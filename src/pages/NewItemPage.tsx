@@ -73,15 +73,28 @@ const NewItemPage = () => {
       return;
     }
 
-    // Validate and sanitize inputs
-    const titleValidation = validateAndSanitizeText(title, CONTENT_LIMITS.title, true);
-    if (!titleValidation.isValid) {
+    // Validate that at least title or message is provided
+    if (!title.trim() && !message.trim()) {
       toast({
-        title: "שגיאה בכותרת",
-        description: titleValidation.error,
+        title: "שגיאה",
+        description: "נא להזין כותרת או הודעה לפרופיל",
         variant: "destructive",
       });
       return;
+    }
+
+    // Validate and sanitize inputs only if title is provided
+    let titleValidation: { isValid: boolean; value: string; error?: string } = { isValid: true, value: "", error: "" };
+    if (title.trim()) {
+      titleValidation = validateAndSanitizeText(title, CONTENT_LIMITS.title, true);
+      if (!titleValidation.isValid) {
+        toast({
+          title: "שגיאה בכותרת",
+          description: titleValidation.error || "שגיאה לא ידועה",
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     const descValidation = validateAndSanitizeText(description, CONTENT_LIMITS.description);
@@ -106,7 +119,7 @@ const NewItemPage = () => {
 
     // Check for inappropriate content
     const contentToCheck = `${titleValidation.value} ${descValidation.value}`;
-    if (containsInappropriateContent(contentToCheck)) {
+    if (contentToCheck.trim() && containsInappropriateContent(contentToCheck)) {
       toast({
         title: "תוכן לא מתאים",
         description: "התוכן שהוזן מכיל מילים לא מתאימות",
@@ -118,10 +131,12 @@ const NewItemPage = () => {
     setIsSubmitting(true);
     
     try {
+      // Determine title - use provided title or default if only message exists
+      const finalTitle = titleValidation.value || (message.trim() ? "הודעה חדשה" : "");
 
       // Create the item data with sanitized values
       const itemData = {
-        title: titleValidation.value,
+        title: finalTitle,
         description: descValidation.value || null,
         price: priceValidation.value || null,
         category: category || null,
@@ -133,26 +148,30 @@ const NewItemPage = () => {
 
       console.log('Creating item with data:', itemData);
 
-      // Insert into database
-      const { data, error } = await supabase
-        .from('items')
-        .insert([itemData])
-        .select()
-        .single();
+      // Only create item if there's actual item content (title, description, price, etc.)
+      let createdItem = null;
+      if (title.trim() || description.trim() || price || category || selectedImage) {
+        // Insert into database
+        const { data, error } = await supabase
+          .from('items')
+          .insert([itemData])
+          .select()
+          .single();
 
-      console.log('Database insert result:', { data, error });
+        console.log('Database insert result:', { data, error });
 
-      if (error) {
-        console.error('Database error:', error);
-        toast({
-          title: "שגיאה",
-          description: "לא ניתן לשמור את הפריט במסד הנתונים",
-          variant: "destructive",
-        });
-        return;
+        if (error) {
+          console.error('Database error:', error);
+          toast({
+            title: "שגיאה",
+            description: "לא ניתן לשמור את הפריט במסד הנתונים",
+            variant: "destructive",
+          });
+          return;
+        }
+        createdItem = data;
+        console.log('Item created successfully:', data);
       }
-
-      console.log('Item created successfully:', data);
 
       // If user added a message, save it to their profile
       if (message.trim()) {
@@ -161,13 +180,15 @@ const NewItemPage = () => {
       }
 
       toast({
-        title: "פריט נוסף בהצלחה!",
-        description: "הפריט שלך נוסף למרקט פליס",
+        title: "נשמר בהצלחה!",
+        description: createdItem ? "הפריט שלך נוסף למרקט פליס" : "ההודעה נשמרה בפרופיל שלך",
       });
 
-      // Refresh the homepage data
-      console.log('Calling refreshItems to update homepage...');
-      refreshItems();
+      // Refresh the homepage data if item was created
+      if (createdItem) {
+        console.log('Calling refreshItems to update homepage...');
+        refreshItems();
+      }
       
       // Navigate to homepage to see the new item
       navigate('/');
@@ -319,7 +340,7 @@ const NewItemPage = () => {
               className="w-full h-12 rounded-full text-lg font-medium"
               style={{ backgroundColor: '#BB31E9' }}
               onClick={handleSubmit}
-              disabled={isSubmitting || !title.trim()}
+              disabled={isSubmitting || (!title.trim() && !message.trim())}
             >
               {isSubmitting ? 'שומר...' : 'שמור'}
             </Button>

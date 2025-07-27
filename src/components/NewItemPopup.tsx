@@ -45,10 +45,11 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
   const handleSubmit = async () => {
     console.log('Save button clicked in popup');
     
-    if (!title.trim()) {
+    // Allow submission if either title or message is provided
+    if (!title.trim() && !message.trim()) {
       toast({
         title: "שגיאה",
-        description: "נא להזין כותרת לפריט",
+        description: "נא להזין כותרת או הודעה לפרופיל",
         variant: "destructive",
       });
       return;
@@ -93,9 +94,12 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
         }
       }
 
+      // Determine title - use provided title or default if only message exists
+      const finalTitle = title.trim() || (message.trim() ? "הודעה חדשה" : "");
+
       // Create the item data
       const itemData = {
-        title: title.trim(),
+        title: finalTitle,
         description: description.trim() || null,
         price: price ? parseFloat(price) : null,
         category: category || null,
@@ -107,26 +111,30 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
 
       console.log('Creating item with data:', itemData);
 
-      // Insert into database
-      const { data, error } = await supabase
-        .from('items')
-        .insert([itemData])
-        .select()
-        .single();
+      // Only create item if there's actual item content (title, description, price, etc.)
+      let createdItem = null;
+      if (title.trim() || description.trim() || price || category || selectedImage) {
+        // Insert into database
+        const { data, error } = await supabase
+          .from('items')
+          .insert([itemData])
+          .select()
+          .single();
 
-      console.log('Database insert result:', { data, error });
+        console.log('Database insert result:', { data, error });
 
-      if (error) {
-        console.error('Database error:', error);
-        toast({
-          title: "שגיאה",
-          description: "לא ניתן לשמור את הפריט במסד הנתונים",
-          variant: "destructive",
-        });
-        return;
+        if (error) {
+          console.error('Database error:', error);
+          toast({
+            title: "שגיאה",
+            description: "לא ניתן לשמור את הפריט במסד הנתונים",
+            variant: "destructive",
+          });
+          return;
+        }
+        createdItem = data;
+        console.log('Item created successfully:', data);
       }
-
-      console.log('Item created successfully:', data);
 
       // If user added a message, save it to their profile
       if (message.trim()) {
@@ -135,12 +143,14 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       }
 
       toast({
-        title: "פריט נוסף בהצלחה!",
-        description: "הפריט שלך נוסף למרקט פליס",
+        title: "נשמר בהצלחה!",
+        description: createdItem ? "הפריט שלך נוסף למרקט פליס" : "ההודעה נשמרה בפרופיל שלך",
       });
 
-      // Trigger refresh on the homepage
-      refreshItems();
+      // Trigger refresh on the homepage if item was created
+      if (createdItem) {
+        refreshItems();
+      }
       if (onItemCreated) {
         onItemCreated();
       }
@@ -304,7 +314,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
               className="w-full h-12 rounded-full text-lg font-medium text-white"
               style={{ backgroundColor: '#BB31E9' }}
               onClick={handleSubmit}
-              disabled={isSubmitting || !title.trim()}
+              disabled={isSubmitting || (!title.trim() && !message.trim())}
             >
               {isSubmitting ? 'שומר...' : 'שמור'}
             </Button>
