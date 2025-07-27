@@ -319,28 +319,6 @@ const ProfilePage = () => {
           <h2 className="text-lg font-bold mb-4">הודעות</h2>
           <div className="flex gap-4 overflow-x-auto pb-4">
             <div className="flex gap-6">
-              {/* Add new message box - only for own profile */}
-              {isOwnProfile && (
-                <div className="flex-shrink-0 w-48 h-32 rounded-lg bg-card border border-dashed border-primary/50 p-3 flex flex-col justify-center">
-                  <textarea
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="הוסף הודעה חדשה..."
-                    className="flex-1 px-2 py-1 text-sm bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent mb-2"
-                    dir="rtl"
-                    rows={2}
-                  />
-                  <Button
-                    onClick={handleAddMessage}
-                    disabled={!newMessage.trim() || creatingMessage}
-                    size="sm"
-                    className="w-full text-xs"
-                  >
-                    {creatingMessage ? "שומר..." : "הוסף"}
-                  </Button>
-                </div>
-              )}
-              
               {messagesLoading ? (
                 // Loading skeleton
                 <div className="flex gap-6">
@@ -391,6 +369,28 @@ const ProfilePage = () => {
                     אין הודעות עדיין
                   </div>
                 )
+              )}
+              
+              {/* Add new message box - only for own profile */}
+              {isOwnProfile && (
+                <div className="flex-shrink-0 w-48 h-32 rounded-lg bg-card border border-dashed border-primary/50 p-3 flex flex-col justify-center">
+                  <textarea
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="הוסף הודעה חדשה..."
+                    className="flex-1 px-2 py-1 text-sm bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent mb-2"
+                    dir="rtl"
+                    rows={2}
+                  />
+                  <Button
+                    onClick={handleAddMessage}
+                    disabled={!newMessage.trim() || creatingMessage}
+                    size="sm"
+                    className="w-full text-xs"
+                  >
+                    {creatingMessage ? "שומר..." : "הוסף"}
+                  </Button>
+                </div>
               )}
             </div>
             <div className="flex-shrink-0 flex items-center">
