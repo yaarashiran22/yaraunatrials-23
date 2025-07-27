@@ -342,7 +342,7 @@ const ProfilePage = () => {
                     </div>
                     {/* Edit and Delete buttons - only show for own profile */}
                     {isOwnProfile && (
-                      <div className="absolute top-1 right-1 flex gap-1">
+                      <div className="absolute bottom-1 right-1 flex gap-1">
                         <Button
                           variant="secondary"
                           size="sm"
@@ -454,7 +454,7 @@ const ProfilePage = () => {
                     />
                     {/* Edit and Delete buttons - only show for own profile */}
                     {isOwnProfile && (
-                      <div className="absolute top-1 right-1 flex gap-1">
+                      <div className="absolute bottom-1 right-1 flex gap-1">
                         <Button
                           variant="secondary"
                           size="sm"
@@ -512,7 +512,7 @@ const ProfilePage = () => {
                     />
                     {/* Edit and Delete buttons - only show for own profile */}
                     {isOwnProfile && (
-                      <div className="absolute top-1 right-1 flex gap-1">
+                      <div className="absolute bottom-1 right-1 flex gap-1">
                         <Button
                           variant="secondary"
                           size="sm"
@@ -570,7 +570,7 @@ const ProfilePage = () => {
                     />
                     {/* Edit and Delete buttons - only show for own profile */}
                     {isOwnProfile && (
-                      <div className="absolute top-1 right-1 flex gap-1">
+                      <div className="absolute bottom-1 right-1 flex gap-1">
                         <Button
                           variant="secondary"
                           size="sm"
@@ -628,7 +628,7 @@ const ProfilePage = () => {
                     />
                     {/* Edit and Delete buttons - only show for own profile */}
                     {isOwnProfile && (
-                      <div className="absolute top-1 right-1 flex gap-1">
+                      <div className="absolute bottom-1 right-1 flex gap-1">
                         <Button
                           variant="secondary"
                           size="sm"
