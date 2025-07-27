@@ -10,6 +10,7 @@ import AddStoryButton from "@/components/AddStoryButton";
 import UniformCard from "@/components/UniformCard";
 import SectionHeader from "@/components/SectionHeader";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import { ResizeProfilePicturesButton } from "@/components/ResizeProfilePicturesButton";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -131,6 +132,9 @@ const Index = () => {
       />
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 max-w-7xl mx-auto">
+        {/* Temporary resize button */}
+        <ResizeProfilePicturesButton />
+        
         {/* Community Members Section */}
         <section>
           <SectionHeader title="שכנים וחברים" />

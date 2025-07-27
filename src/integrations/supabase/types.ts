@@ -238,20 +238,28 @@ export type Database = {
       smallprofiles: {
         Row: {
           created_at: string
-          id: number
+          id: string
           photo: string | null
         }
         Insert: {
           created_at?: string
-          id?: number
+          id: string
           photo?: string | null
         }
         Update: {
           created_at?: string
-          id?: number
+          id?: string
           photo?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "smallprofiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       stories: {
         Row: {
