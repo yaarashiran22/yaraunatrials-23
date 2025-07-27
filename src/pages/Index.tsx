@@ -166,21 +166,22 @@ const Index = () => {
               <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
                 {recommendationItems.map((item) => (
                   <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                    <UniformCard
-                      id={item.id}
-                      image={item.image_url || coffeeShop}
-                      title={item.title}
-                      subtitle={item.location || 'תל אביב'}
-                      type="business"
-                      onClick={() => handleMarketplaceClick(item)}
-                      favoriteData={{
-                        id: item.id,
-                        title: item.title,
-                        description: item.description,
-                        image: item.image_url,
-                        type: 'recommendation'
-                      }}
-                    />
+                     <UniformCard
+                       id={item.id}
+                       image={item.image_url || coffeeShop}
+                       title={item.title}
+                       subtitle={item.location || 'תל אביב'}
+                       type="business"
+                       onClick={() => handleMarketplaceClick(item)}
+                       userProfile={item.user_profile}
+                       favoriteData={{
+                         id: item.id,
+                         title: item.title,
+                         description: item.description,
+                         image: item.image_url,
+                         type: 'recommendation'
+                       }}
+                     />
                   </div>
                 ))}
               </div>
@@ -201,35 +202,36 @@ const Index = () => {
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {databaseEvents.map((event) => (
                 <div key={`db-event-${event.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
-                    id={event.id}
-                    image={event.image_url || communityEvent}
-                    title={event.title}
-                    subtitle={event.location || 'תל אביב'}
-                    type="event"
-                    onClick={() => handleEventClick({
-                      details: {
-                        id: event.id,
-                        title: event.title,
-                        description: event.description || 'אירוע קהילתי',
-                        date: 'תאריך יקבע בהמשך',
-                        time: 'שעה תקבע בהמשך',
-                        location: event.location || 'תל אביב',
-                        image: event.image_url || communityEvent,
-                        organizer: {
-                          name: "מארגן האירוע",
-                          image: profile1
-                        }
-                      }
-                    })}
-                    favoriteData={{
-                      id: event.id,
-                      title: event.title,
-                      description: event.description,
-                      image: event.image_url,
-                      type: 'event'
-                    }}
-                  />
+                   <UniformCard
+                     id={event.id}
+                     image={event.image_url || communityEvent}
+                     title={event.title}
+                     subtitle={event.location || 'תל אביב'}
+                     type="event"
+                     onClick={() => handleEventClick({
+                       details: {
+                         id: event.id,
+                         title: event.title,
+                         description: event.description || 'אירוע קהילתי',
+                         date: 'תאריך יקבע בהמשך',
+                         time: 'שעה תקבע בהמשך',
+                         location: event.location || 'תל אביב',
+                         image: event.image_url || communityEvent,
+                         organizer: {
+                           name: "מארגן האירוע",
+                           image: profile1
+                         }
+                       }
+                     })}
+                     userProfile={event.user_profile}
+                     favoriteData={{
+                       id: event.id,
+                       title: event.title,
+                       description: event.description,
+                       image: event.image_url,
+                       type: 'event'
+                     }}
+                   />
                 </div>
               ))}
             </div>
@@ -249,21 +251,22 @@ const Index = () => {
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {artItems.map((item) => (
                 <div key={`art-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || artPiece1}
-                    title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    type="business"
-                    onClick={() => handleMarketplaceClick(item)}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.description,
-                      image: item.image_url,
-                      type: 'art'
-                    }}
-                  />
+                   <UniformCard
+                     id={item.id}
+                     image={item.image_url || artPiece1}
+                     title={item.title}
+                     subtitle={item.location || 'תל אביב'}
+                     type="business"
+                     onClick={() => handleMarketplaceClick(item)}
+                     userProfile={item.user_profile}
+                     favoriteData={{
+                       id: item.id,
+                       title: item.title,
+                       description: item.description,
+                       image: item.image_url,
+                       type: 'art'
+                     }}
+                   />
                 </div>
               ))}
             </div>
@@ -283,23 +286,24 @@ const Index = () => {
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {marketplaceItems.slice(0, 6).map((item) => (
                 <div key={item.id} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || dressItem}
-                    title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    price={item.price ? `₪${item.price}` : undefined}
-                    type="marketplace"
-                    onClick={() => handleMarketplaceClick(item)}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.description,
-                      price: item.price,
-                      image_url: item.image_url,
-                      type: 'marketplace'
-                    }}
-                  />
+                   <UniformCard
+                     id={item.id}
+                     image={item.image_url || dressItem}
+                     title={item.title}
+                     subtitle={item.location || 'תל אביב'}
+                     price={item.price ? `₪${item.price}` : undefined}
+                     type="marketplace"
+                     onClick={() => handleMarketplaceClick(item)}
+                     userProfile={item.user_profile}
+                     favoriteData={{
+                       id: item.id,
+                       title: item.title,
+                       description: item.description,
+                       price: item.price,
+                       image_url: item.image_url,
+                       type: 'marketplace'
+                     }}
+                   />
                 </div>
               ))}
             </div>

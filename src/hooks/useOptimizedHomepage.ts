@@ -13,6 +13,11 @@ export interface OptimizedItem {
   image_url?: string;
   location?: string;
   created_at: string;
+  user_id?: string;
+  user_profile?: {
+    name: string;
+    profile_image_url: string;
+  } | null;
 }
 
 export interface OptimizedProfile {
@@ -28,28 +33,40 @@ const fetchHomepageData = async () => {
     const [marketplaceResult, eventsResult, recommendationsResult, artResult, profilesResult] = await Promise.all([
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select(`
+          id, title, description, price, category, image_url, location, created_at, user_id,
+          user_profile:profiles(name, profile_image_url)
+        `)
         .eq('status', 'active')
         .eq('category', 'secondhand')
         .order('created_at', { ascending: false })
         .limit(8),
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select(`
+          id, title, description, price, category, image_url, location, created_at, user_id,
+          user_profile:profiles(name, profile_image_url)
+        `)
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
         .limit(8),
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select(`
+          id, title, description, price, category, image_url, location, created_at, user_id,
+          user_profile:profiles(name, profile_image_url)
+        `)
         .eq('status', 'active')
         .eq('category', 'recommendation')
         .order('created_at', { ascending: false })
         .limit(8),
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select(`
+          id, title, description, price, category, image_url, location, created_at, user_id,
+          user_profile:profiles(name, profile_image_url)
+        `)
         .eq('status', 'active')
         .eq('category', 'art')
         .order('created_at', { ascending: false })
