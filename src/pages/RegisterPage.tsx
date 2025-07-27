@@ -1,0 +1,319 @@
+import { ArrowRight, Paperclip } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import BottomNavigation from "@/components/BottomNavigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+const RegisterPage = () => {
+  const navigate = useNavigate();
+  const { signUp } = useAuth();
+  const { toast } = useToast();
+  
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    neighborhood: '',
+    bio: '',
+    socialEmail: '',
+    instagram: '',
+    facebook: '',
+    tiktok: '',
+    linkedin: ''
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
+      toast({
+        title: "שגיאה",
+        description: "נא למלא את כל השדות הנדרשים",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Register the user
+      const { error: signUpError } = await signUp(formData.email, formData.password, formData.name);
+      
+      if (signUpError) {
+        console.error('Sign up error:', signUpError);
+        toast({
+          title: "שגיאת רישום",
+          description: signUpError.message || "לא ניתן לבצע רישום",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Wait a moment for the user to be created
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Get the newly created user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        // Create or update the profile with all the information
+        const profileData = {
+          id: user.id,
+          email: formData.email,
+          name: formData.name,
+          location: formData.neighborhood,
+          bio: formData.bio,
+          profile_image_url: profileImage,
+          username: formData.instagram ? `https://instagram.com/${formData.instagram}` : null,
+          show_in_search: true,
+          is_private: false
+        };
+
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert(profileData);
+
+        if (profileError) {
+          console.error('Profile creation error:', profileError);
+          // Don't fail completely if profile creation fails
+        }
+      }
+
+      toast({
+        title: "רישום הושלם בהצלחה!",
+        description: "הפרופיל שלך נוצר ויופיע בדף הבית",
+        variant: "default",
+      });
+
+      // Navigate to home page
+      navigate('/');
+      
+    } catch (error) {
+      console.error('Registration error:', error);
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה בלתי צפויה",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background pb-20">
+      {/* Custom Header */}
+      <header className="sticky top-0 z-50 bg-card border-b shadow-sm">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Back arrow - Left side */}
+            <div className="flex items-center">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => navigate(-1)}
+              >
+                <ArrowRight className="h-5 w-5" />
+              </Button>
+            </div>
+            
+            {/* Title - Center */}
+            <div className="text-center">
+              {/* Empty - title moved to page content */}
+            </div>
+            
+            {/* Logo - Right side */}
+            <div className="flex items-center gap-2">
+              <div className="text-center">
+                <div className="flex items-center justify-center">
+                  <div className="text-3xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">השכונה שלנו כאן</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8">
+        {/* Page Title */}
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-foreground">הרשמה</h1>
+        </div>
+
+        <div className="max-w-md mx-auto">
+          {/* Form Container with white background */}
+          <div className="bg-card rounded-2xl shadow-lg p-6 mb-6">
+            <div className="space-y-4">
+              <div>
+                <Input 
+                  placeholder="שם"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+              
+              <div>
+                <Input 
+                  placeholder="מייל"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+              
+              <div>
+                <Input 
+                  placeholder="סיסמא"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => handleInputChange('password', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+              
+              <div>
+                <Input 
+                  placeholder="שכונה"
+                  value={formData.neighborhood}
+                  onChange={(e) => handleInputChange('neighborhood', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+              
+              <div>
+                <Input 
+                  placeholder="ביו קצר"
+                  value={formData.bio}
+                  onChange={(e) => handleInputChange('bio', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+            </div>
+
+            {/* Email Field with Attachment */}
+            <div className="relative mt-4">
+              <Input 
+                placeholder="אימייל נוסף (אופציונלי)"
+                value={formData.socialEmail}
+                onChange={(e) => handleInputChange('socialEmail', e.target.value)}
+                className="w-full h-12 text-right bg-background border border-border rounded-lg pl-12"
+              />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 p-2"
+              >
+                <Paperclip className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </div>
+
+            {/* Profile Photo Section */}
+            <div className="pt-6">
+              <div className="flex items-center gap-3">
+                <label htmlFor="profile-upload" className="cursor-pointer">
+                  <input
+                    id="profile-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center overflow-hidden">
+                    {profileImage ? (
+                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <Paperclip className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </div>
+                </label>
+                <span className="text-foreground font-medium">תמונת פרופיל</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Networks Section */}
+          <div className="bg-card rounded-2xl shadow-lg p-6">
+            <h2 className="text-lg font-bold text-foreground mb-4 text-center">@רשתות חברתיות</h2>
+            <div className="space-y-4">
+              <div>
+                <Input 
+                  placeholder="Instagram @"
+                  value={formData.instagram}
+                  onChange={(e) => handleInputChange('instagram', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+              
+              <div>
+                <Input 
+                  placeholder="Facebook"
+                  value={formData.facebook}
+                  onChange={(e) => handleInputChange('facebook', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+              
+              <div>
+                <Input 
+                  placeholder="TikTok @"
+                  value={formData.tiktok}
+                  onChange={(e) => handleInputChange('tiktok', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+              
+              <div>
+                <Input 
+                  placeholder="LinkedIn"
+                  value={formData.linkedin}
+                  onChange={(e) => handleInputChange('linkedin', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+            </div>
+            
+            {/* Submit Button */}
+            <div className="mt-6">
+              <Button 
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="w-full h-12 text-white text-lg font-medium rounded-lg"
+                style={{ backgroundColor: '#BB31E9' }}
+              >
+                {isSubmitting ? 'רושם...' : 'הרשם'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      <BottomNavigation />
+    </div>
+  );
+};
+
+export default RegisterPage;

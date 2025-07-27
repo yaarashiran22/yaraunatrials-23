@@ -1,0 +1,102 @@
+
+import LanguageSelector from "@/components/LanguageSelector";
+import NeighborhoodSelector from "@/components/NeighborhoodSelector";
+import NeighborhoodIndicator from "@/components/NeighborhoodIndicator";
+import SearchBar from "@/components/SearchBar";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell } from "lucide-react";
+import logoImage from "@/assets/reference-image.png";
+
+interface HeaderProps {
+  title?: string;
+  showSearch?: boolean;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
+  onNotificationsClick?: () => void;
+}
+
+const Header = ({ 
+  title, 
+  showSearch = false, 
+  searchValue = "", 
+  onSearchChange, 
+  searchPlaceholder,
+  onNotificationsClick
+}: HeaderProps) => {
+  const { t } = useLanguage();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
+  return (
+    <header className="bg-transparent">
+      <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-3">
+        <div className="flex items-center justify-between gap-2">
+          {/* Logo and User Greeting - Right side */}
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+            <div 
+              className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity" 
+              style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}
+              onClick={handleLogoClick}
+              role="button"
+              aria-label="Navigate to homepage"
+            >
+              una
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground hidden sm:inline">
+                שלום {user ? (user.email?.split('@')[0] || 'משתמש') : 'אורח'}
+              </span>
+              <NeighborhoodIndicator />
+            </div>
+          </div>
+          
+          {/* Title or Search - Center */}
+          <div className="flex-1 max-w-md mx-2 sm:mx-4 min-w-0">
+            {showSearch && onSearchChange ? (
+              <SearchBar 
+                value={searchValue}
+                onChange={onSearchChange}
+                placeholder={searchPlaceholder}
+              />
+            ) : title ? (
+              <div className="text-center">
+                <h1 className="text-base sm:text-lg font-bold text-foreground truncate">{title}</h1>
+              </div>
+            ) : null}
+          </div>
+          
+          {/* Notifications - Left side */}
+          <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+            {onNotificationsClick && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onNotificationsClick}
+                className="h-8 w-8 rounded-lg p-0"
+                aria-label="Open notifications"
+              >
+                <Bell className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;

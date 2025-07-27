@@ -1,0 +1,116 @@
+
+import { Home, User, Users, Settings, LogIn, Plus, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNewItem } from "@/contexts/NewItemContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const BottomNavigation = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { t, language, setLanguage } = useLanguage();
+  const { user } = useAuth();
+  const { openNewItem } = useNewItem();
+
+  const languages = [
+    { code: 'he', name: 'עברית', flag: '🇮🇱' },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { code: 'es', name: 'Español', flag: '🇪🇸' }
+  ];
+
+  const isActive = (path: string) => location.pathname === path;
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t shadow-lg lg:hidden">
+      <div className="container mx-auto px-2 py-2 max-w-full">
+        <div className="flex items-center justify-around w-full">
+          {/* Home - בית */}
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate('/')}
+            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
+              isActive('/') ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            <Home className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-xs font-medium truncate">בית</span>
+          </Button>
+
+          {/* Neighborhood Feed - פיד שכונתי */}
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate('/feed')}
+            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
+              isActive('/feed') ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            <Users className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-xs font-medium truncate">פיד</span>
+          </Button>
+
+          {/* Create button - Center button */}
+          <Button
+            variant="default"
+            size="lg"
+            onClick={openNewItem}
+            className="rounded-full w-14 h-14 shadow-lg flex flex-col items-center justify-center"
+            style={{ backgroundColor: '#BB31E9', color: 'hsl(0 0% 100%)' }}
+          >
+            <Plus className="h-6 w-6 text-primary-foreground" />
+          </Button>
+
+          {/* Favorites - מועדפים */}
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate('/favorites')}
+            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 text-red-500 hover:text-red-600 ${
+              isActive('/favorites') ? 'text-red-600' : ''
+            }`}
+          >
+            <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-xs font-medium truncate">שמורים</span>
+          </Button>
+
+          {/* Profile/Login - פרופיל/התחברות */}
+          {user ? (
+            <Button
+              variant="ghost"
+              size="lg"
+              onClick={() => navigate('/profile/1')}
+              className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
+                location.pathname.startsWith('/profile') ? 'text-primary' : 'text-muted-foreground'
+              }`}
+            >
+              <User className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="text-xs font-medium truncate">פרופיל</span>
+            </Button>
+          ) : (
+            <Button
+              variant="ghost"
+              size="lg"
+              onClick={() => navigate('/login')}
+              className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
+                isActive('/login') ? 'text-primary' : 'text-muted-foreground'
+              }`}
+            >
+              <LogIn className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="text-xs font-medium truncate">התחברות</span>
+            </Button>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default BottomNavigation;
