@@ -166,13 +166,14 @@ const Index = () => {
               <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
                 {recommendationItems.map((item) => (
                   <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                    <UniformCard
+                     <UniformCard
                       id={item.id}
                       image={item.image_url || coffeeShop}
                       title={item.title}
                       subtitle={item.location || 'תל אביב'}
                       type="business"
                       onClick={() => handleMarketplaceClick(item)}
+                     userProfile={Array.isArray(item.profiles) ? item.profiles[0] : item.profiles}
                       favoriteData={{
                         id: item.id,
                         title: item.title,
@@ -201,7 +202,7 @@ const Index = () => {
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {databaseEvents.map((event) => (
                 <div key={`db-event-${event.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
+                   <UniformCard
                     id={event.id}
                     image={event.image_url || communityEvent}
                     title={event.title}
@@ -222,6 +223,7 @@ const Index = () => {
                         }
                       }
                     })}
+                    userProfile={Array.isArray(event.profiles) ? event.profiles[0] : event.profiles}
                     favoriteData={{
                       id: event.id,
                       title: event.title,
@@ -249,13 +251,14 @@ const Index = () => {
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {artItems.map((item) => (
                 <div key={`art-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
+                   <UniformCard
                     id={item.id}
                     image={item.image_url || artPiece1}
                     title={item.title}
                     subtitle={item.location || 'תל אביב'}
                     type="business"
                     onClick={() => handleMarketplaceClick(item)}
+                    userProfile={Array.isArray(item.profiles) ? item.profiles[0] : item.profiles}
                     favoriteData={{
                       id: item.id,
                       title: item.title,
@@ -283,7 +286,7 @@ const Index = () => {
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {marketplaceItems.slice(0, 6).map((item) => (
                 <div key={item.id} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
+                   <UniformCard
                     id={item.id}
                     image={item.image_url || dressItem}
                     title={item.title}
@@ -291,6 +294,7 @@ const Index = () => {
                     price={item.price ? `₪${item.price}` : undefined}
                     type="marketplace"
                     onClick={() => handleMarketplaceClick(item)}
+                    userProfile={Array.isArray(item.profiles) ? item.profiles[0] : item.profiles}
                     favoriteData={{
                       id: item.id,
                       title: item.title,
