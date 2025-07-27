@@ -13,11 +13,6 @@ export interface OptimizedItem {
   image_url?: string;
   location?: string;
   created_at: string;
-  user_id?: string;
-  uploader?: {
-    name: string;
-    small_photo: string;
-  };
 }
 
 export interface OptimizedProfile {
@@ -33,52 +28,28 @@ const fetchHomepageData = async () => {
     const [marketplaceResult, eventsResult, recommendationsResult, artResult, profilesResult] = await Promise.all([
       supabase
         .from('items')
-        .select(`
-          id, title, description, price, category, image_url, location, created_at, user_id,
-          uploader:profiles!user_id (
-            name,
-            small_photo:smallprofiles(photo)
-          )
-        `)
+        .select('id, title, description, price, category, image_url, location, created_at')
         .eq('status', 'active')
         .eq('category', 'secondhand')
         .order('created_at', { ascending: false })
         .limit(8),
       supabase
         .from('items')
-        .select(`
-          id, title, description, price, category, image_url, location, created_at, user_id,
-          uploader:profiles!user_id (
-            name,
-            small_photo:smallprofiles(photo)
-          )
-        `)
+        .select('id, title, description, price, category, image_url, location, created_at')
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
         .limit(8),
       supabase
         .from('items')
-        .select(`
-          id, title, description, price, category, image_url, location, created_at, user_id,
-          uploader:profiles!user_id (
-            name,
-            small_photo:smallprofiles(photo)
-          )
-        `)
+        .select('id, title, description, price, category, image_url, location, created_at')
         .eq('status', 'active')
         .eq('category', 'recommendation')
         .order('created_at', { ascending: false })
         .limit(8),
       supabase
         .from('items')
-        .select(`
-          id, title, description, price, category, image_url, location, created_at, user_id,
-          uploader:profiles!user_id (
-            name,
-            small_photo:smallprofiles(photo)
-          )
-        `)
+        .select('id, title, description, price, category, image_url, location, created_at')
         .eq('status', 'active')
         .eq('category', 'art')
         .order('created_at', { ascending: false })
@@ -98,19 +69,10 @@ const fetchHomepageData = async () => {
     if (artResult.error) throw artResult.error;
     if (profilesResult.error) throw profilesResult.error;
 
-    // Process items to include uploader information
-    const processItems = (items: any[]) => items.map(item => ({
-      ...item,
-      uploader: item.uploader ? {
-        name: item.uploader.name || 'משתמש',
-        small_photo: item.uploader.small_photo?.[0]?.photo || null
-      } : null
-    }));
-
-    const marketplaceItems = processItems(marketplaceResult.data || []);
-    const databaseEvents = processItems(eventsResult.data || []);
-    const recommendationItems = processItems(recommendationsResult.data || []);
-    const artItems = processItems(artResult.data || []);
+    const marketplaceItems = marketplaceResult.data || [];
+    const databaseEvents = eventsResult.data || [];
+    const recommendationItems = recommendationsResult.data || [];
+    const artItems = artResult.data || [];
     const profiles = (profilesResult.data || []).map((profile) => ({
       id: profile.id,
       image: profile.profile_image_url || profile1,
