@@ -94,16 +94,15 @@ const UniformCard = ({
       
       {/* Display uploader profile image for events */}
       {type === 'event' && uploader && (
-        <div className="absolute top-2 right-2 flex items-center gap-1 bg-card/90 backdrop-blur-sm rounded-full px-2 py-1">
+        <div className="absolute top-2 right-2">
           <img 
             src={uploader.small_photo}
             alt={uploader.name}
-            className="w-6 h-6 rounded-full object-cover"
+            className="w-8 h-8 rounded-full object-cover border-2 border-white/80 shadow-sm"
             onError={(e) => {
               e.currentTarget.src = uploader.image;
             }}
           />
-          <span className="text-xs text-foreground font-medium">{uploader.name}</span>
         </div>
       )}
       
