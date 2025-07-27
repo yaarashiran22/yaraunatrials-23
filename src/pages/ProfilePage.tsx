@@ -497,7 +497,7 @@ const ProfilePage = () => {
                 // Loading skeleton
                 <div className="flex gap-6">
                   {Array(3).fill(null).map((_, index) => (
-                    <div key={index} className="flex-shrink-0 w-36 h-24 bg-muted rounded-lg animate-pulse"></div>
+                    <div key={index} className="flex-shrink-0 w-48 h-32 bg-muted rounded-lg animate-pulse"></div>
                   ))}
                 </div>
               ) : recommendationItems.length > 0 ? (
@@ -555,17 +555,17 @@ const ProfilePage = () => {
                 // Loading skeleton
                 <div className="flex gap-6">
                   {Array(3).fill(null).map((_, index) => (
-                    <div key={index} className="flex-shrink-0 w-36 h-24 bg-muted rounded-lg animate-pulse"></div>
+                    <div key={index} className="flex-shrink-0 w-48 h-32 bg-muted rounded-lg animate-pulse"></div>
                   ))}
                 </div>
               ) : messages.length > 0 ? (
                 messages.map((message) => (
-                  <div key={message.id} className="relative flex-shrink-0 w-36 mb-2">
-                    <div className="w-36 h-24 rounded-lg bg-card border border-border p-3 cursor-pointer hover:bg-muted/20 transition-colors">
-                      <p className="text-xs text-foreground line-clamp-3 leading-tight" dir="rtl">
+                  <div key={message.id} className="relative flex-shrink-0 w-48 mb-2">
+                    <div className="w-48 h-32 rounded-lg bg-card border border-border p-4 cursor-pointer hover:bg-muted/20 transition-colors">
+                      <p className="text-sm text-foreground line-clamp-4 leading-relaxed" dir="rtl">
                         {message.message}
                       </p>
-                      <div className="absolute bottom-1 left-1 text-[10px] text-muted-foreground">
+                      <div className="absolute bottom-2 left-2 text-xs text-muted-foreground">
                         {new Date(message.created_at).toLocaleDateString('he-IL', { 
                           month: 'short', 
                           day: 'numeric'
