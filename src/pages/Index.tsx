@@ -92,7 +92,7 @@ const Index = () => {
   // Static data has been removed to show only real content
 
   const handleEventClick = (event: any) => {
-    setSelectedEvent(event.details || event);
+    setSelectedEvent(event);
     setIsEventPopupOpen(true);
   };
 
@@ -208,18 +208,16 @@ const Index = () => {
                     subtitle={event.location || 'תל אביב'}
                     type="event"
                     onClick={() => handleEventClick({
-                      details: {
-                        id: event.id,
-                        title: event.title,
-                        description: event.description || 'אירוע קהילתי',
-                        date: 'תאריך יקבע בהמשך',
-                        time: 'שעה תקבע בהמשך',
-                        location: event.location || 'תל אביב',
-                        image: event.image_url || communityEvent,
-                        organizer: {
-                          name: "מארגן האירוע",
-                          image: profile1
-                        }
+                      id: event.id,
+                      title: event.title,
+                      description: event.description || 'אירוע קהילתי',
+                      date: 'תאריך יקבע בהמשך',
+                      time: 'שעה תקבע בהמשך',
+                      location: event.location || 'תל אביב',
+                      image: event.image_url || communityEvent,
+                      organizer: {
+                        name: "מארגן האירוע",
+                        image: profile1
                       }
                     })}
                     favoriteData={{
@@ -315,6 +313,7 @@ const Index = () => {
       <EventPopup 
         isOpen={isEventPopupOpen}
         onClose={() => setIsEventPopupOpen(false)}
+        eventId={selectedEvent?.id}
         event={selectedEvent}
       />
 
