@@ -488,9 +488,9 @@ const ProfilePage = () => {
           </div>
         </section>
 
-        {/* אמנים יוצרים Section */}
+        {/* אמנות Section */}
         <section className="mb-8">
-          <h2 className="text-lg font-bold mb-4">אמנים יוצרים</h2>
+          <h2 className="text-lg font-bold mb-4">אמנות</h2>
           <div className="flex gap-4 overflow-x-auto pb-4">
             <div className="flex gap-6">
               {itemsLoading ? (
