@@ -78,7 +78,7 @@ const BottomNavigation = () => {
             }`}
           >
             <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">שמורים</span>
+            <span className="text-xs font-medium truncate">חברים</span>
           </Button>
 
           {/* Profile/Login - פרופיל/התחברות */}
