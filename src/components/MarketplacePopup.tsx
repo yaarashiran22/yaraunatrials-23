@@ -3,6 +3,7 @@ import { X, MessageCircle, Share, Heart, MapPin, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useItemDetails } from "@/hooks/useItemDetails";
 
 interface MarketplacePopupProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ interface MarketplacePopupProps {
     price: string;
     description?: string;
     seller?: {
+      id?: string;
       name: string;
       image: string;
       location: string;
@@ -26,6 +28,9 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Fetch item details with uploader info if item.id exists
+  const { item: itemDetails, loading: itemLoading } = useItemDetails(item?.id || "");
+
   const defaultItem = {
     id: "1",
     title: "חולצות אייטים",
@@ -33,6 +38,7 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
     price: "₪45",
     description: "חולצות באיכות מעולה, נלבשו מספר פעמים בלבד. מתאים למידות M-L.",
     seller: {
+      id: "default",
       name: "יערה שיין",
       image: "https://images.unsplash.com/photo-1494790108755-2616b66dfd8d?w=100&h=100&fit=crop",
       location: "תל אביב"
@@ -40,7 +46,21 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
     condition: "כמו חדש"
   };
 
-  const itemData = item || defaultItem;
+  // Create display item with uploader info if available
+  const displayItem = itemDetails ? {
+    id: itemDetails.id,
+    title: itemDetails.title,
+    image: itemDetails.image_url || item?.image || defaultItem.image,
+    price: itemDetails.price ? `₪${itemDetails.price}` : item?.price || defaultItem.price,
+    description: itemDetails.description || item?.description || defaultItem.description,
+    seller: {
+      id: itemDetails.uploader.id,
+      name: itemDetails.uploader.name || "משתמש",
+      image: itemDetails.uploader.profile_image_url || defaultItem.seller.image,
+      location: itemDetails.uploader.location || "לא צוין"
+    },
+    condition: item?.condition || defaultItem.condition
+  } : (item || defaultItem);
 
   const handleContact = () => {
     toast({
@@ -57,8 +77,15 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
   };
 
   const handleViewDetails = () => {
-    navigate(`/item/${itemData.id}`);
+    navigate(`/item/${displayItem.id}`);
     onClose();
+  };
+
+  const handleViewProfile = () => {
+    if (displayItem.seller?.id) {
+      navigate(`/profile/${displayItem.seller.id}`);
+      onClose();
+    }
   };
 
   if (!isOpen) return null;
@@ -76,7 +103,7 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
             <X className="h-5 w-5" />
           </Button>
           
-          <h2 className="text-lg font-bold text-foreground">{itemData.title}</h2>
+          <h2 className="text-lg font-bold text-foreground">{displayItem.title}</h2>
           
           <Button 
             variant="ghost" 
@@ -93,8 +120,8 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
           <div className="relative mb-6">
             <div className="border-4 border-blue-400 rounded-2xl overflow-hidden">
               <img 
-                src={itemData.image}
-                alt={itemData.title}
+                src={displayItem.image}
+                alt={displayItem.title}
                 className="w-full h-64 object-cover"
               />
             </div>
@@ -113,32 +140,35 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
           {/* Item Details */}
           <div className="space-y-4">
             <div className="text-center">
-              <h3 className="text-2xl font-bold text-foreground mb-2">{itemData.price}</h3>
-              <p className="text-lg font-semibold text-foreground">{itemData.title}</p>
-              {itemData.condition && (
-                <p className="text-sm text-primary">מצב: {itemData.condition}</p>
+              <h3 className="text-2xl font-bold text-foreground mb-2">{displayItem.price}</h3>
+              <p className="text-lg font-semibold text-foreground">{displayItem.title}</p>
+              {displayItem.condition && (
+                <p className="text-sm text-primary">מצב: {displayItem.condition}</p>
               )}
             </div>
             
-            {itemData.description && (
+            {displayItem.description && (
               <p className="text-foreground leading-relaxed text-center">
-                {itemData.description}
+                {displayItem.description}
               </p>
             )}
             
             {/* Seller Info */}
-            {itemData.seller && (
-              <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
+            {displayItem.seller && (
+              <div 
+                className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={handleViewProfile}
+              >
                 <img 
-                  src={itemData.seller.image}
-                  alt={itemData.seller.name}
+                  src={displayItem.seller.image}
+                  alt={displayItem.seller.name}
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div className="flex-1">
-                  <p className="font-semibold text-foreground">{itemData.seller.name}</p>
+                  <p className="font-semibold text-foreground">{displayItem.seller.name}</p>
                   <div className="flex items-center gap-1 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4" />
-                    <span>{itemData.seller.location}</span>
+                    <span>{displayItem.seller.location}</span>
                   </div>
                 </div>
               </div>
