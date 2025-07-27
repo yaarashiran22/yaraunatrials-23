@@ -173,6 +173,7 @@ const Index = () => {
                       subtitle={item.location || 'תל אביב'}
                       type="business"
                       onClick={() => handleMarketplaceClick(item)}
+                      uploader={item.uploader}
                       favoriteData={{
                         id: item.id,
                         title: item.title,
@@ -222,6 +223,7 @@ const Index = () => {
                         }
                       }
                     })}
+                    uploader={event.uploader}
                     favoriteData={{
                       id: event.id,
                       title: event.title,
@@ -256,6 +258,7 @@ const Index = () => {
                     subtitle={item.location || 'תל אביב'}
                     type="business"
                     onClick={() => handleMarketplaceClick(item)}
+                    uploader={item.uploader}
                     favoriteData={{
                       id: item.id,
                       title: item.title,
@@ -291,6 +294,7 @@ const Index = () => {
                     price={item.price ? `₪${item.price}` : undefined}
                     type="marketplace"
                     onClick={() => handleMarketplaceClick(item)}
+                    uploader={item.uploader}
                     favoriteData={{
                       id: item.id,
                       title: item.title,

@@ -15,7 +15,10 @@ interface UniformCardProps {
   onClick?: () => void;
   altText?: string; // For image alt text when title is ReactNode
   favoriteData?: any; // Complete data for favorites
-  
+  uploader?: {
+    name: string;
+    small_photo: string | null;
+  };
 }
 
 const UniformCard = ({ 
@@ -28,7 +31,8 @@ const UniformCard = ({
   type, 
   onClick, 
   altText,
-  favoriteData
+  favoriteData,
+  uploader
 }: UniformCardProps) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   
@@ -65,12 +69,26 @@ const UniformCard = ({
       className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer"
       onClick={onClick}
     >
-      <div className="aspect-[4/3] overflow-hidden">
+      <div className="aspect-[4/3] overflow-hidden relative">
         <img 
           src={image} 
           alt={getAltText()}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
+        
+        {/* User profile photo overlay */}
+        {uploader?.small_photo && (
+          <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-black/70 rounded-full px-2 py-1">
+            <img 
+              src={uploader.small_photo}
+              alt={uploader.name}
+              className="w-5 h-5 rounded-full object-cover border border-white/20"
+            />
+            <span className="text-white text-xs font-medium truncate max-w-16">
+              {uploader.name}
+            </span>
+          </div>
+        )}
       </div>
       
       {(type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
