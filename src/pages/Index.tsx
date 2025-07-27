@@ -207,6 +207,7 @@ const Index = () => {
                     title={event.title}
                     subtitle={event.location || 'תל אביב'}
                     type="event"
+                    uploader={event.uploader}
                     onClick={() => handleEventClick({
                       id: event.id,
                       title: event.title,
@@ -216,8 +217,8 @@ const Index = () => {
                       location: event.location || 'תל אביב',
                       image: event.image_url || communityEvent,
                       organizer: {
-                        name: "מארגן האירוע",
-                        image: profile1
+                        name: event.uploader?.name || "מארגן האירוע",
+                        image: event.uploader?.image || profile1
                       }
                     })}
                     favoriteData={{

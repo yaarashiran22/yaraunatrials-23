@@ -13,6 +13,12 @@ export interface OptimizedItem {
   image_url?: string;
   location?: string;
   created_at: string;
+  uploader?: {
+    name: string;
+    image: string;
+    small_photo: string;
+    location: string;
+  };
 }
 
 export interface OptimizedProfile {
@@ -35,7 +41,7 @@ const fetchHomepageData = async () => {
         .limit(8),
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select('id, title, description, price, category, image_url, location, created_at, user_id')
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
@@ -70,9 +76,49 @@ const fetchHomepageData = async () => {
     if (profilesResult.error) throw profilesResult.error;
 
     const marketplaceItems = marketplaceResult.data || [];
-    const databaseEvents = eventsResult.data || [];
+    const rawEvents = eventsResult.data || [];
     const recommendationItems = recommendationsResult.data || [];
     const artItems = artResult.data || [];
+    
+    // Fetch uploader profile data for events
+    const eventUserIds = rawEvents.map(event => event.user_id).filter(Boolean);
+    let uploaderProfiles = {};
+    let uploaderSmallProfiles = {};
+    
+    if (eventUserIds.length > 0) {
+      const [profilesResult, smallProfilesResult] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('id, name, profile_image_url, location')
+          .in('id', eventUserIds),
+        supabase
+          .from('smallprofiles')
+          .select('id, photo')
+          .in('id', eventUserIds)
+      ]);
+      
+      uploaderProfiles = (profilesResult.data || []).reduce((acc, profile) => {
+        acc[profile.id] = profile;
+        return acc;
+      }, {});
+      
+      uploaderSmallProfiles = (smallProfilesResult.data || []).reduce((acc, profile) => {
+        acc[profile.id] = profile;
+        return acc;
+      }, {});
+    }
+    
+    // Transform events data to include uploader info
+    const databaseEvents = rawEvents.map(event => ({
+      ...event,
+      uploader: {
+        name: uploaderProfiles[event.user_id]?.name || 'משתמש',
+        image: uploaderProfiles[event.user_id]?.profile_image_url || profile1,
+        small_photo: uploaderSmallProfiles[event.user_id]?.photo || profile1,
+        location: uploaderProfiles[event.user_id]?.location || 'לא צוין'
+      }
+    }));
+    
     const profiles = (profilesResult.data || []).map((profile) => ({
       id: profile.id,
       image: profile.profile_image_url || profile1,
