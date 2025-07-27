@@ -5,31 +5,67 @@ import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useToast } from "@/hooks/use-toast";
+import { useItemDetails } from "@/hooks/useItemDetails";
 import dressItem from "@/assets/dress-item.jpg";
+import profile1 from "@/assets/profile-1.jpg";
 
 const ItemDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { item, loading, error } = useItemDetails(id || '');
 
-  // Mock data - in a real app this would come from an API
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background pb-20">
+        <Header />
+        <main className="container mx-auto px-4 py-6">
+          <div className="text-center">טוען...</div>
+        </main>
+        <BottomNavigation />
+      </div>
+    );
+  }
+
+  if (error || !item) {
+    return (
+      <div className="min-h-screen bg-background pb-20">
+        <Header />
+        <main className="container mx-auto px-4 py-6">
+          <div className="text-center">
+            <p className="text-muted-foreground">{error || 'פריט לא נמצא'}</p>
+            <Button onClick={() => navigate('/')} className="mt-4">
+              חזרה לעמוד הבית
+            </Button>
+          </div>
+        </main>
+        <BottomNavigation />
+      </div>
+    );
+  }
+
   const itemData = {
-    id: id || "1",
-    title: "חולצות אייטים",
-    image: dressItem,
-    price: "₪45",
-    description: "חולצות באיכות מעולה, נלבשו מספר פעמים בלבד. מתאים למידות M-L. החולצות נשמרו בקפדנות וללא כתמים או נזקים.",
+    id: item.id,
+    title: item.title,
+    image: item.image_url || dressItem,
+    price: item.price ? `₪${item.price}` : undefined,
+    description: item.description || `${item.title} במצב מעולה.`,
     condition: "כמו חדש",
-    category: "בגדים",
-    size: "M-L",
+    category: item.category || "כללי",
+    size: "M-L", // Could be added to database schema if needed
     seller: {
-      name: "יערה שיין",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b66dfd8d?w=100&h=100&fit=crop",
-      location: "תל אביב",
-      rating: 4.8,
-      reviewCount: 23
+      id: item.uploader.id,
+      name: item.uploader.name || "משתמש",
+      image: item.uploader.small_profile_photo || item.uploader.profile_image_url || profile1,
+      location: item.uploader.location || item.location || "לא צוין",
+      rating: 4.8, // Could be calculated from reviews if implemented
+      reviewCount: 23 // Could be calculated from reviews if implemented
     },
-    postedDate: "לפני 2 ימים"
+    postedDate: new Date(item.created_at).toLocaleDateString('he-IL', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })
   };
 
   const handleContact = () => {
@@ -47,7 +83,7 @@ const ItemDetailsPage = () => {
   };
 
   const handleSellerProfile = () => {
-    navigate(`/profile/${itemData.seller.name}`);
+    navigate(`/profile/${itemData.seller.id}`);
   };
 
   return (
@@ -112,7 +148,8 @@ const ItemDetailsPage = () => {
               <img 
                 src={itemData.seller.image}
                 alt={itemData.seller.name}
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-12 h-12 rounded-full object-cover cursor-pointer"
+                onClick={handleSellerProfile}
               />
               <div className="flex-1">
                 <p className="font-semibold text-foreground">{itemData.seller.name}</p>
