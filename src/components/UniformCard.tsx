@@ -92,25 +92,25 @@ const UniformCard = ({
         </Button>
       )}
       
-      {/* Display uploader profile image for events */}
-      {type === 'event' && uploader && (
-        <div className="absolute top-2 right-2">
-          <img 
-            src={uploader.small_photo}
-            alt={uploader.name}
-            className="w-8 h-8 rounded-full object-cover border-2 border-white/80 shadow-sm"
-            onError={(e) => {
-              e.currentTarget.src = uploader.image;
-            }}
-          />
-        </div>
-      )}
       
       <div className="p-3 h-20 flex flex-col justify-between">
-        <div>
-          <h3 className="font-semibold text-foreground truncate text-sm">{title}</h3>
-          {subtitle && (
-            <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
+        <div className="flex items-start gap-2">
+          <div className="flex-1">
+            <h3 className="font-semibold text-foreground truncate text-sm">{title}</h3>
+            {subtitle && (
+              <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
+            )}
+          </div>
+          {/* Display uploader profile image for events */}
+          {type === 'event' && uploader && (
+            <img 
+              src={uploader.small_photo}
+              alt={uploader.name}
+              className="w-8 h-8 rounded-full object-cover border-2 border-white/80 shadow-sm flex-shrink-0"
+              onError={(e) => {
+                e.currentTarget.src = uploader.image;
+              }}
+            />
           )}
         </div>
         {price && (
