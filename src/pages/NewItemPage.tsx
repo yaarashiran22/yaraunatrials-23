@@ -13,6 +13,7 @@ import { useSecureAuth } from "@/hooks/useSecureAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useNewItem } from "@/contexts/NewItemContext";
+import { useUserMessages } from "@/hooks/useUserMessages";
 import { 
   validateAndSanitizeText, 
   validatePrice, 
@@ -30,10 +31,12 @@ const NewItemPage = () => {
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
+  const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, requireAuth, canPerformAction, isAnonymousUser } = useSecureAuth();
   const { toast } = useToast();
   const { refreshItems } = useNewItem();
+  const { createMessage } = useUserMessages();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -150,6 +153,13 @@ const NewItemPage = () => {
       }
 
       console.log('Item created successfully:', data);
+
+      // If user added a message, save it to their profile
+      if (message.trim()) {
+        console.log('Saving message to profile:', message);
+        await createMessage(message.trim());
+      }
+
       toast({
         title: "פריט נוסף בהצלחה!",
         description: "הפריט שלך נוסף למרקט פליס",
@@ -261,6 +271,17 @@ const NewItemPage = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full min-h-[80px] text-right bg-background border border-border rounded-3xl resize-none p-4"
+            />
+          </div>
+
+          {/* Message Field */}
+          <div className="space-y-2">
+            <label className="text-sm text-muted-foreground block text-right">הודעה לפרופיל</label>
+            <Textarea 
+              placeholder="הוסף הודעה שתוצג בפרופיל שלך (אופציונלי)"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="w-full min-h-[60px] text-right bg-background border border-border rounded-3xl resize-none p-4"
             />
           </div>
 
