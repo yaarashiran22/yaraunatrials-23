@@ -314,27 +314,32 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* יד שנייה Section */}
+        {/* הודעות Section */}
         <section className="mb-8">
-          <h2 className="text-lg font-bold mb-4">יד שנייה</h2>
+          <h2 className="text-lg font-bold mb-4">הודעות</h2>
           <div className="flex gap-4 overflow-x-auto pb-4">
             <div className="flex gap-6">
-              {itemsLoading ? (
+              {messagesLoading ? (
                 // Loading skeleton
                 <div className="flex gap-6">
                   {Array(3).fill(null).map((_, index) => (
-                    <div key={index} className="flex-shrink-0 w-36 h-24 bg-muted rounded-lg animate-pulse"></div>
+                    <div key={index} className="flex-shrink-0 w-48 h-32 bg-muted rounded-lg animate-pulse"></div>
                   ))}
                 </div>
-              ) : secondHandItems.length > 0 ? (
-                secondHandItems.map((item) => (
-                  <div key={item.id} className="relative flex-shrink-0 w-36 mb-2">
-                    <img 
-                      src={item.image_url || dressItem} 
-                      alt={item.title}
-                      className="w-36 h-24 rounded-lg object-cover cursor-pointer"
-                      onClick={() => handleItemClick(item)}
-                    />
+              ) : messages.length > 0 ? (
+                messages.map((message) => (
+                  <div key={message.id} className="relative flex-shrink-0 w-48 mb-2">
+                    <div className="w-48 h-32 rounded-lg bg-card border border-border p-4 cursor-pointer hover:bg-muted/20 transition-colors">
+                      <p className="text-sm text-foreground line-clamp-4 leading-relaxed" dir="rtl">
+                        {message.message}
+                      </p>
+                      <div className="absolute bottom-2 left-2 text-xs text-muted-foreground">
+                        {new Date(message.created_at).toLocaleDateString('he-IL', { 
+                          month: 'short', 
+                          day: 'numeric'
+                        })}
+                      </div>
+                    </div>
                     {/* Edit and Delete buttons - only show for own profile */}
                     {isOwnProfile && (
                       <div className="absolute top-1 right-1 flex gap-1">
@@ -342,17 +347,17 @@ const ProfilePage = () => {
                           variant="secondary"
                           size="sm"
                           className="p-1 h-7 w-7 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 border-2 border-white"
-                          onClick={() => handleEditItem(item.id)}
+                          onClick={() => handleEditMessage(message.id, message.message)}
                         >
-                          <Pencil className="h-4 w-4 text-white" />
+                          <Edit3 className="h-3 w-3 text-white" />
                         </Button>
                         <Button
                           variant="destructive"
                           size="sm"
                           className="p-1 h-7 w-7 rounded-full shadow-lg bg-red-500 hover:bg-red-600 border-2 border-white"
-                          onClick={() => handleDeleteItem(item.id)}
+                          onClick={() => handleDeleteMessage(message.id)}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>
                     )}
@@ -361,7 +366,7 @@ const ProfilePage = () => {
               ) : (
                 !isOwnProfile && (
                   <div className="text-center text-muted-foreground py-8">
-                    אין פריטים עדיין
+                    אין הודעות עדיין
                   </div>
                 )
               )}
@@ -370,6 +375,60 @@ const ProfilePage = () => {
               <ChevronLeft className="h-5 w-5 text-muted-foreground" />
             </div>
           </div>
+          
+          {/* Add new message - only for own profile */}
+          {isOwnProfile && (
+            <div className="mt-4 p-4 bg-card rounded-lg border">
+              <div className="flex gap-2">
+                <textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="הוסף הודעה חדשה..."
+                  className="flex-1 min-h-[80px] px-3 py-2 bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  dir="rtl"
+                />
+                <Button
+                  onClick={handleAddMessage}
+                  disabled={!newMessage.trim() || creatingMessage}
+                  className="self-end"
+                  size="sm"
+                >
+                  {creatingMessage ? "שומר..." : "הוסף"}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Edit Message Modal */}
+          {editingMessageId && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+              <div className="w-full max-w-md bg-background rounded-lg mx-4 p-6" dir="rtl">
+                <h3 className="text-lg font-bold mb-4">ערוך הודעה</h3>
+                <textarea
+                  value={editingMessageText}
+                  onChange={(e) => setEditingMessageText(e.target.value)}
+                  className="w-full min-h-[120px] px-3 py-2 bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent mb-4"
+                  dir="rtl"
+                />
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    onClick={handleCancelEdit}
+                    variant="outline"
+                    size="sm"
+                  >
+                    ביטול
+                  </Button>
+                  <Button
+                    onClick={handleUpdateMessage}
+                    disabled={!editingMessageText.trim() || !!updatingMessage}
+                    size="sm"
+                  >
+                    {updatingMessage ? "שומר..." : "שמור"}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* אירועים Section */}
@@ -546,32 +605,27 @@ const ProfilePage = () => {
           </div>
         </section>
 
-        {/* הודעות Section */}
+        {/* יד שנייה Section */}
         <section className="mb-8">
-          <h2 className="text-lg font-bold mb-4">הודעות</h2>
+          <h2 className="text-lg font-bold mb-4">יד שנייה</h2>
           <div className="flex gap-4 overflow-x-auto pb-4">
             <div className="flex gap-6">
-              {messagesLoading ? (
+              {itemsLoading ? (
                 // Loading skeleton
                 <div className="flex gap-6">
                   {Array(3).fill(null).map((_, index) => (
-                    <div key={index} className="flex-shrink-0 w-48 h-32 bg-muted rounded-lg animate-pulse"></div>
+                    <div key={index} className="flex-shrink-0 w-36 h-24 bg-muted rounded-lg animate-pulse"></div>
                   ))}
                 </div>
-              ) : messages.length > 0 ? (
-                messages.map((message) => (
-                  <div key={message.id} className="relative flex-shrink-0 w-48 mb-2">
-                    <div className="w-48 h-32 rounded-lg bg-card border border-border p-4 cursor-pointer hover:bg-muted/20 transition-colors">
-                      <p className="text-sm text-foreground line-clamp-4 leading-relaxed" dir="rtl">
-                        {message.message}
-                      </p>
-                      <div className="absolute bottom-2 left-2 text-xs text-muted-foreground">
-                        {new Date(message.created_at).toLocaleDateString('he-IL', { 
-                          month: 'short', 
-                          day: 'numeric'
-                        })}
-                      </div>
-                    </div>
+              ) : secondHandItems.length > 0 ? (
+                secondHandItems.map((item) => (
+                  <div key={item.id} className="relative flex-shrink-0 w-36 mb-2">
+                    <img 
+                      src={item.image_url || dressItem} 
+                      alt={item.title}
+                      className="w-36 h-24 rounded-lg object-cover cursor-pointer"
+                      onClick={() => handleItemClick(item)}
+                    />
                     {/* Edit and Delete buttons - only show for own profile */}
                     {isOwnProfile && (
                       <div className="absolute top-1 right-1 flex gap-1">
@@ -579,17 +633,17 @@ const ProfilePage = () => {
                           variant="secondary"
                           size="sm"
                           className="p-1 h-7 w-7 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 border-2 border-white"
-                          onClick={() => handleEditMessage(message.id, message.message)}
+                          onClick={() => handleEditItem(item.id)}
                         >
-                          <Edit3 className="h-3 w-3 text-white" />
+                          <Pencil className="h-4 w-4 text-white" />
                         </Button>
                         <Button
                           variant="destructive"
                           size="sm"
                           className="p-1 h-7 w-7 rounded-full shadow-lg bg-red-500 hover:bg-red-600 border-2 border-white"
-                          onClick={() => handleDeleteMessage(message.id)}
+                          onClick={() => handleDeleteItem(item.id)}
                         >
-                          <Trash2 className="h-3 w-3" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     )}
@@ -598,7 +652,7 @@ const ProfilePage = () => {
               ) : (
                 !isOwnProfile && (
                   <div className="text-center text-muted-foreground py-8">
-                    אין הודעות עדיין
+                    אין פריטים עדיין
                   </div>
                 )
               )}
@@ -607,60 +661,6 @@ const ProfilePage = () => {
               <ChevronLeft className="h-5 w-5 text-muted-foreground" />
             </div>
           </div>
-          
-          {/* Add new message - only for own profile */}
-          {isOwnProfile && (
-            <div className="mt-4 p-4 bg-card rounded-lg border">
-              <div className="flex gap-2">
-                <textarea
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="הוסף הודעה חדשה..."
-                  className="flex-1 min-h-[80px] px-3 py-2 bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  dir="rtl"
-                />
-                <Button
-                  onClick={handleAddMessage}
-                  disabled={!newMessage.trim() || creatingMessage}
-                  className="self-end"
-                  size="sm"
-                >
-                  {creatingMessage ? "שומר..." : "הוסף"}
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Edit Message Modal */}
-          {editingMessageId && (
-            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-              <div className="w-full max-w-md bg-background rounded-lg mx-4 p-6" dir="rtl">
-                <h3 className="text-lg font-bold mb-4">ערוך הודעה</h3>
-                <textarea
-                  value={editingMessageText}
-                  onChange={(e) => setEditingMessageText(e.target.value)}
-                  className="w-full min-h-[120px] px-3 py-2 bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent mb-4"
-                  dir="rtl"
-                />
-                <div className="flex gap-2 justify-end">
-                  <Button
-                    onClick={handleCancelEdit}
-                    variant="outline"
-                    size="sm"
-                  >
-                    ביטול
-                  </Button>
-                  <Button
-                    onClick={handleUpdateMessage}
-                    disabled={!editingMessageText.trim() || !!updatingMessage}
-                    size="sm"
-                  >
-                    {updatingMessage ? "שומר..." : "שמור"}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
         </section>
 
         {/* Logout Button */}
