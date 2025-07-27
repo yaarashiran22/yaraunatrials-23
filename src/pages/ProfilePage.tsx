@@ -1,10 +1,11 @@
-import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil } from "lucide-react";
+import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil, MessageSquare, Edit3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSecureAuth } from "@/hooks/useSecureAuth";
 import { useProfile } from "@/hooks/useProfile";
 import { useUserItems } from "@/hooks/useUserItems";
+import { useUserMessages } from "@/hooks/useUserMessages";
 import { validateUUID, canUserModifyItem } from "@/utils/security";
 import { useToast } from "@/hooks/use-toast";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -40,6 +41,7 @@ const ProfilePage = () => {
   const actualProfileId = getActualProfileId();
   const { profile: profileData, loading, error, refetch } = useProfile(actualProfileId);
   const { items: userItems, loading: itemsLoading, deleteItem } = useUserItems(actualProfileId);
+  const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
   // Check if this is the current user's profile
   const isOwnProfile = user && (!id || !validateUUID(id) || id === user.id);
@@ -49,6 +51,9 @@ const ProfilePage = () => {
   const [showAddItem, setShowAddItem] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [isItemPopupOpen, setIsItemPopupOpen] = useState(false);
+  const [newMessage, setNewMessage] = useState("");
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editingMessageText, setEditingMessageText] = useState("");
 
   const handleDeleteItem = async (itemId: string) => {
     // Require authentication
@@ -134,6 +139,41 @@ const ProfilePage = () => {
 
   const handleLogout = () => {
     navigate('/login');
+  };
+
+  const handleAddMessage = async () => {
+    if (!newMessage.trim()) return;
+    
+    const success = await createMessage(newMessage);
+    if (success) {
+      setNewMessage("");
+    }
+  };
+
+  const handleEditMessage = (messageId: string, currentText: string) => {
+    setEditingMessageId(messageId);
+    setEditingMessageText(currentText);
+  };
+
+  const handleUpdateMessage = async () => {
+    if (!editingMessageId || !editingMessageText.trim()) return;
+    
+    const success = await updateMessage(editingMessageId, editingMessageText);
+    if (success) {
+      setEditingMessageId(null);
+      setEditingMessageText("");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingMessageId(null);
+    setEditingMessageText("");
+  };
+
+  const handleDeleteMessage = async (messageId: string) => {
+    if (window.confirm('האם אתה בטוח שברצונך למחוק את ההודעה?')) {
+      await deleteMessage(messageId);
+    }
   };
 
 
@@ -503,6 +543,118 @@ const ProfilePage = () => {
             <div className="flex-shrink-0 flex items-center">
               <ChevronLeft className="h-5 w-5 text-muted-foreground" />
             </div>
+          </div>
+        </section>
+
+        {/* הודעות Section */}
+        <section className="mb-8">
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <MessageSquare className="h-5 w-5" />
+            הודעות
+          </h2>
+          
+          {/* Add new message - only for own profile */}
+          {isOwnProfile && (
+            <div className="mb-4 p-4 bg-card rounded-lg border">
+              <div className="flex gap-2">
+                <textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="הוסף הודעה חדשה..."
+                  className="flex-1 min-h-[80px] px-3 py-2 bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  dir="rtl"
+                />
+                <Button
+                  onClick={handleAddMessage}
+                  disabled={!newMessage.trim() || creatingMessage}
+                  className="self-end"
+                  size="sm"
+                >
+                  {creatingMessage ? "שומר..." : "הוסף"}
+                </Button>
+              </div>
+            </div>
+          )}
+          
+          {/* Messages list */}
+          <div className="space-y-3">
+            {messagesLoading ? (
+              <div className="text-center py-4">
+                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+              </div>
+            ) : messages.length > 0 ? (
+              messages.map((message) => (
+                <div key={message.id} className="p-4 bg-card rounded-lg border">
+                  {editingMessageId === message.id ? (
+                    <div className="space-y-2">
+                      <textarea
+                        value={editingMessageText}
+                        onChange={(e) => setEditingMessageText(e.target.value)}
+                        className="w-full min-h-[80px] px-3 py-2 bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        dir="rtl"
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          onClick={handleCancelEdit}
+                          variant="outline"
+                          size="sm"
+                        >
+                          ביטול
+                        </Button>
+                        <Button
+                          onClick={handleUpdateMessage}
+                          disabled={!editingMessageText.trim() || updatingMessage === message.id}
+                          size="sm"
+                        >
+                          {updatingMessage === message.id ? "שומר..." : "שמור"}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <p className="text-foreground whitespace-pre-wrap" dir="rtl">
+                        {message.message}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(message.created_at).toLocaleDateString('he-IL', { 
+                            year: 'numeric', 
+                            month: 'short', 
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                        {isOwnProfile && (
+                          <div className="flex gap-1">
+                            <Button
+                              onClick={() => handleEditMessage(message.id, message.message)}
+                              variant="ghost"
+                              size="sm"
+                              className="p-1 h-8 w-8"
+                            >
+                              <Edit3 className="h-4 w-4 text-muted-foreground" />
+                            </Button>
+                            <Button
+                              onClick={() => handleDeleteMessage(message.id)}
+                              variant="ghost"
+                              size="sm"
+                              className="p-1 h-8 w-8 text-destructive hover:text-destructive"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-muted-foreground py-8">
+                {isOwnProfile ? "אין הודעות עדיין. הוסף הודעה ראשונה!" : "אין הודעות עדיין"}
+              </div>
+            )}
           </div>
         </section>
 
