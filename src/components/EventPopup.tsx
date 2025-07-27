@@ -74,6 +74,13 @@ const EventPopup = ({
     })
   } : (event || defaultEvent);
 
+  const handleViewProfile = () => {
+    if (displayEvent.organizer?.id) {
+      navigate(`/profile/${displayEvent.organizer.id}`);
+      onClose();
+    }
+  };
+
   console.log('EventPopup - eventData:', eventData);
   console.log('EventPopup - uploader data:', eventData?.uploader);
   console.log('EventPopup - final organizer image:', displayEvent.organizer?.image);
@@ -96,12 +103,6 @@ const EventPopup = ({
     onClose();
   };
 
-  const handleOrganizerProfile = () => {
-    if (displayEvent.organizer?.id) {
-      navigate(`/profile/${displayEvent.organizer.id}`);
-      onClose();
-    }
-  };
   if (!isOpen) return null;
 
   // Show loading state
@@ -178,12 +179,14 @@ const EventPopup = ({
             
             {/* Organizer Info */}
             {displayEvent.organizer && (
-              <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
+              <div 
+                className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                onClick={handleViewProfile}
+              >
                 <img 
                   src={displayEvent.organizer.image || profile1}
                   alt={displayEvent.organizer.name}
-                  className="w-12 h-12 rounded-full object-cover cursor-pointer"
-                  onClick={handleOrganizerProfile}
+                  className="w-12 h-12 rounded-full object-cover"
                   onError={(e) => {
                     console.log('Profile image failed to load, using fallback. Original src:', e.currentTarget.src);
                     e.currentTarget.src = profile1;
@@ -196,15 +199,6 @@ const EventPopup = ({
                     <span>{displayEvent.organizer.location}</span>
                   </div>
                 </div>
-                {displayEvent.organizer.id && (
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={handleOrganizerProfile}
-                  >
-                    פרופיל
-                  </Button>
-                )}
               </div>
             )}
           </div>
