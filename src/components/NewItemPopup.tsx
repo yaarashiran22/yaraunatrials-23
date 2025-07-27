@@ -94,26 +94,23 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
         }
       }
 
-      // Determine title - use provided title or default if only message exists
-      const finalTitle = title.trim() || (message.trim() ? "הודעה חדשה" : "");
-
-      // Create the item data
-      const itemData = {
-        title: finalTitle,
-        description: description.trim() || null,
-        price: price ? parseFloat(price) : null,
-        category: category || null,
-        location: location || null,
-        image_url: selectedImage || null,
-        user_id: currentUser.id,
-        status: 'active'
-      };
-
-      console.log('Creating item with data:', itemData);
-
-      // Only create item if there's actual item content (title, description, price, etc.)
+      // Only create item if there's actual item content (not just message)
       let createdItem = null;
       if (title.trim() || description.trim() || price || category || selectedImage) {
+        // Create the item data
+        const itemData = {
+          title: title.trim(),
+          description: description.trim() || null,
+          price: price ? parseFloat(price) : null,
+          category: category || null,
+          location: location || null,
+          image_url: selectedImage || null,
+          user_id: currentUser.id,
+          status: 'active'
+        };
+
+        console.log('Creating item with data:', itemData);
+
         // Insert into database
         const { data, error } = await supabase
           .from('items')

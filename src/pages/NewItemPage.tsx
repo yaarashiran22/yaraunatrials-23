@@ -131,26 +131,23 @@ const NewItemPage = () => {
     setIsSubmitting(true);
     
     try {
-      // Determine title - use provided title or default if only message exists
-      const finalTitle = titleValidation.value || (message.trim() ? "הודעה חדשה" : "");
-
-      // Create the item data with sanitized values
-      const itemData = {
-        title: finalTitle,
-        description: descValidation.value || null,
-        price: priceValidation.value || null,
-        category: category || null,
-        location: location || null,
-        image_url: selectedImage || null,
-        user_id: user!.id,
-        status: 'active'
-      };
-
-      console.log('Creating item with data:', itemData);
-
-      // Only create item if there's actual item content (title, description, price, etc.)
+      // Only create item if there's actual item content (not just message)
       let createdItem = null;
       if (title.trim() || description.trim() || price || category || selectedImage) {
+        // Create the item data with sanitized values
+        const itemData = {
+          title: titleValidation.value,
+          description: descValidation.value || null,
+          price: priceValidation.value || null,
+          category: category || null,
+          location: location || null,
+          image_url: selectedImage || null,
+          user_id: user!.id,
+          status: 'active'
+        };
+
+        console.log('Creating item with data:', itemData);
+
         // Insert into database
         const { data, error } = await supabase
           .from('items')
