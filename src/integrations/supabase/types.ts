@@ -235,6 +235,24 @@ export type Database = {
           },
         ]
       }
+      smallprofiles: {
+        Row: {
+          created_at: string
+          id: number
+          photo: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          photo?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          photo?: string | null
+        }
+        Relationships: []
+      }
       stories: {
         Row: {
           created_at: string
