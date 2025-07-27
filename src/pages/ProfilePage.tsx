@@ -548,14 +548,69 @@ const ProfilePage = () => {
 
         {/* הודעות Section */}
         <section className="mb-8">
-          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <MessageSquare className="h-5 w-5" />
-            הודעות
-          </h2>
+          <h2 className="text-lg font-bold mb-4">הודעות</h2>
+          <div className="flex gap-4 overflow-x-auto pb-4">
+            <div className="flex gap-6">
+              {messagesLoading ? (
+                // Loading skeleton
+                <div className="flex gap-6">
+                  {Array(3).fill(null).map((_, index) => (
+                    <div key={index} className="flex-shrink-0 w-36 h-24 bg-muted rounded-lg animate-pulse"></div>
+                  ))}
+                </div>
+              ) : messages.length > 0 ? (
+                messages.map((message) => (
+                  <div key={message.id} className="relative flex-shrink-0 w-36 mb-2">
+                    <div className="w-36 h-24 rounded-lg bg-card border border-border p-3 cursor-pointer hover:bg-muted/20 transition-colors">
+                      <p className="text-xs text-foreground line-clamp-3 leading-tight" dir="rtl">
+                        {message.message}
+                      </p>
+                      <div className="absolute bottom-1 left-1 text-[10px] text-muted-foreground">
+                        {new Date(message.created_at).toLocaleDateString('he-IL', { 
+                          month: 'short', 
+                          day: 'numeric'
+                        })}
+                      </div>
+                    </div>
+                    {/* Edit and Delete buttons - only show for own profile */}
+                    {isOwnProfile && (
+                      <div className="absolute top-1 right-1 flex gap-1">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="p-1 h-7 w-7 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 border-2 border-white"
+                          onClick={() => handleEditMessage(message.id, message.message)}
+                        >
+                          <Edit3 className="h-3 w-3 text-white" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="p-1 h-7 w-7 rounded-full shadow-lg bg-red-500 hover:bg-red-600 border-2 border-white"
+                          onClick={() => handleDeleteMessage(message.id)}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                !isOwnProfile && (
+                  <div className="text-center text-muted-foreground py-8">
+                    אין הודעות עדיין
+                  </div>
+                )
+              )}
+            </div>
+            <div className="flex-shrink-0 flex items-center">
+              <ChevronLeft className="h-5 w-5 text-muted-foreground" />
+            </div>
+          </div>
           
           {/* Add new message - only for own profile */}
           {isOwnProfile && (
-            <div className="mb-4 p-4 bg-card rounded-lg border">
+            <div className="mt-4 p-4 bg-card rounded-lg border">
               <div className="flex gap-2">
                 <textarea
                   value={newMessage}
@@ -575,87 +630,37 @@ const ProfilePage = () => {
               </div>
             </div>
           )}
-          
-          {/* Messages list */}
-          <div className="space-y-3">
-            {messagesLoading ? (
-              <div className="text-center py-4">
-                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-              </div>
-            ) : messages.length > 0 ? (
-              messages.map((message) => (
-                <div key={message.id} className="p-4 bg-card rounded-lg border">
-                  {editingMessageId === message.id ? (
-                    <div className="space-y-2">
-                      <textarea
-                        value={editingMessageText}
-                        onChange={(e) => setEditingMessageText(e.target.value)}
-                        className="w-full min-h-[80px] px-3 py-2 bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        dir="rtl"
-                      />
-                      <div className="flex gap-2 justify-end">
-                        <Button
-                          onClick={handleCancelEdit}
-                          variant="outline"
-                          size="sm"
-                        >
-                          ביטול
-                        </Button>
-                        <Button
-                          onClick={handleUpdateMessage}
-                          disabled={!editingMessageText.trim() || updatingMessage === message.id}
-                          size="sm"
-                        >
-                          {updatingMessage === message.id ? "שומר..." : "שמור"}
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <p className="text-foreground whitespace-pre-wrap" dir="rtl">
-                        {message.message}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(message.created_at).toLocaleDateString('he-IL', { 
-                            year: 'numeric', 
-                            month: 'short', 
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </span>
-                        {isOwnProfile && (
-                          <div className="flex gap-1">
-                            <Button
-                              onClick={() => handleEditMessage(message.id, message.message)}
-                              variant="ghost"
-                              size="sm"
-                              className="p-1 h-8 w-8"
-                            >
-                              <Edit3 className="h-4 w-4 text-muted-foreground" />
-                            </Button>
-                            <Button
-                              onClick={() => handleDeleteMessage(message.id)}
-                              variant="ghost"
-                              size="sm"
-                              className="p-1 h-8 w-8 text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
+
+          {/* Edit Message Modal */}
+          {editingMessageId && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+              <div className="w-full max-w-md bg-background rounded-lg mx-4 p-6" dir="rtl">
+                <h3 className="text-lg font-bold mb-4">ערוך הודעה</h3>
+                <textarea
+                  value={editingMessageText}
+                  onChange={(e) => setEditingMessageText(e.target.value)}
+                  className="w-full min-h-[120px] px-3 py-2 bg-background border border-border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent mb-4"
+                  dir="rtl"
+                />
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    onClick={handleCancelEdit}
+                    variant="outline"
+                    size="sm"
+                  >
+                    ביטול
+                  </Button>
+                  <Button
+                    onClick={handleUpdateMessage}
+                    disabled={!editingMessageText.trim() || !!updatingMessage}
+                    size="sm"
+                  >
+                    {updatingMessage ? "שומר..." : "שמור"}
+                  </Button>
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-muted-foreground py-8">
-                {isOwnProfile ? "אין הודעות עדיין. הוסף הודעה ראשונה!" : "אין הודעות עדיין"}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </section>
 
         {/* Logout Button */}
