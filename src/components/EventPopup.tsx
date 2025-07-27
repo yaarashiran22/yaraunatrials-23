@@ -33,8 +33,9 @@ const EventPopup = ({
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Fetch real event data if eventId is provided
-  const { item: eventData, loading } = useItemDetails(eventId || event?.id || '');
+  // Only fetch real event data if eventId is provided and popup is open
+  const shouldFetchData = isOpen && eventId && eventId !== '';
+  const { item: eventData, loading } = useItemDetails(shouldFetchData ? eventId : '');
 
   const defaultEvent = {
     id: "1",
@@ -60,8 +61,10 @@ const EventPopup = ({
     description: eventData.description || defaultEvent.description,
     organizer: {
       id: eventData.uploader.id,
-      name: eventData.uploader.name,
-      image: eventData.uploader.small_profile_photo || eventData.uploader.profile_image_url || profile1,
+      name: eventData.uploader.name || "משתמש",
+      image: eventData.uploader.small_profile_photo || 
+             eventData.uploader.profile_image_url || 
+             profile1,
       location: eventData.uploader.location || "לא צוין"
     },
     date: new Date(eventData.created_at).toLocaleDateString('he-IL', { 
@@ -96,6 +99,17 @@ const EventPopup = ({
     }
   };
   if (!isOpen) return null;
+
+  // Show loading state
+  if (shouldFetchData && loading) {
+    return (
+      <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
+        <div className="bg-background rounded-2xl w-full max-w-sm p-8 text-center">
+          <div className="text-muted-foreground">טוען נתונים...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
@@ -166,6 +180,10 @@ const EventPopup = ({
                   alt={displayEvent.organizer.name}
                   className="w-12 h-12 rounded-full object-cover cursor-pointer"
                   onClick={handleOrganizerProfile}
+                  onError={(e) => {
+                    console.log('Profile image failed to load, using fallback');
+                    e.currentTarget.src = profile1;
+                  }}
                 />
                 <div className="flex-1">
                   <p className="font-semibold text-foreground">{displayEvent.organizer.name}</p>
