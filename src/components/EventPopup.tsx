@@ -73,6 +73,8 @@ const EventPopup = ({
       day: 'numeric' 
     })
   } : (event || defaultEvent);
+
+  console.log('EventPopup - displayEvent.organizer:', displayEvent.organizer);
   const handleContact = () => {
     toast({
       title: "פותח צ'אט",
@@ -176,12 +178,12 @@ const EventPopup = ({
             {displayEvent.organizer && (
               <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
                 <img 
-                  src={displayEvent.organizer.image}
+                  src={displayEvent.organizer.image || profile1}
                   alt={displayEvent.organizer.name}
                   className="w-12 h-12 rounded-full object-cover cursor-pointer"
                   onClick={handleOrganizerProfile}
                   onError={(e) => {
-                    console.log('Profile image failed to load, using fallback');
+                    console.log('Profile image failed to load, using fallback. Original src:', e.currentTarget.src);
                     e.currentTarget.src = profile1;
                   }}
                 />
