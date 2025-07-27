@@ -62,8 +62,8 @@ const EventPopup = ({
     organizer: {
       id: eventData.uploader.id,
       name: eventData.uploader.name || "משתמש",
-      image: eventData.uploader.small_profile_photo || 
-             eventData.uploader.profile_image_url || 
+      image: eventData.uploader.profile_image_url || 
+             eventData.uploader.small_profile_photo || 
              profile1,
       location: eventData.uploader.location || "לא צוין"
     },
@@ -74,7 +74,9 @@ const EventPopup = ({
     })
   } : (event || defaultEvent);
 
-  console.log('EventPopup - displayEvent.organizer:', displayEvent.organizer);
+  console.log('EventPopup - eventData:', eventData);
+  console.log('EventPopup - uploader data:', eventData?.uploader);
+  console.log('EventPopup - final organizer image:', displayEvent.organizer?.image);
   const handleContact = () => {
     toast({
       title: "פותח צ'אט",
