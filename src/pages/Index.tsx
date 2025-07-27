@@ -159,7 +159,7 @@ const Index = () => {
 
         {/* Recommendations Section - Database Only */}
         <section>
-          <SectionHeader title="דברים יפים באמצע הדרך" viewAllPath="/recommended" />
+          <SectionHeader title="מומלצים" viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
           ) : (
