@@ -8,6 +8,7 @@ import NotificationsPopup from "@/components/NotificationsPopup";
 import ProfileCard from "@/components/ProfileCard";
 import AddStoryButton from "@/components/AddStoryButton";
 import UniformCard from "@/components/UniformCard";
+import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { Button } from "@/components/ui/button";
@@ -157,36 +158,44 @@ const Index = () => {
         </section>
 
         {/* Recommendations Section - Database Only */}
-        {recommendationItems.length > 0 && (
-          <section>
-            <SectionHeader title="הדברים הקטנים" viewAllPath="/recommended" />
-            {loading ? (
-              <LoadingSkeleton type="cards" count={3} />
-            ) : (
-              <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-                {recommendationItems.map((item) => (
-                  <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                    <UniformCard
-                      id={item.id}
-                      image={item.image_url || coffeeShop}
-                      title={item.title}
-                      subtitle={item.location || 'תל אביב'}
-                      type="business"
-                      onClick={() => handleMarketplaceClick(item)}
-                      favoriteData={{
-                        id: item.id,
-                        title: item.title,
-                        description: item.description,
-                        image: item.image_url,
-                        type: 'recommendation'
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        )}
+        <section>
+          <SectionHeader title="הדברים הקטנים" viewAllPath="/recommended" />
+          {loading ? (
+            <LoadingSkeleton type="cards" count={3} />
+          ) : (
+            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
+              {user && (
+                <div className="flex-shrink-0 w-36 lg:w-auto">
+                  <AddRecommendationCard />
+                </div>
+              )}
+              {recommendationItems.map((item) => (
+                <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
+                  <UniformCard
+                    id={item.id}
+                    image={item.image_url || coffeeShop}
+                    title={item.title}
+                    subtitle={item.location || 'תל אביב'}
+                    type="business"
+                    onClick={() => handleMarketplaceClick(item)}
+                    favoriteData={{
+                      id: item.id,
+                      title: item.title,
+                      description: item.description,
+                      image: item.image_url,
+                      type: 'recommendation'
+                    }}
+                  />
+                </div>
+              ))}
+              {!user && recommendationItems.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>אין פריטים זמינים כרגע</p>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
 
         {/* Events Section - Database Only */}
         <section>
