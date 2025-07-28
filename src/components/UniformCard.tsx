@@ -93,7 +93,7 @@ const UniformCard = ({
       )}
       
       
-      <div className="p-3 h-16 flex flex-col justify-between">
+      <div className="p-3 h-14 flex flex-col justify-between">
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <h3 className="font-semibold text-foreground truncate text-sm">{title}</h3>
