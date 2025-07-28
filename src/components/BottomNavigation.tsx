@@ -73,8 +73,8 @@ const BottomNavigation = () => {
             variant="ghost"
             size="lg"
             onClick={() => navigate('/favorites')}
-            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 text-red-500 hover:text-red-600 ${
-              isActive('/favorites') ? 'text-red-600' : ''
+            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
+              isActive('/favorites') ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
             <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
