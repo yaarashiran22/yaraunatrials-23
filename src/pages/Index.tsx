@@ -173,6 +173,7 @@ const Index = () => {
                     subtitle={item.location || 'תל אביב'}
                     type="business"
                     onClick={() => handleMarketplaceClick(item)}
+                    showFavoriteButton={false}
                     favoriteData={{
                       id: item.id,
                       title: item.title,

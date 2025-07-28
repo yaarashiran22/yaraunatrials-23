@@ -21,6 +21,7 @@ interface UniformCardProps {
     small_photo: string;
     location: string;
   };
+  showFavoriteButton?: boolean; // Control whether to show the favorite button
 }
 
 const UniformCard = ({ 
@@ -34,7 +35,8 @@ const UniformCard = ({
   onClick, 
   altText,
   favoriteData,
-  uploader
+  uploader,
+  showFavoriteButton = true
 }: UniformCardProps) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   
@@ -79,7 +81,7 @@ const UniformCard = ({
         />
       </div>
       
-      {(type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
+      {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
         <Button
           variant="ghost"
           size="sm"
