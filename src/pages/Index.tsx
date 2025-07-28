@@ -164,11 +164,6 @@ const Index = () => {
             <LoadingSkeleton type="cards" count={3} />
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {user && (
-                <div className="flex-shrink-0 w-36 lg:w-auto">
-                  <AddRecommendationCard />
-                </div>
-              )}
               {recommendationItems.map((item) => (
                 <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
                   <UniformCard
