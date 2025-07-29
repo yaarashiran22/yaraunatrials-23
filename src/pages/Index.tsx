@@ -97,7 +97,7 @@ const Index = () => {
     setIsEventPopupOpen(true);
   };
 
-  const handleMarketplaceClick = (item: any) => {
+  const handleMarketplaceClick = (item: any, itemType?: string) => {
     const itemDetails = {
       id: item.id,
       title: item.title,
@@ -109,7 +109,8 @@ const Index = () => {
         image: profile1,
         location: item.location || "תל אביב"
       },
-      condition: "כמו חדש"
+      condition: "כמו חדש",
+      type: itemType || 'marketplace' // Add type to identify recommendation items
     };
     setSelectedMarketplaceItem(itemDetails);
     setIsMarketplacePopupOpen(true);
@@ -172,7 +173,7 @@ const Index = () => {
                     title={item.title}
                     subtitle={item.location || 'תל אביב'}
                     type="business"
-                    onClick={() => handleMarketplaceClick(item)}
+                    onClick={() => handleMarketplaceClick(item, 'recommendation')}
                     showFavoriteButton={false}
                     favoriteData={{
                       id: item.id,
