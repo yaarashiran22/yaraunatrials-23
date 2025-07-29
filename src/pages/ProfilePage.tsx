@@ -111,7 +111,8 @@ const ProfilePage = () => {
         image: profileData?.profile_image_url || profile1,
         location: item.location || profileData?.location || "תל אביב"
       },
-      condition: "כמו חדש"
+      condition: "כמו חדש",
+      type: item.category
     };
     setSelectedItem(itemDetails);
     setIsItemPopupOpen(true);

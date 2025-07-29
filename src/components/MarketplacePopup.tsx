@@ -21,6 +21,7 @@ interface MarketplacePopupProps {
       location: string;
     };
     condition?: string;
+    type?: string;
   };
 }
 
@@ -174,6 +175,22 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
               </div>
             )}
           </div>
+
+          {/* Request to Join Section - only for join me items */}
+          {item?.type === 'recommendation' && (
+            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <h4 className="text-lg font-semibold text-foreground mb-3 text-center">בקשה להצטרפות</h4>
+              <p className="text-foreground text-center mb-4">
+                שלח בקשה להצטרפות לפעילות זו והמארגן יחזור אליך
+              </p>
+              <Button 
+                onClick={handleContact}
+                className="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white rounded-2xl text-lg font-medium"
+              >
+                שלח בקשת הצטרפות
+              </Button>
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="mt-8 flex flex-col gap-3">
