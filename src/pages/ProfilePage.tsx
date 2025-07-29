@@ -331,7 +331,7 @@ const ProfilePage = () => {
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {recommendationItems.map((item) => (
-                <div key={`join-me-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
+                <div key={`join-me-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto relative">
                   <UniformCard
                     id={item.id}
                     image={item.image_url || coffeeShop}
@@ -348,6 +348,27 @@ const ProfilePage = () => {
                       type: 'recommendation'
                     }}
                   />
+                  {/* Edit and Delete buttons - only show for own profile */}
+                  {isOwnProfile && (
+                    <div className="absolute bottom-1 right-1 flex gap-1">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="p-1 h-7 w-7 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 border-2 border-white"
+                        onClick={() => handleEditItem(item.id)}
+                      >
+                        <Pencil className="h-4 w-4 text-white" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="p-1 h-7 w-7 rounded-full shadow-lg bg-red-500 hover:bg-red-600 border-2 border-white"
+                        onClick={() => handleDeleteItem(item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ))}
               {recommendationItems.length === 0 && (
