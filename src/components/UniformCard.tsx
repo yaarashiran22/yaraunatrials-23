@@ -1,5 +1,5 @@
 
-import { Save } from "lucide-react";
+import { Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import React from "react";
@@ -90,7 +90,7 @@ const UniformCard = ({
           }`}
           onClick={handleFavoriteClick}
         >
-          <Save className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
+          <Bookmark className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
         </Button>
       )}
       
