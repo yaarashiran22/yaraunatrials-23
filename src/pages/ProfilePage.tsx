@@ -1,4 +1,4 @@
-import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil, MessageSquare, Edit3 } from "lucide-react";
+import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil, MessageSquare, Edit3, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -309,9 +309,18 @@ const ProfilePage = () => {
                 </Button>
               )}
               {isOwnProfile && (
-                <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
-                  עריכה
-                </Button>
+                <>
+                  <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
+                    עריכה
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-full p-2 h-8 w-8"
+                  >
+                    <Bookmark className="h-4 w-4" />
+                  </Button>
+                </>
               )}
             </div>
           </div>
