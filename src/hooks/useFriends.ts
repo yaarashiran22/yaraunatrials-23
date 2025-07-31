@@ -18,7 +18,7 @@ export const useFriends = () => {
         .from('user_friends')
         .select(`
           friend_id,
-          profiles!user_friends_friend_id_fkey (
+          profiles:friend_id (
             id,
             name,
             username,
