@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSecureAuth } from "@/hooks/useSecureAuth";
-import { useProfile } from "@/hooks/useProfile";
-import { useUserItems } from "@/hooks/useUserItems";
+import { format } from "date-fns";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserMessages } from "@/hooks/useUserMessages";
 import { validateUUID, canUserModifyItem } from "@/utils/security";
 import { useToast } from "@/hooks/use-toast";
@@ -12,9 +12,12 @@ import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/Header";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
-import AddItemPopup from "@/components/AddItemPopup";
-import UniformCard from "@/components/UniformCard";
+import { useUserItems } from "@/hooks/useUserItems";
+import { useFriends } from "@/hooks/useFriends";
+import { useProfile } from "@/hooks/useProfile";
 import SectionHeader from "@/components/SectionHeader";
+import UniformCard from "@/components/UniformCard";
+import AddItemPopup from "@/components/AddItemPopup";
 
 import profile1 from "@/assets/profile-1.jpg";
 import dressItem from "@/assets/dress-item.jpg";
@@ -43,12 +46,13 @@ const ProfilePage = () => {
   const actualProfileId = getActualProfileId();
   const { profile: profileData, loading, error, refetch } = useProfile(actualProfileId);
   const { items: userItems, loading: itemsLoading, deleteItem } = useUserItems(actualProfileId);
+  const { addFriend, isFriend } = useFriends();
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
   // Check if this is the current user's profile
   const isOwnProfile = user && (!id || !validateUUID(id) || id === user.id);
   
-  const [isAdded, setIsAdded] = useState(false);
+  
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAddItem, setShowAddItem] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -179,6 +183,14 @@ const ProfilePage = () => {
     }
   };
 
+  const handleAddFriend = async () => {
+    if (!actualProfileId || isOwnProfile) return;
+    
+    const success = await addFriend(actualProfileId);
+    if (success) {
+      // Friend added successfully
+    }
+  };
 
 
   // Show loading state
@@ -298,16 +310,16 @@ const ProfilePage = () => {
                   <Settings className="h-4 w-4" />
                 </Button>
               )}
-              {!isOwnProfile && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className={`rounded-full px-3 py-1 h-7 text-xs ${isAdded ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
-                  onClick={() => setIsAdded(!isAdded)}
-                >
-                  הוספה
-                </Button>
-              )}
+               {!isOwnProfile && (
+                 <Button 
+                   variant="outline" 
+                   size="sm" 
+                   className={`rounded-full px-3 py-1 h-7 text-xs ${isFriend(actualProfileId || '') ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
+                   onClick={handleAddFriend}
+                 >
+                   {isFriend(actualProfileId || '') ? 'נוסף לחברים' : 'הוספה'}
+                 </Button>
+               )}
               {isOwnProfile && (
                 <>
                   <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
