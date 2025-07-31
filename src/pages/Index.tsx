@@ -277,7 +277,7 @@ const Index = () => {
 
         {/* Marketplace Section - Database Only */}
         <section>
-          <SectionHeader title="יד שנייה ומסירות" viewAllPath="/marketplace" />
+          <SectionHeader title="למסירה" viewAllPath="/marketplace" />
           {loading ? (
             <LoadingSkeleton type="cards" count={4} />
           ) : marketplaceItems.length === 0 ? (
