@@ -46,6 +46,7 @@ const Index = () => {
     databaseEvents,
     recommendationItems, 
     artItems,
+    businessItems,
     loading, 
     error,
     refetch,
@@ -165,7 +166,7 @@ const Index = () => {
             <LoadingSkeleton type="cards" count={3} />
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {recommendationItems.map((item) => (
+              {businessItems.map((item) => (
                 <div key={`business-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
                   <UniformCard
                     id={item.id}
@@ -185,7 +186,7 @@ const Index = () => {
                   />
                 </div>
               ))}
-              {!user && recommendationItems.length === 0 && (
+              {!user && businessItems.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
                   <p>אין עסקים זמינים כרגע</p>
                 </div>

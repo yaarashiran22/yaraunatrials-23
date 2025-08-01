@@ -256,6 +256,7 @@ const EditItemPage = () => {
               <SelectContent className="bg-background border border-border z-50">
                 <SelectItem value="art">אמנות</SelectItem>
                 <SelectItem value="secondhand">יד שנייה</SelectItem>
+                <SelectItem value="business">עסק</SelectItem>
                 <SelectItem value="event">אירוע</SelectItem>
                 <SelectItem value="recommendation">המלצה</SelectItem>
               </SelectContent>
