@@ -135,12 +135,16 @@ const Index = () => {
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section */}
-        <section className="bg-muted/30 rounded-2xl p-6 border border-border/50">
-          <SectionHeader title="שכנים וחברים" />
+        <section className="bg-muted/50 rounded-2xl p-6 border border-border shadow-sm relative overflow-hidden">
+          {/* Subtle gradient overlay for extra visual interest */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none" />
+          <div className="relative z-10">
+            <SectionHeader title="שכנים וחברים" />
+          </div>
           {loading ? (
             <LoadingSkeleton type="profiles" />
           ) : (
-            <div className="flex gap-4 overflow-x-auto lg:grid lg:grid-cols-6 xl:grid-cols-8 lg:gap-6 pb-2 scrollbar-hide" dir="rtl">
+            <div className="flex gap-4 overflow-x-auto lg:grid lg:grid-cols-6 xl:grid-cols-8 lg:gap-6 pb-2 scrollbar-hide relative z-10" dir="rtl">
               {user && <AddStoryButton className="flex-shrink-0" />}
               {displayProfiles.length > 0 ? (
                 displayProfiles.map((profile) => (
