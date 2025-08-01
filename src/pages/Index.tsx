@@ -135,7 +135,7 @@ const Index = () => {
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section */}
-        <section>
+        <section className="bg-muted/30 rounded-2xl p-6 border border-border/50">
           <SectionHeader title="שכנים וחברים" />
           {loading ? (
             <LoadingSkeleton type="profiles" />
