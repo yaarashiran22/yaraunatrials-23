@@ -165,7 +165,7 @@ const Index = () => {
 
         {/* Popular Businesses Section - Database Only */}
         <section>
-          <SectionHeader title="עסקים פופולאריים" viewAllPath="/recommended" />
+          <SectionHeader title="המלצות שכנים" viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
           ) : (
