@@ -60,23 +60,20 @@ const Header = ({
               <span className="text-sm text-muted-foreground hidden sm:inline">
                 שלום {user ? (user.email?.split('@')[0] || 'משתמש') : 'אורח'}
               </span>
-              <NeighborhoodIndicator />
             </div>
           </div>
           
-          {/* Title or Search - Center */}
-          <div className="flex-1 max-w-md mx-2 sm:mx-4 min-w-0">
+          {/* Neighborhood Selector or Search - Center */}
+          <div className="flex-1 max-w-md mx-2 sm:mx-4 min-w-0 flex justify-center">
             {showSearch && onSearchChange ? (
               <SearchBar 
                 value={searchValue}
                 onChange={onSearchChange}
                 placeholder={searchPlaceholder}
               />
-            ) : title ? (
-              <div className="text-center">
-                <h1 className="text-base sm:text-lg font-bold text-foreground truncate">{title}</h1>
-              </div>
-            ) : null}
+            ) : (
+              <NeighborhoodIndicator />
+            )}
           </div>
           
           {/* Notifications - Left side */}
