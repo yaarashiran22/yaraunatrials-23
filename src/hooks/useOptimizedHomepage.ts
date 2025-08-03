@@ -38,42 +38,42 @@ const fetchHomepageData = async () => {
         .eq('status', 'active')
         .eq('category', 'secondhand')
         .order('created_at', { ascending: false })
-        .limit(8),
+        .limit(6),
       supabase
         .from('items')
         .select('id, title, description, price, category, image_url, location, created_at, user_id')
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
-        .limit(8),
+        .limit(6),
       supabase
         .from('items')
         .select('id, title, description, price, category, image_url, location, created_at')
         .eq('status', 'active')
         .eq('category', 'recommendation')
         .order('created_at', { ascending: false })
-        .limit(8),
+        .limit(6),
       supabase
         .from('items')
         .select('id, title, description, price, category, image_url, location, created_at')
         .eq('status', 'active')
         .eq('category', 'art')
         .order('created_at', { ascending: false })
-        .limit(8),
+        .limit(6),
       supabase
         .from('items')
         .select('id, title, description, price, category, image_url, location, created_at')
         .eq('status', 'active')
         .eq('category', 'business')
         .order('created_at', { ascending: false })
-        .limit(8),
+        .limit(6),
       supabase
         .from('profiles')
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
         .eq('show_in_search', true)
         .order('created_at', { ascending: false })
-        .limit(12)
+        .limit(8)
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;
@@ -161,13 +161,14 @@ export const useOptimizedHomepage = () => {
     });
   };
 
-  // Main query with React Query caching
+  // Main query with React Query caching and aggressive optimization
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['homepage-data'],
     queryFn: fetchHomepageData,
-    staleTime: 30000, // 30 seconds
-    gcTime: 300000, // 5 minutes
+    staleTime: 60000, // 60 seconds - keep data fresh longer
+    gcTime: 600000, // 10 minutes - cache longer
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
     retry: 1,
   });
 
