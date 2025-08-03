@@ -135,9 +135,9 @@ const Index = () => {
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section */}
-        <section className="bg-muted/50 rounded-2xl p-6 border border-border shadow-sm relative overflow-hidden">
+        <section className="bg-primary/10 rounded-2xl p-6 border-2 border-primary/20 shadow-lg relative overflow-hidden">
           {/* Subtle gradient overlay for extra visual interest */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/8 via-transparent to-accent/8 pointer-events-none" />
           <div className="relative z-10">
             <SectionHeader title="שכנים וחברים" />
           </div>
@@ -164,7 +164,7 @@ const Index = () => {
         </section>
 
         {/* Join me Section - Database Only */}
-        <section className="bg-card/30 rounded-2xl p-6 border border-border/50 shadow-sm backdrop-blur-sm">
+        <section className="bg-accent/15 rounded-2xl p-6 border-2 border-accent/30 shadow-md">
           <SectionHeader title="Join me" viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -200,7 +200,7 @@ const Index = () => {
         </section>
 
         {/* Events Section - Database Only */}
-        <section className="bg-muted/20 rounded-xl p-5 border border-border/30">
+        <section className="bg-muted/30 rounded-2xl p-6 border-2 border-muted/50 shadow-md">
           <SectionHeader title="אירועים" viewAllPath="/events" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -247,7 +247,7 @@ const Index = () => {
         </section>
 
         {/* Artists/Creators Section - Database Only */}
-        <section className="bg-accent/10 rounded-xl p-5 border border-accent/20">
+        <section className="bg-card rounded-2xl p-6 border-2 border-card-foreground/20 shadow-lg">
           <SectionHeader title="אמנים יוצרים" viewAllPath="/artists" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -281,7 +281,7 @@ const Index = () => {
         </section>
 
         {/* Marketplace Section - Database Only */}
-        <section className="bg-secondary/20 rounded-xl p-5 border border-secondary/30">
+        <section className="bg-secondary/25 rounded-2xl p-6 border-2 border-secondary/40 shadow-md">
           <SectionHeader title="למסירה" viewAllPath="/marketplace" />
           {loading ? (
             <LoadingSkeleton type="cards" count={4} />
@@ -317,7 +317,7 @@ const Index = () => {
         </section>
 
         {/* Popular Businesses Section - Database Only - Moved to Bottom */}
-        <section className="bg-card/50 rounded-xl p-5 border border-border shadow-sm">
+        <section className="bg-destructive/10 rounded-2xl p-6 border-2 border-destructive/25 shadow-md">
           <SectionHeader title="שאלות שכנים" viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
