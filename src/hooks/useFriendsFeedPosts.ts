@@ -25,13 +25,20 @@ export const useFriendsFeedPosts = () => {
     
     setLoading(true);
     try {
+      console.log('Fetching friends feed posts for user:', user.id);
+      
       // First get the posts
       const { data: postsData, error: postsError } = await supabase
         .from('friends_feed_posts')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (postsError) throw postsError;
+      if (postsError) {
+        console.error('Error fetching posts:', postsError);
+        throw postsError;
+      }
+
+      console.log('Found posts:', postsData?.length || 0);
 
       // Then get the profiles for these posts
       if (postsData && postsData.length > 0) {
@@ -41,7 +48,12 @@ export const useFriendsFeedPosts = () => {
           .select('id, name, profile_image_url')
           .in('id', userIds);
 
-        if (profilesError) throw profilesError;
+        if (profilesError) {
+          console.error('Error fetching profiles:', profilesError);
+          throw profilesError;
+        }
+
+        console.log('Found profiles:', profilesData?.length || 0);
 
         // Combine the data
         const postsWithProfiles = postsData.map(post => ({
@@ -49,6 +61,7 @@ export const useFriendsFeedPosts = () => {
           profiles: profilesData?.find(profile => profile.id === post.user_id)
         }));
 
+        console.log('Posts with profiles:', postsWithProfiles);
         setPosts(postsWithProfiles);
       } else {
         setPosts([]);
@@ -64,6 +77,8 @@ export const useFriendsFeedPosts = () => {
     if (!user) return null;
 
     try {
+      console.log('Creating post for user:', user.id, 'content:', content?.length, 'image:', !!imageUrl);
+      
       const { data: postData, error: postError } = await supabase
         .from('friends_feed_posts')
         .insert({
@@ -74,7 +89,12 @@ export const useFriendsFeedPosts = () => {
         .select('*')
         .single();
 
-      if (postError) throw postError;
+      if (postError) {
+        console.error('Error creating post:', postError);
+        throw postError;
+      }
+
+      console.log('Post created successfully:', postData);
 
       // Get the user's profile
       const { data: profileData, error: profileError } = await supabase
@@ -83,12 +103,17 @@ export const useFriendsFeedPosts = () => {
         .eq('id', user.id)
         .single();
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error('Error fetching profile:', profileError);
+        throw profileError;
+      }
 
       const newPost = {
         ...postData,
         profiles: profileData
       };
+      
+      console.log('Adding post to local state:', newPost);
       
       // Add the new post to the beginning of the list
       setPosts(prev => [newPost, ...prev]);
