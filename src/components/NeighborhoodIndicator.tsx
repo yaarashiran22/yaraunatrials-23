@@ -39,7 +39,9 @@ const NeighborhoodIndicator = () => {
 
   // Memoize current neighborhood calculation to prevent infinite re-renders
   const currentNeighborhood = useMemo(() => {
-    return selectedNeighborhood || (user && !loading ? profile?.location : null) || "תל אביב";
+    if (selectedNeighborhood) return selectedNeighborhood;
+    if (user && !loading && profile?.location) return profile.location;
+    return "תל אביב";
   }, [selectedNeighborhood, user, loading, profile?.location]);
 
   const currentNeighborhoodObj = useMemo(() => {
