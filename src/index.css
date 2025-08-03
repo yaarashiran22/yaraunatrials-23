@@ -11,7 +11,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 280 30% 97%;
-    background: linear-gradient(166deg, hsl(280 20% 98%) 18%, hsl(270 25% 95%) 90%);
+    background: linear-gradient(166deg, hsl(320 25% 96%) 18%, hsl(45 40% 92%) 90%);
 
     --card: 0 0% 100%;
     --card-foreground: 215 25% 27%;
