@@ -37,11 +37,8 @@ const NeighborhoodIndicator = () => {
     }
   };
 
-  if (!user || loading) {
-    return null;
-  }
-
-  const currentNeighborhood = selectedNeighborhood || profile?.location || "תל אביב";
+  // For non-authenticated users, use default neighborhood or selected one
+  const currentNeighborhood = selectedNeighborhood || (user && !loading ? profile?.location : null) || "תל אביב";
   const currentNeighborhoodObj = neighborhoods.find(n => n.name === currentNeighborhood) || neighborhoods[0];
   const displayName = getDisplayName(currentNeighborhoodObj);
 
