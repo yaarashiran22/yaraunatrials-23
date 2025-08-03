@@ -5,17 +5,19 @@ import BusinessPopup from "@/components/BusinessPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import UniformCard from "@/components/UniformCard";
 import FriendsFeedUpload from "@/components/FriendsFeedUpload";
+import FriendsPictureUpload from "@/components/FriendsPictureUpload";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Bell, ArrowLeft, Heart, Users, Camera } from "lucide-react";
+import { Bell, ArrowLeft, Heart, Users, Camera, Images } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { useFriends } from "@/hooks/useFriends";
 import { useFriendsFeedPosts } from "@/hooks/useFriendsFeedPosts";
+import { useFriendsPictureGalleries } from "@/hooks/useFriendsPictureGalleries";
 import { useAuth } from "@/contexts/AuthContext";
 
 const FavoritesPage = () => {
@@ -23,6 +25,7 @@ const FavoritesPage = () => {
   const { user } = useAuth();
   const { friends, getAllFriendsItemsByCategory, loading: friendsLoading } = useFriends();
   const { posts: friendsPosts, loading: postsLoading } = useFriendsFeedPosts();
+  const { galleries: pictureGalleries, loading: galleriesLoading } = useFriendsPictureGalleries();
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
@@ -136,6 +139,62 @@ const FavoritesPage = () => {
             <TabsContent value="feed" className="space-y-6">
               {/* Upload Section */}
               <FriendsFeedUpload />
+
+              {/* Picture Upload Section */}
+              <FriendsPictureUpload />
+
+              {/* Picture Galleries */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold">גלריות תמונות</h2>
+                {galleriesLoading ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">טוען גלריות...</p>
+                  </div>
+                ) : pictureGalleries.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <Images className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-muted-foreground">אין גלריות עדיין</p>
+                      <p className="text-sm text-muted-foreground">התחילו לשתף תמונות!</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  pictureGalleries.map((gallery) => (
+                    <Card key={gallery.id}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3 mb-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={gallery.profiles?.profile_image_url} />
+                            <AvatarFallback>{gallery.profiles?.name?.[0] || 'U'}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold">{gallery.profiles?.name || 'משתמש'}</span>
+                              <span className="text-sm text-muted-foreground">
+                                {formatTimeAgo(gallery.created_at)}
+                              </span>
+                            </div>
+                            {gallery.title && (
+                              <p className="text-sm text-muted-foreground">{gallery.title}</p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-3 gap-2">
+                          {gallery.images.map((imageUrl, index) => (
+                            <img
+                              key={index}
+                              src={imageUrl}
+                              alt={`Gallery image ${index + 1}`}
+                              className="w-full h-24 object-cover rounded-lg"
+                            />
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
 
               {/* Friends Posts */}
               <div className="space-y-4">

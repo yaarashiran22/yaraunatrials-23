@@ -68,6 +68,33 @@ export type Database = {
         }
         Relationships: []
       }
+      friends_picture_galleries: {
+        Row: {
+          created_at: string
+          id: string
+          images: string[]
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          images?: string[]
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          images?: string[]
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       items: {
         Row: {
           category: string | null
