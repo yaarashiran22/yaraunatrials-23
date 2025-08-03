@@ -163,44 +163,8 @@ const Index = () => {
           )}
         </section>
 
-        {/* Popular Businesses Section - Database Only */}
-        <section>
-          <SectionHeader title="שאלות שכנים" viewAllPath="/recommended" />
-          {loading ? (
-            <LoadingSkeleton type="cards" count={3} />
-          ) : (
-            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {businessItems.map((item) => (
-                <div key={`business-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || coffeeShop}
-                    title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    type="business"
-                    onClick={() => handleMarketplaceClick(item, 'business')}
-                    showFavoriteButton={true}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.description,
-                      image: item.image_url,
-                      type: 'business'
-                    }}
-                  />
-                </div>
-              ))}
-              {!user && businessItems.length === 0 && (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p>אין עסקים זמינים כרגע</p>
-                </div>
-              )}
-            </div>
-          )}
-        </section>
-
-        {/* Recommendations Section - Database Only */}
-        <section>
+        {/* Join me Section - Database Only */}
+        <section className="bg-card/30 rounded-2xl p-6 border border-border/50 shadow-sm backdrop-blur-sm">
           <SectionHeader title="Join me" viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -236,7 +200,7 @@ const Index = () => {
         </section>
 
         {/* Events Section - Database Only */}
-        <section>
+        <section className="bg-muted/20 rounded-xl p-5 border border-border/30">
           <SectionHeader title="אירועים" viewAllPath="/events" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -283,7 +247,7 @@ const Index = () => {
         </section>
 
         {/* Artists/Creators Section - Database Only */}
-        <section>
+        <section className="bg-accent/10 rounded-xl p-5 border border-accent/20">
           <SectionHeader title="אמנים יוצרים" viewAllPath="/artists" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -317,7 +281,7 @@ const Index = () => {
         </section>
 
         {/* Marketplace Section - Database Only */}
-        <section>
+        <section className="bg-secondary/20 rounded-xl p-5 border border-secondary/30">
           <SectionHeader title="למסירה" viewAllPath="/marketplace" />
           {loading ? (
             <LoadingSkeleton type="cards" count={4} />
@@ -348,6 +312,42 @@ const Index = () => {
                   />
                 </div>
               ))}
+            </div>
+          )}
+        </section>
+
+        {/* Popular Businesses Section - Database Only - Moved to Bottom */}
+        <section className="bg-card/50 rounded-xl p-5 border border-border shadow-sm">
+          <SectionHeader title="שאלות שכנים" viewAllPath="/recommended" />
+          {loading ? (
+            <LoadingSkeleton type="cards" count={3} />
+          ) : (
+            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
+              {businessItems.map((item) => (
+                <div key={`business-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
+                  <UniformCard
+                    id={item.id}
+                    image={item.image_url || coffeeShop}
+                    title={item.title}
+                    subtitle={item.location || 'תל אביב'}
+                    type="business"
+                    onClick={() => handleMarketplaceClick(item, 'business')}
+                    showFavoriteButton={true}
+                    favoriteData={{
+                      id: item.id,
+                      title: item.title,
+                      description: item.description,
+                      image: item.image_url,
+                      type: 'business'
+                    }}
+                  />
+                </div>
+              ))}
+              {!user && businessItems.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>אין עסקים זמינים כרגע</p>
+                </div>
+              )}
             </div>
           )}
         </section>
