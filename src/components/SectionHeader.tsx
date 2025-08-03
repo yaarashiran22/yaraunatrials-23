@@ -19,8 +19,8 @@ const SectionHeader = ({ title, subtitle, viewAllPath }: SectionHeaderProps) => 
   };
 
   return (
-    <div className="flex items-center justify-between mb-4">
-      <div>
+    <div className="flex flex-col items-center justify-center mb-4">
+      <div className="text-center">
         <h2 className="text-xl font-bold text-foreground">{title}</h2>
         {subtitle && (
           <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
@@ -31,7 +31,7 @@ const SectionHeader = ({ title, subtitle, viewAllPath }: SectionHeaderProps) => 
           variant="ghost"
           size="sm"
           onClick={handleViewAll}
-          className="text-primary hover:text-primary/80 gap-1"
+          className="text-primary hover:text-primary/80 gap-1 mt-2"
         >
           <span>הצג הכל</span>
           <ChevronLeft className="h-4 w-4" />
