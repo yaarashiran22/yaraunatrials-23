@@ -45,22 +45,29 @@ const NeighborhoodIndicator = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="flex items-center gap-1 text-muted-foreground hover:text-foreground">
-          <MapPin className="h-4 w-4" />
-          <span className="hidden sm:inline text-sm">{displayName}</span>
-          <span className="sm:hidden text-sm">{displayName.length > 10 ? displayName.substring(0, 10) + "..." : displayName}</span>
-          <ChevronDown className="h-3 w-3" />
+        <Button 
+          variant="ghost" 
+          size="lg" 
+          className="flex items-center gap-2 text-foreground hover:text-foreground/80 bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-border/50 rounded-full px-4 py-2 shadow-sm transition-all duration-200"
+        >
+          <MapPin className="h-5 w-5 text-primary" />
+          <span className="text-base font-medium">{displayName}</span>
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background border shadow-lg z-50">
+      <DropdownMenuContent align="center" className="bg-background/95 backdrop-blur-sm border shadow-xl z-50 min-w-[200px] rounded-xl p-2">
         {neighborhoods.map((neighborhood) => (
           <DropdownMenuItem 
             key={neighborhood.name}
             onClick={() => setSelectedNeighborhood(neighborhood.name)}
-            className={`cursor-pointer ${currentNeighborhood === neighborhood.name ? 'bg-primary/10' : ''}`}
+            className={`cursor-pointer rounded-lg p-3 transition-colors ${
+              currentNeighborhood === neighborhood.name 
+                ? 'bg-primary/15 text-primary font-medium' 
+                : 'hover:bg-muted/50'
+            }`}
           >
-            <MapPin className="h-4 w-4 mr-2" />
-            <span>{getDisplayName(neighborhood)}</span>
+            <MapPin className="h-4 w-4 mr-3 text-primary" />
+            <span className="text-sm font-medium">{getDisplayName(neighborhood)}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
