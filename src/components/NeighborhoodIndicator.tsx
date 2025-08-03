@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const NeighborhoodIndicator = () => {
@@ -17,16 +17,16 @@ const NeighborhoodIndicator = () => {
   const { language } = useLanguage();
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("");
 
-  const neighborhoods = [
+  const neighborhoods = useMemo(() => [
     { name: "תל אביב", nameEn: "Tel Aviv", nameEs: "Tel Aviv" },
     { name: "פלורנטין", nameEn: "Florentin", nameEs: "Florentin" },
     { name: "נחלת בנימין", nameEn: "Nahalat Binyamin", nameEs: "Nahalat Binyamin" },
     { name: "שכונת מונטיפיורי", nameEn: "Montefiore", nameEs: "Montefiore" },
     { name: "יפו העתיקה", nameEn: "Old Jaffa", nameEs: "Jaffa Antigua" },
     { name: "נווה צדק", nameEn: "Neve Tzedek", nameEs: "Neve Tzedek" }
-  ];
+  ], []);
 
-  const getDisplayName = (neighborhood: any) => {
+  const getDisplayName = useMemo(() => (neighborhood: any) => {
     switch (language) {
       case 'en':
         return neighborhood.nameEn;
@@ -35,12 +35,20 @@ const NeighborhoodIndicator = () => {
       default:
         return neighborhood.name;
     }
-  };
+  }, [language]);
 
-  // For non-authenticated users, use default neighborhood or selected one
-  const currentNeighborhood = selectedNeighborhood || (user && !loading ? profile?.location : null) || "תל אביב";
-  const currentNeighborhoodObj = neighborhoods.find(n => n.name === currentNeighborhood) || neighborhoods[0];
-  const displayName = getDisplayName(currentNeighborhoodObj);
+  // Memoize current neighborhood calculation to prevent infinite re-renders
+  const currentNeighborhood = useMemo(() => {
+    return selectedNeighborhood || (user && !loading ? profile?.location : null) || "תל אביב";
+  }, [selectedNeighborhood, user, loading, profile?.location]);
+
+  const currentNeighborhoodObj = useMemo(() => {
+    return neighborhoods.find(n => n.name === currentNeighborhood) || neighborhoods[0];
+  }, [neighborhoods, currentNeighborhood]);
+
+  const displayName = useMemo(() => {
+    return getDisplayName(currentNeighborhoodObj);
+  }, [getDisplayName, currentNeighborhoodObj]);
 
   return (
     <DropdownMenu>
