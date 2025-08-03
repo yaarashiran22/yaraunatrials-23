@@ -136,7 +136,7 @@ const Index = () => {
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-4 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section */}
-        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-border/30 shadow-sm">
+        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-3 lg:p-4 border border-border/30 shadow-sm">
           <div className="relative z-10">
             <SectionHeader title="שכנים וחברים" />
           </div>
@@ -163,7 +163,7 @@ const Index = () => {
         </section>
 
         {/* Join me Section - Database Only */}
-        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-border/30 shadow-sm">
+        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-3 lg:p-4 border border-border/30 shadow-sm">
           <SectionHeader title="Join me" viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -199,7 +199,7 @@ const Index = () => {
         </section>
 
         {/* Events Section - Database Only */}
-        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-border/30 shadow-sm">
+        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-3 lg:p-4 border border-border/30 shadow-sm">
           <SectionHeader title="אירועים" viewAllPath="/events" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -246,7 +246,7 @@ const Index = () => {
         </section>
 
         {/* Artists/Creators Section - Database Only */}
-        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-border/30 shadow-sm">
+        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-3 lg:p-4 border border-border/30 shadow-sm">
           <SectionHeader title="אמנים יוצרים" viewAllPath="/artists" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
@@ -280,7 +280,7 @@ const Index = () => {
         </section>
 
         {/* Marketplace Section - Database Only */}
-        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-border/30 shadow-sm">
+        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-3 lg:p-4 border border-border/30 shadow-sm">
           <SectionHeader title="למסירה" viewAllPath="/marketplace" />
           {loading ? (
             <LoadingSkeleton type="cards" count={4} />
@@ -316,7 +316,7 @@ const Index = () => {
         </section>
 
         {/* Popular Businesses Section - Database Only - Moved to Bottom */}
-        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-border/30 shadow-sm">
+        <section className="bg-card/40 backdrop-blur-sm rounded-2xl p-3 lg:p-4 border border-border/30 shadow-sm">
           <SectionHeader title="שאלות שכנים" viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
