@@ -5,11 +5,13 @@ import BusinessPopup from "@/components/BusinessPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import UniformCard from "@/components/UniformCard";
 import FriendsFeedUpload from "@/components/FriendsFeedUpload";
+import FriendsPictureUpload from "@/components/FriendsPictureUpload";
+import { useFriendsPictureGalleries } from "@/hooks/useFriendsPictureGalleries";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Bell, ArrowLeft, Heart, Users, Camera } from "lucide-react";
+import { Bell, ArrowLeft, Heart, Users, Camera, Image } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -23,6 +25,7 @@ const FavoritesPage = () => {
   const { user } = useAuth();
   const { friends, getAllFriendsItemsByCategory, loading: friendsLoading } = useFriends();
   const { posts: friendsPosts, loading: postsLoading } = useFriendsFeedPosts();
+  const { galleries, loading: galleriesLoading, refreshGalleries } = useFriendsPictureGalleries();
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
@@ -122,10 +125,14 @@ const FavoritesPage = () => {
           </div>
         ) : (
           <Tabs defaultValue="feed" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="feed" className="flex items-center gap-2">
                 <Camera className="h-4 w-4" />
                 פיד חברים
+              </TabsTrigger>
+              <TabsTrigger value="pictures" className="flex items-center gap-2">
+                <Image className="h-4 w-4" />
+                גלריות תמונות
               </TabsTrigger>
               <TabsTrigger value="items" className="flex items-center gap-2">
                 <Heart className="h-4 w-4" />
@@ -182,6 +189,65 @@ const FavoritesPage = () => {
                             className="w-full max-h-96 object-cover rounded-lg"
                           />
                         )}
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="pictures" className="space-y-6">
+              {/* Picture Upload Section */}
+              <FriendsPictureUpload onGalleryCreated={refreshGalleries} />
+
+              {/* Picture Galleries */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold">גלריות תמונות של חברים</h2>
+                {galleriesLoading ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">טוען גלריות...</p>
+                  </div>
+                ) : galleries.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <Image className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-muted-foreground">אין גלריות תמונות עדיין</p>
+                      <p className="text-sm text-muted-foreground">בואו נתחיל לשתף תמונות!</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  galleries.map((gallery) => (
+                    <Card key={gallery.id}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3 mb-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={gallery.profiles?.profile_image_url} />
+                            <AvatarFallback>{gallery.profiles?.name?.[0] || 'U'}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold">{gallery.profiles?.name || 'משתמש'}</span>
+                              <span className="text-sm text-muted-foreground">
+                                {formatTimeAgo(gallery.created_at)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {gallery.title && (
+                          <h3 className="text-lg font-semibold mb-3">{gallery.title}</h3>
+                        )}
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          {gallery.images.map((image, index) => (
+                            <img
+                              key={index}
+                              src={image}
+                              alt={`Gallery image ${index + 1}`}
+                              className="w-full aspect-square object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                            />
+                          ))}
+                        </div>
                       </CardContent>
                     </Card>
                   ))
