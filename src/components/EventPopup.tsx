@@ -81,9 +81,6 @@ const EventPopup = ({
     }
   };
 
-  console.log('EventPopup - eventData:', eventData);
-  console.log('EventPopup - uploader data:', eventData?.uploader);
-  console.log('EventPopup - final organizer image:', displayEvent.organizer?.image);
   const handleContact = () => {
     toast({
       title: "פותח צ'אט",

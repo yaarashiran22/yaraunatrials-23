@@ -109,7 +109,13 @@ export const useItemDetails = (itemId: string) => {
   };
 
   useEffect(() => {
-    fetchItemDetails();
+    if (itemId && itemId.trim() !== '') {
+      fetchItemDetails();
+    } else {
+      setLoading(false);
+      setItem(null);
+      setError(null);
+    }
   }, [itemId]);
 
   return {
