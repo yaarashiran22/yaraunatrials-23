@@ -151,6 +151,30 @@ export const useFriends = () => {
     }
   };
 
+  /**
+   * Get all friends' items organized by category
+   */
+  const getAllFriendsItemsByCategory = async () => {
+    const categories: { [category: string]: any[] } = {};
+    
+    for (const friend of friends) {
+      const items = await getFriendItems(friend.friend_id);
+      
+      items.forEach(item => {
+        const category = item.category || 'other';
+        if (!categories[category]) {
+          categories[category] = [];
+        }
+        categories[category].push({
+          ...item,
+          uploader: friend.profiles
+        });
+      });
+    }
+    
+    return categories;
+  };
+
   useEffect(() => {
     fetchFriends();
   }, []);
@@ -162,6 +186,7 @@ export const useFriends = () => {
     removeFriend,
     isFriend,
     getFriendItems,
+    getAllFriendsItemsByCategory,
     refreshFriends: fetchFriends
   };
 };

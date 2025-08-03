@@ -1,23 +1,28 @@
 import BottomNavigation from "@/components/BottomNavigation";
-import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import EventPopup from "@/components/EventPopup";
 import BusinessPopup from "@/components/BusinessPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import UniformCard from "@/components/UniformCard";
+import FriendsFeedUpload from "@/components/FriendsFeedUpload";
 import { Button } from "@/components/ui/button";
-import { Bell, ArrowLeft, Heart, Bookmark, Users } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Bell, ArrowLeft, Heart, Users, Camera } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { useFavorites } from "@/contexts/FavoritesContext";
 import { useFriends } from "@/hooks/useFriends";
+import { useFriendsFeedPosts } from "@/hooks/useFriendsFeedPosts";
+import { useAuth } from "@/contexts/AuthContext";
 
 const FavoritesPage = () => {
   const navigate = useNavigate();
-  const { favorites } = useFavorites();
-  const { friends, getFriendItems } = useFriends();
+  const { user } = useAuth();
+  const { friends, getAllFriendsItemsByCategory, loading: friendsLoading } = useFriends();
+  const { posts: friendsPosts, loading: postsLoading } = useFriendsFeedPosts();
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
@@ -25,7 +30,7 @@ const FavoritesPage = () => {
   const [isBusinessPopupOpen, setIsBusinessPopupOpen] = useState(false);
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
-  const [friendsItems, setFriendsItems] = useState<{ [key: string]: any[] }>({});
+  const [friendsItemsByCategory, setFriendsItemsByCategory] = useState<{ [category: string]: any[] }>({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -33,36 +38,61 @@ const FavoritesPage = () => {
       if (friends.length === 0) return;
       
       setLoading(true);
-      const itemsData: { [key: string]: any[] } = {};
-      
-      for (const friend of friends) {
-        const items = await getFriendItems(friend.friend_id);
-        itemsData[friend.friend_id] = items;
+      try {
+        const itemsByCategory = await getAllFriendsItemsByCategory();
+        setFriendsItemsByCategory(itemsByCategory);
+      } catch (error) {
+        console.error('Error loading friends items by category:', error);
+      } finally {
+        setLoading(false);
       }
-      
-      setFriendsItems(itemsData);
-      setLoading(false);
     };
 
     loadFriendsItems();
-  }, [friends, getFriendItems]);
-
-  const handleFavoriteClick = (favorite: any) => {
-    if (favorite.type === 'business') {
-      setSelectedBusiness(favorite.data);
-      setIsBusinessPopupOpen(true);
-    } else if (favorite.type === 'event') {
-      setSelectedEvent(favorite.data);
-      setIsEventPopupOpen(true);
-    }
-  };
+  }, [friends, getAllFriendsItemsByCategory]);
 
   const handleItemClick = (item: any) => {
     navigate(`/item/${item.id}`);
   };
 
-  // Calculate total items from all friends
-  const totalFriendsItems = Object.values(friendsItems).reduce((total, items) => total + items.length, 0);
+  const getCategoryDisplayName = (category: string) => {
+    const categoryNames: { [key: string]: string } = {
+      'secondhand': 'יד שנייה',
+      'event': 'אירועים',
+      'business': 'עסקים',
+      'art': 'אמנות',
+      'recommendation': 'המלצות',
+      'other': 'אחר'
+    };
+    return categoryNames[category] || category;
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'עכשיו';
+    if (diffInMinutes < 60) return `לפני ${diffInMinutes} דקות`;
+    if (diffInMinutes < 1440) return `לפני ${Math.floor(diffInMinutes / 60)} שעות`;
+    return `לפני ${Math.floor(diffInMinutes / 1440)} ימים`;
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background pb-20 flex items-center justify-center" dir="rtl">
+        <div className="text-center">
+          <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-600 mb-2">עליך להתחבר</h2>
+          <p className="text-gray-500">כדי לראות תוכן של חברים</p>
+          <Button onClick={() => navigate('/login')} className="mt-4">
+            התחבר
+          </Button>
+        </div>
+        <BottomNavigation />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-20" dir="rtl">
@@ -72,7 +102,7 @@ const FavoritesPage = () => {
           <Bell className="h-5 w-5" />
         </Button>
         <div className="flex items-center gap-2">
-          <Bookmark className="h-5 w-5 text-primary" />
+          <Users className="h-5 w-5 text-primary" />
           <span className="text-lg font-bold">חברים</span>
         </div>
         <div className="flex items-center gap-3">
@@ -91,68 +121,135 @@ const FavoritesPage = () => {
             <p className="text-gray-500">התחל להוסיף חברים על ידי לחיצה על כפתור ההוספה בפרופיל שלהם</p>
           </div>
         ) : (
-          <>
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-center mb-2">החברים שלי</h1>
-              <p className="text-center text-muted-foreground">{friends.length} חברים • {totalFriendsItems} פריטים</p>
-            </div>
+          <Tabs defaultValue="feed" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="feed" className="flex items-center gap-2">
+                <Camera className="h-4 w-4" />
+                פיד חברים
+              </TabsTrigger>
+              <TabsTrigger value="items" className="flex items-center gap-2">
+                <Heart className="h-4 w-4" />
+                פריטים לפי קטגוריה
+              </TabsTrigger>
+            </TabsList>
 
-            {/* Friends and their items */}
-            <div className="space-y-8">
-              {friends.map((friend) => {
-                const friendProfile = friend.profiles;
-                const items = friendsItems[friend.friend_id] || [];
-                
-                return (
-                  <div key={friend.friend_id} className="space-y-4">
-                    {/* Friend Profile */}
-                    <div 
-                      className="flex items-center gap-3 p-4 bg-card rounded-lg border cursor-pointer hover:bg-accent/50 transition-colors"
-                      onClick={() => navigate(`/profile/${friend.friend_id}`)}
-                    >
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={friendProfile?.profile_image_url} />
-                        <AvatarFallback>{friendProfile?.name?.[0] || 'F'}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <h3 className="font-semibold">{friendProfile?.name || 'משתמש'}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {items.length} פריטים
-                        </p>
-                      </div>
-                    </div>
+            <TabsContent value="feed" className="space-y-6">
+              {/* Upload Section */}
+              <FriendsFeedUpload />
 
-                    {/* Friend's Items */}
-                    {loading ? (
-                      <div className="text-center py-4">
-                        <p className="text-muted-foreground">טוען...</p>
-                      </div>
-                    ) : items.length > 0 ? (
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {items.map((item) => (
-                          <UniformCard
-                            key={`${friend.friend_id}-${item.id}`}
-                            id={item.id}
-                            image={item.image_url}
-                            title={item.title}
-                            subtitle={item.description}
-                            price={item.price}
-                            type="marketplace"
-                            onClick={() => handleItemClick(item)}
-                            favoriteData={item}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-4 text-muted-foreground">
-                        <p>לחבר זה אין פריטים עדיין</p>
-                      </div>
-                    )}
+              {/* Friends Posts */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold">פוסטים של חברים</h2>
+                {postsLoading ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">טוען פוסטים...</p>
                   </div>
-                );
-              })}
-            </div>
-          </>
+                ) : friendsPosts.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <Camera className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-muted-foreground">אין פוסטים עדיין</p>
+                      <p className="text-sm text-muted-foreground">בואו נתחיל לשתף תוכן!</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  friendsPosts.map((post) => (
+                    <Card key={post.id}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3 mb-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={post.profiles?.profile_image_url} />
+                            <AvatarFallback>{post.profiles?.name?.[0] || 'U'}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold">{post.profiles?.name || 'משתמש'}</span>
+                              <span className="text-sm text-muted-foreground">
+                                {formatTimeAgo(post.created_at)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {post.content && (
+                          <p className="mb-3 text-sm">{post.content}</p>
+                        )}
+                        
+                        {post.image_url && (
+                          <img
+                            src={post.image_url}
+                            alt="Post image"
+                            className="w-full max-h-96 object-cover rounded-lg"
+                          />
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="items" className="space-y-6">
+              <div className="mb-6">
+                <h1 className="text-2xl font-bold text-center mb-2">פריטים של חברים</h1>
+                <p className="text-center text-muted-foreground">
+                  {friends.length} חברים • {Object.values(friendsItemsByCategory).reduce((total, items) => total + items.length, 0)} פריטים
+                </p>
+              </div>
+
+              {loading ? (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">טוען פריטים...</p>
+                </div>
+              ) : Object.keys(friendsItemsByCategory).length === 0 ? (
+                <div className="text-center py-12">
+                  <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <h2 className="text-xl font-semibold text-gray-600 mb-2">אין פריטים עדיין</h2>
+                  <p className="text-gray-500">החברים שלך עדיין לא פרסמו פריטים</p>
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  {Object.entries(friendsItemsByCategory).map(([category, items]) => (
+                    <Card key={category}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center justify-between">
+                          <span>{getCategoryDisplayName(category)}</span>
+                          <Badge variant="secondary">{items.length}</Badge>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                          {items.map((item) => (
+                            <div key={`${item.id}-${item.user_id}`} className="space-y-2">
+                              <UniformCard
+                                id={item.id}
+                                image={item.image_url}
+                                title={item.title}
+                                subtitle={item.description}
+                                price={item.price}
+                                type="marketplace"
+                                onClick={() => handleItemClick(item)}
+                                favoriteData={item}
+                              />
+                              {item.uploader && (
+                                <div className="flex items-center gap-2 px-2">
+                                  <Avatar className="h-6 w-6">
+                                    <AvatarImage src={item.uploader.profile_image_url} />
+                                    <AvatarFallback className="text-xs">{item.uploader.name?.[0] || 'U'}</AvatarFallback>
+                                  </Avatar>
+                                  <span className="text-xs text-muted-foreground">{item.uploader.name}</span>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         )}
       </main>
 
