@@ -182,7 +182,7 @@ const Index = () => {
                     favoriteData={{
                       id: item.id,
                       title: item.title,
-                      description: item.description,
+                      description: item.title,
                       image: item.image_url,
                       type: 'recommendation'
                     }}
@@ -221,7 +221,7 @@ const Index = () => {
                     onClick={() => handleEventClick({
                       id: event.id,
                       title: event.title,
-                      description: event.description || 'אירוע קהילתי',
+                      description: event.title,
                       date: 'תאריך יקבע בהמשך',
                       time: 'שעה תקבע בהמשך',
                       location: event.location || 'תל אביב',
@@ -234,7 +234,7 @@ const Index = () => {
                     favoriteData={{
                       id: event.id,
                       title: event.title,
-                      description: event.description,
+                      description: event.title,
                       image: event.image_url,
                       type: 'event'
                     }}
@@ -268,7 +268,7 @@ const Index = () => {
                     favoriteData={{
                       id: item.id,
                       title: item.title,
-                      description: item.description,
+                      description: item.title,
                       image: item.image_url,
                       type: 'art'
                     }}
@@ -303,7 +303,7 @@ const Index = () => {
                     favoriteData={{
                       id: item.id,
                       title: item.title,
-                      description: item.description,
+                      description: item.title,
                       price: item.price,
                       image_url: item.image_url,
                       type: 'marketplace'
@@ -335,7 +335,7 @@ const Index = () => {
                     favoriteData={{
                       id: item.id,
                       title: item.title,
-                      description: item.description,
+                      description: item.title,
                       image: item.image_url,
                       type: 'business'
                     }}

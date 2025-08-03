@@ -30,50 +30,50 @@ export interface OptimizedProfile {
 // Optimized database queries with pre-filtering for faster mobile loading
 const fetchHomepageData = async () => {
   try {
-    // Parallel optimized queries with database-level filtering for mobile performance
+    // Parallel optimized queries with minimal data for fastest mobile loading
     const [marketplaceResult, eventsResult, recommendationsResult, artResult, businessResult, profilesResult] = await Promise.all([
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select('id, title, price, image_url, location')
         .eq('status', 'active')
         .eq('category', 'secondhand')
         .order('created_at', { ascending: false })
-        .limit(6),
+        .limit(4),
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at, user_id')
+        .select('id, title, image_url, location, user_id')
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
-        .limit(6),
+        .limit(4),
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select('id, title, image_url, location')
         .eq('status', 'active')
         .eq('category', 'recommendation')
         .order('created_at', { ascending: false })
-        .limit(6),
+        .limit(3),
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select('id, title, image_url, location')
         .eq('status', 'active')
         .eq('category', 'art')
         .order('created_at', { ascending: false })
-        .limit(6),
+        .limit(3),
       supabase
         .from('items')
-        .select('id, title, description, price, category, image_url, location, created_at')
+        .select('id, title, image_url, location')
         .eq('status', 'active')
         .eq('category', 'business')
         .order('created_at', { ascending: false })
-        .limit(6),
+        .limit(3),
       supabase
         .from('profiles')
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
         .eq('show_in_search', true)
         .order('created_at', { ascending: false })
-        .limit(8)
+        .limit(6)
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;
@@ -165,8 +165,8 @@ export const useOptimizedHomepage = () => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['homepage-data'],
     queryFn: fetchHomepageData,
-    staleTime: 60000, // 60 seconds - keep data fresh longer
-    gcTime: 600000, // 10 minutes - cache longer
+    staleTime: 300000, // 5 minutes - keep data fresh much longer
+    gcTime: 1800000, // 30 minutes - cache even longer
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     retry: 1,
