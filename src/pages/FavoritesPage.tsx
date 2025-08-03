@@ -5,20 +5,21 @@ import BusinessPopup from "@/components/BusinessPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import UniformCard from "@/components/UniformCard";
 import FriendsFeedUpload from "@/components/FriendsFeedUpload";
-import FriendsPictureUpload from "@/components/FriendsPictureUpload";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Bell, ArrowLeft, Heart, Users, Camera, Images } from "lucide-react";
+import { Bell, ArrowLeft, Heart, Users, Camera } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import { useFriends } from "@/hooks/useFriends";
 import { useFriendsFeedPosts } from "@/hooks/useFriendsFeedPosts";
 import { useFriendsPictureGalleries } from "@/hooks/useFriendsPictureGalleries";
 import { useAuth } from "@/contexts/AuthContext";
+import FriendsPictureUpload from "@/components/FriendsPictureUpload";
 
 const FavoritesPage = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const FavoritesPage = () => {
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const [friendsItemsByCategory, setFriendsItemsByCategory] = useState<{ [category: string]: any[] }>({});
   const [loading, setLoading] = useState(false);
+  const [isPhotoUploadOpen, setIsPhotoUploadOpen] = useState(false);
 
   useEffect(() => {
     const loadFriendsItems = async () => {
@@ -80,6 +82,7 @@ const FavoritesPage = () => {
     if (diffInMinutes < 1440) return `לפני ${Math.floor(diffInMinutes / 60)} שעות`;
     return `לפני ${Math.floor(diffInMinutes / 1440)} ימים`;
   };
+
 
   if (!user) {
     return (
@@ -127,7 +130,7 @@ const FavoritesPage = () => {
           <Tabs defaultValue="feed" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="feed" className="flex items-center gap-2">
-                <Camera className="h-4 w-4" />
+                <Camera className="h-4 w-4" onClick={() => setIsPhotoUploadOpen(true)} />
                 פיד חברים
               </TabsTrigger>
               <TabsTrigger value="items" className="flex items-center gap-2">
@@ -140,9 +143,6 @@ const FavoritesPage = () => {
               {/* Upload Section */}
               <FriendsFeedUpload />
 
-              {/* Picture Upload Section */}
-              <FriendsPictureUpload />
-
               {/* Picture Galleries */}
               <div className="space-y-4">
                 <h2 className="text-xl font-bold">גלריות תמונות</h2>
@@ -153,7 +153,7 @@ const FavoritesPage = () => {
                 ) : pictureGalleries.length === 0 ? (
                   <Card>
                     <CardContent className="p-6 text-center">
-                      <Images className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                      <Camera className="h-12 w-12 text-gray-300 mx-auto mb-3" />
                       <p className="text-muted-foreground">אין גלריות עדיין</p>
                       <p className="text-sm text-muted-foreground">התחילו לשתף תמונות!</p>
                     </CardContent>
@@ -335,6 +335,16 @@ const FavoritesPage = () => {
         isOpen={showNotifications} 
         onClose={() => setShowNotifications(false)} 
       />
+
+      {/* Photo Upload Dialog */}
+      <Dialog open={isPhotoUploadOpen} onOpenChange={setIsPhotoUploadOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>העלה גלריית תמונות</DialogTitle>
+          </DialogHeader>
+          <FriendsPictureUpload onGalleryCreated={() => setIsPhotoUploadOpen(false)} />
+        </DialogContent>
+      </Dialog>
       
       <BottomNavigation />
     </div>
