@@ -22,7 +22,7 @@ const NeighborCard = ({ user, onStoryClick }: NeighborCardProps) => {
         <img 
           src={user.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
           alt={user.name}
-          className="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer"
+          className="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer transition-transform duration-200 hover:scale-110 hover:shadow-lg"
           onClick={() => navigate(`/profile/${user.id}`)}
         />
         {/* Story indicator - small circle icon */}
