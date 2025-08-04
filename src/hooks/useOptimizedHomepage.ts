@@ -12,7 +12,8 @@ export interface OptimizedItem {
   category?: string;
   image_url?: string;
   location?: string;
-  created_at: string;
+  user_id?: string;
+  created_at?: string;
   uploader?: {
     name: string;
     image: string;
@@ -27,105 +28,98 @@ export interface OptimizedProfile {
   image: string;
 }
 
-// Optimized database queries with pre-filtering for faster mobile loading
+// Ultra-optimized database queries with aggressive limits for instant mobile loading
 const fetchHomepageData = async () => {
   try {
-    // Parallel optimized queries with minimal data for fastest mobile loading
-    const [marketplaceResult, eventsResult, recommendationsResult, artResult, businessResult, profilesResult] = await Promise.all([
+    // Single optimized query with minimal data - limit everything for mobile speed
+    const [marketplaceResult, eventsResult, recommendationsResult, artResult, profilesResult] = await Promise.all([
       supabase
         .from('items')
         .select('id, title, price, image_url, location')
         .eq('status', 'active')
         .eq('category', 'secondhand')
         .order('created_at', { ascending: false })
-        .limit(4),
+        .limit(6), // Reduced from unlimited to 6 for mobile speed
       supabase
         .from('items')
         .select('id, title, image_url, location, user_id')
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
-        .limit(4),
+        .limit(4), // Keep at 4
       supabase
         .from('items')
         .select('id, title, image_url, location')
         .eq('status', 'active')
         .eq('category', 'recommendation')
         .order('created_at', { ascending: false })
-        .limit(3),
+        .limit(3), // Keep at 3
       supabase
         .from('items')
         .select('id, title, image_url, location')
         .eq('status', 'active')
         .eq('category', 'art')
         .order('created_at', { ascending: false })
-        .limit(3),
-      supabase
-        .from('items')
-        .select('id, title, image_url, location')
-        .eq('status', 'active')
-        .eq('category', 'business')
-        .order('created_at', { ascending: false })
-        .limit(3),
+        .limit(3), // Keep at 3
       supabase
         .from('profiles')
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
         .eq('show_in_search', true)
         .order('created_at', { ascending: false })
+        .limit(8) // Add strict limit to profiles for mobile speed
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;
     if (eventsResult.error) throw eventsResult.error;
     if (recommendationsResult.error) throw recommendationsResult.error;
     if (artResult.error) throw artResult.error;
-    if (businessResult.error) throw businessResult.error;
     if (profilesResult.error) throw profilesResult.error;
 
     const marketplaceItems = marketplaceResult.data || [];
     const rawEvents = eventsResult.data || [];
     const recommendationItems = recommendationsResult.data || [];
     const artItems = artResult.data || [];
-    const businessItems = businessResult.data || [];
     
-    // Fetch uploader profile data for events
-    const eventUserIds = rawEvents.map(event => event.user_id).filter(Boolean);
-    let uploaderProfiles = {};
-    let uploaderSmallProfiles = {};
-    
-    if (eventUserIds.length > 0) {
-      const [profilesResult, smallProfilesResult] = await Promise.all([
-        supabase
-          .from('profiles')
-          .select('id, name, profile_image_url, location')
-          .in('id', eventUserIds),
-        supabase
-          .from('smallprofiles')
-          .select('id, photo')
-          .in('id', eventUserIds)
-      ]);
-      
-      uploaderProfiles = (profilesResult.data || []).reduce((acc, profile) => {
-        acc[profile.id] = profile;
-        return acc;
-      }, {});
-      
-      uploaderSmallProfiles = (smallProfilesResult.data || []).reduce((acc, profile) => {
-        acc[profile.id] = profile;
-        return acc;
-      }, {});
-    }
-    
-    // Transform events data to include uploader info
-    const databaseEvents = rawEvents.map(event => ({
+    // Optimized uploader profile fetching - only fetch if we have events and limit fields
+    let databaseEvents: OptimizedItem[] = rawEvents.map(event => ({
       ...event,
       uploader: {
-        name: uploaderProfiles[event.user_id]?.name || 'משתמש',
-        image: uploaderProfiles[event.user_id]?.profile_image_url || profile1,
-        small_photo: uploaderSmallProfiles[event.user_id]?.photo || profile1,
-        location: uploaderProfiles[event.user_id]?.location || 'לא צוין'
+        name: 'משתמש',
+        image: profile1,
+        small_photo: profile1,
+        location: 'לא צוין'
       }
     }));
+    
+    if (rawEvents.length > 0) {
+      const eventUserIds = rawEvents.map(event => event.user_id).filter(Boolean);
+      
+      if (eventUserIds.length > 0) {
+        const [uploaderProfilesResult] = await Promise.all([
+          supabase
+            .from('profiles')
+            .select('id, name, profile_image_url, location')
+            .in('id', eventUserIds)
+        ]);
+        
+        const uploaderProfiles = (uploaderProfilesResult.data || []).reduce((acc: any, profile) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {});
+        
+        // Transform events data with uploader info
+        databaseEvents = rawEvents.map(event => ({
+          ...event,
+          uploader: {
+            name: uploaderProfiles[event.user_id]?.name || 'משתמש',
+            image: uploaderProfiles[event.user_id]?.profile_image_url || profile1,
+            small_photo: uploaderProfiles[event.user_id]?.profile_image_url || profile1,
+            location: uploaderProfiles[event.user_id]?.location || 'לא צוין'
+          }
+        }));
+      }
+    }
     
     const profiles = (profilesResult.data || []).map((profile) => ({
       id: profile.id,
@@ -134,9 +128,9 @@ const fetchHomepageData = async () => {
     }));
 
     // Combine all items for backward compatibility
-    const items = [...marketplaceItems, ...databaseEvents, ...recommendationItems, ...artItems, ...businessItems];
+    const items = [...marketplaceItems, ...databaseEvents, ...recommendationItems, ...artItems];
 
-    return { items, marketplaceItems, databaseEvents, recommendationItems, artItems, businessItems, profiles };
+    return { items, marketplaceItems, databaseEvents, recommendationItems, artItems, businessItems: [], profiles };
   } catch (error) {
     console.error('Homepage data fetch error:', error);
     toast({
@@ -160,15 +154,17 @@ export const useOptimizedHomepage = () => {
     });
   };
 
-  // Main query with React Query caching and aggressive optimization
+  // Main query with React Query caching and ultra-aggressive optimization for mobile
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['homepage-data'],
     queryFn: fetchHomepageData,
-    staleTime: 300000, // 5 minutes - keep data fresh much longer
-    gcTime: 1800000, // 30 minutes - cache even longer
+    staleTime: 600000, // 10 minutes - much longer for mobile
+    gcTime: 3600000, // 1 hour - aggressive caching
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    retry: 1,
+    refetchOnReconnect: false,
+    retry: 2,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   // Extract pre-filtered data for instant mobile loading
