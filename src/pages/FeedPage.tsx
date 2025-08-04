@@ -41,8 +41,7 @@ const FeedPage = () => {
         const { data, error } = await supabase
           .from('profiles')
           .select('id, name, profile_image_url')
-          .not('name', 'is', null)
-          .limit(10);
+          .not('name', 'is', null);
 
         if (error) {
           console.error('Error fetching users:', error);
