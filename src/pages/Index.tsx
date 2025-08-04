@@ -140,7 +140,7 @@ const Index = () => {
           {loading ? (
             <LoadingSkeleton type="profiles" />
           ) : (
-            <div className="flex gap-4 overflow-x-auto lg:grid lg:grid-cols-6 xl:grid-cols-8 lg:gap-6 pb-2 scrollbar-hide relative z-10" dir="rtl">
+            <div className="flex overflow-x-auto gap-4 pb-2" dir="rtl">
               {user && <AddStoryButton className="flex-shrink-0" />}
               {displayProfiles.length > 0 ? (
                 displayProfiles.map((profile) => (
