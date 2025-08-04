@@ -197,7 +197,30 @@ const FeedPage = () => {
       />
 
       <main className="px-4 py-4 pb-32">
-
+        {/* People in Neighborhood Section */}
+        <section className="mb-6">
+          <SectionHeader title="אנשים בשכונה" />
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {usersLoading ? (
+              <div className="text-center py-4">
+                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+              </div>
+            ) : (
+              registeredUsers.map((user) => (
+                <NeighborCard
+                  key={user.id}
+                  user={user}
+                  onStoryClick={handleStoryClick}
+                />
+              ))
+            )}
+            {registeredUsers.length === 0 && !usersLoading && (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>אין משתמשים רשומים עדיין</p>
+              </div>
+            )}
+          </div>
+        </section>
 
         {/* Upload Card - Only show if user is authenticated */}
         {user && (
