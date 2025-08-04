@@ -197,46 +197,6 @@ const FeedPage = () => {
       />
 
       <main className="px-4 py-4 pb-32">
-        {/* Know Your Neighborhood Section */}
-        {showNeighborhood && (
-          <div className="bg-card rounded-lg shadow-sm p-4 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-muted-foreground" />
-                <h2 className="font-semibold text-foreground">הכר את השכונה</h2>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setShowNeighborhood(false)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-            
-            <p className="text-sm text-muted-foreground mb-4">{registeredUsers.length}+ שכנים</p>
-
-            <div className="flex overflow-x-auto gap-4 pb-2">
-              {usersLoading ? (
-                <div className="text-center py-4">
-                  <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-                </div>
-              ) : registeredUsers.length === 0 ? (
-                <div className="text-center py-4 text-muted-foreground">
-                  <p className="text-sm">אין משתמשים רשומים עדיין</p>
-                </div>
-              ) : (
-                registeredUsers.map((user) => (
-                  <NeighborCard
-                    key={user.id}
-                    user={user}
-                    onStoryClick={handleStoryClick}
-                  />
-                ))
-              )}
-            </div>
-          </div>
-        )}
 
 
         {/* Upload Card - Only show if user is authenticated */}
