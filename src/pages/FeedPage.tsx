@@ -232,27 +232,21 @@ const FeedPage = () => {
         )}
 
         {/* שאלות שכנים Section */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm mb-6">
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm mb-6">
           <SectionHeader title="שאלות שכנים" viewAllPath="/recommended" />
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {businessItems.map((item) => (
-              <div key={`business-${item.id}`} className="flex-shrink-0 w-32">
-                <UniformCard
-                  id={item.id}
-                  image={item.image_url || coffeeShop}
-                  title={item.title}
-                  subtitle={item.location || 'תל אביב'}
-                  type="business"
-                  onClick={() => handleMarketplaceClick(item, 'business')}
-                  showFavoriteButton={true}
-                  favoriteData={{
-                    id: item.id,
-                    title: item.title,
-                    description: item.title,
-                    image: item.image_url,
-                    type: 'business'
-                  }}
-                />
+              <div 
+                key={`business-${item.id}`} 
+                className="flex-shrink-0 w-48 bg-background border border-border rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => handleMarketplaceClick(item, 'business')}
+              >
+                <h3 className="font-medium text-foreground text-sm mb-1 line-clamp-2">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  {item.location || 'תל אביב'}
+                </p>
               </div>
             ))}
             {!user && businessItems.length === 0 && (
