@@ -148,7 +148,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
         onClick={handleClick}
       >
         <div className="relative">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/30 border-2 border-dashed border-primary/50 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full border-2 border-dashed border-primary/50 flex items-center justify-center">
             <Plus className="w-6 h-6 text-primary" />
           </div>
           <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
