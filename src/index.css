@@ -114,7 +114,7 @@ All colors MUST be HSL.
   }
 
   body {
-    background: hsl(var(--background));
+    background: linear-gradient(166deg, rgba(255, 215, 173, 1) 18%, rgba(255, 218, 138, 1) 70%);
     color: hsl(var(--foreground));
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     direction: rtl;
