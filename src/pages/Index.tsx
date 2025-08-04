@@ -161,7 +161,7 @@ const Index = () => {
 
         {/* Join me Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="Join me" viewAllPath="/recommended" />
+          <SectionHeader title="מוזמנים" viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
           ) : (
