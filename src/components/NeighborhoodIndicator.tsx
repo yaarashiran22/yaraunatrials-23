@@ -26,7 +26,7 @@ const NeighborhoodIndicator = () => {
     { name: "נווה צדק", nameEn: "Neve Tzedek", nameEs: "Neve Tzedek" }
   ], []);
 
-  const getDisplayName = useMemo(() => (neighborhood: any) => {
+  const getDisplayName = (neighborhood: any) => {
     switch (language) {
       case 'en':
         return neighborhood.nameEn;
@@ -35,7 +35,7 @@ const NeighborhoodIndicator = () => {
       default:
         return neighborhood.name;
     }
-  }, [language]);
+  };
 
   // Memoize current neighborhood calculation to prevent infinite re-renders
   const currentNeighborhood = useMemo(() => {
@@ -50,7 +50,7 @@ const NeighborhoodIndicator = () => {
 
   const displayName = useMemo(() => {
     return getDisplayName(currentNeighborhoodObj);
-  }, [getDisplayName, currentNeighborhoodObj]);
+  }, [currentNeighborhoodObj, language]);
 
   return (
     <DropdownMenu>
