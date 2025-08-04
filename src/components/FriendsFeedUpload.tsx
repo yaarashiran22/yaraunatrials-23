@@ -4,6 +4,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Camera, X, Send } from 'lucide-react';
 import { useFriendsFeedPosts } from '@/hooks/useFriendsFeedPosts';
+import { useFriendsPictureGalleries } from '@/hooks/useFriendsPictureGalleries';
 import { useToast } from '@/hooks/use-toast';
 
 interface FriendsFeedUploadProps {
@@ -16,6 +17,7 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const { createPost } = useFriendsFeedPosts();
+  const { createGallery } = useFriendsPictureGalleries();
   const { toast } = useToast();
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,28 +49,26 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
 
     setUploading(true);
     try {
-      let imageUrl = '';
-      
       if (selectedImage) {
-        // Convert image to base64 for storage
+        // If there's an image, create a picture gallery instead of a post
         const reader = new FileReader();
         reader.onload = async (e) => {
-          imageUrl = e.target?.result as string;
+          const imageUrl = e.target?.result as string;
           
-          const post = await createPost(content.trim() || undefined, imageUrl);
+          const gallery = await createGallery([imageUrl], content.trim() || undefined);
           
-          if (post) {
+          if (gallery) {
             setContent('');
             setSelectedImage(null);
             setImagePreview(null);
             onPostCreated?.();
             toast({
-              title: "הפוסט נפרסם בהצלחה!"
+              title: "התמונה נוספה לגלריה בהצלחה!"
             });
           } else {
             toast({
               title: "שגיאה",
-              description: "לא ניתן לפרסם את הפוסט",
+              description: "לא ניתן להעלות את התמונה",
               variant: "destructive"
             });
           }
@@ -76,7 +76,7 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
         };
         reader.readAsDataURL(selectedImage);
       } else {
-        // Text only post
+        // Text only post - create a regular post
         const post = await createPost(content.trim());
         
         if (post) {
@@ -95,10 +95,10 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
         setUploading(false);
       }
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error('Error creating content:', error);
       toast({
         title: "שגיאה",
-        description: "לא ניתן לפרסם את הפוסט",
+        description: "לא ניתן לפרסם את התוכן",
         variant: "destructive"
       });
       setUploading(false);
