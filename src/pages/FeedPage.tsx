@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import StoriesPopup from "@/components/StoriesPopup";
-import TelAvivMap from "@/components/TelAvivMap";
+
 import { Button } from "@/components/ui/button";
 import { Search, X, Heart, MessageCircle, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -178,14 +178,6 @@ const FeedPage = () => {
           </div>
         )}
 
-        {/* Tel Aviv Map Section */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <MapPin className="h-5 w-5 text-primary" />
-            <h2 className="font-semibold text-foreground">מפת תל אביב</h2>
-          </div>
-          <TelAvivMap />
-        </div>
 
         {/* Upload Card - Only show if user is authenticated */}
         {user && (
