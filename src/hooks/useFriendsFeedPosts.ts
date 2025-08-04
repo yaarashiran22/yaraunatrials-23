@@ -149,6 +149,15 @@ export const useFriendsFeedPosts = () => {
     fetchFriendsFeedPosts();
   }, [user]);
 
+  // Auto-refresh posts every 30 seconds to show new content
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchFriendsFeedPosts();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [user]);
+
   return {
     posts,
     loading,

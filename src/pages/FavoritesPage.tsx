@@ -143,59 +143,6 @@ const FavoritesPage = () => {
               {/* Upload Section */}
               <FriendsFeedUpload />
 
-              {/* Picture Galleries */}
-              <div className="space-y-4">
-                <h2 className="text-xl font-bold">גלריות תמונות</h2>
-                {galleriesLoading ? (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">טוען גלריות...</p>
-                  </div>
-                ) : pictureGalleries.length === 0 ? (
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <Camera className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                      <p className="text-muted-foreground">אין גלריות עדיין</p>
-                      <p className="text-sm text-muted-foreground">התחילו לשתף תמונות!</p>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  pictureGalleries.map((gallery) => (
-                    <Card key={gallery.id}>
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3 mb-3">
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage src={gallery.profiles?.profile_image_url} />
-                            <AvatarFallback>{gallery.profiles?.name?.[0] || 'U'}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="font-semibold">{gallery.profiles?.name || 'משתמש'}</span>
-                              <span className="text-sm text-muted-foreground">
-                                {formatTimeAgo(gallery.created_at)}
-                              </span>
-                            </div>
-                            {gallery.title && (
-                              <p className="text-sm text-muted-foreground">{gallery.title}</p>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-3 gap-2">
-                          {gallery.images.map((imageUrl, index) => (
-                            <img
-                              key={index}
-                              src={imageUrl}
-                              alt={`Gallery image ${index + 1}`}
-                              className="w-full h-24 object-cover rounded-lg"
-                            />
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))
-                )}
-              </div>
-
               {/* Friends Posts */}
               <div className="space-y-4">
                 <h2 className="text-xl font-bold">פוסטים של חברים</h2>

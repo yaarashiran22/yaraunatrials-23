@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Camera, X, Send } from 'lucide-react';
 import { useFriendsFeedPosts } from '@/hooks/useFriendsFeedPosts';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface FriendsFeedUploadProps {
   onPostCreated?: () => void;
@@ -50,49 +51,46 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
       let imageUrl = '';
       
       if (selectedImage) {
-        // Convert image to base64 for storage
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          imageUrl = e.target?.result as string;
-          
-          const post = await createPost(content.trim() || undefined, imageUrl);
-          
-          if (post) {
-            setContent('');
-            setSelectedImage(null);
-            setImagePreview(null);
-            onPostCreated?.();
-            toast({
-              title: "הפוסט נפרסם בהצלחה!"
-            });
-          } else {
-            toast({
-              title: "שגיאה",
-              description: "לא ניתן לפרסם את הפוסט",
-              variant: "destructive"
-            });
-          }
-          setUploading(false);
-        };
-        reader.readAsDataURL(selectedImage);
-      } else {
-        // Text only post
-        const post = await createPost(content.trim());
-        
-        if (post) {
-          setContent('');
-          onPostCreated?.();
-          toast({
-            title: "הפוסט נפרסם בהצלחה!"
-          });
-        } else {
-          toast({
-            title: "שגיאה",
-            description: "לא ניתן לפרסם את הפוסט",
-            variant: "destructive"
-          });
+        // Upload image to Supabase storage
+        const fileExt = selectedImage.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `friends-feed/${fileName}`;
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('profile-images')
+          .upload(filePath, selectedImage);
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          throw uploadError;
         }
-        setUploading(false);
+
+        // Get the public URL
+        const { data: urlData } = supabase.storage
+          .from('profile-images')
+          .getPublicUrl(filePath);
+
+        imageUrl = urlData.publicUrl;
+        console.log('Image uploaded successfully:', imageUrl);
+      }
+
+      // Create the post
+      const post = await createPost(content.trim() || undefined, imageUrl || undefined);
+      
+      if (post) {
+        setContent('');
+        setSelectedImage(null);
+        setImagePreview(null);
+        onPostCreated?.();
+        toast({
+          title: "הפוסט נפרסם בהצלחה!"
+        });
+      } else {
+        toast({
+          title: "שגיאה",
+          description: "לא ניתן לפרסם את הפוסט",
+          variant: "destructive"
+        });
       }
     } catch (error) {
       console.error('Error creating post:', error);
@@ -101,6 +99,7 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
         description: "לא ניתן לפרסם את הפוסט",
         variant: "destructive"
       });
+    } finally {
       setUploading(false);
     }
   };
