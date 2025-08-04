@@ -73,7 +73,6 @@ const fetchHomepageData = async () => {
         .not('name', 'is', null)
         .eq('show_in_search', true)
         .order('created_at', { ascending: false })
-        .limit(6)
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;
