@@ -240,7 +240,7 @@ const FeedPage = () => {
                 return (
                   <div 
                     key={`question-${question.id}`} 
-                    className="flex-shrink-0 w-64 bg-background border border-border rounded-lg p-4"
+                    className="flex-shrink-0 w-64 bg-white border border-border rounded-lg p-4"
                   >
                     <div className="flex items-start gap-3 mb-3">
                       <img 
