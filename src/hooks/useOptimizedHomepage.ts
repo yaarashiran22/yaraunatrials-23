@@ -158,13 +158,13 @@ export const useOptimizedHomepage = () => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['homepage-data'],
     queryFn: fetchHomepageData,
-    staleTime: 600000, // 10 minutes - much longer for mobile
-    gcTime: 3600000, // 1 hour - aggressive caching
+    staleTime: 300000, // 5 minutes - aggressive but not excessive
+    gcTime: 600000, // 10 minutes 
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
-    retry: 2,
-    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+    retry: 1, // Reduced retries for faster failure
+    retryDelay: 1000, // Fixed delay
   });
 
   // Extract pre-filtered data for instant mobile loading

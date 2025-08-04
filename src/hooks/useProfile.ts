@@ -26,10 +26,7 @@ export const useProfile = (profileId?: string) => {
   const fetchProfile = useCallback(async () => {
     const targetId = profileId || user?.id;
     
-    console.log('Fetching profile for ID:', targetId, 'profileId param:', profileId, 'user.id:', user?.id);
-    
     if (!targetId) {
-      console.log('No target ID available');
       setProfile(null);
       setLoading(false);
       return;
@@ -39,30 +36,23 @@ export const useProfile = (profileId?: string) => {
     setError(null);
 
     try {
-      console.log('Querying profiles table for ID:', targetId);
       const { data, error: fetchError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', targetId)
         .maybeSingle();
 
-      console.log('Profile query result:', { data, error: fetchError });
-
       if (fetchError) {
-        console.error('Error fetching profile:', fetchError);
         setError(fetchError.message);
         setProfile(null);
       } else if (!data) {
-        console.log('No profile found for ID:', targetId);
         setError('Profile not found');
         setProfile(null);
       } else {
-        console.log('Profile loaded successfully:', data);
         setProfile(data);
         setError(null);
       }
     } catch (err: any) {
-      console.error('Unexpected error:', err);
       setError(err.message || 'An unexpected error occurred');
       setProfile(null);
     } finally {
@@ -192,7 +182,7 @@ export const useProfile = (profileId?: string) => {
 
   useEffect(() => {
     fetchProfile();
-  }, [fetchProfile]);
+  }, [profileId, user?.id]); // Direct dependencies instead of fetchProfile
 
   return {
     profile,
