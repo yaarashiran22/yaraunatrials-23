@@ -41,7 +41,7 @@ const BottomNavigation = () => {
             }`}
           >
             <Home className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">בית</span>
+            <span className="text-xs font-medium truncate">{t('navigation.home')}</span>
           </Button>
 
           {/* Neighborhood Feed - פיד שכונתי */}
@@ -54,7 +54,7 @@ const BottomNavigation = () => {
             }`}
           >
             <Users className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">פיד</span>
+            <span className="text-xs font-medium truncate">{t('navigation.feed')}</span>
           </Button>
 
           {/* Create button - Center button */}
@@ -78,7 +78,7 @@ const BottomNavigation = () => {
             }`}
           >
             <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">חברים</span>
+            <span className="text-xs font-medium truncate">{t('navigation.favorites')}</span>
           </Button>
 
           {/* Profile/Login - פרופיל/התחברות */}
@@ -92,7 +92,7 @@ const BottomNavigation = () => {
               }`}
             >
               <User className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-xs font-medium truncate">פרופיל</span>
+              <span className="text-xs font-medium truncate">{t('common.profile')}</span>
             </Button>
           ) : (
             <Button
@@ -104,7 +104,7 @@ const BottomNavigation = () => {
               }`}
             >
               <LogIn className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-xs font-medium truncate">התחברות</span>
+              <span className="text-xs font-medium truncate">{t('common.login')}</span>
             </Button>
           )}
         </div>

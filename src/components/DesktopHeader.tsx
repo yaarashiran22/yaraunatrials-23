@@ -1,8 +1,9 @@
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Bell, Plus, ChevronDown } from "lucide-react";
+import { LogOut, User, Bell, Plus, ChevronDown, Settings } from "lucide-react";
 import { useNewItem } from "@/contexts/NewItemContext";
 import LanguageSelector from "@/components/LanguageSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
@@ -27,6 +28,7 @@ const DesktopHeader = ({
   onNotificationsClick
 }: DesktopHeaderProps) => {
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { openNewItem } = useNewItem();
 
@@ -67,7 +69,7 @@ const DesktopHeader = ({
               style={{ backgroundColor: '#BB31E9', color: 'hsl(0 0% 100%)' }}
             >
               <Plus className="h-4 w-4 mr-2" />
-              צור פוסט
+              {t('navigation.createPost')}
             </Button>
             
             {/* Notifications */}
@@ -88,22 +90,22 @@ const DesktopHeader = ({
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="rounded-full px-4">
                     <User className="h-4 w-4 mr-2" />
-                    {user.email?.split('@')[0] || 'משתמש'}
+                    {user.email?.split('@')[0] || t('common.profile')}
                     <ChevronDown className="h-4 w-4 mr-2" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem onClick={() => navigate('/profile/1')}>
                     <User className="h-4 w-4 mr-2" />
-                    פרופיל
+                    {t('common.profile')}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/settings')}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    הגדרות
+                    <Settings className="h-4 w-4 mr-2" />
+                    {t('common.settings')}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="h-4 w-4 mr-2" />
-                    התנתק
+                    {t('common.logout')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -113,7 +115,7 @@ const DesktopHeader = ({
                 onClick={() => navigate('/login')}
                 className="rounded-full"
               >
-                התחבר
+                {t('common.login')}
               </Button>
             )}
           </div>

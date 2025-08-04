@@ -62,12 +62,14 @@ export const translations = {
       recommended: "מומלצים",
       artists: "אמנים יוצרים",
       feed: "פיד",
+      favorites: "חברים",
       createPost: "צור פוסט",
       createEvent: "צור אירוע",
       createItem: "צור פריט למכירה"
     },
     sections: {
       neighbors: "שכנים וחברים",
+      joinMe: "מוזמנים להצטרף",
       knowYourNeighborhood: "הכיר את השכונה"
     },
     popups: {
@@ -147,12 +149,14 @@ export const translations = {
       recommended: "Recommended",
       artists: "Artists & Creators",
       feed: "Feed",
+      favorites: "Friends",
       createPost: "Create Post",
       createEvent: "Create Event",
       createItem: "Create Item for Sale"
     },
     sections: {
       neighbors: "Neighbors & Friends",
+      joinMe: "Invited to Join",
       knowYourNeighborhood: "Know Your Neighborhood"
     },
     popups: {
@@ -232,12 +236,14 @@ export const translations = {
       recommended: "Recomendados", 
       artists: "Artistas y Creadores",
       feed: "Feed",
+      favorites: "Amigos",
       createPost: "Crear Publicación",
       createEvent: "Crear Evento",
       createItem: "Crear Artículo en Venta"
     },
     sections: {
       neighbors: "Vecinos y Amigos",
+      joinMe: "Invitados a Unirse",
       knowYourNeighborhood: "Conoce tu Barrio"
     },
     popups: {

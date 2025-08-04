@@ -120,14 +120,14 @@ const Index = () => {
       {/* Mobile Header */}
       <div className="lg:hidden">
         <Header 
-          title="בית"
+          title={t('common.home')}
           onNotificationsClick={() => setShowNotifications(true)}
         />
       </div>
       
       {/* Desktop Header */}
       <DesktopHeader 
-        title="בית"
+        title={t('common.home')}
         onNotificationsClick={() => setShowNotifications(true)}
       />
       
@@ -135,7 +135,7 @@ const Index = () => {
         {/* Community Members Section - Special styling for better differentiation */}
         <section className="mb-8 lg:mb-10">
           <div className="relative z-10">
-            <SectionHeader title="שכנים וחברים" />
+            <SectionHeader title={t('sections.neighbors')} />
           </div>
           {loading ? (
             <LoadingSkeleton type="profiles" />
@@ -161,7 +161,7 @@ const Index = () => {
 
         {/* Join me Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="מוזמנים להצטרף" viewAllPath="/recommended" />
+          <SectionHeader title={t('sections.joinMe')} viewAllPath="/recommended" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
           ) : (
@@ -197,7 +197,7 @@ const Index = () => {
 
         {/* Events Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="אירועים" viewAllPath="/events" />
+          <SectionHeader title={t('events.title')} viewAllPath="/events" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
           ) : databaseEvents.length === 0 ? (
@@ -244,7 +244,7 @@ const Index = () => {
 
         {/* Artists/Creators Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="אמנים יוצרים" viewAllPath="/artists" />
+          <SectionHeader title={t('artists.title')} viewAllPath="/artists" />
           {loading ? (
             <LoadingSkeleton type="cards" count={3} />
           ) : artItems.length === 0 ? (
@@ -278,7 +278,7 @@ const Index = () => {
 
         {/* Marketplace Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="למסירה" viewAllPath="/marketplace" />
+          <SectionHeader title={t('marketplace.title')} viewAllPath="/marketplace" />
           {loading ? (
             <LoadingSkeleton type="cards" count={4} />
           ) : marketplaceItems.length === 0 ? (
