@@ -10,7 +10,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 48 40% 96%;
+    --background: linear-gradient(166deg, rgba(255, 215, 173, 1) 18%, rgba(255, 218, 138, 1) 70%);
     --foreground: 30 25% 25%;
     background: linear-gradient(166deg, hsl(48 35% 93%) 18%, hsl(48 45% 92%) 90%);
 
@@ -114,7 +114,7 @@ All colors MUST be HSL.
   }
 
   body {
-    background: linear-gradient(166deg, rgba(255, 215, 173, 1) 18%, rgba(255, 218, 138, 1) 70%);
+    background: var(--background);
     color: hsl(var(--foreground));
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     direction: rtl;
