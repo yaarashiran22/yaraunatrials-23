@@ -16,6 +16,8 @@ import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import NeighborCard from "@/components/NeighborCard";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
+import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
+import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
 import { supabase } from "@/integrations/supabase/client";
 
 import profile1 from "@/assets/profile-1.jpg";
@@ -39,7 +41,8 @@ const FeedPage = () => {
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const { posts, loading } = usePosts();
-  const { businessItems } = useOptimizedHomepage();
+  const { questions, loading: questionsLoading } = useNeighborQuestions();
+  const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
 
   // Fetch registered users
   useEffect(() => {
@@ -95,6 +98,37 @@ const FeedPage = () => {
 
     fetchPostProfiles();
   }, [posts]);
+
+  // Fetch user profiles for neighbor questions
+  useEffect(() => {
+    const fetchQuestionProfiles = async () => {
+      if (questions.length === 0) return;
+
+      const userIds = [...new Set(questions.map(q => q.user_id))];
+      
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, name, profile_image_url')
+          .in('id', userIds);
+
+        if (error) {
+          console.error('Error fetching question profiles:', error);
+        } else {
+          const profilesMap = (data || []).reduce((acc, profile) => {
+            acc[profile.id] = profile;
+            return acc;
+          }, {} as {[key: string]: any});
+          
+          setQuestionProfiles(profilesMap);
+        }
+      } catch (err) {
+        console.error('Unexpected error fetching question profiles:', err);
+      }
+    };
+
+    fetchQuestionProfiles();
+  }, [questions]);
 
   // Transform database posts to display format with real user data
   const displayPosts = posts.map(post => {
@@ -233,25 +267,46 @@ const FeedPage = () => {
 
         {/* שאלות שכנים Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm mb-6">
-          <SectionHeader title="שאלות שכנים" viewAllPath="/recommended" />
+          <SectionHeader title="שאלות שכנים" />
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            {businessItems.map((item) => (
-              <div 
-                key={`business-${item.id}`} 
-                className="flex-shrink-0 w-48 bg-background border border-border rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow"
-                onClick={() => handleMarketplaceClick(item, 'business')}
-              >
-                <h3 className="font-medium text-foreground text-sm mb-1 line-clamp-2">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  {item.location || 'תל אביב'}
-                </p>
+            <NeighborQuestionCard />
+            {questionsLoading ? (
+              <div className="text-center py-4 flex-shrink-0">
+                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
               </div>
-            ))}
-            {!user && businessItems.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground">
-                <p>אין עסקים זמינים כרגע</p>
+            ) : (
+              questions.map((question) => {
+                const userProfile = questionProfiles[question.user_id];
+                return (
+                  <div 
+                    key={`question-${question.id}`} 
+                    className="flex-shrink-0 w-64 bg-background border border-border rounded-lg p-4"
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <img 
+                        src={userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
+                        alt={userProfile?.name || "משתמש"}
+                        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-foreground text-sm">
+                          {userProfile?.name || "משתמש"}
+                        </h4>
+                        <p className="text-xs text-muted-foreground">
+                          {getTimeAgo(question.created_at)}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-foreground leading-relaxed break-words">
+                      {question.content}
+                    </p>
+                  </div>
+                );
+              })
+            )}
+            {questions.length === 0 && !questionsLoading && (
+              <div className="text-center py-8 text-muted-foreground flex-shrink-0">
+                <p>אין שאלות עדיין</p>
               </div>
             )}
           </div>
