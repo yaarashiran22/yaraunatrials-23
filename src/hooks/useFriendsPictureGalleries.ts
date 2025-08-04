@@ -64,9 +64,14 @@ export const useFriendsPictureGalleries = () => {
   };
 
   const createGallery = async (images: string[], title?: string) => {
-    if (!user) return null;
+    if (!user) {
+      console.error('No user found for creating gallery');
+      return null;
+    }
 
     try {
+      console.log('Creating gallery with:', { user_id: user.id, images, title });
+      
       const { data: galleryData, error: galleryError } = await supabase
         .from('friends_picture_galleries')
         .insert({
@@ -75,27 +80,32 @@ export const useFriendsPictureGalleries = () => {
           title
         })
         .select('*')
-        .single();
+        .maybeSingle();
 
       if (galleryError) {
         console.error('Error creating gallery:', galleryError);
         throw galleryError;
       }
 
+      if (!galleryData) {
+        console.error('No gallery data returned after creation');
+        return null;
+      }
+
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('id, name, profile_image_url')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
 
       if (profileError) {
         console.error('Error fetching profile:', profileError);
-        throw profileError;
+        // Don't throw here, we can still return the gallery without profile data
       }
 
       const newGallery = {
         ...galleryData,
-        profiles: profileData
+        profiles: profileData || undefined
       };
       
       setGalleries(prev => [newGallery, ...prev]);
