@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -20,7 +20,7 @@ export const useFriendsFeedPosts = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
-  const fetchFriendsFeedPosts = useCallback(async () => {
+  const fetchFriendsFeedPosts = async () => {
     if (!user) return;
     
     setLoading(true);
@@ -71,7 +71,7 @@ export const useFriendsFeedPosts = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  };
 
   const createPost = async (content?: string, imageUrl?: string) => {
     if (!user) return null;
@@ -147,7 +147,7 @@ export const useFriendsFeedPosts = () => {
 
   useEffect(() => {
     fetchFriendsFeedPosts();
-  }, [fetchFriendsFeedPosts]);
+  }, [user]);
 
   // Auto-refresh posts every 30 seconds to show new content
   useEffect(() => {
@@ -156,7 +156,7 @@ export const useFriendsFeedPosts = () => {
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [fetchFriendsFeedPosts]);
+  }, [user]);
 
   return {
     posts,
