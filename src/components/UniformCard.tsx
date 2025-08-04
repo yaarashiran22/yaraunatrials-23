@@ -81,20 +81,6 @@ const UniformCard = ({
         />
       </div>
       
-      {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className={`absolute top-2 left-2 p-1.5 rounded-full bg-card/80 backdrop-blur-sm ${
-            isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
-          }`}
-          onClick={handleFavoriteClick}
-        >
-          <Bookmark className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
-        </Button>
-      )}
-      
-      
       <div className="p-3 h-14 flex flex-col justify-between">
         <div className="flex items-start gap-2">
           <div className="flex-1">
@@ -113,6 +99,19 @@ const UniformCard = ({
                 e.currentTarget.src = uploader.image;
               }}
             />
+          )}
+          {/* Save button moved to bottom */}
+          {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`p-1.5 rounded-full ${
+                isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
+              }`}
+              onClick={handleFavoriteClick}
+            >
+              <Bookmark className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
+            </Button>
           )}
         </div>
         {price && (
