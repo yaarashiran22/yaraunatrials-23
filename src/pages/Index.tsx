@@ -312,41 +312,6 @@ const Index = () => {
           )}
         </section>
 
-        {/* Popular Businesses Section - Database Only - Moved to Bottom */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="שאלות שכנים" viewAllPath="/recommended" />
-          {loading ? (
-            <LoadingSkeleton type="cards" count={3} />
-          ) : (
-            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {businessItems.map((item) => (
-                <div key={`business-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || coffeeShop}
-                    title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    type="business"
-                    onClick={() => handleMarketplaceClick(item, 'business')}
-                    showFavoriteButton={true}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.title,
-                      image: item.image_url,
-                      type: 'business'
-                    }}
-                  />
-                </div>
-              ))}
-              {!user && businessItems.length === 0 && (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p>אין עסקים זמינים כרגע</p>
-                </div>
-              )}
-            </div>
-          )}
-        </section>
       </main>
       
       <FilterPopup 

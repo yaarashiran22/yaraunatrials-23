@@ -2,6 +2,9 @@ import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import StoriesPopup from "@/components/StoriesPopup";
+import MarketplacePopup from "@/components/MarketplacePopup";
+import UniformCard from "@/components/UniformCard";
+import SectionHeader from "@/components/SectionHeader";
 
 import { Button } from "@/components/ui/button";
 import { Search, X, Heart, MessageCircle, MapPin } from "lucide-react";
@@ -9,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePosts } from "@/hooks/usePosts";
 import { useStories } from "@/hooks/useStories";
+import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import NeighborCard from "@/components/NeighborCard";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -32,7 +36,10 @@ const FeedPage = () => {
   const [registeredUsers, setRegisteredUsers] = useState<any[]>([]);
   const [usersLoading, setUsersLoading] = useState(true);
   const [postProfiles, setPostProfiles] = useState<{[key: string]: any}>({});
+  const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
+  const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const { posts, loading } = usePosts();
+  const { businessItems } = useOptimizedHomepage();
 
   // Fetch registered users
   useEffect(() => {
@@ -122,6 +129,26 @@ const FeedPage = () => {
     return `לפני ${diffInDays} ימים`;
   }
 
+  // Function to handle marketplace item click
+  const handleMarketplaceClick = (item: any, itemType?: string) => {
+    const itemDetails = {
+      id: item.id,
+      title: item.title,
+      image: item.image_url || item.image,
+      price: item.price ? `₪${item.price}` : undefined,
+      description: item.description || `${item.title} במצב מעולה.`,
+      seller: {
+        name: "יערה שיין",
+        image: profile1,
+        location: item.location || "תל אביב"
+      },
+      condition: "כמו חדש",
+      type: itemType || 'marketplace'
+    };
+    setSelectedMarketplaceItem(itemDetails);
+    setIsMarketplacePopupOpen(true);
+  };
+
   // Function to handle story viewing
   const handleStoryClick = (userId: string) => {
     setSelectedUserId(userId);
@@ -204,6 +231,38 @@ const FeedPage = () => {
           </div>
         )}
 
+        {/* שאלות שכנים Section */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm mb-6">
+          <SectionHeader title="שאלות שכנים" viewAllPath="/recommended" />
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {businessItems.map((item) => (
+              <div key={`business-${item.id}`} className="flex-shrink-0 w-32">
+                <UniformCard
+                  id={item.id}
+                  image={item.image_url || coffeeShop}
+                  title={item.title}
+                  subtitle={item.location || 'תל אביב'}
+                  type="business"
+                  onClick={() => handleMarketplaceClick(item, 'business')}
+                  showFavoriteButton={true}
+                  favoriteData={{
+                    id: item.id,
+                    title: item.title,
+                    description: item.title,
+                    image: item.image_url,
+                    type: 'business'
+                  }}
+                />
+              </div>
+            ))}
+            {!user && businessItems.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>אין עסקים זמינים כרגע</p>
+              </div>
+            )}
+          </div>
+        </section>
+
         {/* Posts Feed */}
         <div className="space-y-6 mb-8">
           {loading ? (
@@ -281,6 +340,12 @@ const FeedPage = () => {
           userId={selectedUserId}
         />
       )}
+      
+      <MarketplacePopup 
+        isOpen={isMarketplacePopupOpen}
+        onClose={() => setIsMarketplacePopupOpen(false)}
+        item={selectedMarketplaceItem}
+      />
       
       <BottomNavigation />
     </div>
