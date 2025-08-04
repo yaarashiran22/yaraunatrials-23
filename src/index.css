@@ -113,7 +113,8 @@ All colors MUST be HSL.
   }
 
   body {
-    background: var(--background);
+    background: linear-gradient(166deg, hsl(280 15% 98%) 18%, hsl(270 12% 96%) 90%);
+    background-attachment: fixed;
     color: hsl(var(--foreground));
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     direction: rtl;
