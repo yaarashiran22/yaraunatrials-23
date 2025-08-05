@@ -206,9 +206,11 @@ const EventPopup = ({
           {/* Action Buttons */}
           <div className="mt-8 flex flex-col gap-3">
             <Button 
-              variant="outline"
-              disabled
-              className="flex-1 h-12 rounded-2xl text-lg font-medium cursor-default"
+              variant={eventData?.mobile_number ? "default" : "outline"}
+              disabled={!eventData?.mobile_number}
+              className={`flex-1 h-12 rounded-2xl text-lg font-medium ${
+                eventData?.mobile_number ? 'cursor-default' : 'cursor-default opacity-60'
+              }`}
             >
               <MessageCircle className="h-5 w-5 ml-2" />
               {eventData?.mobile_number || 'אין נייד'}

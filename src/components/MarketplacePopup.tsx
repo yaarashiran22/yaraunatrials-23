@@ -198,9 +198,11 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
           {/* Action Buttons */}
           <div className="mt-8 flex flex-col gap-3">
             <Button 
-              variant="outline"
-              disabled
-              className="flex-1 h-12 rounded-2xl text-lg font-medium cursor-default"
+              variant={itemDetails?.mobile_number ? "default" : "outline"}
+              disabled={!itemDetails?.mobile_number}
+              className={`flex-1 h-12 rounded-2xl text-lg font-medium ${
+                itemDetails?.mobile_number ? 'cursor-default' : 'cursor-default opacity-60'
+              }`}
             >
               <MessageCircle className="h-5 w-5 ml-2" />
               {itemDetails?.mobile_number || 'אין נייד'}

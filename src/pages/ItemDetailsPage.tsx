@@ -179,8 +179,12 @@ const ItemDetailsPage = () => {
           {/* Action Buttons */}
           <div className="flex gap-3 mt-8">
             <Button 
-              disabled
-              className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl text-lg font-medium cursor-default opacity-80"
+              disabled={!item.mobile_number}
+              className={`flex-1 h-12 rounded-2xl text-lg font-medium ${
+                item.mobile_number 
+                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground cursor-default' 
+                  : 'bg-muted text-muted-foreground cursor-default opacity-60'
+              }`}
             >
               <MessageCircle className="h-5 w-5 ml-2" />
               {item.mobile_number || 'אין נייד'}
