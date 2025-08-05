@@ -237,7 +237,7 @@ const FeedPage = () => {
             <div className="flex-1">
               <input 
                 type="text"
-                placeholder="שתפ.י פוסט"
+                placeholder="שתפ.י פוסט עם השכונה"
                 className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
                 readOnly
               />
