@@ -18,7 +18,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
 import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
-import { NeighborQuestionComments } from "@/components/NeighborQuestionComments";
 import { supabase } from "@/integrations/supabase/client";
 
 import profile1 from "@/assets/profile-1.jpg";
@@ -281,10 +280,9 @@ const FeedPage = () => {
                         </p>
                       </div>
                     </div>
-                    <p className="text-sm text-foreground leading-relaxed break-words mb-3">
+                    <p className="text-sm text-foreground leading-relaxed break-words">
                       {question.content}
                     </p>
-                    <NeighborQuestionComments questionId={question.id} />
                   </div>
                 );
               })
