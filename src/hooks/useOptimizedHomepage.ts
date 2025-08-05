@@ -123,7 +123,7 @@ const fetchHomepageData = async () => {
     
     const profiles = (profilesResult.data || []).map((profile) => ({
       id: profile.id,
-      image: profile.profile_image_url || profile1,
+      image: profile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
       name: profile.name || 'משתמש'
     }));
 
