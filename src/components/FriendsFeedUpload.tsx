@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+
 import { Camera, X, Send } from 'lucide-react';
 import { useFriendsFeedPosts } from '@/hooks/useFriendsFeedPosts';
 import { useToast } from '@/hooks/use-toast';
@@ -105,20 +105,19 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
   };
 
   return (
-    <Card className="mb-6">
-      <CardContent className="p-4">
-        <div className="space-y-4">
-          <Textarea
-            placeholder="מה החדש? שתף עם החברים שלך..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="resize-none"
-            rows={3}
-          />
-          
-          <div className="text-sm text-muted-foreground bg-muted/30 p-2 rounded-lg">
-            💡 טיפ: לחץ על כפתור "תמונה" למטה כדי להוסיף תמונה לפוסט שלך
-          </div>
+    <div className="bg-white rounded-lg p-4 mb-6 shadow-sm border">
+      <div className="space-y-4">
+        <Textarea
+          placeholder="מה החדש? שתף עם החברים שלך..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          className="resize-none border-none shadow-none p-0 bg-transparent text-foreground placeholder:text-muted-foreground"
+          rows={3}
+        />
+        
+        <div className="text-sm text-muted-foreground bg-muted/30 p-2 rounded-lg">
+          💡 טיפ: לחץ על כפתור "תמונה" למטה כדי להוסיף תמונה לפוסט שלך
+        </div>
           
           {imagePreview && (
             <div className="relative">
@@ -177,9 +176,8 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
               )}
             </Button>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
