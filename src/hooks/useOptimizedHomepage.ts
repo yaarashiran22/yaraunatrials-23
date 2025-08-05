@@ -32,7 +32,7 @@ export interface OptimizedProfile {
 const fetchHomepageData = async () => {
   try {
     // Batch all queries in a single Promise.all for maximum performance
-    const [marketplaceResult, eventsResult, recommendationsResult, artResult, profilesResult] = await Promise.all([
+    const [marketplaceResult, eventsResult, recommendationsResult, artResult, apartmentsResult, profilesResult] = await Promise.all([
       supabase
         .from('items')
         .select('id, title, price, image_url, location')
@@ -62,6 +62,13 @@ const fetchHomepageData = async () => {
         .order('created_at', { ascending: false })
         .limit(3),
       supabase
+        .from('items')
+        .select('id, title, price, image_url, location')
+        .eq('status', 'active')
+        .eq('category', 'apartments')
+        .order('created_at', { ascending: false })
+        .limit(4),
+      supabase
         .from('profiles')
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
@@ -74,12 +81,14 @@ const fetchHomepageData = async () => {
     if (eventsResult.error) throw eventsResult.error;
     if (recommendationsResult.error) throw recommendationsResult.error;
     if (artResult.error) throw artResult.error;
+    if (apartmentsResult.error) throw apartmentsResult.error;
     if (profilesResult.error) throw profilesResult.error;
 
     const marketplaceItems = marketplaceResult.data || [];
     const rawEvents = eventsResult.data || [];
     const recommendationItems = recommendationsResult.data || [];
     const artItems = artResult.data || [];
+    const apartmentItems = apartmentsResult.data || [];
     
     // Optimized uploader profile fetching - only fetch if we have events and limit fields
     let databaseEvents: OptimizedItem[] = rawEvents.map(event => ({
@@ -128,9 +137,9 @@ const fetchHomepageData = async () => {
     }));
 
     // Combine all items for backward compatibility
-    const items = [...marketplaceItems, ...databaseEvents, ...recommendationItems, ...artItems];
+    const items = [...marketplaceItems, ...databaseEvents, ...recommendationItems, ...artItems, ...apartmentItems];
 
-    return { items, marketplaceItems, databaseEvents, recommendationItems, artItems, businessItems: [], profiles };
+    return { items, marketplaceItems, databaseEvents, recommendationItems, artItems, apartmentItems, businessItems: [], profiles };
   } catch (error) {
     console.error('Homepage data fetch error:', error);
     toast({
@@ -174,6 +183,7 @@ export const useOptimizedHomepage = () => {
   const databaseEvents = data?.databaseEvents || [];
   const recommendationItems = data?.recommendationItems || [];
   const artItems = data?.artItems || [];
+  const apartmentItems = data?.apartmentItems || [];
   const businessItems = data?.businessItems || [];
 
   return {
@@ -183,6 +193,7 @@ export const useOptimizedHomepage = () => {
     databaseEvents,
     recommendationItems,
     artItems,
+    apartmentItems,
     businessItems,
     loading: isLoading,
     error: error?.message || null,
