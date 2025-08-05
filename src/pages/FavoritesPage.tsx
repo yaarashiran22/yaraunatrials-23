@@ -22,6 +22,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import FriendsPictureUpload from "@/components/FriendsPictureUpload";
 import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
 import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
+import { NeighborQuestionItem } from "@/components/NeighborQuestionItem";
 import SectionHeader from "@/components/SectionHeader";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -31,7 +32,7 @@ const FavoritesPage = () => {
   const { friends, getAllFriendsItemsByCategory, loading: friendsLoading } = useFriends();
   const { posts: friendsPosts, loading: postsLoading } = useFriendsFeedPosts();
   const { galleries: pictureGalleries, loading: galleriesLoading } = useFriendsPictureGalleries();
-  const { questions, loading: questionsLoading } = useNeighborQuestions();
+  const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -208,29 +209,14 @@ const FavoritesPage = () => {
                     questions.map((question) => {
                       const userProfile = questionProfiles[question.user_id];
                       return (
-                        <div 
-                          key={`question-${question.id}`} 
-                          className="flex-shrink-0 w-64 bg-white border border-border rounded-lg p-4"
-                        >
-                          <div className="flex items-start gap-3 mb-3">
-                            <img 
-                              src={userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-                              alt={userProfile?.name || "משתמש"}
-                              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-                            />
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-foreground text-sm">
-                                {userProfile?.name || "משתמש"}
-                              </h4>
-                              <p className="text-xs text-muted-foreground">
-                                {getTimeAgo(question.created_at)}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="text-sm text-foreground leading-relaxed break-words">
-                            {question.content}
-                          </p>
-                        </div>
+                        <NeighborQuestionItem
+                          key={`question-${question.id}`}
+                          question={question}
+                          userProfile={userProfile}
+                          getTimeAgo={getTimeAgo}
+                          questionProfiles={questionProfiles}
+                          onDeleteQuestion={deleteQuestion}
+                        />
                       );
                     })
                   )}
