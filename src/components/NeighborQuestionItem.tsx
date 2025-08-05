@@ -28,16 +28,14 @@ export const NeighborQuestionItem = ({
 }: NeighborQuestionItemProps) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const { comments, loading, creating, createComment, fetchComments } = useNeighborQuestionComments(
-    showComments ? question.id : undefined
-  );
+  const { comments, commentCount, loading, creating, createComment, fetchComments } = useNeighborQuestionComments(question.id);
   const { user } = useAuth();
 
   const handleToggleComments = () => {
-    setShowComments(!showComments);
     if (!showComments) {
       fetchComments(question.id);
     }
+    setShowComments(!showComments);
   };
 
   const handleSubmitComment = async () => {
@@ -50,6 +48,10 @@ export const NeighborQuestionItem = ({
     
     if (success) {
       setNewComment("");
+      // Auto-open comments section after posting if it wasn't already open
+      if (!showComments) {
+        setShowComments(true);
+      }
     }
   };
 
@@ -84,7 +86,7 @@ export const NeighborQuestionItem = ({
           className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
         >
           <MessageCircle className="h-4 w-4 ml-1" />
-          {comments.length > 0 ? `${comments.length} תגובות` : "הגב"}
+          {commentCount > 0 ? `${commentCount} תגובות` : "הגב"}
         </Button>
       </div>
 

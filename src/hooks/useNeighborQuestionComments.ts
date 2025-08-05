@@ -19,10 +19,28 @@ interface CreateCommentData {
 
 export const useNeighborQuestionComments = (questionId?: string) => {
   const [comments, setComments] = useState<NeighborQuestionComment[]>([]);
+  const [commentCount, setCommentCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [creating, setCreating] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+
+  const fetchCommentCount = async (qId: string) => {
+    try {
+      const { count, error } = await supabase
+        .from('neighbor_question_comments' as any)
+        .select('*', { count: 'exact', head: true })
+        .eq('question_id', qId);
+
+      if (error) {
+        console.error('Error fetching comment count:', error);
+      } else {
+        setCommentCount(count || 0);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+  };
 
   const fetchComments = async (qId: string) => {
     try {
@@ -96,6 +114,8 @@ export const useNeighborQuestionComments = (questionId?: string) => {
         
         // Add the new comment to the list
         setComments(prev => [...prev, data as any]);
+        // Update comment count
+        setCommentCount(prev => prev + 1);
         return true;
       }
     } catch (err) {
@@ -144,6 +164,8 @@ export const useNeighborQuestionComments = (questionId?: string) => {
         
         // Remove the comment from the list
         setComments(prev => prev.filter(c => c.id !== commentId));
+        // Update comment count
+        setCommentCount(prev => Math.max(0, prev - 1));
         return true;
       }
     } catch (err) {
@@ -159,15 +181,17 @@ export const useNeighborQuestionComments = (questionId?: string) => {
 
   useEffect(() => {
     if (questionId) {
-      fetchComments(questionId);
+      fetchCommentCount(questionId);
     }
   }, [questionId]);
 
   return {
     comments,
+    commentCount,
     loading,
     creating,
     fetchComments,
+    fetchCommentCount,
     createComment,
     deleteComment,
   };
