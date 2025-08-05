@@ -208,7 +208,7 @@ const EventPopup = ({
               className="flex-1 h-12 rounded-2xl text-lg font-medium"
             >
               <MessageCircle className="h-5 w-5 ml-2" />
-              צור קשר
+              {eventData?.mobile_number || 'צור קשר'}
             </Button>
             <Button 
               onClick={handleViewDetails}

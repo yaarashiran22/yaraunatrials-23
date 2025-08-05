@@ -10,6 +10,7 @@ export interface ItemWithUploader {
   category?: string;
   image_url?: string;
   location?: string;
+  mobile_number?: string;
   status: string;
   created_at: string;
   uploader: {
@@ -83,6 +84,7 @@ export const useItemDetails = (itemId: string) => {
         category: itemData.category,
         image_url: itemData.image_url,
         location: itemData.location,
+        mobile_number: itemData.mobile_number,
         status: itemData.status,
         created_at: itemData.created_at,
         uploader: {
