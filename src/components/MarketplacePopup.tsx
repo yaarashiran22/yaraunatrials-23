@@ -63,6 +63,9 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
     condition: item?.condition || defaultItem.condition
   } : (item || defaultItem);
 
+  console.log('MarketplacePopup - itemDetails:', itemDetails);
+  console.log('MarketplacePopup - mobile_number:', itemDetails?.mobile_number);
+
   const handleContact = () => {
     toast({
       title: "פותח צ'אט",

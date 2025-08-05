@@ -74,6 +74,9 @@ const EventPopup = ({
     })
   } : (event || defaultEvent);
 
+  console.log('EventPopup - eventData:', eventData);
+  console.log('EventPopup - mobile_number:', eventData?.mobile_number);
+
   const handleViewProfile = () => {
     if (displayEvent.organizer?.id) {
       navigate(`/profile/${displayEvent.organizer.id}`);

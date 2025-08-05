@@ -68,6 +68,9 @@ const ItemDetailsPage = () => {
     })
   };
 
+  console.log('ItemDetailsPage - item:', item);
+  console.log('ItemDetailsPage - mobile_number:', item?.mobile_number);
+
   const handleContact = () => {
     toast({
       title: "פותח צ'אט",
