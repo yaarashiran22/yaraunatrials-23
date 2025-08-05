@@ -25,6 +25,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, signInAnonymously } = useAuth();
   const { toast } = useToast();
@@ -105,6 +106,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
           category: category || null,
           location: location || null,
           image_url: selectedImage || null,
+          mobile_number: mobileNumber.trim() || null,
           user_id: currentUser.id,
           status: 'active'
         };
@@ -159,6 +161,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       setLocation('');
       setDescription('');
       setMessage('');
+      setMobileNumber('');
       setSelectedImage(null);
       onClose();
       
@@ -264,6 +267,18 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full min-h-[80px] text-right bg-background border border-border rounded-3xl resize-none p-4"
+            />
+          </div>
+
+          {/* Contact Mobile Number Field */}
+          <div className="space-y-2">
+            <label className="text-sm text-muted-foreground block text-right">מספר נייד ליצירת קשר</label>
+            <Input 
+              placeholder=""
+              type="tel"
+              value={mobileNumber}
+              onChange={(e) => setMobileNumber(e.target.value)}
+              className="w-full h-12 text-right bg-background border border-border rounded-full"
             />
           </div>
 

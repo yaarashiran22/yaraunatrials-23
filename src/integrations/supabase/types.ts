@@ -103,6 +103,7 @@ export type Database = {
           id: string
           image_url: string | null
           location: string | null
+          mobile_number: string | null
           price: number | null
           status: string | null
           title: string
@@ -116,6 +117,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
+          mobile_number?: string | null
           price?: number | null
           status?: string | null
           title: string
@@ -129,6 +131,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
+          mobile_number?: string | null
           price?: number | null
           status?: string | null
           title?: string

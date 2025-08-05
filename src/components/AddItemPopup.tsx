@@ -12,6 +12,7 @@ interface AddItemPopupProps {
 
 const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [mobileNumber, setMobileNumber] = useState('');
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -107,11 +108,14 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
           </div>
 
 
-          {/* Description Field */}
+          {/* Contact Mobile Number Field */}
           <div className="space-y-1">
-            <label className="text-sm text-muted-foreground block text-right">תמונה</label>
+            <label className="text-sm text-muted-foreground block text-right">מספר נייד ליצירת קשר</label>
             <Input 
               placeholder=""
+              type="tel"
+              value={mobileNumber}
+              onChange={(e) => setMobileNumber(e.target.value)}
               className="w-full h-11 text-right bg-background border border-border rounded-full px-4"
             />
           </div>
