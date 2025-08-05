@@ -31,7 +31,7 @@ export interface OptimizedProfile {
 // Ultra-optimized database queries with aggressive limits for instant mobile loading
 const fetchHomepageData = async () => {
   try {
-    // Single optimized query with minimal data - limit everything for mobile speed
+    // Batch all queries in a single Promise.all for maximum performance
     const [marketplaceResult, eventsResult, recommendationsResult, artResult, profilesResult] = await Promise.all([
       supabase
         .from('items')
@@ -39,34 +39,35 @@ const fetchHomepageData = async () => {
         .eq('status', 'active')
         .eq('category', 'secondhand')
         .order('created_at', { ascending: false })
-        .limit(6), // Reduced from unlimited to 6 for mobile speed
+        .limit(6),
       supabase
         .from('items')
         .select('id, title, image_url, location, user_id')
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
-        .limit(4), // Keep at 4
+        .limit(4),
       supabase
         .from('items')
         .select('id, title, image_url, location')
         .eq('status', 'active')
         .eq('category', 'recommendation')
         .order('created_at', { ascending: false })
-        .limit(3), // Keep at 3
+        .limit(3),
       supabase
         .from('items')
         .select('id, title, image_url, location')
         .eq('status', 'active')
         .eq('category', 'art')
         .order('created_at', { ascending: false })
-        .limit(3), // Keep at 3
+        .limit(3),
       supabase
         .from('profiles')
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
         .eq('show_in_search', true)
-        .order('created_at', { ascending: false})
+        .order('created_at', { ascending: false })
+        .limit(10) // Limit profiles for faster loading
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;
@@ -147,23 +148,23 @@ export const useOptimizedHomepage = () => {
   // Preload data on mount
   const preloadData = () => {
     queryClient.prefetchQuery({
-      queryKey: ['homepage-data-v2'], // Changed key to match main query
+      queryKey: ['homepage-data-v3'], // Match main query key
       queryFn: fetchHomepageData,
-      staleTime: 30000,
+      staleTime: 180000,
     });
   };
 
   // Main query with React Query caching and ultra-aggressive optimization for mobile
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['homepage-data-v2'], // Changed key to invalidate old cache
+    queryKey: ['homepage-data-v3'], // Updated key for new optimizations
     queryFn: fetchHomepageData,
-    staleTime: 300000, // 5 minutes - aggressive but not excessive
-    gcTime: 600000, // 10 minutes 
+    staleTime: 180000, // 3 minutes - balanced performance and freshness
+    gcTime: 900000, // 15 minutes - longer persistence
     refetchOnWindowFocus: false,
-    refetchOnMount: true, // Changed to true to ensure fresh data
+    refetchOnMount: false, // Use cached data if available
     refetchOnReconnect: false,
-    retry: 1, // Reduced retries for faster failure
-    retryDelay: 1000, // Fixed delay
+    retry: 1,
+    retryDelay: 500,
   });
 
   // Extract pre-filtered data for instant mobile loading

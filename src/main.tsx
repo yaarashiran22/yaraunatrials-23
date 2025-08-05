@@ -6,10 +6,14 @@ import './index.css'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 30000, // 30 seconds
-      gcTime: 300000, // 5 minutes
+      staleTime: 120000, // 2 minutes - increased for better caching
+      gcTime: 600000, // 10 minutes - increased for better persistence
       refetchOnWindowFocus: false,
+      refetchOnMount: false, // Only refetch if data is stale
+      refetchOnReconnect: false,
       retry: 1,
+      retryDelay: 500, // Faster retry
+      networkMode: 'online', // Only fetch when online
     },
   },
 })
