@@ -20,6 +20,10 @@ import { useFriendsFeedPosts } from "@/hooks/useFriendsFeedPosts";
 import { useFriendsPictureGalleries } from "@/hooks/useFriendsPictureGalleries";
 import { useAuth } from "@/contexts/AuthContext";
 import FriendsPictureUpload from "@/components/FriendsPictureUpload";
+import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
+import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
+import SectionHeader from "@/components/SectionHeader";
+import { supabase } from "@/integrations/supabase/client";
 
 const FavoritesPage = () => {
   const navigate = useNavigate();
@@ -27,6 +31,8 @@ const FavoritesPage = () => {
   const { friends, getAllFriendsItemsByCategory, loading: friendsLoading } = useFriends();
   const { posts: friendsPosts, loading: postsLoading } = useFriendsFeedPosts();
   const { galleries: pictureGalleries, loading: galleriesLoading } = useFriendsPictureGalleries();
+  const { questions, loading: questionsLoading } = useNeighborQuestions();
+  const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
@@ -56,6 +62,37 @@ const FavoritesPage = () => {
     loadFriendsItems();
   }, [friends, getAllFriendsItemsByCategory]);
 
+  // Fetch user profiles for neighbor questions
+  useEffect(() => {
+    const fetchQuestionProfiles = async () => {
+      if (questions.length === 0) return;
+
+      const userIds = [...new Set(questions.map(q => q.user_id))];
+      
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, name, profile_image_url')
+          .in('id', userIds);
+
+        if (error) {
+          console.error('Error fetching question profiles:', error);
+        } else {
+          const profilesMap = (data || []).reduce((acc, profile) => {
+            acc[profile.id] = profile;
+            return acc;
+          }, {} as {[key: string]: any});
+          
+          setQuestionProfiles(profilesMap);
+        }
+      } catch (err) {
+        console.error('Unexpected error fetching question profiles:', err);
+      }
+    };
+
+    fetchQuestionProfiles();
+  }, [questions]);
+
   const handleItemClick = (item: any) => {
     navigate(`/item/${item.id}`);
   };
@@ -82,6 +119,21 @@ const FavoritesPage = () => {
     if (diffInMinutes < 1440) return `לפני ${Math.floor(diffInMinutes / 60)} שעות`;
     return `לפני ${Math.floor(diffInMinutes / 1440)} ימים`;
   };
+
+  // Helper function to format time ago for questions (similar to FeedPage)
+  function getTimeAgo(dateString: string) {
+    const now = new Date();
+    const postDate = new Date(dateString);
+    const diffInHours = Math.floor((now.getTime() - postDate.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return "עכשיו";
+    if (diffInHours === 1) return "לפני שעה";
+    if (diffInHours < 24) return `לפני ${diffInHours} שעות`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays === 1) return "אתמול";
+    return `לפני ${diffInDays} ימים`;
+  }
 
 
   if (!user) {
@@ -142,6 +194,53 @@ const FavoritesPage = () => {
             <TabsContent value="feed" className="space-y-6">
               {/* Upload Section */}
               <FriendsFeedUpload />
+
+              {/* שאלות שכנים Section */}
+              <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm">
+                <SectionHeader title="שאלות שכנים" />
+                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                  <NeighborQuestionCard />
+                  {questionsLoading ? (
+                    <div className="text-center py-4 flex-shrink-0">
+                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    </div>
+                  ) : (
+                    questions.map((question) => {
+                      const userProfile = questionProfiles[question.user_id];
+                      return (
+                        <div 
+                          key={`question-${question.id}`} 
+                          className="flex-shrink-0 w-64 bg-white border border-border rounded-lg p-4"
+                        >
+                          <div className="flex items-start gap-3 mb-3">
+                            <img 
+                              src={userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
+                              alt={userProfile?.name || "משתמש"}
+                              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium text-foreground text-sm">
+                                {userProfile?.name || "משתמש"}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                {getTimeAgo(question.created_at)}
+                              </p>
+                            </div>
+                          </div>
+                          <p className="text-sm text-foreground leading-relaxed break-words">
+                            {question.content}
+                          </p>
+                        </div>
+                      );
+                    })
+                  )}
+                  {questions.length === 0 && !questionsLoading && (
+                    <div className="text-center py-8 text-muted-foreground flex-shrink-0">
+                      <p>אין שאלות עדיין</p>
+                    </div>
+                  )}
+                </div>
+              </section>
 
               {/* Friends Posts */}
               <div className="space-y-4">
