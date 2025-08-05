@@ -197,7 +197,7 @@ const FavoritesPage = () => {
 
               {/* שאלות שכנים Section */}
               <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm">
-                <SectionHeader title="שאלות שכנים" />
+                <SectionHeader title="שאלות חברים" />
                 <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
                   <NeighborQuestionCard />
                   {questionsLoading ? (
