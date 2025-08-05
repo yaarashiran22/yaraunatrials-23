@@ -163,7 +163,6 @@ const FavoritesPage = () => {
         </Button>
         <div className="flex items-center gap-2">
           <Users className="h-5 w-5 text-primary" />
-          <span className="text-lg font-bold">חברים</span>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-3xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
