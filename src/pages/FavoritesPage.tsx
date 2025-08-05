@@ -1,4 +1,6 @@
 import BottomNavigation from "@/components/BottomNavigation";
+import Header from "@/components/Header";
+import DesktopHeader from "@/components/DesktopHeader";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import EventPopup from "@/components/EventPopup";
 import BusinessPopup from "@/components/BusinessPopup";
@@ -155,24 +157,22 @@ const FavoritesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="rtl">
-      {/* Custom Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-background">
-        <Button variant="ghost" size="sm" onClick={() => setShowNotifications(true)}>
-          <Bell className="h-5 w-5" />
-        </Button>
-        <div className="flex items-center gap-2">
-          <Users className="h-5 w-5 text-primary" />
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="text-3xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </div>
+    <div className="min-h-screen bg-background" dir="rtl">
+      {/* Mobile Header */}
+      <div className="lg:hidden">
+        <Header 
+          title="חברים"
+          onNotificationsClick={() => setShowNotifications(true)}
+        />
       </div>
+      
+      {/* Desktop Header */}
+      <DesktopHeader 
+        title="חברים"
+        onNotificationsClick={() => setShowNotifications(true)}
+      />
 
-      <main className="px-4 py-6">
+      <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Friends Profile Row */}
         <FriendsProfileRow />
         
