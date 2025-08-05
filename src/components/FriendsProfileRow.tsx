@@ -30,19 +30,21 @@ const FriendsProfileRow = () => {
         {friends.map((friend) => (
           <div 
             key={friend.friend_id} 
-            className="flex-shrink-0 text-center cursor-pointer hover:opacity-80 transition-opacity"
+            className="flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0"
             onClick={() => navigate(`/profile/${friend.friend_id}`)}
           >
-            <Avatar className="w-16 h-16 mx-auto mb-2 ring-2 ring-primary/20 hover:ring-primary/40 transition-all">
-              <AvatarImage 
-                src={friend.profiles?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
-                alt={friend.profiles?.name || 'משתמש'} 
-              />
-              <AvatarFallback className="text-sm font-medium">
-                {friend.profiles?.name?.[0] || 'U'}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-xs text-foreground font-medium block max-w-[64px] truncate">
+            <div className="relative">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-400 to-[#BB31E9] p-0.5">
+                <div className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card">
+                  <img 
+                    src={friend.profiles?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
+                    alt={friend.profiles?.name || 'משתמש'}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+            <span className="text-sm font-medium text-foreground text-center max-w-[64px] truncate">
               {friend.profiles?.name || 'משתמש'}
             </span>
           </div>
