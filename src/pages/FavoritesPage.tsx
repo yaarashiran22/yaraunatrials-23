@@ -24,6 +24,7 @@ import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
 import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
 import { NeighborQuestionItem } from "@/components/NeighborQuestionItem";
 import SectionHeader from "@/components/SectionHeader";
+import FriendsProfileRow from "@/components/FriendsProfileRow";
 import { supabase } from "@/integrations/supabase/client";
 
 const FavoritesPage = () => {
@@ -173,6 +174,9 @@ const FavoritesPage = () => {
       </div>
 
       <main className="px-4 py-6">
+        {/* Friends Profile Row */}
+        <FriendsProfileRow />
+        
         {friends.length === 0 ? (
           <div className="text-center py-12">
             <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
