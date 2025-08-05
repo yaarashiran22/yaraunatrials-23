@@ -192,7 +192,7 @@ const FavoritesPage = () => {
               </TabsTrigger>
               <TabsTrigger value="items" className="flex items-center gap-2">
                 <Heart className="h-4 w-4" />
-                פריטים לפי קטגוריה
+                פריטים של חברים
               </TabsTrigger>
             </TabsList>
 
