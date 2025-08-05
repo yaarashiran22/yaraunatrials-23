@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MessageCircle, Send } from "lucide-react";
+import { MessageCircle, Send, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useNeighborQuestionComments } from "@/hooks/useNeighborQuestionComments";
@@ -18,13 +18,15 @@ interface NeighborQuestionItemProps {
   };
   getTimeAgo: (dateString: string) => string;
   questionProfiles: Record<string, any>;
+  onDeleteQuestion: (questionId: string) => void;
 }
 
 export const NeighborQuestionItem = ({ 
   question, 
   userProfile, 
   getTimeAgo,
-  questionProfiles 
+  questionProfiles,
+  onDeleteQuestion
 }: NeighborQuestionItemProps) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -55,6 +57,12 @@ export const NeighborQuestionItem = ({
     }
   };
 
+  const handleDeleteQuestion = async () => {
+    if (confirm("האם אתה בטוח שאתה רוצה למחוק את השאלה?")) {
+      onDeleteQuestion(question.id);
+    }
+  };
+
   return (
     <div className="flex-shrink-0 w-64 bg-white border border-border rounded-lg p-4">
       <div className="flex items-start gap-3 mb-3">
@@ -71,6 +79,17 @@ export const NeighborQuestionItem = ({
             {getTimeAgo(question.created_at)}
           </p>
         </div>
+        {/* Delete button - only show for question author */}
+        {user && user.id === question.user_id && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDeleteQuestion}
+            className="h-6 w-6 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       
       <p className="text-sm text-foreground leading-relaxed break-words mb-3">

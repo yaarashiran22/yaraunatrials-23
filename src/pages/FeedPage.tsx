@@ -42,7 +42,7 @@ const FeedPage = () => {
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const { posts, loading } = usePosts();
-  const { questions, loading: questionsLoading } = useNeighborQuestions();
+  const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
 
   // Fetch registered users
@@ -268,6 +268,7 @@ const FeedPage = () => {
                     userProfile={userProfile}
                     getTimeAgo={getTimeAgo}
                     questionProfiles={questionProfiles}
+                    onDeleteQuestion={deleteQuestion}
                   />
                 );
               })
