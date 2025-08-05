@@ -6,7 +6,7 @@ import FilterPopup from "@/components/FilterPopup";
 import EventPopup from "@/components/EventPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import NotificationsPopup from "@/components/NotificationsPopup";
-import ProfileCard from "@/components/ProfileCard";
+import NeighborsSection from "@/components/NeighborsSection";
 import AddStoryButton from "@/components/AddStoryButton";
 import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
@@ -69,25 +69,6 @@ const Index = () => {
     setRefreshCallback(() => refetch);
   }, [setRefreshCallback, refetch]);
 
-  // Create display profiles with current user first if authenticated
-  const displayProfiles = (() => {
-    if (!user || !currentUserProfile) {
-      return profiles;
-    }
-
-    // Filter out current user from other profiles to avoid duplicates
-    const otherProfiles = profiles.filter(p => p.id !== user.id);
-    
-    // Add current user's profile first
-    const currentUserDisplayProfile = {
-      id: user.id,
-      name: currentUserProfile.name || 'אתה',
-      image: currentUserProfile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"
-    };
-
-    return [currentUserDisplayProfile, ...otherProfiles];
-  })();
-
   // All business, event, and artwork data now comes from the database
   // Static data has been removed to show only real content
 
@@ -132,34 +113,8 @@ const Index = () => {
       />
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
-        {/* Community Members Section - Special styling for better differentiation */}
-        <section className="mb-8 lg:mb-10">
-          <div className="relative z-10">
-            <SectionHeader 
-              title={`${t('sections.neighbors')} ${displayProfiles.length > 0 ? `(${displayProfiles.length})` : ''}`} 
-            />
-          </div>
-          {loading ? (
-            <LoadingSkeleton type="profiles" />
-          ) : (
-            <div className="flex overflow-x-auto gap-4 pb-2" dir="rtl">
-              {user && <AddStoryButton className="flex-shrink-0" />}
-              {displayProfiles.length > 0 ? (
-                displayProfiles.map((profile) => (
-                  <ProfileCard
-                    key={profile.id}
-                    id={profile.id}
-                    image={profile.image}
-                    name={profile.name}
-                    className="flex-shrink-0"
-                  />
-                ))
-              ) : (
-                <div className="text-center py-4 text-muted-foreground col-span-full">אין משתמשים רשומים עדיין</div>
-              )}
-            </div>
-          )}
-        </section>
+        {/* Community Members Section - Optimized with lazy loading */}
+        <NeighborsSection initialProfiles={profiles} loading={loading} />
 
         {/* Join me Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
