@@ -29,21 +29,21 @@ const FriendsProfileRow = () => {
       <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
         {friends.map((friend) => (
           <div 
-            key={friend.id} 
+            key={friend.friend_id} 
             className="flex-shrink-0 text-center cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={() => navigate(`/profile/${friend.id}`)}
+            onClick={() => navigate(`/profile/${friend.friend_id}`)}
           >
             <Avatar className="w-16 h-16 mx-auto mb-2 ring-2 ring-primary/20 hover:ring-primary/40 transition-all">
               <AvatarImage 
-                src={friend.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
-                alt={friend.name || 'משתמש'} 
+                src={friend.profiles?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
+                alt={friend.profiles?.name || 'משתמש'} 
               />
               <AvatarFallback className="text-sm font-medium">
-                {friend.name?.[0] || 'U'}
+                {friend.profiles?.name?.[0] || 'U'}
               </AvatarFallback>
             </Avatar>
             <span className="text-xs text-foreground font-medium block max-w-[64px] truncate">
-              {friend.name || 'משתמש'}
+              {friend.profiles?.name || 'משתמש'}
             </span>
           </div>
         ))}
