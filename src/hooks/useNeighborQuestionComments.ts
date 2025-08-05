@@ -28,7 +28,7 @@ export const useNeighborQuestionComments = (questionId?: string) => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('neighbor_question_comments')
+        .from('neighbor_question_comments' as any)
         .select('*')
         .eq('question_id', qId)
         .order('created_at', { ascending: true });
@@ -41,7 +41,7 @@ export const useNeighborQuestionComments = (questionId?: string) => {
           variant: "destructive",
         });
       } else {
-        setComments(data || []);
+        setComments((data as any) || []);
       }
     } catch (err) {
       console.error('Unexpected error:', err);
@@ -69,7 +69,7 @@ export const useNeighborQuestionComments = (questionId?: string) => {
       setCreating(true);
       
       const { data, error } = await supabase
-        .from('neighbor_question_comments')
+        .from('neighbor_question_comments' as any)
         .insert([
           {
             question_id: commentData.question_id,
@@ -95,7 +95,7 @@ export const useNeighborQuestionComments = (questionId?: string) => {
         });
         
         // Add the new comment to the list
-        setComments(prev => [...prev, data]);
+        setComments(prev => [...prev, data as any]);
         return true;
       }
     } catch (err) {
@@ -123,7 +123,7 @@ export const useNeighborQuestionComments = (questionId?: string) => {
 
     try {
       const { error } = await supabase
-        .from('neighbor_question_comments')
+        .from('neighbor_question_comments' as any)
         .delete()
         .eq('id', commentId)
         .eq('user_id', user.id);
