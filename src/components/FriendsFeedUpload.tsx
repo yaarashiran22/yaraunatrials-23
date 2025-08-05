@@ -151,8 +151,7 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
                   asChild
                 >
                   <span>
-                    <Camera className="h-4 w-4 mr-2" />
-                    תמונה
+                    <Camera className="h-4 w-4" />
                   </span>
                 </Button>
               </label>
