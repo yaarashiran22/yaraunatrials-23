@@ -203,7 +203,7 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
               className="flex-1 h-12 rounded-2xl text-lg font-medium"
             >
               <MessageCircle className="h-5 w-5 ml-2" />
-              {itemDetails?.mobile_number || 'צור קשר'}
+              {itemDetails?.mobile_number || 'אין נייד'}
             </Button>
             <Button 
               onClick={handleViewDetails}

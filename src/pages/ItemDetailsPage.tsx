@@ -183,7 +183,7 @@ const ItemDetailsPage = () => {
               className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl text-lg font-medium"
             >
               <MessageCircle className="h-5 w-5 ml-2" />
-              {item.mobile_number || 'צור קשר'}
+              {item.mobile_number || 'אין נייד'}
             </Button>
           </div>
         </div>
