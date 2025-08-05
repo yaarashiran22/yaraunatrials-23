@@ -234,7 +234,6 @@ const FavoritesPage = () => {
 
               {/* Friends Posts */}
               <div className="space-y-4">
-                <h2 className="text-xl font-bold">פוסטים של חברים</h2>
                 {postsLoading ? (
                   <div className="text-center py-8">
                     <p className="text-muted-foreground">טוען פוסטים...</p>
