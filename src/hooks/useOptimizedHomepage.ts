@@ -66,8 +66,7 @@ const fetchHomepageData = async () => {
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
         .eq('show_in_search', true)
-        .order('created_at', { ascending: false })
-        .limit(8) // Add strict limit to profiles for mobile speed
+        .order('created_at', { ascending: false})
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;

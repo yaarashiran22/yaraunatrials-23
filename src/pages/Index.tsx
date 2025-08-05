@@ -135,7 +135,9 @@ const Index = () => {
         {/* Community Members Section - Special styling for better differentiation */}
         <section className="mb-8 lg:mb-10">
           <div className="relative z-10">
-            <SectionHeader title={t('sections.neighbors')} />
+            <SectionHeader 
+              title={`${t('sections.neighbors')} ${displayProfiles.length > 0 ? `(${displayProfiles.length})` : ''}`} 
+            />
           </div>
           {loading ? (
             <LoadingSkeleton type="profiles" />
