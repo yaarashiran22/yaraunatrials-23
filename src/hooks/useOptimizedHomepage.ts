@@ -66,8 +66,8 @@ const fetchHomepageData = async () => {
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
         .eq('show_in_search', true)
-        .order('created_at', { ascending: false })
-        .limit(10) // Limit profiles for faster loading
+        .order('created_at', { ascending: false }) // Newest users first
+        .limit(20) // Increased limit to show more users including newest
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;
