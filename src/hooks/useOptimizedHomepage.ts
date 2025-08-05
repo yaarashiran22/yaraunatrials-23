@@ -147,7 +147,7 @@ export const useOptimizedHomepage = () => {
   // Preload data on mount
   const preloadData = () => {
     queryClient.prefetchQuery({
-      queryKey: ['homepage-data'],
+      queryKey: ['homepage-data-v2'], // Changed key to match main query
       queryFn: fetchHomepageData,
       staleTime: 30000,
     });
@@ -155,12 +155,12 @@ export const useOptimizedHomepage = () => {
 
   // Main query with React Query caching and ultra-aggressive optimization for mobile
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['homepage-data'],
+    queryKey: ['homepage-data-v2'], // Changed key to invalidate old cache
     queryFn: fetchHomepageData,
     staleTime: 300000, // 5 minutes - aggressive but not excessive
     gcTime: 600000, // 10 minutes 
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchOnMount: true, // Changed to true to ensure fresh data
     refetchOnReconnect: false,
     retry: 1, // Reduced retries for faster failure
     retryDelay: 1000, // Fixed delay
