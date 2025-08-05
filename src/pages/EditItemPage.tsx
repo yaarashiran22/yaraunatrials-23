@@ -30,6 +30,7 @@ const EditItemPage = () => {
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { user, requireAuth } = useSecureAuth();
@@ -67,6 +68,7 @@ const EditItemPage = () => {
         setPrice(data.price ? data.price.toString() : '');
         setCategory(data.category || '');
         setLocation(data.location || '');
+        setMobileNumber(data.mobile_number || '');
         setSelectedImage(data.image_url || null);
         
       } catch (error) {
@@ -168,6 +170,7 @@ const EditItemPage = () => {
         category: category || null,
         location: location || null,
         image_url: selectedImage || null,
+        mobile_number: mobileNumber.trim() || null,
       };
 
       const result = await updateItem(itemId, updateData);
@@ -289,6 +292,18 @@ const EditItemPage = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full min-h-[80px] text-right bg-background border border-border rounded-3xl resize-none p-4"
+            />
+          </div>
+
+          {/* Contact Mobile Number Field */}
+          <div className="space-y-2">
+            <label className="text-sm text-muted-foreground block text-right">מספר נייד ליצירת קשר</label>
+            <Input 
+              placeholder=""
+              type="tel"
+              value={mobileNumber}
+              onChange={(e) => setMobileNumber(e.target.value)}
+              className="w-full h-12 text-right bg-background border border-border rounded-full"
             />
           </div>
 
