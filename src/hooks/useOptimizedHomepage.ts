@@ -67,7 +67,7 @@ const fetchHomepageData = async () => {
         .not('name', 'is', null)
         .eq('show_in_search', true)
         .order('created_at', { ascending: false })
-        .limit(15) // Initial batch for fast loading
+        .limit(10) // Limit profiles for faster loading
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;
