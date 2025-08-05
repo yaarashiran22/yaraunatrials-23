@@ -115,9 +115,6 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
           rows={3}
         />
         
-        <div className="text-sm text-muted-foreground bg-muted/30 p-2 rounded-lg">
-          💡 טיפ: לחץ על כפתור "תמונה" למטה כדי להוסיף תמונה לפוסט שלך
-        </div>
           
           {imagePreview && (
             <div className="relative">
