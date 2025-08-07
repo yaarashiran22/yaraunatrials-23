@@ -286,6 +286,7 @@ export type Database = {
           interests: string[] | null
           is_private: boolean | null
           location: string | null
+          mobile_number: string | null
           name: string | null
           profile_image_url: string | null
           show_in_search: boolean | null
@@ -300,6 +301,7 @@ export type Database = {
           interests?: string[] | null
           is_private?: boolean | null
           location?: string | null
+          mobile_number?: string | null
           name?: string | null
           profile_image_url?: string | null
           show_in_search?: boolean | null
@@ -314,6 +316,7 @@ export type Database = {
           interests?: string[] | null
           is_private?: boolean | null
           location?: string | null
+          mobile_number?: string | null
           name?: string | null
           profile_image_url?: string | null
           show_in_search?: boolean | null

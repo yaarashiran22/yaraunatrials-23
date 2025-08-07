@@ -7,7 +7,7 @@ interface EnhancedAuthContextType {
   user: User | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, name?: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, name?: string, mobileNumber?: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resendConfirmation: (email: string) => Promise<{ error: any }>;
   resetPassword: (email: string) => Promise<{ error: any }>;
@@ -125,7 +125,7 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
-  const signUp = async (email: string, password: string, name?: string) => {
+  const signUp = async (email: string, password: string, name?: string, mobileNumber?: string) => {
     try {
       const redirectUrl = `${window.location.origin}/`;
       
@@ -134,7 +134,10 @@ export const EnhancedAuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
         password,
         options: {
           emailRedirectTo: redirectUrl,
-          data: name ? { name: name.trim() } : undefined
+          data: { 
+            name: name?.trim() || '',
+            mobile_number: mobileNumber?.trim() || ''
+          }
         }
       });
 

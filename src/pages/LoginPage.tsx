@@ -23,7 +23,7 @@ const LoginPage = () => {
     try {
       const { error } = isLogin 
         ? await signIn(email, password)
-        : await signUp(email, password, name);
+        : await signUp(email, password, name, '');
       
       if (error) {
         toast({

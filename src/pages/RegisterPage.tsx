@@ -17,6 +17,7 @@ const RegisterPage = () => {
     name: '',
     email: '',
     password: '',
+    mobileNumber: '',
     neighborhood: '',
     bio: '',
     socialEmail: '',
@@ -45,10 +46,10 @@ const RegisterPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !formData.mobileNumber.trim()) {
       toast({
         title: "שגיאה",
-        description: "נא למלא את כל השדות הנדרשים",
+        description: "נא למלא את כל השדות הנדרשים (שם, מייל, סיסמא ומספר טלפון)",
         variant: "destructive",
       });
       return;
@@ -58,7 +59,7 @@ const RegisterPage = () => {
     
     try {
       // Register the user
-      const { error: signUpError } = await signUp(formData.email, formData.password, formData.name);
+      const { error: signUpError } = await signUp(formData.email, formData.password, formData.name, formData.mobileNumber);
       
       if (signUpError) {
         console.error('Sign up error:', signUpError);
@@ -82,6 +83,7 @@ const RegisterPage = () => {
           id: user.id,
           email: formData.email,
           name: formData.name,
+          mobile_number: formData.mobileNumber,
           location: formData.neighborhood,
           bio: formData.bio,
           profile_image_url: profileImage,
@@ -191,6 +193,16 @@ const RegisterPage = () => {
                   type="password"
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
+                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                />
+              </div>
+              
+              <div>
+                <Input 
+                  placeholder="מספר טלפון *"
+                  type="tel"
+                  value={formData.mobileNumber}
+                  onChange={(e) => handleInputChange('mobileNumber', e.target.value)}
                   className="w-full h-12 text-right bg-background border border-border rounded-lg"
                 />
               </div>
