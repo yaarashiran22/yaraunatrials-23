@@ -45,15 +45,15 @@ const DailyPhotoCard = ({
   };
   
   return (
-    <div className="flex-shrink-0 w-32 h-36">
+    <div className="flex-shrink-0 w-32">
       <div 
-        className="relative rounded-lg overflow-hidden h-full group cursor-pointer"
+        className="relative rounded-xl overflow-hidden aspect-[4/3] group cursor-pointer bg-card shadow-card hover:shadow-lg transition-all duration-300"
         onClick={onClick}
       >
         <img 
           src={primaryImage} 
           alt={`Daily photo by ${userName}`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
         
         {/* Delete button - only show for owner */}
