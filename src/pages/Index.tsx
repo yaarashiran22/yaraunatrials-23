@@ -12,6 +12,7 @@ import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import PhotoUploadCard from "@/components/PhotoUploadCard";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -163,38 +164,25 @@ const Index = () => {
           )}
         </section>
 
-        {/* Photo of the Day Section - Database Only */}
+        {/* Photo of the Day Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title={t('artists.title')} viewAllPath="/artists" />
-          {loading ? (
-            <LoadingSkeleton type="cards" count={3} />
-          ) : artItems.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <p>אין פריטי אמנות זמינים כרגע</p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-foreground">{t('artists.title')}</h2>
+              <div className="bg-primary/10 px-3 py-1 rounded-full">
+                <span className="text-sm font-medium text-primary">
+                  {new Date().toLocaleDateString('he-IL', { 
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short'
+                  })}
+                </span>
+              </div>
             </div>
-          ) : (
-            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {artItems.map((item) => (
-                <div key={`art-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || artPiece1}
-                    title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    type="business"
-                    onClick={() => handleMarketplaceClick(item)}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.title,
-                      image: item.image_url,
-                      type: 'art'
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          </div>
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            <PhotoUploadCard />
+          </div>
         </section>
 
         {/* Join me Section - Database Only */}
