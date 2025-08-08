@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, Camera, Users, MapPin } from 'lucide-react';
+import { Plus, Camera, Users, MapPin, Trash2 } from 'lucide-react';
 import { useDailyPhotoChallenge } from '@/hooks/useDailyPhotoChallenge';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { toast } from '@/hooks/use-toast';
 
 const DailyPhotoChallenge = () => {
-  const { challenge, isLoading, submitPhoto, isSubmitting, checkSubmissionQuery } = useDailyPhotoChallenge();
+  const { challenge, isLoading, submitPhoto, isSubmitting, deletePhoto, isDeleting, checkSubmissionQuery } = useDailyPhotoChallenge();
   const { user } = useAuth();
   const { profile } = useProfile(user?.id);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -90,7 +90,7 @@ const DailyPhotoChallenge = () => {
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               {selectedImage ? (
                 <>
-                  <div className="aspect-[4/3] overflow-hidden">
+                  <div className="aspect-[3/4] overflow-hidden">
                     <img 
                       src={selectedImage} 
                       alt="תמונה נבחרה" 
@@ -122,7 +122,7 @@ const DailyPhotoChallenge = () => {
                 </>
               ) : (
                 <>
-                  <div className="aspect-[4/3] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
+                  <div className="aspect-[3/4] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
                     <input
                       type="file"
                       accept="image/*"
@@ -153,7 +153,7 @@ const DailyPhotoChallenge = () => {
         {!user && (
           <div className="flex-shrink-0 w-32 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
-              <div className="aspect-[4/3] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
+              <div className="aspect-[3/4] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
                 <Plus className="h-8 w-8 text-muted-foreground mb-2" />
                 <p className="text-sm text-muted-foreground text-center px-2">
                   התחבר כדי להעלות
@@ -169,7 +169,7 @@ const DailyPhotoChallenge = () => {
         {hasUserSubmitted && (
           <div className="flex-shrink-0 w-32 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card border-2 border-green-200 w-full">
-              <div className="aspect-[4/3] bg-green-50 flex flex-col items-center justify-center">
+              <div className="aspect-[3/4] bg-green-50 flex flex-col items-center justify-center">
                 <Camera className="h-8 w-8 text-green-600 mb-2" />
                 <p className="text-green-700 text-sm font-medium text-center px-2">
                   ✓ שלחת היום
@@ -193,40 +193,56 @@ const DailyPhotoChallenge = () => {
         {challenge.submissions.map((submission) => (
           <div key={submission.id} className="flex-shrink-0 w-32 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
-              <div className="aspect-[4/3] overflow-hidden">
+              <div className="aspect-[3/4] overflow-hidden relative">
                 <img 
                   src={submission.image_url} 
                   alt="תמונת משתמש" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-              </div>
-              
-              <div className="p-3 h-14 flex items-center gap-2">
-                {submission.is_anonymous ? (
-                  <>
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">?</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground text-sm">אנונימי</h4>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">שכונה</span>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-purple-400"></div>
-                    <div>
-                      <h4 className="font-semibold text-foreground text-sm">תושב</h4>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">פלורנטין</span>
-                      </div>
-                    </div>
-                  </>
+                {/* Delete button for user's own photos */}
+                {submission.user_id === user?.id && (
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    className="absolute top-2 right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deletePhoto(submission.id);
+                    }}
+                    disabled={isDeleting}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
                 )}
+                
+                {/* Text overlay with gradient background instead of white */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                  {submission.is_anonymous ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">?</span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-white text-sm">אנונימי</h4>
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3 text-white/70" />
+                          <span className="text-xs text-white/70">שכונה</span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-purple-400"></div>
+                      <div>
+                        <h4 className="font-semibold text-white text-sm">תושב</h4>
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3 text-white/70" />
+                          <span className="text-xs text-white/70">פלורנטין</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

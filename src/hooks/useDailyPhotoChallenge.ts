@@ -93,6 +93,16 @@ const checkUserSubmission = async (challengeId: string, userId?: string) => {
   return data;
 };
 
+// Delete a photo submission
+const deletePhoto = async (submissionId: string) => {
+  const { error } = await supabase
+    .from('daily_photo_submissions')
+    .delete()
+    .eq('id', submissionId);
+
+  if (error) throw error;
+};
+
 export const useDailyPhotoChallenge = () => {
   const queryClient = useQueryClient();
 
@@ -122,6 +132,25 @@ export const useDailyPhotoChallenge = () => {
     },
   });
 
+  const deletePhotoMutation = useMutation({
+    mutationFn: deletePhoto,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['daily-photo-challenge'] });
+      toast({
+        title: "תמונה נמחקה בהצלחה!",
+        description: "התמונה שלך הוסרה מתמונת היום",
+      });
+    },
+    onError: (error) => {
+      console.error('Photo deletion error:', error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן למחוק את התמונה",
+        variant: "destructive",
+      });
+    },
+  });
+
   const checkSubmissionQuery = (challengeId: string, userId?: string) => 
     useQuery({
       queryKey: ['user-photo-submission', challengeId, userId],
@@ -137,6 +166,8 @@ export const useDailyPhotoChallenge = () => {
     refetch,
     submitPhoto: submitPhotoMutation.mutate,
     isSubmitting: submitPhotoMutation.isPending,
+    deletePhoto: deletePhotoMutation.mutate,
+    isDeleting: deletePhotoMutation.isPending,
     checkSubmissionQuery,
   };
 };
