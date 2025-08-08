@@ -11,6 +11,7 @@ interface DailyPhotoCardProps {
   userId: string;
   currentUserId?: string;
   onDelete?: (photoId: string, imageUrl: string) => Promise<void>;
+  onClick?: () => void;
 }
 
 const DailyPhotoCard = ({ 
@@ -20,13 +21,15 @@ const DailyPhotoCard = ({
   userAvatar, 
   userId, 
   currentUserId,
-  onDelete 
+  onDelete,
+  onClick 
 }: DailyPhotoCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const primaryImage = images[0]; // Use the first image as primary
   const isOwner = currentUserId === userId;
 
-  const handleDelete = async () => {
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
     if (!onDelete || !primaryImage) return;
     
     setIsDeleting(true);
@@ -43,7 +46,10 @@ const DailyPhotoCard = ({
   
   return (
     <div className="flex-shrink-0 w-32 h-36">
-      <div className="relative rounded-lg overflow-hidden h-full group">
+      <div 
+        className="relative rounded-lg overflow-hidden h-full group cursor-pointer"
+        onClick={onClick}
+      >
         <img 
           src={primaryImage} 
           alt={`Daily photo by ${userName}`}
