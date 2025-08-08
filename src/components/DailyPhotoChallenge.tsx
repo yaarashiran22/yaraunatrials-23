@@ -12,6 +12,7 @@ const DailyPhotoChallenge = () => {
   const { user } = useAuth();
   const { profile } = useProfile(user?.id);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   // Check if user has already submitted today
@@ -21,6 +22,7 @@ const DailyPhotoChallenge = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setSelectedImage(e.target?.result as string);
@@ -30,7 +32,7 @@ const DailyPhotoChallenge = () => {
   };
 
   const handleSubmit = () => {
-    if (!selectedImage || !challenge) {
+    if (!selectedFile || !challenge) {
       toast({
         title: "שגיאה",
         description: "נא לבחור תמונה לשליחה",
@@ -50,12 +52,13 @@ const DailyPhotoChallenge = () => {
 
     submitPhoto({
       challengeId: challenge.id,
-      imageUrl: selectedImage,
+      imageFile: selectedFile,
       isAnonymous,
       userId: user?.id,
     });
 
     setSelectedImage(null);
+    setSelectedFile(null);
     setIsAnonymous(false);
   };
 

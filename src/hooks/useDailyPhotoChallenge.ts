@@ -70,17 +70,43 @@ const fetchTodayChallenge = async (): Promise<DailyPhotoChallenge | null> => {
 // Submit a photo for today's challenge
 const submitPhoto = async (params: {
   challengeId: string;
-  imageUrl: string;
+  imageFile: File;
   isAnonymous: boolean;
   userId?: string;
 }) => {
+  if (!params.userId) {
+    throw new Error('User must be authenticated to upload photos');
+  }
+
+  // Generate a unique filename
+  const fileExt = params.imageFile.name.split('.').pop();
+  const fileName = `${params.userId}/${Date.now()}.${fileExt}`;
+
+  // Upload image to Supabase Storage
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from('daily-photos')
+    .upload(fileName, params.imageFile, {
+      cacheControl: '3600',
+      upsert: false
+    });
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  // Get the public URL
+  const { data: { publicUrl } } = supabase.storage
+    .from('daily-photos')
+    .getPublicUrl(fileName);
+
+  // Save submission to database
   const { data, error } = await supabase
     .from('daily_photo_submissions')
     .insert({
       challenge_id: params.challengeId,
-      image_url: params.imageUrl,
+      image_url: publicUrl,
       is_anonymous: params.isAnonymous,
-      user_id: params.userId || null
+      user_id: params.userId
     })
     .select()
     .single();
@@ -106,6 +132,33 @@ const checkUserSubmission = async (challengeId: string, userId?: string) => {
 
 // Delete a photo submission
 const deletePhoto = async (submissionId: string) => {
+  // First get the submission to find the image URL
+  const { data: submission, error: fetchError } = await supabase
+    .from('daily_photo_submissions')
+    .select('image_url')
+    .eq('id', submissionId)
+    .single();
+
+  if (fetchError) throw fetchError;
+
+  // Extract filename from the URL to delete from storage
+  if (submission?.image_url) {
+    const url = new URL(submission.image_url);
+    const pathParts = url.pathname.split('/');
+    const fileName = pathParts.slice(-2).join('/'); // Get user_id/filename
+
+    // Delete from storage
+    const { error: storageError } = await supabase.storage
+      .from('daily-photos')
+      .remove([fileName]);
+
+    if (storageError) {
+      console.error('Storage deletion error:', storageError);
+      // Continue with database deletion even if storage deletion fails
+    }
+  }
+
+  // Delete from database
   const { error } = await supabase
     .from('daily_photo_submissions')
     .delete()
