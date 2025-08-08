@@ -12,8 +12,6 @@ import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
-import DailyPhotoChallenge from "@/components/DailyPhotoChallenge";
-import { useDailyPhotoChallenge } from "@/hooks/useDailyPhotoChallenge";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -57,8 +55,6 @@ const Index = () => {
     refetch,
     preloadData
   } = useOptimizedHomepage();
-
-  const { challenge } = useDailyPhotoChallenge();
 
   // Removed preload useEffect that was causing infinite re-renders
 
@@ -169,18 +165,36 @@ const Index = () => {
 
         {/* Photo of the Day Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <div className="flex items-center justify-between mb-4 px-2">
-            <h2 className="text-xl font-bold text-foreground">תמונה ביום</h2>
-            <div className="bg-primary/10 border border-primary/20 rounded-lg px-3 py-1">
-              <span className="text-sm text-primary font-medium">
-                {new Date().toLocaleDateString('he-IL', { 
-                  day: 'numeric', 
-                  month: 'long' 
-                })}
-              </span>
+          <SectionHeader title={t('artists.title')} viewAllPath="/artists" />
+          {loading ? (
+            <LoadingSkeleton type="cards" count={3} />
+          ) : artItems.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>אין פריטי אמנות זמינים כרגע</p>
             </div>
-          </div>
-          <DailyPhotoChallenge />
+          ) : (
+            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
+              {artItems.map((item) => (
+                <div key={`art-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
+                  <UniformCard
+                    id={item.id}
+                    image={item.image_url || artPiece1}
+                    title={item.title}
+                    subtitle={item.location || 'תל אביב'}
+                    type="business"
+                    onClick={() => handleMarketplaceClick(item)}
+                    favoriteData={{
+                      id: item.id,
+                      title: item.title,
+                      description: item.title,
+                      image: item.image_url,
+                      type: 'art'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Join me Section - Database Only */}
@@ -191,7 +205,7 @@ const Index = () => {
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {recommendationItems.map((item) => (
-                <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
+                <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
                   <UniformCard
                     id={item.id}
                     image={item.image_url || coffeeShop}

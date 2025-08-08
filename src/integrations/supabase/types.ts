@@ -14,97 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      daily_photo_challenges: {
-        Row: {
-          challenge_date: string
-          created_at: string
-          id: string
-          instruction_id: string
-        }
-        Insert: {
-          challenge_date: string
-          created_at?: string
-          id?: string
-          instruction_id: string
-        }
-        Update: {
-          challenge_date?: string
-          created_at?: string
-          id?: string
-          instruction_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "daily_photo_challenges_instruction_id_fkey"
-            columns: ["instruction_id"]
-            isOneToOne: false
-            referencedRelation: "daily_photo_instructions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      daily_photo_instructions: {
-        Row: {
-          created_at: string
-          id: string
-          instruction_text: string
-          is_active: boolean | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          instruction_text: string
-          is_active?: boolean | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          instruction_text?: string
-          is_active?: boolean | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      daily_photo_submissions: {
-        Row: {
-          challenge_id: string
-          created_at: string
-          id: string
-          image_url: string
-          is_anonymous: boolean | null
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: {
-          challenge_id: string
-          created_at?: string
-          id?: string
-          image_url: string
-          is_anonymous?: boolean | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Update: {
-          challenge_id?: string
-          created_at?: string
-          id?: string
-          image_url?: string
-          is_anonymous?: boolean | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "daily_photo_submissions_challenge_id_fkey"
-            columns: ["challenge_id"]
-            isOneToOne: false
-            referencedRelation: "daily_photo_challenges"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       favorites: {
         Row: {
           created_at: string
@@ -555,45 +464,12 @@ export type Database = {
         }
         Relationships: []
       }
-      user_picture_galleries: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          image_url: string
-          title: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          image_url: string
-          title?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          image_url?: string
-          title?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      rotate_daily_challenge: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
