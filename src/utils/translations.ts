@@ -48,7 +48,7 @@ export const translations = {
       searchPlaceholder: "חיפוש פריטים..."
     },
     artists: {
-      title: "אמנים יוצרים",
+      title: "תמונה ביום",
       searchPlaceholder: "חיפוש אמנים..."
     },
     recommended: {
@@ -60,7 +60,7 @@ export const translations = {
       events: "אירועים", 
       marketplace: "יד שנייה",
       recommended: "מומלצים",
-      artists: "אמנים יוצרים",
+      artists: "תמונה ביום",
       feed: "פיד",
       favorites: "חברים",
       createPost: "צור פוסט",
@@ -135,7 +135,7 @@ export const translations = {
       searchPlaceholder: "Search items..."
     },
     artists: {
-      title: "Artists & Creators",
+      title: "Photo of the Day",
       searchPlaceholder: "Search artists..."
     },
     recommended: {
@@ -147,7 +147,7 @@ export const translations = {
       events: "Events",
       marketplace: "Marketplace", 
       recommended: "Recommended",
-      artists: "Artists & Creators",
+      artists: "Photo of the Day",
       feed: "Feed",
       favorites: "Friends",
       createPost: "Create Post",
@@ -222,7 +222,7 @@ export const translations = {
       searchPlaceholder: "Buscar artículos..."
     },
     artists: {
-      title: "Artistas y Creadores",
+      title: "Foto del Día",
       searchPlaceholder: "Buscar artistas..."
     },
     recommended: {
@@ -234,7 +234,7 @@ export const translations = {
       events: "Eventos",
       marketplace: "Mercado",
       recommended: "Recomendados", 
-      artists: "Artistas y Creadores",
+      artists: "Foto del Día",
       feed: "Feed",
       favorites: "Amigos",
       createPost: "Crear Publicación",

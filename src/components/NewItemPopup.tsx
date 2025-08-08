@@ -232,7 +232,6 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
                 <SelectValue placeholder="בחר קטגוריה" />
               </SelectTrigger>
               <SelectContent className="bg-background border border-border z-50">
-                <SelectItem value="art">אמנות</SelectItem>
                 <SelectItem value="secondhand">יד שנייה</SelectItem>
                 <SelectItem value="business">עסק</SelectItem>
                 <SelectItem value="event">אירוע</SelectItem>
