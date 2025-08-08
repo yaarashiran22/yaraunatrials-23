@@ -185,7 +185,7 @@ const Index = () => {
           </div>
           <p className="text-sm text-muted-foreground mb-4">תעלו תמונה שלכם בקפה של הבוקר</p>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            <PhotoUploadCard onUploadComplete={refetchDailyPhotos} />
+            {user && <PhotoUploadCard onUploadComplete={refetchDailyPhotos} />}
             {dailyPhotosLoading ? (
               <LoadingSkeleton type="cards" count={3} />
             ) : (
