@@ -21,46 +21,64 @@ export interface DailyPhotoSubmission {
   };
 }
 
-// Fetch today's photo challenge with submissions
+// Fetch today's photo challenge with submissions (optimized)
 const fetchTodayChallenge = async (): Promise<DailyPhotoChallenge | null> => {
   const today = new Date().toISOString().split('T')[0];
   
-  const { data: challenge, error } = await supabase
+  // First, get the challenge
+  const { data: challenge, error: challengeError } = await supabase
     .from('daily_photo_challenges')
     .select(`
       id,
       challenge_date,
       daily_photo_instructions (
         instruction_text
-      ),
-      daily_photo_submissions (
-        id,
-        image_url,
-        is_anonymous,
-        created_at,
-        user_id,
-        profiles (
-          name,
-          profile_image_url
-        )
       )
     `)
     .eq('challenge_date', today)
     .single();
 
-  if (error && error.code !== 'PGRST116') {
-    throw error;
+  if (challengeError && challengeError.code !== 'PGRST116') {
+    throw challengeError;
   }
 
   if (!challenge) {
     return null;
   }
 
+  // Then, get submissions with profile data in a separate optimized query
+  const { data: submissions, error: submissionsError } = await supabase
+    .from('daily_photo_submissions')
+    .select(`
+      id,
+      image_url,
+      is_anonymous,
+      created_at,
+      user_id,
+      profiles!inner (
+        name,
+        profile_image_url
+      )
+    `)
+    .eq('challenge_id', challenge.id)
+    .order('created_at', { ascending: false });
+
+  if (submissionsError) {
+    console.error('Submissions fetch error:', submissionsError);
+    // Return challenge without submissions if there's an error
+    return {
+      id: challenge.id,
+      instruction_text: challenge.daily_photo_instructions?.instruction_text || '',
+      challenge_date: challenge.challenge_date,
+      submissions: []
+    };
+  }
+
   return {
     id: challenge.id,
     instruction_text: challenge.daily_photo_instructions?.instruction_text || '',
     challenge_date: challenge.challenge_date,
-    submissions: (challenge.daily_photo_submissions || []).map((submission: any) => ({
+    submissions: (submissions || []).map((submission: any) => ({
       ...submission,
       user_profile: submission.profiles
     }))
@@ -173,8 +191,10 @@ export const useDailyPhotoChallenge = () => {
   const { data: challenge, isLoading, error, refetch } = useQuery({
     queryKey: ['daily-photo-challenge'],
     queryFn: fetchTodayChallenge,
-    staleTime: 300000, // 5 minutes
-    refetchOnWindowFocus: false,
+    staleTime: 60000, // Reduced to 1 minute for faster updates
+    gcTime: 300000, // 5 minutes
+    refetchOnWindowFocus: true, // Enable refetch on focus for fresh data
+    retry: 1, // Reduce retries for faster failures
   });
 
   const submitPhotoMutation = useMutation({
