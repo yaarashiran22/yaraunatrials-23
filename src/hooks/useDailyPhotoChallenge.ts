@@ -21,6 +21,19 @@ export interface DailyPhotoSubmission {
   };
 }
 
+export interface UserPictureGallery {
+  id: string;
+  image_url: string;
+  title?: string;
+  description?: string;
+  created_at: string;
+  user_id: string;
+  user_profile?: {
+    name: string;
+    profile_image_url: string;
+  };
+}
+
 // Fetch today's photo challenge with submissions (optimized)
 const fetchTodayChallenge = async (): Promise<DailyPhotoChallenge | null> => {
   const today = new Date().toISOString().split('T')[0];
@@ -185,6 +198,120 @@ const deletePhoto = async (submissionId: string) => {
   if (error) throw error;
 };
 
+// Fetch user picture galleries
+const fetchUserPictureGalleries = async (): Promise<UserPictureGallery[]> => {
+  const { data, error } = await supabase
+    .from('user_picture_galleries')
+    .select(`
+      id,
+      image_url,
+      title,
+      description,
+      created_at,
+      user_id,
+      profiles!inner (
+        name,
+        profile_image_url
+      )
+    `)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  if (error) {
+    console.error('Picture galleries fetch error:', error);
+    return [];
+  }
+
+  return (data || []).map((item: any) => ({
+    ...item,
+    user_profile: item.profiles
+  }));
+};
+
+// Add picture to gallery
+const addPictureToGallery = async (params: {
+  imageFile: File;
+  title?: string;
+  description?: string;
+  userId?: string;
+}) => {
+  if (!params.userId) {
+    throw new Error('User must be authenticated to upload pictures');
+  }
+
+  // Generate a unique filename
+  const fileExt = params.imageFile.name.split('.').pop();
+  const fileName = `${params.userId}/gallery/${Date.now()}.${fileExt}`;
+
+  // Upload image to Supabase Storage
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from('daily-photos')
+    .upload(fileName, params.imageFile, {
+      cacheControl: '3600',
+      upsert: false
+    });
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  // Get the public URL
+  const { data: { publicUrl } } = supabase.storage
+    .from('daily-photos')
+    .getPublicUrl(fileName);
+
+  // Save to picture gallery
+  const { data, error } = await supabase
+    .from('user_picture_galleries')
+    .insert({
+      image_url: publicUrl,
+      title: params.title,
+      description: params.description,
+      user_id: params.userId
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+// Delete picture from gallery
+const deletePictureFromGallery = async (pictureId: string) => {
+  // First get the picture to find the image URL
+  const { data: picture, error: fetchError } = await supabase
+    .from('user_picture_galleries')
+    .select('image_url')
+    .eq('id', pictureId)
+    .single();
+
+  if (fetchError) throw fetchError;
+
+  // Extract filename from the URL to delete from storage
+  if (picture?.image_url) {
+    const url = new URL(picture.image_url);
+    const pathParts = url.pathname.split('/');
+    const fileName = pathParts.slice(-3).join('/'); // Get user_id/gallery/filename
+
+    // Delete from storage
+    const { error: storageError } = await supabase.storage
+      .from('daily-photos')
+      .remove([fileName]);
+
+    if (storageError) {
+      console.error('Storage deletion error:', storageError);
+    }
+  }
+
+  // Delete from database
+  const { error } = await supabase
+    .from('user_picture_galleries')
+    .delete()
+    .eq('id', pictureId);
+
+  if (error) throw error;
+};
+
 export const useDailyPhotoChallenge = () => {
   const queryClient = useQueryClient();
 
@@ -236,12 +363,57 @@ export const useDailyPhotoChallenge = () => {
     },
   });
 
+  const { data: pictureGalleries, isLoading: galleriesLoading, refetch: refetchGalleries } = useQuery({
+    queryKey: ['user-picture-galleries'],
+    queryFn: fetchUserPictureGalleries,
+    staleTime: 60000,
+    gcTime: 300000,
+  });
+
+  const addPictureMutation = useMutation({
+    mutationFn: addPictureToGallery,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-picture-galleries'] });
+      toast({
+        title: "תמונה נוספה בהצלחה!",
+        description: "התמונה שלך נוספה לגלריה",
+      });
+    },
+    onError: (error) => {
+      console.error('Picture addition error:', error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן להוסיף את התמונה",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deletePictureMutation = useMutation({
+    mutationFn: deletePictureFromGallery,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-picture-galleries'] });
+      toast({
+        title: "תמונה נמחקה בהצלחה!",
+        description: "התמונה הוסרה מהגלריה",
+      });
+    },
+    onError: (error) => {
+      console.error('Picture deletion error:', error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן למחוק את התמונה",
+        variant: "destructive",
+      });
+    },
+  });
+
   const checkSubmissionQuery = (challengeId: string, userId?: string) => 
     useQuery({
       queryKey: ['user-photo-submission', challengeId, userId],
       queryFn: () => checkUserSubmission(challengeId, userId),
       enabled: !!challengeId && !!userId,
-      staleTime: 300000,
+      staleTime: 60000,
     });
 
   return {
@@ -254,5 +426,13 @@ export const useDailyPhotoChallenge = () => {
     deletePhoto: deletePhotoMutation.mutate,
     isDeleting: deletePhotoMutation.isPending,
     checkSubmissionQuery,
+    // Picture gallery functions
+    pictureGalleries,
+    galleriesLoading,
+    refetchGalleries,
+    addPictureToGallery: addPictureMutation.mutate,
+    isAddingPicture: addPictureMutation.isPending,
+    deletePictureFromGallery: deletePictureMutation.mutate,
+    isDeletingPicture: deletePictureMutation.isPending,
   };
 };
