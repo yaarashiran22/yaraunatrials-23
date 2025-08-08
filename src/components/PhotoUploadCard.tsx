@@ -143,7 +143,7 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
 
   if (!user) {
     return (
-      <div className="flex-shrink-0 w-28 h-32">
+      <div className="flex-shrink-0 w-32 h-36">
         <div className="border border-dashed border-border rounded-lg p-3 h-full flex flex-col items-center justify-center text-center">
           <p className="text-xs text-muted-foreground">התחבר כדי להעלות תמונה</p>
         </div>
@@ -153,14 +153,12 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
 
   return (
     <>
-      <div className="flex-shrink-0 w-28 h-32">
+      <div className="flex-shrink-0 w-32 h-36">
         <div 
           className="border-2 border-dashed border-primary/50 rounded-lg h-full flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/70 hover:bg-primary/5 transition-all duration-200"
           onClick={() => setShowOptions(true)}
         >
-          <div className="w-12 h-12 rounded-full border-2 border-dashed border-primary/40 flex items-center justify-center mb-2">
-            <Plus className="w-6 h-6 text-primary" />
-          </div>
+          <Plus className="w-8 h-8 text-primary mb-2" />
           <span className="text-xs text-primary font-medium">הוסף תמונה</span>
         </div>
       </div>
