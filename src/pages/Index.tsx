@@ -43,6 +43,7 @@ const Index = () => {
   // Use optimized homepage hook with React Query caching
   const { 
     profiles, 
+    totalUsersCount,
     marketplaceItems, 
     databaseEvents,
     recommendationItems, 
@@ -137,7 +138,7 @@ const Index = () => {
         <section className="mb-8 lg:mb-10">
           <div className="relative z-10">
             <SectionHeader 
-              title={`${t('sections.neighbors')} ${displayProfiles.length > 0 ? `(${displayProfiles.length})` : ''}`} 
+              title={`${t('sections.neighbors')} ${totalUsersCount > 0 ? `(${totalUsersCount})` : ''}`} 
             />
           </div>
           {loading ? (

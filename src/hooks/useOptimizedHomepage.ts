@@ -32,7 +32,7 @@ export interface OptimizedProfile {
 const fetchHomepageData = async () => {
   try {
     // Batch all queries in a single Promise.all for maximum performance
-    const [marketplaceResult, eventsResult, recommendationsResult, artResult, apartmentsResult, profilesResult] = await Promise.all([
+    const [marketplaceResult, eventsResult, recommendationsResult, artResult, apartmentsResult, profilesResult, profilesCountResult] = await Promise.all([
       supabase
         .from('items')
         .select('id, title, price, image_url, location')
@@ -73,8 +73,12 @@ const fetchHomepageData = async () => {
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
         .eq('show_in_search', true)
-        .order('created_at', { ascending: false }) // Newest users first
-        .limit(20) // Increased limit to show more users including newest
+        .order('created_at', { ascending: false }), // Removed limit to show all users
+      supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .not('name', 'is', null)
+        .eq('show_in_search', true)
     ]);
 
     if (marketplaceResult.error) throw marketplaceResult.error;
@@ -83,6 +87,7 @@ const fetchHomepageData = async () => {
     if (artResult.error) throw artResult.error;
     if (apartmentsResult.error) throw apartmentsResult.error;
     if (profilesResult.error) throw profilesResult.error;
+    if (profilesCountResult.error) throw profilesCountResult.error;
 
     const marketplaceItems = marketplaceResult.data || [];
     const rawEvents = eventsResult.data || [];
@@ -136,10 +141,12 @@ const fetchHomepageData = async () => {
       name: profile.name || 'משתמש'
     }));
 
+    const totalUsersCount = profilesCountResult.count || 0;
+
     // Combine all items for backward compatibility
     const items = [...marketplaceItems, ...databaseEvents, ...recommendationItems, ...artItems, ...apartmentItems];
 
-    return { items, marketplaceItems, databaseEvents, recommendationItems, artItems, apartmentItems, businessItems: [], profiles };
+    return { items, marketplaceItems, databaseEvents, recommendationItems, artItems, apartmentItems, businessItems: [], profiles, totalUsersCount };
   } catch (error) {
     console.error('Homepage data fetch error:', error);
     toast({
@@ -179,6 +186,7 @@ export const useOptimizedHomepage = () => {
   // Extract pre-filtered data for instant mobile loading
   const items = data?.items || [];
   const profiles = data?.profiles || [];
+  const totalUsersCount = data?.totalUsersCount || 0;
   const marketplaceItems = data?.marketplaceItems || [];
   const databaseEvents = data?.databaseEvents || [];
   const recommendationItems = data?.recommendationItems || [];
@@ -189,6 +197,7 @@ export const useOptimizedHomepage = () => {
   return {
     items,
     profiles,
+    totalUsersCount,
     marketplaceItems,
     databaseEvents,
     recommendationItems,
