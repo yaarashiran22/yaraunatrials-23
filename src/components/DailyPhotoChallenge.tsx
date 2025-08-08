@@ -192,7 +192,7 @@ const DailyPhotoChallenge = () => {
         {/* Photo Submissions - Similar to UniformCard layout */}
         {challenge.submissions.map((submission) => (
           <div key={submission.id} className="flex-shrink-0 w-36 lg:w-auto">
-            <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
+            <div className="relative bg-transparent rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               <div className="aspect-[4/3] overflow-hidden relative">
                 <img 
                   src={submission.image_url} 
@@ -216,7 +216,7 @@ const DailyPhotoChallenge = () => {
                 )}
               </div>
               {/* User info below the image */}
-              <div className="p-3 h-14 flex items-center gap-2">
+              <div className="p-3 h-14 flex items-center gap-2 bg-transparent">
                 {submission.is_anonymous ? (
                   <>
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
