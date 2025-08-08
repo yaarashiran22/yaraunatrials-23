@@ -169,9 +169,17 @@ const Index = () => {
 
         {/* Photo of the Day Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader 
-            title={challenge?.instruction_text ? `${t('artists.title')} - ${challenge.instruction_text}` : t('artists.title')} 
-          />
+          <div className="flex items-center justify-between mb-4 px-2">
+            <h2 className="text-xl font-bold text-foreground">תמונה ביום</h2>
+            <div className="bg-primary/10 border border-primary/20 rounded-lg px-3 py-1">
+              <span className="text-sm text-primary font-medium">
+                {new Date().toLocaleDateString('he-IL', { 
+                  day: 'numeric', 
+                  month: 'long' 
+                })}
+              </span>
+            </div>
+          </div>
           <DailyPhotoChallenge />
         </section>
 
