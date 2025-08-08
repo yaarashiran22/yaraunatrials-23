@@ -81,45 +81,29 @@ const DailyPhotoChallenge = () => {
   }
 
   return (
-    <div className="space-y-4">
-      {/* Today's Challenge Instruction */}
-      <Card className="p-4 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20">
-        <div className="flex items-center gap-3 mb-2">
-          <Camera className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold text-primary">תמונת היום</h3>
-        </div>
-        <p className="text-lg font-medium text-foreground mb-2">
-          {challenge.instruction_text}
-        </p>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Users className="h-4 w-4" />
-          <span>{challenge.submissions.length} תמונות נשלחו</span>
-        </div>
-      </Card>
-
+    <div>
       {/* Photo Submissions in horizontal scroll layout like neighbor questions */}
-      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
         {/* Add Photo Card - Similar to NeighborQuestionCard */}
         {!hasUserSubmitted && user && (
-          <Card className="flex-shrink-0 w-64 bg-background border border-dashed border-border rounded-lg p-4 min-h-[300px]">
+          <Card className="flex-shrink-0 w-32 lg:w-auto bg-background border border-dashed border-border rounded-lg p-3 min-h-[160px]">
             <div className="flex flex-col h-full">
-              <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center gap-2 mb-2">
                 <img 
                   src={profile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
                   alt={profile?.name || "אתה"}
-                  className="w-8 h-8 rounded-full object-cover"
+                  className="w-6 h-6 rounded-full object-cover"
                 />
                 <div>
-                  <h4 className="font-medium text-foreground text-sm">
+                  <h4 className="font-medium text-foreground text-xs">
                     {profile?.name || "אתה"}
                   </h4>
-                  <p className="text-xs text-muted-foreground">עכשיו</p>
                 </div>
               </div>
               
               {selectedImage ? (
-                <div className="space-y-3 flex-1">
-                  <div className="w-full h-40 rounded-lg overflow-hidden border">
+                <div className="space-y-2 flex-1">
+                  <div className="w-full h-20 rounded-lg overflow-hidden border">
                     <img 
                       src={selectedImage} 
                       alt="תמונה נבחרה" 
@@ -127,16 +111,16 @@ const DailyPhotoChallenge = () => {
                     />
                   </div>
                   
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <input
                       type="checkbox"
                       id="anonymous"
                       checked={isAnonymous}
                       onChange={(e) => setIsAnonymous(e.target.checked)}
-                      className="rounded"
+                      className="rounded w-3 h-3"
                     />
                     <label htmlFor="anonymous" className="text-xs text-muted-foreground">
-                      שלח באופן אנונימי
+                      אנונימי
                     </label>
                   </div>
 
@@ -144,9 +128,9 @@ const DailyPhotoChallenge = () => {
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                     size="sm"
-                    className="w-full"
+                    className="w-full h-7 text-xs"
                   >
-                    {isSubmitting ? 'שולח...' : 'שלח תמונה'}
+                    {isSubmitting ? 'שולח...' : 'שלח'}
                   </Button>
                 </div>
               ) : (
@@ -158,10 +142,10 @@ const DailyPhotoChallenge = () => {
                       onChange={handleImageUpload}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                     />
-                    <div className="h-32 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center hover:border-primary/50 transition-colors cursor-pointer">
-                      <Plus className="h-8 w-8 text-muted-foreground mb-2" />
-                      <p className="text-sm text-muted-foreground text-center">
-                        הוסף תמונה לאתגר
+                    <div className="h-20 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center hover:border-primary/50 transition-colors cursor-pointer">
+                      <Plus className="h-5 w-5 text-muted-foreground mb-1" />
+                      <p className="text-xs text-muted-foreground text-center">
+                        הוסף תמונה
                       </p>
                     </div>
                   </div>
@@ -172,32 +156,29 @@ const DailyPhotoChallenge = () => {
         )}
 
         {!user && (
-          <Card className="flex-shrink-0 w-64 bg-background border border-dashed border-border rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow flex flex-col items-center justify-center min-h-[300px] text-center">
-            <Plus className="h-8 w-8 text-muted-foreground mb-2" />
-            <p className="text-sm text-muted-foreground">
-              התחבר כדי להעלות תמונה
+          <Card className="flex-shrink-0 w-32 lg:w-auto bg-background border border-dashed border-border rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow flex flex-col items-center justify-center min-h-[160px] text-center">
+            <Plus className="h-5 w-5 text-muted-foreground mb-1" />
+            <p className="text-xs text-muted-foreground">
+              התחבר כדי להעלות
             </p>
           </Card>
         )}
 
         {hasUserSubmitted && (
-          <Card className="flex-shrink-0 w-64 bg-green-50 border-green-200 p-4 min-h-[300px] flex flex-col items-center justify-center text-center">
-            <Camera className="h-8 w-8 text-green-600 mb-2" />
-            <p className="text-green-700 text-sm font-medium mb-1">
-              ✓ שלחת תמונה היום!
-            </p>
-            <p className="text-green-600 text-xs">
-              תוכל לשלוח שוב מחר
+          <Card className="flex-shrink-0 w-32 lg:w-auto bg-green-50 border-green-200 p-3 min-h-[160px] flex flex-col items-center justify-center text-center">
+            <Camera className="h-5 w-5 text-green-600 mb-1" />
+            <p className="text-green-700 text-xs font-medium">
+              ✓ שלחת היום
             </p>
           </Card>
         )}
 
         {/* Photo Submissions - Similar to NeighborQuestionItem layout */}
         {challenge.submissions.map((submission) => (
-          <Card key={submission.id} className="flex-shrink-0 w-64 bg-white border border-border rounded-lg p-4 min-h-[300px]">
+          <Card key={submission.id} className="flex-shrink-0 w-32 lg:w-auto bg-white border border-border rounded-lg p-2 min-h-[160px]">
             <div className="flex flex-col h-full">
               {/* Photo */}
-              <div className="w-full h-40 rounded-lg overflow-hidden border mb-3">
+              <div className="w-full h-20 rounded-lg overflow-hidden border mb-2">
                 <img 
                   src={submission.image_url} 
                   alt="תמונת משתמש" 
@@ -206,27 +187,27 @@ const DailyPhotoChallenge = () => {
               </div>
               
               {/* User info at bottom */}
-              <div className="flex items-center gap-3 mt-auto">
+              <div className="flex items-center gap-2 mt-auto">
                 {submission.is_anonymous ? (
                   <>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
                       <span className="text-white text-xs font-bold">?</span>
                     </div>
                     <div>
-                      <h4 className="font-medium text-foreground text-sm">אנונימי</h4>
+                      <h4 className="font-medium text-foreground text-xs">אנונימי</h4>
                       <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-muted-foreground" />
+                        <MapPin className="h-2 w-2 text-muted-foreground" />
                         <span className="text-xs text-muted-foreground">שכונה</span>
                       </div>
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-400"></div>
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-purple-400"></div>
                     <div>
-                      <h4 className="font-medium text-foreground text-sm">תושב שכונה</h4>
+                      <h4 className="font-medium text-foreground text-xs">תושב</h4>
                       <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-muted-foreground" />
+                        <MapPin className="h-2 w-2 text-muted-foreground" />
                         <span className="text-xs text-muted-foreground">פלורנטין</span>
                       </div>
                     </div>
@@ -237,10 +218,9 @@ const DailyPhotoChallenge = () => {
           </Card>
         ))}
 
-        {challenge.submissions.length === 0 && (
-          <div className="flex-shrink-0 w-64 text-center py-8 text-muted-foreground">
-            <p className="text-sm">אין תמונות עדיין</p>
-            <p className="text-xs mt-1">היה הראשון לשתף!</p>
+        {challenge.submissions.length === 0 && !hasUserSubmitted && !user && (
+          <div className="flex-shrink-0 w-32 lg:w-auto text-center py-4 text-muted-foreground">
+            <p className="text-xs">אין תמונות עדיין</p>
           </div>
         )}
       </div>

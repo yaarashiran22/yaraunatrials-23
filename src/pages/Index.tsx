@@ -13,6 +13,7 @@ import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import DailyPhotoChallenge from "@/components/DailyPhotoChallenge";
+import { useDailyPhotoChallenge } from "@/hooks/useDailyPhotoChallenge";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -56,6 +57,8 @@ const Index = () => {
     refetch,
     preloadData
   } = useOptimizedHomepage();
+
+  const { challenge } = useDailyPhotoChallenge();
 
   // Removed preload useEffect that was causing infinite re-renders
 
@@ -165,8 +168,10 @@ const Index = () => {
         </section>
 
         {/* Photo of the Day Section - Database Only */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
-          <SectionHeader title={t('artists.title')} />
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
+          <SectionHeader 
+            title={challenge?.instruction_text ? `${t('artists.title')} - ${challenge.instruction_text}` : t('artists.title')} 
+          />
           <DailyPhotoChallenge />
         </section>
 
