@@ -144,7 +144,7 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
   if (!user) {
     return (
       <div className="flex-shrink-0 w-32">
-        <div className="border border-dashed border-border rounded-xl aspect-[4/3] flex items-center justify-center text-center bg-card">
+        <div className="border border-dashed border-border rounded-xl aspect-[4/3] flex items-center justify-center text-center">
           <p className="text-xs text-muted-foreground px-2">התחבר כדי להעלות תמונה</p>
         </div>
       </div>
@@ -155,7 +155,7 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
     <>
       <div className="flex-shrink-0 w-32">
         <div 
-          className="border-2 border-dashed border-primary/50 rounded-xl aspect-[4/3] flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/70 hover:bg-primary/5 transition-all duration-200 bg-card"
+          className="border-2 border-dashed border-primary/50 rounded-xl aspect-[4/3] flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/70 hover:bg-primary/5 transition-all duration-200"
           onClick={() => setShowOptions(true)}
         >
           <Plus className="w-6 h-6 text-primary mb-1" />
