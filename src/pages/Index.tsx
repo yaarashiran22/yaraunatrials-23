@@ -13,6 +13,7 @@ import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PhotoUploadCard from "@/components/PhotoUploadCard";
+import DailyPhotoCard from "@/components/DailyPhotoCard";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -20,6 +21,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
+import { useDailyPhotos } from "@/hooks/useDailyPhotos";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 
 import profile1 from "@/assets/profile-1.jpg";
@@ -40,6 +42,7 @@ const Index = () => {
   const { setRefreshCallback } = useNewItem();
   const { user } = useAuth();
   const { profile: currentUserProfile } = useProfile(user?.id);
+  const { dailyPhotos, isLoading: dailyPhotosLoading, refetchDailyPhotos } = useDailyPhotos();
   
   // Use optimized homepage hook with React Query caching
   const { 
@@ -182,7 +185,19 @@ const Index = () => {
           </div>
           <p className="text-sm text-muted-foreground mb-4">תעלו תמונה שלכם בקפה של הבוקר</p>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            <PhotoUploadCard />
+            <PhotoUploadCard onUploadComplete={refetchDailyPhotos} />
+            {dailyPhotosLoading ? (
+              <LoadingSkeleton type="cards" count={3} />
+            ) : (
+              dailyPhotos.map((photo) => (
+                <DailyPhotoCard
+                  key={photo.id}
+                  images={photo.images}
+                  userName={photo.profiles?.name || 'אנונימי'}
+                  userAvatar={photo.profiles?.profile_image_url}
+                />
+              ))
+            )}
           </div>
         </section>
 

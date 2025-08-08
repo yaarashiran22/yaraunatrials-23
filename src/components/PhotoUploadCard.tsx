@@ -56,13 +56,13 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
         .from('daily-photos')
         .getPublicUrl(fileName);
 
-      // Save to database using friends_picture_galleries table for now
+      // Save to database using friends_picture_galleries table
       const { error: dbError } = await supabase
         .from('friends_picture_galleries')
         .insert({
           user_id: user.id,
-          image_url: urlData.publicUrl,
-          caption: `Daily photo - ${new Date().toLocaleDateString('he-IL')}`
+          images: [urlData.publicUrl],
+          title: `Daily photo - ${new Date().toLocaleDateString('he-IL')}`
         });
 
       if (dbError) throw dbError;
