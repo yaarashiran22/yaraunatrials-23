@@ -138,27 +138,29 @@ const Index = () => {
       />
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
-        {/* Community Members Section - Special styling for better differentiation */}
-        <section className="mb-8 lg:mb-10">
-          <div className="relative z-10">
-            <SectionHeader 
-              title={`${t('sections.neighbors')} ${totalUsersCount > 0 ? `(${totalUsersCount})` : ''}`} 
-            />
-          </div>
+        {/* Community Members Section */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
+          <SectionHeader 
+            title={`${t('sections.neighbors')} ${totalUsersCount > 0 ? `(${totalUsersCount})` : ''}`} 
+          />
           {loading ? (
             <LoadingSkeleton type="profiles" />
           ) : (
-            <div className="flex overflow-x-auto gap-4 pb-2" dir="rtl">
-              {user && <AddStoryButton className="flex-shrink-0" />}
+            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide" dir="rtl">
+              {user && (
+                <div className="flex-shrink-0 w-36 lg:w-auto">
+                  <AddStoryButton />
+                </div>
+              )}
               {displayProfiles.length > 0 ? (
                 displayProfiles.map((profile) => (
-                  <ProfileCard
-                    key={profile.id}
-                    id={profile.id}
-                    image={profile.image}
-                    name={profile.name}
-                    className="flex-shrink-0"
-                  />
+                  <div key={profile.id} className="flex-shrink-0 w-36 lg:w-auto">
+                    <ProfileCard
+                      id={profile.id}
+                      image={profile.image}
+                      name={profile.name}
+                    />
+                  </div>
                 ))
               ) : (
                 <div className="text-center py-4 text-muted-foreground col-span-full">אין משתמשים רשומים עדיין</div>
@@ -191,7 +193,7 @@ const Index = () => {
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {recommendationItems.map((item) => (
-                <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
+                <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
                   <UniformCard
                     id={item.id}
                     image={item.image_url || coffeeShop}

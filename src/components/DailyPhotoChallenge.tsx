@@ -86,7 +86,7 @@ const DailyPhotoChallenge = () => {
       <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
         {/* Add Photo Card - Similar to UniformCard */}
         {!hasUserSubmitted && user && (
-          <div className="flex-shrink-0 w-32 lg:w-auto">
+          <div className="flex-shrink-0 w-36 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               {selectedImage ? (
                 <>
@@ -151,7 +151,7 @@ const DailyPhotoChallenge = () => {
         )}
 
         {!user && (
-          <div className="flex-shrink-0 w-32 lg:w-auto">
+          <div className="flex-shrink-0 w-36 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               <div className="aspect-square border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
                 <Plus className="h-6 w-6 text-muted-foreground/70 mb-1" />
@@ -167,7 +167,7 @@ const DailyPhotoChallenge = () => {
         )}
 
         {hasUserSubmitted && (
-          <div className="flex-shrink-0 w-32 lg:w-auto">
+          <div className="flex-shrink-0 w-36 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card border-2 border-green-200 w-full">
               <div className="aspect-square bg-green-50 flex flex-col items-center justify-center">
                 <Camera className="h-6 w-6 text-green-600 mb-1" />
@@ -191,7 +191,7 @@ const DailyPhotoChallenge = () => {
 
         {/* Photo Submissions - Similar to UniformCard layout */}
         {challenge.submissions.map((submission) => (
-          <div key={submission.id} className="flex-shrink-0 w-32 lg:w-auto">
+          <div key={submission.id} className="flex-shrink-0 w-36 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               <div className="aspect-square overflow-hidden">
                 <img 
