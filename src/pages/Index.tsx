@@ -172,8 +172,8 @@ const Index = () => {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <h2 className="text-lg font-semibold text-foreground">תמונה ביום</h2>
-              <div className="bg-yellow-500/20 px-3 py-1 rounded-full">
-                <span className="text-sm font-medium text-yellow-700">
+              <div className="bg-yellow-400/15 px-3 py-1 rounded-full">
+                <span className="text-sm font-medium text-yellow-600">
                   {new Date().toLocaleDateString('he-IL', { 
                     weekday: 'short',
                     day: 'numeric',
