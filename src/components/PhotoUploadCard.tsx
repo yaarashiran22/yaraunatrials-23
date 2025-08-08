@@ -38,13 +38,13 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
         .from('daily-photos')
         .getPublicUrl(fileName);
 
-      // Save to database (you'll need to create this table)
+      // Save to database using friends_picture_galleries table for now
       const { error: dbError } = await supabase
-        .from('daily_photo_submissions')
+        .from('friends_picture_galleries')
         .insert({
           user_id: user.id,
           image_url: urlData.publicUrl,
-          challenge_date: new Date().toISOString().split('T')[0]
+          caption: `Daily photo - ${new Date().toLocaleDateString('he-IL')}`
         });
 
       if (dbError) throw dbError;
@@ -83,17 +83,17 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
 
   return (
     <>
-      <div className="flex-shrink-0 w-36 lg:w-auto">
-        <div className="bg-card border border-dashed border-border rounded-lg p-4 h-48 flex flex-col items-center justify-center text-center hover:bg-accent/50 transition-colors">
-          <div className="space-y-3">
+      <div className="flex-shrink-0 w-28 h-32">
+        <div className="border border-dashed border-border rounded-lg p-3 h-full flex flex-col items-center justify-center text-center hover:bg-accent/20 transition-colors">
+          <div className="space-y-2">
             <Button
               onClick={() => setShowCamera(true)}
-              variant="outline"
+              variant="ghost"
               size="sm"
               disabled={isUploading}
-              className="w-full"
+              className="w-full h-8 text-xs bg-transparent hover:bg-accent/30"
             >
-              <Camera className="w-4 h-4 mr-2" />
+              <Camera className="w-3 h-3 mr-1" />
               צלם
             </Button>
             
@@ -106,12 +106,12 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
                 disabled={isUploading}
               />
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 disabled={isUploading}
-                className="w-full"
+                className="w-full h-8 text-xs bg-transparent hover:bg-accent/30"
               >
-                <Upload className="w-4 h-4 mr-2" />
+                <Upload className="w-3 h-3 mr-1" />
                 {isUploading ? "מעלה..." : "העלה"}
               </Button>
             </div>
