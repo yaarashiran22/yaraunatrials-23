@@ -136,6 +136,7 @@ export const useDailyPhotoChallenge = () => {
     mutationFn: deletePhoto,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['daily-photo-challenge'] });
+      queryClient.invalidateQueries({ queryKey: ['user-photo-submission'] });
       toast({
         title: "תמונה נמחקה בהצלחה!",
         description: "התמונה שלך הוסרה מתמונת היום",
