@@ -90,23 +90,23 @@ const DailyPhotoChallenge = () => {
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               {selectedImage ? (
                 <>
-                  <div className="aspect-[4/3] overflow-hidden">
+                  <div className="aspect-square overflow-hidden">
                     <img 
                       src={selectedImage} 
                       alt="תמונה נבחרה" 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <div className="p-3 h-14 flex flex-col justify-between">
-                    <div className="flex items-center gap-1 mb-2">
+                  <div className="p-2 h-12 flex flex-col justify-between">
+                    <div className="flex items-center gap-1 mb-1">
                       <input
                         type="checkbox"
                         id="anonymous"
                         checked={isAnonymous}
                         onChange={(e) => setIsAnonymous(e.target.checked)}
-                        className="rounded w-3 h-3"
+                        className="rounded w-2.5 h-2.5"
                       />
-                      <label htmlFor="anonymous" className="text-xs text-muted-foreground">
+                      <label htmlFor="anonymous" className="text-xs text-muted-foreground/70">
                         אנונימי
                       </label>
                     </div>
@@ -114,7 +114,7 @@ const DailyPhotoChallenge = () => {
                       onClick={handleSubmit}
                       disabled={isSubmitting}
                       size="sm"
-                      className="w-full h-7 text-xs"
+                      className="w-full h-6 text-xs"
                     >
                       {isSubmitting ? 'שולח...' : 'שלח'}
                     </Button>
@@ -122,25 +122,25 @@ const DailyPhotoChallenge = () => {
                 </>
               ) : (
                 <>
-                  <div className="aspect-[4/3] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
+                  <div className="aspect-square border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleImageUpload}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                     />
-                    <Plus className="h-8 w-8 text-muted-foreground mb-2" />
-                    <p className="text-sm text-muted-foreground text-center px-2">
+                    <Plus className="h-6 w-6 text-muted-foreground/70 mb-1" />
+                    <p className="text-xs text-muted-foreground/70 text-center px-2">
                       הוסף תמונה
                     </p>
                   </div>
-                  <div className="p-3 h-14 flex items-center gap-2">
+                  <div className="p-2 h-12 flex items-center gap-2">
                     <img 
                       src={profile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
                       alt={profile?.name || "אתה"}
-                      className="w-6 h-6 rounded-full object-cover"
+                      className="w-5 h-5 rounded-full object-cover"
                     />
-                    <h4 className="font-semibold text-foreground text-sm">
+                    <h4 className="font-medium text-foreground/80 text-xs">
                       {profile?.name || "אתה"}
                     </h4>
                   </div>
@@ -153,14 +153,14 @@ const DailyPhotoChallenge = () => {
         {!user && (
           <div className="flex-shrink-0 w-32 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
-              <div className="aspect-[4/3] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
-                <Plus className="h-8 w-8 text-muted-foreground mb-2" />
-                <p className="text-sm text-muted-foreground text-center px-2">
+              <div className="aspect-square border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
+                <Plus className="h-6 w-6 text-muted-foreground/70 mb-1" />
+                <p className="text-xs text-muted-foreground/70 text-center px-2">
                   התחבר כדי להעלות
                 </p>
               </div>
-              <div className="p-3 h-14 flex items-center justify-center">
-                <p className="text-xs text-muted-foreground">משתמש אורח</p>
+              <div className="p-2 h-12 flex items-center justify-center">
+                <p className="text-xs text-muted-foreground/70">משתמש אורח</p>
               </div>
             </div>
           </div>
@@ -169,19 +169,19 @@ const DailyPhotoChallenge = () => {
         {hasUserSubmitted && (
           <div className="flex-shrink-0 w-32 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card border-2 border-green-200 w-full">
-              <div className="aspect-[4/3] bg-green-50 flex flex-col items-center justify-center">
-                <Camera className="h-8 w-8 text-green-600 mb-2" />
-                <p className="text-green-700 text-sm font-medium text-center px-2">
+              <div className="aspect-square bg-green-50 flex flex-col items-center justify-center">
+                <Camera className="h-6 w-6 text-green-600 mb-1" />
+                <p className="text-green-700 text-xs font-medium text-center px-2">
                   ✓ שלחת היום
                 </p>
               </div>
-              <div className="p-3 h-14 flex items-center gap-2">
+              <div className="p-2 h-12 flex items-center gap-2">
                 <img 
                   src={profile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
                   alt={profile?.name || "אתה"}
-                  className="w-6 h-6 rounded-full object-cover"
+                  className="w-5 h-5 rounded-full object-cover"
                 />
-                <h4 className="font-semibold text-foreground text-sm">
+                <h4 className="font-medium text-foreground/80 text-xs">
                   {profile?.name || "אתה"}
                 </h4>
               </div>
@@ -193,7 +193,7 @@ const DailyPhotoChallenge = () => {
         {challenge.submissions.map((submission) => (
           <div key={submission.id} className="flex-shrink-0 w-32 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
-              <div className="aspect-[4/3] overflow-hidden">
+              <div className="aspect-square overflow-hidden">
                 <img 
                   src={submission.image_url} 
                   alt="תמונת משתמש" 
@@ -201,28 +201,28 @@ const DailyPhotoChallenge = () => {
                 />
               </div>
               
-              <div className="p-3 h-14 flex items-center gap-2">
+              <div className="p-2 h-12 flex items-center gap-1.5">
                 {submission.is_anonymous ? (
                   <>
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
                       <span className="text-white text-xs font-bold">?</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground text-sm">אנונימי</h4>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">שכונה</span>
+                      <h4 className="font-medium text-foreground/80 text-xs">אנונימי</h4>
+                      <div className="flex items-center gap-0.5">
+                        <MapPin className="h-2.5 w-2.5 text-muted-foreground/70" />
+                        <span className="text-xs text-muted-foreground/70">שכונה</span>
                       </div>
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-purple-400"></div>
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-purple-400"></div>
                     <div>
-                      <h4 className="font-semibold text-foreground text-sm">תושב</h4>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">פלורנטין</span>
+                      <h4 className="font-medium text-foreground/80 text-xs">תושב</h4>
+                      <div className="flex items-center gap-0.5">
+                        <MapPin className="h-2.5 w-2.5 text-muted-foreground/70" />
+                        <span className="text-xs text-muted-foreground/70">פלורנטין</span>
                       </div>
                     </div>
                   </>
