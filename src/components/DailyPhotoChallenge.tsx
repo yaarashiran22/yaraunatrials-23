@@ -90,7 +90,7 @@ const DailyPhotoChallenge = () => {
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               {selectedImage ? (
                 <>
-                  <div className="aspect-[3/4] overflow-hidden">
+                  <div className="aspect-[4/3] overflow-hidden">
                     <img 
                       src={selectedImage} 
                       alt="תמונה נבחרה" 
@@ -122,7 +122,7 @@ const DailyPhotoChallenge = () => {
                 </>
               ) : (
                 <>
-                  <div className="aspect-[3/4] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
+                  <div className="aspect-[4/3] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
                     <input
                       type="file"
                       accept="image/*"
@@ -153,7 +153,7 @@ const DailyPhotoChallenge = () => {
         {!user && (
           <div className="flex-shrink-0 w-36 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
-              <div className="aspect-[3/4] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
+              <div className="aspect-[4/3] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
                 <Plus className="h-8 w-8 text-muted-foreground mb-2" />
                 <p className="text-sm text-muted-foreground text-center px-2">
                   התחבר כדי להעלות
@@ -169,7 +169,7 @@ const DailyPhotoChallenge = () => {
         {hasUserSubmitted && (
           <div className="flex-shrink-0 w-36 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card border-2 border-green-200 w-full">
-              <div className="aspect-[3/4] bg-green-50 flex flex-col items-center justify-center">
+              <div className="aspect-[4/3] bg-green-50 flex flex-col items-center justify-center">
                 <Camera className="h-8 w-8 text-green-600 mb-2" />
                 <p className="text-green-700 text-sm font-medium text-center px-2">
                   ✓ שלחת היום
@@ -193,7 +193,7 @@ const DailyPhotoChallenge = () => {
         {challenge.submissions.map((submission) => (
           <div key={submission.id} className="flex-shrink-0 w-36 lg:w-auto">
             <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
-              <div className="aspect-[3/4] overflow-hidden relative">
+              <div className="aspect-[4/3] overflow-hidden relative">
                 <img 
                   src={submission.image_url} 
                   alt="תמונת משתמש" 
