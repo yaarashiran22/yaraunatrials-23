@@ -42,7 +42,7 @@ const DailyPhotoCard = ({
   };
   
   return (
-    <div className="flex-shrink-0 w-28 h-32">
+    <div className="flex-shrink-0 w-32 h-36">
       <div className="relative rounded-lg overflow-hidden h-full group">
         <img 
           src={primaryImage} 
