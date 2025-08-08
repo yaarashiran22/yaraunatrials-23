@@ -64,9 +64,50 @@ export const useDailyPhotos = () => {
     queryClient.invalidateQueries({ queryKey: ['daily-photos'] });
   };
 
+  const deleteDailyPhoto = async (photoId: string, imageUrl: string) => {
+    try {
+      console.log('Deleting photo:', photoId, imageUrl);
+      
+      // Extract file path from URL for storage deletion
+      const urlParts = imageUrl.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+      const userFolder = urlParts[urlParts.length - 2];
+      const filePath = `${userFolder}/${fileName}`;
+      
+      // Delete from storage
+      const { error: storageError } = await supabase.storage
+        .from('daily-photos')
+        .remove([filePath]);
+      
+      if (storageError) {
+        console.error('Storage deletion error:', storageError);
+        throw storageError;
+      }
+      
+      // Delete from database
+      const { error: dbError } = await supabase
+        .from('friends_picture_galleries')
+        .delete()
+        .eq('id', photoId);
+      
+      if (dbError) {
+        console.error('Database deletion error:', dbError);
+        throw dbError;
+      }
+      
+      console.log('Photo deleted successfully');
+      // Refresh the data
+      refetchDailyPhotos();
+    } catch (error) {
+      console.error('Delete photo error:', error);
+      throw error;
+    }
+  };
+
   return {
     dailyPhotos: dailyPhotos || [],
     isLoading,
     refetchDailyPhotos,
+    deleteDailyPhoto,
   };
 };

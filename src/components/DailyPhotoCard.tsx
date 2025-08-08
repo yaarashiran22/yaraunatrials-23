@@ -1,20 +1,68 @@
+import { useState } from "react";
+import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
 interface DailyPhotoCardProps {
+  photoId: string;
   images: string[];
   userName: string;
   userAvatar?: string;
+  userId: string;
+  currentUserId?: string;
+  onDelete?: (photoId: string, imageUrl: string) => Promise<void>;
 }
 
-const DailyPhotoCard = ({ images, userName, userAvatar }: DailyPhotoCardProps) => {
+const DailyPhotoCard = ({ 
+  photoId, 
+  images, 
+  userName, 
+  userAvatar, 
+  userId, 
+  currentUserId,
+  onDelete 
+}: DailyPhotoCardProps) => {
+  const [isDeleting, setIsDeleting] = useState(false);
   const primaryImage = images[0]; // Use the first image as primary
+  const isOwner = currentUserId === userId;
+
+  const handleDelete = async () => {
+    if (!onDelete || !primaryImage) return;
+    
+    setIsDeleting(true);
+    try {
+      await onDelete(photoId, primaryImage);
+      toast.success("התמונה נמחקה בהצלחה");
+    } catch (error) {
+      toast.error("שגיאה במחיקת התמונה");
+      console.error('Delete error:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   
   return (
     <div className="flex-shrink-0 w-28 h-32">
-      <div className="relative rounded-lg overflow-hidden h-full">
+      <div className="relative rounded-lg overflow-hidden h-full group">
         <img 
           src={primaryImage} 
           alt={`Daily photo by ${userName}`}
           className="w-full h-full object-cover"
         />
+        
+        {/* Delete button - only show for owner */}
+        {isOwner && onDelete && (
+          <Button
+            variant="destructive"
+            size="icon"
+            className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            <Trash2 className="h-3 w-3" />
+          </Button>
+        )}
+        
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-300">

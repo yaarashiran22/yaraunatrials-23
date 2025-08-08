@@ -42,7 +42,7 @@ const Index = () => {
   const { setRefreshCallback } = useNewItem();
   const { user } = useAuth();
   const { profile: currentUserProfile } = useProfile(user?.id);
-  const { dailyPhotos, isLoading: dailyPhotosLoading, refetchDailyPhotos } = useDailyPhotos();
+  const { dailyPhotos, isLoading: dailyPhotosLoading, refetchDailyPhotos, deleteDailyPhoto } = useDailyPhotos();
   
   // Use optimized homepage hook with React Query caching
   const { 
@@ -192,9 +192,13 @@ const Index = () => {
               dailyPhotos.map((photo) => (
                 <DailyPhotoCard
                   key={photo.id}
+                  photoId={photo.id}
                   images={photo.images}
                   userName={photo.profiles?.name || 'אנונימי'}
                   userAvatar={photo.profiles?.profile_image_url}
+                  userId={photo.user_id}
+                  currentUserId={user?.id}
+                  onDelete={deleteDailyPhoto}
                 />
               ))
             )}
