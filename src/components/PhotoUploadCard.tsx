@@ -84,14 +84,14 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
   return (
     <>
       <div className="flex-shrink-0 w-28 h-32">
-        <div className="border border-dashed border-border rounded-lg p-3 h-full flex flex-col items-center justify-center text-center hover:bg-accent/20 transition-colors">
+        <div className="border-2 border-dashed border-primary/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center hover:border-primary/50 hover:bg-primary/5 transition-all duration-200">
           <div className="space-y-2">
             <Button
               onClick={() => setShowCamera(true)}
-              variant="ghost"
+              variant="outline"
               size="sm"
               disabled={isUploading}
-              className="w-full h-8 text-xs bg-transparent hover:bg-accent/30"
+              className="w-full h-8 text-xs border-primary/40 bg-primary/5 hover:bg-primary/10 hover:border-primary/60"
             >
               <Camera className="w-3 h-3 mr-1" />
               צלם
@@ -106,10 +106,10 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
                 disabled={isUploading}
               />
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 disabled={isUploading}
-                className="w-full h-8 text-xs bg-transparent hover:bg-accent/30"
+                className="w-full h-8 text-xs border-primary/40 bg-primary/5 hover:bg-primary/10 hover:border-primary/60"
               >
                 <Upload className="w-3 h-3 mr-1" />
                 {isUploading ? "מעלה..." : "העלה"}

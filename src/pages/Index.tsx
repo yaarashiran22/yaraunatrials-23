@@ -168,7 +168,7 @@ const Index = () => {
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-foreground">{t('artists.title')}</h2>
+              <h2 className="text-lg font-semibold text-foreground">תמונה ביום</h2>
               <div className="bg-primary/10 px-3 py-1 rounded-full">
                 <span className="text-sm font-medium text-primary">
                   {new Date().toLocaleDateString('he-IL', { 
@@ -180,6 +180,7 @@ const Index = () => {
               </div>
             </div>
           </div>
+          <p className="text-sm text-muted-foreground mb-4">תעלו תמונה שלכם בקפה של הבוקר</p>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             <PhotoUploadCard />
           </div>
