@@ -44,7 +44,7 @@ export const translations = {
       secondHand: "יד שנייה"
     },
     marketplace: {
-      title: "יד שנייה",
+      title: "למסירה",
       searchPlaceholder: "חיפוש פריטים..."
     },
     artists: {
