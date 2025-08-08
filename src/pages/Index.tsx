@@ -162,6 +162,40 @@ const Index = () => {
           )}
         </section>
 
+        {/* Photo of the Day Section - Database Only */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
+          <SectionHeader title={t('artists.title')} viewAllPath="/artists" />
+          {loading ? (
+            <LoadingSkeleton type="cards" count={3} />
+          ) : artItems.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>אין פריטי אמנות זמינים כרגע</p>
+            </div>
+          ) : (
+            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
+              {artItems.map((item) => (
+                <div key={`art-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
+                  <UniformCard
+                    id={item.id}
+                    image={item.image_url || artPiece1}
+                    title={item.title}
+                    subtitle={item.location || 'תל אביב'}
+                    type="business"
+                    onClick={() => handleMarketplaceClick(item)}
+                    favoriteData={{
+                      id: item.id,
+                      title: item.title,
+                      description: item.title,
+                      image: item.image_url,
+                      type: 'art'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
         {/* Join me Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <SectionHeader title={t('sections.joinMe')} viewAllPath="/recommended" />
@@ -237,40 +271,6 @@ const Index = () => {
                       description: event.title,
                       image: event.image_url,
                       type: 'event'
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Artists/Creators Section - Database Only */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title={t('artists.title')} viewAllPath="/artists" />
-          {loading ? (
-            <LoadingSkeleton type="cards" count={3} />
-          ) : artItems.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <p>אין פריטי אמנות זמינים כרגע</p>
-            </div>
-          ) : (
-            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {artItems.map((item) => (
-                <div key={`art-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || artPiece1}
-                    title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    type="business"
-                    onClick={() => handleMarketplaceClick(item)}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.title,
-                      image: item.image_url,
-                      type: 'art'
                     }}
                   />
                 </div>
