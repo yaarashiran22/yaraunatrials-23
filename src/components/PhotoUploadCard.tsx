@@ -39,24 +39,34 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
       return;
     }
 
+    console.log('Starting file upload:', file.name);
     setIsUploading(true);
     try {
       // Upload image to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}/${Date.now()}.${fileExt}`;
       
+      console.log('Uploading to storage:', fileName);
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('daily-photos')
         .upload(fileName, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('Upload successful:', uploadData);
 
       // Get public URL
       const { data: urlData } = supabase.storage
         .from('daily-photos')
         .getPublicUrl(fileName);
 
+      console.log('Public URL:', urlData.publicUrl);
+
       // Save to database using friends_picture_galleries table
+      console.log('Saving to database...');
       const { error: dbError } = await supabase
         .from('friends_picture_galleries')
         .insert({
@@ -65,13 +75,17 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
           title: `Daily photo - ${new Date().toLocaleDateString('he-IL')}`
         });
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database insert error:', dbError);
+        throw dbError;
+      }
 
+      console.log('Database insert successful');
       toast.success("התמונה הועלתה בהצלחה!");
       onUploadComplete?.();
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error("שגיאה בהעלאת התמונה");
+      toast.error("שגיאה בהעלאת התמונה: " + (error as any)?.message || 'Unknown error');
     } finally {
       setIsUploading(false);
     }
