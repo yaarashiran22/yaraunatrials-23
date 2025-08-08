@@ -231,7 +231,7 @@ const Index = () => {
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {databaseEvents.map((event) => (
-                <div key={`db-event-${event.id}`} className="flex-shrink-0 w-36 lg:w-auto">
+                <div key={`db-event-${event.id}`} className="flex-shrink-0 w-32 lg:w-auto">
                   <UniformCard
                     id={event.id}
                     image={event.image_url || communityEvent}
@@ -279,7 +279,7 @@ const Index = () => {
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {marketplaceItems.slice(0, 6).map((item) => (
-                <div key={item.id} className="flex-shrink-0 w-36 lg:w-auto">
+                <div key={item.id} className="flex-shrink-0 w-32 lg:w-auto">
                   <UniformCard
                     id={item.id}
                     image={item.image_url || dressItem}
