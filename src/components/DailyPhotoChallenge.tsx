@@ -87,7 +87,7 @@ const DailyPhotoChallenge = () => {
         {/* Add Photo Card - Similar to UniformCard */}
         {!hasUserSubmitted && user && (
           <div className="flex-shrink-0 w-36 lg:w-auto">
-            <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
+            <div className="relative bg-transparent rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               {selectedImage ? (
                 <>
                   <div className="aspect-[4/3] overflow-hidden">
@@ -152,7 +152,7 @@ const DailyPhotoChallenge = () => {
 
         {!user && (
           <div className="flex-shrink-0 w-36 lg:w-auto">
-            <div className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
+            <div className="relative bg-transparent rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group w-full cursor-pointer">
               <div className="aspect-[4/3] border-2 border-dashed border-border rounded-t-xl flex flex-col items-center justify-center hover:border-primary/50 transition-colors">
                 <Plus className="h-8 w-8 text-muted-foreground mb-2" />
                 <p className="text-sm text-muted-foreground text-center px-2">
