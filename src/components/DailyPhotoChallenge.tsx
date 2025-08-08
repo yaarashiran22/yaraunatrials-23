@@ -232,13 +232,9 @@ const DailyPhotoChallenge = () => {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <img 
-                        src={submission.user_profile_image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-                        alt={submission.user_name || "תושב"}
-                        className="w-6 h-6 rounded-full object-cover"
-                      />
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-purple-400"></div>
                       <div>
-                        <h4 className="font-semibold text-white text-sm">{submission.user_name || "תושב"}</h4>
+                        <h4 className="font-semibold text-white text-sm">תושב</h4>
                         <div className="flex items-center gap-1">
                           <MapPin className="h-3 w-3 text-white/70" />
                           <span className="text-xs text-white/70">פלורנטין</span>

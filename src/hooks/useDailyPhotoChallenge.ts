@@ -15,8 +15,6 @@ export interface DailyPhotoSubmission {
   is_anonymous: boolean;
   created_at: string;
   user_id?: string;
-  user_name?: string;
-  user_profile_image?: string;
 }
 
 // Fetch today's photo challenge with submissions
@@ -36,11 +34,7 @@ const fetchTodayChallenge = async (): Promise<DailyPhotoChallenge | null> => {
         image_url,
         is_anonymous,
         created_at,
-        user_id,
-        profiles (
-          name,
-          profile_image_url
-        )
+        user_id
       )
     `)
     .eq('challenge_date', today)
@@ -58,11 +52,7 @@ const fetchTodayChallenge = async (): Promise<DailyPhotoChallenge | null> => {
     id: challenge.id,
     instruction_text: challenge.daily_photo_instructions?.instruction_text || '',
     challenge_date: challenge.challenge_date,
-    submissions: (challenge.daily_photo_submissions || []).map((submission: any) => ({
-      ...submission,
-      user_name: submission.profiles?.name,
-      user_profile_image: submission.profiles?.profile_image_url
-    }))
+    submissions: challenge.daily_photo_submissions || []
   };
 };
 
