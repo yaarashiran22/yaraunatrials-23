@@ -189,7 +189,7 @@ const Index = () => {
               </span>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">תעלו תמונה שלכם בקפה של הבוקר</p>
+          
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {user && <PhotoUploadCard onUploadComplete={refetchDailyPhotos} />}
             {dailyPhotosLoading ? (
