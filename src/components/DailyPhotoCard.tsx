@@ -47,14 +47,16 @@ const DailyPhotoCard = ({
   return (
     <div className="flex-shrink-0 w-36">
       <div 
-        className="relative rounded-xl overflow-hidden aspect-[4/3] group cursor-pointer bg-card shadow-card hover:shadow-lg transition-all duration-300"
+        className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer"
         onClick={onClick}
       >
-        <img 
-          src={primaryImage} 
-          alt={`Daily photo by ${userName}`}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+        <div className="aspect-[4/3] overflow-hidden">
+          <img 
+            src={primaryImage} 
+            alt={`Daily photo by ${userName}`}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
         
         {/* Delete button - only show for owner */}
         {isOwner && onDelete && (
@@ -69,9 +71,9 @@ const DailyPhotoCard = ({
           </Button>
         )}
         
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+        <div className="p-3 h-14 flex flex-col justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-300">
+            <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-300 flex-shrink-0">
               {userAvatar ? (
                 <img 
                   src={userAvatar} 
@@ -86,7 +88,7 @@ const DailyPhotoCard = ({
                 </div>
               )}
             </div>
-            <span className="text-xs text-white font-medium truncate">
+            <span className="text-xs text-foreground font-medium truncate">
               {userName}
             </span>
           </div>
