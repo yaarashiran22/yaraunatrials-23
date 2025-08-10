@@ -48,7 +48,7 @@ export const translations = {
       searchPlaceholder: "חיפוש פריטים..."
     },
     artists: {
-      title: "תמונה ביום",
+      title: "גלרייה",
       searchPlaceholder: "חיפוש אמנים..."
     },
     recommended: {
@@ -60,7 +60,7 @@ export const translations = {
       events: "אירועים", 
       marketplace: "יד שנייה",
       recommended: "מומלצים",
-      artists: "תמונה ביום",
+      artists: "גלרייה",
       feed: "פיד",
       favorites: "חברים",
       createPost: "צור פוסט",

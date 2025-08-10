@@ -59,7 +59,7 @@ const DailyPhotoPopup = ({
       <div className="bg-card rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-border">
-          <h2 className="text-lg font-semibold text-foreground">תמונה ביום</h2>
+          <h2 className="text-lg font-semibold text-foreground">גלרייה</h2>
           <div className="flex gap-2">
             {isOwner && onDelete && (
               <Button
