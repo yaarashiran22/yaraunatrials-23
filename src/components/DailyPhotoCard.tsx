@@ -45,7 +45,7 @@ const DailyPhotoCard = ({
   };
   
   return (
-    <div className="flex-shrink-0 w-32">
+    <div className="flex-shrink-0 w-36">
       <div 
         className="relative rounded-xl overflow-hidden aspect-[4/3] group cursor-pointer bg-card shadow-card hover:shadow-lg transition-all duration-300"
         onClick={onClick}
