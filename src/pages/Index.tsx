@@ -11,7 +11,7 @@ import AddStoryButton from "@/components/AddStoryButton";
 import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
+import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import PhotoUploadCard from "@/components/PhotoUploadCard";
 import DailyPhotoCard from "@/components/DailyPhotoCard";
 import DailyPhotoPopup from "@/components/DailyPhotoPopup";
@@ -158,7 +158,7 @@ const Index = () => {
             />
           </div>
           {loading ? (
-            <LoadingSkeleton type="profiles" />
+            <FastLoadingSkeleton type="profiles" />
           ) : (
             <div className="flex overflow-x-auto gap-4 pb-2" dir="rtl">
               {user && <AddStoryButton className="flex-shrink-0" />}
@@ -190,7 +190,7 @@ const Index = () => {
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {user && <PhotoUploadCard onUploadComplete={refetchDailyPhotos} />}
             {dailyPhotosLoading ? (
-              <LoadingSkeleton type="cards" count={3} />
+              <FastLoadingSkeleton type="cards" count={3} />
             ) : (
               dailyPhotos.map((photo) => (
                 <DailyPhotoCard
@@ -220,7 +220,7 @@ const Index = () => {
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <SectionHeader title={t('sections.joinMe')} viewAllPath="/recommended" />
           {loading ? (
-            <LoadingSkeleton type="cards" count={3} />
+            <FastLoadingSkeleton type="cards" count={3} />
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {recommendationItems.map((item) => (
@@ -256,7 +256,7 @@ const Index = () => {
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <SectionHeader title={t('events.title')} viewAllPath="/events" />
           {loading ? (
-            <LoadingSkeleton type="cards" count={3} />
+            <FastLoadingSkeleton type="cards" count={3} />
           ) : databaseEvents.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <p>אין אירועים זמינים כרגע</p>
@@ -304,7 +304,7 @@ const Index = () => {
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <SectionHeader title={t('marketplace.title')} viewAllPath="/marketplace" />
           {loading ? (
-            <LoadingSkeleton type="cards" count={4} />
+            <FastLoadingSkeleton type="cards" count={4} />
           ) : marketplaceItems.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <p>אין פריטים למכירה כרגע</p>

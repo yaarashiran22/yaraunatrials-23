@@ -161,27 +161,27 @@ const fetchHomepageData = async () => {
 export const useOptimizedHomepage = () => {
   const queryClient = useQueryClient();
 
-  // Preload data immediately on mount for instant loading
+  // Ultra-aggressive preloading for instant loading
   const preloadData = () => {
     queryClient.prefetchQuery({
-      queryKey: ['homepage-data-v4'], // Updated key for new optimizations
+      queryKey: ['homepage-data-v5'], // Updated for new ultra-optimizations
       queryFn: fetchHomepageData,
-      staleTime: 300000, // 5 minutes - longer stale time for better caching
+      staleTime: 1000 * 60 * 15, // 15 minutes - ultra-aggressive caching
     });
   };
 
-  // Main query with ultra-aggressive caching for instant mobile loading
+  // Ultra-aggressive caching for instant loading
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['homepage-data-v4'], // Updated key for new optimizations
+    queryKey: ['homepage-data-v5'], // Updated for new ultra-optimizations
     queryFn: fetchHomepageData,
-    staleTime: 300000, // 5 minutes - longer stale time for better performance
-    gcTime: 1800000, // 30 minutes - much longer persistence
+    staleTime: 1000 * 60 * 15, // 15 minutes - ultra-aggressive
+    gcTime: 1000 * 60 * 60, // 1 hour - maximum memory persistence
     refetchOnWindowFocus: false,
-    refetchOnMount: false, // Always use cached data if available
+    refetchOnMount: false,
     refetchOnReconnect: false,
-    retry: 1,
-    retryDelay: 300, // Faster retry
-    placeholderData: (previousData) => previousData, // Keep showing old data while fetching new
+    retry: 0, // No retries for instant loading
+    enabled: true, // Always enabled for immediate data fetching
+    placeholderData: (previousData) => previousData,
   });
 
   // Extract pre-filtered data for instant mobile loading
