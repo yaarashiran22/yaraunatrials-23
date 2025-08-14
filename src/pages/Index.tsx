@@ -183,7 +183,7 @@ const Index = () => {
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-foreground">גלריית שכונה</h2>
+              <h2 className="text-lg font-semibold text-foreground">גלריית השכונה</h2>
             </div>
           </div>
           
