@@ -1,5 +1,6 @@
 
 import LanguageSelector from "@/components/LanguageSelector";
+import MarketSelector from "@/components/MarketSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NeighborhoodIndicator from "@/components/NeighborhoodIndicator";
 import SearchBar from "@/components/SearchBar";
@@ -76,8 +77,9 @@ const Header = ({
             )}
           </div>
           
-          {/* Notifications - Left side */}
+          {/* Market Selector and Notifications - Left side */}
           <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+            <MarketSelector />
             {onNotificationsClick && (
               <Button 
                 variant="ghost" 

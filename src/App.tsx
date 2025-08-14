@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-ro
 import { Home, User, Users, Settings, Heart } from "lucide-react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { MarketProvider } from "@/contexts/MarketContext";
 import { NewItemProvider } from "@/contexts/NewItemContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 
@@ -159,15 +160,17 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <LanguageProvider>
-        <AuthProvider>
-          <NewItemProvider>
-            <FavoritesProvider>
-              <AppContent />
-            </FavoritesProvider>
-          </NewItemProvider>
-        </AuthProvider>
-      </LanguageProvider>
+      <MarketProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <NewItemProvider>
+              <FavoritesProvider>
+                <AppContent />
+              </FavoritesProvider>
+            </NewItemProvider>
+          </AuthProvider>
+        </LanguageProvider>
+      </MarketProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
