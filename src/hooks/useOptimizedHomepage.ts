@@ -161,26 +161,27 @@ const fetchHomepageData = async () => {
 export const useOptimizedHomepage = () => {
   const queryClient = useQueryClient();
 
-  // Preload data on mount
+  // Preload data immediately on mount for instant loading
   const preloadData = () => {
     queryClient.prefetchQuery({
-      queryKey: ['homepage-data-v3'], // Match main query key
+      queryKey: ['homepage-data-v4'], // Updated key for new optimizations
       queryFn: fetchHomepageData,
-      staleTime: 180000,
+      staleTime: 300000, // 5 minutes - longer stale time for better caching
     });
   };
 
-  // Main query with React Query caching and ultra-aggressive optimization for mobile
+  // Main query with ultra-aggressive caching for instant mobile loading
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['homepage-data-v3'], // Updated key for new optimizations
+    queryKey: ['homepage-data-v4'], // Updated key for new optimizations
     queryFn: fetchHomepageData,
-    staleTime: 180000, // 3 minutes - balanced performance and freshness
-    gcTime: 900000, // 15 minutes - longer persistence
+    staleTime: 300000, // 5 minutes - longer stale time for better performance
+    gcTime: 1800000, // 30 minutes - much longer persistence
     refetchOnWindowFocus: false,
-    refetchOnMount: false, // Use cached data if available
+    refetchOnMount: false, // Always use cached data if available
     refetchOnReconnect: false,
     retry: 1,
-    retryDelay: 500,
+    retryDelay: 300, // Faster retry
+    placeholderData: (previousData) => previousData, // Keep showing old data while fetching new
   });
 
   // Extract pre-filtered data for instant mobile loading

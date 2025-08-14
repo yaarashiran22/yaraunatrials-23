@@ -17,7 +17,7 @@ import DailyPhotoCard from "@/components/DailyPhotoCard";
 import DailyPhotoPopup from "@/components/DailyPhotoPopup";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -61,7 +61,10 @@ const Index = () => {
     preloadData
   } = useOptimizedHomepage();
 
-  // Removed preload useEffect that was causing infinite re-renders
+  // Preload data immediately on component mount for instant loading
+  useEffect(() => {
+    preloadData();
+  }, [preloadData]);
 
   // Popup states
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -78,8 +81,8 @@ const Index = () => {
     setRefreshCallback(() => refetch);
   }, [setRefreshCallback, refetch]);
 
-  // Create display profiles with current user first if authenticated
-  const displayProfiles = (() => {
+  // Memoize display profiles to prevent unnecessary re-calculations
+  const displayProfiles = useMemo(() => {
     if (!user || !currentUserProfile) {
       return profiles;
     }
@@ -95,17 +98,18 @@ const Index = () => {
     };
 
     return [currentUserDisplayProfile, ...otherProfiles];
-  })();
+  }, [user, currentUserProfile, profiles]);
 
   // All business, event, and artwork data now comes from the database
   // Static data has been removed to show only real content
 
-  const handleEventClick = (event: any) => {
+  // Memoize event handlers to prevent unnecessary re-renders
+  const handleEventClick = useCallback((event: any) => {
     setSelectedEvent(event);
     setIsEventPopupOpen(true);
-  };
+  }, []);
 
-  const handleMarketplaceClick = (item: any, itemType?: string) => {
+  const handleMarketplaceClick = useCallback((item: any, itemType?: string) => {
     const itemDetails = {
       id: item.id,
       title: item.title,
@@ -118,16 +122,16 @@ const Index = () => {
         location: item.location || "תל אביב"
       },
       condition: "כמו חדש",
-      type: itemType || 'marketplace' // Add type to identify recommendation items
+      type: itemType || 'marketplace'
     };
     setSelectedMarketplaceItem(itemDetails);
     setIsMarketplacePopupOpen(true);
-  };
+  }, []);
 
-  const handlePhotoClick = (photo: any) => {
+  const handlePhotoClick = useCallback((photo: any) => {
     setSelectedPhoto(photo);
     setIsDailyPhotoPopupOpen(true);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background" dir="rtl">

@@ -6,14 +6,15 @@ import './index.css'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 120000, // 2 minutes - increased for better caching
-      gcTime: 600000, // 10 minutes - increased for better persistence
+      staleTime: 300000, // 5 minutes - much longer for instant loading
+      gcTime: 1800000, // 30 minutes - much longer persistence
       refetchOnWindowFocus: false,
-      refetchOnMount: false, // Only refetch if data is stale
+      refetchOnMount: false, // Always use cached data if available
       refetchOnReconnect: false,
       retry: 1,
-      retryDelay: 500, // Faster retry
+      retryDelay: 250, // Even faster retry
       networkMode: 'online', // Only fetch when online
+      placeholderData: (previousData) => previousData, // Keep showing old data while fetching
     },
   },
 })
