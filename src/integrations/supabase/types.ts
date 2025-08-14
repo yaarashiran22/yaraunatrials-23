@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
+  // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.12 (cd3cf9e)"
@@ -74,7 +74,6 @@ export type Database = {
           id: string
           image_url: string
           is_anonymous: boolean | null
-          market: string | null
           updated_at: string
           user_id: string | null
         }
@@ -84,7 +83,6 @@ export type Database = {
           id?: string
           image_url: string
           is_anonymous?: boolean | null
-          market?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -94,7 +92,6 @@ export type Database = {
           id?: string
           image_url?: string
           is_anonymous?: boolean | null
-          market?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -141,7 +138,6 @@ export type Database = {
           created_at: string
           id: string
           image_url: string | null
-          market: string | null
           updated_at: string
           user_id: string
         }
@@ -150,7 +146,6 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
-          market?: string | null
           updated_at?: string
           user_id: string
         }
@@ -159,7 +154,6 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
-          market?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -200,7 +194,6 @@ export type Database = {
           id: string
           image_url: string | null
           location: string | null
-          market: string | null
           mobile_number: string | null
           price: number | null
           status: string | null
@@ -215,7 +208,6 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
-          market?: string | null
           mobile_number?: string | null
           price?: number | null
           status?: string | null
@@ -230,7 +222,6 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
-          market?: string | null
           mobile_number?: string | null
           price?: number | null
           status?: string | null
@@ -280,7 +271,6 @@ export type Database = {
           content: string
           created_at: string
           id: string
-          market: string | null
           updated_at: string
           user_id: string
         }
@@ -288,7 +278,6 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
-          market?: string | null
           updated_at?: string
           user_id: string
         }
@@ -296,7 +285,6 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
-          market?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -357,7 +345,6 @@ export type Database = {
           id: string
           image_url: string | null
           location: string | null
-          market: string | null
           updated_at: string
           user_id: string
         }
@@ -367,7 +354,6 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
-          market?: string | null
           updated_at?: string
           user_id: string
         }
@@ -377,7 +363,6 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
-          market?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -392,7 +377,6 @@ export type Database = {
           interests: string[] | null
           is_private: boolean | null
           location: string | null
-          market: string | null
           mobile_number: string | null
           name: string | null
           profile_image_url: string | null
@@ -408,7 +392,6 @@ export type Database = {
           interests?: string[] | null
           is_private?: boolean | null
           location?: string | null
-          market?: string | null
           mobile_number?: string | null
           name?: string | null
           profile_image_url?: string | null
@@ -424,7 +407,6 @@ export type Database = {
           interests?: string[] | null
           is_private?: boolean | null
           location?: string | null
-          market?: string | null
           mobile_number?: string | null
           name?: string | null
           profile_image_url?: string | null
@@ -495,7 +477,6 @@ export type Database = {
           expires_at: string
           id: string
           image_url: string
-          market: string | null
           user_id: string
         }
         Insert: {
@@ -503,7 +484,6 @@ export type Database = {
           expires_at?: string
           id?: string
           image_url: string
-          market?: string | null
           user_id: string
         }
         Update: {
@@ -511,7 +491,6 @@ export type Database = {
           expires_at?: string
           id?: string
           image_url?: string
-          market?: string | null
           user_id?: string
         }
         Relationships: []
@@ -601,36 +580,6 @@ export type Database = {
           id?: string
           image_url?: string
           title?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      user_preferences: {
-        Row: {
-          auto_detect_market: boolean
-          created_at: string
-          id: string
-          language: string | null
-          preferred_market: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          auto_detect_market?: boolean
-          created_at?: string
-          id?: string
-          language?: string | null
-          preferred_market?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          auto_detect_market?: boolean
-          created_at?: string
-          id?: string
-          language?: string | null
-          preferred_market?: string
           updated_at?: string
           user_id?: string
         }

@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { LogOut, User, Bell, Plus, ChevronDown, Settings } from "lucide-react";
 import { useNewItem } from "@/contexts/NewItemContext";
 import LanguageSelector from "@/components/LanguageSelector";
-import MarketSelector from "@/components/MarketSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NeighborhoodIndicator from "@/components/NeighborhoodIndicator";
 import SearchBar from "@/components/SearchBar";
@@ -58,7 +57,7 @@ const DesktopHeader = ({
           {/* Center section - Selectors */}
           <div className="flex items-center gap-4">
             <NeighborhoodIndicator />
-            <MarketSelector />
+            <LanguageSelector />
           </div>
           
           {/* Right section - Actions and user */}
