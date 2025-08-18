@@ -302,6 +302,30 @@ export type Database = {
         }
         Relationships: []
       }
+      photo_gallery_likes: {
+        Row: {
+          created_at: string
+          gallery_id: string
+          id: string
+          image_url: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          gallery_id: string
+          id?: string
+          image_url: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          gallery_id?: string
+          id?: string
+          image_url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           content: string

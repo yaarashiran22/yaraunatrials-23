@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { usePhotoLikes } from "@/hooks/usePhotoLikes";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface DailyPhotoCardProps {
   photoId: string;
@@ -25,8 +27,12 @@ const DailyPhotoCard = ({
   onClick 
 }: DailyPhotoCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const { user } = useAuth();
   const primaryImage = images[0]; // Use the first image as primary
   const isOwner = currentUserId === userId;
+  
+  // Use photo likes hook
+  const { likesCount, isLiked, toggleLike, loading: likesLoading } = usePhotoLikes(photoId, primaryImage);
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card click
@@ -41,6 +47,19 @@ const DailyPhotoCard = ({
       console.error('Delete error:', error);
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
+    if (!user) {
+      toast.error("יש להתחבר כדי לתת לייק");
+      return;
+    }
+    
+    const success = await toggleLike();
+    if (!success) {
+      toast.error("שגיאה בעדכון הלייק");
     }
   };
   
@@ -71,26 +90,48 @@ const DailyPhotoCard = ({
           </Button>
         )}
         
+        {/* Like button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute bottom-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={handleLike}
+          disabled={likesLoading}
+        >
+          <Heart 
+            className={`h-3 w-3 ${isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+          />
+        </Button>
+        
         <div className="p-3 h-14 flex flex-col justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-300 flex-shrink-0">
-              {userAvatar ? (
-                <img 
-                  src={userAvatar} 
-                  alt={userName}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-primary/20 flex items-center justify-center">
-                  <span className="text-xs text-primary font-medium">
-                    {userName.charAt(0)}
-                  </span>
-                </div>
-              )}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-300 flex-shrink-0">
+                {userAvatar ? (
+                  <img 
+                    src={userAvatar} 
+                    alt={userName}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-primary/20 flex items-center justify-center">
+                    <span className="text-xs text-primary font-medium">
+                      {userName.charAt(0)}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <span className="text-xs text-foreground font-medium truncate">
+                {userName}
+              </span>
             </div>
-            <span className="text-xs text-foreground font-medium truncate">
-              {userName}
-            </span>
+            {/* Like count */}
+            {likesCount > 0 && (
+              <div className="flex items-center gap-1">
+                <Heart className="h-3 w-3 text-red-500 fill-red-500" />
+                <span className="text-xs text-muted-foreground">{likesCount}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
