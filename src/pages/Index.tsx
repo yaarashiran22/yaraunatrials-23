@@ -300,41 +300,6 @@ const Index = () => {
         </section>
 
 
-        {/* Marketplace Section - Database Only */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title={t('marketplace.title')} viewAllPath="/marketplace" />
-          {loading ? (
-            <FastLoadingSkeleton type="cards" count={4} />
-          ) : marketplaceItems.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <p>אין פריטים למכירה כרגע</p>
-            </div>
-          ) : (
-            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {marketplaceItems.slice(0, 6).map((item) => (
-                <div key={item.id} className="flex-shrink-0 w-36 lg:w-auto">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || dressItem}
-                    title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    price={item.price ? `₪${item.price}` : undefined}
-                    type="marketplace"
-                    onClick={() => handleMarketplaceClick(item)}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.title,
-                      price: item.price,
-                      image_url: item.image_url,
-                      type: 'marketplace'
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
 
       </main>
       
