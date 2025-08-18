@@ -167,6 +167,7 @@ export type Database = {
       }
       friends_picture_galleries: {
         Row: {
+          caption: string | null
           created_at: string
           id: string
           images: string[]
@@ -175,6 +176,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          caption?: string | null
           created_at?: string
           id?: string
           images?: string[]
@@ -183,6 +185,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          caption?: string | null
           created_at?: string
           id?: string
           images?: string[]
