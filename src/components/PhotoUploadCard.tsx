@@ -38,10 +38,10 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
     return new File([u8arr], filename, { type: mime });
   };
 
-  // Validate caption (max 5 words)
+  // Validate caption (max 4 words)
   const validateCaption = (text: string): boolean => {
     const words = text.trim().split(/\s+/).filter(word => word.length > 0);
-    return words.length <= 5;
+    return words.length <= 4;
   };
 
   const handleCaptionChange = (value: string) => {
@@ -262,7 +262,7 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="caption">כותרת (עד 5 מילים)</Label>
+              <Label htmlFor="caption">כותרת (עד 4 מילים)</Label>
               <Input
                 id="caption"
                 value={caption}
@@ -272,7 +272,7 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
                 dir="rtl"
               />
               <p className="text-xs text-muted-foreground text-right">
-                {wordCount}/5 מילים
+                {wordCount}/4 מילים
               </p>
             </div>
           </div>
