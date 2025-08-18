@@ -115,8 +115,10 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
   };
 
   const handleFileSelection = (file: File) => {
+    console.log('PhotoUploadCard - File selected:', file.name, file.size);
     setSelectedFile(file);
     setShowCaptionDialog(true);
+    console.log('PhotoUploadCard - Caption dialog should show:', true);
   };
 
   const handleUploadWithCaption = () => {
@@ -164,9 +166,13 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('PhotoUploadCard - File input changed');
     const file = event.target.files?.[0];
+    console.log('PhotoUploadCard - Selected file from input:', file);
     if (file) {
       handleFileSelection(file);
+    } else {
+      console.log('PhotoUploadCard - No file selected');
     }
   };
 
@@ -237,7 +243,10 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
       </Dialog>
 
       {/* Caption Dialog */}
-      <Dialog open={showCaptionDialog} onOpenChange={setShowCaptionDialog}>
+      <Dialog open={showCaptionDialog} onOpenChange={(open) => {
+        console.log('PhotoUploadCard - Caption dialog onOpenChange:', open);
+        setShowCaptionDialog(open);
+      }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center">הוסף כותרת לתמונה</DialogTitle>
