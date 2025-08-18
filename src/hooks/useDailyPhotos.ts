@@ -6,6 +6,7 @@ export interface DailyPhotoSubmission {
   user_id: string;
   images: string[];
   title?: string;
+  caption?: string;
   created_at: string;
   profiles?: {
     name: string;

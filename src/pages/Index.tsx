@@ -198,6 +198,7 @@ const Index = () => {
                   userAvatar={photo.profiles?.profile_image_url}
                   userId={photo.user_id}
                   currentUserId={user?.id}
+                  caption={photo.caption}
                   onDelete={deleteDailyPhoto}
                   onClick={() => handlePhotoClick({
                     id: photo.id,

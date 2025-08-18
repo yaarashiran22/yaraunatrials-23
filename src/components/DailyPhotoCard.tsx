@@ -12,6 +12,7 @@ interface DailyPhotoCardProps {
   userAvatar?: string;
   userId: string;
   currentUserId?: string;
+  caption?: string;
   onDelete?: (photoId: string, imageUrl: string) => Promise<void>;
   onClick?: () => void;
 }
@@ -23,6 +24,7 @@ const DailyPhotoCard = ({
   userAvatar, 
   userId, 
   currentUserId,
+  caption,
   onDelete,
   onClick 
 }: DailyPhotoCardProps) => {
@@ -134,7 +136,7 @@ const DailyPhotoCard = ({
           />
         </Button>
         
-        <div className="p-3 h-14 flex flex-col justify-between">
+        <div className="p-3 flex flex-col justify-between space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-300 flex-shrink-0">
@@ -164,6 +166,13 @@ const DailyPhotoCard = ({
               </div>
             )}
           </div>
+          
+          {/* Caption */}
+          {caption && (
+            <div className="text-xs text-muted-foreground text-right leading-tight">
+              {caption}
+            </div>
+          )}
         </div>
       </div>
     </div>
