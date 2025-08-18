@@ -27,6 +27,7 @@ const DailyPhotoCard = ({
   onClick 
 }: DailyPhotoCardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showLikeAnimation, setShowLikeAnimation] = useState(false);
   const { user } = useAuth();
   const primaryImage = images[0]; // Use the first image as primary
   const isOwner = currentUserId === userId;
@@ -62,6 +63,26 @@ const DailyPhotoCard = ({
       toast.error("שגיאה בעדכון הלייק");
     }
   };
+
+  const handleDoubleClick = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
+    if (!user) {
+      toast.error("יש להתחבר כדי לתת לייק");
+      return;
+    }
+    
+    // Show like animation
+    setShowLikeAnimation(true);
+    setTimeout(() => setShowLikeAnimation(false), 1000);
+    
+    // Only like if not already liked (double-click to like, not unlike)
+    if (!isLiked) {
+      const success = await toggleLike();
+      if (!success) {
+        toast.error("שגיאה בעדכון הלייק");
+      }
+    }
+  };
   
   return (
     <div className="flex-shrink-0 w-36">
@@ -69,12 +90,22 @@ const DailyPhotoCard = ({
         className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer"
         onClick={onClick}
       >
-        <div className="aspect-[4/3] overflow-hidden">
+        <div className="aspect-[4/3] overflow-hidden relative">
           <img 
             src={primaryImage} 
             alt={`Daily photo by ${userName}`}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onDoubleClick={handleDoubleClick}
           />
+          
+          {/* Like animation overlay */}
+          {showLikeAnimation && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="animate-ping">
+                <Heart className="h-12 w-12 text-red-500 fill-red-500 drop-shadow-lg" />
+              </div>
+            </div>
+          )}
         </div>
         
         {/* Delete button - only show for owner */}
