@@ -286,6 +286,11 @@ const ProfilePage = () => {
               </div>
             </div>
             <p className="text-sm text-foreground mb-4">{profileData?.bio || "אין תיאור"}</p>
+            {profileData?.specialty && (
+              <div className="bg-primary/10 rounded-lg px-3 py-2 mb-4 inline-block">
+                <span className="text-sm font-medium text-primary">{profileData.specialty}</span>
+              </div>
+            )}
             
             <div className="flex items-center gap-3 text-sm">
               {profileData?.username ? (

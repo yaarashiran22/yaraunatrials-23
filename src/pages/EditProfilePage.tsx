@@ -28,6 +28,7 @@ const EditProfilePage = () => {
     username: "",
     bio: "",
     location: "",
+    specialty: "",
     interests: ['צילום', 'יוצר תוכן', 'אמנות', 'מוזיקה'],
     isPrivate: false,
     showInSearch: true
@@ -83,6 +84,7 @@ const EditProfilePage = () => {
         username: formData.username,
         bio: formData.bio,
         location: formData.location,
+        specialty: formData.specialty,
         interests: formData.interests,
         is_private: formData.isPrivate,
         show_in_search: formData.showInSearch,
@@ -122,6 +124,7 @@ const EditProfilePage = () => {
         username: profile.username || "",
         bio: profile.bio || "",
         location: profile.location || "",
+        specialty: profile.specialty || "",
         interests: profile.interests || ['צילום', 'יוצר תוכן', 'אמנות', 'מוזיקה'],
         isPrivate: profile.is_private || false,
         showInSearch: profile.show_in_search !== false // Default to true if null/undefined
@@ -225,6 +228,17 @@ const EditProfilePage = () => {
               className="text-right"
               value={formData.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
+            />
+          </div>
+
+          {/* Specialty */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">התמחות (אופציונלי)</label>
+            <Input 
+              placeholder="למשל: צלמת חתונות, מעצבת גרפית, שפית"
+              className="text-right"
+              value={formData.specialty}
+              onChange={(e) => handleInputChange('specialty', e.target.value)}
             />
           </div>
 

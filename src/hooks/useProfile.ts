@@ -13,6 +13,7 @@ export interface Profile {
   is_private: boolean | null;
   show_in_search: boolean | null;
   interests: string[] | null;
+  specialty: string | null;
   created_at: string;
   updated_at: string | null;
 }
