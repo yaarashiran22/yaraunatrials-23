@@ -150,11 +150,11 @@ const Index = () => {
       />
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
-        {/* Popular in Neighborhood Section */}
+        {/* Community Members Section - Special styling for better differentiation */}
         <section className="mb-8 lg:mb-10">
           <div className="relative z-10">
             <SectionHeader 
-              title="פופולארי בשכונה" 
+              title={`${t('sections.neighbors')} ${totalUsersCount > 0 ? `(${totalUsersCount})` : ''}`} 
             />
           </div>
           {loading ? (
@@ -162,7 +162,19 @@ const Index = () => {
           ) : (
             <div className="flex overflow-x-auto gap-4 pb-2" dir="rtl">
               {user && <AddStoryButton className="flex-shrink-0" />}
-              {/* Profile pictures removed - content can be added here later */}
+              {displayProfiles.length > 0 ? (
+                displayProfiles.map((profile) => (
+                  <ProfileCard
+                    key={profile.id}
+                    id={profile.id}
+                    image={profile.image}
+                    name={profile.name}
+                    className="flex-shrink-0"
+                  />
+                ))
+              ) : (
+                <div className="text-center py-4 text-muted-foreground col-span-full">אין משתמשים רשומים עדיין</div>
+              )}
             </div>
           )}
         </section>
