@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Camera, Upload, Plus, Image as ImageIcon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +20,9 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const [showCaptionDialog, setShowCaptionDialog] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [caption, setCaption] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Convert base64 to file
@@ -33,7 +38,19 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
     return new File([u8arr], filename, { type: mime });
   };
 
-  const handleFileUpload = async (file: File) => {
+  // Validate caption (max 5 words)
+  const validateCaption = (text: string): boolean => {
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    return words.length <= 5;
+  };
+
+  const handleCaptionChange = (value: string) => {
+    if (validateCaption(value)) {
+      setCaption(value);
+    }
+  };
+
+  const handleFileUploadWithCaption = async (file: File, caption: string) => {
     if (!user) {
       toast.error("יש להתחבר כדי להעלות תמונה");
       return;
@@ -65,14 +82,15 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
 
       console.log('Public URL:', urlData.publicUrl);
 
-      // Save to database using friends_picture_galleries table
+      // Save to database using friends_picture_galleries table with caption
       console.log('Saving to database...');
       const { error: dbError } = await supabase
         .from('friends_picture_galleries')
         .insert({
           user_id: user.id,
           images: [urlData.publicUrl],
-          title: `Daily photo - ${new Date().toLocaleDateString('he-IL')}`
+          title: caption || `Daily photo - ${new Date().toLocaleDateString('he-IL')}`,
+          caption: caption
         });
 
       if (dbError) {
@@ -83,11 +101,27 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
       console.log('Database insert successful');
       toast.success("התמונה הועלתה בהצלחה!");
       onUploadComplete?.();
+      
+      // Reset state
+      setSelectedFile(null);
+      setCaption("");
+      setShowCaptionDialog(false);
     } catch (error) {
       console.error('Upload error:', error);
       toast.error("שגיאה בהעלאת התמונה: " + (error as any)?.message || 'Unknown error');
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleFileSelection = (file: File) => {
+    setSelectedFile(file);
+    setShowCaptionDialog(true);
+  };
+
+  const handleUploadWithCaption = () => {
+    if (selectedFile) {
+      handleFileUploadWithCaption(selectedFile, caption);
     }
   };
 
@@ -103,7 +137,7 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
 
       if (image.base64String) {
         const file = base64ToFile(`data:image/jpeg;base64,${image.base64String}`, `daily-photo-${Date.now()}.jpg`);
-        await handleFileUpload(file);
+        handleFileSelection(file);
       }
     } catch (error: any) {
       console.error('Mobile camera error:', error);
@@ -132,14 +166,16 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      handleFileUpload(file);
+      handleFileSelection(file);
     }
   };
 
   const handleWebCameraCapture = (file: File) => {
-    handleFileUpload(file);
+    handleFileSelection(file);
     setShowCamera(false);
   };
+
+  const wordCount = caption.trim().split(/\s+/).filter(word => word.length > 0).length;
 
   if (!user) {
     return (
@@ -197,6 +233,58 @@ const PhotoUploadCard = ({ onUploadComplete }: PhotoUploadCardProps) => {
               <span>בחר מהגלריה</span>
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Caption Dialog */}
+      <Dialog open={showCaptionDialog} onOpenChange={setShowCaptionDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">הוסף כותרת לתמונה</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            {selectedFile && (
+              <div className="aspect-square w-32 mx-auto rounded-lg overflow-hidden">
+                <img 
+                  src={URL.createObjectURL(selectedFile)} 
+                  alt="Preview" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="caption">כותרת (עד 5 מילים)</Label>
+              <Input
+                id="caption"
+                value={caption}
+                onChange={(e) => handleCaptionChange(e.target.value)}
+                placeholder="הוסף כותרת קצרה..."
+                className="text-right"
+                dir="rtl"
+              />
+              <p className="text-xs text-muted-foreground text-right">
+                {wordCount}/5 מילים
+              </p>
+            </div>
+          </div>
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowCaptionDialog(false);
+                setSelectedFile(null);
+                setCaption("");
+              }}
+            >
+              ביטול
+            </Button>
+            <Button
+              onClick={handleUploadWithCaption}
+              disabled={isUploading}
+            >
+              {isUploading ? "מעלה..." : "העלה"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
