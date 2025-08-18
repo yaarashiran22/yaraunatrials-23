@@ -123,22 +123,21 @@ const DailyPhotoCard = ({
           </Button>
         )}
         
-        {/* Like button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute bottom-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={handleLike}
-          disabled={likesLoading}
-        >
-          <Heart 
-            className={`h-3 w-3 ${isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
-          />
-        </Button>
-        
         <div className="p-3 flex flex-col justify-between space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
+              {/* Like button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-4 w-4 p-0"
+                onClick={handleLike}
+                disabled={likesLoading}
+              >
+                <Heart 
+                  className={`h-3 w-3 ${isLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+                />
+              </Button>
               <div className="w-5 h-5 rounded-full overflow-hidden bg-gray-300 flex-shrink-0">
                 {userAvatar ? (
                   <img 
