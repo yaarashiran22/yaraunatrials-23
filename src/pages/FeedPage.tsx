@@ -236,7 +236,7 @@ const FeedPage = () => {
         <div className="mb-6">
           <Button 
             onClick={() => navigate('/neighbors')}
-            className="w-full bg-muted/50 hover:bg-muted/70 text-foreground font-medium py-3 rounded-lg shadow-sm border border-border/50"
+            className="w-full bg-purple-100/80 hover:bg-purple-200/80 text-purple-700 font-medium py-3 rounded-lg shadow-sm border border-purple-200/50"
           >
             הכר את השכנים
           </Button>
