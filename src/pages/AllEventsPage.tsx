@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -242,45 +242,11 @@ const AllEventsPage = () => {
         ) : (
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {filteredEvents.map((event) => (
-              <div 
+              <EventCard
                 key={event.id}
+                event={event}
                 onClick={() => handleEventClick(event)}
-                className="cursor-pointer bg-card rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow"
-              >
-                <div className="aspect-[3/4] w-full">
-                  {event.image_url ? (
-                    <img 
-                      src={event.image_url} 
-                      alt={event.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-muted flex items-center justify-center">
-                      <span className="text-lg">🎉</span>
-                    </div>
-                  )}
-                </div>
-                <div className="p-2">
-                  <h3 className="font-semibold text-xs text-right mb-1 truncate leading-tight">
-                    {event.title}
-                  </h3>
-                  {event.location && (
-                    <p className="text-[10px] text-muted-foreground text-right truncate">
-                      📍 {event.location}
-                    </p>
-                  )}
-                  {event.price && event.price > 0 ? (
-                    <p className="text-[10px] font-medium text-primary text-right mt-1">
-                      {event.price} ₪
-                    </p>
-                  ) : (
-                    <p className="text-[10px] font-medium text-green-600 text-right mt-1">
-                      חינם
-                    </p>
-                  )}
-                </div>
-              </div>
+              />
             ))}
           </div>
         )}
@@ -301,5 +267,47 @@ const AllEventsPage = () => {
     </div>
   );
 };
+
+// Memoized EventCard component for better performance
+const EventCard = memo(({ event, onClick }: { event: any; onClick: () => void }) => (
+  <div 
+    onClick={onClick}
+    className="cursor-pointer bg-card rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow"
+  >
+    <div className="aspect-[3/4] w-full">
+      {event.image_url ? (
+        <img 
+          src={event.image_url} 
+          alt={event.title}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div className="w-full h-full bg-muted flex items-center justify-center">
+          <span className="text-lg">🎉</span>
+        </div>
+      )}
+    </div>
+    <div className="p-2">
+      <h3 className="font-semibold text-xs text-right mb-1 truncate leading-tight">
+        {event.title}
+      </h3>
+      {event.location && (
+        <p className="text-[10px] text-muted-foreground text-right truncate">
+          📍 {event.location}
+        </p>
+      )}
+      {event.price && event.price > 0 ? (
+        <p className="text-[10px] font-medium text-primary text-right mt-1">
+          {event.price} ₪
+        </p>
+      ) : (
+        <p className="text-[10px] font-medium text-green-600 text-right mt-1">
+          חינם
+        </p>
+      )}
+    </div>
+  </div>
+));
 
 export default AllEventsPage;
