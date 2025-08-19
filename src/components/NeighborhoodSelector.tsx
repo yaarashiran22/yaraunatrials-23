@@ -40,7 +40,7 @@ const NeighborhoodSelector = () => {
         <Button variant="ghost" size="sm" className="flex items-center gap-1">
           <ChevronDown className="h-4 w-4" />
           <span className="text-sm">{getDisplayName(neighborhoods.find(n => n.name === selectedNeighborhood))}</span>
-          <MapPin className="h-4 w-4 text-purple-600" />
+          <MapPin className="h-4 w-4 text-primary" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background border shadow-lg">
@@ -50,7 +50,7 @@ const NeighborhoodSelector = () => {
             onClick={() => setSelectedNeighborhood(neighborhood.name)}
             className={`cursor-pointer ${selectedNeighborhood === neighborhood.name ? 'bg-primary/10' : ''}`}
           >
-            <MapPin className="h-4 w-4 mr-2 text-purple-600" />
+            <MapPin className="h-4 w-4 mr-2 text-primary" />
             <span>{getDisplayName(neighborhood)}</span>
           </DropdownMenuItem>
         ))}
