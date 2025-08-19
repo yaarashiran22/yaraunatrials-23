@@ -125,7 +125,7 @@ const ProfilePage = () => {
   // Filter items by category
   const secondHandItems = userItems.filter(item => item.category === 'secondhand' || !item.category);
   const eventItems = userItems.filter(item => item.category === 'event');
-  const recommendationItems = userItems.filter(item => item.category === 'recommendation');
+  const recommendationItems = userItems.filter(item => item.category === 'מוזמנים להצטרף');
   const artItems = userItems.filter(item => item.category === 'art');
 
   // Listen for profile updates (when returning from edit page)

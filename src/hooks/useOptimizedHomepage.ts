@@ -51,7 +51,7 @@ const fetchHomepageData = async () => {
         .from('items')
         .select('id, title, image_url, location')
         .eq('status', 'active')
-        .eq('category', 'business')
+        .eq('category', 'מוזמנים להצטרף')
         .order('created_at', { ascending: false })
         .limit(4), // Reduced for faster loading
       supabase
