@@ -15,6 +15,7 @@ import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -39,6 +40,7 @@ const Index = () => {
   const { setRefreshCallback } = useNewItem();
   const { user } = useAuth();
   const { profile: currentUserProfile } = useProfile(user?.id);
+  const navigate = useNavigate();
   
   // Use optimized homepage hook with React Query caching
   const { 
@@ -206,7 +208,17 @@ const Index = () => {
 
         {/* Events Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title={t('events.title')} />
+          <div className="flex justify-between items-center mb-4">
+            <SectionHeader title={t('events.title')} />
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => navigate('/all-events')}
+              className="text-xs px-3 py-1"
+            >
+              הצג את כל האירועים
+            </Button>
+          </div>
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
           ) : databaseEvents.length === 0 ? (
