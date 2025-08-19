@@ -58,7 +58,7 @@ const AllEventsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("כל השכונות");
   const [priceFilter, setPriceFilter] = useState("כל המחירים");
-  const [showFilters, setShowFilters] = useState(false);
+  // Removed showFilters state - filters are always visible
 
   // Optimized filtering with useMemo for better performance
   const filteredEvents = useMemo(() => {
@@ -167,33 +167,9 @@ const AllEventsPage = () => {
           />
         </div>
 
-        {/* Filter Toggle Button */}
-        <div className="flex justify-between items-center">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2"
-          >
-            <Filter className="h-4 w-4" />
-            סינון
-          </Button>
-          
-          {(selectedNeighborhood !== "כל השכונות" || priceFilter !== "כל המחירים") && (
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={clearFilters}
-              className="text-xs"
-            >
-              נקה סינונים
-            </Button>
-          )}
-        </div>
-
-        {/* Filter Options */}
-        {showFilters && (
-          <div className="space-y-3 pt-2">
+        {/* Filter Options - Always Visible */}
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-sm font-medium mb-2 block">שכונה</label>
               <Select value={selectedNeighborhood} onValueChange={setSelectedNeighborhood}>
@@ -226,7 +202,20 @@ const AllEventsPage = () => {
               </Select>
             </div>
           </div>
-        )}
+          
+          {(selectedNeighborhood !== "כל השכונות" || priceFilter !== "כל המחירים") && (
+            <div className="flex justify-center">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={clearFilters}
+                className="text-xs"
+              >
+                נקה סינונים
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Results Section */}
