@@ -298,7 +298,8 @@ const ProfilePage = () => {
                   href={profileData.username} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-primary hover:text-primary/80 underline cursor-pointer"
+                  className="hover:opacity-80 underline cursor-pointer"
+                  style={{ color: 'hsl(280 60% 65%)' }}
                 >
                   עמוד סושיאל
                 </a>
