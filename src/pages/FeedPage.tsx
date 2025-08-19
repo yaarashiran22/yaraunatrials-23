@@ -203,32 +203,6 @@ const FeedPage = () => {
           <SectionHeader title="עסקים וקופונים" />
         </section>
 
-        {/* Upload Card - Only show if user is authenticated */}
-        {user && (
-          <div 
-            className="bg-white rounded-lg p-4 mb-6 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm border"
-            onClick={() => navigate('/create-post')}
-          >
-            <img 
-              src={profile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-              alt="Profile"
-              className="w-10 h-10 rounded-full object-cover"
-            />
-            <div className="flex-1">
-              <input 
-                type="text"
-                placeholder="שתפ.י פוסט עם השכונה"
-                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
-                readOnly
-              />
-            </div>
-            <div className="flex gap-1">
-              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-            </div>
-          </div>
-        )}
-
         {/* שאלות שכנים Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm mb-6">
           <SectionHeader title="שאלות שכנים" />
@@ -260,6 +234,32 @@ const FeedPage = () => {
             )}
           </div>
         </section>
+
+        {/* Upload Card - Only show if user is authenticated */}
+        {user && (
+          <div 
+            className="bg-white rounded-lg p-4 mb-6 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm border"
+            onClick={() => navigate('/create-post')}
+          >
+            <img 
+              src={profile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
+              alt="Profile"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <div className="flex-1">
+              <input 
+                type="text"
+                placeholder="שתפ.י פוסט עם השכונה"
+                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
+                readOnly
+              />
+            </div>
+            <div className="flex gap-1">
+              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+            </div>
+          </div>
+        )}
 
         {/* Posts Feed */}
         <div className="space-y-6 mb-8">
