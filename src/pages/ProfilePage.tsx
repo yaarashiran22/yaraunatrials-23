@@ -287,8 +287,8 @@ const ProfilePage = () => {
             </div>
             <p className="text-sm text-foreground mb-4">{profileData?.bio || "אין תיאור"}</p>
             {profileData?.specialty && (
-              <div className="bg-primary/10 rounded-lg px-3 py-2 mb-4 inline-block">
-                <span className="text-sm font-medium text-primary">{profileData.specialty}</span>
+              <div className="rounded-lg px-3 py-2 mb-4 inline-block" style={{ backgroundColor: 'hsl(280 60% 65%)' }}>
+                <span className="text-sm font-medium text-white">{profileData.specialty}</span>
               </div>
             )}
             
