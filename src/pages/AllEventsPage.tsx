@@ -224,7 +224,9 @@ const AllEventsPage = () => {
       {/* Results Section */}
       <main className="px-4 py-4">
         <div className="mb-4 text-sm text-muted-foreground">
-          נמצאו {filteredEvents.length} אירועים
+          נמצאו {filteredEvents.length} אירועים מתוך {events.length} סה"כ
+          <br />
+          DEBUG: Loading: {loading.toString()}, Total events: {events.length}
         </div>
 
         {loading ? (

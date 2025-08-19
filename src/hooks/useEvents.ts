@@ -23,6 +23,15 @@ export const useEvents = () => {
       console.log("Starting fetchEvents...");
       setLoading(true);
       
+      // First try to get ALL items to see if we can fetch anything
+      const { data: allData, error: allError } = await supabase
+        .from('items')
+        .select('*')
+        .limit(5);
+      
+      console.log("All items query:", { allData, allError });
+      
+      // Now try the specific events query
       const { data, error } = await supabase
         .from('items')
         .select('*')
@@ -31,12 +40,14 @@ export const useEvents = () => {
         .order('created_at', { ascending: false })
         .limit(20);
 
+      console.log("Events query response:", { data, error });
+      
       if (error) {
         console.error('Supabase error:', error);
         throw error;
       }
       
-      console.log('Events fetched:', data?.length || 0);
+      console.log('Events fetched successfully:', data?.length || 0, 'events');
       setEvents((data || []) as Event[]);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -45,13 +56,14 @@ export const useEvents = () => {
         description: "לא ניתן לטעון את האירועים",
         variant: "destructive",
       });
-      setEvents([]); // Set empty array on error
+      setEvents([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    console.log("useEvents useEffect triggered");
     fetchEvents();
   }, []);
 
