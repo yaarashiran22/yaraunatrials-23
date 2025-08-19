@@ -45,7 +45,7 @@ const ProfilePage = () => {
   
   const actualProfileId = getActualProfileId();
   const { profile: profileData, loading, error, refetch } = useProfile(actualProfileId);
-  const { items: userItems, loading: itemsLoading, deleteItem } = useUserItems(actualProfileId);
+  const { items: userItems, loading: itemsLoading, deleteItem, refetch: refetchItems } = useUserItems(actualProfileId);
   const { addFriend, isFriend } = useFriends();
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
@@ -132,11 +132,12 @@ const ProfilePage = () => {
   useEffect(() => {
     const handleFocus = () => {
       refetch();
+      refetchItems(); // Also refresh items when page regains focus
     };
 
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
-  }, [refetch]);
+  }, [refetch, refetchItems]);
 
   // Also refetch when returning from navigation
   useEffect(() => {
