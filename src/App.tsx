@@ -8,6 +8,8 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { NewItemProvider } from "@/contexts/NewItemContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
+import { SearchProvider } from "@/contexts/SearchContext";
+import SearchPopup from "@/components/SearchPopup";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
 import NewItemPopup from "@/components/NewItemPopup";
@@ -150,6 +152,7 @@ const AppContent = () => {
       </div>
       
       <NewItemPopup isOpen={isOpen} onClose={closeNewItem} onItemCreated={refreshItems} />
+      <SearchPopup />
     </BrowserRouter>
   );
 };
@@ -163,7 +166,9 @@ const App = () => (
         <AuthProvider>
           <NewItemProvider>
             <FavoritesProvider>
-              <AppContent />
+              <SearchProvider>
+                <AppContent />
+              </SearchProvider>
             </FavoritesProvider>
           </NewItemProvider>
         </AuthProvider>
