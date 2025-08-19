@@ -86,11 +86,11 @@ const Header = ({
               onClick={openNewItem} 
               size="sm" 
               variant="ghost"
-              className="h-9 w-9 rounded-full p-0 hover:bg-muted/20"
-              style={{ border: '2px solid #BB31E9' }}
+              className="h-8 w-8 rounded-full p-0 hover:bg-muted/20"
+              style={{ border: '2px solid #BB31E9', backgroundColor: '#BB31E9' }}
               aria-label="Add new item"
             >
-              <Plus className="h-4 w-4" style={{ color: '#BB31E9' }} />
+              <Plus className="h-4 w-4" style={{ color: 'white' }} />
             </Button>
           </div>
         </div>
