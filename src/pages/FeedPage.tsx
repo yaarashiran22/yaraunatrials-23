@@ -5,6 +5,10 @@ import StoriesPopup from "@/components/StoriesPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import UniformCard from "@/components/UniformCard";
 import SectionHeader from "@/components/SectionHeader";
+import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
+import PhotoUploadCard from "@/components/PhotoUploadCard";
+import DailyPhotoCard from "@/components/DailyPhotoCard";
+import DailyPhotoPopup from "@/components/DailyPhotoPopup";
 
 import { Button } from "@/components/ui/button";
 import { Search, X, Heart, MessageCircle, MapPin } from "lucide-react";
@@ -17,6 +21,7 @@ import NeighborCard from "@/components/NeighborCard";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
+import { useDailyPhotos } from "@/hooks/useDailyPhotos";
 import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
 import { NeighborQuestionItem } from "@/components/NeighborQuestionItem";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,6 +37,7 @@ const FeedPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { profile } = useProfile(user?.id);
+  const { dailyPhotos, isLoading: dailyPhotosLoading, refetchDailyPhotos, deleteDailyPhoto } = useDailyPhotos();
   const [showNeighborhood, setShowNeighborhood] = useState(true);
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -41,6 +47,8 @@ const FeedPage = () => {
   const [postProfiles, setPostProfiles] = useState<{[key: string]: any}>({});
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
+  const [isDailyPhotoPopupOpen, setIsDailyPhotoPopupOpen] = useState(false);
   const { posts, loading } = usePosts();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
@@ -190,6 +198,12 @@ const FeedPage = () => {
     setShowStories(true);
   };
 
+  // Function to handle photo click
+  const handlePhotoClick = (photo: any) => {
+    setSelectedPhoto(photo);
+    setIsDailyPhotoPopupOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-background" dir="rtl">
       <Header 
@@ -201,6 +215,38 @@ const FeedPage = () => {
         {/* Businesses and Coupons Section */}
         <section className="mb-6">
           <SectionHeader title="עסקים וקופונים" />
+        </section>
+
+        {/* Photo Gallery Section */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm mb-6">
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {user && <PhotoUploadCard onUploadComplete={refetchDailyPhotos} />}
+            {dailyPhotosLoading ? (
+              <FastLoadingSkeleton type="cards" count={3} />
+            ) : (
+              dailyPhotos.map((photo) => (
+                <DailyPhotoCard
+                  key={photo.id}
+                  photoId={photo.id}
+                  images={photo.images}
+                  userName={photo.profiles?.name || 'אנונימי'}
+                  userAvatar={photo.profiles?.profile_image_url}
+                  userId={photo.user_id}
+                  currentUserId={user?.id}
+                  caption={photo.caption}
+                  onDelete={deleteDailyPhoto}
+                  onClick={() => handlePhotoClick({
+                    id: photo.id,
+                    images: photo.images,
+                    userName: photo.profiles?.name || 'אנונימי',
+                    userAvatar: photo.profiles?.profile_image_url,
+                    userId: photo.user_id,
+                    createdAt: photo.created_at
+                  })}
+                />
+              ))
+            )}
+          </div>
         </section>
 
         {/* שאלות שכנים Section */}
@@ -343,6 +389,14 @@ const FeedPage = () => {
         isOpen={isMarketplacePopupOpen}
         onClose={() => setIsMarketplacePopupOpen(false)}
         item={selectedMarketplaceItem}
+      />
+      
+      <DailyPhotoPopup 
+        isOpen={isDailyPhotoPopupOpen}
+        onClose={() => setIsDailyPhotoPopupOpen(false)}
+        photo={selectedPhoto}
+        currentUserId={user?.id}
+        onDelete={deleteDailyPhoto}
       />
       
       <BottomNavigation />

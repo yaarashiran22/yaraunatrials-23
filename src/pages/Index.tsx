@@ -12,9 +12,6 @@ import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
-import PhotoUploadCard from "@/components/PhotoUploadCard";
-import DailyPhotoCard from "@/components/DailyPhotoCard";
-import DailyPhotoPopup from "@/components/DailyPhotoPopup";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -22,7 +19,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
-import { useDailyPhotos } from "@/hooks/useDailyPhotos";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 
 import profile1 from "@/assets/profile-1.jpg";
@@ -43,7 +39,6 @@ const Index = () => {
   const { setRefreshCallback } = useNewItem();
   const { user } = useAuth();
   const { profile: currentUserProfile } = useProfile(user?.id);
-  const { dailyPhotos, isLoading: dailyPhotosLoading, refetchDailyPhotos, deleteDailyPhoto } = useDailyPhotos();
   
   // Use optimized homepage hook with React Query caching
   const { 
@@ -73,8 +68,6 @@ const Index = () => {
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
-  const [isDailyPhotoPopupOpen, setIsDailyPhotoPopupOpen] = useState(false);
 
   // Set refresh callback for new items
   useEffect(() => {
@@ -128,11 +121,6 @@ const Index = () => {
     setIsMarketplacePopupOpen(true);
   }, []);
 
-  const handlePhotoClick = useCallback((photo: any) => {
-    setSelectedPhoto(photo);
-    setIsDailyPhotoPopupOpen(true);
-  }, []);
-
   return (
     <div className="min-h-screen bg-background" dir="rtl">
       {/* Mobile Header */}
@@ -179,40 +167,6 @@ const Index = () => {
           )}
         </section>
 
-        {/* Photo of the Day Section */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <div className="mb-4">
-          </div>
-          
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            {user && <PhotoUploadCard onUploadComplete={refetchDailyPhotos} />}
-            {dailyPhotosLoading ? (
-              <FastLoadingSkeleton type="cards" count={3} />
-            ) : (
-              dailyPhotos.map((photo) => (
-                <DailyPhotoCard
-                  key={photo.id}
-                  photoId={photo.id}
-                  images={photo.images}
-                  userName={photo.profiles?.name || 'אנונימי'}
-                  userAvatar={photo.profiles?.profile_image_url}
-                  userId={photo.user_id}
-                  currentUserId={user?.id}
-                  caption={photo.caption}
-                  onDelete={deleteDailyPhoto}
-                  onClick={() => handlePhotoClick({
-                    id: photo.id,
-                    images: photo.images,
-                    userName: photo.profiles?.name || 'אנונימי',
-                    userAvatar: photo.profiles?.profile_image_url,
-                    userId: photo.user_id,
-                    createdAt: photo.created_at
-                  })}
-                />
-              ))
-            )}
-          </div>
-        </section>
 
         {/* Join me Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
@@ -331,14 +285,6 @@ const Index = () => {
       <NotificationsPopup 
         isOpen={showNotifications} 
         onClose={() => setShowNotifications(false)} 
-      />
-
-      <DailyPhotoPopup 
-        isOpen={isDailyPhotoPopupOpen}
-        onClose={() => setIsDailyPhotoPopupOpen(false)}
-        photo={selectedPhoto}
-        currentUserId={user?.id}
-        onDelete={deleteDailyPhoto}
       />
       
       <BottomNavigation />
