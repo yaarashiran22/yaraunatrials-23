@@ -183,166 +183,92 @@ const FavoritesPage = () => {
             <p className="text-gray-500">התחל להוסיף חברים על ידי לחיצה על כפתור ההוספה בפרופיל שלהם</p>
           </div>
         ) : (
-          <Tabs defaultValue="feed" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="feed" className="flex items-center gap-2">
-                <Camera className="h-4 w-4" onClick={() => setIsPhotoUploadOpen(true)} />
-                פיד חברים
-              </TabsTrigger>
-              <TabsTrigger value="items" className="flex items-center gap-2">
-                <Heart className="h-4 w-4" />
-                פריטים של חברים
-              </TabsTrigger>
-            </TabsList>
+          <div className="space-y-6">
+            {/* Upload Section */}
+            <FriendsFeedUpload />
 
-            <TabsContent value="feed" className="space-y-6">
-              {/* Upload Section */}
-              <FriendsFeedUpload />
-
-              {/* שאלות שכנים Section */}
-              <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm">
-                <SectionHeader title="שאלות חברים" />
-                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                  <NeighborQuestionCard />
-                  {questionsLoading ? (
-                    <div className="text-center py-4 flex-shrink-0">
-                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-                    </div>
-                  ) : (
-                    questions.map((question) => {
-                      const userProfile = questionProfiles[question.user_id];
-                      return (
-                        <NeighborQuestionItem
-                          key={`question-${question.id}`}
-                          question={question}
-                          userProfile={userProfile}
-                          getTimeAgo={getTimeAgo}
-                          questionProfiles={questionProfiles}
-                          onDeleteQuestion={deleteQuestion}
-                        />
-                      );
-                    })
-                  )}
-                  {questions.length === 0 && !questionsLoading && (
-                    <div className="text-center py-8 text-muted-foreground flex-shrink-0">
-                      <p>אין שאלות עדיין</p>
-                    </div>
-                  )}
-                </div>
-              </section>
-
-              {/* Friends Posts */}
-              <div className="space-y-4">
-                {postsLoading ? (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground">טוען פוסטים...</p>
+            {/* שאלות שכנים Section */}
+            <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm">
+              <SectionHeader title="שאלות חברים" />
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                <NeighborQuestionCard />
+                {questionsLoading ? (
+                  <div className="text-center py-4 flex-shrink-0">
+                    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
                   </div>
-                ) : friendsPosts.length === 0 ? (
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <Camera className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                      <p className="text-muted-foreground">אין פוסטים עדיין</p>
-                      <p className="text-sm text-muted-foreground">בואו נתחיל לשתף תוכן!</p>
-                    </CardContent>
-                  </Card>
                 ) : (
-                  friendsPosts.map((post) => (
-                    <Card key={post.id}>
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3 mb-3">
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage src={post.profiles?.profile_image_url} />
-                            <AvatarFallback>{post.profiles?.name?.[0] || 'U'}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="font-semibold">{post.profiles?.name || 'משתמש'}</span>
-                              <span className="text-sm text-muted-foreground">
-                                {formatTimeAgo(post.created_at)}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {post.content && (
-                          <p className="mb-3 text-sm">{post.content}</p>
-                        )}
-                        
-                        {post.image_url && (
-                          <img
-                            src={post.image_url}
-                            alt="Post image"
-                            className="w-full max-h-96 object-cover rounded-lg"
-                          />
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))
+                  questions.map((question) => {
+                    const userProfile = questionProfiles[question.user_id];
+                    return (
+                      <NeighborQuestionItem
+                        key={`question-${question.id}`}
+                        question={question}
+                        userProfile={userProfile}
+                        getTimeAgo={getTimeAgo}
+                        questionProfiles={questionProfiles}
+                        onDeleteQuestion={deleteQuestion}
+                      />
+                    );
+                  })
+                )}
+                {questions.length === 0 && !questionsLoading && (
+                  <div className="text-center py-8 text-muted-foreground flex-shrink-0">
+                    <p>אין שאלות עדיין</p>
+                  </div>
                 )}
               </div>
-            </TabsContent>
+            </section>
 
-            <TabsContent value="items" className="space-y-6">
-              <div className="mb-6">
-                <h1 className="text-2xl font-bold text-center mb-2">פריטים של חברים</h1>
-                <p className="text-center text-muted-foreground">
-                  {friends.length} חברים • {Object.values(friendsItemsByCategory).reduce((total, items) => total + items.length, 0)} פריטים
-                </p>
-              </div>
-
-              {loading ? (
+            {/* Friends Posts */}
+            <div className="space-y-4">
+              {postsLoading ? (
                 <div className="text-center py-8">
-                  <p className="text-muted-foreground">טוען פריטים...</p>
+                  <p className="text-muted-foreground">טוען פוסטים...</p>
                 </div>
-              ) : Object.keys(friendsItemsByCategory).length === 0 ? (
-                <div className="text-center py-12">
-                  <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h2 className="text-xl font-semibold text-gray-600 mb-2">אין פריטים עדיין</h2>
-                  <p className="text-gray-500">החברים שלך עדיין לא פרסמו פריטים</p>
-                </div>
+              ) : friendsPosts.length === 0 ? (
+                <Card>
+                  <CardContent className="p-6 text-center">
+                    <Camera className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-muted-foreground">אין פוסטים עדיין</p>
+                    <p className="text-sm text-muted-foreground">בואו נתחיל לשתף תוכן!</p>
+                  </CardContent>
+                </Card>
               ) : (
-                <div className="space-y-8">
-                  {Object.entries(friendsItemsByCategory).map(([category, items]) => (
-                    <Card key={category}>
-                      <CardHeader>
-                        <CardTitle className="flex items-center justify-between">
-                          <span>{getCategoryDisplayName(category)}</span>
-                          <Badge variant="secondary">{items.length}</Badge>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                          {items.map((item) => (
-                            <div key={`${item.id}-${item.user_id}`} className="space-y-2">
-                              <UniformCard
-                                id={item.id}
-                                image={item.image_url}
-                                title={item.title}
-                                subtitle={item.description}
-                                price={item.price}
-                                type="marketplace"
-                                onClick={() => handleItemClick(item)}
-                                favoriteData={item}
-                              />
-                              {item.uploader && (
-                                <div className="flex items-center gap-2 px-2">
-                                  <Avatar className="h-6 w-6">
-                                    <AvatarImage src={item.uploader.profile_image_url} />
-                                    <AvatarFallback className="text-xs">{item.uploader.name?.[0] || 'U'}</AvatarFallback>
-                                  </Avatar>
-                                  <span className="text-xs text-muted-foreground">{item.uploader.name}</span>
-                                </div>
-                              )}
-                            </div>
-                          ))}
+                friendsPosts.map((post) => (
+                  <Card key={post.id}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start gap-3 mb-3">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={post.profiles?.profile_image_url} />
+                          <AvatarFallback>{post.profiles?.name?.[0] || 'U'}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">{post.profiles?.name || 'משתמש'}</span>
+                            <span className="text-sm text-muted-foreground">
+                              {formatTimeAgo(post.created_at)}
+                            </span>
+                          </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                      </div>
+                      
+                      {post.content && (
+                        <p className="mb-3 text-sm">{post.content}</p>
+                      )}
+                      
+                      {post.image_url && (
+                        <img
+                          src={post.image_url}
+                          alt="Post image"
+                          className="w-full max-h-96 object-cover rounded-lg"
+                        />
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
               )}
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
         )}
       </main>
 
