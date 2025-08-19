@@ -199,11 +199,11 @@ const FeedPage = () => {
 
       <main className="px-4 py-4 pb-32">
         {/* שאלות שכנים Section */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm mb-6">
-          <div className="mb-4 px-2">
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-1.5 lg:p-2 border border-border/20 shadow-sm mb-6 mt-4">
+          <div className="mb-3 px-2">
             <SectionHeader title="שאלות שכנים" />
           </div>
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-2.5 overflow-x-auto pb-1.5 scrollbar-hide">
             <NeighborQuestionCard />
             {questionsLoading ? (
               <div className="text-center py-4 flex-shrink-0">
