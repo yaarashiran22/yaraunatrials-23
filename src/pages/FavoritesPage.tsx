@@ -35,7 +35,7 @@ const FavoritesPage = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const { friends, getAllFriendsItemsByCategory, loading: friendsLoading } = useFriends();
-  const { posts: friendsPosts, loading: postsLoading, deletePost } = useFriendsFeedPosts();
+  const { posts: friendsPosts, loading: postsLoading, deletePost, refreshPosts } = useFriendsFeedPosts();
   const { galleries: pictureGalleries, loading: galleriesLoading } = useFriendsPictureGalleries();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
@@ -187,7 +187,7 @@ const FavoritesPage = () => {
         ) : (
           <div className="space-y-6">
             {/* Upload Section */}
-            <FriendsFeedUpload />
+            <FriendsFeedUpload onPostCreated={refreshPosts} />
 
             {/* שאלות שכנים Section */}
             <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm">
