@@ -236,9 +236,9 @@ const AllEventsPage = () => {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {[...Array(6)].map((_, index) => (
-              <div key={index} className="w-full aspect-square bg-muted rounded-xl animate-pulse"></div>
+              <div key={index} className="w-full aspect-[3/4] bg-muted rounded-lg animate-pulse"></div>
             ))}
           </div>
         ) : filteredEvents.length === 0 ? (
@@ -251,14 +251,14 @@ const AllEventsPage = () => {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {filteredEvents.map((event) => (
               <div 
                 key={event.id}
                 onClick={() => handleEventClick(event)}
-                className="cursor-pointer bg-card rounded-xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow"
+                className="cursor-pointer bg-card rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow"
               >
-                <div className="aspect-square w-full">
+                <div className="aspect-[3/4] w-full">
                   {event.image_url ? (
                     <img 
                       src={event.image_url} 
@@ -268,25 +268,25 @@ const AllEventsPage = () => {
                     />
                   ) : (
                     <div className="w-full h-full bg-muted flex items-center justify-center">
-                      <span className="text-2xl">🎉</span>
+                      <span className="text-lg">🎉</span>
                     </div>
                   )}
                 </div>
-                <div className="p-3">
-                  <h3 className="font-semibold text-sm text-right mb-1 truncate">
+                <div className="p-2">
+                  <h3 className="font-semibold text-xs text-right mb-1 truncate leading-tight">
                     {event.title}
                   </h3>
                   {event.location && (
-                    <p className="text-xs text-muted-foreground text-right truncate">
+                    <p className="text-[10px] text-muted-foreground text-right truncate">
                       📍 {event.location}
                     </p>
                   )}
                   {event.price && event.price > 0 ? (
-                    <p className="text-xs font-medium text-primary text-right mt-1">
+                    <p className="text-[10px] font-medium text-primary text-right mt-1">
                       {event.price} ₪
                     </p>
                   ) : (
-                    <p className="text-xs font-medium text-green-600 text-right mt-1">
+                    <p className="text-[10px] font-medium text-green-600 text-right mt-1">
                       חינם
                     </p>
                   )}
