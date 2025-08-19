@@ -1,5 +1,5 @@
 
-import { Home, User, Users, Settings, LogIn, Plus, Heart } from "lucide-react";
+import { Home, User, Users, Settings, LogIn, Plus, Heart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -57,15 +57,15 @@ const BottomNavigation = () => {
             <span className="text-xs font-medium truncate">{t('navigation.feed')}</span>
           </Button>
 
-          {/* Create button - Center button */}
+          {/* Search button - Center button */}
           <Button
             variant="default"
             size="lg"
-            onClick={openNewItem}
+            onClick={() => navigate('/marketplace')}
             className="rounded-full w-14 h-14 shadow-lg flex flex-col items-center justify-center"
             style={{ backgroundColor: '#BB31E9', color: 'hsl(0 0% 100%)' }}
           >
-            <Plus className="h-6 w-6 text-primary-foreground" />
+            <Search className="h-6 w-6 text-primary-foreground" />
           </Button>
 
           {/* Favorites - מועדפים */}

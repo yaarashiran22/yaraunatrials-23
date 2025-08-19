@@ -8,8 +8,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell } from "lucide-react";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
+import { useNewItem } from "@/contexts/NewItemContext";
 
 interface HeaderProps {
   title?: string;
@@ -31,6 +32,7 @@ const Header = ({
   const { t } = useLanguage();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { openNewItem } = useNewItem();
 
   const handleLogout = () => {
     logout();
@@ -76,19 +78,17 @@ const Header = ({
             )}
           </div>
           
-          {/* Notifications - Left side */}
+          {/* Add Item button - Right side */}
           <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
-            {onNotificationsClick && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={onNotificationsClick}
-                className="h-8 w-8 rounded-lg p-0"
-                aria-label="Open notifications"
-              >
-                <Bell className="h-4 w-4" />
-              </Button>
-            )}
+            <Button 
+              onClick={openNewItem} 
+              size="sm" 
+              className="h-8 w-8 rounded-lg p-0"
+              style={{ backgroundColor: '#BB31E9', color: 'hsl(0 0% 100%)' }}
+              aria-label="Add new item"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </div>
