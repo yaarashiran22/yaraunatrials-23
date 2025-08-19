@@ -198,9 +198,9 @@ const FeedPage = () => {
       />
 
       <main className="px-4 py-4 pb-32">
-        {/* Popular in Neighborhood Section */}
+        {/* Businesses and Coupons Section */}
         <section className="mb-6">
-          <SectionHeader title="פופולארי בשכונה" />
+          <SectionHeader title="עסקים וקופונים" />
         </section>
 
         {/* Upload Card - Only show if user is authenticated */}
