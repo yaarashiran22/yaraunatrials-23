@@ -200,6 +200,9 @@ const FeedPage = () => {
       <main className="px-4 py-4 pb-32">
         {/* שאלות שכנים Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm mb-6">
+          <div className="mb-4 px-2">
+            <SectionHeader title="שאלות שכנים" />
+          </div>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             <NeighborQuestionCard />
             {questionsLoading ? (
