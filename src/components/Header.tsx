@@ -87,7 +87,7 @@ const Header = ({
               size="sm" 
               variant="ghost"
               className="h-8 w-8 rounded-full p-0 hover:bg-muted/20"
-              style={{ border: '2px solid #BB31E9', backgroundColor: '#BB31E9' }}
+              style={{ border: '2px solid #9B59B6', backgroundColor: '#9B59B6' }}
               aria-label="Add new item"
             >
               <Plus className="h-4 w-4" style={{ color: 'white' }} />
