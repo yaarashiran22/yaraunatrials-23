@@ -250,6 +250,14 @@ const Index = () => {
           )}
         </section>
 
+        {/* קופונים Section */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
+          <SectionHeader title="קופונים" />
+          <div className="text-center py-8 text-muted-foreground">
+            <p>אין קופונים זמינים כרגע</p>
+          </div>
+        </section>
+
         {/* Events Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <SectionHeader title={t('events.title')} viewAllPath="/events" />
