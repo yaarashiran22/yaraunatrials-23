@@ -31,8 +31,14 @@ const EventsPage = () => {
     );
 
   useEffect(() => {
+    console.log('EventsPage - fetching items...');
     fetchItems();
-  }, []);
+  }, [fetchItems]);
+
+  useEffect(() => {
+    console.log('EventsPage - items updated:', items);
+    console.log('EventsPage - events filtered:', events);
+  }, [items, events]);
 
   const handleEventClick = (event: any) => {
     navigate(`/event/${event.id}`);
