@@ -1,10 +1,15 @@
-import { X, Plus, Bell } from "lucide-react";
+import { X, Plus, Bell, CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import { useState } from "react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -25,6 +30,8 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [isEveryDay, setIsEveryDay] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, signInAnonymously } = useAuth();
   const { toast } = useToast();
@@ -147,6 +154,8 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       setLocation('');
       setDescription('');
       setMobileNumber('');
+      setSelectedDate(undefined);
+      setIsEveryDay(false);
       setSelectedImage(null);
       onClose();
       
@@ -264,6 +273,52 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
             />
           </div>
 
+          {/* Date Field */}
+          <div className="space-y-2">
+            <label className="text-sm text-muted-foreground block text-right">תאריך</label>
+            
+            {/* Every Day Checkbox */}
+            <div className="flex items-center space-x-2 justify-end mb-2">
+              <label htmlFor="every-day" className="text-sm text-muted-foreground">כל יום</label>
+              <Checkbox 
+                id="every-day"
+                checked={isEveryDay} 
+                onCheckedChange={(checked) => {
+                  setIsEveryDay(checked as boolean);
+                  if (checked) {
+                    setSelectedDate(undefined);
+                  }
+                }}
+              />
+            </div>
+
+            {/* Date Picker */}
+            {!isEveryDay && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full h-12 text-right bg-background border border-border rounded-full justify-start",
+                      !selectedDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {selectedDate ? format(selectedDate, "PPP", { locale: undefined }) : "בחר תאריך"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 bg-background border border-border" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto bg-background")}
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
 
           {/* Add Image Button */}
           <div className="relative">
