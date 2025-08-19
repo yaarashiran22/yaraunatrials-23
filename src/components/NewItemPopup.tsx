@@ -220,7 +220,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
                 <SelectItem value="secondhand">יד שנייה</SelectItem>
                 <SelectItem value="business">עסק</SelectItem>
                 <SelectItem value="event">אירוע</SelectItem>
-                <SelectItem value="recommendation">המלצה</SelectItem>
+                <SelectItem value="recommendation">מוזמנים להצטרף</SelectItem>
               </SelectContent>
             </Select>
           </div>
