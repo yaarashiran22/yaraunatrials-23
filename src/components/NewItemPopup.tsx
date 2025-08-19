@@ -24,7 +24,6 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
-  const [message, setMessage] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, signInAnonymously } = useAuth();
@@ -46,11 +45,11 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
   const handleSubmit = async () => {
     console.log('Save button clicked in popup');
     
-    // Allow submission if either title or message is provided
-    if (!title.trim() && !message.trim()) {
+    // Require title for item creation
+    if (!title.trim()) {
       toast({
         title: "שגיאה",
-        description: "נא להזין כותרת או הודעה לפרופיל",
+        description: "נא להזין כותרת",
         variant: "destructive",
       });
       return;
@@ -95,61 +94,48 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
         }
       }
 
-      // Only create item if there's actual item content (not just message)
-      let createdItem = null;
-      if (title.trim() || description.trim() || price || category || selectedImage) {
-        // Create the item data
-        const itemData = {
-          title: title.trim(),
-          description: description.trim() || null,
-          price: price ? parseFloat(price) : null,
-          category: category || null,
-          location: location || null,
-          image_url: selectedImage || null,
-          mobile_number: mobileNumber.trim() || null,
-          user_id: currentUser.id,
-          status: 'active'
-        };
+      // Create the item data
+      const itemData = {
+        title: title.trim(),
+        description: description.trim() || null,
+        price: price ? parseFloat(price) : null,
+        category: category || null,
+        location: location || null,
+        image_url: selectedImage || null,
+        mobile_number: mobileNumber.trim() || null,
+        user_id: currentUser.id,
+        status: 'active'
+      };
 
-        console.log('Creating item with data:', itemData);
+      console.log('Creating item with data:', itemData);
 
-        // Insert into database
-        const { data, error } = await supabase
-          .from('items')
-          .insert([itemData])
-          .select()
-          .single();
+      // Insert into database
+      const { data, error } = await supabase
+        .from('items')
+        .insert([itemData])
+        .select()
+        .single();
 
-        console.log('Database insert result:', { data, error });
+      console.log('Database insert result:', { data, error });
 
-        if (error) {
-          console.error('Database error:', error);
-          toast({
-            title: "שגיאה",
-            description: "לא ניתן לשמור את הפריט במסד הנתונים",
-            variant: "destructive",
-          });
-          return;
-        }
-        createdItem = data;
-        console.log('Item created successfully:', data);
+      if (error) {
+        console.error('Database error:', error);
+        toast({
+          title: "שגיאה",
+          description: "לא ניתן לשמור את הפריט במסד הנתונים",
+          variant: "destructive",
+        });
+        return;
       }
-
-      // If user added a message, save it to their profile
-      if (message.trim()) {
-        console.log('Saving message to profile:', message);
-        await createMessage(message.trim());
-      }
+      console.log('Item created successfully:', data);
 
       toast({
         title: "נשמר בהצלחה!",
-        description: createdItem ? "הפריט שלך נוסף למרקט פליס" : "ההודעה נשמרה בפרופיל שלך",
+        description: "הפריט שלך נוסף למרקט פליס",
       });
 
-      // Trigger refresh on the homepage if item was created
-      if (createdItem) {
-        refreshItems();
-      }
+      // Trigger refresh on the homepage
+      refreshItems();
       if (onItemCreated) {
         onItemCreated();
       }
@@ -160,7 +146,6 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       setCategory('');
       setLocation('');
       setDescription('');
-      setMessage('');
       setMobileNumber('');
       setSelectedImage(null);
       onClose();
@@ -281,16 +266,6 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
             />
           </div>
 
-          {/* Message Field */}
-          <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">הודעה לפרופיל</label>
-            <Textarea 
-              placeholder="הוסף הודעה שתוצג בפרופיל שלך (אופציונלי)"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full min-h-[60px] text-right bg-background border border-border rounded-3xl resize-none p-4"
-            />
-          </div>
 
           {/* Add Image Button */}
           <div className="relative">
@@ -326,7 +301,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
               className="w-full h-12 rounded-full text-lg font-medium text-white"
               style={{ backgroundColor: '#BB31E9' }}
               onClick={handleSubmit}
-              disabled={isSubmitting || (!title.trim() && !message.trim())}
+              disabled={isSubmitting || !title.trim()}
             >
               {isSubmitting ? 'שומר...' : 'שמור'}
             </Button>
