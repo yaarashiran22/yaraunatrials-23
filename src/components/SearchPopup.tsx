@@ -106,7 +106,7 @@ const SearchPopup = () => {
         
         <div className="relative">
           <Input
-            placeholder={t('search.placeholder') || 'Search for users, items, events...'}
+            placeholder="Search for users, items, events..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pr-10"
