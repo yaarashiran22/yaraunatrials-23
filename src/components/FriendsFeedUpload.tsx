@@ -16,6 +16,7 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const { createPost } = useFriendsFeedPosts();
   const { toast } = useToast();
 
@@ -81,6 +82,7 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
         setContent('');
         setSelectedImage(null);
         setImagePreview(null);
+        setIsExpanded(false);
         onPostCreated?.();
         toast({
           title: "הפוסט נפרסם בהצלחה!"
@@ -104,6 +106,31 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
     }
   };
 
+  if (!isExpanded) {
+    return (
+      <div 
+        className="bg-white rounded-lg p-4 mb-6 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm border"
+        onClick={() => setIsExpanded(true)}
+      >
+        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+          <Camera className="h-5 w-5 text-primary" />
+        </div>
+        <div className="flex-1">
+          <input 
+            type="text"
+            placeholder="מה החדש? שתף עם החברים שלך..."
+            className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
+            readOnly
+          />
+        </div>
+        <div className="flex gap-1">
+          <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+          <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-lg p-4 mb-6 shadow-sm border">
       <div className="space-y-4">
@@ -113,6 +140,7 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
           onChange={(e) => setContent(e.target.value)}
           className="resize-none border-none shadow-none p-0 bg-transparent text-foreground placeholder:text-muted-foreground"
           rows={3}
+          autoFocus
         />
         
           
@@ -155,6 +183,14 @@ const FriendsFeedUpload = ({ onPostCreated }: FriendsFeedUploadProps) => {
                   </span>
                 </Button>
               </label>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsExpanded(false)}
+                className="text-muted-foreground"
+              >
+                ביטול
+              </Button>
             </div>
             
             <Button
