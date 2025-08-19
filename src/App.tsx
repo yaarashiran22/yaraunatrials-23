@@ -27,6 +27,7 @@ import RecommendedPage from "./pages/RecommendedPage";
 import MarketplacePage from "./pages/MarketplacePage";
 import ArtistsCreatorsPage from "./pages/ArtistsCreatorsPage";
 import NeighborhoodProfilePage from "./pages/NeighborhoodProfilePage";
+import NeighborsPage from "./pages/NeighborsPage";
 
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -88,6 +89,7 @@ const AppContent = () => {
               <Route path="/recommended" element={<RecommendedPage />} />
               <Route path="/marketplace" element={<MarketplacePage />} />
               <Route path="/artists-creators" element={<ArtistsCreatorsPage />} />
+              <Route path="/neighbors" element={<NeighborsPage />} />
               <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/favorites" element={<FavoritesPage />} />
@@ -139,6 +141,7 @@ const AppContent = () => {
             <Route path="/recommended" element={<RecommendedPage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="/artists-creators" element={<ArtistsCreatorsPage />} />
+            <Route path="/neighbors" element={<NeighborsPage />} />
             <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
             
             <Route path="/settings" element={<SettingsPage />} />
