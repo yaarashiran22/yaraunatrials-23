@@ -13,6 +13,7 @@ import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import PhotoBubble from "@/components/PhotoBubble";
+import { usePhotoBubbles } from "@/hooks/usePhotoBubbles";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -40,7 +41,7 @@ const Index = () => {
   const { setRefreshCallback } = useNewItem();
   const { user } = useAuth();
   const { profile: currentUserProfile } = useProfile(user?.id);
-  
+  const { photos: photoBubbles, refetch: refetchPhotos } = usePhotoBubbles();
   // Use optimized homepage hook with React Query caching
   const { 
     profiles, 
@@ -258,23 +259,22 @@ const Index = () => {
           <div className="flex gap-4 overflow-x-auto pb-2 px-2">
             <PhotoBubble 
               isAddButton={true} 
-              onPhotoAdded={() => refetch()}
+              onPhotoAdded={() => {
+                refetch();
+                refetchPhotos();
+              }}
             />
-            <PhotoBubble 
-              image={profile1}
-              status="בקפה"
-              userName="יערה"
-            />
-            <PhotoBubble 
-              image={profile2}
-              status="בבית"
-              userName="דני"
-            />
-            <PhotoBubble 
-              image={profile3}
-              status="בעבודה"
-              userName="מיכל"
-            />
+            {photoBubbles.map((photo) => (
+              <PhotoBubble 
+                key={photo.id}
+                photo={photo}
+              />
+            ))}
+            {photoBubbles.length === 0 && (
+              <div className="text-center py-4 text-muted-foreground text-sm">
+                אין תמונות עדיין - הוסף את הראשונה!
+              </div>
+            )}
           </div>
         </section>
 

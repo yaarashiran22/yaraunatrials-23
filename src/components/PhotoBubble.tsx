@@ -3,21 +3,16 @@ import { Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import type { PhotoBubbleData } from "@/hooks/usePhotoBubbles";
 
 interface PhotoBubbleProps {
-  id?: string;
-  image?: string;
-  status?: string;
-  userName?: string;
+  photo?: PhotoBubbleData;
   isAddButton?: boolean;
   onPhotoAdded?: () => void;
 }
 
 const PhotoBubble = ({ 
-  id, 
-  image, 
-  status, 
-  userName, 
+  photo,
   isAddButton = false, 
   onPhotoAdded 
 }: PhotoBubbleProps) => {
@@ -46,14 +41,14 @@ const PhotoBubble = ({
         .from('photos')
         .getPublicUrl(filePath);
 
-      // Save to database (you can create a new table for photo bubbles)
+      // Save to database
       const { error: dbError } = await supabase
         .from('user_picture_galleries')
         .insert({
           user_id: user.id,
           image_url: publicUrl,
-          title: 'Photo Bubble',
-          description: 'תמונה חדשה'
+          title: 'תמונה חדשה',
+          description: 'הועלתה עכשיו'
         });
 
       if (dbError) throw dbError;
@@ -96,18 +91,18 @@ const PhotoBubble = ({
     <div className="flex flex-col items-center space-y-2 relative">
       <div className="relative">
         <img 
-          src={image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
-          alt={userName || "תמונה"}
+          src={photo?.image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
+          alt={photo?.profiles?.name || "תמונה"}
           className="w-16 h-16 rounded-full object-cover ring-2 ring-primary/20"
         />
-        {status && (
-          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs px-2 py-1 rounded-full min-w-max">
-            {status}
+        {photo?.description && (
+          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs px-2 py-1 rounded-full min-w-max max-w-20 truncate">
+            {photo.description}
           </div>
         )}
       </div>
       <span className="text-xs text-foreground truncate max-w-[60px]">
-        {userName || 'משתמש'}
+        {photo?.profiles?.name || 'משתמש'}
       </span>
     </div>
   );
