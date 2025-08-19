@@ -50,8 +50,10 @@ const Header = ({
           {/* Logo and User Greeting - Right side */}
           <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
             <div 
-              className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity" 
-              style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}
+              className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity text-white" 
+              style={{ 
+                textShadow: '1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black, -1px -1px 0 black, 0 1px 0 black, 0 -1px 0 black, 1px 0 0 black, -1px 0 0 black' 
+              }}
               onClick={handleLogoClick}
               role="button"
               aria-label="Navigate to homepage"
