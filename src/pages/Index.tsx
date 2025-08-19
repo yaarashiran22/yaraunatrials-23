@@ -206,7 +206,7 @@ const Index = () => {
 
         {/* Events Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title={t('events.title')} viewAllPath="/events" />
+          <SectionHeader title={t('events.title')} />
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
           ) : databaseEvents.length === 0 ? (
