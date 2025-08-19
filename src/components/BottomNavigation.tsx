@@ -65,7 +65,7 @@ const BottomNavigation = () => {
             size="lg"
             onClick={openSearch}
             className="rounded-full w-16 h-16 shadow-xl flex flex-col items-center justify-center transform hover:scale-105 transition-all duration-200"
-            style={{ backgroundColor: 'hsl(280 60% 55%)', color: 'white' }}
+            style={{ backgroundColor: 'hsl(45 40% 88%)', color: 'hsl(25 30% 25%)' }}
           >
             <Search className="h-7 w-7" />
           </Button>
