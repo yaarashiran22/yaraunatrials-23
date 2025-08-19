@@ -20,14 +20,22 @@ export const useEvents = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
+      console.log('Fetching events...');
+      
       const { data, error } = await supabase
         .from('items')
         .select('*')
         .eq('category', 'event')
         .eq('status', 'active')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(20); // Limit to 20 events for faster loading
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Events fetched:', data?.length || 0);
       setEvents((data || []) as Event[]);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -36,6 +44,7 @@ export const useEvents = () => {
         description: "לא ניתן לטעון את האירועים",
         variant: "destructive",
       });
+      setEvents([]); // Set empty array on error
     } finally {
       setLoading(false);
     }

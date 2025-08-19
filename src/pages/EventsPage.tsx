@@ -49,7 +49,11 @@ const EventsPage = () => {
       {/* Content Grid */}
       <main className="px-4 py-4">
         {loading ? (
-          <LoadingSkeleton type="cards" />
+          <div className="grid grid-cols-3 gap-4">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="w-full aspect-square bg-muted rounded-xl animate-pulse"></div>
+            ))}
+          </div>
         ) : (
           <div className="grid grid-cols-3 gap-4 auto-rows-max">
             {filteredEvents.length === 0 ? (
@@ -61,7 +65,7 @@ const EventsPage = () => {
                 <div 
                   key={event.id}
                   onClick={() => handleEventClick(event)}
-                  className="cursor-pointer w-full"
+                  className="cursor-pointer w-full hover:scale-105 transition-transform duration-200"
                 >
                   <div className="bg-card rounded-xl overflow-hidden shadow-sm border">
                     {event.image_url ? (
@@ -70,6 +74,7 @@ const EventsPage = () => {
                           src={event.image_url} 
                           alt={event.title}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       </div>
                     ) : (
