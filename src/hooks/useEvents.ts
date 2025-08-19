@@ -14,41 +14,26 @@ export interface Event {
 }
 
 export const useEvents = () => {
-  console.log("useEvents hook called");
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchEvents = async () => {
     try {
-      console.log("Starting fetchEvents...");
       setLoading(true);
       
-      // First try to get ALL items to see if we can fetch anything
-      const { data: allData, error: allError } = await supabase
-        .from('items')
-        .select('*')
-        .limit(5);
-      
-      console.log("All items query:", { allData, allError });
-      
-      // Now try the specific events query
+      // Simplified single query for better performance
       const { data, error } = await supabase
         .from('items')
         .select('*')
         .eq('category', 'event')
-        .eq('status', 'active')
         .order('created_at', { ascending: false })
-        .limit(20);
+        .limit(50); // Increased limit for better UX
 
-      console.log("Events query response:", { data, error });
+      if (error) throw error;
       
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-      
-      console.log('Events fetched successfully:', data?.length || 0, 'events');
-      setEvents((data || []) as Event[]);
+      // Filter active events on client side for faster initial load
+      const activeEvents = (data || []).filter(item => item.status === 'active');
+      setEvents(activeEvents as Event[]);
     } catch (error) {
       console.error('Error fetching events:', error);
       toast({
@@ -63,7 +48,6 @@ export const useEvents = () => {
   };
 
   useEffect(() => {
-    console.log("useEvents useEffect triggered");
     fetchEvents();
   }, []);
 

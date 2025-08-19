@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -14,11 +14,11 @@ import { useEvents } from "@/hooks/useEvents";
 import communityEvent from "@/assets/community-event.jpg";
 import profile1 from "@/assets/profile-1.jpg";
 
-// Predefined neighborhoods in Tel Aviv
+// Predefined neighborhoods in Tel Aviv - memoized for performance
 const neighborhoods = [
   "כל השכונות",
   "לב העיר",
-  "נחלת בנימין",
+  "נחלת בנימין", 
   "רוטשילד",
   "פלורנטין",
   "שפירא",
@@ -34,71 +34,79 @@ const neighborhoods = [
   "הרצליה",
   "בת ים",
   "חולון"
-];
+] as const;
+
+// Price filter options - memoized for performance
+const priceOptions = [
+  "כל המחירים",
+  "חינם", 
+  "עד 50 ₪",
+  "50-100 ₪",
+  "100-200 ₪",
+  "מעל 200 ₪"
+] as const;
 
 const AllEventsPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { events, loading } = useEvents();
+
+  // State management
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-
-  // Filter states
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("כל השכונות");
   const [priceFilter, setPriceFilter] = useState("כל המחירים");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Price filter options
-  const priceOptions = [
-    "כל המחירים",
-    "חינם",
-    "עד 50 ₪",
-    "50-100 ₪", 
-    "100-200 ₪",
-    "מעל 200 ₪"
-  ];
-
-  // Filter events based on search, neighborhood, and price
+  // Optimized filtering with useMemo for better performance
   const filteredEvents = useMemo(() => {
+    if (!events.length) return [];
+    
     return events.filter(event => {
-      // Search filter
-      const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           event.description?.toLowerCase().includes(searchQuery.toLowerCase());
+      // Search filter - case insensitive
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase().trim();
+        const matchesSearch = event.title.toLowerCase().includes(query) ||
+                             event.description?.toLowerCase().includes(query) ||
+                             event.location?.toLowerCase().includes(query);
+        if (!matchesSearch) return false;
+      }
 
       // Neighborhood filter
-      const matchesNeighborhood = selectedNeighborhood === "כל השכונות" || 
-                                  event.location?.includes(selectedNeighborhood);
+      if (selectedNeighborhood !== "כל השכונות") {
+        if (!event.location?.includes(selectedNeighborhood)) return false;
+      }
 
       // Price filter
-      let matchesPrice = true;
       if (priceFilter !== "כל המחירים") {
         const price = event.price || 0;
         switch (priceFilter) {
           case "חינם":
-            matchesPrice = price === 0;
+            if (price !== 0) return false;
             break;
           case "עד 50 ₪":
-            matchesPrice = price > 0 && price <= 50;
+            if (price === 0 || price > 50) return false;
             break;
           case "50-100 ₪":
-            matchesPrice = price > 50 && price <= 100;
+            if (price <= 50 || price > 100) return false;
             break;
           case "100-200 ₪":
-            matchesPrice = price > 100 && price <= 200;
+            if (price <= 100 || price > 200) return false;
             break;
           case "מעל 200 ₪":
-            matchesPrice = price > 200;
+            if (price <= 200) return false;
             break;
         }
       }
 
-      return matchesSearch && matchesNeighborhood && matchesPrice;
+      return true;
     });
   }, [events, searchQuery, selectedNeighborhood, priceFilter]);
 
-  const handleEventClick = (event: any) => {
+  // Optimized event handlers with useCallback
+  const handleEventClick = useCallback((event: any) => {
     setSelectedEvent({
       id: event.id,
       title: event.title,
@@ -113,13 +121,13 @@ const AllEventsPage = () => {
       }
     });
     setIsEventPopupOpen(true);
-  };
+  }, []);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setSearchQuery("");
     setSelectedNeighborhood("כל השכונות");
     setPriceFilter("כל המחירים");
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background pb-20" dir="rtl">
@@ -224,14 +232,12 @@ const AllEventsPage = () => {
       {/* Results Section */}
       <main className="px-4 py-4">
         <div className="mb-4 text-sm text-muted-foreground">
-          נמצאו {filteredEvents.length} אירועים מתוך {events.length} סה"כ
-          <br />
-          DEBUG: Loading: {loading.toString()}, Total events: {events.length}
+          נמצאו {filteredEvents.length} אירועים
         </div>
 
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[...Array(8)].map((_, index) => (
+            {[...Array(6)].map((_, index) => (
               <div key={index} className="w-full aspect-square bg-muted rounded-xl animate-pulse"></div>
             ))}
           </div>
