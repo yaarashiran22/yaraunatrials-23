@@ -66,7 +66,7 @@ const DesktopHeader = ({
             <Button
               onClick={openNewItem}
               className="rounded-full w-9 h-9 p-0"
-              style={{ backgroundColor: '#8B4CB8', color: 'white', border: '2px solid #8B4CB8' }}
+              style={{ backgroundColor: '#7B3F98', color: 'white', border: '2px solid #7B3F98' }}
             >
               <Plus className="h-4 w-4" />
             </Button>

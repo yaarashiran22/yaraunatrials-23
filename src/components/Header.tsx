@@ -52,7 +52,7 @@ const Header = ({
             <div 
               className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity" 
               style={{ 
-                color: 'hsl(280 75% 60%)'
+                color: 'hsl(280 85% 55%)'
               }}
               onClick={handleLogoClick}
               role="button"
@@ -87,7 +87,7 @@ const Header = ({
               size="sm" 
               variant="ghost"
               className="h-8 w-8 rounded-full p-0 hover:bg-muted/20"
-              style={{ border: '2px solid #8B4CB8', backgroundColor: '#8B4CB8' }}
+              style={{ border: '2px solid #7B3F98', backgroundColor: '#7B3F98' }}
               aria-label="Add new item"
             >
               <Plus className="h-4 w-4" style={{ color: 'white' }} />
