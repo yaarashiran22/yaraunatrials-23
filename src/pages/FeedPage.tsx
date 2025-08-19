@@ -243,20 +243,20 @@ const FeedPage = () => {
         </div>
 
         {/* Featured Photo of the Day */}
-        <div className="mb-6">
+        <div className="mb-6 max-w-sm mx-auto">
           <div className="bg-card rounded-lg overflow-hidden shadow-sm border">
-            <div className="p-4 pb-2">
-              <h2 className="text-lg font-semibold text-foreground mb-2">תמונת היום המומלצת</h2>
+            <div className="p-3 pb-2">
+              <h2 className="text-base font-semibold text-foreground mb-2">תמונת היום המומלצת</h2>
             </div>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="aspect-square overflow-hidden">
               <img 
                 src="/lovable-uploads/e16b6549-7de7-4d45-a50f-fcf08e7f5069.png"
                 alt="תמונת היום המומלצת"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="p-4 pt-3">
-              <p className="text-sm text-muted-foreground">
+            <div className="p-3 pt-2">
+              <p className="text-xs text-muted-foreground">
                 תמונה יפהפייה מהשכונה שלנו - חנות מקסימה ברחוב הראשי
               </p>
             </div>
