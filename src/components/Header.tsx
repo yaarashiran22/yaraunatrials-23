@@ -52,7 +52,7 @@ const Header = ({
             <div 
               className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity text-white" 
               style={{ 
-                textShadow: '1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black, -1px -1px 0 black, 0 1px 0 black, 0 -1px 0 black, 1px 0 0 black, -1px 0 0 black' 
+                textShadow: '0.5px 0.5px 0 black, -0.5px 0.5px 0 black, 0.5px -0.5px 0 black, -0.5px -0.5px 0 black, 0 0.5px 0 black, 0 -0.5px 0 black, 0.5px 0 0 black, -0.5px 0 0 black' 
               }}
               onClick={handleLogoClick}
               role="button"
