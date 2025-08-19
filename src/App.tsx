@@ -6,10 +6,8 @@ import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-ro
 import { Home, User, Users, Settings, Heart } from "lucide-react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import { SearchProvider, useSearch } from "@/contexts/SearchContext";
 import { NewItemProvider } from "@/contexts/NewItemContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
-import { EnhancedAuthProvider } from "@/contexts/EnhancedAuthContext";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
 import NewItemPopup from "@/components/NewItemPopup";
@@ -28,8 +26,6 @@ import MarketplacePage from "./pages/MarketplacePage";
 import ArtistsCreatorsPage from "./pages/ArtistsCreatorsPage";
 import NeighborhoodProfilePage from "./pages/NeighborhoodProfilePage";
 
-import SearchPopup from "@/components/SearchPopup";
-import BottomNavigation from "@/components/BottomNavigation";
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
 import NewItemPage from "./pages/NewItemPage";
@@ -64,8 +60,7 @@ const DesktopNavItem = ({ href, icon: Icon, label }: { href: string; icon: any; 
 };
 
 const AppContent = () => {
-  const { isOpen, closeNewItem } = useNewItem();
-  const { isSearchOpen, closeSearch } = useSearch();
+  const { isOpen, closeNewItem, refreshItems } = useNewItem();
   
   return (
     <BrowserRouter>
@@ -151,15 +146,10 @@ const AppContent = () => {
             <Route path="/create-event" element={<CreateEventPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          
-          {/* Bottom Navigation for mobile */}
-          <BottomNavigation />
         </div>
-        
-        {/* Global Modals */}
-        <NewItemPopup isOpen={isOpen} onClose={closeNewItem} />
-        <SearchPopup isOpen={isSearchOpen} onClose={closeSearch} />
       </div>
+      
+      <NewItemPopup isOpen={isOpen} onClose={closeNewItem} onItemCreated={refreshItems} />
     </BrowserRouter>
   );
 };
@@ -170,15 +160,13 @@ const App = () => (
       <Toaster />
       <Sonner />
       <LanguageProvider>
-        <SearchProvider>
-          <EnhancedAuthProvider>
-            <NewItemProvider>
-              <FavoritesProvider>
-                <AppContent />
-              </FavoritesProvider>
-            </NewItemProvider>
-          </EnhancedAuthProvider>
-        </SearchProvider>
+        <AuthProvider>
+          <NewItemProvider>
+            <FavoritesProvider>
+              <AppContent />
+            </FavoritesProvider>
+          </NewItemProvider>
+        </AuthProvider>
       </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>

@@ -5,7 +5,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNewItem } from "@/contexts/NewItemContext";
-import { useSearch } from "@/contexts/SearchContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +18,6 @@ const BottomNavigation = () => {
   const { t, language, setLanguage } = useLanguage();
   const { user } = useAuth();
   const { openNewItem } = useNewItem();
-  const { openSearch } = useSearch();
 
   const languages = [
     { code: 'he', name: 'עברית', flag: '🇮🇱' },
@@ -63,7 +61,7 @@ const BottomNavigation = () => {
           <Button
             variant="default"
             size="lg"
-            onClick={openSearch}
+            onClick={() => navigate('/marketplace')}
             className="rounded-full w-14 h-14 shadow-lg flex flex-col items-center justify-center"
             style={{ backgroundColor: '#BB31E9', color: 'hsl(0 0% 100%)' }}
           >
