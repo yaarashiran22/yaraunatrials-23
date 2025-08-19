@@ -64,10 +64,10 @@ const BottomNavigation = () => {
             variant="default"
             size="lg"
             onClick={openSearch}
-            className="rounded-full w-14 h-14 shadow-lg flex flex-col items-center justify-center"
-            style={{ backgroundColor: 'hsl(25 35% 85%)', color: 'hsl(30 25% 25%)' }}
+            className="rounded-full w-16 h-16 shadow-xl flex flex-col items-center justify-center transform hover:scale-105 transition-all duration-200"
+            style={{ backgroundColor: 'hsl(280 60% 65%)', color: 'white' }}
           >
-            <Search className="h-6 w-6" />
+            <Search className="h-7 w-7" />
           </Button>
 
           {/* Favorites - מועדפים */}
