@@ -14,13 +14,14 @@ export interface Event {
 }
 
 export const useEvents = () => {
+  console.log("useEvents hook called");
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchEvents = async () => {
     try {
+      console.log("Starting fetchEvents...");
       setLoading(true);
-      console.log('Fetching events...');
       
       const { data, error } = await supabase
         .from('items')
@@ -28,7 +29,7 @@ export const useEvents = () => {
         .eq('category', 'event')
         .eq('status', 'active')
         .order('created_at', { ascending: false })
-        .limit(20); // Limit to 20 events for faster loading
+        .limit(20);
 
       if (error) {
         console.error('Supabase error:', error);
