@@ -11,11 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Bell, ArrowLeft, Heart, Users, Camera } from "lucide-react";
+import { Bell, ArrowLeft, Heart, Users, Camera, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 import { useFriends } from "@/hooks/useFriends";
 import { useFriendsFeedPosts } from "@/hooks/useFriendsFeedPosts";
@@ -31,9 +32,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 const FavoritesPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { user } = useAuth();
   const { friends, getAllFriendsItemsByCategory, loading: friendsLoading } = useFriends();
-  const { posts: friendsPosts, loading: postsLoading } = useFriendsFeedPosts();
+  const { posts: friendsPosts, loading: postsLoading, deletePost } = useFriendsFeedPosts();
   const { galleries: pictureGalleries, loading: galleriesLoading } = useFriendsPictureGalleries();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
@@ -243,11 +245,36 @@ const FavoritesPage = () => {
                           <AvatarFallback>{post.profiles?.name?.[0] || 'U'}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold">{post.profiles?.name || 'משתמש'}</span>
-                            <span className="text-sm text-muted-foreground">
-                              {formatTimeAgo(post.created_at)}
-                            </span>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold">{post.profiles?.name || 'משתמש'}</span>
+                              <span className="text-sm text-muted-foreground">
+                                {formatTimeAgo(post.created_at)}
+                              </span>
+                            </div>
+                            {user && post.user_id === user.id && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={async () => {
+                                  const success = await deletePost(post.id);
+                                  if (success) {
+                                    toast({
+                                      title: "הפוסט נמחק בהצלחה"
+                                    });
+                                  } else {
+                                    toast({
+                                      title: "שגיאה",
+                                      description: "לא ניתן למחוק את הפוסט",
+                                      variant: "destructive"
+                                    });
+                                  }
+                                }}
+                                className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </div>
