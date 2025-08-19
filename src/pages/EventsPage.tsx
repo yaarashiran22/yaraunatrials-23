@@ -9,7 +9,7 @@ import { Search, Filter } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useItems } from "@/hooks/useItems";
+import { useEvents } from "@/hooks/useEvents";
 
 const EventsPage = () => {
   const { t } = useLanguage();
@@ -19,26 +19,18 @@ const EventsPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
-  const { items, loading, fetchItems } = useItems();
+  const { events, loading, fetchEvents } = useEvents();
 
-  // Filter events from database
-  const events = items
-    .filter(item => item.category === 'event')
-    .filter(item => 
-      searchQuery === "" || 
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  // Filter events by search query
+  const filteredEvents = events.filter(event => 
+    searchQuery === "" || 
+    event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    event.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
-    console.log('EventsPage - fetching items...');
-    fetchItems();
-  }, [fetchItems]);
-
-  useEffect(() => {
-    console.log('EventsPage - items updated:', items);
-    console.log('EventsPage - events filtered:', events);
-  }, [items, events]);
+    fetchEvents();
+  }, [fetchEvents]);
 
   const handleEventClick = (event: any) => {
     navigate(`/event/${event.id}`);
@@ -63,9 +55,9 @@ const EventsPage = () => {
               <div key={index} className="w-full aspect-square bg-muted rounded-xl animate-pulse"></div>
             ))}
           </div>
-        ) : events.length > 0 ? (
+        ) : filteredEvents.length > 0 ? (
           <div className="grid grid-cols-3 gap-4 auto-rows-max">
-            {events.map((event) => (
+            {filteredEvents.map((event) => (
               <UniformCard
                 key={event.id}
                 id={event.id}
