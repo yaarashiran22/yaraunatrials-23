@@ -83,7 +83,7 @@ const Header = ({
             <Button 
               onClick={openNewItem} 
               size="sm" 
-              className="h-8 w-8 rounded-lg p-0"
+              className="h-9 w-9 rounded-full p-0"
               style={{ backgroundColor: '#BB31E9', color: 'hsl(0 0% 100%)' }}
               aria-label="Add new item"
             >
