@@ -1,4 +1,4 @@
-import { X, MessageCircle, Share, Heart, MapPin, Eye } from "lucide-react";
+import { X, MessageCircle, Share, Bookmark, MapPin, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -158,7 +158,7 @@ const EventPopup = ({
                 size="sm"
                 className="p-2 rounded-full bg-card/80 backdrop-blur-sm text-red-500"
               >
-                <Heart className="h-4 w-4" />
+                <Bookmark className="h-4 w-4" />
               </Button>
             </div>
           </div>
