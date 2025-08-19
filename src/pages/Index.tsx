@@ -12,8 +12,6 @@ import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
-import PhotoBubble from "@/components/PhotoBubble";
-import { usePhotoBubbles } from "@/hooks/usePhotoBubbles";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -41,7 +39,7 @@ const Index = () => {
   const { setRefreshCallback } = useNewItem();
   const { user } = useAuth();
   const { profile: currentUserProfile } = useProfile(user?.id);
-  const { photos: photoBubbles, refetch: refetchPhotos } = usePhotoBubbles();
+  
   // Use optimized homepage hook with React Query caching
   const { 
     profiles, 
@@ -253,28 +251,11 @@ const Index = () => {
           )}
         </section>
 
-        {/* תמונות Section */}
+        {/* קופונים Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="תמונות" />
-          <div className="flex gap-4 overflow-x-auto pb-2 px-2">
-            <PhotoBubble 
-              isAddButton={true} 
-              onPhotoAdded={() => {
-                refetch();
-                refetchPhotos();
-              }}
-            />
-            {photoBubbles.map((photo) => (
-              <PhotoBubble 
-                key={photo.id}
-                photo={photo}
-              />
-            ))}
-            {photoBubbles.length === 0 && (
-              <div className="text-center py-4 text-muted-foreground text-sm">
-                אין תמונות עדיין - הוסף את הראשונה!
-              </div>
-            )}
+          <SectionHeader title="קופונים" />
+          <div className="text-center py-8 text-muted-foreground">
+            <p>אין קופונים זמינים כרגע</p>
           </div>
         </section>
 
