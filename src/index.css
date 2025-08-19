@@ -19,11 +19,11 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 27%;
 
-    --primary: 160 70% 35%;
+    --primary: 30 60% 35%;
     --primary-foreground: 0 0% 100%;
     
-    --primary-soft: 160 40% 95%;
-    --primary-glow: 160 70% 45%;
+    --primary-soft: 30 40% 95%;
+    --primary-glow: 30 60% 45%;
 
     --pink: 330 100% 70%;
     --pink-foreground: 0 0% 100%;
@@ -34,19 +34,19 @@ All colors MUST be HSL.
     --muted: 220 14% 96%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 160 40% 95%;
-    --accent-foreground: 160 70% 35%;
+    --accent: 30 40% 95%;
+    --accent-foreground: 30 60% 35%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 160 70% 35%;
+    --ring: 30 60% 35%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(160 70% 35%), hsl(160 70% 45%));
-    --gradient-soft: linear-gradient(180deg, hsl(160 40% 98%), hsl(220 14% 96%));
-    --shadow-soft: 0 4px 20px -4px hsl(160 70% 35% / 0.1);
+    --gradient-primary: linear-gradient(135deg, hsl(30 60% 35%), hsl(30 60% 45%));
+    --gradient-soft: linear-gradient(180deg, hsl(30 40% 98%), hsl(220 14% 96%));
+    --shadow-soft: 0 4px 20px -4px hsl(30 60% 35% / 0.1);
     --shadow-card: 0 2px 8px -2px hsl(220 13% 91% / 0.3);
 
     --radius: 0.75rem;
