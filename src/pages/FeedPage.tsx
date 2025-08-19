@@ -245,8 +245,7 @@ const FeedPage = () => {
         </section>
 
         {/* שאלות שכנים Section */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm mb-6">
-          <SectionHeader title="שאלות שכנים" />
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm mb-6">
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             <NeighborQuestionCard />
             {questionsLoading ? (
