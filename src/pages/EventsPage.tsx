@@ -3,16 +3,15 @@ import BottomNavigation from "@/components/BottomNavigation";
 import EventFilterPopup from "@/components/EventFilterPopup";
 import EventPopup from "@/components/EventPopup";
 import NotificationsPopup from "@/components/NotificationsPopup";
+import UniformCard from "@/components/UniformCard";
 import { Button } from "@/components/ui/button";
 import { Search, Filter } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-import communityEvent from "@/assets/community-event.jpg";
+import { useItems } from "@/hooks/useItems";
 
 const EventsPage = () => {
-  console.log("EventsPage loading - no coffeeShop references");  // Debug log
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -20,37 +19,23 @@ const EventsPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
+  const { items, loading, fetchItems } = useItems();
 
-  const events = [
-    {
-      id: 1,
-      image: communityEvent,
-      title: "פיצה מיוחדת",
-      subtitle: "ערב פיצה בדוחי",
-      details: {
-        title: "פיצה מיוחדת",
-        image: communityEvent,
-        price: "50 ₪",
-        description: "ערב פיצה מיוחד עם רכיבים איכותיים",
-        instagram: "pizza_event@"
-      }
-    },
-    {
-      id: 2,
-      title: "MSBR",
-      subtitle: "אירוע מיוחד",
-      details: {
-        title: "MSBR",
-        price: "חינם",
-        description: "אירוע מיוחד במקום",
-        instagram: "msbr@"
-      }
-    }
-  ];
+  // Filter events from database
+  const events = items
+    .filter(item => item.category === 'event')
+    .filter(item => 
+      searchQuery === "" || 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   const handleEventClick = (event: any) => {
-    setSelectedEvent(event.details);
-    setIsEventPopupOpen(true);
+    navigate(`/event/${event.id}`);
   };
 
   return (
@@ -66,45 +51,34 @@ const EventsPage = () => {
       
       {/* Content Grid */}
       <main className="px-4 py-4">
-        <div className="grid grid-cols-3 gap-4 auto-rows-max">
-          {/* Featured Event Card */}
-          <div 
-            onClick={() => handleEventClick(events[0])}
-            className="cursor-pointer w-full"
-          >
-            <div className="bg-card rounded-xl overflow-hidden shadow-sm border">
-              <div className="aspect-square w-full">
-                <img 
-                  src={events[0].image} 
-                  alt={events[0].title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-2">
-                <h3 className="font-semibold text-xs text-right truncate">{events[0].title}</h3>
-                <p className="text-xs text-muted-foreground text-right mt-1 truncate">{events[0].subtitle}</p>
-              </div>
-            </div>
+        {loading ? (
+          <div className="grid grid-cols-3 gap-4 auto-rows-max">
+            {[...Array(9)].map((_, index) => (
+              <div key={index} className="w-full aspect-square bg-muted rounded-xl animate-pulse"></div>
+            ))}
           </div>
-          
-          {/* MSBR Card */}
-          <div 
-            onClick={() => handleEventClick(events[1])}
-            className="cursor-pointer w-full"
-          >
-            <div className="bg-card rounded-xl overflow-hidden shadow-sm border aspect-square flex items-center justify-center" style={{ backgroundColor: '#374151' }}>
-              <div className="text-center">
-                <div className="text-sm font-bold" style={{ color: '#10B981' }}>MS</div>
-                <div className="text-sm font-bold" style={{ color: '#F59E0B' }}>BR</div>
-              </div>
-            </div>
+        ) : events.length > 0 ? (
+          <div className="grid grid-cols-3 gap-4 auto-rows-max">
+            {events.map((event) => (
+              <UniformCard
+                key={event.id}
+                id={event.id}
+                image={event.image_url || ""}
+                title={event.title}
+                subtitle={event.description || ""}
+                price={event.price ? `${event.price} ₪` : ""}
+                onClick={() => handleEventClick(event)}
+                type="event"
+                altText={`${event.title} - אירוע`}
+                showFavoriteButton={false}
+              />
+            ))}
           </div>
-          
-          {/* Placeholder Cards */}
-          {[...Array(9)].map((_, index) => (
-            <div key={index} className="w-full aspect-square bg-muted rounded-xl"></div>
-          ))}
-        </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">לא נמצאו אירועים</p>
+          </div>
+        )}
       </main>
 
       <EventFilterPopup 
