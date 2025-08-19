@@ -32,48 +32,35 @@ export interface OptimizedProfile {
 const fetchHomepageData = async () => {
   try {
     // Batch all queries in a single Promise.all for maximum performance
-    const [marketplaceResult, eventsResult, recommendationsResult, artResult, apartmentsResult, profilesResult, profilesCountResult] = await Promise.all([
+    const [marketplaceResult, eventsResult, recommendationsResult, profilesResult, profilesCountResult] = await Promise.all([
       supabase
         .from('items')
         .select('id, title, price, image_url, location')
         .eq('status', 'active')
         .eq('category', 'secondhand')
         .order('created_at', { ascending: false })
-        .limit(6),
+        .limit(4), // Reduced for faster loading
       supabase
         .from('items')
         .select('id, title, image_url, location, user_id')
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
-        .limit(4),
+        .limit(3), // Reduced for faster loading
       supabase
         .from('items')
         .select('id, title, image_url, location')
         .eq('status', 'active')
         .eq('category', 'business')
         .order('created_at', { ascending: false })
-        .limit(3),
-      supabase
-        .from('items')
-        .select('id, title, image_url, location')
-        .eq('status', 'active')
-        .eq('category', 'art')
-        .order('created_at', { ascending: false })
-        .limit(3),
-      supabase
-        .from('items')
-        .select('id, title, price, image_url, location')
-        .eq('status', 'active')
-        .eq('category', 'apartments')
-        .order('created_at', { ascending: false })
-        .limit(4),
+        .limit(4), // Reduced for faster loading
       supabase
         .from('profiles')
         .select('id, name, profile_image_url')
         .not('name', 'is', null)
         .eq('show_in_search', true)
-        .order('created_at', { ascending: false }), // Removed limit to show all users
+        .order('created_at', { ascending: false })
+        .limit(10), // Optimized for mobile
       supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
@@ -81,19 +68,16 @@ const fetchHomepageData = async () => {
         .eq('show_in_search', true)
     ]);
 
+    // Handle errors gracefully
     if (marketplaceResult.error) throw marketplaceResult.error;
     if (eventsResult.error) throw eventsResult.error;
     if (recommendationsResult.error) throw recommendationsResult.error;
-    if (artResult.error) throw artResult.error;
-    if (apartmentsResult.error) throw apartmentsResult.error;
     if (profilesResult.error) throw profilesResult.error;
     if (profilesCountResult.error) throw profilesCountResult.error;
 
     const marketplaceItems = marketplaceResult.data || [];
     const rawEvents = eventsResult.data || [];
     const recommendationItems = recommendationsResult.data || [];
-    const artItems = artResult.data || [];
-    const apartmentItems = apartmentsResult.data || [];
     
     // Optimized uploader profile fetching - only fetch if we have events and limit fields
     let databaseEvents: OptimizedItem[] = rawEvents.map(event => ({
@@ -143,10 +127,20 @@ const fetchHomepageData = async () => {
 
     const totalUsersCount = profilesCountResult.count || 0;
 
-    // Combine all items for backward compatibility
-    const items = [...marketplaceItems, ...databaseEvents, ...recommendationItems, ...artItems, ...apartmentItems];
+    // Combine all items for backward compatibility - removed unused categories
+    const items = [...marketplaceItems, ...databaseEvents, ...recommendationItems];
 
-    return { items, marketplaceItems, databaseEvents, recommendationItems, artItems, apartmentItems, businessItems: [], profiles, totalUsersCount };
+    return { 
+      items, 
+      marketplaceItems, 
+      databaseEvents, 
+      recommendationItems, 
+      artItems: [], // Empty for faster loading
+      apartmentItems: [], // Empty for faster loading
+      businessItems: [], 
+      profiles, 
+      totalUsersCount 
+    };
   } catch (error) {
     console.error('Homepage data fetch error:', error);
     toast({
@@ -164,7 +158,7 @@ export const useOptimizedHomepage = () => {
   // Ultra-aggressive preloading for instant loading
   const preloadData = () => {
     queryClient.prefetchQuery({
-      queryKey: ['homepage-data-v5'], // Updated for new ultra-optimizations
+      queryKey: ['homepage-data-v6'], // Updated for new ultra-optimizations
       queryFn: fetchHomepageData,
       staleTime: 1000 * 60 * 15, // 15 minutes - ultra-aggressive caching
     });
@@ -172,7 +166,7 @@ export const useOptimizedHomepage = () => {
 
   // Ultra-aggressive caching for instant loading
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['homepage-data-v5'], // Updated for new ultra-optimizations
+    queryKey: ['homepage-data-v6'], // Updated for new ultra-optimizations
     queryFn: fetchHomepageData,
     staleTime: 1000 * 60 * 15, // 15 minutes - ultra-aggressive
     gcTime: 1000 * 60 * 60, // 1 hour - maximum memory persistence
