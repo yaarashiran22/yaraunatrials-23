@@ -65,8 +65,8 @@ const DesktopHeader = ({
             {/* Add Item button (replacing notifications) */}
             <Button
               onClick={openNewItem}
-              className="rounded-full w-10 h-10 p-0 border-2 border-purple-500"
-              style={{ backgroundColor: '#BB31E9', color: 'hsl(0 0% 100%)' }}
+              className="rounded-full w-10 h-10 p-0"
+              style={{ backgroundColor: '#BB31E9', color: 'hsl(0 0% 100%)', border: '2px solid #BB31E9' }}
             >
               <Plus className="h-4 w-4" />
             </Button>
