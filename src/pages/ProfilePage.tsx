@@ -344,68 +344,6 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Join me Section */}
-        <section className="mb-8">
-          <SectionHeader title="Join me" />
-          {itemsLoading ? (
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {Array(3).fill(null).map((_, index) => (
-                <div key={index} className="flex-shrink-0 w-32 lg:w-auto">
-                  <div className="bg-muted rounded-xl h-32 animate-pulse"></div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {recommendationItems.map((item) => (
-                <div key={`join-me-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto relative">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || coffeeShop}
-                    title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    type="business"
-                    onClick={() => handleItemClick(item)}
-                    showFavoriteButton={false}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.description,
-                      image: item.image_url,
-                      type: 'recommendation'
-                    }}
-                  />
-                  {/* Edit and Delete buttons - only show for own profile */}
-                  {isOwnProfile && (
-                    <div className="absolute bottom-1 right-1 flex gap-1">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className="p-1 h-7 w-7 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 border-2 border-white"
-                        onClick={() => handleEditItem(item.id)}
-                      >
-                        <Pencil className="h-4 w-4 text-white" />
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="p-1 h-7 w-7 rounded-full shadow-lg bg-red-500 hover:bg-red-600 border-2 border-white"
-                        onClick={() => handleDeleteItem(item.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              ))}
-              {recommendationItems.length === 0 && (
-                <div className="text-center py-8 text-muted-foreground w-full">
-                  <p>אין פריטים זמינים כרגע</p>
-                </div>
-              )}
-            </div>
-          )}
-        </section>
 
         {/* אירועים Section */}
         <section className="mb-8">
