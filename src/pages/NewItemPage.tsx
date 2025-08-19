@@ -257,10 +257,8 @@ const NewItemPage = () => {
               </SelectTrigger>
               <SelectContent className="bg-background border border-border z-50">
                 <SelectItem value="art">אמנות</SelectItem>
-                <SelectItem value="secondhand">יד שנייה</SelectItem>
-                <SelectItem value="business">עסק</SelectItem>
                 <SelectItem value="event">אירוע</SelectItem>
-                <SelectItem value="recommendation">מוזמנים להצטרף</SelectItem>
+                <SelectItem value="מוזמנים להצטרף">מוזמנים להצטרף</SelectItem>
               </SelectContent>
             </Select>
           </div>
