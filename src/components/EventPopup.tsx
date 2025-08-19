@@ -166,7 +166,9 @@ const EventPopup = ({
           {/* Event Details */}
           <div className="space-y-4">
             <div className="text-center">
-              <h3 className="text-2xl font-bold text-foreground mb-2">{displayEvent.price}</h3>
+              {eventData?.price && (
+                <h3 className="text-2xl font-bold text-foreground mb-2">{displayEvent.price}</h3>
+              )}
               <p className="text-lg font-semibold text-foreground">{displayEvent.title}</p>
               {displayEvent.date && (
                 <p className="text-sm text-primary">תאריך: {displayEvent.date}</p>

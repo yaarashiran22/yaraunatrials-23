@@ -144,11 +144,10 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
           {/* Item Details */}
           <div className="space-y-4">
             <div className="text-center">
-              <h3 className="text-2xl font-bold text-foreground mb-2">{displayItem.price}</h3>
-              <p className="text-lg font-semibold text-foreground">{displayItem.title}</p>
-              {displayItem.condition && (
-                <p className="text-sm text-primary">מצב: {displayItem.condition}</p>
+              {(itemDetails?.price || item?.price) && (
+                <h3 className="text-2xl font-bold text-foreground mb-2">{displayItem.price}</h3>
               )}
+              <p className="text-lg font-semibold text-foreground">{displayItem.title}</p>
             </div>
             
             {displayItem.description && (
