@@ -287,7 +287,7 @@ const ProfilePage = () => {
             </div>
             <p className="text-sm text-foreground mb-4">{profileData?.bio || "אין תיאור"}</p>
             {profileData?.specialty && (
-              <div className="rounded-lg px-3 py-2 mb-4 inline-block" style={{ backgroundColor: 'hsl(280 60% 65%)' }}>
+              <div className="rounded-lg px-3 py-2 mb-4 inline-block" style={{ backgroundColor: 'hsl(280 60% 55%)' }}>
                 <span className="text-sm font-medium text-white">{profileData.specialty}</span>
               </div>
             )}
@@ -299,7 +299,7 @@ const ProfilePage = () => {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:opacity-80 underline cursor-pointer"
-                  style={{ color: 'hsl(280 60% 65%)' }}
+                  style={{ color: 'hsl(280 60% 55%)' }}
                 >
                   עמוד סושיאל
                 </a>
