@@ -12,6 +12,7 @@ import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
+import PhotoBubble from "@/components/PhotoBubble";
 import { Button } from "@/components/ui/button";
 import { Bell } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -251,11 +252,29 @@ const Index = () => {
           )}
         </section>
 
-        {/* קופונים Section */}
+        {/* תמונות Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="קופונים" />
-          <div className="text-center py-8 text-muted-foreground">
-            <p>אין קופונים זמינים כרגע</p>
+          <SectionHeader title="תמונות" />
+          <div className="flex gap-4 overflow-x-auto pb-2 px-2">
+            <PhotoBubble 
+              isAddButton={true} 
+              onPhotoAdded={() => refetch()}
+            />
+            <PhotoBubble 
+              image={profile1}
+              status="בקפה"
+              userName="יערה"
+            />
+            <PhotoBubble 
+              image={profile2}
+              status="בבית"
+              userName="דני"
+            />
+            <PhotoBubble 
+              image={profile3}
+              status="בעבודה"
+              userName="מיכל"
+            />
           </div>
         </section>
 
