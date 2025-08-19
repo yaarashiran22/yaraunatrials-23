@@ -206,18 +206,6 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
             />
           </div>
 
-          {/* Price Field */}
-          <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">מחיר</label>
-            <Input 
-              placeholder=""
-              type="number"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className="w-full h-12 text-right bg-background border border-border rounded-full"
-            />
-          </div>
-
           {/* Category Field */}
           <div className="space-y-2">
             <label className="text-sm text-muted-foreground block text-right">קטגוריה</label>
@@ -318,6 +306,18 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
                 </PopoverContent>
               </Popover>
             )}
+          </div>
+
+          {/* Price Field */}
+          <div className="space-y-2">
+            <label className="text-sm text-muted-foreground block text-right">מחיר</label>
+            <Input 
+              placeholder=""
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="w-full h-12 text-right bg-background border border-border rounded-full"
+            />
           </div>
 
           {/* Add Image Button */}
