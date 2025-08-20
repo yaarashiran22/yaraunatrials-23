@@ -29,6 +29,7 @@ import ArtistsCreatorsPage from "./pages/ArtistsCreatorsPage";
 import NeighborhoodProfilePage from "./pages/NeighborhoodProfilePage";
 import NeighborsPage from "./pages/NeighborsPage";
 import AllEventsPage from "./pages/AllEventsPage";
+import AllRecommendationsPage from "./pages/AllRecommendationsPage";
 
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -85,6 +86,7 @@ const AppContent = () => {
               <Route path="/feed" element={<FeedPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/all-events" element={<AllEventsPage />} />
+              <Route path="/all-recommendations" element={<AllRecommendationsPage />} />
               <Route path="/event/:id" element={<EventDetailsPage />} />
               <Route path="/item/:id" element={<ItemDetailsPage />} />
               <Route path="/artist/:id" element={<ArtistDetailsPage />} />
@@ -138,6 +140,7 @@ const AppContent = () => {
             <Route path="/feed" element={<FeedPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/all-events" element={<AllEventsPage />} />
+            <Route path="/all-recommendations" element={<AllRecommendationsPage />} />
             <Route path="/event/:id" element={<EventDetailsPage />} />
             <Route path="/item/:id" element={<ItemDetailsPage />} />
             <Route path="/artist/:id" element={<ArtistDetailsPage />} />

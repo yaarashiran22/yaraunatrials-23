@@ -172,7 +172,17 @@ const Index = () => {
 
         {/* Join me Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title={t('sections.joinMe')} />
+          <div className="flex justify-between items-center mb-4">
+            <SectionHeader title={t('sections.joinMe')} />
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => navigate('/all-recommendations')}
+              className="text-xs px-3 py-1"
+            >
+              הצג את כל ההצעות
+            </Button>
+          </div>
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
           ) : (
