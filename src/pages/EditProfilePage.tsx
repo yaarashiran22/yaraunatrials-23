@@ -140,26 +140,18 @@ const EditProfilePage = () => {
     <div className="min-h-screen bg-background" dir="rtl">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b bg-background">
-        <Button variant="ghost" size="sm" onClick={() => setShowNotifications(true)}>
-          <Bell className="h-5 w-5" />
+        <div></div> {/* Empty div for spacing */}
+        <h2 className="text-lg font-semibold">עריכת פרופיל</h2>
+        <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+          <ArrowLeft className="h-5 w-5" />
         </Button>
-        <NeighborhoodSelector />
-        <div className="flex items-center gap-3">
-          <div className="text-3xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
-          <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </div>
       </div>
 
       <main className="px-4 py-6 pb-20">
-        {/* Page Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold">עריכת פרופיל</h1>
-        </div>
+        {/* Page content starts here - title removed since it's now in header */}
 
         {/* Profile Picture Section */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-8 mt-6">
           <div className="relative">
             <img 
               src={profileImage}
