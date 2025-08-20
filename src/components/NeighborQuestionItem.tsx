@@ -8,9 +8,10 @@ import { useAuth } from "@/contexts/AuthContext";
 interface NeighborQuestionItemProps {
   question: {
     id: string;
-    user_id: string;
+    user_id: string | null;
     content: string;
     created_at: string;
+    is_anonymous?: boolean;
   };
   userProfile?: {
     name?: string;
@@ -66,21 +67,39 @@ export const NeighborQuestionItem = ({
   return (
     <div className="flex-shrink-0 w-64 bg-white border border-border rounded-lg p-4">
       <div className="flex items-start gap-3 mb-3">
-        <img 
-          src={userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-          alt={userProfile?.name || "משתמש"}
-          className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-        />
-        <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-foreground text-sm">
-            {userProfile?.name || "משתמש"}
-          </h4>
-          <p className="text-xs text-muted-foreground">
-            {getTimeAgo(question.created_at)}
-          </p>
-        </div>
-        {/* Delete button - only show for question author */}
-        {user && user.id === question.user_id && (
+        {question.is_anonymous ? (
+          <>
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+              <span className="text-xs text-muted-foreground">?</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <h4 className="font-medium text-foreground text-sm">
+                משתמש אנונימי
+              </h4>
+              <p className="text-xs text-muted-foreground">
+                {getTimeAgo(question.created_at)}
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <img 
+              src={userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
+              alt={userProfile?.name || "משתמש"}
+              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <h4 className="font-medium text-foreground text-sm">
+                {userProfile?.name || "משתמש"}
+              </h4>
+              <p className="text-xs text-muted-foreground">
+                {getTimeAgo(question.created_at)}
+              </p>
+            </div>
+          </>
+        )}
+        {/* Delete button - only show for question author and non-anonymous questions */}
+        {user && question.user_id && user.id === question.user_id && !question.is_anonymous && (
           <Button
             variant="ghost"
             size="sm"
