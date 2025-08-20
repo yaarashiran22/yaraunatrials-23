@@ -1,7 +1,6 @@
 import { ArrowRight, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -25,8 +24,7 @@ const RegisterPage = () => {
     instagram: '',
     facebook: '',
     tiktok: '',
-    linkedin: '',
-    accountType: '' // Added account type
+    linkedin: ''
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,10 +46,10 @@ const RegisterPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !formData.mobileNumber.trim() || !formData.accountType) {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !formData.mobileNumber.trim()) {
       toast({
         title: "שגיאה",
-        description: "נא למלא את כל השדות הנדרשים (שם, מייל, סיסמא, מספר טלפון וסוג חשבון)",
+        description: "נא למלא את כל השדות הנדרשים (שם, מייל, סיסמא ומספר טלפון)",
         variant: "destructive",
       });
       return;
@@ -61,7 +59,7 @@ const RegisterPage = () => {
     
     try {
       // Register the user
-      const { error: signUpError } = await signUp(formData.email, formData.password, formData.name, formData.mobileNumber, formData.accountType);
+      const { error: signUpError } = await signUp(formData.email, formData.password, formData.name, formData.mobileNumber);
       
       if (signUpError) {
         console.error('Sign up error:', signUpError);
@@ -91,8 +89,7 @@ const RegisterPage = () => {
           profile_image_url: profileImage,
           username: formData.instagram ? `https://instagram.com/${formData.instagram}` : null,
           show_in_search: true,
-          is_private: false,
-          account_type: formData.accountType
+          is_private: false
         };
 
         const { error: profileError } = await supabase
@@ -208,18 +205,6 @@ const RegisterPage = () => {
                   onChange={(e) => handleInputChange('mobileNumber', e.target.value)}
                   className="w-full h-12 text-right bg-background border border-border rounded-lg"
                 />
-              </div>
-
-              <div>
-                <Select dir="rtl" value={formData.accountType} onValueChange={(value) => handleInputChange('accountType', value)}>
-                  <SelectTrigger className="w-full h-12 text-right bg-background border border-border rounded-lg">
-                    <SelectValue placeholder="סוג חשבון *" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background border border-border z-50">
-                    <SelectItem value="personal">חשבון אישי</SelectItem>
-                    <SelectItem value="business">חשבון עסקי</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
               
               <div>

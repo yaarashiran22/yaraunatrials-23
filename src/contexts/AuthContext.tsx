@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, name?: string, mobileNumber?: string, accountType?: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, name?: string, mobileNumber?: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   signInAnonymously: () => Promise<{ error: any }>;
   // Backward compatibility
@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error };
   };
 
-  const signUp = async (email: string, password: string, name?: string, mobileNumber?: string, accountType?: string) => {
+  const signUp = async (email: string, password: string, name?: string, mobileNumber?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signUp({
@@ -64,8 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         emailRedirectTo: redirectUrl,
         data: { 
           name: name || '',
-          mobile_number: mobileNumber || '',
-          account_type: accountType || 'personal'
+          mobile_number: mobileNumber || ''
         }
       }
     });
