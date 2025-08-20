@@ -378,6 +378,41 @@ const ProfilePage = () => {
           </section>
         )}
 
+        {/* תמונות מהפיד Section */}
+        {imagePosts.length > 0 && (
+          <section className="mb-8">
+            <SectionHeader title="תמונות מהפיד" />
+            {postsLoading ? (
+              <div className="grid grid-cols-3 gap-2 lg:grid-cols-4 xl:grid-cols-6">
+                {Array(6).fill(null).map((_, index) => (
+                  <div key={index} className="aspect-square bg-muted rounded-lg animate-pulse"></div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-2 lg:grid-cols-4 xl:grid-cols-6">
+                {imagePosts.map((post) => (
+                  <div key={`feed-image-${post.id}`} className="aspect-square relative group cursor-pointer">
+                    <img
+                      src={post.image_url}
+                      alt="תמונה מהפיד"
+                      className="w-full h-full object-cover rounded-lg hover:opacity-90 transition-opacity"
+                      onClick={() => {
+                        setSelectedImageId(post.id);
+                        setShowFeedImages(true);
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                      <div className="bg-white/90 rounded-full p-2">
+                        <span className="text-xs text-black">לחץ לצפייה</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
         {/* מוזמנים להצטרף Section */}
         <section className="mb-8">
           <SectionHeader title="מוזמנים להצטרף" />
@@ -498,41 +533,6 @@ const ProfilePage = () => {
             </div>
           </div>
         </section>
-
-        {/* תמונות מהפיד Section */}
-        {imagePosts.length > 0 && (
-          <section className="mb-8">
-            <SectionHeader title="תמונות מהפיד" />
-            {postsLoading ? (
-              <div className="grid grid-cols-3 gap-2 lg:grid-cols-4 xl:grid-cols-6">
-                {Array(6).fill(null).map((_, index) => (
-                  <div key={index} className="aspect-square bg-muted rounded-lg animate-pulse"></div>
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-3 gap-2 lg:grid-cols-4 xl:grid-cols-6">
-                {imagePosts.map((post) => (
-                  <div key={`feed-image-${post.id}`} className="aspect-square relative group cursor-pointer">
-                    <img
-                      src={post.image_url}
-                      alt="תמונה מהפיד"
-                      className="w-full h-full object-cover rounded-lg hover:opacity-90 transition-opacity"
-                      onClick={() => {
-                        setSelectedImageId(post.id);
-                        setShowFeedImages(true);
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                      <div className="bg-white/90 rounded-full p-2">
-                        <span className="text-xs text-black">לחץ לצפייה</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        )}
 
 
         {/* Logout Button */}
