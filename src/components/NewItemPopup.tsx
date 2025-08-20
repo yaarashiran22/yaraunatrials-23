@@ -1,4 +1,4 @@
-import { X, Plus, Bell, CalendarIcon } from "lucide-react";
+import { X, Plus, CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -178,14 +178,10 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       <div className="w-full max-w-md bg-background rounded-3xl max-h-[90vh] overflow-hidden mx-4" dir="rtl">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b bg-background">
-          <Button variant="ghost" size="sm">
-            <Bell className="h-5 w-5" />
-          </Button>
           <div className="flex items-center gap-2">
             <span className="text-lg font-bold">פריט חדש</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="text-2xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
             <Button variant="ghost" size="sm" onClick={onClose}>
               <X className="h-5 w-5" />
             </Button>
