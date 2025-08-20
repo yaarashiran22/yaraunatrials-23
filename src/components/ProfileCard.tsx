@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useStories } from "@/hooks/useStories";
 import { useState } from "react";
 import StoriesPopup from "./StoriesPopup";
+import ProfilePictureViewer from "./ProfilePictureViewer";
 
 interface ProfileCardProps {
   image: string;
@@ -15,6 +16,7 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
   const navigate = useNavigate();
   const { stories, loading, refetch } = useStories(id);
   const [showStories, setShowStories] = useState(false);
+  const [showProfilePicture, setShowProfilePicture] = useState(false);
   
   const handleClick = async () => {
     console.log('ProfileCard clicked for user:', id, 'Current stories count:', stories.length);
@@ -55,7 +57,13 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
       >
         <div className="relative">
           <div className={`w-16 h-16 rounded-full ${getBackgroundColor(name)} p-0.5`}>
-            <div className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card">
+            <div 
+              className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowProfilePicture(true);
+              }}
+            >
               <img 
                 src={image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
                 alt={name}
@@ -77,6 +85,13 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
         isOpen={showStories}
         onClose={() => setShowStories(false)}
         userId={id}
+      />
+      
+      <ProfilePictureViewer
+        isOpen={showProfilePicture}
+        onClose={() => setShowProfilePicture(false)}
+        imageUrl={image}
+        userName={name}
       />
     </>
   );

@@ -1,10 +1,20 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useFriends } from "@/hooks/useFriends";
+import { useState } from "react";
+import ProfilePictureViewer from "./ProfilePictureViewer";
 
 const FriendsProfileRow = () => {
   const navigate = useNavigate();
   const { friends, loading } = useFriends();
+  const [showProfilePicture, setShowProfilePicture] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState<any>(null);
+
+  const handleProfilePictureClick = (friend: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedFriend(friend);
+    setShowProfilePicture(true);
+  };
 
   if (loading) {
     return (
@@ -35,7 +45,10 @@ const FriendsProfileRow = () => {
           >
             <div className="relative">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-400 to-[#BB31E9] p-0.5">
-                <div className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card">
+                <div 
+                  className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={(e) => handleProfilePictureClick(friend, e)}
+                >
                   <img 
                     src={friend.profiles?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
                     alt={friend.profiles?.name || 'משתמש'}
@@ -50,6 +63,13 @@ const FriendsProfileRow = () => {
           </div>
         ))}
       </div>
+      
+      <ProfilePictureViewer
+        isOpen={showProfilePicture}
+        onClose={() => setShowProfilePicture(false)}
+        imageUrl={selectedFriend?.profiles?.profile_image_url || ""}
+        userName={selectedFriend?.profiles?.name || 'משתמש'}
+      />
     </div>
   );
 };
