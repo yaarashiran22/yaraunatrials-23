@@ -94,7 +94,7 @@ export const NeighborQuestionItem = ({
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="font-medium text-foreground text-sm">
-                משתמש אנונימי
+                אנונימי
               </h4>
               <div className="flex items-center gap-2">
                 <p className="text-xs text-muted-foreground">
