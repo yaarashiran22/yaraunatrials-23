@@ -283,25 +283,28 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          is_anonymous: boolean | null
           market: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           content: string
           created_at?: string
           id?: string
+          is_anonymous?: boolean | null
           market?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           content?: string
           created_at?: string
           id?: string
+          is_anonymous?: boolean | null
           market?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -412,6 +415,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_type: string | null
           bio: string | null
           created_at: string
           email: string
@@ -429,6 +433,7 @@ export type Database = {
           username: string | null
         }
         Insert: {
+          account_type?: string | null
           bio?: string | null
           created_at?: string
           email: string
@@ -446,6 +451,7 @@ export type Database = {
           username?: string | null
         }
         Update: {
+          account_type?: string | null
           bio?: string | null
           created_at?: string
           email?: string

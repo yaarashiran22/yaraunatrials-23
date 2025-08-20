@@ -13,6 +13,7 @@ interface NeighborQuestion {
 
 interface CreateQuestionData {
   content: string;
+  isAnonymous?: boolean;
 }
 
 export const useNeighborQuestions = () => {
@@ -53,26 +54,24 @@ export const useNeighborQuestions = () => {
   };
 
   const createQuestion = async (questionData: CreateQuestionData) => {
-    if (!user) {
-      toast({
-        title: "שגיאה",
-        description: "יש להתחבר כדי לפרסם שאלה",
-        variant: "destructive",
-      });
-      return false;
-    }
-
     try {
       setCreating(true);
       
+      const insertData = questionData.isAnonymous 
+        ? {
+            user_id: null,
+            is_anonymous: true,
+            content: questionData.content,
+          }
+        : {
+            user_id: user?.id || null,
+            is_anonymous: false,
+            content: questionData.content,
+          };
+
       const { data, error } = await supabase
         .from('neighbor_questions')
-        .insert([
-          {
-            user_id: user.id,
-            content: questionData.content,
-          },
-        ])
+        .insert([insertData])
         .select()
         .single();
 
