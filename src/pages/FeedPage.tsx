@@ -7,6 +7,7 @@ import UniformCard from "@/components/UniformCard";
 import SectionHeader from "@/components/SectionHeader";
 import { PostCommentsModal } from "@/components/PostCommentsModal";
 import { PostItem } from "@/components/PostItem";
+import FeedUpload from "@/components/FeedUpload";
 
 import { Button } from "@/components/ui/button";
 import { Search, X, Heart, MessageCircle, MapPin } from "lucide-react";
@@ -45,7 +46,7 @@ const FeedPage = () => {
   const [postProfiles, setPostProfiles] = useState<{[key: string]: any}>({});
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
-  const { posts, loading } = usePosts();
+  const { posts, loading, fetchPosts } = usePosts();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
   const [selectedPostForComments, setSelectedPostForComments] = useState<string | null>(null);
@@ -213,28 +214,7 @@ const FeedPage = () => {
 
         {/* Upload Card - Only show if user is authenticated */}
         {user && (
-          <div 
-            className="bg-white rounded-lg p-4 mb-6 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm border"
-            onClick={() => navigate('/create-post')}
-          >
-            <img 
-              src={profile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-              alt="Profile"
-              className="w-10 h-10 rounded-full object-cover"
-            />
-            <div className="flex-1">
-              <input 
-                type="text"
-                placeholder="שתפ.י פוסט עם השכונה"
-                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
-                readOnly
-              />
-            </div>
-            <div className="flex gap-1">
-              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-            </div>
-          </div>
+          <FeedUpload onPostCreated={fetchPosts} />
         )}
 
         {/* שאלות שכנים Section - Moved below post sharing */}
