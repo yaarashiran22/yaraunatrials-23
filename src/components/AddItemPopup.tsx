@@ -13,6 +13,9 @@ interface AddItemPopupProps {
 const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mobileNumber, setMobileNumber] = useState('');
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [location, setLocation] = useState('');
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -24,6 +27,8 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
       reader.readAsDataURL(file);
     }
   };
+
+  const isFormValid = title.trim() && category && location && mobileNumber.trim() && selectedImage;
 
   if (!isOpen) return null;
 
@@ -53,6 +58,8 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
             <Input 
               placeholder=""
               type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               className="w-full h-11 text-right bg-background border border-border rounded-full px-4"
             />
           </div>
@@ -70,7 +77,7 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
           {/* Category Field */}
           <div className="space-y-1">
             <label className="text-sm text-muted-foreground block text-right">קטגוריה</label>
-            <Select dir="rtl">
+            <Select dir="rtl" value={category} onValueChange={setCategory}>
               <SelectTrigger className="w-full h-11 text-right bg-background border border-border rounded-full px-4">
                 <SelectValue placeholder="בחר קטגוריה" />
               </SelectTrigger>
@@ -86,7 +93,7 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
           {/* Location Field */}
           <div className="space-y-1">
             <label className="text-sm text-muted-foreground block text-right">מיקום</label>
-            <Select dir="rtl">
+            <Select dir="rtl" value={location} onValueChange={setLocation}>
               <SelectTrigger className="w-full h-11 text-right bg-background border border-border rounded-full px-4">
                 <SelectValue placeholder="בחר מיקום" />
               </SelectTrigger>
@@ -145,8 +152,9 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
           {/* Submit Button */}
           <div className="pt-4">
             <Button 
-              className="w-full h-11 rounded-full text-lg font-medium text-white"
+              className="w-full h-11 rounded-full text-lg font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: '#BB31E9' }}
+              disabled={!isFormValid}
               onClick={() => {
                 console.log('Form submitted');
                 onClose();
