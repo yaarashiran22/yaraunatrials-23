@@ -178,7 +178,12 @@ const FavoritesPage = () => {
         {/* Friends Profile Row */}
         <FriendsProfileRow />
         
-        {friends.length === 0 ? (
+        {friendsLoading ? (
+          <div className="text-center py-12">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-muted-foreground">טוען חברים...</p>
+          </div>
+        ) : friends.length === 0 ? (
           <div className="text-center py-12">
             <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-gray-600 mb-2">אין חברים עדיין</h2>
