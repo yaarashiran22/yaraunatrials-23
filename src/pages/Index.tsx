@@ -175,7 +175,7 @@ const Index = () => {
         {/* Join me Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <SectionHeader title={t('sections.joinMe')} />
+            <h2 className="text-xl font-bold text-foreground">{t('sections.joinMe')}</h2>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
