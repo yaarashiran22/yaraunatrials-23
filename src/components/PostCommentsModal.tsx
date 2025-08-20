@@ -19,7 +19,7 @@ export const PostCommentsModal = ({ isOpen, onClose, postId, postTitle }: PostCo
   const { comments, commentsCount, loading, submitting, addComment, deleteComment } = usePostComments(postId);
   const [newComment, setNewComment] = useState('');
   const [showProfilePicture, setShowProfilePicture] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string} | null>(null);
+  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string; userId?: string} | null>(null);
 
   const handleSubmitComment = async () => {
     const success = await addComment(newComment);
@@ -77,7 +77,8 @@ export const PostCommentsModal = ({ isOpen, onClose, postId, postTitle }: PostCo
                   onClick={() => {
                     setSelectedUser({
                       imageUrl: comment.profiles?.profile_image_url || "",
-                      name: comment.profiles?.name || "משתמש"
+                      name: comment.profiles?.name || "משתמש",
+                      userId: comment.user_id
                     });
                     setShowProfilePicture(true);
                   }}
@@ -139,6 +140,7 @@ export const PostCommentsModal = ({ isOpen, onClose, postId, postTitle }: PostCo
           onClose={() => setShowProfilePicture(false)}
           imageUrl={selectedUser?.imageUrl || ""}
           userName={selectedUser?.name || "משתמש"}
+          userId={selectedUser?.userId}
         />
       </DialogContent>
     </Dialog>

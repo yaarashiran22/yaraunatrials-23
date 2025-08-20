@@ -33,7 +33,7 @@ export const NeighborQuestionItem = ({
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [showProfilePicture, setShowProfilePicture] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string} | null>(null);
+  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string; userId?: string} | null>(null);
   const { comments, commentCount, loading, creating, createComment, fetchComments } = useNeighborQuestionComments(question.id);
   const { user } = useAuth();
 
@@ -93,7 +93,8 @@ export const NeighborQuestionItem = ({
               onClick={() => {
                 setSelectedUser({
                   imageUrl: userProfile?.profile_image_url || "",
-                  name: userProfile?.name || "משתמש"
+                  name: userProfile?.name || "משתמש",
+                  userId: question.user_id || undefined
                 });
                 setShowProfilePicture(true);
               }}
@@ -181,7 +182,8 @@ export const NeighborQuestionItem = ({
                         onClick={() => {
                           setSelectedUser({
                             imageUrl: commentUserProfile?.profile_image_url || "",
-                            name: commentUserProfile?.name || "משתמש"
+                            name: commentUserProfile?.name || "משתמש",
+                            userId: comment.user_id
                           });
                           setShowProfilePicture(true);
                         }}
@@ -218,6 +220,7 @@ export const NeighborQuestionItem = ({
         onClose={() => setShowProfilePicture(false)}
         imageUrl={selectedUser?.imageUrl || ""}
         userName={selectedUser?.name || "משתמש"}
+        userId={selectedUser?.userId}
       />
     </div>
   );

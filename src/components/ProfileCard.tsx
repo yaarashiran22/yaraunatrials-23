@@ -92,6 +92,7 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
         onClose={() => setShowProfilePicture(false)}
         imageUrl={image}
         userName={name}
+        userId={id}
       />
     </>
   );

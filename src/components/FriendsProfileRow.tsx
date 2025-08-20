@@ -69,6 +69,7 @@ const FriendsProfileRow = () => {
         onClose={() => setShowProfilePicture(false)}
         imageUrl={selectedFriend?.profiles?.profile_image_url || ""}
         userName={selectedFriend?.profiles?.name || 'משתמש'}
+        userId={selectedFriend?.friend_id}
       />
     </div>
   );

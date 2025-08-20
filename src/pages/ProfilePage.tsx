@@ -538,6 +538,7 @@ const ProfilePage = () => {
         onClose={() => setShowProfilePicture(false)}
         imageUrl={profileData?.profile_image_url || ""}
         userName={profileData?.name || "משתמש"}
+        userId={actualProfileId}
       />
     </div>
   );

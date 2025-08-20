@@ -57,6 +57,7 @@ const NeighborCard = ({ user, onStoryClick }: NeighborCardProps) => {
         onClose={() => setShowProfilePicture(false)}
         imageUrl={user.profile_image_url || ""}
         userName={user.name}
+        userId={user.id}
       />
     </>
   );

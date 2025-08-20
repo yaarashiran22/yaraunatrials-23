@@ -21,7 +21,7 @@ const NeighborsPage = () => {
   const [neighbors, setNeighbors] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [showProfilePicture, setShowProfilePicture] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string} | null>(null);
+  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string; userId?: string} | null>(null);
 
   useEffect(() => {
     const fetchNeighbors = async () => {
@@ -110,7 +110,8 @@ const NeighborsPage = () => {
                       e.stopPropagation();
                       setSelectedUser({
                         imageUrl: neighbor.profile_image_url || "",
-                        name: neighbor.name
+                        name: neighbor.name,
+                        userId: neighbor.id
                       });
                       setShowProfilePicture(true);
                     }}
@@ -163,6 +164,7 @@ const NeighborsPage = () => {
           onClose={() => setShowProfilePicture(false)}
           imageUrl={selectedUser?.imageUrl || ""}
           userName={selectedUser?.name || "משתמש"}
+          userId={selectedUser?.userId}
         />
       </main>
 
