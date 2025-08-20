@@ -37,7 +37,7 @@ import artPiece4 from "@/assets/canvas-art-4.jpg";
 
 const Index = () => {
   const { t, language } = useLanguage();
-  const { setRefreshCallback } = useNewItem();
+  const { setRefreshCallback, openNewItem } = useNewItem();
   const { user } = useAuth();
   const { profile: currentUserProfile } = useProfile(user?.id);
   const navigate = useNavigate();
@@ -174,14 +174,24 @@ const Index = () => {
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <SectionHeader title={t('sections.joinMe')} />
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => navigate('/all-recommendations')}
-              className="text-xs px-3 py-1"
-            >
-              הצג עוד
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={openNewItem}
+                className="text-xs px-2 py-1 hover:bg-primary/10"
+              >
+                +
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate('/all-recommendations')}
+                className="text-xs px-3 py-1"
+              >
+                הצג עוד
+              </Button>
+            </div>
           </div>
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
