@@ -180,7 +180,7 @@ const Index = () => {
               onClick={() => navigate('/all-recommendations')}
               className="text-xs px-3 py-1"
             >
-              הצג את כל ההצעות
+              הצג עוד
             </Button>
           </div>
           {loading ? (
