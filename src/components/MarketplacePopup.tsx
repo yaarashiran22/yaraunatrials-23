@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useItemDetails } from "@/hooks/useItemDetails";
 
+// Location mapping from English to Hebrew
+const locationMapping: Record<string, string> = {
+  'tel-aviv': 'תל אביב',
+  'florentin': 'פלורנטין', 
+  'lev-hair': 'לב העיר',
+  'jerusalem': 'ירושלים',
+  'ramat-gan': 'רמת גן',
+  'givatayim': 'גבעתיים'
+};
+
 interface MarketplacePopupProps {
   isOpen: boolean;
   onClose: () => void;
@@ -161,7 +171,7 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
               <div className="space-y-2 p-4 bg-muted/30 rounded-lg">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="h-4 w-4" />
-                  <span>{itemDetails.location || 'לא צוין'}</span>
+                  <span>{locationMapping[itemDetails.location] || itemDetails.location || 'לא צוין'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="h-4 w-4" />
