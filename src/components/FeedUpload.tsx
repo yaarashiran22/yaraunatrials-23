@@ -159,7 +159,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
         const filePath = `${user.id}/${fileName}`; // User ID folder structure required by RLS
 
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('photos') // Using same bucket for now, can create separate video bucket if needed
+          .from('videos')
           .upload(filePath, selectedVideo);
 
         if (uploadError) {
@@ -169,7 +169,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
 
         // Get the public URL
         const { data: urlData } = supabase.storage
-          .from('photos')
+          .from('videos')
           .getPublicUrl(filePath);
 
         videoUrl = urlData.publicUrl;
