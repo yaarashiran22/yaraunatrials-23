@@ -34,9 +34,10 @@ const EventPopup = ({
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Only fetch real event data if eventId is provided and popup is open
-  const shouldFetchData = isOpen && eventId && eventId !== '';
-  const { item: eventData, loading } = useItemDetails(shouldFetchData ? eventId : '');
+  // Always show UI immediately with passed event data
+  // Only fetch additional details if we need mobile_number or other specific data
+  const needsAdditionalData = !event?.organizer?.id && eventId;
+  const { item: eventData, loading } = useItemDetails(needsAdditionalData ? eventId : '');
 
   const defaultEvent = {
     id: "1",
@@ -109,8 +110,10 @@ const EventPopup = ({
 
   if (!isOpen) return null;
 
-  // Show optimized loading state
-  if (shouldFetchData && loading) {
+  // Show immediate UI with passed data, no loading screen needed unless we're fetching additional data
+  const showLoadingState = needsAdditionalData && loading && !event;
+
+  if (showLoadingState) {
     return (
       <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
         <div className="bg-background rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto mx-4">

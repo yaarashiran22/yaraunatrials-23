@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
@@ -22,108 +22,93 @@ export interface ItemWithUploader {
   };
 }
 
-export const useItemDetails = (itemId: string) => {
-  const [item, setItem] = useState<ItemWithUploader | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const fetchItemDetails = async (itemId: string): Promise<ItemWithUploader | null> => {
+  if (!itemId) {
+    throw new Error('מזהה פריט לא תקין');
+  }
 
-  const fetchItemDetails = async () => {
-    if (!itemId) {
-      setError('מזהה פריט לא תקין');
-      setLoading(false);
-      return;
-    }
+  // First fetch the item
+  const { data: itemData, error: itemError } = await supabase
+    .from('items')
+    .select('*')
+    .eq('id', itemId)
+    .eq('status', 'active')
+    .single();
 
-    try {
-      setLoading(true);
-      setError(null);
+  if (itemError) throw itemError;
+  
+  if (!itemData) {
+    throw new Error('פריט לא נמצא');
+  }
 
-      // First fetch the item
-      const { data: itemData, error: itemError } = await supabase
-        .from('items')
-        .select('*')
-        .eq('id', itemId)
-        .eq('status', 'active')
-        .single();
+  // Then fetch the uploader profile and small profile in parallel
+  const [uploaderResult, smallProfileResult] = await Promise.all([
+    supabase
+      .from('profiles')
+      .select('id, name, profile_image_url, location')
+      .eq('id', itemData.user_id)
+      .single(),
+    supabase
+      .from('smallprofiles')
+      .select('photo')
+      .eq('id', itemData.user_id)
+      .maybeSingle()
+  ]);
 
-      if (itemError) throw itemError;
-      
-      if (!itemData) {
-        setError('פריט לא נמצא');
-        return;
-      }
+  const { data: uploaderData, error: uploaderError } = uploaderResult;
+  const { data: smallProfileData } = smallProfileResult;
 
-      // Then fetch the uploader profile
-      const { data: uploaderData, error: uploaderError } = await supabase
-        .from('profiles')
-        .select('id, name, profile_image_url, location')
-        .eq('id', itemData.user_id)
-        .single();
+  if (uploaderError) {
+    console.error('Error fetching uploader profile:', uploaderError);
+  }
 
-      if (uploaderError) {
-        console.error('Error fetching uploader profile:', uploaderError);
-      }
-
-      // Fetch small profile photo separately
-      let smallProfilePhoto = null;
-      if (uploaderData) {
-        const { data: smallProfileData } = await supabase
-          .from('smallprofiles')
-          .select('photo')
-          .eq('id', uploaderData.id)
-          .single();
-        
-        smallProfilePhoto = smallProfileData?.photo;
-      }
-
-      const itemWithUploader: ItemWithUploader = {
-        id: itemData.id,
-        title: itemData.title,
-        description: itemData.description,
-        price: itemData.price,
-        category: itemData.category,
-        image_url: itemData.image_url,
-        location: itemData.location,
-        mobile_number: itemData.mobile_number,
-        status: itemData.status,
-        created_at: itemData.created_at,
-        uploader: {
-          id: uploaderData?.id || itemData.user_id,
-          name: uploaderData?.name || 'משתמש',
-          profile_image_url: uploaderData?.profile_image_url,
-          location: uploaderData?.location,
-          small_profile_photo: smallProfilePhoto
-        }
-      };
-
-      setItem(itemWithUploader);
-    } catch (error) {
-      console.error('Error fetching item details:', error);
-      setError('לא ניתן לטעון את פרטי הפריט');
-      toast({
-        title: "שגיאה",
-        description: "לא ניתן לטעון את פרטי הפריט",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+  const itemWithUploader: ItemWithUploader = {
+    id: itemData.id,
+    title: itemData.title,
+    description: itemData.description,
+    price: itemData.price,
+    category: itemData.category,
+    image_url: itemData.image_url,
+    location: itemData.location,
+    mobile_number: itemData.mobile_number,
+    status: itemData.status,
+    created_at: itemData.created_at,
+    uploader: {
+      id: uploaderData?.id || itemData.user_id,
+      name: uploaderData?.name || 'משתמש',
+      profile_image_url: uploaderData?.profile_image_url,
+      location: uploaderData?.location,
+      small_profile_photo: smallProfileData?.photo
     }
   };
 
-  useEffect(() => {
-    if (itemId && itemId.trim() !== '') {
-      fetchItemDetails();
-    } else {
-      setLoading(false);
-      setItem(null);
-      setError(null);
-    }
-  }, [itemId]);
+  return itemWithUploader;
+};
+
+export const useItemDetails = (itemId: string) => {
+  const { data: item, isLoading: loading, error, refetch } = useQuery({
+    queryKey: ['item-details', itemId],
+    queryFn: () => fetchItemDetails(itemId),
+    enabled: !!itemId && itemId.trim() !== '',
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+    retry: 2,
+  });
+
+  // Handle errors manually
+  if (error) {
+    console.error('Error fetching item details:', error);
+    toast({
+      title: "שגיאה",
+      description: error.message || "לא ניתן לטעון את פרטי הפריט",
+      variant: "destructive",
+    });
+  }
 
   return {
-    item,
+    item: item || null,
     loading,
-    error,
-    refetch: fetchItemDetails,
+    error: error?.message || null,
+    refetch,
   };
 };
