@@ -168,7 +168,7 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
             
             {/* Item Location and Date for Join Items */}
             {itemDetails?.category === 'מוזמנים להצטרף' && (
-              <div className="space-y-3 p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="space-y-3 p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
                 <div className="flex items-center gap-3 text-base font-medium text-foreground">
                   <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   <span>{locationMapping[itemDetails.location] || itemDetails.location || 'לא צוין'}</span>
