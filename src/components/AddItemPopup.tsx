@@ -1,9 +1,13 @@
-import { X, Plus, Bell } from "lucide-react";
+import { X, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { useNewItem } from "@/contexts/NewItemContext";
 
 interface AddItemPopupProps {
   isOpen: boolean;
@@ -11,11 +15,17 @@ interface AddItemPopupProps {
 }
 
 const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const { refreshItems } = useNewItem();
+  
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mobileNumber, setMobileNumber] = useState('');
   const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -29,6 +39,98 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
   };
 
   const isFormValid = title.trim() && category && location && mobileNumber.trim() && selectedImage;
+
+  const handleSubmit = async () => {
+    if (!user) {
+      toast({
+        title: "שגיאה",
+        description: "יש להתחבר כדי להוסיף פריט",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!isFormValid) {
+      toast({
+        title: "שגיאה", 
+        description: "יש למלא את כל השדות הנדרשים",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Upload image to Supabase storage first
+      let imageUrl = null;
+      if (selectedImage) {
+        const file = await fetch(selectedImage).then(r => r.blob());
+        const fileExt = 'jpg';
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('item-images')
+          .upload(fileName, file);
+
+        if (uploadError) {
+          console.error('Image upload error:', uploadError);
+          // Continue without image if upload fails
+        } else {
+          const { data: urlData } = supabase.storage
+            .from('item-images')
+            .getPublicUrl(uploadData.path);
+          imageUrl = urlData.publicUrl;
+        }
+      }
+
+      // Insert item into database
+      const { error } = await supabase
+        .from('items')
+        .insert({
+          title: title.trim(),
+          price: price ? parseFloat(price) : null,
+          category,
+          location,
+          mobile_number: mobileNumber.trim(),
+          image_url: imageUrl,
+          user_id: user.id,
+          status: 'active',
+          market: 'israel'
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "הצלחה!",
+        description: "הפריט נוסף בהצלחה",
+      });
+
+      // Reset form
+      setTitle('');
+      setPrice('');
+      setCategory('');
+      setLocation('');
+      setMobileNumber('');
+      setSelectedImage(null);
+      
+      // Refresh the homepage data
+      refreshItems();
+      
+      onClose();
+    } catch (error) {
+      console.error('Error saving item:', error);
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה בשמירת הפריט",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -69,7 +171,9 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
             <label className="text-sm text-muted-foreground block text-right">מחיר</label>
             <Input 
               placeholder=""
-              type="text"
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
               className="w-full h-11 text-right bg-background border border-border rounded-full px-4"
             />
           </div>
@@ -82,6 +186,7 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
                 <SelectValue placeholder="בחר קטגוריה" />
               </SelectTrigger>
               <SelectContent className="bg-background border border-border z-50">
+                <SelectItem value="מוזמנים להצטרף">מוזמנים להצטרף</SelectItem>
                 <SelectItem value="art">אמנות</SelectItem>
                 <SelectItem value="secondhand">יד שנייה</SelectItem>
                 <SelectItem value="business">עסק</SelectItem>
@@ -154,13 +259,10 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
             <Button 
               className="w-full h-11 rounded-full text-lg font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: '#BB31E9' }}
-              disabled={!isFormValid}
-              onClick={() => {
-                console.log('Form submitted');
-                onClose();
-              }}
+              disabled={!isFormValid || isSubmitting}
+              onClick={handleSubmit}
             >
-              שמור
+              {isSubmitting ? "שומר..." : "שמור"}
             </Button>
           </div>
         </div>
