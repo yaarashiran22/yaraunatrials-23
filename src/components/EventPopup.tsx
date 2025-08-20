@@ -1,8 +1,9 @@
-import { X, MessageCircle, Share, Bookmark, MapPin, Eye } from "lucide-react";
+import { X, MessageCircle, Share, Bookmark, MapPin, Eye, Check, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useItemDetails } from "@/hooks/useItemDetails";
+import { useEventRSVP } from "@/hooks/useEventRSVP";
 import profile1 from "@/assets/profile-1.jpg";
 
 interface EventPopupProps {
@@ -73,6 +74,9 @@ const EventPopup = ({
       day: 'numeric' 
     })
   } : (event || defaultEvent);
+  
+  // RSVP functionality
+  const { userRSVP, rsvpCount, handleRSVP, isUpdating } = useEventRSVP(eventId || displayEvent.id);
 
   console.log('EventPopup - eventData:', eventData);
   console.log('EventPopup - mobile_number:', eventData?.mobile_number);
@@ -205,8 +209,37 @@ const EventPopup = ({
             )}
           </div>
 
+          {/* RSVP Section */}
+          <div className="mt-6 p-4 bg-muted/20 rounded-xl">
+            <div className="text-center mb-4">
+              <p className="text-sm text-muted-foreground mb-2">
+                {rsvpCount} אנשים מגיעים לאירוע
+              </p>
+              <div className="flex gap-2 justify-center">
+                <Button
+                  onClick={() => handleRSVP('going')}
+                  disabled={isUpdating}
+                  variant={userRSVP?.status === 'going' ? "default" : "outline"}
+                  className="flex-1 h-10 rounded-lg"
+                >
+                  <Check className="h-4 w-4 ml-2" />
+                  מגיע
+                </Button>
+                <Button
+                  onClick={() => handleRSVP('maybe')}
+                  disabled={isUpdating}
+                  variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
+                  className="flex-1 h-10 rounded-lg"
+                >
+                  <UserCheck className="h-4 w-4 ml-2" />
+                  אולי
+                </Button>
+              </div>
+            </div>
+          </div>
+
           {/* Action Buttons */}
-          <div className="mt-8 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-3">
             <Button 
               variant={eventData?.mobile_number ? "default" : "outline"}
               disabled={!eventData?.mobile_number}
