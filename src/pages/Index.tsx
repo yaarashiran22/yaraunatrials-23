@@ -14,7 +14,7 @@ import FriendMeetupPopup from "@/components/FriendMeetupPopup";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import { Button } from "@/components/ui/button";
-import { Bell, Users } from "lucide-react";
+import { Bell, Users, Plus } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -183,6 +183,7 @@ const Index = () => {
                 onClick={() => setShowFriendMeetup(true)}
                 className="text-xs px-2 py-1 rounded-full bg-background hover:bg-purple-50 border-purple-400 text-purple-600 hover:border-purple-500"
               >
+                <Plus className="h-3 w-3" />
                 <Users className="h-3 w-3" />
               </Button>
               <Button 
