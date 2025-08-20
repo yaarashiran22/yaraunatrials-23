@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useStories, Story } from "@/hooks/useStories";
 import { useProfile } from "@/hooks/useProfile";
+import { useNavigate } from "react-router-dom";
 
 interface StoriesPopupProps {
   isOpen: boolean;
@@ -13,8 +14,15 @@ interface StoriesPopupProps {
 const StoriesPopup = ({ isOpen, onClose, userId }: StoriesPopupProps) => {
   const { stories, loading } = useStories(userId);
   const { profile } = useProfile(userId);
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+
+  const handleNameClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClose();
+    navigate(`/profile/${userId}`);
+  };
 
   // Reset to first story when popup opens
   useEffect(() => {
@@ -131,7 +139,12 @@ const StoriesPopup = ({ isOpen, onClose, userId }: StoriesPopupProps) => {
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-medium">{profile?.name || "Unknown"}</span>
+              <span 
+                className="font-medium cursor-pointer hover:underline"
+                onClick={handleNameClick}
+              >
+                {profile?.name || "Unknown"}
+              </span>
               <span className="text-xs text-white/70">{currentIndex + 1} of {stories.length}</span>
             </div>
           </div>
