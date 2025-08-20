@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Search, ArrowLeft, Bell } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useItems } from "@/hooks/useItems";
+import { useRecommendations } from "@/hooks/useRecommendations";
 
 import coffeeShop from "@/assets/coffee-shop.jpg";
 import profile1 from "@/assets/profile-1.jpg";
@@ -49,12 +49,7 @@ const priceOptions = [
 const AllRecommendationsPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const { items: allItems, loading } = useItems();
-
-  // Filter for recommendation items (business type items)
-  const recommendationItems = useMemo(() => {
-    return allItems.filter(item => item.category === 'business' || item.category === 'recommendation');
-  }, [allItems]);
+  const { recommendations, loading } = useRecommendations();
 
   // State management
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -66,9 +61,9 @@ const AllRecommendationsPage = () => {
 
   // Optimized filtering with useMemo for better performance
   const filteredItems = useMemo(() => {
-    if (!recommendationItems.length) return [];
+    if (!recommendations.length) return [];
     
-    return recommendationItems.filter(item => {
+    return recommendations.filter(item => {
       // Search filter - case insensitive
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
@@ -107,7 +102,7 @@ const AllRecommendationsPage = () => {
 
       return true;
     });
-  }, [recommendationItems, searchQuery, selectedNeighborhood, priceFilter]);
+  }, [recommendations, searchQuery, selectedNeighborhood, priceFilter]);
 
   // Optimized event handlers with useCallback
   const handleItemClick = useCallback((item: any) => {
