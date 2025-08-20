@@ -187,7 +187,14 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
                 </div>
                 <div className="flex items-center gap-3 text-base font-medium text-foreground">
                   <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                  <span>{new Date(itemDetails.created_at).toLocaleDateString('he-IL')}</span>
+                  <span>
+                    {new Date(itemDetails.created_at).toLocaleDateString('he-IL', { 
+                      weekday: 'long', 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </span>
                 </div>
               </div>
             )}
