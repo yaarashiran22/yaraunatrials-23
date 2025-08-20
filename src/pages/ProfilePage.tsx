@@ -295,9 +295,13 @@ const ProfilePage = () => {
               </div>
             </div>
             <p className="text-sm text-foreground mb-4">{profileData?.bio || "אין תיאור"}</p>
-            {profileData?.specialty && (
-              <div className="rounded-lg px-3 py-2 mb-4 inline-block" style={{ backgroundColor: 'hsl(280 60% 55%)' }}>
-                <span className="text-sm font-medium text-white">{profileData.specialty}</span>
+            {profileData?.specialties && profileData.specialties.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {profileData.specialties.map((specialty, index) => (
+                  <div key={index} className="rounded-lg px-3 py-2 inline-block" style={{ backgroundColor: 'hsl(280 60% 55%)' }}>
+                    <span className="text-sm font-medium text-white">{specialty}</span>
+                  </div>
+                ))}
               </div>
             )}
             

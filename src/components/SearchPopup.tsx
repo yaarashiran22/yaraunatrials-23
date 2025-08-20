@@ -14,7 +14,7 @@ interface Profile {
   name: string | null;
   username: string | null;
   bio: string | null;
-  specialty: string | null;
+  specialties: string[] | null;
   profile_image_url: string | null;
 }
 
@@ -48,8 +48,8 @@ const SearchPopup = () => {
       // Search profiles
       const { data: profilesData } = await supabase
         .from('profiles')
-        .select('id, name, username, bio, specialty, profile_image_url')
-        .or(`name.ilike.%${query}%,username.ilike.%${query}%,bio.ilike.%${query}%,specialty.ilike.%${query}%`)
+        .select('id, name, username, bio, specialties, profile_image_url')
+        .or(`name.ilike.%${query}%,username.ilike.%${query}%,bio.ilike.%${query}%`)
         .limit(10);
 
       // Search items
@@ -160,9 +160,9 @@ const SearchPopup = () => {
                       <div className="font-medium text-sm">
                         {profile.name || profile.username || 'Unknown User'}
                       </div>
-                      {profile.specialty && (
+                      {profile.specialties && profile.specialties.length > 0 && (
                         <div className="text-xs text-primary font-medium">
-                          {profile.specialty}
+                          {profile.specialties.join(', ')}
                         </div>
                       )}
                       {profile.bio && (

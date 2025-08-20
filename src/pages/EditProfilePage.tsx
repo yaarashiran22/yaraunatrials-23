@@ -28,7 +28,7 @@ const EditProfilePage = () => {
     username: "",
     bio: "",
     location: "",
-    specialty: "",
+    specialties: [],
     interests: ['צילום', 'יוצר תוכן', 'אמנות', 'מוזיקה'],
     isPrivate: false,
     showInSearch: true
@@ -52,7 +52,7 @@ const EditProfilePage = () => {
     }
   };
 
-  const handleInputChange = (field: string, value: string | boolean) => {
+  const handleInputChange = (field: string, value: string | boolean | string[]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -84,7 +84,7 @@ const EditProfilePage = () => {
         username: formData.username,
         bio: formData.bio,
         location: formData.location,
-        specialty: formData.specialty,
+        specialties: formData.specialties,
         interests: formData.interests,
         is_private: formData.isPrivate,
         show_in_search: formData.showInSearch,
@@ -124,7 +124,7 @@ const EditProfilePage = () => {
         username: profile.username || "",
         bio: profile.bio || "",
         location: profile.location || "",
-        specialty: profile.specialty || "",
+        specialties: profile.specialties || [],
         interests: profile.interests || ['צילום', 'יוצר תוכן', 'אמנות', 'מוזיקה'],
         isPrivate: profile.is_private || false,
         showInSearch: profile.show_in_search !== false // Default to true if null/undefined
@@ -223,15 +223,42 @@ const EditProfilePage = () => {
             />
           </div>
 
-          {/* Specialty */}
+          {/* Specialties */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">התמחות (אופציונלי)</label>
-            <Input 
-              placeholder="למשל: צלמת חתונות, מעצבת גרפית, שפית"
-              className="text-right"
-              value={formData.specialty}
-              onChange={(e) => handleInputChange('specialty', e.target.value)}
-            />
+            <label className="block text-sm font-medium text-foreground mb-3">התמחויות</label>
+            <div className="flex flex-wrap gap-2">
+              {formData.specialties.map((specialty, index) => (
+                <div key={index} className="flex items-center gap-2 bg-muted rounded-full px-3 py-1">
+                  <span className="text-sm">{specialty}</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="p-0 h-4 w-4"
+                    onClick={() => {
+                      const newSpecialties = formData.specialties.filter((_, i) => i !== index);
+                      handleInputChange('specialties', newSpecialties);
+                    }}
+                  >
+                    <Plus className="h-3 w-3 rotate-45" />
+                  </Button>
+                </div>
+              ))}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="rounded-full px-3 py-1 h-7"
+                onClick={() => {
+                  const newSpecialty = prompt('הוסף התמחות:');
+                  if (newSpecialty?.trim()) {
+                    const newSpecialties = [...formData.specialties, newSpecialty.trim()];
+                    handleInputChange('specialties', newSpecialties);
+                  }
+                }}
+              >
+                <Plus className="h-3 w-3 ml-1" />
+                הוסף
+              </Button>
+            </div>
           </div>
 
           {/* Join Date */}

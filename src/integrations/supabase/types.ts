@@ -461,7 +461,7 @@ export type Database = {
           name: string | null
           profile_image_url: string | null
           show_in_search: boolean | null
-          specialty: string | null
+          specialties: string[] | null
           updated_at: string | null
           username: string | null
         }
@@ -479,7 +479,7 @@ export type Database = {
           name?: string | null
           profile_image_url?: string | null
           show_in_search?: boolean | null
-          specialty?: string | null
+          specialties?: string[] | null
           updated_at?: string | null
           username?: string | null
         }
@@ -497,7 +497,7 @@ export type Database = {
           name?: string | null
           profile_image_url?: string | null
           show_in_search?: boolean | null
-          specialty?: string | null
+          specialties?: string[] | null
           updated_at?: string | null
           username?: string | null
         }
