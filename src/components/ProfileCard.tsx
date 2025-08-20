@@ -61,7 +61,7 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
               className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card cursor-pointer hover:opacity-80 transition-opacity"
               onClick={(e) => {
                 e.stopPropagation();
-                handleClick(); // Show stories if they exist, otherwise navigate to profile
+                setShowProfilePicture(true); // Show profile picture viewer
               }}
             >
               <img 
