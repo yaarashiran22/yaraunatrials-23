@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -6,8 +6,17 @@ export const useFriends = () => {
   const [friends, setFriends] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const lastFetchRef = useRef<number>(0);
+  const CACHE_DURATION = 60000; // 1 minute cache
 
-  const fetchFriends = async () => {
+  const fetchFriends = async (forceRefresh = false) => {
+    const now = Date.now();
+    
+    // Use cache unless forced refresh or cache expired
+    if (!forceRefresh && now - lastFetchRef.current < CACHE_DURATION && friends.length > 0) {
+      return;
+    }
+
     try {
       setLoading(true);
       const { data: { user } } = await supabase.auth.getUser();
@@ -34,6 +43,7 @@ export const useFriends = () => {
       }
 
       setFriends(data || []);
+      lastFetchRef.current = now;
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -203,6 +213,6 @@ export const useFriends = () => {
     isFriend,
     getFriendItems,
     getAllFriendsItemsByCategory,
-    refreshFriends: fetchFriends
+    refreshFriends: () => fetchFriends(true)
   };
 };

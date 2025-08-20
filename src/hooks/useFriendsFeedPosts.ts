@@ -149,11 +149,11 @@ export const useFriendsFeedPosts = () => {
     fetchFriendsFeedPosts();
   }, [user]);
 
-  // Auto-refresh posts every 30 seconds to show new content
+  // Auto-refresh posts every 2 minutes to reduce load
   useEffect(() => {
     const interval = setInterval(() => {
       fetchFriendsFeedPosts();
-    }, 30000);
+    }, 120000); // 2 minutes instead of 30 seconds
 
     return () => clearInterval(interval);
   }, [user]);

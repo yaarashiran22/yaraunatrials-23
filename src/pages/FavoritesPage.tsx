@@ -34,7 +34,7 @@ const FavoritesPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
-  const { friends, getAllFriendsItemsByCategory, loading: friendsLoading } = useFriends();
+  const { friends, loading: friendsLoading } = useFriends();
   const { posts: friendsPosts, loading: postsLoading, deletePost, refreshPosts } = useFriendsFeedPosts();
   const { galleries: pictureGalleries, loading: galleriesLoading } = useFriendsPictureGalleries();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
@@ -46,31 +46,7 @@ const FavoritesPage = () => {
   const [isBusinessPopupOpen, setIsBusinessPopupOpen] = useState(false);
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
-  const [friendsItemsByCategory, setFriendsItemsByCategory] = useState<{ [category: string]: any[] }>({});
-  const [loading, setLoading] = useState(false);
   const [isPhotoUploadOpen, setIsPhotoUploadOpen] = useState(false);
-
-  // Memoize the friends items loading to prevent redundant calls
-  useEffect(() => {
-    const loadFriendsItems = async () => {
-      if (friends.length === 0 || loading || friendsLoading) return;
-      
-      setLoading(true);
-      try {
-        const itemsByCategory = await getAllFriendsItemsByCategory();
-        setFriendsItemsByCategory(itemsByCategory);
-      } catch (error) {
-        console.error('Error loading friends items by category:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Only load if we have friends and aren't already loading
-    if (friends.length > 0 && !loading && !friendsLoading) {
-      loadFriendsItems();
-    }
-  }, [friends.length, friendsLoading]); // Only depend on friends.length, not the entire friends array
 
   // Fetch user profiles for neighbor questions
   useEffect(() => {
