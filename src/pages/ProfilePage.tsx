@@ -286,7 +286,15 @@ const ProfilePage = () => {
                 <span>{profileData?.location || "לא צוין"}</span>
               </div>
             </div>
-            <p className="text-sm text-foreground mb-4">{profileData?.bio || "אין תיאור"}</p>
+            <p className="text-sm text-foreground mb-2">{profileData?.bio || "אין תיאור"}</p>
+            {/* Account Type Display */}
+            {profileData?.account_type && (
+              <div className="rounded-lg px-3 py-1 mb-2 inline-block" style={{ backgroundColor: profileData.account_type === 'business' ? 'hsl(280 60% 55%)' : 'hsl(220 60% 55%)' }}>
+                <span className="text-xs font-medium text-white">
+                  {profileData.account_type === 'business' ? 'חשבון עסקי' : 'חשבון אישי'}
+                </span>
+              </div>
+            )}
             {profileData?.specialty && (
               <div className="rounded-lg px-3 py-2 mb-4 inline-block" style={{ backgroundColor: 'hsl(280 60% 55%)' }}>
                 <span className="text-sm font-medium text-white">{profileData.specialty}</span>

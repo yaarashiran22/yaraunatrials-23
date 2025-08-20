@@ -14,6 +14,7 @@ export interface Profile {
   show_in_search: boolean | null;
   interests: string[] | null;
   specialty: string | null;
+  account_type: string | null;
   created_at: string;
   updated_at: string | null;
 }
