@@ -85,7 +85,7 @@ export const NeighborQuestionItem = ({
   const messageTypeInfo = getMessageTypeInfo(question.message_type);
 
   return (
-    <div className="flex-shrink-0 w-52 bg-white border border-border rounded-lg p-3">
+    <div className="flex-shrink-0 w-48 bg-white border border-border rounded-lg p-3">
       <div className="flex items-start gap-2 mb-2">
         {question.is_anonymous ? (
           <>

@@ -47,7 +47,7 @@ export const NeighborQuestionCard = () => {
 
   if (isCreating) {
     return (
-      <Card className="flex-shrink-0 w-72 bg-background border border-border rounded-lg p-4">
+      <Card className="flex-shrink-0 w-56 bg-background border border-border rounded-lg p-3">
         <Textarea
           value={questionText}
           onChange={(e) => setQuestionText(e.target.value)}
@@ -124,11 +124,11 @@ export const NeighborQuestionCard = () => {
 
   return (
     <Card 
-      className="flex-shrink-0 w-48 bg-background border border-dashed border-border rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow flex flex-col items-center justify-center min-h-[120px] text-center"
+      className="flex-shrink-0 w-40 bg-background border border-dashed border-border rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow flex flex-col items-center justify-center min-h-[100px] text-center"
       onClick={() => setIsCreating(true)}
     >
-      <Plus className="h-8 w-8 text-muted-foreground mb-2" />
-      <p className="text-sm text-muted-foreground">
+      <Plus className="h-6 w-6 text-muted-foreground mb-2" />
+      <p className="text-xs text-muted-foreground">
         הוסף הודעה חדשה
       </p>
     </Card>
