@@ -93,7 +93,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
         // Upload image to Supabase storage
         const fileExt = selectedImage.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `posts/${fileName}`;
+        const filePath = `${user.id}/${fileName}`; // User ID folder structure required by RLS
 
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('photos')
