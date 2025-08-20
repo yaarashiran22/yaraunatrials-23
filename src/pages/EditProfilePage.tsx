@@ -142,7 +142,7 @@ const EditProfilePage = () => {
       <div className="flex items-center justify-between p-4 border-b bg-background">
         <div></div> {/* Empty div for spacing */}
         <h2 className="text-lg font-semibold">עריכת פרופיל</h2>
-        <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+        <Button variant="ghost" size="sm" onClick={() => navigate('/profile')}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
       </div>
