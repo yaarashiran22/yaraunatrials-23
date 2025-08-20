@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -11,39 +11,43 @@ interface EventRSVP {
   created_at: string;
 }
 
-const fetchEventRSVP = async (eventId: string, userId: string | null): Promise<EventRSVP | null> => {
-  if (!userId || !eventId) return null;
+// Combined fetch for better performance
+const fetchEventRSVPData = async (eventId: string, userId: string | null): Promise<{
+  userRSVP: EventRSVP | null;
+  rsvpCount: number;
+}> => {
+  if (!eventId) return { userRSVP: null, rsvpCount: 0 };
   
-  const { data, error } = await supabase
-    .from('event_rsvps')
-    .select('*')
-    .eq('event_id', eventId)
-    .eq('user_id', userId)
-    .single();
-
-  if (error && error.code !== 'PGRST116') {
-    console.error('Error fetching RSVP:', error);
-    throw error;
-  }
-
-  return data;
-};
-
-const fetchEventRSVPCount = async (eventId: string): Promise<number> => {
-  if (!eventId) return 0;
-  
-  const { count, error } = await supabase
+  // Fetch count
+  const countPromise = supabase
     .from('event_rsvps')
     .select('*', { count: 'exact', head: true })
     .eq('event_id', eventId)
     .eq('status', 'going');
 
-  if (error) {
-    console.error('Error fetching RSVP count:', error);
-    throw error;
+  // Fetch user RSVP if user is logged in
+  const userRSVPPromise = userId ? supabase
+    .from('event_rsvps')
+    .select('*')
+    .eq('event_id', eventId)
+    .eq('user_id', userId)
+    .maybeSingle() : Promise.resolve({ data: null, error: null });
+
+  // Execute both queries in parallel
+  const [countResult, userRSVPResult] = await Promise.all([countPromise, userRSVPPromise]);
+
+  if (countResult.error) {
+    console.error('Error fetching RSVP count:', countResult.error);
   }
 
-  return count || 0;
+  if (userRSVPResult.error && userRSVPResult.error.code !== 'PGRST116') {
+    console.error('Error fetching user RSVP:', userRSVPResult.error);
+  }
+
+  return {
+    userRSVP: userRSVPResult.data,
+    rsvpCount: countResult.count || 0
+  };
 };
 
 const upsertRSVP = async (eventId: string, userId: string, status: string) => {
@@ -83,33 +87,49 @@ export const useEventRSVP = (eventId: string) => {
     getUser();
   }, []);
 
-  // Fetch user's RSVP status
-  const { data: userRSVP, isLoading: rsvpLoading } = useQuery({
-    queryKey: ['event-rsvp', eventId, user?.id],
-    queryFn: () => fetchEventRSVP(eventId, user?.id),
-    enabled: !!eventId && !!user?.id,
-  });
-
-  // Fetch total RSVP count
-  const { data: rsvpCount = 0, isLoading: countLoading } = useQuery({
-    queryKey: ['event-rsvp-count', eventId],
-    queryFn: () => fetchEventRSVPCount(eventId),
+  // Combined query for better performance
+  const { data, isLoading } = useQuery({
+    queryKey: ['event-rsvp-data', eventId, user?.id],
+    queryFn: () => fetchEventRSVPData(eventId, user?.id),
     enabled: !!eventId,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  // RSVP mutation
+  const userRSVP = data?.userRSVP;
+  const rsvpCount = data?.rsvpCount || 0;
+
+  // RSVP mutation with optimistic updates
   const rsvpMutation = useMutation({
     mutationFn: ({ status }: { status: string }) => 
       upsertRSVP(eventId, user?.id!, status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['event-rsvp', eventId, user?.id] });
-      queryClient.invalidateQueries({ queryKey: ['event-rsvp-count', eventId] });
-      toast({
-        title: "RSVP מעודכן!",
-        description: "התגובה שלך לאירוע נשמרה",
+    onMutate: async ({ status }) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['event-rsvp-data', eventId, user?.id] });
+      
+      // Snapshot previous value
+      const previousData = queryClient.getQueryData(['event-rsvp-data', eventId, user?.id]);
+      
+      // Optimistically update
+      queryClient.setQueryData(['event-rsvp-data', eventId, user?.id], (old: any) => {
+        if (!old) return old;
+        const wasGoing = old.userRSVP?.status === 'going';
+        const isGoing = status === 'going';
+        
+        return {
+          ...old,
+          userRSVP: { ...old.userRSVP, status },
+          rsvpCount: old.rsvpCount + (isGoing ? 1 : 0) - (wasGoing ? 1 : 0)
+        };
       });
+      
+      return { previousData };
     },
-    onError: (error) => {
+    onError: (error, variables, context) => {
+      // Rollback on error
+      if (context?.previousData) {
+        queryClient.setQueryData(['event-rsvp-data', eventId, user?.id], context.previousData);
+      }
       console.error('RSVP error:', error);
       toast({
         title: "שגיאה",
@@ -117,26 +137,57 @@ export const useEventRSVP = (eventId: string) => {
         variant: "destructive",
       });
     },
-  });
-
-  // Remove RSVP mutation
-  const removeRSVPMutation = useMutation({
-    mutationFn: () => deleteRSVP(eventId, user?.id!),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['event-rsvp', eventId, user?.id] });
-      queryClient.invalidateQueries({ queryKey: ['event-rsvp-count', eventId] });
       toast({
-        title: "RSVP הוסר",
-        description: "התגובה שלך לאירוע הוסרה",
+        title: "RSVP מעודכן!",
+        description: "התגובה שלך לאירוע נשמרה",
       });
     },
-    onError: (error) => {
+    onSettled: () => {
+      // Always refetch after success or error
+      queryClient.invalidateQueries({ queryKey: ['event-rsvp-data', eventId, user?.id] });
+    },
+  });
+
+  // Remove RSVP mutation with optimistic updates
+  const removeRSVPMutation = useMutation({
+    mutationFn: () => deleteRSVP(eventId, user?.id!),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['event-rsvp-data', eventId, user?.id] });
+      const previousData = queryClient.getQueryData(['event-rsvp-data', eventId, user?.id]);
+      
+      queryClient.setQueryData(['event-rsvp-data', eventId, user?.id], (old: any) => {
+        if (!old) return old;
+        const wasGoing = old.userRSVP?.status === 'going';
+        
+        return {
+          ...old,
+          userRSVP: null,
+          rsvpCount: Math.max(0, old.rsvpCount - (wasGoing ? 1 : 0))
+        };
+      });
+      
+      return { previousData };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(['event-rsvp-data', eventId, user?.id], context.previousData);
+      }
       console.error('Remove RSVP error:', error);
       toast({
         title: "שגיאה",
         description: "לא ניתן להסיר את ה-RSVP",
         variant: "destructive",
       });
+    },
+    onSuccess: () => {
+      toast({
+        title: "RSVP הוסר",
+        description: "התגובה שלך לאירוע הוסרה",
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['event-rsvp-data', eventId, user?.id] });
     },
   });
 
@@ -159,11 +210,13 @@ export const useEventRSVP = (eventId: string) => {
     }
   };
 
-  return {
+  const memoizedReturn = useMemo(() => ({
     userRSVP,
     rsvpCount,
-    isLoading: rsvpLoading || countLoading,
+    isLoading,
     handleRSVP,
     isUpdating: rsvpMutation.isPending || removeRSVPMutation.isPending,
-  };
+  }), [userRSVP, rsvpCount, isLoading, handleRSVP, rsvpMutation.isPending, removeRSVPMutation.isPending]);
+
+  return memoizedReturn;
 };

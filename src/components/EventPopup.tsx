@@ -109,12 +109,35 @@ const EventPopup = ({
 
   if (!isOpen) return null;
 
-  // Show loading state
+  // Show optimized loading state
   if (shouldFetchData && loading) {
     return (
       <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
-        <div className="bg-background rounded-2xl w-full max-w-sm p-8 text-center">
-          <div className="text-muted-foreground">טוען נתונים...</div>
+        <div className="bg-background rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto mx-4">
+          {/* Header Skeleton */}
+          <div className="flex items-center justify-between p-4 border-b">
+            <div className="w-6 h-6 bg-muted rounded animate-pulse"></div>
+            <div className="w-32 h-6 bg-muted rounded animate-pulse"></div>
+            <div className="w-6 h-6 bg-muted rounded animate-pulse"></div>
+          </div>
+          
+          {/* Content Skeleton */}
+          <div className="p-4">
+            <div className="w-full h-64 bg-muted rounded-2xl animate-pulse mb-6"></div>
+            <div className="space-y-4">
+              <div className="text-center space-y-2">
+                <div className="w-24 h-8 bg-muted rounded mx-auto animate-pulse"></div>
+                <div className="w-48 h-6 bg-muted rounded mx-auto animate-pulse"></div>
+                <div className="w-32 h-4 bg-muted rounded mx-auto animate-pulse"></div>
+              </div>
+              <div className="w-full h-16 bg-muted rounded animate-pulse"></div>
+              <div className="w-full h-16 bg-muted rounded animate-pulse"></div>
+              <div className="space-y-3">
+                <div className="w-full h-12 bg-muted rounded-2xl animate-pulse"></div>
+                <div className="w-full h-12 bg-muted rounded-2xl animate-pulse"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
