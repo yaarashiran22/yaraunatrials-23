@@ -46,7 +46,7 @@ const FeedPage = () => {
   const [postProfiles, setPostProfiles] = useState<{[key: string]: any}>({});
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
-  const { posts, loading, fetchPosts } = usePosts();
+  const { posts, loading, fetchPosts, deletePost } = usePosts();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
   const [selectedPostForComments, setSelectedPostForComments] = useState<string | null>(null);
@@ -143,6 +143,7 @@ const FeedPage = () => {
     
     return {
       id: post.id,
+      userId: post.user_id,
       userImage: userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
       userName: userProfile?.name || "משתמש",
       tag: post.location || "תושב שכונה",
@@ -191,6 +192,14 @@ const FeedPage = () => {
   const handleStoryClick = (userId: string) => {
     setSelectedUserId(userId);
     setShowStories(true);
+  };
+
+  // Handle post deletion
+  const handleDeletePost = async (postId: string) => {
+    const success = await deletePost(postId);
+    if (success) {
+      // Post will be removed from the list automatically by the deletePost function
+    }
   };
 
   return (
@@ -269,6 +278,7 @@ const FeedPage = () => {
                 key={post.id}
                 post={post}
                 onCommentsClick={setSelectedPostForComments}
+                onDelete={handleDeletePost}
               />
             ))
           )}
