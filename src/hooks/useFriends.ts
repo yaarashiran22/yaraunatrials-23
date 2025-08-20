@@ -152,24 +152,40 @@ export const useFriends = () => {
   };
 
   /**
-   * Get all friends' items organized by category
+   * Get all friends' items organized by category (optimized with parallel requests and caching)
    */
   const getAllFriendsItemsByCategory = async () => {
     const categories: { [category: string]: any[] } = {};
     
-    for (const friend of friends) {
-      const items = await getFriendItems(friend.friend_id);
+    if (friends.length === 0) return categories;
+    
+    try {
+      // Make all API calls in parallel instead of sequential
+      const friendItemPromises = friends.map(friend => 
+        getFriendItems(friend.friend_id).then(items => ({
+          friend,
+          items
+        }))
+      );
       
-      items.forEach(item => {
-        const category = item.category || 'other';
-        if (!categories[category]) {
-          categories[category] = [];
-        }
-        categories[category].push({
-          ...item,
-          uploader: friend.profiles
+      // Wait for all requests to complete
+      const friendsWithItems = await Promise.all(friendItemPromises);
+      
+      // Process the results
+      friendsWithItems.forEach(({ friend, items }) => {
+        items.forEach(item => {
+          const category = item.category || 'other';
+          if (!categories[category]) {
+            categories[category] = [];
+          }
+          categories[category].push({
+            ...item,
+            uploader: friend.profiles
+          });
         });
       });
+    } catch (error) {
+      console.error('Error fetching friends items:', error);
     }
     
     return categories;
