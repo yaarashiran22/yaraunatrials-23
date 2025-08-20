@@ -215,7 +215,7 @@ const FeedPage = () => {
           <Button 
             onClick={() => navigate('/neighbors')}
             variant="outline"
-            className="w-full text-muted-foreground border-border/50 hover:bg-accent/30 font-normal py-2.5 text-sm"
+            className="w-full text-foreground/80 border-primary/20 hover:bg-primary/5 hover:border-primary/30 font-medium py-3 text-sm shadow-sm"
           >
             הכר את השכונה
           </Button>
