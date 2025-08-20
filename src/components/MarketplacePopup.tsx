@@ -156,6 +156,19 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
               </p>
             )}
             
+            {/* Item Location and Date for Join Items */}
+            {itemDetails?.category === 'מוזמנים להצטרף' && (
+              <div className="space-y-2 p-4 bg-muted/30 rounded-lg">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4" />
+                  <span>{itemDetails.location || 'לא צוין'}</span>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  <span>תאריך: {new Date(itemDetails.created_at).toLocaleDateString('he-IL')}</span>
+                </div>
+              </div>
+            )}
+
             {/* Seller Info */}
             {displayItem.seller && (
               <div 
@@ -179,7 +192,7 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
           </div>
 
           {/* Request to Join Section - only for join me items */}
-          {item?.type === 'recommendation' && (
+          {(item?.type === 'recommendation' || itemDetails?.category === 'מוזמנים להצטרף') && (
             <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
               <h4 className="text-lg font-semibold text-foreground mb-3 text-center">בקשה להצטרפות</h4>
               <p className="text-foreground text-center mb-4">

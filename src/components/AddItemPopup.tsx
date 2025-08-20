@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface AddItemPopupProps {
   isOpen: boolean;
@@ -12,19 +14,107 @@ interface AddItemPopupProps {
 
 const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [mobileNumber, setMobileNumber] = useState('');
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
+  const [price, setPrice] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setSelectedImage(e.target?.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!isFormValid || isSubmitting) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Sign in anonymously if no user
+      const { data: { user } } = await supabase.auth.getUser();
+      let currentUserId = user?.id;
+      
+      if (!currentUserId) {
+        const { data: authData, error: authError } = await supabase.auth.signInAnonymously();
+        if (authError) throw authError;
+        currentUserId = authData.user?.id;
+      }
+
+      if (!currentUserId) {
+        throw new Error('Failed to authenticate user');
+      }
+
+      let imageUrl = null;
+
+      // Upload image if selected
+      if (selectedFile) {
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `${currentUserId}-${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('item-images')
+          .upload(fileName, selectedFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('item-images')
+          .getPublicUrl(fileName);
+
+        imageUrl = publicUrl;
+      }
+
+      // Insert item into database
+      const { error: insertError } = await supabase
+        .from('items')
+        .insert({
+          user_id: currentUserId,
+          title,
+          price: price ? parseFloat(price) : null,
+          category,
+          location,
+          mobile_number: mobileNumber,
+          image_url: imageUrl,
+          market: 'israel'
+        });
+
+      if (insertError) throw insertError;
+
+      toast({
+        title: "הפריט נוסף בהצלחה!",
+        description: "הפריט שלך מופיע כעת בעמוד הבית",
+      });
+
+      // Reset form
+      setTitle('');
+      setPrice('');
+      setCategory('');
+      setLocation('');
+      setMobileNumber('');
+      setSelectedImage(null);
+      setSelectedFile(null);
+      
+      onClose();
+    } catch (error) {
+      console.error('Error creating item:', error);
+      toast({
+        title: "שגיאה",
+        description: "אירעה שגיאה בהוספת הפריט. אנא נסה שוב.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -66,10 +156,12 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
 
           {/* Price Field */}
           <div className="space-y-1">
-            <label className="text-sm text-muted-foreground block text-right">מחיר</label>
+            <label className="text-sm text-muted-foreground block text-right">מחיר (אופציונלי)</label>
             <Input 
               placeholder=""
               type="text"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
               className="w-full h-11 text-right bg-background border border-border rounded-full px-4"
             />
           </div>
@@ -86,6 +178,7 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
                 <SelectItem value="secondhand">יד שנייה</SelectItem>
                 <SelectItem value="business">עסק</SelectItem>
                 <SelectItem value="event">אירוע</SelectItem>
+                <SelectItem value="מוזמנים להצטרף">מוזמנים להצטרף</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -154,13 +247,10 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
             <Button 
               className="w-full h-11 rounded-full text-lg font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: '#BB31E9' }}
-              disabled={!isFormValid}
-              onClick={() => {
-                console.log('Form submitted');
-                onClose();
-              }}
+              disabled={!isFormValid || isSubmitting}
+              onClick={handleSubmit}
             >
-              שמור
+              {isSubmitting ? 'שומר...' : 'שמור'}
             </Button>
           </div>
         </div>
