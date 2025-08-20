@@ -111,7 +111,7 @@ const FeedPage = () => {
     const fetchQuestionProfiles = async () => {
       if (questions.length === 0) return;
 
-      const userIds = [...new Set(questions.map(q => q.user_id))];
+      const userIds = [...new Set(questions.map(q => q.user_id).filter(id => id !== null))];
       
       try {
         const { data, error } = await supabase
@@ -239,7 +239,7 @@ const FeedPage = () => {
               </div>
             ) : (
               questions.map((question) => {
-                const userProfile = questionProfiles[question.user_id];
+                const userProfile = question.user_id ? questionProfiles[question.user_id] : null;
                 return (
                   <NeighborQuestionItem
                     key={`question-${question.id}`}
