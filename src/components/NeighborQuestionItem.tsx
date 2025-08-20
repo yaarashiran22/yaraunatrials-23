@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { MessageCircle, Send, Trash2 } from "lucide-react";
+import React from "react";
+import { MessageCircle, Send, Trash2, AlertTriangle, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useNeighborQuestionComments } from "@/hooks/useNeighborQuestionComments";
@@ -13,6 +14,7 @@ interface NeighborQuestionItemProps {
     content: string;
     created_at: string;
     is_anonymous?: boolean;
+    message_type?: string;
   };
   userProfile?: {
     name?: string;
@@ -62,10 +64,25 @@ export const NeighborQuestionItem = ({
   };
 
   const handleDeleteQuestion = async () => {
-    if (confirm("האם אתה בטוח שאתה רוצה למחוק את השאלה?")) {
+    if (confirm("האם אתה בטוח שאתה רוצה למחוק את ההודעה?")) {
       onDeleteQuestion(question.id);
     }
   };
+
+  // Get message type display info
+  const getMessageTypeInfo = (messageType?: string) => {
+    switch (messageType) {
+      case 'alert':
+        return { icon: AlertTriangle, label: 'התראה', color: 'text-red-600' };
+      case 'help':
+        return { icon: HelpCircle, label: 'צריך עזרה', color: 'text-orange-600' };
+      case 'inquiry':
+      default:
+        return { icon: MessageCircle, label: 'בירור', color: 'text-blue-600' };
+    }
+  };
+
+  const messageTypeInfo = getMessageTypeInfo(question.message_type);
 
   return (
     <div className="flex-shrink-0 w-64 bg-white border border-border rounded-lg p-4">
@@ -79,9 +96,15 @@ export const NeighborQuestionItem = ({
               <h4 className="font-medium text-foreground text-sm">
                 משתמש אנונימי
               </h4>
-              <p className="text-xs text-muted-foreground">
-                {getTimeAgo(question.created_at)}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-muted-foreground">
+                  {getTimeAgo(question.created_at)}
+                </p>
+                <div className={`flex items-center gap-1 ${messageTypeInfo.color}`}>
+                  {React.createElement(messageTypeInfo.icon, { className: "h-3 w-3" })}
+                  <span className="text-xs">{messageTypeInfo.label}</span>
+                </div>
+              </div>
             </div>
           </>
         ) : (
@@ -103,9 +126,15 @@ export const NeighborQuestionItem = ({
               <h4 className="font-medium text-foreground text-sm">
                 {userProfile?.name || "משתמש"}
               </h4>
-              <p className="text-xs text-muted-foreground">
-                {getTimeAgo(question.created_at)}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-muted-foreground">
+                  {getTimeAgo(question.created_at)}
+                </p>
+                <div className={`flex items-center gap-1 ${messageTypeInfo.color}`}>
+                  {React.createElement(messageTypeInfo.icon, { className: "h-3 w-3" })}
+                  <span className="text-xs">{messageTypeInfo.label}</span>
+                </div>
+              </div>
             </div>
           </>
         )}

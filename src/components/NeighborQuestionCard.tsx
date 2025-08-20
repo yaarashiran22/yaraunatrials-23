@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Send, User, UserX } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Plus, Send, User, UserX, AlertTriangle, HelpCircle, MessageSquare } from "lucide-react";
 import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -11,19 +12,28 @@ export const NeighborQuestionCard = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [questionText, setQuestionText] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [messageType, setMessageType] = useState<"alert" | "inquiry" | "help">("inquiry");
   const { createQuestion, creating } = useNeighborQuestions();
   const { user } = useAuth();
+
+  const messageTypeOptions = [
+    { value: "inquiry", label: "בירור", icon: MessageSquare },
+    { value: "alert", label: "התראה", icon: AlertTriangle },
+    { value: "help", label: "צריך עזרה", icon: HelpCircle },
+  ];
 
   const handleSubmit = async () => {
     if (!questionText.trim()) return;
     
     const success = await createQuestion({ 
       content: questionText.trim(),
-      isAnonymous: isAnonymous
+      isAnonymous: isAnonymous,
+      messageType: messageType
     });
     if (success) {
       setQuestionText("");
       setIsAnonymous(false);
+      setMessageType("inquiry");
       setIsCreating(false);
     }
   };
@@ -32,6 +42,7 @@ export const NeighborQuestionCard = () => {
     setIsCreating(false);
     setQuestionText("");
     setIsAnonymous(false);
+    setMessageType("inquiry");
   };
 
   if (isCreating) {
@@ -40,10 +51,35 @@ export const NeighborQuestionCard = () => {
         <Textarea
           value={questionText}
           onChange={(e) => setQuestionText(e.target.value)}
-          placeholder="שאל שאלה לשכנים..."
+          placeholder="כתוב הודעה לשכנים..."
           className="mb-3 min-h-[80px] resize-none"
           autoFocus
         />
+        
+        {/* Message type selector */}
+        <div className="mb-3">
+          <label className="text-sm text-muted-foreground block mb-2">
+            סוג ההודעה
+          </label>
+          <Select value={messageType} onValueChange={(value: "alert" | "inquiry" | "help") => setMessageType(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {messageTypeOptions.map((option) => {
+                const IconComponent = option.icon;
+                return (
+                  <SelectItem key={option.value} value={option.value}>
+                    <div className="flex items-center gap-2">
+                      <IconComponent className="h-4 w-4" />
+                      <span>{option.label}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
         
         {/* Anonymous posting option */}
         <div className="flex items-center space-x-2 mb-3 justify-end">
@@ -93,7 +129,7 @@ export const NeighborQuestionCard = () => {
     >
       <Plus className="h-8 w-8 text-muted-foreground mb-2" />
       <p className="text-sm text-muted-foreground">
-        הוסף שאלה חדשה
+        הוסף הודעה חדשה
       </p>
     </Card>
   );

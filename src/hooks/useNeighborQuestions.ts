@@ -10,11 +10,13 @@ interface NeighborQuestion {
   created_at: string;
   updated_at: string;
   is_anonymous?: boolean;
+  message_type?: string;
 }
 
 interface CreateQuestionData {
   content: string;
   isAnonymous?: boolean;
+  messageType?: string;
 }
 
 export const useNeighborQuestions = () => {
@@ -36,7 +38,7 @@ export const useNeighborQuestions = () => {
         console.error('Error fetching neighbor questions:', error);
         toast({
           title: "שגיאה",
-          description: "שגיאה בטעינת השאלות",
+          description: "שגיאה בטעינת ההודעות",
           variant: "destructive",
         });
       } else {
@@ -46,7 +48,7 @@ export const useNeighborQuestions = () => {
       console.error('Unexpected error:', err);
       toast({
         title: "שגיאה",
-        description: "שגיאה בטעינת השאלות",
+        description: "שגיאה בטעינת ההודעות",
         variant: "destructive",
       });
     } finally {
@@ -63,11 +65,13 @@ export const useNeighborQuestions = () => {
             user_id: null,
             is_anonymous: true,
             content: questionData.content,
+            message_type: questionData.messageType || 'inquiry',
           }
         : {
             user_id: user?.id || null,
             is_anonymous: false,
             content: questionData.content,
+            message_type: questionData.messageType || 'inquiry',
           };
 
       const { data, error } = await supabase
@@ -80,14 +84,14 @@ export const useNeighborQuestions = () => {
         console.error('Error creating neighbor question:', error);
         toast({
           title: "שגיאה",
-          description: "שגיאה בפרסום השאלה",
+          description: "שגיאה בפרסום ההודעה",
           variant: "destructive",
         });
         return false;
       } else {
         toast({
           title: "הצלחה",
-          description: "השאלה פורסמה בהצלחה",
+          description: "ההודעה פורסמה בהצלחה",
         });
         
         // Add the new question to the beginning of the list
@@ -98,7 +102,7 @@ export const useNeighborQuestions = () => {
       console.error('Unexpected error:', err);
       toast({
         title: "שגיאה",
-        description: "שגיאה בפרסום השאלה",
+        description: "שגיאה בפרסום ההודעה",
         variant: "destructive",
       });
       return false;
@@ -111,7 +115,7 @@ export const useNeighborQuestions = () => {
     if (!user) {
       toast({
         title: "שגיאה",
-        description: "יש להתחבר כדי למחוק שאלה",
+        description: "יש להתחבר כדי למחוק הודעה",
         variant: "destructive",
       });
       return false;
@@ -128,14 +132,14 @@ export const useNeighborQuestions = () => {
         console.error('Error deleting neighbor question:', error);
         toast({
           title: "שגיאה",
-          description: "שגיאה במחיקת השאלה",
+          description: "שגיאה במחיקת ההודעה",
           variant: "destructive",
         });
         return false;
       } else {
         toast({
           title: "הצלחה",
-          description: "השאלה נמחקה בהצלחה",
+          description: "ההודעה נמחקה בהצלחה",
         });
         
         // Remove the question from the list
@@ -146,7 +150,7 @@ export const useNeighborQuestions = () => {
       console.error('Unexpected error:', err);
       toast({
         title: "שגיאה",
-        description: "שגיאה במחיקת השאלה",
+        description: "שגיאה במחיקת ההודעה",
         variant: "destructive",
       });
       return false;

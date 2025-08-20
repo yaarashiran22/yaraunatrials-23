@@ -312,6 +312,7 @@ export type Database = {
           id: string
           is_anonymous: boolean | null
           market: string | null
+          message_type: string | null
           updated_at: string
           user_id: string | null
         }
@@ -321,6 +322,7 @@ export type Database = {
           id?: string
           is_anonymous?: boolean | null
           market?: string | null
+          message_type?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -330,6 +332,7 @@ export type Database = {
           id?: string
           is_anonymous?: boolean | null
           market?: string | null
+          message_type?: string | null
           updated_at?: string
           user_id?: string | null
         }
