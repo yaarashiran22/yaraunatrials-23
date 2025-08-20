@@ -14,6 +14,7 @@ export interface Profile {
   show_in_search: boolean | null;
   interests: string[] | null;
   specialty: string | null;
+  account_type: string | null;
   created_at: string;
   updated_at: string | null;
 }
@@ -50,7 +51,8 @@ export const useProfile = (profileId?: string) => {
         setError('Profile not found');
         setProfile(null);
       } else {
-        setProfile(data);
+        // Cast the data to our Profile interface
+        setProfile(data as unknown as Profile);
         setError(null);
       }
     } catch (err: any) {
@@ -77,7 +79,8 @@ export const useProfile = (profileId?: string) => {
       throw updateError;
     }
 
-    setProfile(data);
+    // Cast the data to our Profile interface
+    setProfile(data as unknown as Profile);
     return data;
   }, [user?.id]);
 

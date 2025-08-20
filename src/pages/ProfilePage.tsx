@@ -345,6 +345,40 @@ const ProfilePage = () => {
           </div>
         </div>
 
+        {/* תחומי עניין Section - Only show if user has interests */}
+        {profileData?.interests && profileData.interests.length > 0 && (
+          <section className="mb-6">
+            <h3 className="text-lg font-semibold mb-3">תחומי עניין</h3>
+            <div className="flex flex-wrap gap-2">
+              {profileData.interests.map((interest, index) => (
+                <div 
+                  key={index} 
+                  className="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium"
+                >
+                  {interest}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Account Type Badge */}
+        {profileData?.account_type && (
+          <section className="mb-6">
+            <div className="inline-flex items-center">
+              <span 
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  profileData.account_type === 'business' 
+                    ? 'bg-purple-100 text-purple-800' 
+                    : 'bg-blue-100 text-blue-800'
+                }`}
+              >
+                {profileData.account_type === 'business' ? 'עסק' : 'אישי'}
+              </span>
+            </div>
+          </section>
+        )}
+
         {/* מוזמנים להצטרף Section */}
         <section className="mb-8">
           <SectionHeader title="מוזמנים להצטרף" />
