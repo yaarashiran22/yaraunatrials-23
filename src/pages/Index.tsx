@@ -10,10 +10,11 @@ import ProfileCard from "@/components/ProfileCard";
 import AddStoryButton from "@/components/AddStoryButton";
 import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
+import FriendMeetupPopup from "@/components/FriendMeetupPopup";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import { Button } from "@/components/ui/button";
-import { Bell } from "lucide-react";
+import { Bell, Users } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -70,6 +71,7 @@ const Index = () => {
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showFriendMeetup, setShowFriendMeetup] = useState(false);
 
   // Set refresh callback for new items
   useEffect(() => {
@@ -178,10 +180,11 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={openNewItem}
-                className="text-xs px-2 py-1 hover:bg-primary/10"
+                onClick={() => setShowFriendMeetup(true)}
+                className="text-sm px-3 py-2 bg-yellow-100 hover:bg-yellow-200 border-yellow-300 text-yellow-800 font-medium"
               >
-                +
+                <Users className="h-4 w-4 mr-1" />
+                חברים
               </Button>
               <Button 
                 variant="outline" 
@@ -317,6 +320,11 @@ const Index = () => {
       <NotificationsPopup 
         isOpen={showNotifications} 
         onClose={() => setShowNotifications(false)} 
+      />
+
+      <FriendMeetupPopup 
+        isOpen={showFriendMeetup} 
+        onClose={() => setShowFriendMeetup(false)} 
       />
       
       <BottomNavigation />
