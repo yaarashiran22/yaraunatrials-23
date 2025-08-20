@@ -198,8 +198,45 @@ const FeedPage = () => {
       />
 
       <main className="px-4 py-4 pb-32">
-        {/* שאלות שכנים Section */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-1.5 lg:p-2 border border-border/20 shadow-sm mb-6 mt-4">
+        {/* הכר את השכנים Button - Made more subtle */}
+        <div className="mb-4 mt-2">
+          <Button 
+            onClick={() => navigate('/neighbors')}
+            variant="outline"
+            className="w-full text-muted-foreground border-border/50 hover:bg-accent/30 font-normal py-2.5 text-sm"
+          >
+            הכר את השכונה
+          </Button>
+        </div>
+
+        {/* Upload Card - Only show if user is authenticated */}
+        {user && (
+          <div 
+            className="bg-white rounded-lg p-4 mb-6 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm border"
+            onClick={() => navigate('/create-post')}
+          >
+            <img 
+              src={profile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
+              alt="Profile"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <div className="flex-1">
+              <input 
+                type="text"
+                placeholder="שתפ.י פוסט עם השכונה"
+                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
+                readOnly
+              />
+            </div>
+            <div className="flex gap-1">
+              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+            </div>
+          </div>
+        )}
+
+        {/* שאלות שכנים Section - Moved below post sharing */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-1.5 lg:p-2 border border-border/20 shadow-sm mb-6">
           <div className="mb-3 px-2">
             <SectionHeader title="שאלות שכנים" />
           </div>
@@ -231,43 +268,6 @@ const FeedPage = () => {
             )}
           </div>
         </section>
-
-        {/* הכר את השכנים Button */}
-        <div className="mb-6">
-          <Button 
-            onClick={() => navigate('/neighbors')}
-            className="w-full bg-[hsl(var(--una-purple))] hover:bg-[hsl(var(--una-purple))]/90 text-white font-medium py-3 rounded-lg shadow-sm border-0"
-          >
-            הכר את השכנים
-          </Button>
-        </div>
-
-
-        {/* Upload Card - Only show if user is authenticated */}
-        {user && (
-          <div 
-            className="bg-white rounded-lg p-4 mb-6 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm border"
-            onClick={() => navigate('/create-post')}
-          >
-            <img 
-              src={profile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-              alt="Profile"
-              className="w-10 h-10 rounded-full object-cover"
-            />
-            <div className="flex-1">
-              <input 
-                type="text"
-                placeholder="שתפ.י פוסט עם השכונה"
-                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
-                readOnly
-              />
-            </div>
-            <div className="flex gap-1">
-              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-              <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-            </div>
-          </div>
-        )}
 
         {/* Posts Feed */}
         <div className="space-y-6 mb-8">
