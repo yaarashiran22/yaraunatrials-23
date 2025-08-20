@@ -42,6 +42,20 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
   // Fetch item details with uploader info if item.id exists
   const { item: itemDetails, loading: itemLoading } = useItemDetails(item?.id || "");
 
+  // Don't show default data - wait for real data to load
+  if (itemLoading && item?.id) {
+    return (
+      <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
+        <div className="bg-background rounded-2xl w-full max-w-sm p-8 mx-4">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <p className="text-foreground">טוען פרטי פריט...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const defaultItem = {
     id: "1",
     title: "חולצות אייטים",
@@ -57,7 +71,7 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
     condition: "כמו חדש"
   };
 
-  // Create display item with uploader info if available
+  // Create display item with uploader info if available, otherwise use passed item or default
   const displayItem = itemDetails ? {
     id: itemDetails.id,
     title: itemDetails.title,
