@@ -1,5 +1,5 @@
 
-import { X, MessageCircle, Share, Heart, MapPin, Eye } from "lucide-react";
+import { X, MessageCircle, Share, Heart, MapPin, Eye, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -163,7 +163,8 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
                   <MapPin className="h-4 w-4" />
                   <span>{itemDetails.location || 'לא צוין'}</span>
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Calendar className="h-4 w-4" />
                   <span>תאריך: {new Date(itemDetails.created_at).toLocaleDateString('he-IL')}</span>
                 </div>
               </div>
