@@ -1,5 +1,5 @@
 
-import { X, MessageCircle, Share, Heart, MapPin, Eye, Calendar } from "lucide-react";
+import { X, MessageCircle, Share, Heart, MapPin, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -42,8 +42,11 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
   // Fetch item details with uploader info if item.id exists
   const { item: itemDetails, loading: itemLoading } = useItemDetails(item?.id || "");
 
-  // Don't show default data - wait for real data to load
-  if (itemLoading && item?.id) {
+  // For faster loading, use passed item data immediately if available
+  const hasItemData = item && item.title && item.image;
+  
+  // Show loading only if we don't have basic item data and we're fetching details
+  if (itemLoading && !hasItemData && item?.id) {
     return (
       <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
         <div className="bg-background rounded-2xl w-full max-w-sm p-8 mx-4">
@@ -102,11 +105,6 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
       title: "שותף בהצלחה!",
       description: "הפריט שותף ברשתות החברתיות",
     });
-  };
-
-  const handleViewDetails = () => {
-    navigate(`/item/${displayItem.id}`);
-    onClose();
   };
 
   const handleViewProfile = () => {
@@ -243,13 +241,6 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
             >
               <MessageCircle className="h-5 w-5 ml-2" />
               {itemDetails?.mobile_number || 'אין נייד'}
-            </Button>
-            <Button 
-              onClick={handleViewDetails}
-              className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl text-lg font-medium"
-            >
-              <Eye className="h-5 w-5 ml-2" />
-              פרטים מלאים
             </Button>
           </div>
         </div>
