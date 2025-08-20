@@ -226,7 +226,7 @@ const Index = () => {
               onClick={() => navigate('/all-events')}
               className="text-xs px-3 py-1"
             >
-              הצג את כל האירועים
+              הצג עוד
             </Button>
           </div>
           {loading ? (
