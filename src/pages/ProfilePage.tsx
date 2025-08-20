@@ -17,6 +17,7 @@ import { useFriends } from "@/hooks/useFriends";
 import { useProfile } from "@/hooks/useProfile";
 import SectionHeader from "@/components/SectionHeader";
 import UniformCard from "@/components/UniformCard";
+import AddItemPopup from "@/components/AddItemPopup";
 
 import profile1 from "@/assets/profile-1.jpg";
 import dressItem from "@/assets/dress-item.jpg";
@@ -53,6 +54,7 @@ const ProfilePage = () => {
   
   
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showAddItem, setShowAddItem] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [isItemPopupOpen, setIsItemPopupOpen] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -484,6 +486,10 @@ const ProfilePage = () => {
       <NotificationsPopup 
         isOpen={showNotifications} 
         onClose={() => setShowNotifications(false)} 
+      />
+      <AddItemPopup 
+        isOpen={showAddItem} 
+        onClose={() => setShowAddItem(false)} 
       />
       <MarketplacePopup 
         isOpen={isItemPopupOpen}
