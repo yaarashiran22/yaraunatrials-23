@@ -32,6 +32,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
   const [mobileNumber, setMobileNumber] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [isEveryDay, setIsEveryDay] = useState(false);
+  const [isFree, setIsFree] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user, signInAnonymously } = useAuth();
   const { toast } = useToast();
@@ -59,7 +60,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       { value: location, name: 'מיקום' },
       { value: description.trim(), name: 'תיאור' },
       { value: mobileNumber.trim(), name: 'מספר נייד' },
-      { value: price, name: 'מחיר' },
+      { value: price || isFree, name: 'מחיר' },
       { value: selectedImage, name: 'תמונה' }
     ];
 
@@ -122,7 +123,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       const itemData = {
         title: title.trim(),
         description: description.trim() || null,
-        price: price ? parseFloat(price) : null,
+        price: isFree ? 0 : (price ? parseFloat(price) : null),
         category: category || null,
         location: location || null,
         image_url: selectedImage || null,
@@ -172,9 +173,9 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       setDescription('');
       setMobileNumber('');
       setSelectedDate(undefined);
+      setIsFree(false);
       setIsEveryDay(false);
       setSelectedImage(null);
-      onClose();
       
     } catch (error) {
       console.error('Unexpected error:', error);
@@ -331,13 +332,38 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
           {/* Price Field */}
           <div className="space-y-2">
             <label className="text-sm text-muted-foreground block text-right">מחיר <span className="text-red-500">*</span></label>
-            <Input 
-              placeholder="הזן מחיר בשקלים"
-              type="number"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className="w-full h-12 text-right bg-background border border-border rounded-full"
-            />
+            
+            {/* Free Checkbox */}
+            <div className="flex items-center space-x-2 justify-end mb-2">
+              <label htmlFor="is-free" className="text-sm text-muted-foreground">חינם</label>
+              <Checkbox 
+                id="is-free"
+                checked={isFree} 
+                onCheckedChange={(checked) => {
+                  setIsFree(checked as boolean);
+                  if (checked) {
+                    setPrice('');
+                  }
+                }}
+              />
+            </div>
+
+            {/* Price Input */}
+            {!isFree && (
+              <Input 
+                placeholder="הזן מחיר בשקלים"
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="w-full h-12 text-right bg-background border border-border rounded-full"
+              />
+            )}
+            
+            {isFree && (
+              <div className="w-full h-12 flex items-center justify-center bg-muted/30 border border-border rounded-full">
+                <span className="text-muted-foreground">חינם - ללא תשלום</span>
+              </div>
+            )}
           </div>
 
           {/* Add Image Button */}
@@ -377,11 +403,11 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
               className="w-full h-12 rounded-full text-lg font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: '#BB31E9' }}
               onClick={handleSubmit}
-              disabled={isSubmitting || !title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || !price || !selectedImage || (!isEveryDay && !selectedDate)}
+              disabled={isSubmitting || !title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || (!price && !isFree) || !selectedImage || (!isEveryDay && !selectedDate)}
             >
               {isSubmitting ? 'שומר...' : 'שמור'}
             </Button>
-            {(!title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || !price || !selectedImage || (!isEveryDay && !selectedDate)) && (
+            {(!title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || (!price && !isFree) || !selectedImage || (!isEveryDay && !selectedDate)) && (
               <p className="text-xs text-red-500 text-center mt-2">
                 נא למלא את כל השדות הנדרשים
               </p>
