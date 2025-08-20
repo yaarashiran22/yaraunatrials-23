@@ -330,20 +330,11 @@ const ProfilePage = () => {
                    {isFriend(actualProfileId || '') ? 'נוסף לחברים' : 'הוספה'}
                  </Button>
                )}
-              {isOwnProfile && (
-                <>
-                  <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
-                    עריכה
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="rounded-full p-2 h-8 w-8"
-                  >
-                    <Bookmark className="h-4 w-4" />
-                  </Button>
-                </>
-              )}
+               {isOwnProfile && (
+                <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
+                  עריכה
+                </Button>
+               )}
             </div>
           </div>
         </div>
