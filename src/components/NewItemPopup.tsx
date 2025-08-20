@@ -52,11 +52,28 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
   const handleSubmit = async () => {
     console.log('Save button clicked in popup');
     
-    // Require title for item creation
-    if (!title.trim()) {
+    // Validate all required fields
+    const requiredFields = [
+      { value: title.trim(), name: 'כותרת' },
+      { value: category, name: 'קטגוריה' },
+      { value: location, name: 'מיקום' },
+      { value: description.trim(), name: 'תיאור' },
+      { value: mobileNumber.trim(), name: 'מספר נייד' },
+      { value: price, name: 'מחיר' },
+      { value: selectedImage, name: 'תמונה' }
+    ];
+
+    // Check if date is filled (either specific date or "every day")
+    if (!isEveryDay && !selectedDate) {
+      requiredFields.push({ value: '', name: 'תאריך' });
+    }
+
+    const emptyFields = requiredFields.filter(field => !field.value);
+    
+    if (emptyFields.length > 0) {
       toast({
-        title: "שגיאה",
-        description: "נא להזין כותרת",
+        title: "שגיאה - שדות חסרים",
+        description: `נא למלא את השדות הבאים: ${emptyFields.map(f => f.name).join(', ')}`,
         variant: "destructive",
       });
       return;
@@ -190,11 +207,18 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
 
         {/* Content */}
         <div className="px-4 py-4 space-y-4 max-h-[calc(90vh-120px)] overflow-y-auto">
+          {/* Instructions */}
+          <div className="bg-muted/30 rounded-lg p-3 mb-4">
+            <p className="text-sm text-muted-foreground text-center">
+              כל השדות נדרשים למילוי
+            </p>
+          </div>
+
           {/* Title Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">כותרת</label>
+            <label className="text-sm text-muted-foreground block text-right">כותרת <span className="text-red-500">*</span></label>
             <Input 
-              placeholder=""
+              placeholder="הזן כותרת"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -204,7 +228,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
 
           {/* Category Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">קטגוריה</label>
+            <label className="text-sm text-muted-foreground block text-right">קטגוריה <span className="text-red-500">*</span></label>
             <Select dir="rtl" value={category} onValueChange={setCategory}>
               <SelectTrigger className="w-full h-12 text-right bg-background border border-border rounded-full">
                 <SelectValue placeholder="בחר קטגוריה" />
@@ -218,7 +242,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
 
           {/* Location Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">מיקום</label>
+            <label className="text-sm text-muted-foreground block text-right">מיקום <span className="text-red-500">*</span></label>
             <Select dir="rtl" value={location} onValueChange={setLocation}>
               <SelectTrigger className="w-full h-12 text-right bg-background border border-border rounded-full">
                 <SelectValue placeholder="בחר מיקום" />
@@ -236,9 +260,9 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
 
           {/* Description Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">תיאור</label>
+            <label className="text-sm text-muted-foreground block text-right">תיאור <span className="text-red-500">*</span></label>
             <Textarea 
-              placeholder=""
+              placeholder="הזן תיאור מפורט"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full min-h-[80px] text-right bg-background border border-border rounded-3xl resize-none p-4"
@@ -247,9 +271,9 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
 
           {/* Contact Mobile Number Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">מספר נייד ליצירת קשר</label>
+            <label className="text-sm text-muted-foreground block text-right">מספר נייד ליצירת קשר <span className="text-red-500">*</span></label>
             <Input 
-              placeholder=""
+              placeholder="הזן מספר נייד"
               type="tel"
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
@@ -259,7 +283,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
 
           {/* Date Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">תאריך</label>
+            <label className="text-sm text-muted-foreground block text-right">תאריך <span className="text-red-500">*</span></label>
             
             {/* Every Day Checkbox */}
             <div className="flex items-center space-x-2 justify-end mb-2">
@@ -306,9 +330,9 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
 
           {/* Price Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">מחיר</label>
+            <label className="text-sm text-muted-foreground block text-right">מחיר <span className="text-red-500">*</span></label>
             <Input 
-              placeholder=""
+              placeholder="הזן מחיר בשקלים"
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
@@ -317,7 +341,9 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
           </div>
 
           {/* Add Image Button */}
-          <div className="relative">
+          <div className="space-y-2">
+            <label className="text-sm text-muted-foreground block text-right">תמונה <span className="text-red-500">*</span></label>
+            <div className="relative">
             <input
               type="file"
               accept="image/*"
@@ -331,6 +357,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
               <Plus className="h-4 w-4 ml-2" />
               הוסף תמונה
             </Button>
+          </div>
           </div>
 
           {/* Selected Image Preview */}
@@ -347,13 +374,18 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
           {/* Submit Button */}
           <div className="pt-4">
             <Button 
-              className="w-full h-12 rounded-full text-lg font-medium text-white"
+              className="w-full h-12 rounded-full text-lg font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: '#BB31E9' }}
               onClick={handleSubmit}
-              disabled={isSubmitting || !title.trim()}
+              disabled={isSubmitting || !title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || !price || !selectedImage || (!isEveryDay && !selectedDate)}
             >
               {isSubmitting ? 'שומר...' : 'שמור'}
             </Button>
+            {(!title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || !price || !selectedImage || (!isEveryDay && !selectedDate)) && (
+              <p className="text-xs text-red-500 text-center mt-2">
+                נא למלא את כל השדות הנדרשים
+              </p>
+            )}
           </div>
         </div>
       </div>
