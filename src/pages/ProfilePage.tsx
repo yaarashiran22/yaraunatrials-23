@@ -15,10 +15,12 @@ import MarketplacePopup from "@/components/MarketplacePopup";
 import { useUserItems } from "@/hooks/useUserItems";
 import { useFriends } from "@/hooks/useFriends";
 import { useProfile } from "@/hooks/useProfile";
+import { useUserPosts } from "@/hooks/useUserPosts";
 import SectionHeader from "@/components/SectionHeader";
 import UniformCard from "@/components/UniformCard";
 import AddItemPopup from "@/components/AddItemPopup";
 import ProfilePictureViewer from "@/components/ProfilePictureViewer";
+import { FeedImageViewer } from "@/components/FeedImageViewer";
 
 import profile1 from "@/assets/profile-1.jpg";
 import dressItem from "@/assets/dress-item.jpg";
@@ -47,6 +49,7 @@ const ProfilePage = () => {
   const actualProfileId = getActualProfileId();
   const { profile: profileData, loading, error, refetch } = useProfile(actualProfileId);
   const { items: userItems, loading: itemsLoading, deleteItem, refetch: refetchItems } = useUserItems(actualProfileId);
+  const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
   const { addFriend, isFriend } = useFriends();
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
@@ -62,6 +65,8 @@ const ProfilePage = () => {
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editingMessageText, setEditingMessageText] = useState("");
   const [showProfilePicture, setShowProfilePicture] = useState(false);
+  const [showFeedImages, setShowFeedImages] = useState(false);
+  const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
 
   const handleDeleteItem = async (itemId: string) => {
     // Require authentication
@@ -494,6 +499,41 @@ const ProfilePage = () => {
           </div>
         </section>
 
+        {/* תמונות מהפיד Section */}
+        {imagePosts.length > 0 && (
+          <section className="mb-8">
+            <SectionHeader title="תמונות מהפיד" />
+            {postsLoading ? (
+              <div className="grid grid-cols-3 gap-2 lg:grid-cols-4 xl:grid-cols-6">
+                {Array(6).fill(null).map((_, index) => (
+                  <div key={index} className="aspect-square bg-muted rounded-lg animate-pulse"></div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-2 lg:grid-cols-4 xl:grid-cols-6">
+                {imagePosts.map((post) => (
+                  <div key={`feed-image-${post.id}`} className="aspect-square relative group cursor-pointer">
+                    <img
+                      src={post.image_url}
+                      alt="תמונה מהפיד"
+                      className="w-full h-full object-cover rounded-lg hover:opacity-90 transition-opacity"
+                      onClick={() => {
+                        setSelectedImageId(post.id);
+                        setShowFeedImages(true);
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                      <div className="bg-white/90 rounded-full p-2">
+                        <span className="text-xs text-black">לחץ לצפייה</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
 
         {/* Logout Button */}
         {isOwnProfile && (
@@ -530,6 +570,15 @@ const ProfilePage = () => {
         imageUrl={profileData?.profile_image_url || ""}
         userName={profileData?.name || "משתמש"}
         userId={actualProfileId}
+      />
+      <FeedImageViewer
+        isOpen={showFeedImages}
+        onClose={() => {
+          setShowFeedImages(false);
+          setSelectedImageId(null);
+        }}
+        images={imagePosts}
+        initialImageId={selectedImageId}
       />
     </div>
   );
