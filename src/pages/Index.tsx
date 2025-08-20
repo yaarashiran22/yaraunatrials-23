@@ -181,7 +181,7 @@ const Index = () => {
                 variant="outline" 
                 size="sm"
                 onClick={() => setShowFriendMeetup(true)}
-                className="text-xs px-2 py-1 bg-primary/5 hover:bg-primary/10 border-primary/20 text-primary"
+                className="text-xs px-2 py-1 rounded-full bg-background hover:bg-purple-50 border-purple-400 text-purple-600 hover:border-purple-500"
               >
                 <Users className="h-3 w-3" />
               </Button>
