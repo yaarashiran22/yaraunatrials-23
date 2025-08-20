@@ -149,7 +149,8 @@ const FeedPage = () => {
       tag: post.location || "תושב שכונה",
       timeAgo: getTimeAgo(post.created_at),
       content: post.content,
-      image: post.image_url
+      image: post.image_url,
+      video: post.video_url
     };
   });
 

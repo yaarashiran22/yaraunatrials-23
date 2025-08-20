@@ -8,6 +8,7 @@ export interface Post {
   user_id: string;
   content: string;
   image_url?: string;
+  video_url?: string;
   location?: string;
   created_at: string;
   updated_at: string;
@@ -16,6 +17,7 @@ export interface Post {
 export interface CreatePostData {
   content: string;
   image_url?: string;
+  video_url?: string;
   location?: string;
 }
 

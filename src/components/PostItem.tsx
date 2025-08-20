@@ -15,6 +15,7 @@ interface PostItemProps {
     timeAgo: string;
     content: string;
     image?: string;
+    video?: string;
   };
   onCommentsClick: (postId: string) => void;
   onDelete?: (postId: string) => void;
@@ -78,6 +79,17 @@ export const PostItem = ({ post, onCommentsClick, onDelete }: PostItemProps) => 
             src={post.image} 
             alt="Post image" 
             className="w-full max-h-96 object-cover rounded-lg"
+          />
+        </div>
+      )}
+
+      {post.video && (
+        <div className="mb-4">
+          <video 
+            src={post.video} 
+            controls
+            className="w-full max-h-96 rounded-lg"
+            preload="metadata"
           />
         </div>
       )}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Camera, X, Send } from 'lucide-react';
+import { Camera, X, Send, Video, Image } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,14 +16,21 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
   const { profile } = useProfile(user?.id);
   const [content, setContent] = useState('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [mediaOnlyMode, setMediaOnlyMode] = useState(false);
   const { toast } = useToast();
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Clear video if image is selected
+      setSelectedVideo(null);
+      setVideoPreview(null);
+      
       setSelectedImage(file);
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -33,12 +40,41 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
     }
   };
 
-  const removeImage = () => {
-    setSelectedImage(null);
-    setImagePreview(null);
+  const handleVideoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check file size (limit to ~50MB)
+      const maxSize = 50 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast({
+          title: "שגיאה",
+          description: "קובץ הווידאו גדול מדי. מקסימום 50MB",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Clear image if video is selected
+      setSelectedImage(null);
+      setImagePreview(null);
+      
+      setSelectedVideo(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setVideoPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const createPost = async (content?: string, imageUrl?: string) => {
+  const removeMedia = () => {
+    setSelectedImage(null);
+    setSelectedVideo(null);
+    setImagePreview(null);
+    setVideoPreview(null);
+  };
+
+  const createPost = async (content?: string, imageUrl?: string, videoUrl?: string) => {
     if (!user) return null;
 
     try {
@@ -48,6 +84,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
           user_id: user.id,
           content: content || '',
           image_url: imageUrl || null,
+          video_url: videoUrl || null,
           location: 'תל אביב', // Default location
           market: 'israel'
         })
@@ -67,10 +104,11 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
   };
 
   const handleSubmit = async () => {
-    if (!content.trim() && !selectedImage) {
+    // Allow posting with just media (photo/video only) or media with caption
+    if (!content.trim() && !selectedImage && !selectedVideo) {
       toast({
         title: "שגיאה",
-        description: "נא להוסיף תוכן או תמונה",
+        description: "נא להוסיף תוכן, תמונה או וידאו",
         variant: "destructive"
       });
       return;
@@ -88,6 +126,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
     setUploading(true);
     try {
       let imageUrl = '';
+      let videoUrl = '';
       
       if (selectedImage) {
         // Upload image to Supabase storage
@@ -113,14 +152,41 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
         console.log('Image uploaded successfully:', imageUrl);
       }
 
+      if (selectedVideo) {
+        // Upload video to Supabase storage
+        const fileExt = selectedVideo.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `${user.id}/${fileName}`; // User ID folder structure required by RLS
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('photos') // Using same bucket for now, can create separate video bucket if needed
+          .upload(filePath, selectedVideo);
+
+        if (uploadError) {
+          console.error('Video upload error:', uploadError);
+          throw uploadError;
+        }
+
+        // Get the public URL
+        const { data: urlData } = supabase.storage
+          .from('photos')
+          .getPublicUrl(filePath);
+
+        videoUrl = urlData.publicUrl;
+        console.log('Video uploaded successfully:', videoUrl);
+      }
+
       // Create the post
-      const post = await createPost(content.trim() || undefined, imageUrl || undefined);
+      const post = await createPost(content.trim() || undefined, imageUrl || undefined, videoUrl || undefined);
       
       if (post) {
         setContent('');
         setSelectedImage(null);
+        setSelectedVideo(null);
         setImagePreview(null);
+        setVideoPreview(null);
         setIsExpanded(false);
+        setMediaOnlyMode(false);
         onPostCreated?.();
         toast({
           title: "הפוסט נפרסם בהצלחה!"
@@ -158,7 +224,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
         <div className="flex-1">
           <input 
             type="text"
-            placeholder="שתפ.י פוסט עם השכונה"
+            placeholder="שתפ.י פוסט, תמונה או וידאו עם השכונה"
             className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
             readOnly
           />
@@ -182,11 +248,11 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
           />
           <div className="flex-1">
             <Textarea
-              placeholder="שתפ.י פוסט עם השכונה"
+              placeholder={mediaOnlyMode ? "כתוב כיתוב (אופציונלי)..." : "שתפ.י פוסט עם השכונה"}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="resize-none border-none shadow-none p-0 bg-transparent text-foreground placeholder:text-muted-foreground"
-              rows={3}
+              rows={mediaOnlyMode ? 2 : 3}
               autoFocus
             />
           </div>
@@ -203,7 +269,25 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
               variant="secondary"
               size="sm"
               className="absolute top-2 right-2"
-              onClick={removeImage}
+              onClick={removeMedia}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+
+        {videoPreview && (
+          <div className="relative">
+            <video
+              src={videoPreview}
+              controls
+              className="w-full max-h-64 rounded-lg"
+            />
+            <Button
+              variant="secondary"
+              size="sm"
+              className="absolute top-2 right-2"
+              onClick={removeMedia}
             >
               <X className="h-4 w-4" />
             </Button>
@@ -227,14 +311,51 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
                 asChild
               >
                 <span>
-                  <Camera className="h-4 w-4" />
+                  <Image className="h-4 w-4" />
                 </span>
               </Button>
             </label>
+
+            <input
+              type="file"
+              accept="video/*"
+              onChange={handleVideoSelect}
+              className="hidden"
+              id="video-upload"
+            />
+            <label htmlFor="video-upload">
+              <Button
+                variant="outline"
+                size="sm"
+                className="cursor-pointer"
+                asChild
+              >
+                <span>
+                  <Video className="h-4 w-4" />
+                </span>
+              </Button>
+            </label>
+
+            {(selectedImage || selectedVideo) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMediaOnlyMode(!mediaOnlyMode)}
+                className={`text-xs ${mediaOnlyMode ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`}
+              >
+                {mediaOnlyMode ? 'מדיה בלבד' : 'עם טקסט'}
+              </Button>
+            )}
+
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setIsExpanded(false)}
+              onClick={() => {
+                setIsExpanded(false);
+                setMediaOnlyMode(false);
+                removeMedia();
+                setContent('');
+              }}
               className="text-muted-foreground"
             >
               ביטול
@@ -243,7 +364,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
           
           <Button
             onClick={handleSubmit}
-            disabled={uploading || (!content.trim() && !selectedImage)}
+            disabled={uploading || (!content.trim() && !selectedImage && !selectedVideo)}
             size="sm"
           >
             {uploading ? (
