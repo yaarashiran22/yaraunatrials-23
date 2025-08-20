@@ -45,11 +45,11 @@ const SearchPopup = () => {
 
     setLoading(true);
     try {
-      // Search profiles
+      // Search profiles - including specialties with partial matching
       const { data: profilesData } = await supabase
         .from('profiles')
         .select('id, name, username, bio, specialties, profile_image_url')
-        .or(`name.ilike.%${query}%,username.ilike.%${query}%,bio.ilike.%${query}%`)
+        .or(`name.ilike.%${query}%,username.ilike.%${query}%,bio.ilike.%${query}%,array_to_string(specialties,',').ilike.%${query}%`)
         .limit(10);
 
       // Search items
