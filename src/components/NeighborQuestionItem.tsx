@@ -85,11 +85,11 @@ export const NeighborQuestionItem = ({
   const messageTypeInfo = getMessageTypeInfo(question.message_type);
 
   return (
-    <div className="flex-shrink-0 w-64 bg-white border border-border rounded-lg p-4">
-      <div className="flex items-start gap-3 mb-3">
+    <div className="flex-shrink-0 w-52 bg-white border border-border rounded-lg p-3">
+      <div className="flex items-start gap-2 mb-2">
         {question.is_anonymous ? (
           <>
-            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+            <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
               <span className="text-xs text-muted-foreground">?</span>
             </div>
             <div className="flex-1 min-w-0">
@@ -112,7 +112,7 @@ export const NeighborQuestionItem = ({
             <img 
               src={userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
               alt={userProfile?.name || "משתמש"}
-              className="w-8 h-8 rounded-full object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+              className="w-7 h-7 rounded-full object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => {
                 setSelectedUser({
                   imageUrl: userProfile?.profile_image_url || "",
@@ -151,12 +151,12 @@ export const NeighborQuestionItem = ({
         )}
       </div>
       
-      <p className="text-sm text-foreground leading-relaxed break-words mb-3">
+      <p className="text-sm text-foreground leading-relaxed break-words mb-2">
         {question.content}
       </p>
 
       {/* Comment toggle button */}
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-2">
         <Button
           variant="ghost"
           size="sm"
@@ -170,15 +170,15 @@ export const NeighborQuestionItem = ({
 
       {/* Comments section */}
       {showComments && (
-        <div className="border-t border-border/20 pt-3 mt-3">
+        <div className="border-t border-border/20 pt-2 mt-2">
           {/* Comment input for authenticated users */}
           {user && (
-            <div className="mb-3">
+            <div className="mb-2">
               <Textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="כתוב תגובה..."
-                className="min-h-[60px] text-xs resize-none"
+                className="min-h-[50px] text-xs resize-none"
               />
               <Button
                 onClick={handleSubmitComment}
@@ -198,7 +198,7 @@ export const NeighborQuestionItem = ({
               <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
             </div>
           ) : (
-            <div className="space-y-2 max-h-40 overflow-y-auto">
+            <div className="space-y-2 max-h-32 overflow-y-auto">
               {comments.map((comment) => {
                 const commentUserProfile = questionProfiles[comment.user_id];
                 return (
@@ -207,7 +207,7 @@ export const NeighborQuestionItem = ({
                       <img 
                         src={commentUserProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
                         alt={commentUserProfile?.name || "משתמש"}
-                        className="w-5 h-5 rounded-full object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                        className="w-4 h-4 rounded-full object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
                         onClick={() => {
                           setSelectedUser({
                             imageUrl: commentUserProfile?.profile_image_url || "",
