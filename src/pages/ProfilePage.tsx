@@ -18,6 +18,7 @@ import { useProfile } from "@/hooks/useProfile";
 import SectionHeader from "@/components/SectionHeader";
 import UniformCard from "@/components/UniformCard";
 import AddItemPopup from "@/components/AddItemPopup";
+import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 
 import profile1 from "@/assets/profile-1.jpg";
 import dressItem from "@/assets/dress-item.jpg";
@@ -60,6 +61,7 @@ const ProfilePage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editingMessageText, setEditingMessageText] = useState("");
+  const [showProfilePicture, setShowProfilePicture] = useState(false);
 
   const handleDeleteItem = async (itemId: string) => {
     // Require authentication
@@ -272,8 +274,9 @@ const ProfilePage = () => {
             <img 
               src={profileData?.profile_image_url || profile1}
               alt={profileData?.name || "משתמש"}
-              className="rounded-full object-cover"
+              className="rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
               style={{ width: '70px', height: '70px', minWidth: '70px', minHeight: '70px' }}
+              onClick={() => setShowProfilePicture(true)}
             />
           </div>
           
@@ -529,6 +532,12 @@ const ProfilePage = () => {
         isOpen={isItemPopupOpen}
         onClose={() => setIsItemPopupOpen(false)}
         item={selectedItem}
+      />
+      <ProfilePictureViewer
+        isOpen={showProfilePicture}
+        onClose={() => setShowProfilePicture(false)}
+        imageUrl={profileData?.profile_image_url || ""}
+        userName={profileData?.name || "משתמש"}
       />
     </div>
   );

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Users, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 
 interface UserProfile {
   id: string;
@@ -19,6 +20,8 @@ const NeighborsPage = () => {
   const navigate = useNavigate();
   const [neighbors, setNeighbors] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showProfilePicture, setShowProfilePicture] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string} | null>(null);
 
   useEffect(() => {
     const fetchNeighbors = async () => {
@@ -102,7 +105,15 @@ const NeighborsPage = () => {
                   <img 
                     src={neighbor.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
                     alt={neighbor.name}
-                    className="w-20 h-20 rounded-full object-cover mb-3 ring-2 ring-primary/20"
+                    className="w-20 h-20 rounded-full object-cover mb-3 ring-2 ring-primary/20 cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedUser({
+                        imageUrl: neighbor.profile_image_url || "",
+                        name: neighbor.name
+                      });
+                      setShowProfilePicture(true);
+                    }}
                   />
                   <h3 className="font-semibold text-foreground mb-1">
                     {neighbor.name}
@@ -146,6 +157,13 @@ const NeighborsPage = () => {
             </div>
           </div>
         )}
+        
+        <ProfilePictureViewer
+          isOpen={showProfilePicture}
+          onClose={() => setShowProfilePicture(false)}
+          imageUrl={selectedUser?.imageUrl || ""}
+          userName={selectedUser?.name || "משתמש"}
+        />
       </main>
 
       <BottomNavigation />

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useNeighborQuestionComments } from "@/hooks/useNeighborQuestionComments";
 import { useAuth } from "@/contexts/AuthContext";
+import ProfilePictureViewer from "./ProfilePictureViewer";
 
 interface NeighborQuestionItemProps {
   question: {
@@ -31,6 +32,8 @@ export const NeighborQuestionItem = ({
 }: NeighborQuestionItemProps) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [showProfilePicture, setShowProfilePicture] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string} | null>(null);
   const { comments, commentCount, loading, creating, createComment, fetchComments } = useNeighborQuestionComments(question.id);
   const { user } = useAuth();
 
@@ -86,7 +89,14 @@ export const NeighborQuestionItem = ({
             <img 
               src={userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
               alt={userProfile?.name || "משתמש"}
-              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+              className="w-8 h-8 rounded-full object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => {
+                setSelectedUser({
+                  imageUrl: userProfile?.profile_image_url || "",
+                  name: userProfile?.name || "משתמש"
+                });
+                setShowProfilePicture(true);
+              }}
             />
             <div className="flex-1 min-w-0">
               <h4 className="font-medium text-foreground text-sm">
@@ -167,7 +177,14 @@ export const NeighborQuestionItem = ({
                       <img 
                         src={commentUserProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
                         alt={commentUserProfile?.name || "משתמש"}
-                        className="w-5 h-5 rounded-full object-cover flex-shrink-0"
+                        className="w-5 h-5 rounded-full object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => {
+                          setSelectedUser({
+                            imageUrl: commentUserProfile?.profile_image_url || "",
+                            name: commentUserProfile?.name || "משתמש"
+                          });
+                          setShowProfilePicture(true);
+                        }}
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
@@ -195,6 +212,13 @@ export const NeighborQuestionItem = ({
           )}
         </div>
       )}
+      
+      <ProfilePictureViewer
+        isOpen={showProfilePicture}
+        onClose={() => setShowProfilePicture(false)}
+        imageUrl={selectedUser?.imageUrl || ""}
+        userName={selectedUser?.name || "משתמש"}
+      />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Trash2, Send } from 'lucide-react';
 import { usePostComments } from '@/hooks/usePostComments';
 import { useAuth } from '@/contexts/AuthContext';
+import ProfilePictureViewer from './ProfilePictureViewer';
 
 interface PostCommentsModalProps {
   isOpen: boolean;
@@ -17,6 +18,8 @@ export const PostCommentsModal = ({ isOpen, onClose, postId, postTitle }: PostCo
   const { user } = useAuth();
   const { comments, commentsCount, loading, submitting, addComment, deleteComment } = usePostComments(postId);
   const [newComment, setNewComment] = useState('');
+  const [showProfilePicture, setShowProfilePicture] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<{imageUrl: string; name: string} | null>(null);
 
   const handleSubmitComment = async () => {
     const success = await addComment(newComment);
@@ -70,7 +73,14 @@ export const PostCommentsModal = ({ isOpen, onClose, postId, postTitle }: PostCo
                 <img 
                   src={comment.profiles?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
                   alt={comment.profiles?.name || "משתמש"}
-                  className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                  className="w-8 h-8 rounded-full object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => {
+                    setSelectedUser({
+                      imageUrl: comment.profiles?.profile_image_url || "",
+                      name: comment.profiles?.name || "משתמש"
+                    });
+                    setShowProfilePicture(true);
+                  }}
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
@@ -123,6 +133,13 @@ export const PostCommentsModal = ({ isOpen, onClose, postId, postTitle }: PostCo
             </Button>
           </div>
         )}
+        
+        <ProfilePictureViewer
+          isOpen={showProfilePicture}
+          onClose={() => setShowProfilePicture(false)}
+          imageUrl={selectedUser?.imageUrl || ""}
+          userName={selectedUser?.name || "משתמש"}
+        />
       </DialogContent>
     </Dialog>
   );
