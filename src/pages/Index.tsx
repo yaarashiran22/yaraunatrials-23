@@ -108,28 +108,29 @@ const Index = () => {
 
   // Memoize event handlers to prevent unnecessary re-renders
   const handleEventClick = useCallback((event: any) => {
-    setSelectedEvent(event);
-    setIsEventPopupOpen(true);
-  }, []);
+    // Navigate to event details page with carousel data
+    const currentIndex = realEvents.findIndex(e => e.id === event.id);
+    navigate(`/event/${event.id}`, { 
+      state: { 
+        eventsList: realEvents, 
+        currentIndex,
+        fromHomepage: true 
+      } 
+    });
+  }, [realEvents, navigate]);
 
   const handleMarketplaceClick = useCallback((item: any, itemType?: string) => {
-    const itemDetails = {
-      id: item.id,
-      title: item.title,
-      image: item.image_url || item.image,
-      price: item.price ? `₪${item.price}` : undefined,
-      description: item.description || `${item.title} במצב מעולה.`,
-      seller: {
-        name: "יערה שיין",
-        image: profile1,
-        location: item.location || "תל אביב"
-      },
-      condition: "כמו חדש",
-      type: itemType || 'marketplace'
-    };
-    setSelectedMarketplaceItem(itemDetails);
-    setIsMarketplacePopupOpen(true);
-  }, []);
+    // Navigate to item details page with carousel data
+    const currentIndex = recommendationItems.findIndex(i => i.id === item.id);
+    navigate(`/item/${item.id}`, { 
+      state: { 
+        itemsList: recommendationItems, 
+        currentIndex,
+        fromHomepage: true,
+        itemType: itemType || 'recommendation'
+      } 
+    });
+  }, [recommendationItems, navigate]);
 
   return (
     <div className="min-h-screen bg-background" dir="rtl">
