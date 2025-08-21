@@ -104,10 +104,10 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
   };
 
   const handleSubmit = async () => {
-    // Allow posting with just media (photo/video only) or media with caption
+    // Allow posting with text only, media only, or media with text
     if (!content.trim() && !selectedImage && !selectedVideo) {
       toast({
-        title: "שגיאה",
+        title: "שגיאה", 
         description: "נא להוסיף תוכן, תמונה או וידאו",
         variant: "destructive"
       });
@@ -224,7 +224,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
         <div className="flex-1">
           <input 
             type="text"
-            placeholder="שתפ.י פוסט, תמונה או וידאו עם השכונה"
+            placeholder="מה חדש? שתפ.י עם השכונה..."
             className="w-full bg-transparent text-foreground placeholder:text-muted-foreground border-none outline-none cursor-pointer"
             readOnly
           />
@@ -248,7 +248,7 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
           />
           <div className="flex-1">
             <Textarea
-              placeholder={mediaOnlyMode ? "כתוב כיתוב (אופציונלי)..." : "שתפ.י פוסט עם השכונה"}
+              placeholder={mediaOnlyMode ? "כתוב כיתוב (אופציונלי)..." : "מה חדש? שתפ.י עם השכונה..."}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="resize-none border-none shadow-none p-0 bg-transparent text-foreground placeholder:text-muted-foreground"
