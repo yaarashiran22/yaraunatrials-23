@@ -69,6 +69,15 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
       return;
     }
 
+    if (!date.trim()) {
+      toast({
+        title: "שגיאה",
+        description: "נא להזין תאריך לאירוע",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!location.trim()) {
       toast({
         title: "שגיאה",
@@ -169,7 +178,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
           {/* Date Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">תאריך</label>
+            <label className="text-sm font-medium text-foreground block text-right">תאריך*</label>
             <div className="relative">
               <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
