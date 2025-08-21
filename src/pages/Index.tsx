@@ -198,7 +198,7 @@ const Index = () => {
                 onClick={() => navigate('/all-recommendations')}
                 className="text-xs px-3 py-1"
               >
-                הצג עוד
+                הכל
               </Button>
             </div>
           </div>
@@ -255,7 +255,7 @@ const Index = () => {
                 onClick={() => navigate('/all-events')}
                 className="text-xs px-3 py-1"
               >
-                הצג עוד
+                הכל
               </Button>
             </div>
           </div>
