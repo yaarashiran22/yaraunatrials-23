@@ -58,7 +58,7 @@ const NeighborhoodIndicator = () => {
         <Button 
           variant="ghost" 
           size="lg" 
-          className="flex items-center gap-2 text-foreground hover:text-foreground/80 bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-border/50 rounded-full px-4 py-2 shadow-sm transition-all duration-200"
+          className="flex items-center gap-2 text-foreground hover:text-foreground/80 bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-border/50 rounded-full px-5 py-2.5 shadow-sm transition-all duration-200"
         >
           <MapPin className="h-5 w-5 text-primary" />
           <span className="text-base font-medium">{displayName}</span>
