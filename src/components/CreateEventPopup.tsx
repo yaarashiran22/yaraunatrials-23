@@ -2,6 +2,7 @@ import { X, Plus, Calendar, Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,6 +24,29 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Neighborhoods available in the website
+  const neighborhoods = [
+    "לב העיר",
+    "נחלת בנימין", 
+    "רוטשילד",
+    "פלורנטין",
+    "שפירא",
+    "יפו העתיקה",
+    "עג'מי",
+    "נווה צדק",
+    "כרם התימנים",
+    "שכונת מונטיפיורי",
+    "רמת אביב",
+    "צפון ישן",
+    "שינקין",
+    "דיזנגוף",
+    "הרצליה",
+    "בת ים",
+    "רמת גן",
+    "גבעתיים",
+    "חולון"
+  ];
 
   if (!isOpen) return null;
 
@@ -175,13 +199,23 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground block text-right">מיקום*</label>
             <div className="relative">
-              <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input 
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="הזן מיקום האירוע"
-                className="w-full h-12 pr-12 text-right bg-card border-2 border-border rounded-full"
-              />
+              <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
+              <Select value={location} onValueChange={setLocation}>
+                <SelectTrigger className="w-full h-12 pr-12 text-right bg-background border-2 border-border rounded-full">
+                  <SelectValue placeholder="בחר שכונה" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border shadow-lg z-50 max-h-60">
+                  {neighborhoods.map((neighborhood) => (
+                    <SelectItem 
+                      key={neighborhood} 
+                      value={neighborhood}
+                      className="text-right cursor-pointer hover:bg-muted"
+                    >
+                      {neighborhood}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
