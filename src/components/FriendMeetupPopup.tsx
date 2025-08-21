@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import { Users, MapPin, Clock, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,6 +21,7 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
   const [place, setPlace] = useState('');
   const [time, setTime] = useState('');
   const [description, setDescription] = useState('');
+  const [friendsOnly, setFriendsOnly] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,7 +53,7 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
         .insert({
           user_id: user.id,
           content: `🎉 מפגש חברים!\n\n📍 איפה: ${place}\n⏰ מתי: ${time}\n\n${description}`,
-          friends_only: true,
+          friends_only: friendsOnly,
           location: place
         });
 
@@ -59,7 +61,7 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
 
       toast({
         title: "מפגש נוצר בהצלחה!",
-        description: "החברים שלך יכולים לראות את המפגש בפיד",
+        description: friendsOnly ? "החברים שלך יכולים לראות את המפגש בפיד" : "כולם יכולים לראות את המפגש בפיד",
       });
 
       // Reset form
@@ -67,6 +69,7 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
       setPlace('');
       setTime('');
       setDescription('');
+      setFriendsOnly(true);
       onClose();
     } catch (error) {
       console.error('Error creating meetup:', error);
@@ -85,6 +88,7 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
     setPlace('');
     setTime('');
     setDescription('');
+    setFriendsOnly(true);
     onClose();
   };
 
@@ -159,10 +163,23 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
             />
           </div>
 
+          <div className="flex items-center justify-between">
+            <Label htmlFor="friendsOnly" className="text-sm font-medium">
+              רק לחברים
+            </Label>
+            <Switch
+              id="friendsOnly"
+              checked={friendsOnly}
+              onCheckedChange={setFriendsOnly}
+            />
+          </div>
+
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
             <div className="flex items-center gap-2 text-yellow-800 text-sm">
               <Users className="h-4 w-4" />
-              <span className="font-medium">רק החברים שלך יראו את המפגש הזה</span>
+              <span className="font-medium">
+                {friendsOnly ? "רק החברים שלך יראו את המפגש הזה" : "כולם יוכלו לראות את המפגש הזה"}
+              </span>
             </div>
           </div>
 
