@@ -1,4 +1,4 @@
-import { X, Plus, Calendar, Clock, MapPin } from "lucide-react";
+import { X, Plus, Calendar, Clock, MapPin, Camera, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +23,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Neighborhoods available in the website
@@ -49,6 +51,18 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   ];
 
   if (!isOpen) return null;
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!user) {
@@ -87,9 +101,37 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
       return;
     }
 
+    if (!selectedImage) {
+      toast({
+        title: "שגיאה", 
+        description: "נא להוסיף תמונה לאירוע",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
+      // Upload image to Supabase storage
+      let imageUrl = null;
+      if (selectedImage) {
+        const fileExt = selectedImage.name.split('.').pop();
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('item-images')
+          .upload(fileName, selectedImage);
+
+        if (uploadError) throw uploadError;
+        
+        const { data } = supabase.storage
+          .from('item-images')
+          .getPublicUrl(fileName);
+          
+        imageUrl = data.publicUrl;
+      }
+
       const { error } = await supabase
         .from('events')
         .insert({
@@ -100,6 +142,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
           time: time || null,
           location: location.trim(),
           price: price.trim() || null,
+          image_url: imageUrl,
           market: 'israel'
         });
 
@@ -117,6 +160,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
       setTime("");
       setLocation("");
       setPrice("");
+      setSelectedImage(null);
+      setImagePreview(null);
 
       // Call callback to refresh data
       if (onEventCreated) {
@@ -237,6 +282,38 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
               placeholder="חינם / 50 ₪"
               className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
             />
+          </div>
+
+          {/* Image Field */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-right">תמונת האירוע*</label>
+            <div className="space-y-2">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                id="image-upload"
+              />
+              <label 
+                htmlFor="image-upload"
+                className="w-full h-12 bg-card border-2 border-border rounded-full flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+              >
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Camera className="h-5 w-5" />
+                  <span className="text-sm">{selectedImage ? selectedImage.name : "בחר תמונה"}</span>
+                </div>
+              </label>
+              {imagePreview && (
+                <div className="w-full h-32 bg-muted rounded-2xl overflow-hidden">
+                  <img 
+                    src={imagePreview} 
+                    alt="תצוגה מקדימה" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Submit Button */}
