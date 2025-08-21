@@ -1,6 +1,6 @@
 
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { ArrowRight, MessageCircle, Share, Heart, MapPin, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { ArrowRight, MessageCircle, Share, Heart, MapPin, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -12,12 +12,8 @@ import profile1 from "@/assets/profile-1.jpg";
 const ItemDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const { toast } = useToast();
   const { item, loading, error } = useItemDetails(id || '');
-
-  // Get carousel data from navigation state
-  const { itemsList = [], currentIndex = 0, fromHomepage = false } = location.state || {};
 
   if (loading) {
     return (
@@ -93,27 +89,6 @@ const ItemDetailsPage = () => {
     navigate(`/profile/${itemData.seller.id}`);
   };
 
-  // Carousel navigation functions
-  const navigateToPrevious = () => {
-    if (!fromHomepage || itemsList.length === 0) return;
-    const currentIdx = itemsList.findIndex((i: any) => i.id === id);
-    const prevIdx = currentIdx > 0 ? currentIdx - 1 : itemsList.length - 1;
-    const prevItem = itemsList[prevIdx];
-    navigate(`/item/${prevItem.id}`, {
-      state: { itemsList, currentIndex: prevIdx, fromHomepage }
-    });
-  };
-
-  const navigateToNext = () => {
-    if (!fromHomepage || itemsList.length === 0) return;
-    const currentIdx = itemsList.findIndex((i: any) => i.id === id);
-    const nextIdx = currentIdx < itemsList.length - 1 ? currentIdx + 1 : 0;
-    const nextItem = itemsList[nextIdx];
-    navigate(`/item/${nextItem.id}`, {
-      state: { itemsList, currentIndex: nextIdx, fromHomepage }
-    });
-  };
-
   return (
     <div className="min-h-screen bg-background pb-20">
       <Header />
@@ -129,29 +104,6 @@ const ItemDetailsPage = () => {
             />
           </div>
           
-          {/* Navigation arrows - only show if from homepage */}
-          {fromHomepage && itemsList.length > 1 && (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={navigateToPrevious}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white"
-              >
-                <ChevronLeft className="h-6 w-6" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={navigateToNext}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white"
-              >
-                <ChevronRight className="h-6 w-6" />
-              </Button>
-            </>
-          )}
-          
-          {/* Share and favorite buttons */}
           <div className="absolute top-4 right-4 flex gap-2">
             <Button
               variant="ghost"
@@ -169,23 +121,6 @@ const ItemDetailsPage = () => {
               <Heart className="h-4 w-4" />
             </Button>
           </div>
-
-          {/* Page indicator - only show if from homepage */}
-          {fromHomepage && itemsList.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1">
-              {itemsList.map((_: any, index: number) => {
-                const currentIdx = itemsList.findIndex((i: any) => i.id === id);
-                return (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full ${
-                      index === currentIdx ? 'bg-white' : 'bg-white/50'
-                    }`}
-                  />
-                );
-              })}
-            </div>
-          )}
         </div>
 
         {/* Item Details */}
