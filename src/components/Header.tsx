@@ -80,19 +80,6 @@ const Header = ({
             )}
           </div>
           
-          {/* Add Item button - Right side */}
-          <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
-            <Button 
-              onClick={openNewItem} 
-              size="sm" 
-              variant="ghost"
-              className="h-8 w-8 rounded-full p-0 hover:bg-muted/20"
-              style={{ border: '2px solid #A855F7', backgroundColor: '#A855F7' }}
-              aria-label="Add new item"
-            >
-              <Plus className="h-4 w-4" style={{ color: 'white' }} />
-            </Button>
-          </div>
         </div>
       </div>
     </header>
