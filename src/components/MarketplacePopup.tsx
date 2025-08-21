@@ -165,7 +165,31 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-background rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto mx-4">
+      {/* Left Navigation Button */}
+      {allItems.length > 1 && currentIndex > 0 && (
+        <Button
+          variant="ghost"
+          size="lg"
+          onClick={handlePrevious}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-lg rounded-full p-3 h-12 w-12"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </Button>
+      )}
+      
+      {/* Right Navigation Button */}
+      {allItems.length > 1 && currentIndex < allItems.length - 1 && (
+        <Button
+          variant="ghost"
+          size="lg"
+          onClick={handleNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-lg rounded-full p-3 h-12 w-12"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </Button>
+      )}
+
+      <div className="bg-background rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto mx-4 relative">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <Button 
@@ -178,29 +202,9 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
           
           <div className="flex items-center gap-2">
             {allItems.length > 1 && (
-              <>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={handlePrevious}
-                  disabled={currentIndex === 0}
-                  className="p-1"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-                <div className="text-xs text-muted-foreground">
-                  {currentIndex + 1} / {allItems.length}
-                </div>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={handleNext}
-                  disabled={currentIndex === allItems.length - 1}
-                  className="p-1"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-              </>
+              <div className="text-sm text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">
+                {currentIndex + 1} / {allItems.length}
+              </div>
             )}
           </div>
           
@@ -215,12 +219,12 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
 
         {/* Page Indicators */}
         {allItems.length > 1 && (
-          <div className="flex justify-center gap-1 py-2 border-b">
+          <div className="flex justify-center gap-2 py-3 border-b bg-muted/20">
             {allItems.map((_, index) => (
               <div
                 key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-primary' : 'bg-muted'
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === currentIndex ? 'bg-primary shadow-sm' : 'bg-muted-foreground/30'
                 }`}
               />
             ))}
