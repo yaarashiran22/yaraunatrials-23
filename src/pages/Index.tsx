@@ -44,6 +44,17 @@ const Index = () => {
   const { user } = useAuth();
   const { profile: currentUserProfile } = useProfile(user?.id);
   const navigate = useNavigate();
+
+  // Listen for navigation events from MarketplacePopup
+  useEffect(() => {
+    const handleNavigateToItem = (event: CustomEvent) => {
+      setSelectedMarketplaceItem(event.detail);
+      setIsMarketplacePopupOpen(true);
+    };
+
+    window.addEventListener('navigateToItem', handleNavigateToItem);
+    return () => window.removeEventListener('navigateToItem', handleNavigateToItem);
+  }, []);
   
   // Use optimized homepage hook with React Query caching
   const { 
@@ -112,7 +123,7 @@ const Index = () => {
     setIsEventPopupOpen(true);
   }, []);
 
-  const handleMarketplaceClick = useCallback((item: any, itemType?: string) => {
+  const handleMarketplaceClick = useCallback((item: any, itemType?: string, items?: any[], currentIndex?: number) => {
     const itemDetails = {
       id: item.id,
       title: item.title,
@@ -127,7 +138,11 @@ const Index = () => {
       condition: "כמו חדש",
       type: itemType || 'marketplace'
     };
-    setSelectedMarketplaceItem(itemDetails);
+    setSelectedMarketplaceItem({
+      ...itemDetails,
+      allItems: items || [item],
+      currentIndex: currentIndex || 0
+    });
     setIsMarketplacePopupOpen(true);
   }, []);
 
@@ -206,7 +221,7 @@ const Index = () => {
             <FastLoadingSkeleton type="cards" count={3} />
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {recommendationItems.map((item) => (
+              {recommendationItems.map((item, index) => (
                 <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
                   <UniformCard
                     id={item.id}
@@ -214,7 +229,7 @@ const Index = () => {
                     title={item.title}
                     subtitle={item.location || 'תל אביב'}
                     type="business"
-                    onClick={() => handleMarketplaceClick(item, 'recommendation')}
+                    onClick={() => handleMarketplaceClick(item, 'recommendation', recommendationItems, index)}
                     showFavoriteButton={true}
                     favoriteData={{
                       id: item.id,

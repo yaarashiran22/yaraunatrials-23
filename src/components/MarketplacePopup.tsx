@@ -1,5 +1,5 @@
 
-import { X, MessageCircle, Share, Heart, MapPin, Calendar } from "lucide-react";
+import { X, MessageCircle, Share, Heart, MapPin, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -32,12 +32,18 @@ interface MarketplacePopupProps {
     };
     condition?: string;
     type?: string;
+    allItems?: any[];
+    currentIndex?: number;
   };
 }
 
 const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Navigation state
+  const allItems = item?.allItems || [];
+  const currentIndex = item?.currentIndex || 0;
 
   // Fetch item details with uploader info if item.id exists
   const { item: itemDetails, loading: itemLoading } = useItemDetails(item?.id || "");
@@ -114,6 +120,47 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
     }
   };
 
+  // Navigation functions
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      const prevItem = allItems[currentIndex - 1];
+      const newItem = {
+        ...item,
+        id: prevItem.id,
+        title: prevItem.title,
+        image: prevItem.image_url || prevItem.image,
+        price: prevItem.price ? `₪${prevItem.price}` : undefined,
+        description: prevItem.description || `${prevItem.title} במצב מעולה.`,
+        currentIndex: currentIndex - 1
+      };
+      // Trigger re-render by updating the parent's selected item
+      onClose();
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('navigateToItem', { detail: newItem }));
+      }, 100);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex < allItems.length - 1) {
+      const nextItem = allItems[currentIndex + 1];
+      const newItem = {
+        ...item,
+        id: nextItem.id,
+        title: nextItem.title,
+        image: nextItem.image_url || nextItem.image,
+        price: nextItem.price ? `₪${nextItem.price}` : undefined,
+        description: nextItem.description || `${nextItem.title} במצב מעולה.`,
+        currentIndex: currentIndex + 1
+      };
+      // Trigger re-render by updating the parent's selected item
+      onClose();
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('navigateToItem', { detail: newItem }));
+      }, 100);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -129,7 +176,33 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
             <X className="h-5 w-5" />
           </Button>
           
-          <h2 className="text-lg font-bold text-foreground">{displayItem.title}</h2>
+          <div className="flex items-center gap-2">
+            {allItems.length > 1 && (
+              <>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={handlePrevious}
+                  disabled={currentIndex === 0}
+                  className="p-1"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+                <div className="text-xs text-muted-foreground">
+                  {currentIndex + 1} / {allItems.length}
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={handleNext}
+                  disabled={currentIndex === allItems.length - 1}
+                  className="p-1"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+          </div>
           
           <Button 
             variant="ghost" 
@@ -139,6 +212,20 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
             <Share className="h-4 w-4" />
           </Button>
         </div>
+
+        {/* Page Indicators */}
+        {allItems.length > 1 && (
+          <div className="flex justify-center gap-1 py-2 border-b">
+            {allItems.map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === currentIndex ? 'bg-primary' : 'bg-muted'
+                }`}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Content */}
         <div className="p-4">
