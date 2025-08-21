@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
+import { useNotifications } from "@/hooks/useNotifications";
+import NotificationsPopup from "@/components/NotificationsPopup";
+import { useState } from "react";
 
 interface HeaderProps {
   title?: string;
@@ -33,6 +36,8 @@ const Header = ({
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { openNewItem } = useNewItem();
+  const { unreadCount } = useNotifications();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -47,7 +52,26 @@ const Header = ({
     <header className="bg-transparent">
       <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-3">
         <div className="flex items-center justify-between gap-2">
-          {/* Logo and User Greeting - Right side */}
+          {/* Notifications Button - Left side */}
+          {user && (
+            <div className="flex items-center">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="relative p-2 h-10 w-10"
+                onClick={() => setShowNotifications(true)}
+              >
+                <Bell className="h-5 w-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </Button>
+            </div>
+          )}
+
+          {/* Logo and User Greeting - Center */}
           <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
             <div 
               className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity" 
@@ -67,7 +91,7 @@ const Header = ({
             </div>
           </div>
           
-          {/* Neighborhood Selector or Search - Center */}
+          {/* Neighborhood Selector or Search - Right side */}
           <div className="flex-1 max-w-md mx-2 sm:mx-4 min-w-0 flex justify-center">
             {showSearch && onSearchChange ? (
               <SearchBar 
@@ -82,6 +106,12 @@ const Header = ({
           
         </div>
       </div>
+      
+      {/* Notifications Popup */}
+      <NotificationsPopup 
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+      />
     </header>
   );
 };

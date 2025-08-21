@@ -1,8 +1,8 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import profile1 from "@/assets/profile-1.jpg";
-import profile2 from "@/assets/profile-2.jpg";
-import profile3 from "@/assets/profile-3.jpg";
+import { useNotifications } from "@/hooks/useNotifications";
+import { formatDistanceToNow } from "date-fns";
+import { he } from "date-fns/locale";
 
 interface NotificationsPopupProps {
   isOpen: boolean;
@@ -10,40 +10,26 @@ interface NotificationsPopupProps {
 }
 
 const NotificationsPopup = ({ isOpen, onClose }: NotificationsPopupProps) => {
+  const { notifications, loading, markAsRead, markAllAsRead } = useNotifications();
+
   if (!isOpen) return null;
 
-  const notifications = [
-    {
-      id: 1,
-      avatar: profile1,
-      text: "דנה הוסיפה תמונה חדשה למוצרים יד שנייה של גילה",
-      time: "לפני 2 שעות"
-    },
-    {
-      id: 2,
-      avatar: profile2,
-      text: "רון פרסם פוסט חדש בקבוצת השכונה על אירוע קהילתי בפארק",
-      time: "לפני 4 שעות"
-    },
-    {
-      id: 3,
-      avatar: profile3,
-      text: "שרי עזבה תגובה",
-      time: "לפני יום אחד"
-    },
-    {
-      id: 4,
-      avatar: profile1,
-      text: "פתיחת בתי קפה חדשים ברשת לכל בית קפה בעיר בקרבת מקום",
-      time: "לפני יומיים"
-    },
-    {
-      id: 5,
-      avatar: profile2,
-      text: "יעל הסינטטית אמירה",
-      time: "לפני יומיים"
+  const handleNotificationClick = (notificationId: string, isRead: boolean) => {
+    if (!isRead) {
+      markAsRead(notificationId);
     }
-  ];
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    try {
+      return formatDistanceToNow(new Date(dateString), {
+        addSuffix: true,
+        locale: he
+      });
+    } catch {
+      return "זמן לא ידוע";
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20">
@@ -54,28 +40,67 @@ const NotificationsPopup = ({ isOpen, onClose }: NotificationsPopupProps) => {
             <X className="h-5 w-5" />
           </Button>
           <h2 className="text-lg font-bold">התראות</h2>
-          <div className="w-10"></div> {/* Spacer for centering */}
+          {notifications.length > 0 && (
+            <Button variant="ghost" size="sm" onClick={markAllAsRead}>
+              סמן הכל כנקרא
+            </Button>
+          )}
         </div>
 
         {/* Notifications List */}
         <div className="overflow-y-auto max-h-[calc(80vh-80px)]">
-          {notifications.map((notification) => (
-            <div key={notification.id} className="flex items-start gap-3 p-4 border-b border-border/50 hover:bg-muted/50">
-              <img 
-                src={notification.avatar}
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-foreground leading-relaxed mb-1">
-                  {notification.text}
-                </p>
-                <span className="text-xs text-muted-foreground">
-                  {notification.time}
-                </span>
+          {loading ? (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-muted-foreground">טוען התראות...</div>
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-muted-foreground text-center">
+                <div className="mb-2">אין התראות חדשות</div>
+                <div className="text-sm">נעדכן אותך כאן על פעילויות חדשות</div>
               </div>
             </div>
-          ))}
+          ) : (
+            notifications.map((notification) => (
+              <div 
+                key={notification.id} 
+                className={`flex items-start gap-3 p-4 border-b border-border/50 hover:bg-muted/50 cursor-pointer ${
+                  !notification.is_read ? 'bg-blue-50/50 dark:bg-blue-950/20' : ''
+                }`}
+                onClick={() => handleNotificationClick(notification.id, notification.is_read)}
+              >
+                {notification.related_user?.profile_image_url ? (
+                  <img 
+                    src={notification.related_user.profile_image_url}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-medium">
+                      {notification.related_user?.name?.charAt(0) || '?'}
+                    </span>
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-sm text-foreground leading-relaxed mb-1">
+                      {notification.related_user?.name && (
+                        <span className="font-medium">{notification.related_user.name} </span>
+                      )}
+                      {notification.message}
+                    </p>
+                    {!notification.is_read && (
+                      <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>
+                    )}
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {formatTimeAgo(notification.created_at)}
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
