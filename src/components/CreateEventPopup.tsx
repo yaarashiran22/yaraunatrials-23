@@ -23,6 +23,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
+  const [externalLink, setExternalLink] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -143,6 +144,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
           location: location.trim(),
           price: price.trim() || null,
           image_url: imageUrl,
+          external_link: externalLink.trim() || null,
           market: 'israel'
         });
 
@@ -160,6 +162,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
       setTime("");
       setLocation("");
       setPrice("");
+      setExternalLink("");
       setSelectedImage(null);
       setImagePreview(null);
 
@@ -280,6 +283,17 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="חינם / 50 ₪"
+              className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
+            />
+          </div>
+
+          {/* External Link Field */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-right">קישור חיצוני (אופציונלי)</label>
+            <Input 
+              value={externalLink}
+              onChange={(e) => setExternalLink(e.target.value)}
+              placeholder="https://example.com"
               className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
             />
           </div>
