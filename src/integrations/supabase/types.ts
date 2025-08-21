@@ -135,6 +135,51 @@ export type Database = {
         }
         Relationships: []
       }
+      events: {
+        Row: {
+          created_at: string
+          date: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          market: string | null
+          price: string | null
+          time: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          market?: string | null
+          price?: string | null
+          time?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          market?: string | null
+          price?: string | null
+          time?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string
@@ -414,6 +459,7 @@ export type Database = {
         Row: {
           content: string
           created_at: string
+          friends_only: boolean
           id: string
           image_url: string | null
           location: string | null
@@ -425,6 +471,7 @@ export type Database = {
         Insert: {
           content: string
           created_at?: string
+          friends_only?: boolean
           id?: string
           image_url?: string | null
           location?: string | null
@@ -436,6 +483,7 @@ export type Database = {
         Update: {
           content?: string
           created_at?: string
+          friends_only?: boolean
           id?: string
           image_url?: string | null
           location?: string | null

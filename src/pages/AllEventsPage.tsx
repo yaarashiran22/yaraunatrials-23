@@ -81,7 +81,8 @@ const AllEventsPage = () => {
 
       // Price filter
       if (priceFilter !== "כל המחירים") {
-        const price = event.price || 0;
+        const priceStr = event.price || "0";
+        const price = typeof priceStr === 'string' ? parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0 : priceStr;
         switch (priceFilter) {
           case "חינם":
             if (price !== 0) return false;

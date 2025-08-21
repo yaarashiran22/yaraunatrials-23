@@ -11,6 +11,7 @@ import AddStoryButton from "@/components/AddStoryButton";
 import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import FriendMeetupPopup from "@/components/FriendMeetupPopup";
+import CreateEventPopup from "@/components/CreateEventPopup";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ import { useNewItem } from "@/contexts/NewItemContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
+import { useEvents } from "@/hooks/useEvents";
 
 import profile1 from "@/assets/profile-1.jpg";
 import profile2 from "@/assets/profile-2.jpg";
@@ -59,6 +61,9 @@ const Index = () => {
     preloadData
   } = useOptimizedHomepage();
 
+  // Fetch events from the new events table
+  const { events: realEvents = [], refetch: refetchEvents } = useEvents();
+
   // Preload data immediately on component mount for instant loading
   useEffect(() => {
     preloadData();
@@ -72,6 +77,7 @@ const Index = () => {
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
 
   // Set refresh callback for new items
   useEffect(() => {
@@ -233,25 +239,36 @@ const Index = () => {
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-foreground">{t('events.title')}</h2>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => navigate('/all-events')}
-              className="text-xs px-3 py-1"
-            >
-              הצג עוד
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowCreateEvent(true)}
+                className="text-xs px-2 py-1 rounded-full bg-background hover:bg-green-50 border-green-400 text-green-600 hover:border-green-500 gap-1"
+              >
+                <Plus className="h-3 w-3" />
+                צור אירוע
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate('/all-events')}
+                className="text-xs px-3 py-1"
+              >
+                הצג עוד
+              </Button>
+            </div>
           </div>
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
-          ) : databaseEvents.length === 0 ? (
+          ) : realEvents.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <p>אין אירועים זמינים כרגע</p>
             </div>
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {databaseEvents.map((event) => (
-                <div key={`db-event-${event.id}`} className="flex-shrink-0 w-36 lg:w-auto">
+              {realEvents.map((event) => (
+                <div key={`event-${event.id}`} className="flex-shrink-0 w-36 lg:w-auto">
                   <UniformCard
                     id={event.id}
                     image={event.image_url || communityEvent}
@@ -262,10 +279,11 @@ const Index = () => {
                     onClick={() => handleEventClick({
                       id: event.id,
                       title: event.title,
-                      description: event.title,
-                      date: 'תאריך יקבע בהמשך',
-                      time: 'שעה תקבע בהמשך',
+                      description: event.description || event.title,
+                      date: event.date || 'תאריך יקבע בהמשך',
+                      time: event.time || 'שעה תקבע בהמשך',
                       location: event.location || 'תל אביב',
+                      price: event.price,
                       image: event.image_url || communityEvent,
                       organizer: {
                         name: event.uploader?.name || "מארגן האירוע",
@@ -275,7 +293,7 @@ const Index = () => {
                     favoriteData={{
                       id: event.id,
                       title: event.title,
-                      description: event.title,
+                      description: event.description || event.title,
                       image: event.image_url,
                       type: 'event'
                     }}
@@ -325,6 +343,15 @@ const Index = () => {
       <FriendMeetupPopup 
         isOpen={showFriendMeetup} 
         onClose={() => setShowFriendMeetup(false)} 
+      />
+
+      <CreateEventPopup 
+        isOpen={showCreateEvent} 
+        onClose={() => setShowCreateEvent(false)} 
+        onEventCreated={() => {
+          refetchEvents();
+          refetch();
+        }}
       />
       
       <BottomNavigation />

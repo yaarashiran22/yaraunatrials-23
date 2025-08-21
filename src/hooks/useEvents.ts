@@ -1,78 +1,89 @@
-import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
 
 export interface Event {
   id: string;
+  user_id: string;
   title: string;
   description?: string;
-  price?: number;
-  image_url?: string;
+  date?: string;
+  time?: string;
   location?: string;
+  price?: string;
+  image_url?: string;
+  market: string;
   created_at: string;
-  user_id: string;
+  updated_at: string;
+  uploader?: {
+    name: string;
+    image: string;
+    small_photo: string;
+    location: string;
+  };
 }
 
 const fetchEvents = async (): Promise<Event[]> => {
-  // Optimized query - fetch only essential fields for initial load
-  const { data, error } = await supabase
-    .from('items')
+  const { data: events, error: eventsError } = await supabase
+    .from('events')
     .select(`
       id,
+      user_id,
       title,
       description,
+      date,
+      time,
+      location,
       price,
       image_url,
-      location,
+      market,
       created_at,
-      user_id
+      updated_at
     `)
-    .eq('category', 'event')
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(100); // Increased limit for better coverage
+    .eq('market', 'israel')
+    .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching events:', error);
-    throw error;
+  if (eventsError) throw eventsError;
+
+  if (!events || events.length === 0) {
+    return [];
   }
 
-  return data || [];
+  // Fetch uploader profiles
+  const userIds = events.map(event => event.user_id);
+  const { data: profiles, error: profilesError } = await supabase
+    .from('profiles')
+    .select('id, name, profile_image_url')
+    .in('id', userIds);
+
+  if (profilesError) throw profilesError;
+
+  const profilesMap = (profiles || []).reduce((acc: any, profile) => {
+    acc[profile.id] = profile;
+    return acc;
+  }, {});
+
+  return events.map(event => ({
+    ...event,
+    uploader: {
+      name: profilesMap[event.user_id]?.name || 'משתמש',
+      image: profilesMap[event.user_id]?.profile_image_url || '/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png',
+      small_photo: profilesMap[event.user_id]?.profile_image_url || '/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png',
+      location: profilesMap[event.user_id]?.location || 'לא צוין'
+    }
+  }));
 };
 
 export const useEvents = () => {
-  const {
-    data: events = [],
-    isLoading: loading,
-    error,
-    refetch
-  } = useQuery({
+  const queryResult = useQuery({
     queryKey: ['events'],
     queryFn: fetchEvents,
-    staleTime: 5 * 60 * 1000, // 5 minutes - events don't change frequently
-    gcTime: 30 * 60 * 1000, // 30 minutes cache
+    staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    retry: 1,
-    // Enable background updates but don't show loading state
-    refetchInterval: 10 * 60 * 1000, // Refetch every 10 minutes in background
   });
 
-  // Show toast on error
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: "שגיאה",
-        description: "לא ניתן לטעון את האירועים",
-        variant: "destructive",
-      });
-    }
-  }, [error]);
-
   return {
-    events,
-    loading,
-    refetch,
+    events: queryResult.data || [],
+    loading: queryResult.isLoading,
+    refetch: queryResult.refetch,
   };
 };
