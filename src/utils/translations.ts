@@ -62,7 +62,7 @@ export const translations = {
       recommended: "מומלצים",
       artists: "גלרייה",
       feed: "פיד",
-      favorites: "חברים",
+      favorites: "אנשים",
       createPost: "צור פוסט",
       createEvent: "צור אירוע",
       createItem: "צור פריט למכירה"
