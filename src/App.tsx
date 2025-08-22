@@ -38,7 +38,6 @@ import CreatePostPage from "./pages/CreatePostPage";
 import CreateEventPage from "./pages/CreateEventPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import EditItemPage from "./pages/EditItemPage";
-import FavoritesPage from "./pages/FavoritesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -96,7 +95,6 @@ const AppContent = () => {
               <Route path="/neighbors" element={<NeighborsPage />} />
               <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
               <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/new-item" element={<NewItemPage />} />
               <Route path="/create-post" element={<CreatePostPage />} />
               <Route path="/create-event" element={<CreateEventPage />} />
@@ -119,7 +117,6 @@ const AppContent = () => {
               <nav className="space-y-2">
                 <DesktopNavItem href="/" icon={Home} label="בית" />
                 <DesktopNavItem href="/feed" icon={Users} label="פיד שכונתי" />
-                <DesktopNavItem href="/favorites" icon={Heart} label="מועדפים" />
                 <DesktopNavItem href="/profile/1" icon={User} label="פרופיל" />
                 <DesktopNavItem href="/settings" icon={Settings} label="הגדרות" />
               </nav>
@@ -151,7 +148,6 @@ const AppContent = () => {
             <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
             
             <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/new-item" element={<NewItemPage />} />
             <Route path="/create-post" element={<CreatePostPage />} />
             <Route path="/create-event" element={<CreateEventPage />} />
