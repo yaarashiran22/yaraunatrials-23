@@ -52,6 +52,7 @@ const FavoritesPage = () => {
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const [isPhotoUploadOpen, setIsPhotoUploadOpen] = useState(false);
   const [isCreateIdeaOpen, setIsCreateIdeaOpen] = useState(false);
+  const [swipeStackKey, setSwipeStackKey] = useState(0);
 
   // Fetch user profiles for neighbor questions
   useEffect(() => {
@@ -109,6 +110,15 @@ const FavoritesPage = () => {
     if (diffInMinutes < 60) return `לפני ${diffInMinutes} דקות`;
     if (diffInMinutes < 1440) return `לפני ${Math.floor(diffInMinutes / 60)} שעות`;
     return `לפני ${Math.floor(diffInMinutes / 1440)} ימים`;
+  };
+
+  const handleIdeaCreated = async (question: string, imageUrl: string, neighborhood: string) => {
+    const success = await createIdea(question, imageUrl, neighborhood);
+    if (success) {
+      // Force refresh the swipe stack to show the new idea
+      setSwipeStackKey(prev => prev + 1);
+    }
+    return success;
   };
 
   // Helper function to format time ago for questions (similar to FeedPage)
@@ -191,6 +201,7 @@ const FavoritesPage = () => {
               <SectionHeader title="רעיונות לשכונה" />
               <div className="flex justify-center py-4">
                 <IdeasSwipeStack
+                  key={swipeStackKey}
                   ideas={ideas}
                   onVote={voteOnIdea}
                   loading={ideasLoading}
@@ -315,7 +326,7 @@ const FavoritesPage = () => {
       <CreateIdeaPopup
         isOpen={isCreateIdeaOpen}
         onClose={() => setIsCreateIdeaOpen(false)}
-        onIdeaCreated={createIdea}
+        onIdeaCreated={handleIdeaCreated}
       />
       
       <BottomNavigation />
