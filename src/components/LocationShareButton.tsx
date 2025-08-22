@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { MapPin, X } from 'lucide-react';
+import { MapPin, X, AlertCircle } from 'lucide-react';
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -19,6 +19,27 @@ const LocationShareButton = ({
   const { user } = useAuth();
   const { userLocations, sharing, shareLocation, removeLocation } = useUserLocations();
   const [isRemoving, setIsRemoving] = useState(false);
+  const [permissionState, setPermissionState] = useState<'granted' | 'denied' | 'prompt'>('prompt');
+
+  // Check geolocation permission status
+  useEffect(() => {
+    const checkPermission = async () => {
+      if ('permissions' in navigator) {
+        try {
+          const permission = await navigator.permissions.query({ name: 'geolocation' });
+          setPermissionState(permission.state);
+          
+          permission.addEventListener('change', () => {
+            setPermissionState(permission.state);
+          });
+        } catch (error) {
+          console.log('Permission API not supported');
+        }
+      }
+    };
+    
+    checkPermission();
+  }, []);
 
   // Check if current user has shared their location
   const userHasSharedLocation = userLocations.some(loc => loc.user_id === user?.id);
@@ -29,12 +50,36 @@ const LocationShareButton = ({
       return;
     }
 
+    // Check if geolocation is supported
+    if (!navigator.geolocation) {
+      toast.error('הדפדפן שלך לא תומך במיקום');
+      return;
+    }
+
+    // Show helpful message if permission was denied
+    if (permissionState === 'denied') {
+      toast.error('גישה למיקום נדחתה. אנא אפשר גישה למיקום בהגדרות הדפדפן ורענן את הדף.');
+      return;
+    }
+
+    console.log('Starting location share process...');
+    toast.loading('מבקש הרשאה למיקום...');
+
     const result = await shareLocation();
     
     if (result.success) {
       toast.success('המיקום שותף בהצלחה!');
+      console.log('Location shared successfully');
     } else {
+      console.error('Location sharing failed:', result.error);
       toast.error(result.error || 'שגיאה בשיתוף המיקום');
+      
+      // Show additional help for common issues
+      if (result.error?.includes('denied')) {
+        toast.info('טיפ: בדוק שאפשרת גישה למיקום בדפדפן שלך', {
+          duration: 5000
+        });
+      }
     }
   };
 
@@ -74,17 +119,20 @@ const LocationShareButton = ({
   return (
     <Button
       onClick={handleLocationShare}
-      disabled={sharing}
+      disabled={sharing || permissionState === 'denied'}
       variant={variant}
       size={size}
-      className={className}
+      className={`${className} ${permissionState === 'denied' ? 'opacity-50' : ''}`}
+      title={permissionState === 'denied' ? 'גישה למיקום נדחתה - אנא אפשר גישה בהגדרות הדפדפן' : ''}
     >
       {sharing ? (
         <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin ml-2" />
+      ) : permissionState === 'denied' ? (
+        <AlertCircle className="w-4 h-4 ml-2" />
       ) : (
         <MapPin className="w-4 h-4 ml-2" />
       )}
-      שתף מיקום
+      {permissionState === 'denied' ? 'גישה נדחתה' : 'שתף מיקום'}
     </Button>
   );
 };

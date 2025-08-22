@@ -95,15 +95,44 @@ export const useUserLocations = () => {
     setSharing(true);
 
     try {
+      console.log('Requesting location permission...');
+      
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 60000
-        });
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            console.log('Location received:', position.coords);
+            resolve(position);
+          },
+          (error) => {
+            console.error('Geolocation error:', error);
+            let errorMessage = 'Failed to get location';
+            
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                errorMessage = 'Location access denied. Please enable location permissions in your browser.';
+                break;
+              case error.POSITION_UNAVAILABLE:
+                errorMessage = 'Location information unavailable. Please try again.';
+                break;
+              case error.TIMEOUT:
+                errorMessage = 'Location request timed out. Please try again.';
+                break;
+              default:
+                errorMessage = `Location error: ${error.message}`;
+                break;
+            }
+            reject(new Error(errorMessage));
+          },
+          {
+            enableHighAccuracy: false, // Changed to false for better compatibility
+            timeout: 15000, // Increased timeout
+            maximumAge: 300000 // 5 minutes cache
+          }
+        );
       });
 
       const { latitude, longitude } = position.coords;
+      console.log('Using coordinates:', latitude, longitude);
 
       // Check if user already has a location shared
       const { data: existingLocation } = await supabase
