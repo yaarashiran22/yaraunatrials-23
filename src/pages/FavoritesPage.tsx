@@ -168,9 +168,6 @@ const FavoritesPage = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Upload Section */}
-            <FriendsFeedUpload onPostCreated={refreshPosts} />
-
             {/* Friends Posts */}
             <div className="space-y-4">
               {postsLoading ? (
