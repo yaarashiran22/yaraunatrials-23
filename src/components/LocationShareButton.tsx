@@ -90,6 +90,10 @@ const LocationShareButton = ({
         toast.info('💡 נסה שוב במקום עם קליטה טובה יותר', {
           duration: 7000
         });
+      } else if (result.error?.includes('mock') || result.error?.includes('testing')) {
+        toast.info('🧪 משתמש במיקום בדיקה - בואנוס איירס', {
+          duration: 7000
+        });
       }
     }
   };
