@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 
 // Fix for default markers in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -23,14 +22,24 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   useEffect(() => {
     const initMap = async () => {
       try {
-        if (!mapRef.current) return;
+        console.log('BuenosAiresMap: Starting map initialization');
+        console.log('BuenosAiresMap: mapRef.current exists:', !!mapRef.current);
+        
+        if (!mapRef.current) {
+          console.log('BuenosAiresMap: mapRef.current is null, exiting');
+          return;
+        }
 
+        console.log('BuenosAiresMap: Creating map with Leaflet');
+        
         // Buenos Aires coordinates
         const buenosAiresCenter: [number, number] = [-34.6118, -58.3960];
 
         // Create map
         const map = L.map(mapRef.current).setView(buenosAiresCenter, 12);
         mapInstanceRef.current = map;
+        
+        console.log('BuenosAiresMap: Map created successfully');
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -59,18 +68,24 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
             .bindPopup(`${neighborhood.name}<br>${neighborhood.nameHe}`);
         });
 
+        console.log('BuenosAiresMap: Map setup completed successfully');
         setIsLoading(false);
       } catch (err) {
-        console.error('Error loading map:', err);
+        console.error('BuenosAiresMap: Error loading map:', err);
         setError('שגיאה בטעינת המפה');
         setIsLoading(false);
       }
     };
 
     // Small delay to ensure DOM is ready
-    const timer = setTimeout(initMap, 100);
+    console.log('BuenosAiresMap: Component mounted, setting up timer');
+    const timer = setTimeout(() => {
+      console.log('BuenosAiresMap: Timer fired, calling initMap');
+      initMap();
+    }, 100);
 
     return () => {
+      console.log('BuenosAiresMap: Component unmounting, cleaning up');
       clearTimeout(timer);
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
