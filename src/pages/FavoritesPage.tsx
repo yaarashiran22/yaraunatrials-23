@@ -29,7 +29,7 @@ import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
 import { NeighborQuestionItem } from "@/components/NeighborQuestionItem";
 import SectionHeader from "@/components/SectionHeader";
 import CreateIdeaPopup from "@/components/CreateIdeaPopup";
-import IdeaCard from "@/components/IdeaCard";
+import IdeasSwipeStack from "@/components/IdeasSwipeStack";
 import FriendsProfileRow from "@/components/FriendsProfileRow";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -41,7 +41,7 @@ const FavoritesPage = () => {
   const { posts: friendsPosts, loading: postsLoading, deletePost, refreshPosts } = useFriendsFeedPosts();
   const { galleries: pictureGalleries, loading: galleriesLoading } = useFriendsPictureGalleries();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
-  const { ideas, loading: ideasLoading, createIdea, voteOnIdea, deleteIdea } = useNeighborhoodIdeas();
+  const { ideas, loading: ideasLoading, createIdea, voteOnIdea, deleteIdea, refreshIdeas } = useNeighborhoodIdeas();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -186,33 +186,16 @@ const FavoritesPage = () => {
               </CardContent>
             </Card>
 
-            {/* Neighborhood Ideas */}
+            {/* Neighborhood Ideas Swipe Stack */}
             <section>
               <SectionHeader title="רעיונות לשכונה" />
-              <div className="space-y-4">
-                {ideasLoading ? (
-                  <div className="text-center py-8">
-                    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                    <p className="text-muted-foreground">טוען רעיונות...</p>
-                  </div>
-                ) : ideas.length === 0 ? (
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <Lightbulb className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                      <p className="text-muted-foreground">עדיין אין רעיונות לשכונה</p>
-                      <p className="text-sm text-muted-foreground">היה הראשון לשתף רעיון!</p>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  ideas.map((idea) => (
-                    <IdeaCard
-                      key={idea.id}
-                      idea={idea}
-                      onVote={voteOnIdea}
-                      onDelete={deleteIdea}
-                    />
-                  ))
-                )}
+              <div className="flex justify-center py-4">
+                <IdeasSwipeStack
+                  ideas={ideas}
+                  onVote={voteOnIdea}
+                  loading={ideasLoading}
+                  onRefresh={refreshIdeas}
+                />
               </div>
             </section>
 
