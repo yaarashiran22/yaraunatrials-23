@@ -63,21 +63,30 @@ const LocationShareButton = ({
     }
 
     console.log('Starting location share process...');
-    toast.loading('מבקש הרשאה למיקום...');
+    
+    // Show loading message and start location sharing
+    const loadingToast = toast.loading('מחפש מיקום...');
 
     const result = await shareLocation();
     
+    // Dismiss the loading toast
+    toast.dismiss(loadingToast);
+    
     if (result.success) {
-      toast.success('המיקום שותף בהצלחה!');
+      toast.success('המיקום שותף בהצלחה! 📍');
       console.log('Location shared successfully');
     } else {
       console.error('Location sharing failed:', result.error);
       toast.error(result.error || 'שגיאה בשיתוף המיקום');
       
       // Show additional help for common issues
-      if (result.error?.includes('denied')) {
-        toast.info('טיפ: בדוק שאפשרת גישה למיקום בדפדפן שלך', {
-          duration: 5000
+      if (result.error?.includes('נדחתה')) {
+        toast.info('💡 בדוק שאפשרת גישה למיקום בדפדפן', {
+          duration: 7000
+        });
+      } else if (result.error?.includes('זמן') || result.error?.includes('timeout')) {
+        toast.info('💡 נסה שוב במקום עם קליטה טובה יותר', {
+          duration: 7000
         });
       }
     }

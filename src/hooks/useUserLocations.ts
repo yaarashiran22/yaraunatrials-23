@@ -28,6 +28,121 @@ export const useUserLocations = () => {
   const [loading, setLoading] = useState(true);
   const [sharing, setSharing] = useState(false);
 
+  // Progressive location detection with fallback
+  const getLocationWithFallback = async (): Promise<GeolocationPosition> => {
+    console.log('Starting location detection with fallback methods...');
+    
+    // Method 1: Try quick, less accurate location first
+    try {
+      console.log('Trying method 1: Quick location (network-based)...');
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+          reject(new Error('Quick location timeout'));
+        }, 5000); // Short timeout for quick method
+        
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            clearTimeout(timeoutId);
+            console.log('Method 1 succeeded:', position.coords);
+            resolve(position);
+          },
+          (error) => {
+            clearTimeout(timeoutId);
+            console.log('Method 1 failed:', error.message);
+            reject(error);
+          },
+          {
+            enableHighAccuracy: false, // Network/WiFi based location
+            timeout: 4000,
+            maximumAge: 600000 // 10 minutes cache
+          }
+        );
+      });
+      return position;
+    } catch (error) {
+      console.log('Method 1 failed, trying method 2...');
+    }
+
+    // Method 2: Try with GPS but longer timeout
+    try {
+      console.log('Trying method 2: GPS with longer timeout...');
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+          reject(new Error('GPS location timeout'));
+        }, 20000); // Longer timeout for GPS
+        
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            clearTimeout(timeoutId);
+            console.log('Method 2 succeeded:', position.coords);
+            resolve(position);
+          },
+          (error) => {
+            clearTimeout(timeoutId);
+            console.log('Method 2 failed:', error.message);
+            reject(error);
+          },
+          {
+            enableHighAccuracy: true, // GPS based location
+            timeout: 18000,
+            maximumAge: 300000 // 5 minutes cache
+          }
+        );
+      });
+      return position;
+    } catch (error) {
+      console.log('Method 2 failed, trying method 3...');
+    }
+
+    // Method 3: Fallback with very relaxed settings
+    try {
+      console.log('Trying method 3: Fallback with relaxed settings...');
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+          reject(new Error('All location methods failed'));
+        }, 30000); // Very long timeout
+        
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            clearTimeout(timeoutId);
+            console.log('Method 3 succeeded:', position.coords);
+            resolve(position);
+          },
+          (error) => {
+            clearTimeout(timeoutId);
+            console.log('Method 3 failed:', error.message);
+            
+            let errorMessage = 'לא ניתן לקבל מיקום';
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                errorMessage = 'הגישה למיקום נדחתה. אנא אפשר גישה למיקום בהגדרות הדפדפן.';
+                break;
+              case error.POSITION_UNAVAILABLE:
+                errorMessage = 'המיקום לא זמין. בדוק שהמיקום מופעל במכשיר.';
+                break;
+              case error.TIMEOUT:
+                errorMessage = 'זמן קבלת המיקום פג. נסה שוב במקום עם קליטה טובה יותר.';
+                break;
+              default:
+                errorMessage = `שגיאת מיקום: ${error.message}`;
+                break;
+            }
+            reject(new Error(errorMessage));
+          },
+          {
+            enableHighAccuracy: false,
+            timeout: 25000,
+            maximumAge: 900000 // 15 minutes cache - very permissive
+          }
+        );
+      });
+      return position;
+    } catch (error) {
+      // If all methods fail, provide helpful error
+      throw new Error('לא ניתן לקבל מיקום. נסה לרענן את הדף או לבדוק שהמיקום מופעל במכשיר.');
+    }
+  };
+
   // Fetch all user locations with profiles
   const fetchUserLocations = async () => {
     try {
@@ -97,40 +212,9 @@ export const useUserLocations = () => {
     try {
       console.log('Requesting location permission...');
       
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            console.log('Location received:', position.coords);
-            resolve(position);
-          },
-          (error) => {
-            console.error('Geolocation error:', error);
-            let errorMessage = 'Failed to get location';
-            
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                errorMessage = 'Location access denied. Please enable location permissions in your browser.';
-                break;
-              case error.POSITION_UNAVAILABLE:
-                errorMessage = 'Location information unavailable. Please try again.';
-                break;
-              case error.TIMEOUT:
-                errorMessage = 'Location request timed out. Please try again.';
-                break;
-              default:
-                errorMessage = `Location error: ${error.message}`;
-                break;
-            }
-            reject(new Error(errorMessage));
-          },
-          {
-            enableHighAccuracy: false, // Changed to false for better compatibility
-            timeout: 15000, // Increased timeout
-            maximumAge: 300000 // 5 minutes cache
-          }
-        );
-      });
-
+      // Try to get location with progressive fallback
+      const position = await getLocationWithFallback();
+      
       const { latitude, longitude } = position.coords;
       console.log('Using coordinates:', latitude, longitude);
 
