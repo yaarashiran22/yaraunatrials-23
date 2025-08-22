@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface UserLocation {
   id: string;
@@ -23,7 +23,7 @@ interface UserLocationWithProfile extends UserLocation {
 }
 
 export const useUserLocations = () => {
-  const { user } = useEnhancedAuth();
+  const { user } = useAuth();
   const [userLocations, setUserLocations] = useState<UserLocationWithProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [sharing, setSharing] = useState(false);

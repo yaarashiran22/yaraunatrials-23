@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MapPin, X } from 'lucide-react';
 import { useUserLocations } from '@/hooks/useUserLocations';
-import { useEnhancedAuth } from '@/contexts/EnhancedAuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 interface LocationShareButtonProps {
@@ -16,7 +16,7 @@ const LocationShareButton = ({
   size = 'default',
   className = ''
 }: LocationShareButtonProps) => {
-  const { user } = useEnhancedAuth();
+  const { user } = useAuth();
   const { userLocations, sharing, shareLocation, removeLocation } = useUserLocations();
   const [isRemoving, setIsRemoving] = useState(false);
 
