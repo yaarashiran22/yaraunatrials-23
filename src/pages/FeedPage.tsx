@@ -5,16 +5,12 @@ import StoriesPopup from "@/components/StoriesPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import UniformCard from "@/components/UniformCard";
 import SectionHeader from "@/components/SectionHeader";
-import { PostCommentsModal } from "@/components/PostCommentsModal";
-import { PostItem } from "@/components/PostItem";
-import FeedUpload from "@/components/FeedUpload";
 import BuenosAiresMap from "@/components/BuenosAiresMap";
 
 import { Button } from "@/components/ui/button";
 import { Search, X, Heart, MessageCircle, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePosts } from "@/hooks/usePosts";
 import { useStories } from "@/hooks/useStories";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import NeighborCard from "@/components/NeighborCard";
@@ -23,8 +19,6 @@ import { useProfile } from "@/hooks/useProfile";
 import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
 import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
 import { NeighborQuestionItem } from "@/components/NeighborQuestionItem";
-import { usePostLikes } from "@/hooks/usePostLikes";
-import { usePostComments } from "@/hooks/usePostComments";
 import { supabase } from "@/integrations/supabase/client";
 
 import profile1 from "@/assets/profile-1.jpg";
@@ -44,13 +38,10 @@ const FeedPage = () => {
   const [showStories, setShowStories] = useState(false);
   const [registeredUsers, setRegisteredUsers] = useState<any[]>([]);
   const [usersLoading, setUsersLoading] = useState(true);
-  const [postProfiles, setPostProfiles] = useState<{[key: string]: any}>({});
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
-  const { posts, loading, fetchPosts, deletePost } = usePosts();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
-  const [selectedPostForComments, setSelectedPostForComments] = useState<string | null>(null);
 
   // Fetch registered users
   useEffect(() => {
@@ -76,36 +67,6 @@ const FeedPage = () => {
     fetchRegisteredUsers();
   }, []);
 
-  // Fetch user profiles for posts
-  useEffect(() => {
-    const fetchPostProfiles = async () => {
-      if (posts.length === 0) return;
-
-      const userIds = [...new Set(posts.map(post => post.user_id))];
-      
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('id, name, profile_image_url')
-          .in('id', userIds);
-
-        if (error) {
-          console.error('Error fetching post profiles:', error);
-        } else {
-          const profilesMap = (data || []).reduce((acc, profile) => {
-            acc[profile.id] = profile;
-            return acc;
-          }, {} as {[key: string]: any});
-          
-          setPostProfiles(profilesMap);
-        }
-      } catch (err) {
-        console.error('Unexpected error fetching post profiles:', err);
-      }
-    };
-
-    fetchPostProfiles();
-  }, [posts]);
 
   // Fetch user profiles for neighbor questions
   useEffect(() => {
@@ -137,23 +98,6 @@ const FeedPage = () => {
 
     fetchQuestionProfiles();
   }, [questions]);
-
-  // Transform database posts to display format with real user data
-  const displayPosts = posts.map(post => {
-    const userProfile = postProfiles[post.user_id];
-    
-    return {
-      id: post.id,
-      userId: post.user_id,
-      userImage: userProfile?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
-      userName: userProfile?.name || "משתמש",
-      tag: post.location || "תושב שכונה",
-      timeAgo: getTimeAgo(post.created_at),
-      content: post.content,
-      image: post.image_url,
-      video: post.video_url
-    };
-  });
 
   // Helper function to format time ago
   function getTimeAgo(dateString: string) {
@@ -196,13 +140,6 @@ const FeedPage = () => {
     setShowStories(true);
   };
 
-  // Handle post deletion
-  const handleDeletePost = async (postId: string) => {
-    const success = await deletePost(postId);
-    if (success) {
-      // Post will be removed from the list automatically by the deletePost function
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background" dir="rtl">
@@ -223,10 +160,6 @@ const FeedPage = () => {
           </Button>
         </div>
 
-        {/* Upload Card - Only show if user is authenticated */}
-        {user && (
-          <FeedUpload onPostCreated={fetchPosts} />
-        )}
 
         {/* Buenos Aires Map Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 border border-border/20 shadow-sm mb-6">
@@ -270,29 +203,6 @@ const FeedPage = () => {
           </div>
         </section>
 
-        {/* Posts Feed */}
-        <div className="space-y-6 mb-8">
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-muted-foreground">טוען פוסטים...</p>
-            </div>
-          ) : displayPosts.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">אין פוסטים עדיין</p>
-              <p className="text-sm text-muted-foreground mt-2">היה הראשון לפרסם בשכונה!</p>
-            </div>
-          ) : (
-            displayPosts.map((post) => (
-              <PostItem
-                key={post.id}
-                post={post}
-                onCommentsClick={setSelectedPostForComments}
-                onDelete={handleDeletePost}
-              />
-            ))
-          )}
-        </div>
 
       </main>
       
@@ -318,13 +228,6 @@ const FeedPage = () => {
         item={selectedMarketplaceItem}
       />
       
-      {selectedPostForComments && (
-        <PostCommentsModal
-          isOpen={!!selectedPostForComments}
-          onClose={() => setSelectedPostForComments(null)}
-          postId={selectedPostForComments}
-        />
-      )}
       
       <BottomNavigation />
     </div>
