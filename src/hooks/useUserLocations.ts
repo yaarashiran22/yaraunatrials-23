@@ -270,11 +270,11 @@ export const useUserLocations = () => {
         .from('user_locations')
         .select('id')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle(); // Use maybeSingle instead of single to avoid errors when no data found
 
-      if (fetchError && fetchError.code !== 'PGRST116') {
+      if (fetchError) {
         console.error('Error checking existing location:', fetchError);
-        return { success: false, error: 'Database error when checking existing location' };
+        return { success: false, error: `Database error when checking existing location: ${fetchError.message}` };
       }
 
       console.log('Existing location found:', !!existingLocation);
@@ -356,6 +356,7 @@ export const useUserLocations = () => {
   };
 
   useEffect(() => {
+    console.log('useUserLocations: Hook initialized, calling fetchUserLocations');
     fetchUserLocations();
   }, []);
 

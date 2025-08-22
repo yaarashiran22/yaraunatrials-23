@@ -22,6 +22,8 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   const [error, setError] = useState<string | null>(null);
   const { userLocations } = useUserLocations();
 
+  console.log('BuenosAiresMap: Component rendered, userLocations:', userLocations.length);
+
   // Function to add user location markers
   const addUserLocationMarkers = () => {
     if (!mapInstanceRef.current) {
