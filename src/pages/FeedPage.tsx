@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useStories } from "@/hooks/useStories";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import NeighborCard from "@/components/NeighborCard";
-import { useAuth } from "@/contexts/AuthContext";
+import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
 import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
@@ -31,7 +31,7 @@ import vintageStore from "@/assets/vintage-store.jpg";
 
 const FeedPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useEnhancedAuth();
   const { profile } = useProfile(user?.id);
   const [showNeighborhood, setShowNeighborhood] = useState(true);
   const [showNotifications, setShowNotifications] = useState(false);
