@@ -270,6 +270,38 @@ export type Database = {
         }
         Relationships: []
       }
+      idea_votes: {
+        Row: {
+          created_at: string
+          id: string
+          idea_id: string
+          user_id: string
+          vote: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          idea_id: string
+          user_id: string
+          vote: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          idea_id?: string
+          user_id?: string
+          vote?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "idea_votes_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "neighborhood_ideas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       items: {
         Row: {
           category: string | null
@@ -383,6 +415,39 @@ export type Database = {
           message_type?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      neighborhood_ideas: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          market: string | null
+          neighborhood: string
+          question: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          market?: string | null
+          neighborhood: string
+          question: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          market?: string | null
+          neighborhood?: string
+          question?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

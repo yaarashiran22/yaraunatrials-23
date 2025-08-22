@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Bell, ArrowLeft, Heart, Users, Camera, Trash2 } from "lucide-react";
+import { Bell, ArrowLeft, Heart, Users, Camera, Trash2, Lightbulb, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,9 +24,12 @@ import { useFriendsPictureGalleries } from "@/hooks/useFriendsPictureGalleries";
 import { useAuth } from "@/contexts/AuthContext";
 import FriendsPictureUpload from "@/components/FriendsPictureUpload";
 import { useNeighborQuestions } from "@/hooks/useNeighborQuestions";
+import { useNeighborhoodIdeas } from "@/hooks/useNeighborhoodIdeas";
 import { NeighborQuestionCard } from "@/components/NeighborQuestionCard";
 import { NeighborQuestionItem } from "@/components/NeighborQuestionItem";
 import SectionHeader from "@/components/SectionHeader";
+import CreateIdeaPopup from "@/components/CreateIdeaPopup";
+import IdeaCard from "@/components/IdeaCard";
 import FriendsProfileRow from "@/components/FriendsProfileRow";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -38,6 +41,7 @@ const FavoritesPage = () => {
   const { posts: friendsPosts, loading: postsLoading, deletePost, refreshPosts } = useFriendsFeedPosts();
   const { galleries: pictureGalleries, loading: galleriesLoading } = useFriendsPictureGalleries();
   const { questions, loading: questionsLoading, deleteQuestion } = useNeighborQuestions();
+  const { ideas, loading: ideasLoading, createIdea, voteOnIdea, deleteIdea } = useNeighborhoodIdeas();
   const [questionProfiles, setQuestionProfiles] = useState<{[key: string]: any}>({});
   const [showNotifications, setShowNotifications] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -47,6 +51,7 @@ const FavoritesPage = () => {
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const [isPhotoUploadOpen, setIsPhotoUploadOpen] = useState(false);
+  const [isCreateIdeaOpen, setIsCreateIdeaOpen] = useState(false);
 
   // Fetch user profiles for neighbor questions
   useEffect(() => {
@@ -143,14 +148,14 @@ const FavoritesPage = () => {
       {/* Mobile Header */}
       <div className="lg:hidden">
         <Header 
-          title="חברים"
+          title="אנשים"
           onNotificationsClick={() => setShowNotifications(true)}
         />
       </div>
       
       {/* Desktop Header */}
       <DesktopHeader 
-        title="חברים"
+        title="אנשים"
         onNotificationsClick={() => setShowNotifications(true)}
       />
 
@@ -168,6 +173,49 @@ const FavoritesPage = () => {
           </div>
         ) : (
           <div className="space-y-6">
+            {/* Create Idea Section */}
+            <Card className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-2 border-dashed border-primary/30">
+              <CardContent className="p-6 text-center">
+                <Lightbulb className="h-12 w-12 text-primary mx-auto mb-3" />
+                <h3 className="text-lg font-semibold mb-2">יש לך רעיון לשכונה?</h3>
+                <p className="text-muted-foreground mb-4">שתף רעיון עם השכנים וקבל את דעתם</p>
+                <Button onClick={() => setIsCreateIdeaOpen(true)} className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  פרסם רעיון
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Neighborhood Ideas */}
+            <section>
+              <SectionHeader title="רעיונות לשכונה" />
+              <div className="space-y-4">
+                {ideasLoading ? (
+                  <div className="text-center py-8">
+                    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                    <p className="text-muted-foreground">טוען רעיונות...</p>
+                  </div>
+                ) : ideas.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <Lightbulb className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-muted-foreground">עדיין אין רעיונות לשכונה</p>
+                      <p className="text-sm text-muted-foreground">היה הראשון לשתף רעיון!</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  ideas.map((idea) => (
+                    <IdeaCard
+                      key={idea.id}
+                      idea={idea}
+                      onVote={voteOnIdea}
+                      onDelete={deleteIdea}
+                    />
+                  ))
+                )}
+              </div>
+            </section>
+
             {/* Friends Posts */}
             <div className="space-y-4">
               {postsLoading ? (
@@ -279,6 +327,13 @@ const FavoritesPage = () => {
           <FriendsPictureUpload onGalleryCreated={() => setIsPhotoUploadOpen(false)} />
         </DialogContent>
       </Dialog>
+
+      {/* Create Idea Popup */}
+      <CreateIdeaPopup
+        isOpen={isCreateIdeaOpen}
+        onClose={() => setIsCreateIdeaOpen(false)}
+        onIdeaCreated={createIdea}
+      />
       
       <BottomNavigation />
     </div>
