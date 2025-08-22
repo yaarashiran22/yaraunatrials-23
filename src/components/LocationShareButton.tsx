@@ -17,7 +17,7 @@ const LocationShareButton = ({
   className = ''
 }: LocationShareButtonProps) => {
   const { user } = useAuth();
-  const { userLocations, sharing, shareLocation, removeLocation } = useUserLocations();
+  const { userLocations, sharing, shareLocation, removeLocation, refreshLocations } = useUserLocations();
   const [isRemoving, setIsRemoving] = useState(false);
   const [permissionState, setPermissionState] = useState<'granted' | 'denied' | 'prompt'>('prompt');
 
@@ -62,7 +62,7 @@ const LocationShareButton = ({
       return;
     }
 
-    console.log('Starting location share process...');
+    console.log('LocationShareButton: Starting location share process...');
     
     // Show loading message and start location sharing
     const loadingToast = toast.loading('מחפש מיקום...');
@@ -74,9 +74,11 @@ const LocationShareButton = ({
     
     if (result.success) {
       toast.success('המיקום שותף בהצלחה! 📍');
-      console.log('Location shared successfully');
+      console.log('LocationShareButton: Location shared successfully, refreshing locations...');
+      // Force refresh the locations to update the map immediately
+      await refreshLocations();
     } else {
-      console.error('Location sharing failed:', result.error);
+      console.error('LocationShareButton: Location sharing failed:', result.error);
       toast.error(result.error || 'שגיאה בשיתוף המיקום');
       
       // Show additional help for common issues

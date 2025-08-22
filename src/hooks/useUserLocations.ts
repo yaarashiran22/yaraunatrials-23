@@ -145,6 +145,7 @@ export const useUserLocations = () => {
 
   // Fetch all user locations with profiles
   const fetchUserLocations = async () => {
+    console.log('Fetching user locations...');
     try {
       const { data: locations, error: locationsError } = await supabase
         .from('user_locations')
@@ -156,13 +157,17 @@ export const useUserLocations = () => {
         return;
       }
 
+      console.log(`Found ${locations?.length || 0} user locations`);
+
       if (!locations || locations.length === 0) {
+        console.log('No user locations found, setting empty array');
         setUserLocations([]);
         return;
       }
 
       // Get unique user IDs
       const userIds = [...new Set(locations.map(loc => loc.user_id))];
+      console.log('Fetching profiles for user IDs:', userIds);
 
       // Fetch profiles for these users
       const { data: profiles, error: profilesError } = await supabase
@@ -175,6 +180,8 @@ export const useUserLocations = () => {
         return;
       }
 
+      console.log(`Found ${profiles?.length || 0} profiles`);
+
       // Combine locations with profiles
       const locationsWithProfiles = locations
         .map(location => {
@@ -185,10 +192,12 @@ export const useUserLocations = () => {
               profile
             };
           }
+          console.log(`No profile found for user_id: ${location.user_id}`);
           return null;
         })
         .filter(Boolean) as UserLocationWithProfile[];
 
+      console.log(`Setting ${locationsWithProfiles.length} locations with profiles`);
       setUserLocations(locationsWithProfiles);
     } catch (error) {
       console.error('Error in fetchUserLocations:', error);
@@ -200,13 +209,16 @@ export const useUserLocations = () => {
   // Share current location
   const shareLocation = async (): Promise<{ success: boolean; error?: string }> => {
     if (!user) {
+      console.error('User not authenticated for location sharing');
       return { success: false, error: 'User not authenticated' };
     }
 
     if (!navigator.geolocation) {
+      console.error('Geolocation not supported');
       return { success: false, error: 'Geolocation is not supported by this browser' };
     }
 
+    console.log('Starting location sharing process for user:', user.id);
     setSharing(true);
 
     try {
@@ -216,18 +228,27 @@ export const useUserLocations = () => {
       const position = await getLocationWithFallback();
       
       const { latitude, longitude } = position.coords;
-      console.log('Using coordinates:', latitude, longitude);
+      console.log('Successfully got coordinates:', { latitude, longitude });
 
       // Check if user already has a location shared
-      const { data: existingLocation } = await supabase
+      console.log('Checking for existing location...');
+      const { data: existingLocation, error: fetchError } = await supabase
         .from('user_locations')
         .select('id')
         .eq('user_id', user.id)
         .single();
 
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        console.error('Error checking existing location:', fetchError);
+        return { success: false, error: 'Database error when checking existing location' };
+      }
+
+      console.log('Existing location found:', !!existingLocation);
+
       let result;
       if (existingLocation) {
         // Update existing location
+        console.log('Updating existing location...');
         result = await supabase
           .from('user_locations')
           .update({
@@ -235,29 +256,35 @@ export const useUserLocations = () => {
             longitude: longitude,
             updated_at: new Date().toISOString()
           })
-          .eq('user_id', user.id);
+          .eq('user_id', user.id)
+          .select();
       } else {
         // Create new location
+        console.log('Creating new location...');
         result = await supabase
           .from('user_locations')
           .insert({
             user_id: user.id,
             latitude: latitude,
             longitude: longitude
-          });
+          })
+          .select();
       }
 
       if (result.error) {
-        console.error('Error saving location:', result.error);
-        return { success: false, error: 'Failed to save location' };
+        console.error('Error saving location to database:', result.error);
+        return { success: false, error: `Database error: ${result.error.message}` };
       }
 
-      // Refresh locations
+      console.log('Location saved successfully:', result.data);
+
+      // Refresh locations immediately
+      console.log('Refreshing user locations...');
       await fetchUserLocations();
 
       return { success: true };
     } catch (error) {
-      console.error('Error getting location:', error);
+      console.error('Error in shareLocation:', error);
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Failed to get location' 

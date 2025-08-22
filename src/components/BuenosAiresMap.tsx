@@ -24,7 +24,12 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
 
   // Function to add user location markers
   const addUserLocationMarkers = () => {
-    if (!mapInstanceRef.current) return;
+    if (!mapInstanceRef.current) {
+      console.log('BuenosAiresMap: No map instance available for adding markers');
+      return;
+    }
+
+    console.log(`BuenosAiresMap: Adding markers for ${userLocations.length} user locations`);
 
     // Clear existing user markers
     userMarkersRef.current.forEach(marker => {
@@ -33,8 +38,10 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
     userMarkersRef.current = [];
 
     // Add markers for each user location
-    userLocations.forEach(userLocation => {
+    userLocations.forEach((userLocation, index) => {
       if (!mapInstanceRef.current) return;
+
+      console.log(`BuenosAiresMap: Adding marker ${index + 1} for user:`, userLocation.profile.name, 'at', userLocation.latitude, userLocation.longitude);
 
       // Create custom icon for user profile picture
       const userIcon = L.divIcon({
@@ -80,6 +87,8 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
 
       userMarkersRef.current.push(marker);
     });
+
+    console.log(`BuenosAiresMap: Successfully added ${userMarkersRef.current.length} user markers`);
   };
 
   useEffect(() => {
@@ -161,8 +170,12 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
 
   // Update user markers when userLocations change
   useEffect(() => {
+    console.log('BuenosAiresMap: userLocations changed, length:', userLocations.length);
     if (mapInstanceRef.current && !isLoading) {
+      console.log('BuenosAiresMap: Map ready, adding user location markers');
       addUserLocationMarkers();
+    } else {
+      console.log('BuenosAiresMap: Map not ready yet, isLoading:', isLoading);
     }
   }, [userLocations, isLoading]);
 
