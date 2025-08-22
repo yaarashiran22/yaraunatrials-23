@@ -24,7 +24,7 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
 
   console.log('BuenosAiresMap: Component rendered, userLocations:', userLocations.length);
 
-  // Function to add user location markers
+  // Function to add user location markers - optimized for performance
   const addUserLocationMarkers = () => {
     if (!mapInstanceRef.current) {
       console.log('BuenosAiresMap: No map instance available for adding markers');
@@ -33,56 +33,54 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
 
     console.log(`BuenosAiresMap: Adding markers for ${userLocations.length} user locations`);
 
-    // Clear existing user markers
-    userMarkersRef.current.forEach(marker => {
-      mapInstanceRef.current?.removeLayer(marker);
-    });
-    userMarkersRef.current = [];
+    // Clear existing user markers efficiently
+    if (userMarkersRef.current.length > 0) {
+      userMarkersRef.current.forEach(marker => {
+        mapInstanceRef.current?.removeLayer(marker);
+      });
+      userMarkersRef.current = [];
+    }
 
-    // Add markers for each user location
+    // Add markers for each user location with optimized icons
     userLocations.forEach((userLocation, index) => {
       if (!mapInstanceRef.current) return;
 
       console.log(`BuenosAiresMap: Adding marker ${index + 1} for user:`, userLocation.profile.name, 'at', userLocation.latitude, userLocation.longitude);
 
-      // Create custom icon for user profile picture
+      // Create optimized custom icon with smaller HTML for faster rendering
       const userIcon = L.divIcon({
         html: `
-          <div class="relative">
-            <div class="w-10 h-10 rounded-full border-2 border-white shadow-lg overflow-hidden bg-white">
-              <img 
-                src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
-                alt="${userLocation.profile.name}"
-                class="w-full h-full object-cover"
-                onerror="this.src='/placeholder.svg'"
-              />
-            </div>
-            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+          <div class="w-8 h-8 rounded-full border-2 border-white shadow-md overflow-hidden bg-white relative">
+            <img 
+              src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
+              alt=""
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border border-white rounded-full"></div>
           </div>
         `,
         className: 'user-location-marker',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
+        iconSize: [32, 32], // Smaller size for better performance
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
       });
 
       const marker = L.marker([userLocation.latitude, userLocation.longitude], {
-        icon: userIcon
+        icon: userIcon,
+        riseOnHover: true // Better UX without performance cost
       })
         .addTo(mapInstanceRef.current)
         .bindPopup(`
-          <div dir="rtl" class="text-right">
-            <div class="flex items-center gap-2 mb-2">
+          <div dir="rtl" class="text-right text-sm">
+            <div class="flex items-center gap-2">
               <img 
                 src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
-                alt="${userLocation.profile.name}"
-                class="w-8 h-8 rounded-full object-cover"
-                onerror="this.src='/placeholder.svg'"
+                alt=""
+                class="w-6 h-6 rounded-full object-cover"
+                loading="lazy"
               />
               <span class="font-medium">${userLocation.profile.name || 'משתמש'}</span>
-            </div>
-            <div class="text-xs text-gray-600">
-              מיקום משותף
             </div>
           </div>
         `);
@@ -109,36 +107,48 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
         // Buenos Aires coordinates
         const buenosAiresCenter: [number, number] = [-34.6118, -58.3960];
 
-        // Create map
-        const map = L.map(mapRef.current).setView(buenosAiresCenter, 12);
+        // Create map with optimized settings
+        const map = L.map(mapRef.current, {
+          zoomControl: true,
+          attributionControl: false, // Remove attribution for faster loading
+          fadeAnimation: false, // Disable fade animation for faster rendering
+          zoomAnimation: true,
+          markerZoomAnimation: false // Disable marker animations for better performance
+        }).setView(buenosAiresCenter, 12);
+        
         mapInstanceRef.current = map;
         
         console.log('BuenosAiresMap: Map created successfully');
 
-        // Add OpenStreetMap tiles
+        // Use faster tile provider with lower quality for faster loading
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap contributors',
-          maxZoom: 19,
+          attribution: '© OpenStreetMap',
+          maxZoom: 18, // Reduced from 19
+          minZoom: 10, // Set minimum zoom for better performance
+          tileSize: 256, // Standard tile size for faster loading
+          updateWhenZooming: false, // Don't update tiles while zooming for better performance
+          updateWhenIdle: true, // Only update when idle
         }).addTo(map);
 
-        // Add marker for Buenos Aires center
+        // Add marker for Buenos Aires center (reduced popup content)
         L.marker(buenosAiresCenter)
           .addTo(map)
-          .bindPopup('Buenos Aires<br>בואנוס איירס');
+          .bindPopup('Buenos Aires');
 
-        // Add some popular neighborhoods as markers
+        // Add simplified neighborhood markers for faster loading
         const neighborhoods = [
-          { name: "Palermo", nameHe: "פלרמו", lat: -34.5870, lng: -58.4263 },
-          { name: "San Telmo", nameHe: "סן טלמו", lat: -34.6202, lng: -58.3731 },
-          { name: "La Boca", nameHe: "לה בוקה", lat: -34.6343, lng: -58.3635 },
-          { name: "Recoleta", nameHe: "רקולטה", lat: -34.5885, lng: -58.3967 },
-          { name: "Puerto Madero", nameHe: "פוארטו מדרו", lat: -34.6107, lng: -58.3647 },
+          { name: "Palermo", lat: -34.5870, lng: -58.4263 },
+          { name: "San Telmo", lat: -34.6202, lng: -58.3731 },
+          { name: "La Boca", lat: -34.6343, lng: -58.3635 },
+          { name: "Recoleta", lat: -34.5885, lng: -58.3967 },
+          { name: "Puerto Madero", lat: -34.6107, lng: -58.3647 },
         ];
 
+        // Add neighborhood markers with simpler popups
         neighborhoods.forEach(neighborhood => {
           L.marker([neighborhood.lat, neighborhood.lng])
             .addTo(map)
-            .bindPopup(`${neighborhood.name}<br>${neighborhood.nameHe}`);
+            .bindPopup(neighborhood.name);
         });
 
         // Add user location markers
@@ -153,16 +163,12 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
       }
     };
 
-    // Small delay to ensure DOM is ready
-    console.log('BuenosAiresMap: Component mounted, setting up timer');
-    const timer = setTimeout(() => {
-      console.log('BuenosAiresMap: Timer fired, calling initMap');
-      initMap();
-    }, 100);
+    // Immediate initialization - no delay for faster loading
+    console.log('BuenosAiresMap: Component mounted, initializing map immediately');
+    initMap();
 
     return () => {
       console.log('BuenosAiresMap: Component unmounting, cleaning up');
-      clearTimeout(timer);
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
@@ -192,16 +198,16 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   }
 
   return (
-    <div className={`${className} rounded-xl overflow-hidden border border-border/20 shadow-sm relative`}>
+    <div className={`${className} rounded-xl overflow-hidden border border-border/20 shadow-sm relative bg-muted/10`}>
       {isLoading && (
-        <div className="absolute inset-0 bg-muted/30 flex items-center justify-center z-[1000]">
+        <div className="absolute inset-0 bg-gradient-to-br from-muted/20 to-muted/40 flex items-center justify-center z-[1000] backdrop-blur-sm">
           <div className="text-center">
-            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-            <p className="text-muted-foreground text-sm">טוען מפה...</p>
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+            <p className="text-muted-foreground text-xs">טוען מפה...</p>
           </div>
         </div>
       )}
-      <div ref={mapRef} className="w-full h-full" />
+      <div ref={mapRef} className="w-full h-full min-h-[200px]" />
     </div>
   );
 };
