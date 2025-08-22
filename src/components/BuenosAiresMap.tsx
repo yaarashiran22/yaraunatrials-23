@@ -1,5 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { Loader } from '@googlemaps/js-api-loader';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Fix for default markers in Leaflet
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+});
 
 interface BuenosAiresMapProps {
   className?: string;
@@ -7,69 +16,67 @@ interface BuenosAiresMapProps {
 
 const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initMap = async () => {
       try {
-        const loader = new Loader({
-          apiKey: "AIzaSyBxDVr8E5kHZJ_CfKoEFEKyVr5pS9kFqjQ", // Public Google Maps API key
-          version: "weekly",
-          libraries: ["places", "geometry"]
-        });
-
-        const { Map } = await loader.importLibrary("maps");
-        const { AdvancedMarkerElement } = await loader.importLibrary("marker");
-
         if (!mapRef.current) return;
 
         // Buenos Aires coordinates
-        const buenosAiresCenter = { lat: -34.6118, lng: -58.3960 };
+        const buenosAiresCenter: [number, number] = [-34.6118, -58.3960];
 
-        const map = new Map(mapRef.current, {
-          zoom: 12,
-          center: buenosAiresCenter,
-          mapId: "BUENOS_AIRES_MAP",
-          disableDefaultUI: false,
-          zoomControl: true,
-          streetViewControl: false,
-          fullscreenControl: false,
-        });
+        // Create map
+        const map = L.map(mapRef.current).setView(buenosAiresCenter, 12);
+        mapInstanceRef.current = map;
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors',
+          maxZoom: 19,
+        }).addTo(map);
 
         // Add marker for Buenos Aires center
-        new AdvancedMarkerElement({
-          map,
-          position: buenosAiresCenter,
-          title: "Buenos Aires",
-        });
+        L.marker(buenosAiresCenter)
+          .addTo(map)
+          .bindPopup('Buenos Aires<br>בואנוס איירס')
+          .openPopup();
 
         // Add some popular neighborhoods as markers
         const neighborhoods = [
-          { name: "Palermo", lat: -34.5870, lng: -58.4263 },
-          { name: "San Telmo", lat: -34.6202, lng: -58.3731 },
-          { name: "La Boca", lat: -34.6343, lng: -58.3635 },
-          { name: "Recoleta", lat: -34.5885, lng: -58.3967 },
-          { name: "Puerto Madero", lat: -34.6107, lng: -58.3647 },
+          { name: "Palermo", nameHe: "פלרמו", lat: -34.5870, lng: -58.4263 },
+          { name: "San Telmo", nameHe: "סן טלמו", lat: -34.6202, lng: -58.3731 },
+          { name: "La Boca", nameHe: "לה בוקה", lat: -34.6343, lng: -58.3635 },
+          { name: "Recoleta", nameHe: "רקולטה", lat: -34.5885, lng: -58.3967 },
+          { name: "Puerto Madero", nameHe: "פוארטו מדרו", lat: -34.6107, lng: -58.3647 },
         ];
 
         neighborhoods.forEach(neighborhood => {
-          new AdvancedMarkerElement({
-            map,
-            position: { lat: neighborhood.lat, lng: neighborhood.lng },
-            title: neighborhood.name,
-          });
+          L.marker([neighborhood.lat, neighborhood.lng])
+            .addTo(map)
+            .bindPopup(`${neighborhood.name}<br>${neighborhood.nameHe}`);
         });
 
         setIsLoading(false);
       } catch (err) {
-        console.error('Error loading Google Maps:', err);
+        console.error('Error loading map:', err);
         setError('שגיאה בטעינת המפה');
         setIsLoading(false);
       }
     };
 
-    initMap();
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(initMap, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
   }, []);
 
   if (error) {
@@ -85,7 +92,7 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   return (
     <div className={`${className} rounded-xl overflow-hidden border border-border/20 shadow-sm relative`}>
       {isLoading && (
-        <div className="absolute inset-0 bg-muted/30 flex items-center justify-center z-10">
+        <div className="absolute inset-0 bg-muted/30 flex items-center justify-center z-[1000]">
           <div className="text-center">
             <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
             <p className="text-muted-foreground text-sm">טוען מפה...</p>
