@@ -773,6 +773,36 @@ export type Database = {
           },
         ]
       }
+      user_locations: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          latitude: number
+          longitude: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          latitude: number
+          longitude: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_messages: {
         Row: {
           created_at: string
