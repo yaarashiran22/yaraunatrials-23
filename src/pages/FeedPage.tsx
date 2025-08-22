@@ -6,6 +6,7 @@ import MarketplacePopup from "@/components/MarketplacePopup";
 import UniformCard from "@/components/UniformCard";
 import SectionHeader from "@/components/SectionHeader";
 import BuenosAiresMap from "@/components/BuenosAiresMap";
+import LocationShareButton from "@/components/LocationShareButton";
 
 import { Button } from "@/components/ui/button";
 import { Search, X, Heart, MessageCircle, MapPin } from "lucide-react";
@@ -163,8 +164,9 @@ const FeedPage = () => {
 
         {/* Buenos Aires Map Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 border border-border/20 shadow-sm mb-6">
-          <div className="mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <SectionHeader title="מפת בואנוס איירס" />
+            <LocationShareButton size="sm" />
           </div>
           <BuenosAiresMap className="w-full h-64" />
         </section>

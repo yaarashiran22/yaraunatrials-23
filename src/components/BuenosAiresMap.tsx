@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
+import { useUserLocations } from '@/hooks/useUserLocations';
 
 // Fix for default markers in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -16,8 +17,70 @@ interface BuenosAiresMapProps {
 const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
+  const userMarkersRef = useRef<L.Marker[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { userLocations } = useUserLocations();
+
+  // Function to add user location markers
+  const addUserLocationMarkers = () => {
+    if (!mapInstanceRef.current) return;
+
+    // Clear existing user markers
+    userMarkersRef.current.forEach(marker => {
+      mapInstanceRef.current?.removeLayer(marker);
+    });
+    userMarkersRef.current = [];
+
+    // Add markers for each user location
+    userLocations.forEach(userLocation => {
+      if (!mapInstanceRef.current) return;
+
+      // Create custom icon for user profile picture
+      const userIcon = L.divIcon({
+        html: `
+          <div class="relative">
+            <div class="w-10 h-10 rounded-full border-2 border-white shadow-lg overflow-hidden bg-white">
+              <img 
+                src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
+                alt="${userLocation.profile.name}"
+                class="w-full h-full object-cover"
+                onerror="this.src='/placeholder.svg'"
+              />
+            </div>
+            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+          </div>
+        `,
+        className: 'user-location-marker',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+      });
+
+      const marker = L.marker([userLocation.latitude, userLocation.longitude], {
+        icon: userIcon
+      })
+        .addTo(mapInstanceRef.current)
+        .bindPopup(`
+          <div dir="rtl" class="text-right">
+            <div class="flex items-center gap-2 mb-2">
+              <img 
+                src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
+                alt="${userLocation.profile.name}"
+                class="w-8 h-8 rounded-full object-cover"
+                onerror="this.src='/placeholder.svg'"
+              />
+              <span class="font-medium">${userLocation.profile.name || 'משתמש'}</span>
+            </div>
+            <div class="text-xs text-gray-600">
+              מיקום משותף
+            </div>
+          </div>
+        `);
+
+      userMarkersRef.current.push(marker);
+    });
+  };
 
   useEffect(() => {
     const initMap = async () => {
@@ -50,8 +113,7 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
         // Add marker for Buenos Aires center
         L.marker(buenosAiresCenter)
           .addTo(map)
-          .bindPopup('Buenos Aires<br>בואנוס איירס')
-          .openPopup();
+          .bindPopup('Buenos Aires<br>בואנוס איירס');
 
         // Add some popular neighborhoods as markers
         const neighborhoods = [
@@ -67,6 +129,9 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
             .addTo(map)
             .bindPopup(`${neighborhood.name}<br>${neighborhood.nameHe}`);
         });
+
+        // Add user location markers
+        addUserLocationMarkers();
 
         console.log('BuenosAiresMap: Map setup completed successfully');
         setIsLoading(false);
@@ -93,6 +158,13 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
       }
     };
   }, []);
+
+  // Update user markers when userLocations change
+  useEffect(() => {
+    if (mapInstanceRef.current && !isLoading) {
+      addUserLocationMarkers();
+    }
+  }, [userLocations, isLoading]);
 
   if (error) {
     return (
