@@ -154,10 +154,7 @@ const FavoritesPage = () => {
         onNotificationsClick={() => setShowNotifications(true)}
       />
 
-      <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
-        {/* Friends Profile Row */}
-        <FriendsProfileRow />
-        
+      <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">        
         {friendsLoading ? (
           <div className="text-center py-12">
             <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -173,38 +170,6 @@ const FavoritesPage = () => {
           <div className="space-y-6">
             {/* Upload Section */}
             <FriendsFeedUpload onPostCreated={refreshPosts} />
-
-            {/* שאלות שכנים Section */}
-            <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-4 border border-border/20 shadow-sm">
-              <SectionHeader title="שאלות חברים" />
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                <NeighborQuestionCard />
-                {questionsLoading ? (
-                  <div className="text-center py-4 flex-shrink-0">
-                    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-                  </div>
-                ) : (
-                  questions.map((question) => {
-                    const userProfile = question.user_id ? questionProfiles[question.user_id] : null;
-                    return (
-                      <NeighborQuestionItem
-                        key={`question-${question.id}`}
-                        question={question}
-                        userProfile={userProfile}
-                        getTimeAgo={getTimeAgo}
-                        questionProfiles={questionProfiles}
-                        onDeleteQuestion={deleteQuestion}
-                      />
-                    );
-                  })
-                )}
-                {questions.length === 0 && !questionsLoading && (
-                  <div className="text-center py-8 text-muted-foreground flex-shrink-0">
-                    <p>אין שאלות עדיין</p>
-                  </div>
-                )}
-              </div>
-            </section>
 
             {/* Friends Posts */}
             <div className="space-y-4">
