@@ -69,7 +69,7 @@ export const translations = {
     },
     sections: {
       neighbors: "שכנים וחברים",
-      joinMe: "תצטרפו אלי",
+      joinMe: "תצטרפו",
       knowYourNeighborhood: "הכיר את השכונה"
     },
     popups: {
