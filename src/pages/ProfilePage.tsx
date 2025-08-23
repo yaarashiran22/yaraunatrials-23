@@ -78,14 +78,14 @@ const ProfilePage = () => {
     const item = userItems.find(item => item.id === itemId);
     if (!item || !canUserModifyItem(user!.id, item.user_id)) {
       toast({
-        title: "שגיאת הרשאה",
-        description: "אין לך הרשאה למחוק פריט זה",
+        title: "Authorization Error",
+        description: "You don't have permission to delete this item",
         variant: "destructive",
       });
       return;
     }
 
-    if (window.confirm('האם אתה בטוח שברצונך למחוק את הפריט?')) {
+    if (window.confirm('Are you sure you want to delete this item?')) {
       await deleteItem(itemId);
     }
   };
@@ -100,8 +100,8 @@ const ProfilePage = () => {
     const item = userItems.find(item => item.id === itemId);
     if (!item || !canUserModifyItem(user!.id, item.user_id)) {
       toast({
-        title: "שגיאת הרשאה",
-        description: "אין לך הרשאה לערוך פריט זה",
+        title: "Authorization Error",
+        description: "You don't have permission to edit this item",
         variant: "destructive",
       });
       return;
@@ -116,13 +116,13 @@ const ProfilePage = () => {
       title: item.title,
       image: item.image_url || dressItem,
       price: item.price ? `₪${item.price}` : undefined,
-      description: item.description || `${item.title} במצב מעולה.`,
+      description: item.description || `${item.title} in excellent condition.`,
       seller: {
-        name: profileData?.name || "משתמש",
+        name: profileData?.name || "User",
         image: profileData?.profile_image_url || profile1,
-        location: item.location || profileData?.location || "תל אביב"
+        location: item.location || profileData?.location || "Tel Aviv"
       },
-      condition: "כמו חדש",
+      condition: "Like New",
       type: item.category
     };
     setSelectedItem(itemDetails);
@@ -132,7 +132,7 @@ const ProfilePage = () => {
   // Filter items by category
   const secondHandItems = userItems.filter(item => item.category === 'secondhand' || !item.category);
   const eventItems = userItems.filter(item => item.category === 'event');
-  const recommendationItems = userItems.filter(item => item.category === 'מוזמנים להצטרף');
+  const recommendationItems = userItems.filter(item => item.category === 'join me');
   const artItems = userItems.filter(item => item.category === 'art');
 
   // Listen for profile updates (when returning from edit page)
@@ -186,7 +186,7 @@ const ProfilePage = () => {
   };
 
   const handleDeleteMessage = async (messageId: string) => {
-    if (window.confirm('האם אתה בטוח שברצונך למחוק את ההודעה?')) {
+    if (window.confirm('Are you sure you want to delete this message?')) {
       await deleteMessage(messageId);
     }
   };
@@ -210,7 +210,7 @@ const ProfilePage = () => {
           onNotificationsClick={() => setShowNotifications(true)}
         />
         <main className="px-4 py-6 pb-20">
-          <div className="text-center">טוען...</div>
+          <div className="text-center">Loading...</div>
         </main>
         <BottomNavigation />
       </div>
@@ -230,10 +230,10 @@ const ProfilePage = () => {
           <main className="px-4 py-6 pb-20">
             <div className="text-center">
               <p className="text-muted-foreground mb-4">
-                יש להתחבר כדי לצפות בפרופיל
+                Please log in to view profile
               </p>
               <Button onClick={() => navigate('/login')}>
-                התחבר
+                Login
               </Button>
             </div>
           </main>
@@ -251,11 +251,11 @@ const ProfilePage = () => {
         <main className="px-4 py-6 pb-20">
           <div className="text-center">
             <p className="text-muted-foreground mb-4">
-              {error || 'לא נמצא פרופיל'}
+              {error || 'Profile not found'}
             </p>
             {isOwnProfile && (
               <Button onClick={() => navigate('/profile/edit')}>
-                צור פרופיל
+                Create Profile
               </Button>
             )}
           </div>
@@ -278,7 +278,7 @@ const ProfilePage = () => {
           <div className="relative">
             <img 
               src={profileData?.profile_image_url || profile1}
-              alt={profileData?.name || "משתמש"}
+              alt={profileData?.name || "User"}
               className="rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
               style={{ width: '70px', height: '70px', minWidth: '70px', minHeight: '70px' }}
               onClick={() => setShowProfilePicture(true)}
@@ -286,15 +286,15 @@ const ProfilePage = () => {
           </div>
           
           <div className="flex-1">
-            <h1 className="text-xl font-bold mb-1">{profileData?.name || "משתמש"}</h1>
+            <h1 className="text-xl font-bold mb-1">{profileData?.name || "User"}</h1>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <span>{profileData?.created_at ? new Date(profileData.created_at).toLocaleDateString('he-IL', { year: 'numeric', month: 'long' }) : 'מאי 2024'}</span>
+              <span>{profileData?.created_at ? new Date(profileData.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : 'May 2024'}</span>
               <div className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
-                <span>{profileData?.location || "לא צוין"}</span>
+                <span>{profileData?.location || "Not specified"}</span>
               </div>
             </div>
-            <p className="text-sm text-foreground mb-4">{profileData?.bio || "אין תיאור"}</p>
+            <p className="text-sm text-foreground mb-4">{profileData?.bio || "No description"}</p>
             {profileData?.specialties && profileData.specialties.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {profileData.specialties.map((specialty, index) => (
@@ -314,10 +314,10 @@ const ProfilePage = () => {
                   className="hover:opacity-80 underline cursor-pointer"
                   style={{ color: 'hsl(280 60% 55%)' }}
                 >
-                  עמוד סושיאל
+                  Social Page
                 </a>
               ) : (
-                <span className="text-muted-foreground">אין עמוד סושיאל</span>
+                <span className="text-muted-foreground">No Social Page</span>
               )}
               {isOwnProfile && (
                 <Button 
@@ -336,22 +336,22 @@ const ProfilePage = () => {
                    className={`rounded-full px-3 py-1 h-7 text-xs ${isFriend(actualProfileId || '') ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
                    onClick={handleAddFriend}
                  >
-                   {isFriend(actualProfileId || '') ? 'נוסף לחברים' : 'הוספה'}
+                   {isFriend(actualProfileId || '') ? 'Added to friends' : 'Add'}
                  </Button>
                )}
                {isOwnProfile && (
                 <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
-                  עריכה
-                </Button>
+                   Edit
+                 </Button>
                )}
             </div>
           </div>
         </div>
 
-        {/* תחומי עניין Section - Only show if user has interests */}
+        {/* Interests Section - Only show if user has interests */}
         {profileData?.interests && profileData.interests.length > 0 && (
           <section className="mb-6">
-            <h3 className="text-lg font-semibold mb-3">תחומי עניין</h3>
+            <h3 className="text-lg font-semibold mb-3">Interests</h3>
             <div className="flex flex-wrap gap-2">
               {profileData.interests.map((interest, index) => (
                 <div 
@@ -376,50 +376,15 @@ const ProfilePage = () => {
                     : 'bg-blue-100 text-blue-800'
                 }`}
               >
-                {profileData.account_type === 'business' ? 'עסק' : 'אישי'}
+                {profileData.account_type === 'business' ? 'Business' : 'Personal'}
               </span>
             </div>
           </section>
         )}
 
-        {/* תמונות מהפיד Section */}
-        {imagePosts.length > 0 && (
-          <section className="mb-8">
-            <SectionHeader title="תמונות מהפיד" />
-            {postsLoading ? (
-              <div className="grid grid-cols-3 gap-2 lg:grid-cols-4 xl:grid-cols-6">
-                {Array(6).fill(null).map((_, index) => (
-                  <div key={index} className="aspect-square bg-muted rounded-lg animate-pulse"></div>
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-3 gap-2 lg:grid-cols-4 xl:grid-cols-6">
-                {imagePosts.map((post) => (
-                  <div key={`feed-image-${post.id}`} className="aspect-square relative group cursor-pointer">
-                    <img
-                      src={post.image_url}
-                      alt="תמונה מהפיד"
-                      className="w-full h-full object-cover rounded-lg hover:opacity-90 transition-opacity"
-                      onClick={() => {
-                        setSelectedImageId(post.id);
-                        setShowFeedImages(true);
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                      <div className="bg-white/90 rounded-full p-2">
-                        <span className="text-xs text-black">לחץ לצפייה</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        )}
-
-        {/* מוזמנים להצטרף Section */}
+        {/* Join me Section */}
         <section className="mb-8">
-          <SectionHeader title="מוזמנים להצטרף" />
+          <SectionHeader title="Join me" />
           {itemsLoading ? (
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {Array(3).fill(null).map((_, index) => (
@@ -436,7 +401,7 @@ const ProfilePage = () => {
                     id={item.id}
                     image={item.image_url || coffeeShop}
                     title={item.title}
-                    subtitle={item.location || 'תל אביב'}
+                    subtitle={item.location || 'Tel Aviv'}
                     type="business"
                     onClick={() => handleItemClick(item)}
                     showFavoriteButton={false}
@@ -473,16 +438,16 @@ const ProfilePage = () => {
               ))}
               {recommendationItems.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground w-full">
-                  <p>אין פריטים זמינים כרגע</p>
+                  <p>No items available at the moment</p>
                 </div>
               )}
             </div>
           )}
         </section>
 
-        {/* אירועים Section */}
+        {/* Events Section */}
         <section className="mb-8">
-          <h2 className="text-lg font-bold mb-4">אירועים</h2>
+          <h2 className="text-lg font-bold mb-4">Events</h2>
           <div className="flex gap-4 overflow-x-auto pb-4">
             <div className="flex gap-6">
               {itemsLoading ? (
@@ -527,7 +492,7 @@ const ProfilePage = () => {
               ) : (
                 !isOwnProfile && (
                   <div className="text-center text-muted-foreground py-8">
-                    אין אירועים עדיין
+                    No events yet
                   </div>
                 )
               )}
@@ -548,7 +513,7 @@ const ProfilePage = () => {
               className="w-full flex items-center justify-center gap-2 text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
             >
               <LogOut className="h-4 w-4" />
-              התנתקות
+              Logout
             </Button>
           </div>
         )}
@@ -572,7 +537,7 @@ const ProfilePage = () => {
         isOpen={showProfilePicture}
         onClose={() => setShowProfilePicture(false)}
         imageUrl={profileData?.profile_image_url || ""}
-        userName={profileData?.name || "משתמש"}
+        userName={profileData?.name || "User"}
         userId={actualProfileId}
       />
       <FeedImageViewer
