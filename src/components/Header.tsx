@@ -61,22 +61,22 @@ const Header = ({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="p-3 h-12 w-12 bg-card/80 border-border/40 hover:bg-card shadow-sm"
+                className="p-2.5 h-10 w-10 bg-card/80 border-border/40 hover:bg-card shadow-sm"
                 onClick={openSearch}
               >
-                <Search className="h-6 w-6" />
+                <Search className="h-5 w-5" />
               </Button>
               
               {/* Notifications Button */}
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="relative p-3 h-12 w-12 bg-card/80 border-border/40 hover:bg-card shadow-sm"
+                className="relative p-2.5 h-10 w-10 bg-card/80 border-border/40 hover:bg-card shadow-sm"
                 onClick={() => setShowNotifications(true)}
               >
-                <Bell className="h-6 w-6" />
+                <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0 shadow-sm">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center min-w-0 shadow-sm">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}

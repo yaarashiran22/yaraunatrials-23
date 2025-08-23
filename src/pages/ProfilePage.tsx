@@ -314,10 +314,10 @@ const ProfilePage = () => {
                   className="hover:opacity-80 underline cursor-pointer"
                   style={{ color: 'hsl(280 60% 55%)' }}
                 >
-                  Social Page
+                  Instagram
                 </a>
               ) : (
-                <span className="text-muted-foreground">No Social Page</span>
+                <span className="text-muted-foreground">No Instagram</span>
               )}
               {isOwnProfile && (
                 <Button 
