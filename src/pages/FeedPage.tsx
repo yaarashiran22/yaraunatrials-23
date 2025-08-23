@@ -106,13 +106,13 @@ const FeedPage = () => {
     const postDate = new Date(dateString);
     const diffInHours = Math.floor((now.getTime() - postDate.getTime()) / (1000 * 60 * 60));
     
-    if (diffInHours < 1) return "עכשיו";
-    if (diffInHours === 1) return "לפני שעה";
-    if (diffInHours < 24) return `לפני ${diffInHours} שעות`;
+    if (diffInHours < 1) return "now";
+    if (diffInHours === 1) return "1 hour ago";
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
     
     const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays === 1) return "אתמול";
-    return `לפני ${diffInDays} ימים`;
+    if (diffInDays === 1) return "yesterday";
+    return `${diffInDays} days ago`;
   }
 
   // Function to handle marketplace item click
@@ -122,13 +122,13 @@ const FeedPage = () => {
       title: item.title,
       image: item.image_url || item.image,
       price: item.price ? `₪${item.price}` : undefined,
-      description: item.description || `${item.title} במצב מעולה.`,
+      description: item.description || `${item.title} in excellent condition.`,
       seller: {
-        name: "יערה שיין",
+        name: "Yael Shein",
         image: profile1,
-        location: item.location || "תל אביב"
+        location: item.location || "Tel Aviv"
       },
-      condition: "כמו חדש",
+      condition: "Like New",
       type: itemType || 'marketplace'
     };
     setSelectedMarketplaceItem(itemDetails);
@@ -150,14 +150,14 @@ const FeedPage = () => {
       />
 
       <main className="px-4 py-4 pb-32">
-        {/* הכר את השכנים Button - Made more subtle */}
+        {/* Know Your Neighborhood Button - Made more subtle */}
         <div className="mb-4 mt-2">
           <Button 
             onClick={() => navigate('/neighbors')}
             variant="outline"
             className="w-full text-foreground/80 border-primary/20 hover:bg-primary/5 hover:border-primary/30 font-medium py-3 text-sm shadow-sm"
           >
-            הכר את השכונה
+            Know Your Neighborhood
           </Button>
         </div>
 
@@ -165,16 +165,16 @@ const FeedPage = () => {
         {/* Buenos Aires Map Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 border border-border/20 shadow-sm mb-6">
           <div className="mb-4 flex items-center justify-between">
-            <SectionHeader title="מפת בואנוס איירס" />
+            <SectionHeader title="Buenos Aires Map" />
             <LocationShareButton size="sm" />
           </div>
           <BuenosAiresMap className="w-full h-96" />
         </section>
 
-        {/* שאלות שכנים Section - Moved below post sharing */}
+        {/* Neighbor Messages Section - Moved below post sharing */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-1.5 lg:p-2 border border-border/20 shadow-sm mb-6">
           <div className="mb-3 px-2">
-            <SectionHeader title="הודעות שכנים" />
+            <SectionHeader title="Neighbor Messages" />
           </div>
           <div className="flex gap-2.5 overflow-x-auto pb-1.5 scrollbar-hide">
             <NeighborQuestionCard />
@@ -199,7 +199,7 @@ const FeedPage = () => {
             )}
             {questions.length === 0 && !questionsLoading && (
               <div className="text-center py-8 text-muted-foreground flex-shrink-0">
-                <p>אין שאלות עדיין</p>
+                <p>No questions yet</p>
               </div>
             )}
           </div>
