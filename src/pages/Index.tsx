@@ -213,7 +213,7 @@ const Index = () => {
                 onClick={() => navigate('/all-recommendations')}
                 className="text-xs px-3 py-1"
               >
-                More
+                All
               </Button>
             </div>
           </div>
@@ -273,7 +273,7 @@ const Index = () => {
                 onClick={() => navigate('/all-events')}
                 className="text-xs px-3 py-1"
               >
-                More
+                All
               </Button>
             </div>
           </div>
