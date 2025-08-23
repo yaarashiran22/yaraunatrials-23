@@ -162,9 +162,9 @@ const Index = () => {
         onNotificationsClick={() => setShowNotifications(true)}
       />
       
-      <main className="px-4 lg:px-8 py-7 lg:py-9 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
+      <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section - Special styling for better differentiation */}
-        <section className="mb-4 lg:mb-6">
+        <section className="mb-10 lg:mb-12">
           <div className="relative z-10">
             <SectionHeader 
               title={`${t('sections.neighbors')} ${totalUsersCount > 0 ? `(${totalUsersCount})` : ''}`} 
@@ -196,7 +196,7 @@ const Index = () => {
         {/* Join me Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold font-nunito text-foreground">{t('sections.joinMe')}</h2>
+            <h2 className="text-xl font-bold text-foreground">{t('sections.joinMe')}</h2>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
@@ -255,7 +255,7 @@ const Index = () => {
         {/* Events Section - Database Only */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold font-nunito text-foreground">{t('events.title')}</h2>
+            <h2 className="text-xl font-bold text-foreground">{t('events.title')}</h2>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
