@@ -1,5 +1,5 @@
 
-import { Home, User, Users, Settings, LogIn, Plus, Heart, Search } from "lucide-react";
+import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -55,7 +55,7 @@ const BottomNavigation = () => {
               isActive('/feed') ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
-            <Users className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Map className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="text-xs font-medium truncate">{t('navigation.feed')}</span>
           </Button>
 
