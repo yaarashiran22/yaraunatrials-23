@@ -61,7 +61,7 @@ const Header = ({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="p-2.5 h-10 w-10 bg-card/80 border-border/40 hover:bg-card shadow-sm"
+                className="p-2 h-9 w-9 bg-card/80 border-border/40 hover:bg-card shadow-sm"
                 onClick={openSearch}
               >
                 <Search className="h-5 w-5" />
@@ -71,7 +71,7 @@ const Header = ({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="relative p-2.5 h-10 w-10 bg-card/80 border-border/40 hover:bg-card shadow-sm"
+                className="relative p-2 h-9 w-9 bg-card/80 border-border/40 hover:bg-card shadow-sm"
                 onClick={() => setShowNotifications(true)}
               >
                 <Bell className="h-5 w-5" />
