@@ -445,65 +445,6 @@ const ProfilePage = () => {
           )}
         </section>
 
-        {/* Events Section */}
-        <section className="mb-8">
-          <h2 className="text-lg font-bold mb-4">Events</h2>
-          <div className="flex gap-4 overflow-x-auto pb-4">
-            <div className="flex gap-6">
-              {itemsLoading ? (
-                // Loading skeleton
-                <div className="flex gap-6">
-                  {Array(2).fill(null).map((_, index) => (
-                    <div key={index} className="flex-shrink-0 w-36 h-24 bg-muted rounded-lg animate-pulse"></div>
-                  ))}
-                </div>
-              ) : eventItems.length > 0 ? (
-                eventItems.map((item) => (
-                  <div key={item.id} className="relative flex-shrink-0 w-36 mb-2">
-                    <img 
-                      src={item.image_url || communityEvent} 
-                      alt={item.title}
-                      className="w-36 h-24 rounded-lg object-cover cursor-pointer"
-                      onClick={() => handleItemClick(item)}
-                    />
-                    {/* Edit and Delete buttons - only show for own profile */}
-                    {isOwnProfile && (
-                      <div className="absolute bottom-1 right-1 flex gap-1">
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="p-1 h-7 w-7 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 border-2 border-white"
-                          onClick={() => handleEditItem(item.id)}
-                        >
-                          <Pencil className="h-4 w-4 text-white" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="p-1 h-7 w-7 rounded-full shadow-lg bg-red-500 hover:bg-red-600 border-2 border-white"
-                          onClick={() => handleDeleteItem(item.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                ))
-              ) : (
-                !isOwnProfile && (
-                  <div className="text-center text-muted-foreground py-8">
-                    No events yet
-                  </div>
-                )
-              )}
-            </div>
-            <div className="flex-shrink-0 flex items-center">
-              <ChevronLeft className="h-5 w-5 text-muted-foreground" />
-            </div>
-          </div>
-        </section>
-
-
         {/* Logout Button */}
         {isOwnProfile && (
           <div className="mt-8 pt-6 border-t border-border">
