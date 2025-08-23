@@ -68,7 +68,7 @@ export const translations = {
       createItem: "צור פריט למכירה"
     },
     sections: {
-      neighbors: "neighbors",
+      neighbors: "שכנים וחברים",
       joinMe: "join me",
       knowYourNeighborhood: "הכיר את השכונה"
     },
