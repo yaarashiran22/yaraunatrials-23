@@ -21,7 +21,7 @@ const SectionHeader = ({ title, subtitle, viewAllPath }: SectionHeaderProps) => 
   return (
     <div className="flex items-center justify-between mb-4">
       <div>
-        <h2 className="text-lg font-bold text-foreground">{title}</h2>
+        <h2 className="text-lg font-bold font-nunito text-foreground">{title}</h2>
         {subtitle && (
           <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
         )}
