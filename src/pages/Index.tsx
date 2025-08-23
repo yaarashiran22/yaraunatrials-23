@@ -222,7 +222,7 @@ const Index = () => {
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
               {recommendationItems.map((item, index) => (
-                <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
+                <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-36 lg:w-auto">
                   <UniformCard
                     id={item.id}
                     image={item.image_url || coffeeShop}
