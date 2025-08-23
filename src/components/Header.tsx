@@ -94,20 +94,20 @@ const Header = ({
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="p-2 h-10 w-10"
+                className="p-3 h-12 w-12"
                 onClick={openSearch}
               >
-                <Search className="h-5 w-5" />
+                <Search className="h-6 w-6" />
               </Button>
               
               {/* Notifications Button */}
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="relative p-2 h-10 w-10"
+                className="relative p-3 h-12 w-12"
                 onClick={() => setShowNotifications(true)}
               >
-                <Bell className="h-5 w-5" />
+                <Bell className="h-6 w-6" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0">
                     {unreadCount > 9 ? '9+' : unreadCount}
