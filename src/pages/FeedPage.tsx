@@ -165,7 +165,7 @@ const FeedPage = () => {
         {/* Buenos Aires Map Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 border border-border/20 shadow-sm mb-6">
           <div className="mb-4 flex items-center justify-between">
-            <SectionHeader title="Buenos Aires Map" />
+            <SectionHeader title="Around me" />
             <LocationShareButton size="sm" />
           </div>
           <BuenosAiresMap className="w-full h-96" />
