@@ -155,7 +155,7 @@ export const translations = {
       createItem: "Create Item for Sale"
     },
     sections: {
-      neighbors: "Neighbors & Friends",
+      neighbors: "Neighbors",
       joinMe: "Join me",
       knowYourNeighborhood: "Know Your Neighborhood"
     },
