@@ -156,7 +156,7 @@ export const translations = {
     },
     sections: {
       neighbors: "Neighbors & Friends",
-      joinMe: "Invited to Join",
+      joinMe: "Join me",
       knowYourNeighborhood: "Know Your Neighborhood"
     },
     popups: {
