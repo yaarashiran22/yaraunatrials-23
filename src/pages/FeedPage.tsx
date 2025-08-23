@@ -168,7 +168,7 @@ const FeedPage = () => {
             <SectionHeader title="מפת בואנוס איירס" />
             <LocationShareButton size="sm" />
           </div>
-          <BuenosAiresMap className="w-full h-80" />
+          <BuenosAiresMap className="w-full h-96" />
         </section>
 
         {/* שאלות שכנים Section - Moved below post sharing */}
