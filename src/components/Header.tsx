@@ -8,9 +8,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus } from "lucide-react";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Search } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
+import { useSearch } from "@/contexts/SearchContext";
 import { useNotifications } from "@/hooks/useNotifications";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import { useState } from "react";
@@ -36,6 +37,7 @@ const Header = ({
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { openNewItem } = useNewItem();
+  const { openSearch } = useSearch();
   const { unreadCount } = useNotifications();
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -85,9 +87,20 @@ const Header = ({
             )}
           </div>
 
-          {/* Notifications Button - Right side */}
+          {/* Search & Notifications Buttons - Right side */}
           {user && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
+              {/* Search Button */}
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="p-2 h-10 w-10"
+                onClick={openSearch}
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+              
+              {/* Notifications Button */}
               <Button 
                 variant="ghost" 
                 size="sm" 
