@@ -204,9 +204,9 @@ const ProfilePage = () => {
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-background pb-20" dir="rtl">
+      <div className="min-h-screen bg-background pb-20" dir="ltr">
         <Header 
-          title="פרופיל"
+          title="Profile"
           onNotificationsClick={() => setShowNotifications(true)}
         />
         <main className="px-4 py-6 pb-20">
@@ -222,9 +222,9 @@ const ProfilePage = () => {
     // If no user is authenticated and no valid profile ID, redirect to login
     if (!user && (!actualProfileId || !validateUUID(actualProfileId))) {
       return (
-        <div className="min-h-screen bg-background pb-20" dir="rtl">
+        <div className="min-h-screen bg-background pb-20" dir="ltr">
           <Header 
-            title="פרופיל"
+            title="Profile"
             onNotificationsClick={() => setShowNotifications(true)}
           />
           <main className="px-4 py-6 pb-20">
@@ -243,9 +243,9 @@ const ProfilePage = () => {
     }
     
     return (
-      <div className="min-h-screen bg-background pb-20" dir="rtl">
+      <div className="min-h-screen bg-background pb-20" dir="ltr">
         <Header 
-          title="פרופיל"
+          title="Profile"
           onNotificationsClick={() => setShowNotifications(true)}
         />
         <main className="px-4 py-6 pb-20">
@@ -266,9 +266,9 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="rtl">
+    <div className="min-h-screen bg-background pb-20" dir="ltr">
       <Header 
-        title="פרופיל"
+        title="Profile"
         onNotificationsClick={() => setShowNotifications(true)}
       />
 

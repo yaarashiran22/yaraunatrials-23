@@ -52,7 +52,7 @@ const NeighborsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-background pb-20" dir="ltr">
       {/* Custom Header with Back Button */}
       <header className="bg-background border-b border-border/20 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">

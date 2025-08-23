@@ -107,7 +107,7 @@ const Index = () => {
     // Add current user's profile first
     const currentUserDisplayProfile = {
       id: user.id,
-      name: currentUserProfile.name || 'אתה',
+      name: currentUserProfile.name || 'You',
       image: currentUserProfile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"
     };
 
@@ -129,13 +129,13 @@ const Index = () => {
       title: item.title,
       image: item.image_url || item.image,
       price: item.price ? `₪${item.price}` : undefined,
-      description: item.description || `${item.title} במצב מעולה.`,
+      description: item.description || `${item.title} in excellent condition.`,
       seller: {
-        name: "יערה שיין",
+        name: "Yael Shein",
         image: profile1,
-        location: item.location || "תל אביב"
+        location: item.location || "Tel Aviv"
       },
-      condition: "כמו חדש",
+      condition: "Like New",
       type: itemType || 'marketplace'
     };
     setSelectedMarketplaceItem({
@@ -147,7 +147,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-background" dir="ltr">
       {/* Mobile Header */}
       <div className="lg:hidden">
         <Header 
@@ -173,7 +173,7 @@ const Index = () => {
           {loading ? (
             <FastLoadingSkeleton type="profiles" />
           ) : (
-            <div className="flex overflow-x-auto gap-4 pb-2" dir="rtl">
+            <div className="flex overflow-x-auto gap-4 pb-2" dir="ltr">
               {user && <AddStoryButton className="flex-shrink-0" />}
               {displayProfiles.length > 0 ? (
                 displayProfiles.map((profile) => (
@@ -186,7 +186,7 @@ const Index = () => {
                   />
                 ))
               ) : (
-                <div className="text-center py-4 text-muted-foreground col-span-full">אין משתמשים רשומים עדיין</div>
+                <div className="text-center py-4 text-muted-foreground col-span-full">No registered users yet</div>
               )}
             </div>
           )}
@@ -205,7 +205,7 @@ const Index = () => {
                 className="text-xs px-2 py-1 rounded-full bg-background hover:bg-purple-50 border-purple-400 text-purple-600 hover:border-purple-500 gap-1"
                >
                 <Plus className="h-3 w-3" />
-                צור מפגש
+                Create meetup
               </Button>
               <Button 
                 variant="outline" 
@@ -213,7 +213,7 @@ const Index = () => {
                 onClick={() => navigate('/all-recommendations')}
                 className="text-xs px-3 py-1"
               >
-                עוד
+                More
               </Button>
             </div>
           </div>
@@ -227,8 +227,8 @@ const Index = () => {
                     id={item.id}
                     image={item.image_url || coffeeShop}
                     title={item.title}
-                    subtitle={item.location || 'תל אביב'}
-                    date={item.created_at ? new Date(item.created_at).toLocaleDateString('he-IL') : undefined}
+                    subtitle={item.location || 'Tel Aviv'}
+                    date={item.created_at ? new Date(item.created_at).toLocaleDateString('en-US') : undefined}
                     type="business"
                     onClick={() => handleMarketplaceClick(item, 'recommendation', recommendationItems, index)}
                     showFavoriteButton={true}
@@ -246,7 +246,7 @@ const Index = () => {
               ))}
               {!user && recommendationItems.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
-                  <p>אין פריטים זמינים כרגע</p>
+                  <p>No items available at the moment</p>
                 </div>
               )}
             </div>
@@ -265,7 +265,7 @@ const Index = () => {
                 className="text-xs px-2 py-1 rounded-full bg-background hover:bg-purple-50 border-purple-400 text-purple-600 hover:border-purple-500 gap-1"
               >
                 <Plus className="h-3 w-3" />
-                צור אירוע
+                Create event
               </Button>
               <Button 
                 variant="outline" 
@@ -273,7 +273,7 @@ const Index = () => {
                 onClick={() => navigate('/all-events')}
                 className="text-xs px-3 py-1"
               >
-                עוד
+                More
               </Button>
             </div>
           </div>
@@ -281,7 +281,7 @@ const Index = () => {
             <FastLoadingSkeleton type="cards" count={3} />
           ) : realEvents.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <p>אין אירועים זמינים כרגע</p>
+              <p>No events available at the moment</p>
             </div>
           ) : (
             <div className="flex gap-3 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
@@ -291,8 +291,8 @@ const Index = () => {
                     id={event.id}
                     image={event.image_url || communityEvent}
                     title={event.title}
-                    subtitle={event.location || 'תל אביב'}
-                    date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('he-IL')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('he-IL') : undefined}
+                    subtitle={event.location || 'Tel Aviv'}
+                    date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
                     type="event"
                     uploader={event.uploader}
                     onProfileClick={(userId) => navigate(`/profile/${userId}`)}
@@ -300,13 +300,13 @@ const Index = () => {
                       id: event.id,
                       title: event.title,
                       description: event.description || event.title,
-                      date: event.date || 'תאריך יקבע בהמשך',
-                      time: event.time || 'שעה תקבע בהמשך',
-                      location: event.location || 'תל אביב',
+                      date: event.date || 'Date to be determined',
+                      time: event.time || 'Time to be determined', 
+                      location: event.location || 'Tel Aviv',
                       price: event.price,
                       image: event.image_url || communityEvent,
                       organizer: {
-                        name: event.uploader?.name || "מארגן האירוע",
+                        name: event.uploader?.name || "Event Organizer",
                         image: event.uploader?.image || profile1
                       }
                     })}
@@ -327,9 +327,9 @@ const Index = () => {
 
         {/* קופונים Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <SectionHeader title="קופונים" />
+          <SectionHeader title="Coupons" />
           <div className="text-center py-8 text-muted-foreground">
-            <p>אין קופונים זמינים כרגע</p>
+            <p>No coupons available at the moment</p>
           </div>
         </section>
 

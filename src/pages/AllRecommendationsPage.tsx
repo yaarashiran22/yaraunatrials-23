@@ -131,7 +131,7 @@ const AllRecommendationsPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="rtl">
+    <div className="min-h-screen bg-background pb-20" dir="ltr">
       {/* Custom Header with Back Button */}
       <div className="bg-card border-b px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">

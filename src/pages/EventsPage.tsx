@@ -29,7 +29,7 @@ const EventsPage = () => {
     setSelectedEvent({
       title: event.title,
       image: event.image_url,
-      price: event.price ? `${event.price} ₪` : "חינם",
+      price: event.price ? `${event.price} ₪` : "Free",
       description: event.description || "",
       location: event.location
     });
@@ -37,13 +37,13 @@ const EventsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="rtl">
+    <div className="min-h-screen bg-background pb-20" dir="ltr">
       <Header 
-        title="אירועים"
+        title="Events"
         showSearch={true}
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
-        searchPlaceholder="אירועים"
+        searchPlaceholder="Search events..."
         onNotificationsClick={() => setShowNotifications(true)}
       />
       
@@ -57,7 +57,7 @@ const EventsPage = () => {
           </div>
         ) : filteredEvents.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">אין אירועים זמינים</p>
+            <p className="text-muted-foreground">No events available</p>
             <p className="text-xs text-muted-foreground mt-2">DEBUG: Total events: {events.length}</p>
           </div>
         ) : (
@@ -80,16 +80,16 @@ const EventsPage = () => {
                     </div>
                   ) : (
                     <div className="aspect-square w-full bg-muted flex items-center justify-center">
-                      <span className="text-muted-foreground text-sm">אין תמונה</span>
+                      <span className="text-muted-foreground text-sm">No image</span>
                     </div>
                   )}
                   <div className="p-2">
-                    <h3 className="font-semibold text-xs text-right truncate">{event.title}</h3>
+                    <h3 className="font-semibold text-xs text-left truncate">{event.title}</h3>
                     {event.description && (
-                      <p className="text-xs text-muted-foreground text-right mt-1 truncate">{event.description}</p>
+                      <p className="text-xs text-muted-foreground text-left mt-1 truncate">{event.description}</p>
                     )}
                     {event.price && (
-                      <p className="text-xs font-medium text-primary text-right mt-1">{event.price} ₪</p>
+                      <p className="text-xs font-medium text-primary text-left mt-1">{event.price} ₪</p>
                     )}
                   </div>
                 </div>

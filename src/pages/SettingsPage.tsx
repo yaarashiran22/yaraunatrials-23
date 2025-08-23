@@ -97,7 +97,7 @@ const SettingsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="rtl">
+    <div className="min-h-screen bg-background pb-20" dir="ltr">
       <Header 
         title="הגדרות"
         onNotificationsClick={() => setShowNotifications(true)}

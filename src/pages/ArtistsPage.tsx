@@ -16,33 +16,33 @@ const ArtistsPage = () => {
   const artists = [
     {
       image: profile1,
-      title: "צלמות של רוי",
-      subtitle: "צילום אירועים"
+      title: "Roy's Photography",
+      subtitle: "Event Photography"
     },
     {
       image: profile2,
-      title: "יערה אמנית",
-      subtitle: "אמנות דיגיטלית"
+      title: "Yael Artist",
+      subtitle: "Digital Art"
     },
     {
       image: profile3,
-      title: "אבי הצלם",
-      subtitle: "צילום רחוב"
+      title: "Avi Photographer",
+      subtitle: "Street Photography"
     },
     {
       image: communityEvent,
-      title: "נעמה יוצרת",
-      subtitle: "עיצוב גרפי"
+      title: "Naama Creator",
+      subtitle: "Graphic Design"
     },
     {
       image: profile1,
-      title: "רעי מעצבת",
-      subtitle: "עיצוב פנים"
+      title: "Rea Designer",
+      subtitle: "Interior Design"
     },
     {
       image: profile2,
-      title: "דנה אמנית",
-      subtitle: "ציור ומיצב"
+      title: "Dana Artist",
+      subtitle: "Painting & Installation"
     },
   ];
 
@@ -52,7 +52,7 @@ const ArtistsPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-20" dir="ltr">
       <Header 
         title={!searchQuery ? t('artists.title') : undefined}
         showSearch={true}

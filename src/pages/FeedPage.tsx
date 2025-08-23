@@ -143,9 +143,9 @@ const FeedPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-background" dir="ltr">
       <Header 
-        title="פיד שכונתי" 
+        title="Neighborhood Feed"
         onNotificationsClick={() => setShowNotifications(true)}
       />
 

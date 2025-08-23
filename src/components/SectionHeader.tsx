@@ -33,7 +33,7 @@ const SectionHeader = ({ title, subtitle, viewAllPath }: SectionHeaderProps) => 
           onClick={handleViewAll}
           className="text-primary hover:text-primary/80 gap-1"
         >
-          <span>הכל</span>
+          <span>All</span>
           <ChevronLeft className="h-4 w-4" />
         </Button>
       )}

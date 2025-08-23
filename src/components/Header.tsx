@@ -69,7 +69,7 @@ const Header = ({
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground hidden sm:inline">
-                שלום {user ? (user.email?.split('@')[0] || 'משתמש') : 'אורח'}
+                Hello {user ? (user.email?.split('@')[0] || 'User') : 'Guest'}
               </span>
             </div>
           </div>

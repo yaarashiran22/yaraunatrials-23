@@ -39,7 +39,7 @@ const MarketplacePage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="rtl">
+    <div className="min-h-screen bg-background pb-20" dir="ltr">
       <Header 
         title="מרקט פליס"
         showSearch={true}
