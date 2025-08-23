@@ -164,7 +164,7 @@ const Index = () => {
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section - Special styling for better differentiation */}
-        <section className="mb-8 lg:mb-10">
+        <section className="mb-10 lg:mb-12">
           <div className="relative z-10">
             <SectionHeader 
               title={`${t('sections.neighbors')} ${totalUsersCount > 0 ? `(${totalUsersCount})` : ''}`} 
