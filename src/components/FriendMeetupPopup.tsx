@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Users, MapPin, Clock, X } from 'lucide-react';
+import { Users, MapPin, Clock, X, Camera, Image } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
@@ -23,6 +23,25 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
   const [description, setDescription] = useState('');
   const [friendsOnly, setFriendsOnly] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,13 +67,39 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
     setIsCreating(true);
     
     try {
+      let imageUrl = '';
+      
+      // Upload image if selected
+      if (selectedImage) {
+        const fileExt = selectedImage.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `${user.id}/${fileName}`;
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('photos')
+          .upload(filePath, selectedImage);
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          throw uploadError;
+        }
+
+        // Get the public URL
+        const { data: urlData } = supabase.storage
+          .from('photos')
+          .getPublicUrl(filePath);
+
+        imageUrl = urlData.publicUrl;
+      }
+
       const { error } = await supabase
         .from('posts')
         .insert({
           user_id: user.id,
           content: `🎉 מפגש חברים!\n\n📍 איפה: ${place}\n⏰ מתי: ${time}\n\n${description}`,
           friends_only: friendsOnly,
-          location: place
+          location: place,
+          image_url: imageUrl || null
         });
 
       if (error) throw error;
@@ -70,6 +115,8 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
       setTime('');
       setDescription('');
       setFriendsOnly(true);
+      setSelectedImage(null);
+      setImagePreview(null);
       onClose();
     } catch (error) {
       console.error('Error creating meetup:', error);
@@ -89,6 +136,8 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
     setTime('');
     setDescription('');
     setFriendsOnly(true);
+    setSelectedImage(null);
+    setImagePreview(null);
     onClose();
   };
 
@@ -161,6 +210,50 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
               placeholder="מה עוד חשוב לדעת?"
               className="mt-1 h-20"
             />
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <Label htmlFor="image" className="text-sm font-medium flex items-center gap-1">
+              <Camera className="h-4 w-4" />
+              תמונה
+            </Label>
+            <div className="mt-1">
+              {imagePreview ? (
+                <div className="relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-40 object-cover rounded-lg"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    onClick={removeImage}
+                    className="absolute top-2 right-2"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageSelect}
+                    className="hidden"
+                  />
+                  <Label htmlFor="image-upload" className="cursor-pointer">
+                    <div className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-yellow-400 transition-colors">
+                      <Image className="h-8 w-8 text-gray-400 mb-2" />
+                      <span className="text-sm text-gray-500">לחץ להוספת תמונה</span>
+                    </div>
+                  </Label>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center justify-between">
