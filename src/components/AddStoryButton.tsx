@@ -155,7 +155,6 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
             <Camera className="w-3 h-3 text-primary-foreground" />
           </div>
         </div>
-        <span className="text-sm font-medium text-foreground text-center">הוסף סטורי</span>
       </div>
       
       <input
