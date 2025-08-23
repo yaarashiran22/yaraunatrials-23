@@ -19,6 +19,7 @@ export interface OptimizedItem {
     image: string;
     small_photo: string;
     location: string;
+    user_id?: string;
   };
 }
 
@@ -49,7 +50,7 @@ const fetchHomepageData = async () => {
         .limit(3), // Reduced for faster loading
       supabase
         .from('items')
-        .select('id, title, image_url, location')
+        .select('id, title, image_url, location, user_id')
         .eq('status', 'active')
         .eq('category', 'מוזמנים להצטרף')
         .order('created_at', { ascending: false })
@@ -77,9 +78,9 @@ const fetchHomepageData = async () => {
 
     const marketplaceItems = marketplaceResult.data || [];
     const rawEvents = eventsResult.data || [];
-    const recommendationItems = recommendationsResult.data || [];
+    const rawRecommendationItems = recommendationsResult.data || [];
     
-    // Optimized uploader profile fetching - only fetch if we have events and limit fields
+    // Optimized uploader profile fetching for both events and recommendations
     let databaseEvents: OptimizedItem[] = rawEvents.map(event => ({
       ...event,
       uploader: {
@@ -89,34 +90,59 @@ const fetchHomepageData = async () => {
         location: 'לא צוין'
       }
     }));
-    
-    if (rawEvents.length > 0) {
-      const eventUserIds = rawEvents.map(event => event.user_id).filter(Boolean);
-      
-      if (eventUserIds.length > 0) {
-        const [uploaderProfilesResult] = await Promise.all([
-          supabase
-            .from('profiles')
-            .select('id, name, profile_image_url, location')
-            .in('id', eventUserIds)
-        ]);
-        
-        const uploaderProfiles = (uploaderProfilesResult.data || []).reduce((acc: any, profile) => {
-          acc[profile.id] = profile;
-          return acc;
-        }, {});
-        
-        // Transform events data with uploader info
-        databaseEvents = rawEvents.map(event => ({
-          ...event,
-          uploader: {
-            name: uploaderProfiles[event.user_id]?.name || 'משתמש',
-            image: uploaderProfiles[event.user_id]?.profile_image_url || profile1,
-            small_photo: uploaderProfiles[event.user_id]?.profile_image_url || profile1,
-            location: uploaderProfiles[event.user_id]?.location || 'לא צוין'
-          }
-        }));
+
+    let recommendationItems: OptimizedItem[] = rawRecommendationItems.map(item => ({
+      ...item,
+      uploader: {
+        name: 'משתמש',
+        image: profile1,
+        small_photo: profile1,
+        location: 'לא צוין'
       }
+    }));
+    
+    // Fetch uploader profiles for both events and recommendations
+    const allUserIds = [
+      ...rawEvents.map(event => event.user_id),
+      ...rawRecommendationItems.map(item => item.user_id)
+    ].filter(Boolean);
+    
+    if (allUserIds.length > 0) {
+      const [uploaderProfilesResult] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('id, name, profile_image_url, location')
+          .in('id', allUserIds)
+      ]);
+      
+      const uploaderProfiles = (uploaderProfilesResult.data || []).reduce((acc: any, profile) => {
+        acc[profile.id] = profile;
+        return acc;
+      }, {});
+      
+      // Transform events data with uploader info
+      databaseEvents = rawEvents.map(event => ({
+        ...event,
+        uploader: {
+          name: uploaderProfiles[event.user_id]?.name || 'משתמש',
+          image: uploaderProfiles[event.user_id]?.profile_image_url || profile1,
+          small_photo: uploaderProfiles[event.user_id]?.profile_image_url || profile1,
+          location: uploaderProfiles[event.user_id]?.location || 'לא צוין',
+          user_id: event.user_id
+        }
+      }));
+
+      // Transform recommendation items with uploader info
+      recommendationItems = rawRecommendationItems.map(item => ({
+        ...item,
+        uploader: {
+          name: uploaderProfiles[item.user_id]?.name || 'משתמש',
+          image: uploaderProfiles[item.user_id]?.profile_image_url || profile1,
+          small_photo: uploaderProfiles[item.user_id]?.profile_image_url || profile1,
+          location: uploaderProfiles[item.user_id]?.location || 'לא צוין',
+          user_id: item.user_id
+        }
+      }));
     }
     
     const profiles = (profilesResult.data || []).map((profile) => ({

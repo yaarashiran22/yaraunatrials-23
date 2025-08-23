@@ -231,6 +231,8 @@ const Index = () => {
                     type="business"
                     onClick={() => handleMarketplaceClick(item, 'recommendation', recommendationItems, index)}
                     showFavoriteButton={true}
+                    uploader={item.uploader}
+                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
                     favoriteData={{
                       id: item.id,
                       title: item.title,
@@ -291,6 +293,7 @@ const Index = () => {
                     subtitle={event.location || 'תל אביב'}
                     type="event"
                     uploader={event.uploader}
+                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
                     onClick={() => handleEventClick({
                       id: event.id,
                       title: event.title,
@@ -305,6 +308,7 @@ const Index = () => {
                         image: event.uploader?.image || profile1
                       }
                     })}
+                    showFavoriteButton={true}
                     favoriteData={{
                       id: event.id,
                       title: event.title,

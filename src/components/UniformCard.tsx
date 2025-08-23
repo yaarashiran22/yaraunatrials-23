@@ -20,8 +20,10 @@ interface UniformCardProps {
     image: string;
     small_photo: string;
     location: string;
+    user_id?: string;
   };
   showFavoriteButton?: boolean; // Control whether to show the favorite button
+  onProfileClick?: (userId: string) => void; // Handler for profile navigation
 }
 
 const UniformCard = ({ 
@@ -36,7 +38,8 @@ const UniformCard = ({
   altText,
   favoriteData,
   uploader,
-  showFavoriteButton = true
+  showFavoriteButton = true,
+  onProfileClick
 }: UniformCardProps) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   
@@ -89,16 +92,26 @@ const UniformCard = ({
               <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
             )}
           </div>
-          {/* Display uploader profile image for events */}
-          {type === 'event' && uploader && (
-            <img 
-              src={uploader.small_photo}
-              alt={uploader.name}
-              className="w-8 h-8 rounded-full object-cover border-2 border-white/80 shadow-sm flex-shrink-0"
-              onError={(e) => {
-                e.currentTarget.src = uploader.image;
+          {/* Display uploader profile image for events and recommendations */}
+          {(type === 'event' || type === 'business') && uploader && (
+            <div 
+              className="cursor-pointer flex-shrink-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onProfileClick && uploader.user_id) {
+                  onProfileClick(uploader.user_id);
+                }
               }}
-            />
+            >
+              <img 
+                src={uploader.small_photo}
+                alt={uploader.name}
+                className="w-8 h-8 rounded-full object-cover border-2 border-white/80 shadow-sm hover:ring-2 hover:ring-primary/50 transition-all"
+                onError={(e) => {
+                  e.currentTarget.src = uploader.image;
+                }}
+              />
+            </div>
           )}
           {/* Save button moved to bottom */}
           {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
