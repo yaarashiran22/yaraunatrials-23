@@ -54,40 +54,7 @@ const Header = ({
     <header className="bg-transparent">
       <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-3">
         <div className="flex items-center justify-between gap-2">
-          {/* Logo and User Greeting - Left side */}
-          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-            <div 
-              className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity" 
-              style={{ 
-                color: 'hsl(280 85% 65%)'
-              }}
-              onClick={handleLogoClick}
-              role="button"
-              aria-label="Navigate to homepage"
-            >
-              una
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground hidden sm:inline">
-                Hello {user ? (user.email?.split('@')[0] || 'User') : 'Guest'}
-              </span>
-            </div>
-          </div>
-          
-          {/* Neighborhood Selector or Search - Center */}
-          <div className="flex-1 max-w-md mx-2 sm:mx-4 min-w-0 flex justify-center">
-            {showSearch && onSearchChange ? (
-              <SearchBar 
-                value={searchValue}
-                onChange={onSearchChange}
-                placeholder={searchPlaceholder}
-              />
-            ) : (
-              <NeighborhoodIndicator />
-            )}
-          </div>
-
-          {/* Search & Notifications Buttons - Right side */}
+          {/* Search & Notifications Buttons - Left side */}
           {user && (
             <div className="flex items-center gap-2">
               {/* Search Button */}
@@ -116,6 +83,39 @@ const Header = ({
               </Button>
             </div>
           )}
+          
+          {/* Neighborhood Selector or Search - Center */}
+          <div className="flex-1 max-w-md mx-2 sm:mx-4 min-w-0 flex justify-center">
+            {showSearch && onSearchChange ? (
+              <SearchBar 
+                value={searchValue}
+                onChange={onSearchChange}
+                placeholder={searchPlaceholder}
+              />
+            ) : (
+              <NeighborhoodIndicator />
+            )}
+          </div>
+
+          {/* Logo and User Greeting - Right side */}
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground hidden sm:inline">
+                Hello {user ? (user.email?.split('@')[0] || 'User') : 'Guest'}
+              </span>
+            </div>
+            <div 
+              className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity" 
+              style={{ 
+                color: 'hsl(280 85% 65%)'
+              }}
+              onClick={handleLogoClick}
+              role="button"
+              aria-label="Navigate to homepage"
+            >
+              una
+            </div>
+          </div>
           
         </div>
       </div>
