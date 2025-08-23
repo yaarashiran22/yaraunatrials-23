@@ -18,12 +18,14 @@ const NeighborhoodIndicator = () => {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("");
 
   const neighborhoods = useMemo(() => [
-    { name: "תל אביב", nameEn: "Tel Aviv", nameEs: "Tel Aviv" },
-    { name: "פלורנטין", nameEn: "Florentin", nameEs: "Florentin" },
-    { name: "נחלת בנימין", nameEn: "Nahalat Binyamin", nameEs: "Nahalat Binyamin" },
-    { name: "שכונת מונטיפיורי", nameEn: "Montefiore", nameEs: "Montefiore" },
-    { name: "יפו העתיקה", nameEn: "Old Jaffa", nameEs: "Jaffa Antigua" },
-    { name: "נווה צדק", nameEn: "Neve Tzedek", nameEs: "Neve Tzedek" }
+    { name: "Palermo", nameEn: "Palermo", nameEs: "Palermo" },
+    { name: "Recoleta", nameEn: "Recoleta", nameEs: "Recoleta" },
+    { name: "San Telmo", nameEn: "San Telmo", nameEs: "San Telmo" },
+    { name: "La Boca", nameEn: "La Boca", nameEs: "La Boca" },
+    { name: "Puerto Madero", nameEn: "Puerto Madero", nameEs: "Puerto Madero" },
+    { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" },
+    { name: "Belgrano", nameEn: "Belgrano", nameEs: "Belgrano" },
+    { name: "Caballito", nameEn: "Caballito", nameEs: "Caballito" }
   ], []);
 
   const getDisplayName = (neighborhood: any) => {
@@ -41,7 +43,7 @@ const NeighborhoodIndicator = () => {
   const currentNeighborhood = useMemo(() => {
     if (selectedNeighborhood) return selectedNeighborhood;
     if (user && !loading && profile?.location) return profile.location;
-    return "תל אביב";
+    return "Palermo";
   }, [selectedNeighborhood, user, loading, profile?.location]);
 
   const currentNeighborhoodObj = useMemo(() => {
@@ -58,11 +60,11 @@ const NeighborhoodIndicator = () => {
         <Button 
           variant="ghost" 
           size="lg" 
-          className="flex items-center gap-2 text-foreground hover:text-foreground/80 bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-border/50 rounded-full px-5 py-2.5 shadow-sm transition-all duration-200"
+          className="flex items-center gap-2 text-foreground hover:text-foreground/80 bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-border/50 rounded-full px-6 py-3 shadow-sm transition-all duration-200"
         >
-          <MapPin className="h-5 w-5 text-primary" />
-          <span className="text-base font-medium">{displayName}</span>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          <MapPin className="h-6 w-6 text-primary" />
+          <span className="text-lg font-medium">{displayName}</span>
+          <ChevronDown className="h-5 w-5 text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="bg-background/95 backdrop-blur-sm border shadow-xl z-50 min-w-[200px] rounded-xl p-2">
