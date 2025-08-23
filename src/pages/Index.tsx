@@ -228,6 +228,7 @@ const Index = () => {
                     image={item.image_url || coffeeShop}
                     title={item.title}
                     subtitle={item.location || 'תל אביב'}
+                    date={item.created_at ? new Date(item.created_at).toLocaleDateString('he-IL') : undefined}
                     type="business"
                     onClick={() => handleMarketplaceClick(item, 'recommendation', recommendationItems, index)}
                     showFavoriteButton={true}
@@ -291,6 +292,7 @@ const Index = () => {
                     image={event.image_url || communityEvent}
                     title={event.title}
                     subtitle={event.location || 'תל אביב'}
+                    date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('he-IL')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('he-IL') : undefined}
                     type="event"
                     uploader={event.uploader}
                     onProfileClick={(userId) => navigate(`/profile/${userId}`)}

@@ -10,6 +10,7 @@ interface UniformCardProps {
   title: string | React.ReactNode;
   subtitle?: string;
   price?: string;
+  date?: string; // Add date field
   isLiked?: boolean;
   type: 'business' | 'marketplace' | 'event' | 'item' | 'artwork';
   onClick?: () => void;
@@ -32,6 +33,7 @@ const UniformCard = ({
   title, 
   subtitle, 
   price, 
+  date,
   isLiked = false, 
   type, 
   onClick, 
@@ -84,12 +86,15 @@ const UniformCard = ({
         />
       </div>
       
-      <div className="p-3 h-14 flex flex-col justify-between">
+      <div className="p-3 h-16 flex flex-col justify-between">
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <h3 className="font-semibold text-foreground truncate text-sm">{title}</h3>
             {subtitle && (
               <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
+            )}
+            {date && (
+              <p className="text-xs text-muted-foreground/80 truncate mt-0.5">{date}</p>
             )}
           </div>
           {/* Display uploader profile image for events and recommendations */}

@@ -14,6 +14,8 @@ export interface OptimizedItem {
   location?: string;
   user_id?: string;
   created_at?: string;
+  date?: string;
+  time?: string;
   uploader?: {
     name: string;
     image: string;
@@ -50,7 +52,7 @@ const fetchHomepageData = async () => {
         .limit(3), // Reduced for faster loading
       supabase
         .from('items')
-        .select('id, title, image_url, location, user_id')
+        .select('id, title, image_url, location, user_id, created_at')
         .eq('status', 'active')
         .eq('category', 'מוזמנים להצטרף')
         .order('created_at', { ascending: false })
