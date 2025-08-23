@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Home, User, Users, Settings, Heart } from "lucide-react";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import { NewItemProvider } from "@/contexts/NewItemContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { SearchProvider } from "@/contexts/SearchContext";
@@ -51,7 +51,7 @@ const DesktopNavItem = ({ href, icon: Icon, label }: { href: string; icon: any; 
   return (
     <button
       onClick={() => navigate(href)}
-      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-right transition-all duration-200 ${
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
         isActive 
           ? 'bg-primary/10 text-primary border border-primary/20' 
           : 'text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -65,6 +65,7 @@ const DesktopNavItem = ({ href, icon: Icon, label }: { href: string; icon: any; 
 
 const AppContent = () => {
   const { isOpen, closeNewItem, refreshItems } = useNewItem();
+  const { t } = useLanguage();
   
   return (
     <BrowserRouter>
@@ -73,7 +74,7 @@ const AppContent = () => {
         {/* Desktop layout - hidden on mobile */}
         <div className="hidden lg:flex w-full min-h-screen">
           {/* Main content area for desktop */}
-          <div className="flex-1 mr-64">
+          <div className="flex-1 ml-64">
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
@@ -102,8 +103,8 @@ const AppContent = () => {
             </Routes>
           </div>
           
-          {/* Right sidebar for desktop navigation */}
-          <div className="w-64 bg-card border-l shadow-sm fixed right-0 top-0 h-full overflow-y-auto">
+          {/* Left sidebar for desktop navigation */}
+          <div className="w-64 bg-card border-r shadow-sm fixed left-0 top-0 h-full overflow-y-auto">
             <div className="p-6">
               <div 
                 className="text-3xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity mb-8" 
@@ -115,10 +116,10 @@ const AppContent = () => {
                 una
               </div>
               <nav className="space-y-2">
-                <DesktopNavItem href="/" icon={Home} label="בית" />
-                <DesktopNavItem href="/feed" icon={Users} label="פיד שכונתי" />
-                <DesktopNavItem href="/profile/1" icon={User} label="פרופיל" />
-                <DesktopNavItem href="/settings" icon={Settings} label="הגדרות" />
+                <DesktopNavItem href="/" icon={Home} label={t('common.home')} />
+                <DesktopNavItem href="/feed" icon={Users} label={t('feed.title')} />
+                <DesktopNavItem href="/profile/1" icon={User} label={t('common.profile')} />
+                <DesktopNavItem href="/settings" icon={Settings} label={t('common.settings')} />
               </nav>
             </div>
           </div>

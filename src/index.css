@@ -120,12 +120,12 @@ All colors MUST be HSL.
     background: var(--background);
     color: hsl(var(--foreground));
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    direction: rtl;
+    direction: ltr;
     min-height: 100vh;
   }
   
   html {
-    direction: rtl;
+    direction: ltr;
   }
   
   /* Hide scrollbars */
