@@ -26,7 +26,7 @@ export const translations = {
       neighbors: "שכנים"
     },
     events: {
-      title: "אירועים",
+      title: "events",
       searchPlaceholder: "חיפוש אירועים...",
       filterTitle: "פילטר אירועים",
       eventType: "סוג אירוע",
