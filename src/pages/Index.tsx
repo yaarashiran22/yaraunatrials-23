@@ -228,6 +228,7 @@ const Index = () => {
                     <UniformCard
                       id={item.id}
                       image={item.image_url || coffeeShop}
+                      video={(item as any).video_url}
                       title={item.title}
                       subtitle={item.location || 'Tel Aviv'}
                       date={item.created_at ? new Date(item.created_at).toLocaleDateString('en-US') : undefined}
@@ -293,6 +294,7 @@ const Index = () => {
                     <UniformCard
                       id={event.id}
                       image={event.image_url || communityEvent}
+                      video={(event as any).video_url}
                       title={event.title}
                       subtitle={event.location || 'Tel Aviv'}
                       date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
@@ -308,6 +310,7 @@ const Index = () => {
                         location: event.location || 'Tel Aviv',
                         price: event.price,
                         image: event.image_url || communityEvent,
+                        video: (event as any).video_url,
                         organizer: {
                           name: event.uploader?.name || "Event Organizer",
                           image: event.uploader?.image || profile1

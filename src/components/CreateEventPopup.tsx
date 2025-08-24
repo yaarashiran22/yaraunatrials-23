@@ -24,8 +24,9 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [externalLink, setExternalLink] = useState("");
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Neighborhoods available in the website
@@ -53,13 +54,16 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
   if (!isOpen) return null;
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedImage(file);
+      setSelectedFile(file);
+      const isVideo = file.type.startsWith('video/');
+      setFileType(isVideo ? 'video' : 'image');
+      
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
+        setFilePreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -102,10 +106,10 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
       return;
     }
 
-    if (!selectedImage) {
+    if (!selectedFile) {
       toast({
         title: "שגיאה", 
-        description: "נא להוסיף תמונה לאירוע",
+        description: "נא להוסיף תמונה או וידאו לאירוע",
         variant: "destructive",
       });
       return;
@@ -114,23 +118,30 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
     setIsSubmitting(true);
     
     try {
-      // Upload image to Supabase storage
+      // Upload file to Supabase storage
       let imageUrl = null;
-      if (selectedImage) {
-        const fileExt = selectedImage.name.split('.').pop();
+      let videoUrl = null;
+      
+      if (selectedFile) {
+        const fileExt = selectedFile.name.split('.').pop();
         const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        const bucketName = fileType === 'video' ? 'videos' : 'item-images';
         
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('item-images')
-          .upload(fileName, selectedImage);
+          .from(bucketName)
+          .upload(fileName, selectedFile);
 
         if (uploadError) throw uploadError;
         
         const { data } = supabase.storage
-          .from('item-images')
+          .from(bucketName)
           .getPublicUrl(fileName);
           
-        imageUrl = data.publicUrl;
+        if (fileType === 'video') {
+          videoUrl = data.publicUrl;
+        } else {
+          imageUrl = data.publicUrl;
+        }
       }
 
       const { error } = await supabase
@@ -144,6 +155,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
           location: location.trim(),
           price: price.trim() || null,
           image_url: imageUrl,
+          video_url: videoUrl,
           external_link: externalLink.trim() || null,
           market: 'israel'
         });
@@ -163,8 +175,9 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
       setLocation("");
       setPrice("");
       setExternalLink("");
-      setSelectedImage(null);
-      setImagePreview(null);
+      setSelectedFile(null);
+      setFilePreview(null);
+      setFileType(null);
 
       // Call callback to refresh data
       if (onEventCreated) {
@@ -298,33 +311,42 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
             />
           </div>
 
-          {/* Image Field */}
+          {/* Media Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">תמונת האירוע*</label>
+            <label className="text-sm font-medium text-foreground block text-right">תמונה או וידאו*</label>
             <div className="space-y-2">
               <input
                 type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
+                accept="image/*,video/*"
+                onChange={handleFileUpload}
                 className="hidden"
-                id="image-upload"
+                id="media-upload"
               />
               <label 
-                htmlFor="image-upload"
+                htmlFor="media-upload"
                 className="w-full h-12 bg-card border-2 border-border rounded-full flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Camera className="h-5 w-5" />
-                  <span className="text-sm">{selectedImage ? selectedImage.name : "בחר תמונה"}</span>
+                  <span className="text-sm">{selectedFile ? selectedFile.name : "בחר תמונה או וידאו"}</span>
                 </div>
               </label>
-              {imagePreview && (
+              {filePreview && (
                 <div className="w-full h-32 bg-muted rounded-2xl overflow-hidden">
-                  <img 
-                    src={imagePreview} 
-                    alt="תצוגה מקדימה" 
-                    className="w-full h-full object-cover"
-                  />
+                  {fileType === 'video' ? (
+                    <video 
+                      src={filePreview} 
+                      className="w-full h-full object-cover"
+                      controls
+                      muted
+                    />
+                  ) : (
+                    <img 
+                      src={filePreview} 
+                      alt="תצוגה מקדימה" 
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                 </div>
               )}
             </div>

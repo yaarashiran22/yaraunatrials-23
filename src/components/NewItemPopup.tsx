@@ -23,7 +23,9 @@ interface NewItemPopupProps {
 }
 
 const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
@@ -39,12 +41,16 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
   const { refreshItems } = useNewItem();
   const { createMessage } = useUserMessages();
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
+      const isVideo = file.type.startsWith('video/');
+      setFileType(isVideo ? 'video' : 'image');
+      
       const reader = new FileReader();
       reader.onload = (e) => {
-        setSelectedImage(e.target?.result as string);
+        setFilePreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -61,7 +67,7 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       { value: description.trim(), name: 'תיאור' },
       { value: mobileNumber.trim(), name: 'מספר נייד' },
       { value: price || isFree, name: 'מחיר' },
-      { value: selectedImage, name: 'תמונה' }
+      { value: selectedFile, name: 'תמונה או וידאו' }
     ];
 
     // Check if date is filled (either specific date or "every day")
@@ -119,6 +125,42 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
         }
       }
 
+      // Upload file to storage if one is selected
+      let imageUrl = null;
+      let videoUrl = null;
+
+      if (selectedFile) {
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+        const bucketName = fileType === 'video' ? 'videos' : 'item-images';
+
+        console.log('Uploading file to storage:', fileName, 'bucket:', bucketName);
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from(bucketName)
+          .upload(fileName, selectedFile);
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          toast({
+            title: "שגיאה",
+            description: "לא ניתן להעלות את הקובץ",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const { data } = supabase.storage
+          .from(bucketName)
+          .getPublicUrl(fileName);
+
+        if (fileType === 'video') {
+          videoUrl = data.publicUrl;
+        } else {
+          imageUrl = data.publicUrl;
+        }
+      }
+
       // Create the item data
       const itemData = {
         title: title.trim(),
@@ -126,7 +168,8 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
         price: isFree ? 0 : (price ? parseFloat(price) : null),
         category: category || null,
         location: location || null,
-        image_url: selectedImage || null,
+        image_url: imageUrl || null,
+        video_url: videoUrl || null,
         mobile_number: mobileNumber.trim() || null,
         user_id: currentUser.id,
         status: 'active'
@@ -175,7 +218,9 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
       setSelectedDate(undefined);
       setIsFree(false);
       setIsEveryDay(false);
-      setSelectedImage(null);
+      setSelectedFile(null);
+      setFilePreview(null);
+      setFileType(null);
       
     } catch (error) {
       console.error('Unexpected error:', error);
@@ -366,14 +411,14 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
             )}
           </div>
 
-          {/* Add Image Button */}
+          {/* Add Media Button */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">תמונה <span className="text-red-500">*</span></label>
+            <label className="text-sm text-muted-foreground block text-right">תמונה או וידאו <span className="text-red-500">*</span></label>
             <div className="relative">
             <input
               type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
+              accept="image/*,video/*"
+              onChange={handleFileUpload}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
             />
             <Button 
@@ -381,19 +426,28 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
               className="w-full h-12 bg-background border border-border rounded-full text-foreground hover:bg-muted/20"
             >
               <Plus className="h-4 w-4 ml-2" />
-              הוסף תמונה
+              {selectedFile ? selectedFile.name : "הוסף תמונה או וידאו"}
             </Button>
           </div>
           </div>
 
-          {/* Selected Image Preview */}
-          {selectedImage && (
+          {/* Selected File Preview */}
+          {filePreview && (
             <div className="w-full h-32 rounded-2xl overflow-hidden border border-border">
-              <img 
-                src={selectedImage} 
-                alt="Selected" 
-                className="w-full h-full object-cover"
-              />
+              {fileType === 'video' ? (
+                <video 
+                  src={filePreview} 
+                  className="w-full h-full object-cover"
+                  controls
+                  muted
+                />
+              ) : (
+                <img 
+                  src={filePreview} 
+                  alt="Selected" 
+                  className="w-full h-full object-cover"
+                />
+              )}
             </div>
           )}
 
@@ -403,11 +457,11 @@ const NewItemPopup = ({ isOpen, onClose, onItemCreated }: NewItemPopupProps) => 
               className="w-full h-12 rounded-full text-lg font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: '#BB31E9' }}
               onClick={handleSubmit}
-              disabled={isSubmitting || !title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || (!price && !isFree) || !selectedImage || (!isEveryDay && !selectedDate)}
+              disabled={isSubmitting || !title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || (!price && !isFree) || !selectedFile || (!isEveryDay && !selectedDate)}
             >
               {isSubmitting ? 'שומר...' : 'שמור'}
             </Button>
-            {(!title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || (!price && !isFree) || !selectedImage || (!isEveryDay && !selectedDate)) && (
+            {(!title.trim() || !category || !location || !description.trim() || !mobileNumber.trim() || (!price && !isFree) || !selectedFile || (!isEveryDay && !selectedDate)) && (
               <p className="text-xs text-red-500 text-center mt-2">
                 נא למלא את כל השדות הנדרשים
               </p>

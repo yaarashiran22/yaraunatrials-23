@@ -23,24 +23,29 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
   const [description, setDescription] = useState('');
   const [friendsOnly, setFriendsOnly] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
 
-  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedImage(file);
+      setSelectedFile(file);
+      const isVideo = file.type.startsWith('video/');
+      setFileType(isVideo ? 'video' : 'image');
+      
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
+        setFilePreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const removeImage = () => {
-    setSelectedImage(null);
-    setImagePreview(null);
+  const removeFile = () => {
+    setSelectedFile(null);
+    setFilePreview(null);
+    setFileType(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,16 +73,18 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
     
     try {
       let imageUrl = '';
+      let videoUrl = '';
       
-      // Upload image if selected
-      if (selectedImage) {
-        const fileExt = selectedImage.name.split('.').pop();
+      // Upload file if selected
+      if (selectedFile) {
+        const fileExt = selectedFile.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
         const filePath = `${user.id}/${fileName}`;
+        const bucketName = fileType === 'video' ? 'videos' : 'photos';
 
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('photos')
-          .upload(filePath, selectedImage);
+          .from(bucketName)
+          .upload(filePath, selectedFile);
 
         if (uploadError) {
           console.error('Upload error:', uploadError);
@@ -86,10 +93,14 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
 
         // Get the public URL
         const { data: urlData } = supabase.storage
-          .from('photos')
+          .from(bucketName)
           .getPublicUrl(filePath);
 
-        imageUrl = urlData.publicUrl;
+        if (fileType === 'video') {
+          videoUrl = urlData.publicUrl;
+        } else {
+          imageUrl = urlData.publicUrl;
+        }
       }
 
       const { error } = await supabase
@@ -99,7 +110,8 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
           content: `🎉 מפגש חברים!\n\n📍 איפה: ${place}\n⏰ מתי: ${time}\n\n${description}`,
           friends_only: friendsOnly,
           location: place,
-          image_url: imageUrl || null
+          image_url: imageUrl || null,
+          video_url: videoUrl || null
         });
 
       if (error) throw error;
@@ -115,8 +127,9 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
       setTime('');
       setDescription('');
       setFriendsOnly(true);
-      setSelectedImage(null);
-      setImagePreview(null);
+      setSelectedFile(null);
+      setFilePreview(null);
+      setFileType(null);
       onClose();
     } catch (error) {
       console.error('Error creating meetup:', error);
@@ -136,8 +149,9 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
     setTime('');
     setDescription('');
     setFriendsOnly(true);
-    setSelectedImage(null);
-    setImagePreview(null);
+    setSelectedFile(null);
+    setFilePreview(null);
+    setFileType(null);
     onClose();
   };
 
@@ -212,25 +226,34 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
             />
           </div>
 
-          {/* Image Upload */}
+          {/* Media Upload */}
           <div>
-            <Label htmlFor="image" className="text-sm font-medium flex items-center gap-1">
+            <Label htmlFor="media" className="text-sm font-medium flex items-center gap-1">
               <Camera className="h-4 w-4" />
-              תמונה
+              תמונה או וידאו
             </Label>
             <div className="mt-1">
-              {imagePreview ? (
+              {filePreview ? (
                 <div className="relative">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-40 object-cover rounded-lg"
-                  />
+                  {fileType === 'video' ? (
+                    <video
+                      src={filePreview}
+                      className="w-full h-40 object-cover rounded-lg"
+                      controls
+                      muted
+                    />
+                  ) : (
+                    <img
+                      src={filePreview}
+                      alt="Preview"
+                      className="w-full h-40 object-cover rounded-lg"
+                    />
+                  )}
                   <Button
                     type="button"
                     variant="destructive"
                     size="sm"
-                    onClick={removeImage}
+                    onClick={removeFile}
                     className="absolute top-2 right-2"
                   >
                     <X className="h-4 w-4" />
@@ -239,16 +262,16 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
               ) : (
                 <>
                   <input
-                    id="image-upload"
+                    id="media-upload"
                     type="file"
-                    accept="image/*"
-                    onChange={handleImageSelect}
+                    accept="image/*,video/*"
+                    onChange={handleFileSelect}
                     className="hidden"
                   />
-                  <Label htmlFor="image-upload" className="cursor-pointer">
+                  <Label htmlFor="media-upload" className="cursor-pointer">
                     <div className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-yellow-400 transition-colors">
                       <Image className="h-8 w-8 text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-500">לחץ להוספת תמונה</span>
+                      <span className="text-sm text-gray-500">לחץ להוספת תמונה או וידאו</span>
                     </div>
                   </Label>
                 </>

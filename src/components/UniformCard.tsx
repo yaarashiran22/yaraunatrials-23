@@ -6,7 +6,8 @@ import React from "react";
 
 interface UniformCardProps {
   id?: string;
-  image: string;
+  image?: string;
+  video?: string;
   title: string | React.ReactNode;
   subtitle?: string;
   price?: string;
@@ -30,6 +31,7 @@ interface UniformCardProps {
 const UniformCard = ({ 
   id = Math.random().toString(), 
   image, 
+  video,
   title, 
   subtitle, 
   price, 
@@ -79,11 +81,26 @@ const UniformCard = ({
       onClick={onClick}
     >
       <div className="aspect-[4/3] overflow-hidden">
-        <img 
-          src={image} 
-          alt={getAltText()}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+        {video ? (
+          <video 
+            src={video} 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            muted
+            autoPlay
+            loop
+            playsInline
+            onError={(e) => {
+              // If video fails to load, hide the video element
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        ) : (
+          <img 
+            src={image || '/placeholder.svg'} 
+            alt={getAltText()}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        )}
       </div>
       
       <div className="p-3 h-16 flex flex-col justify-between">
