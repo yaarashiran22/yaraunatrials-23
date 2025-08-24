@@ -16,39 +16,59 @@ export const useTimeTheme = () => {
 };
 
 export const TimeThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isNightTime, setIsNightTime] = useState(false);
   const [currentHour, setCurrentHour] = useState(new Date().getHours());
 
   useEffect(() => {
-    const updateTheme = () => {
+    const updateThemeBasedOnTime = () => {
       const now = new Date();
-      setCurrentHour(now.getHours());
+      const hour = now.getHours();
+      setCurrentHour(hour);
       
-      // Set beautiful blue-purple gradient background
-      document.body.style.backgroundImage = `linear-gradient(135deg, hsl(260 80% 65%) 0%, hsl(280 70% 55%) 50%, hsl(240 75% 45%) 100%)`;
+      // Consider it night time between 6 PM (18:00) and 6 AM (06:00)
+      const isNight = hour >= 18 || hour < 6;
+      setIsNightTime(isNight);
+
+      // Update CSS variables based on time of day
+      const root = document.documentElement;
+      
+      // Set a lighter purple gradient background
+      document.body.style.backgroundImage = `linear-gradient(135deg, hsl(280 70% 70%) 0%, hsl(270 80% 55%) 100%)`;
       document.body.style.backgroundAttachment = 'fixed';
       document.body.style.minHeight = '100vh';
       
-      // Set consistent theme colors with maximum text contrast
-      const root = document.documentElement;
-      root.style.setProperty('--foreground', '0 0% 0%'); // Pure black text
-      root.style.setProperty('--card', '0 0% 100%'); // Pure white cards
-      root.style.setProperty('--card-foreground', '0 0% 0%'); // Pure black text on cards
-      root.style.setProperty('--border', '240 20% 70%'); // Visible borders
-      root.style.setProperty('--input', '0 0% 100%'); // White input backgrounds
-      root.style.setProperty('--muted', '0 0% 95%'); // Light muted areas
-      root.style.setProperty('--muted-foreground', '0 0% 0%'); // Black muted text
+      if (isNight) {
+        // Night theme - colors that complement the gradient
+        root.style.setProperty('--foreground', '280 30% 15%');
+        root.style.setProperty('--card', '280 50% 80%');
+        root.style.setProperty('--card-foreground', '280 25% 15%');
+        root.style.setProperty('--border', '280 30% 60%');
+        root.style.setProperty('--input', '280 30% 70%');
+        root.style.setProperty('--muted', '280 35% 75%');
+        root.style.setProperty('--muted-foreground', '280 20% 40%');
+      } else {
+        // Day theme - lighter colors that work with gradient
+        root.style.setProperty('--foreground', '280 30% 15%');
+        root.style.setProperty('--card', '280 50% 85%');
+        root.style.setProperty('--card-foreground', '280 25% 15%');
+        root.style.setProperty('--border', '280 30% 65%');
+        root.style.setProperty('--input', '280 30% 75%');
+        root.style.setProperty('--muted', '280 35% 80%');
+        root.style.setProperty('--muted-foreground', '280 20% 35%');
+      }
     };
 
     // Update immediately
-    updateTheme();
+    updateThemeBasedOnTime();
 
-    // Update every minute
-    const interval = setInterval(updateTheme, 60000);
+    // Update every minute to check for time changes
+    const interval = setInterval(updateThemeBasedOnTime, 60000);
+
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <TimeThemeContext.Provider value={{ isNightTime: false, currentHour }}>
+    <TimeThemeContext.Provider value={{ isNightTime, currentHour }}>
       {children}
     </TimeThemeContext.Provider>
   );
