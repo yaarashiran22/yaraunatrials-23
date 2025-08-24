@@ -150,25 +150,13 @@ const FeedPage = () => {
       />
 
       <main className="px-4 py-4 pb-32">
-        {/* Know Your Neighborhood Button - Made more subtle */}
-        <div className="mb-4 mt-2">
-          <Button 
-            onClick={() => navigate('/neighbors')}
-            variant="outline"
-            className="w-full text-foreground/80 border-primary/20 hover:bg-primary/5 hover:border-primary/30 font-medium py-3 text-sm shadow-sm"
-          >
-            Know Your Neighborhood
-          </Button>
-        </div>
-
-
         {/* Buenos Aires Map Section */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 border border-border/20 shadow-sm mb-6">
           <div className="mb-4 flex items-center justify-between">
             <SectionHeader title="Around me" />
             <LocationShareButton size="sm" />
           </div>
-          <BuenosAiresMap className="w-full h-96" />
+          <BuenosAiresMap className="w-full h-[70vh]" />
         </section>
 
         {/* Neighbor Messages Section - Moved below post sharing */}
