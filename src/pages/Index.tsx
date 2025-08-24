@@ -163,8 +163,8 @@ const Index = () => {
       />
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
-        {/* Community Members Section - Special styling for better differentiation */}
-        <section className="mb-4 lg:mb-6">
+        {/* Community Members Section - Horizontal Carousel */}
+        <section className="mb-6 lg:mb-8">
           <div className="relative z-10">
             <SectionHeader 
               title={`${t('sections.neighbors')} ${totalUsersCount > 0 ? `(${totalUsersCount})` : ''}`} 
@@ -173,37 +173,39 @@ const Index = () => {
           {loading ? (
             <FastLoadingSkeleton type="profiles" />
           ) : (
-            <div className="flex overflow-x-auto gap-4 pb-2" dir="ltr">
-              {user && <AddStoryButton className="flex-shrink-0" />}
-              {displayProfiles.length > 0 ? (
-                displayProfiles.map((profile) => (
-                  <ProfileCard
-                    key={profile.id}
-                    id={profile.id}
-                    image={profile.image}
-                    name={profile.name}
-                    className="flex-shrink-0"
-                  />
-                ))
-              ) : (
-                <div className="text-center py-4 text-muted-foreground col-span-full">No registered users yet</div>
-              )}
+            <div className="relative">
+              <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+                {user && <AddStoryButton className="flex-shrink-0" />}
+                {displayProfiles.length > 0 ? (
+                  displayProfiles.map((profile) => (
+                    <ProfileCard
+                      key={profile.id}
+                      id={profile.id}
+                      image={profile.image}
+                      name={profile.name}
+                      className="flex-shrink-0 min-w-[80px]"
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground w-full">No registered users yet</div>
+                )}
+              </div>
             </div>
           )}
         </section>
 
 
-        {/* Join me Section - Database Only */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <div className="flex justify-between items-center mb-4">
+        {/* Join me Section - Horizontal Carousel */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
+          <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-foreground">{t('sections.joinMe')}</h2>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
                 size="sm"
                 onClick={() => setShowFriendMeetup(true)}
-                className="text-xs px-2 py-1 rounded-full bg-background hover:bg-purple-50 border-purple-400 text-purple-600 hover:border-purple-500 gap-1"
-               >
+                className="text-xs px-2 py-1 rounded-full bg-accent text-accent-foreground hover:bg-accent/80 gap-1"
+              >
                 <Plus className="h-3 w-3" />
               </Button>
               <Button 
@@ -219,49 +221,51 @@ const Index = () => {
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
           ) : (
-            <div className="flex gap-2.5 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {recommendationItems.map((item, index) => (
-                <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-32 lg:w-auto">
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url || coffeeShop}
-                    title={item.title}
-                    subtitle={item.location || 'Tel Aviv'}
-                    date={item.created_at ? new Date(item.created_at).toLocaleDateString('en-US') : undefined}
-                    type="business"
-                    onClick={() => handleMarketplaceClick(item, 'recommendation', recommendationItems, index)}
-                    showFavoriteButton={true}
-                    uploader={item.uploader}
-                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      description: item.title,
-                      image: item.image_url,
-                      type: 'recommendation'
-                    }}
-                  />
-                </div>
-              ))}
-              {!user && recommendationItems.length === 0 && (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p>No items available at the moment</p>
-                </div>
-              )}
+            <div className="relative">
+              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" style={{scrollBehavior: 'smooth'}}>
+                {recommendationItems.map((item, index) => (
+                  <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-48 lg:w-56">
+                    <UniformCard
+                      id={item.id}
+                      image={item.image_url || coffeeShop}
+                      title={item.title}
+                      subtitle={item.location || 'Tel Aviv'}
+                      date={item.created_at ? new Date(item.created_at).toLocaleDateString('en-US') : undefined}
+                      type="business"
+                      onClick={() => handleMarketplaceClick(item, 'recommendation', recommendationItems, index)}
+                      showFavoriteButton={true}
+                      uploader={item.uploader}
+                      onProfileClick={(userId) => navigate(`/profile/${userId}`)}
+                      favoriteData={{
+                        id: item.id,
+                        title: item.title,
+                        description: item.title,
+                        image: item.image_url,
+                        type: 'recommendation'
+                      }}
+                    />
+                  </div>
+                ))}
+                {!user && recommendationItems.length === 0 && (
+                  <div className="text-center py-8 text-muted-foreground w-full">
+                    <p>No items available at the moment</p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </section>
 
-        {/* Events Section - Database Only */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
-          <div className="flex justify-between items-center mb-4">
+        {/* Events Section - Horizontal Carousel */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
+          <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-foreground">{t('events.title')}</h2>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
                 size="sm"
                 onClick={() => setShowCreateEvent(true)}
-                className="text-xs px-2 py-1 rounded-full bg-background hover:bg-purple-50 border-purple-400 text-purple-600 hover:border-purple-500 gap-1"
+                className="text-xs px-2 py-1 rounded-full bg-accent text-accent-foreground hover:bg-accent/80 gap-1"
               >
                 <Plus className="h-3 w-3" />
               </Button>
@@ -282,49 +286,51 @@ const Index = () => {
               <p>No events available at the moment</p>
             </div>
           ) : (
-            <div className="flex gap-2.5 overflow-x-auto lg:grid lg:grid-cols-4 xl:grid-cols-6 lg:gap-6 pb-2 scrollbar-hide">
-              {realEvents.map((event) => (
-                <div key={`event-${event.id}`} className="flex-shrink-0 w-32 lg:w-auto">
-                  <UniformCard
-                    id={event.id}
-                    image={event.image_url || communityEvent}
-                    title={event.title}
-                    subtitle={event.location || 'Tel Aviv'}
-                    date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
-                    type="event"
-                    uploader={event.uploader}
-                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                    onClick={() => handleEventClick({
-                      id: event.id,
-                      title: event.title,
-                      description: event.description || event.title,
-                      date: event.date || 'Date to be determined',
-                      time: event.time || 'Time to be determined', 
-                      location: event.location || 'Tel Aviv',
-                      price: event.price,
-                      image: event.image_url || communityEvent,
-                      organizer: {
-                        name: event.uploader?.name || "Event Organizer",
-                        image: event.uploader?.image || profile1
-                      }
-                    })}
-                    showFavoriteButton={true}
-                    favoriteData={{
-                      id: event.id,
-                      title: event.title,
-                      description: event.description || event.title,
-                      image: event.image_url,
-                      type: 'event'
-                    }}
-                  />
-                </div>
-              ))}
+            <div className="relative">
+              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" style={{scrollBehavior: 'smooth'}}>
+                {realEvents.map((event) => (
+                  <div key={`event-${event.id}`} className="flex-shrink-0 w-48 lg:w-56">
+                    <UniformCard
+                      id={event.id}
+                      image={event.image_url || communityEvent}
+                      title={event.title}
+                      subtitle={event.location || 'Tel Aviv'}
+                      date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
+                      type="event"
+                      uploader={event.uploader}
+                      onProfileClick={(userId) => navigate(`/profile/${userId}`)}
+                      onClick={() => handleEventClick({
+                        id: event.id,
+                        title: event.title,
+                        description: event.description || event.title,
+                        date: event.date || 'Date to be determined',
+                        time: event.time || 'Time to be determined', 
+                        location: event.location || 'Tel Aviv',
+                        price: event.price,
+                        image: event.image_url || communityEvent,
+                        organizer: {
+                          name: event.uploader?.name || "Event Organizer",
+                          image: event.uploader?.image || profile1
+                        }
+                      })}
+                      showFavoriteButton={true}
+                      favoriteData={{
+                        id: event.id,
+                        title: event.title,
+                        description: event.description || event.title,
+                        image: event.image_url,
+                        type: 'event'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </section>
 
-        {/* קופונים Section */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-2 lg:p-2.5 border border-border/20 shadow-sm">
+        {/* Coupons Section - Horizontal Carousel Style */}
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
           <SectionHeader title="Coupons" />
           <div className="text-center py-8 text-muted-foreground">
             <p>No coupons available at the moment</p>
