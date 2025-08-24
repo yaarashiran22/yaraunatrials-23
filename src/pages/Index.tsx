@@ -336,7 +336,7 @@ const Index = () => {
 
         {/* Coupons Section - Horizontal Carousel Style */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
-          <SectionHeader title="Coupons" />
+          <SectionHeader title={t('sections.communityCoupons')} />
           <div className="text-center py-8 text-muted-foreground">
             <p>No coupons available at the moment</p>
           </div>

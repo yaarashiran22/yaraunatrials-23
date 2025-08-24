@@ -70,7 +70,8 @@ export const translations = {
     sections: {
       neighbors: "Neighbors",
       joinMe: "מפגשים פופולריים",
-      knowYourNeighborhood: "הכיר את השכונה"
+      knowYourNeighborhood: "הכיר את השכונה",
+      communityCoupons: "קופונים קהילתיים"
     },
     popups: {
       navigationOpened: "פותח ניווט",
@@ -157,7 +158,8 @@ export const translations = {
     sections: {
       neighbors: "Neighbors",
       joinMe: "Trending Meetups",
-      knowYourNeighborhood: "Know Your Neighborhood"
+      knowYourNeighborhood: "Know Your Neighborhood",
+      communityCoupons: "Community Coupons"
     },
     popups: {
       navigationOpened: "Opening Navigation",
@@ -244,7 +246,8 @@ export const translations = {
     sections: {
       neighbors: "Vecinos y Amigos",
       joinMe: "Encuentros Populares",
-      knowYourNeighborhood: "Conoce tu Barrio"
+      knowYourNeighborhood: "Conoce tu Barrio",
+      communityCoupons: "Cupones Comunitarios"
     },
     popups: {
       navigationOpened: "Abriendo Navegación",
