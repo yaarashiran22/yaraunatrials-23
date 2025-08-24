@@ -12,15 +12,16 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const NeighborhoodSelector = () => {
   const { language } = useLanguage();
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState("תל אביב");
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState("Palermo");
 
   const neighborhoods = [
-    { name: "תל אביב", nameEn: "Tel Aviv", nameEs: "Tel Aviv" },
-    { name: "פלורנטין", nameEn: "Florentin", nameEs: "Florentin" },
-    { name: "נחלת בנימין", nameEn: "Nahalat Binyamin", nameEs: "Nahalat Binyamin" },
-    { name: "שכונת מונטיפיורי", nameEn: "Montefiore", nameEs: "Montefiore" },
-    { name: "יפו העתיקה", nameEn: "Old Jaffa", nameEs: "Jaffa Antigua" },
-    { name: "נווה צדק", nameEn: "Neve Tzedek", nameEs: "Neve Tzedek" }
+    { name: "Palermo", nameEn: "Palermo", nameEs: "Palermo" },
+    { name: "Recoleta", nameEn: "Recoleta", nameEs: "Recoleta" },
+    { name: "San Telmo", nameEn: "San Telmo", nameEs: "San Telmo" },
+    { name: "Puerto Madero", nameEn: "Puerto Madero", nameEs: "Puerto Madero" },
+    { name: "Belgrano", nameEn: "Belgrano", nameEs: "Belgrano" },
+    { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" },
+    { name: "La Boca", nameEn: "La Boca", nameEs: "La Boca" }
   ];
 
   const getDisplayName = (neighborhood: any) => {
@@ -37,10 +38,10 @@ const NeighborhoodSelector = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="flex items-center gap-1">
-          <ChevronDown className="h-4 w-4" />
+        <Button variant="outline" className="flex items-center gap-1 bg-accent text-accent-foreground hover:bg-accent/80">
+          📍
           <span className="text-sm">{getDisplayName(neighborhoods.find(n => n.name === selectedNeighborhood))}</span>
-          <MapPin className="h-4 w-4 text-primary" />
+          <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background border shadow-lg">
