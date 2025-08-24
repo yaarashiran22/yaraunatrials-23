@@ -32,18 +32,21 @@ export const TimeThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       // Update CSS variables based on time of day
       const root = document.documentElement;
       
+      // Set the gradient background for all times
+      document.body.style.backgroundImage = `radial-gradient(at 5.472551278054583% 77.6940494641994%, hsla(214.05405405405406, 65.68047337278107%, 33.13725490196079%, 1) 0%, hsla(214.05405405405406, 65.68047337278107%, 33.13725490196079%, 0) 100%), radial-gradient(at 46.16895314956162% 98.02136190474828%, hsla(286.9767441860465, 84.31372549019606%, 30.000000000000004%, 1) 0%, hsla(286.9767441860465, 84.31372549019606%, 30.000000000000004%, 0) 100%), radial-gradient(at 53.74719405375307% 57.09507727582264%, hsla(214.05405405405406, 65.68047337278107%, 33.13725490196079%, 1) 0%, hsla(214.05405405405406, 65.68047337278107%, 33.13725490196079%, 0) 100%), radial-gradient(at 83.4302741694132% 63.25320120431477%, hsla(286.9767441860465, 84.31372549019606%, 30.000000000000004%, 1) 0%, hsla(286.9767441860465, 84.31372549019606%, 30.000000000000004%, 0) 100%)`;
+      document.body.style.backgroundAttachment = 'fixed';
+      document.body.style.minHeight = '100vh';
+      
       if (isNight) {
-        // Night theme - darker purple-blue
-        root.style.setProperty('--background', '240 25% 15%');
+        // Night theme - keep darker foreground
         root.style.setProperty('--foreground', '240 10% 90%');
         root.style.setProperty('--card', '240 20% 18%');
         root.style.setProperty('--card-foreground', '240 10% 88%');
       } else {
-        // Day theme - lighter bright colors
-        root.style.setProperty('--background', '220 40% 98%');
-        root.style.setProperty('--foreground', '240 20% 20%');
-        root.style.setProperty('--card', '0 0% 100%');
-        root.style.setProperty('--card-foreground', '215 25% 27%');
+        // Day theme - adjust for better contrast with gradient
+        root.style.setProperty('--foreground', '240 10% 95%');
+        root.style.setProperty('--card', '240 20% 15%');
+        root.style.setProperty('--card-foreground', '240 10% 90%');
       }
     };
 
