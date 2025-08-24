@@ -69,7 +69,7 @@ export const translations = {
     },
     sections: {
       neighbors: "Neighbors",
-      joinMe: "Join Me",
+      joinMe: "מפגשים פופולריים",
       knowYourNeighborhood: "הכיר את השכונה"
     },
     popups: {
@@ -156,7 +156,7 @@ export const translations = {
     },
     sections: {
       neighbors: "Neighbors",
-      joinMe: "Join Me",
+      joinMe: "Trending Meetups",
       knowYourNeighborhood: "Know Your Neighborhood"
     },
     popups: {
@@ -243,7 +243,7 @@ export const translations = {
     },
     sections: {
       neighbors: "Vecinos y Amigos",
-      joinMe: "Únete a mí",
+      joinMe: "Encuentros Populares",
       knowYourNeighborhood: "Conoce tu Barrio"
     },
     popups: {
