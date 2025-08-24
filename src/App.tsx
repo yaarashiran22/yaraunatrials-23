@@ -9,7 +9,6 @@ import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import { NewItemProvider } from "@/contexts/NewItemContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { SearchProvider } from "@/contexts/SearchContext";
-import { TimeThemeProvider } from "@/contexts/TimeThemeContext";
 import SearchPopup from "@/components/SearchPopup";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -169,19 +168,17 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <TimeThemeProvider>
-        <LanguageProvider>
-          <AuthProvider>
-            <NewItemProvider>
-              <FavoritesProvider>
-                <SearchProvider>
-                  <AppContent />
-                </SearchProvider>
-              </FavoritesProvider>
-            </NewItemProvider>
-          </AuthProvider>
-        </LanguageProvider>
-      </TimeThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <NewItemProvider>
+            <FavoritesProvider>
+              <SearchProvider>
+                <AppContent />
+              </SearchProvider>
+            </FavoritesProvider>
+          </NewItemProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
