@@ -16,7 +16,6 @@ import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import FloatingMapToggle from "@/components/FloatingMapToggle";
 import FullscreenMap from "@/components/FullscreenMap";
-import MoodFilterStrip from "@/components/MoodFilterStrip";
 import { Button } from "@/components/ui/button";
 import { Bell, Users, Plus } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -93,7 +92,6 @@ const Index = () => {
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
-  const [activeMoodFilter, setActiveMoodFilter] = useState<string>("all");
 
   // Set refresh callback for new items
   useEffect(() => {
@@ -151,12 +149,6 @@ const Index = () => {
     setIsMarketplacePopupOpen(true);
   }, []);
 
-  const handleMoodFilterChange = useCallback((filter: string) => {
-    setActiveMoodFilter(filter);
-    // TODO: Implement actual filtering logic based on mood
-    console.log('Active mood filter:', filter);
-  }, []);
-
   return (
     <div className="min-h-screen bg-background" dir="ltr">
       {/* Mobile Header */}
@@ -172,9 +164,6 @@ const Index = () => {
         title={t('common.home')}
         onNotificationsClick={() => setShowNotifications(true)}
       />
-
-      {/* Mood Filter Strip */}
-      <MoodFilterStrip onFilterChange={handleMoodFilterChange} />
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-3 lg:space-y-4 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section - Horizontal Carousel */}
