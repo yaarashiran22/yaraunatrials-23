@@ -204,7 +204,7 @@ const Index = () => {
                 variant="outline" 
                 size="sm"
                 onClick={() => setShowFriendMeetup(true)}
-                className="text-xs px-2 py-1 rounded-full bg-accent text-accent-foreground hover:bg-accent/80 gap-1"
+                className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1"
               >
                 <Plus className="h-3 w-3" />
               </Button>
@@ -265,7 +265,7 @@ const Index = () => {
                 variant="outline" 
                 size="sm"
                 onClick={() => setShowCreateEvent(true)}
-                className="text-xs px-2 py-1 rounded-full bg-accent text-accent-foreground hover:bg-accent/80 gap-1"
+                className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1"
               >
                 <Plus className="h-3 w-3" />
               </Button>
