@@ -28,15 +28,15 @@ export const TimeThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       document.body.style.backgroundAttachment = 'fixed';
       document.body.style.minHeight = '100vh';
       
-      // Set consistent theme colors with better contrast
+      // Set consistent theme colors with maximum text contrast
       const root = document.documentElement;
-      root.style.setProperty('--foreground', '0 0% 5%'); // Very dark text
-      root.style.setProperty('--card', '0 0% 98%'); // Almost white cards
-      root.style.setProperty('--card-foreground', '0 0% 5%'); // Very dark text on cards
-      root.style.setProperty('--border', '240 20% 80%'); // Light borders
-      root.style.setProperty('--input', '0 0% 95%'); // Light input backgrounds
-      root.style.setProperty('--muted', '240 10% 90%'); // Light muted areas
-      root.style.setProperty('--muted-foreground', '0 0% 25%'); // Dark muted text
+      root.style.setProperty('--foreground', '0 0% 0%'); // Pure black text
+      root.style.setProperty('--card', '0 0% 100%'); // Pure white cards
+      root.style.setProperty('--card-foreground', '0 0% 0%'); // Pure black text on cards
+      root.style.setProperty('--border', '240 20% 70%'); // Visible borders
+      root.style.setProperty('--input', '0 0% 100%'); // White input backgrounds
+      root.style.setProperty('--muted', '0 0% 95%'); // Light muted areas
+      root.style.setProperty('--muted-foreground', '0 0% 0%'); // Black muted text
     };
 
     // Update immediately
