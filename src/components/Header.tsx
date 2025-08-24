@@ -78,12 +78,7 @@ const Header = ({
           
           {/* Location Switcher */}
           <div className="flex-shrink-0">
-            <Button 
-              variant="outline" 
-              className="bg-accent text-accent-foreground hover:bg-accent/80"
-            >
-              📍 Buenos Aires
-            </Button>
+            <NeighborhoodSelector />
           </div>
           
           {/* Notifications */}
