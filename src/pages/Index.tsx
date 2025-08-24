@@ -165,9 +165,9 @@ const Index = () => {
         onNotificationsClick={() => setShowNotifications(true)}
       />
       
-      <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-5 lg:space-y-6 pb-20 lg:pb-8 max-w-7xl mx-auto">
+      <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-3 lg:space-y-4 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section - Horizontal Carousel */}
-        <section className="mb-6 lg:mb-8">
+        <section className="mb-3 lg:mb-4">
           <div className="relative z-10">
             <SectionHeader 
               title={`${t('sections.neighbors')} ${totalUsersCount > 0 ? `(${totalUsersCount})` : ''}`} 

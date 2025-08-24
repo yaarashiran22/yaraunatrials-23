@@ -26,7 +26,7 @@ export const translations = {
       neighbors: "שכנים"
     },
     events: {
-      title: "events",
+      title: "Happening nearby",
       searchPlaceholder: "חיפוש אירועים...",
       filterTitle: "פילטר אירועים",
       eventType: "סוג אירוע",
@@ -69,7 +69,7 @@ export const translations = {
     },
     sections: {
       neighbors: "Neighbors",
-      joinMe: "join me",
+      joinMe: "Join Me",
       knowYourNeighborhood: "הכיר את השכונה"
     },
     popups: {
@@ -113,7 +113,7 @@ export const translations = {
       neighbors: "neighbors"
     },
     events: {
-      title: "Events",
+      title: "Happening nearby",
       searchPlaceholder: "Search events...",
       filterTitle: "Event Filter",
       eventType: "Event Type",
@@ -200,7 +200,7 @@ export const translations = {
       neighbors: "vecinos"
     },
     events: {
-      title: "Eventos",
+      title: "Sucesos cercanos",
       searchPlaceholder: "Buscar eventos...",
       filterTitle: "Filtro de Eventos",
       eventType: "Tipo de Evento",
@@ -243,7 +243,7 @@ export const translations = {
     },
     sections: {
       neighbors: "Vecinos y Amigos",
-      joinMe: "Invitados a Unirse",
+      joinMe: "Únete a mí",
       knowYourNeighborhood: "Conoce tu Barrio"
     },
     popups: {
