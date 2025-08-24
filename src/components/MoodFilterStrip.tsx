@@ -37,7 +37,7 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
                 size="sm"
                 onClick={() => handleFilterClick(filter.id)}
                 className={`
-                  flex-shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 
+                  flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 
                   flex items-center gap-2 min-w-fit border border-transparent
                   ${activeFilter === filter.id 
                     ? `${filter.activeBg} ${filter.color} border-current/20` 
