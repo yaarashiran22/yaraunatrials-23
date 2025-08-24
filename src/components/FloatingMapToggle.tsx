@@ -21,16 +21,16 @@ const FloatingMapToggle = ({ isMapOpen, onToggle }: FloatingMapToggleProps) => {
           }
         `}
         style={!isMapOpen ? {
-          backgroundColor: '#FF6B6B'
+          backgroundColor: '#FF7B4B'
         } : undefined}
         onMouseEnter={(e) => {
           if (!isMapOpen) {
-            e.currentTarget.style.backgroundColor = '#FF5252';
+            e.currentTarget.style.backgroundColor = '#FF6341';
           }
         }}
         onMouseLeave={(e) => {
           if (!isMapOpen) {
-            e.currentTarget.style.backgroundColor = '#FF6B6B';
+            e.currentTarget.style.backgroundColor = '#FF7B4B';
           }
         }}
       >
