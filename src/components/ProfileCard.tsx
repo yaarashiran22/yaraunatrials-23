@@ -30,8 +30,8 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
         console.log('Opening stories popup for user:', id, 'with', freshStories.length, 'stories');
         setShowStories(true);
       } else {
-        console.log('No stories found after refetch, navigating to profile:', id);
-        navigate(`/profile/${id}`);
+        console.log('No stories found, showing profile picture viewer for:', id);
+        setShowProfilePicture(true);
       }
     } catch (error) {
       console.error('Error refetching stories:', error);
@@ -39,7 +39,7 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
       if (stories.length > 0) {
         setShowStories(true);
       } else {
-        navigate(`/profile/${id}`);
+        setShowProfilePicture(true);
       }
     }
   };
@@ -62,11 +62,7 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
         <div className="relative">
           <div className={`w-16 h-16 rounded-full ${getBorderColor(stories)} p-0.5`}>
             <div 
-              className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowProfilePicture(true); // Show profile picture viewer
-              }}
+              className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card"
             >
               <img 
                 src={image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 

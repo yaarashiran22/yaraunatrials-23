@@ -131,7 +131,10 @@ const StoriesPopup = ({ isOpen, onClose, userId }: StoriesPopupProps) => {
         {/* Header */}
         <div className="absolute top-8 left-4 right-4 z-10 flex items-center justify-between text-white">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white">
+            <div 
+              className="w-8 h-8 rounded-full overflow-hidden border-2 border-white cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={handleNameClick}
+            >
               <img
                 src={profile?.profile_image_url || "/placeholder.svg"}
                 alt={profile?.name || "User"}

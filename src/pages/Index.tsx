@@ -21,10 +21,11 @@ import { Button } from "@/components/ui/button";
 import { Bell, Users, Plus } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useNewItem } from "@/contexts/NewItemContext";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useNewItem } from "@/contexts/NewItemContext";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import { useEvents } from "@/hooks/useEvents";
 
@@ -99,6 +100,38 @@ const Index = () => {
     setRefreshCallback(() => refetch);
   }, [setRefreshCallback, refetch]);
 
+  const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
+
+  // Fetch story counts for all users
+  useEffect(() => {
+    const fetchAllUserStoryCounts = async () => {
+      if (!profiles.length) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('stories')
+          .select('user_id')
+          .gt('expires_at', new Date().toISOString());
+
+        if (error) {
+          console.error('Error fetching story counts:', error);
+          return;
+        }
+
+        const counts: {[key: string]: number} = {};
+        data?.forEach((story) => {
+          counts[story.user_id] = (counts[story.user_id] || 0) + 1;
+        });
+        
+        setUserStoryCounts(counts);
+      } catch (error) {
+        console.error('Error fetching story counts:', error);
+      }
+    };
+
+    fetchAllUserStoryCounts();
+  }, [profiles]);
+
   // Memoize display profiles to prevent unnecessary re-calculations
   const displayProfiles = useMemo(() => {
     if (!user || !currentUserProfile) {
@@ -115,8 +148,21 @@ const Index = () => {
       image: currentUserProfile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"
     };
 
-    return [currentUserDisplayProfile, ...otherProfiles];
-  }, [user, currentUserProfile, profiles]);
+    // Sort other profiles: users with stories first, then alphabetically
+    const sortedOtherProfiles = otherProfiles.sort((a, b) => {
+      const aHasStories = (userStoryCounts[a.id] || 0) > 0;
+      const bHasStories = (userStoryCounts[b.id] || 0) > 0;
+      
+      // If one has stories and the other doesn't, prioritize the one with stories
+      if (aHasStories && !bHasStories) return -1;
+      if (!aHasStories && bHasStories) return 1;
+      
+      // If both have stories or both don't have stories, sort alphabetically
+      return (a.name || '').localeCompare(b.name || '');
+    });
+
+    return [currentUserDisplayProfile, ...sortedOtherProfiles];
+  }, [user, currentUserProfile, profiles, userStoryCounts]);
 
   // All business, event, and artwork data now comes from the database
   // Static data has been removed to show only real content
