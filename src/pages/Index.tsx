@@ -251,7 +251,7 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => setShowFriendMeetup(true)}
+                onClick={() => setShowCreateEvent(true)}
                 className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1"
               >
                 <Plus className="h-3 w-3" />
@@ -259,7 +259,7 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => navigate('/all-recommendations')}
+                onClick={() => navigate('/all-events')}
                 className="text-xs px-3 py-1"
               >
                 All
@@ -268,38 +268,51 @@ const Index = () => {
           </div>
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
+          ) : realEvents.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>No meetups available at the moment</p>
+            </div>
           ) : (
             <div className="relative">
               <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" style={{scrollBehavior: 'smooth'}}>
-                {recommendationItems.map((item, index) => (
-                  <div key={`recommendation-${item.id}`} className="flex-shrink-0 w-48 lg:w-56">
+                {realEvents.slice(0, 6).map((event) => (
+                  <div key={`meetup-${event.id}`} className="flex-shrink-0 w-48 lg:w-56">
                     <UniformCard
-                      id={item.id}
-                      image={item.image_url || coffeeShop}
-                      video={(item as any).video_url}
-                      title={item.title}
-                      subtitle={item.location || 'Tel Aviv'}
-                      date={item.created_at ? new Date(item.created_at).toLocaleDateString('en-US') : undefined}
-                      type="business"
-                      onClick={() => handleMarketplaceClick(item, 'recommendation', recommendationItems, index)}
-                      showFavoriteButton={true}
-                      uploader={item.uploader}
+                      id={event.id}
+                      image={event.image_url || communityEvent}
+                      video={(event as any).video_url}
+                      title={event.title}
+                      subtitle={event.location || 'Tel Aviv'}
+                      date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
+                      type="event"
+                      uploader={event.uploader}
                       onProfileClick={(userId) => navigate(`/profile/${userId}`)}
+                      onClick={() => handleEventClick({
+                        id: event.id,
+                        title: event.title,
+                        description: event.description || event.title,
+                        date: event.date || 'Date to be determined',
+                        time: event.time || 'Time to be determined', 
+                        location: event.location || 'Tel Aviv',
+                        price: event.price,
+                        image: event.image_url || communityEvent,
+                        video: (event as any).video_url,
+                        organizer: {
+                          name: event.uploader?.name || "Event Organizer",
+                          image: event.uploader?.image || profile1
+                        }
+                      })}
+                      showFavoriteButton={true}
                       favoriteData={{
-                        id: item.id,
-                        title: item.title,
-                        description: item.title,
-                        image: item.image_url,
-                        type: 'recommendation'
+                        id: event.id,
+                        title: event.title,
+                        description: event.description || event.title,
+                        image: event.image_url,
+                        type: 'event'
                       }}
                     />
                   </div>
                 ))}
-                {!user && recommendationItems.length === 0 && (
-                  <div className="text-center py-8 text-muted-foreground w-full">
-                    <p>No items available at the moment</p>
-                  </div>
-                )}
               </div>
             </div>
           )}
