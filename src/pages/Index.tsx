@@ -14,6 +14,8 @@ import FriendMeetupPopup from "@/components/FriendMeetupPopup";
 import CreateEventPopup from "@/components/CreateEventPopup";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
+import FloatingMapToggle from "@/components/FloatingMapToggle";
+import FullscreenMap from "@/components/FullscreenMap";
 import { Button } from "@/components/ui/button";
 import { Bell, Users, Plus } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -89,6 +91,7 @@ const Index = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   // Set refresh callback for new items
   useEffect(() => {
@@ -380,6 +383,18 @@ const Index = () => {
           refetchEvents();
           refetch();
         }}
+      />
+
+      {/* Floating Map Toggle */}
+      <FloatingMapToggle 
+        isMapOpen={isMapOpen}
+        onToggle={() => setIsMapOpen(!isMapOpen)}
+      />
+
+      {/* Fullscreen Map */}
+      <FullscreenMap 
+        isOpen={isMapOpen}
+        onClose={() => setIsMapOpen(false)}
       />
       
       <BottomNavigation />

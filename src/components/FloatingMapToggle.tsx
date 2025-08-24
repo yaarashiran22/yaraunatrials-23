@@ -1,0 +1,35 @@
+import React from 'react';
+import { Map, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+interface FloatingMapToggleProps {
+  isMapOpen: boolean;
+  onToggle: () => void;
+}
+
+const FloatingMapToggle = ({ isMapOpen, onToggle }: FloatingMapToggleProps) => {
+  return (
+    <div className="fixed bottom-20 lg:bottom-8 right-4 z-40">
+      <Button
+        onClick={onToggle}
+        size="lg"
+        className={`
+          w-14 h-14 rounded-full shadow-lg transition-all duration-300 ease-in-out
+          ${isMapOpen 
+            ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground' 
+            : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+          }
+          hover:scale-105 active:scale-95
+        `}
+      >
+        {isMapOpen ? (
+          <X className="h-6 w-6" />
+        ) : (
+          <Map className="h-6 w-6" />
+        )}
+      </Button>
+    </div>
+  );
+};
+
+export default FloatingMapToggle;
