@@ -61,7 +61,7 @@ const Header = ({
             role="button"
             aria-label="Navigate to homepage"
           >
-            U
+            U.
           </div>
           
           {/* Search Bar - Center */}

@@ -49,7 +49,7 @@ const DesktopHeader = ({
               role="button"
               aria-label="Navigate to homepage"
             >
-              U
+              U.
             </div>
           </div>
           
