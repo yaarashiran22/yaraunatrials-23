@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Coffee, Zap, Heart, Dumbbell, Palette, Users, Search } from "lucide-react";
 
 const moodFilters = [
-  { id: "all", label: "All", icon: Search },
-  { id: "chill", label: "Chill", icon: Coffee },
-  { id: "go-out", label: "Go Out", icon: Zap },
-  { id: "romantic", label: "Romantic", icon: Heart },
-  { id: "active", label: "Active", icon: Dumbbell },
-  { id: "creative", label: "Creative", icon: Palette },
-  { id: "social", label: "Social", icon: Users }
+  { id: "all", label: "All", icon: Search, color: "text-muted-foreground" },
+  { id: "chill", label: "Chill", icon: Coffee, color: "text-blue-500" },
+  { id: "go-out", label: "Go Out", icon: Zap, color: "text-orange-500" },
+  { id: "romantic", label: "Romantic", icon: Heart, color: "text-pink-500" },
+  { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500" },
+  { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500" },
+  { id: "social", label: "Social", icon: Users, color: "text-indigo-500" }
 ];
 
 interface MoodFilterStripProps {
@@ -40,12 +40,12 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
                   flex-shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 
                   flex items-center gap-2 min-w-fit
                   ${activeFilter === filter.id 
-                    ? "bg-accent text-accent-foreground" 
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                    ? `bg-accent text-accent-foreground ${filter.color}` 
+                    : `${filter.color} hover:bg-accent/50`
                   }
                 `}
               >
-                <IconComponent className="h-4 w-4" />
+                <IconComponent className={`h-4 w-4 ${filter.color}`} />
                 {filter.label}
               </Button>
             );
