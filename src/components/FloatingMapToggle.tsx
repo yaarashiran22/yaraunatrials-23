@@ -17,10 +17,22 @@ const FloatingMapToggle = ({ isMapOpen, onToggle }: FloatingMapToggleProps) => {
           w-14 h-14 rounded-full shadow-lg transition-all duration-300 ease-in-out
           ${isMapOpen 
             ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground' 
-            : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+            : 'text-white hover:scale-105 active:scale-95'
           }
-          hover:scale-105 active:scale-95
         `}
+        style={!isMapOpen ? {
+          backgroundColor: '#FF6B6B'
+        } : undefined}
+        onMouseEnter={(e) => {
+          if (!isMapOpen) {
+            e.currentTarget.style.backgroundColor = '#FF5252';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isMapOpen) {
+            e.currentTarget.style.backgroundColor = '#FF6B6B';
+          }
+        }}
       >
         {isMapOpen ? (
           <X className="h-6 w-6" />
