@@ -1,7 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Home, User, Users, Settings, Heart } from "lucide-react";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -40,7 +39,7 @@ import EditProfilePage from "./pages/EditProfilePage";
 import EditItemPage from "./pages/EditItemPage";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+
 
 // Desktop navigation item component
 const DesktopNavItem = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
@@ -163,23 +162,21 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <LanguageProvider>
-        <AuthProvider>
-          <NewItemProvider>
-            <FavoritesProvider>
-              <SearchProvider>
-                <AppContent />
-              </SearchProvider>
-            </FavoritesProvider>
-          </NewItemProvider>
-        </AuthProvider>
-      </LanguageProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <TooltipProvider>
+    <Toaster />
+    <Sonner />
+    <LanguageProvider>
+      <AuthProvider>
+        <NewItemProvider>
+          <FavoritesProvider>
+            <SearchProvider>
+              <AppContent />
+            </SearchProvider>
+          </FavoritesProvider>
+        </NewItemProvider>
+      </AuthProvider>
+    </LanguageProvider>
+  </TooltipProvider>
 );
 
 export default App;
