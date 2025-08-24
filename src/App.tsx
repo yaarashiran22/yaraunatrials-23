@@ -107,8 +107,7 @@ const AppContent = () => {
           <div className="w-64 bg-card border-r shadow-sm fixed left-0 top-0 h-full overflow-y-auto">
             <div className="p-6">
               <div 
-                className="text-3xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity mb-8" 
-                style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}
+              className="text-3xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity mb-8 text-primary"
                 onClick={() => window.location.href = '/'}
                 role="button"
                 aria-label="Navigate to homepage"
