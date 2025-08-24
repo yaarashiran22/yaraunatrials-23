@@ -32,8 +32,8 @@ export const TimeThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       // Update CSS variables based on time of day
       const root = document.documentElement;
       
-      // Set the exact gradient to match the uploaded image
-      document.body.style.backgroundImage = `linear-gradient(135deg, hsl(240 50% 70%) 0%, hsl(280 60% 50%) 100%)`;
+      // Set the purple gradient to match the uploaded image
+      document.body.style.backgroundImage = `linear-gradient(180deg, hsl(280 70% 60%) 0%, hsl(270 80% 35%) 100%)`;
       document.body.style.backgroundAttachment = 'fixed';
       document.body.style.minHeight = '100vh';
       
