@@ -161,15 +161,17 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
       console.log('Text update created successfully:', result);
       
       toast({
-        title: "עדכון נוסף בהצלחה!",
-        description: "העדכון שלך יוסר אוטומטית לאחר 24 שעות",
+        title: "עדכון פורסם בהצלחה!",
+        description: "העדכון שלך מוצג כעת בפרופיל שלך עם מסגרת צהובה",
       });
 
       setUpdateText("");
       setShowTextUpdate(false);
 
-      // Force page refresh to update all profile cards with new announcement indicator
-      window.location.reload();
+      // Force page refresh to update profile cards with announcement indicator
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error: any) {
       console.error('Error creating text update:', error);
       toast({
@@ -283,7 +285,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
                 variant="outline"
                 className="flex-1"
               >
-                בטל
+                ביטול
               </Button>
             </div>
           </div>
