@@ -44,8 +44,12 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
     }
   };
 
-  // Generate a consistent purple color for all users
-  const getBackgroundColor = (name: string) => {
+  // Generate border color based on whether user has announcements
+  const getBorderColor = (stories: any[]) => {
+    const hasAnnouncements = stories.some(story => story.is_announcement);
+    if (hasAnnouncements) {
+      return "bg-gradient-to-br from-yellow-400 to-yellow-600";
+    }
     return "bg-gradient-to-br from-pink-400 to-[#BB31E9]";
   };
 
@@ -56,7 +60,7 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
         onClick={handleClick}
       >
         <div className="relative">
-          <div className={`w-16 h-16 rounded-full ${getBackgroundColor(name)} p-0.5`}>
+          <div className={`w-16 h-16 rounded-full ${getBorderColor(stories)} p-0.5`}>
             <div 
               className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card cursor-pointer hover:opacity-80 transition-opacity"
               onClick={(e) => {

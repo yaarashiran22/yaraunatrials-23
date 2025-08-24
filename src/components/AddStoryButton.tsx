@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
-import { Plus, Camera, Image as ImageIcon } from "lucide-react";
+import { Plus, Camera, Image as ImageIcon, MessageSquare } from "lucide-react";
 import { useStories } from "@/hooks/useStories";
 import { useToast } from "@/hooks/use-toast";
 import { Capacitor } from '@capacitor/core';
 import { Camera as CapacitorCamera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import CameraModal from "./CameraModal";
 
 interface AddStoryButtonProps {
@@ -14,10 +15,12 @@ interface AddStoryButtonProps {
 
 const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { createStory } = useStories();
+  const { createStory, createAnnouncement } = useStories();
   const { toast } = useToast();
   const [showOptions, setShowOptions] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [showTextUpdate, setShowTextUpdate] = useState(false);
+  const [updateText, setUpdateText] = useState("");
 
   // Convert base64 to file
   const base64ToFile = (base64String: string, filename: string): File => {
@@ -137,6 +140,46 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
     }
   };
 
+  const handleTextUpdate = () => {
+    setShowOptions(false);
+    setShowTextUpdate(true);
+  };
+
+  const createTextUpdate = async () => {
+    if (!updateText.trim()) {
+      toast({
+        title: "שגיאה",
+        description: "יש להזין תוכן לעדכון",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      console.log('Creating text update...');
+      const result = await createAnnouncement(updateText.trim());
+      console.log('Text update created successfully:', result);
+      
+      toast({
+        title: "עדכון נוסף בהצלחה!",
+        description: "העדכון שלך יוסר אוטומטית לאחר 24 שעות",
+      });
+
+      setUpdateText("");
+      setShowTextUpdate(false);
+
+      // Force page refresh to update all profile cards with new announcement indicator
+      window.location.reload();
+    } catch (error: any) {
+      console.error('Error creating text update:', error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן להוסיף את העדכון. נסה שוב.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleClick = () => {
     setShowOptions(true);
   };
@@ -169,9 +212,9 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
       <Dialog open={showOptions} onOpenChange={setShowOptions}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-center">הוסף סטורי</DialogTitle>
+            <DialogTitle className="text-center">הוסף סטורי או עדכון</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 py-4">
+          <div className="grid grid-cols-3 gap-4 py-4">
             <Button
               onClick={handleCameraCapture}
               variant="outline"
@@ -188,6 +231,14 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
               <ImageIcon className="w-6 h-6" />
               <span>בחר מהגלריה</span>
             </Button>
+            <Button
+              onClick={handleTextUpdate}
+              variant="outline"
+              className="h-20 flex flex-col gap-2"
+            >
+              <MessageSquare className="w-6 h-6" />
+              <span>עדכון טקסט</span>
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -198,6 +249,46 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
         onClose={() => setShowCamera(false)}
         onCapture={createStoryFromFile}
       />
+
+      {/* Text Update Modal */}
+      <Dialog open={showTextUpdate} onOpenChange={setShowTextUpdate}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">הוסף עדכון טקסט</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <Textarea
+              placeholder="מה קורה אצלך בשכונה?"
+              value={updateText}
+              onChange={(e) => setUpdateText(e.target.value)}
+              className="min-h-[120px]"
+              maxLength={500}
+            />
+            <div className="text-sm text-muted-foreground text-left">
+              {updateText.length}/500 תווים
+            </div>
+            <div className="flex gap-2">
+              <Button
+                onClick={createTextUpdate}
+                disabled={!updateText.trim()}
+                className="flex-1"
+              >
+                פרסם עדכון
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowTextUpdate(false);
+                  setUpdateText("");
+                }}
+                variant="outline"
+                className="flex-1"
+              >
+                בטל
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

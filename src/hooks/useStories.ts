@@ -8,6 +8,9 @@ export interface Story {
   image_url: string;
   created_at: string;
   expires_at: string;
+  story_type: 'image' | 'announcement';
+  text_content?: string;
+  is_announcement: boolean;
 }
 
 export const useStories = (userId?: string) => {
@@ -42,7 +45,7 @@ export const useStories = (userId?: string) => {
         setStories([]);
       } else {
         console.log('Fetched stories:', data?.length || 0, 'stories for user:', targetUserId);
-        setStories(data || []);
+        setStories((data || []) as Story[]);
         setError(null);
       }
     } catch (err: any) {
@@ -80,7 +83,36 @@ export const useStories = (userId?: string) => {
       .from('stories')
       .insert({
         user_id: user.id,
-        image_url: publicUrl
+        image_url: publicUrl,
+        story_type: 'image',
+        is_announcement: false
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      throw createError;
+    }
+
+    // Refresh stories
+    await fetchStories();
+    return data;
+  }, [user?.id, fetchStories]);
+
+  const createAnnouncement = useCallback(async (textContent: string) => {
+    if (!user?.id) {
+      throw new Error('User not authenticated');
+    }
+
+    // Create announcement record
+    const { data, error: createError } = await supabase
+      .from('stories')
+      .insert({
+        user_id: user.id,
+        image_url: '', // Empty for text announcements
+        text_content: textContent,
+        story_type: 'announcement',
+        is_announcement: true
       })
       .select()
       .single();
@@ -122,6 +154,7 @@ export const useStories = (userId?: string) => {
     loading,
     error,
     createStory,
+    createAnnouncement,
     deleteStory,
     refetch: fetchStories
   };

@@ -722,7 +722,10 @@ export type Database = {
           expires_at: string
           id: string
           image_url: string
+          is_announcement: boolean | null
           market: string | null
+          story_type: string | null
+          text_content: string | null
           user_id: string
         }
         Insert: {
@@ -730,7 +733,10 @@ export type Database = {
           expires_at?: string
           id?: string
           image_url: string
+          is_announcement?: boolean | null
           market?: string | null
+          story_type?: string | null
+          text_content?: string | null
           user_id: string
         }
         Update: {
@@ -738,7 +744,10 @@ export type Database = {
           expires_at?: string
           id?: string
           image_url?: string
+          is_announcement?: boolean | null
           market?: string | null
+          story_type?: string | null
+          text_content?: string | null
           user_id?: string
         }
         Relationships: []

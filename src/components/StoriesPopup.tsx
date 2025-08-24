@@ -159,13 +159,26 @@ const StoriesPopup = ({ isOpen, onClose, userId }: StoriesPopupProps) => {
           </button>
         </div>
 
-        {/* Story Image */}
+        {/* Story Content */}
         <div className="relative w-full h-full flex items-center justify-center">
-          <img
-            src={currentStory.image_url}
-            alt="Story"
-            className="w-full h-full object-cover"
-          />
+          {currentStory.story_type === 'announcement' ? (
+            /* Text Announcement Display */
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-600 p-8">
+              <div className="text-center text-white">
+                <h3 className="text-xl font-bold mb-4">📢 עדכון מהשכונה</h3>
+                <p className="text-lg leading-relaxed max-w-sm">
+                  {currentStory.text_content}
+                </p>
+              </div>
+            </div>
+          ) : (
+            /* Image Story Display */
+            <img
+              src={currentStory.image_url}
+              alt="Story"
+              className="w-full h-full object-cover"
+            />
+          )}
           
           {/* Navigation arrows */}
           {currentIndex > 0 && (
