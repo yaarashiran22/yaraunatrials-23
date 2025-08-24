@@ -26,7 +26,7 @@ export const translations = {
       neighbors: "שכנים"
     },
     events: {
-      title: "Happening nearby",
+      title: "קורה השבוע",
       searchPlaceholder: "חיפוש אירועים...",
       filterTitle: "פילטר אירועים",
       eventType: "סוג אירוע",
@@ -113,7 +113,7 @@ export const translations = {
       neighbors: "neighbors"
     },
     events: {
-      title: "Happening nearby",
+      title: "Happening This Week",
       searchPlaceholder: "Search events...",
       filterTitle: "Event Filter",
       eventType: "Event Type",
@@ -200,7 +200,7 @@ export const translations = {
       neighbors: "vecinos"
     },
     events: {
-      title: "Sucesos cercanos",
+      title: "Sucediendo Esta Semana",
       searchPlaceholder: "Buscar eventos...",
       filterTitle: "Filtro de Eventos",
       eventType: "Tipo de Evento",
