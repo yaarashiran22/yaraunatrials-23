@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Coffee, Zap, Heart, Dumbbell, Palette, Users, Search } from "lucide-react";
 
 const moodFilters = [
-  { id: "all", label: "All", icon: Search, color: "text-muted-foreground" },
-  { id: "chill", label: "Chill", icon: Coffee, color: "text-blue-500" },
-  { id: "go-out", label: "Go Out", icon: Zap, color: "text-orange-500" },
-  { id: "romantic", label: "Romantic", icon: Heart, color: "text-pink-500" },
-  { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500" },
-  { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500" },
-  { id: "social", label: "Social", icon: Users, color: "text-indigo-500" }
+  { id: "all", label: "All", icon: Search, color: "text-muted-foreground", activeBg: "bg-muted/80" },
+  { id: "chill", label: "Chill", icon: Coffee, color: "text-blue-500", activeBg: "bg-blue-50 dark:bg-blue-950/30" },
+  { id: "go-out", label: "Go Out", icon: Zap, color: "text-orange-500", activeBg: "bg-orange-50 dark:bg-orange-950/30" },
+  { id: "romantic", label: "Romantic", icon: Heart, color: "text-pink-500", activeBg: "bg-pink-50 dark:bg-pink-950/30" },
+  { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500", activeBg: "bg-green-50 dark:bg-green-950/30" },
+  { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
+  { id: "social", label: "Social", icon: Users, color: "text-indigo-500", activeBg: "bg-indigo-50 dark:bg-indigo-950/30" }
 ];
 
 interface MoodFilterStripProps {
@@ -38,9 +38,9 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
                 onClick={() => handleFilterClick(filter.id)}
                 className={`
                   flex-shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 
-                  flex items-center gap-2 min-w-fit
+                  flex items-center gap-2 min-w-fit border border-transparent
                   ${activeFilter === filter.id 
-                    ? `bg-accent text-accent-foreground ${filter.color}` 
+                    ? `${filter.activeBg} ${filter.color} border-current/20` 
                     : `${filter.color} hover:bg-accent/50`
                   }
                 `}
