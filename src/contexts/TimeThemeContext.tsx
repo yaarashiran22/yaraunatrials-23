@@ -28,15 +28,15 @@ export const TimeThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       document.body.style.backgroundAttachment = 'fixed';
       document.body.style.minHeight = '100vh';
       
-      // Set consistent theme colors that work with the blue-purple gradient
+      // Set consistent theme colors with better contrast
       const root = document.documentElement;
-      root.style.setProperty('--foreground', '240 30% 15%');
-      root.style.setProperty('--card', '260 40% 85%');
-      root.style.setProperty('--card-foreground', '240 25% 15%');
-      root.style.setProperty('--border', '250 30% 70%');
-      root.style.setProperty('--input', '250 30% 75%');
-      root.style.setProperty('--muted', '250 35% 80%');
-      root.style.setProperty('--muted-foreground', '240 20% 35%');
+      root.style.setProperty('--foreground', '0 0% 5%'); // Very dark text
+      root.style.setProperty('--card', '0 0% 98%'); // Almost white cards
+      root.style.setProperty('--card-foreground', '0 0% 5%'); // Very dark text on cards
+      root.style.setProperty('--border', '240 20% 80%'); // Light borders
+      root.style.setProperty('--input', '0 0% 95%'); // Light input backgrounds
+      root.style.setProperty('--muted', '240 10% 90%'); // Light muted areas
+      root.style.setProperty('--muted-foreground', '0 0% 25%'); // Dark muted text
     };
 
     // Update immediately
