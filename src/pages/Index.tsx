@@ -2,6 +2,7 @@
 import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/Header";
 import DesktopHeader from "@/components/DesktopHeader";
+import MoodFilterStrip from "@/components/MoodFilterStrip";
 import FilterPopup from "@/components/FilterPopup";
 import EventPopup from "@/components/EventPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
@@ -164,6 +165,9 @@ const Index = () => {
         title={t('common.home')}
         onNotificationsClick={() => setShowNotifications(true)}
       />
+      
+      {/* Mood Filter Strip */}
+      <MoodFilterStrip />
       
       <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-3 lg:space-y-4 pb-20 lg:pb-8 max-w-7xl mx-auto">
         {/* Community Members Section - Horizontal Carousel */}
