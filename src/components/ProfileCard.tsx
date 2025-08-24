@@ -23,11 +23,11 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
     
     // Always refetch stories to ensure we have the latest data
     try {
-      await refetch();
+      const freshStories = await refetch();
+      console.log('After refetch - fresh stories count:', freshStories?.length || 0);
       
-      // Check the current stories state after refetch
-      if (stories.length > 0) {
-        console.log('Opening stories popup for user:', id, 'with', stories.length, 'stories');
+      if (freshStories && freshStories.length > 0) {
+        console.log('Opening stories popup for user:', id, 'with', freshStories.length, 'stories');
         setShowStories(true);
       } else {
         console.log('No stories found after refetch, navigating to profile:', id);

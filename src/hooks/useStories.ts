@@ -25,7 +25,7 @@ export const useStories = (userId?: string) => {
     if (!targetUserId) {
       setStories([]);
       setLoading(false);
-      return;
+      return [];
     }
 
     setLoading(true);
@@ -43,15 +43,19 @@ export const useStories = (userId?: string) => {
         console.error('Error fetching stories:', fetchError);
         setError(fetchError.message);
         setStories([]);
+        return [];
       } else {
         console.log('Fetched stories:', data?.length || 0, 'stories for user:', targetUserId);
-        setStories((data || []) as Story[]);
+        const typedStories = (data || []) as Story[];
+        setStories(typedStories);
         setError(null);
+        return typedStories;
       }
     } catch (err: any) {
       console.error('Unexpected error:', err);
       setError(err.message || 'An unexpected error occurred');
       setStories([]);
+      return [];
     } finally {
       setLoading(false);
     }
