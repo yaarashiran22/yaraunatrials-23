@@ -51,71 +51,61 @@ const Header = ({
   };
 
   return (
-    <header className="bg-transparent">
-      <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-3">
-        <div className="flex items-center justify-between gap-2">
-          {/* Search & Notifications Buttons - Left side */}
-          {user && (
-            <div className="flex items-center gap-2">
-              {/* Search Button */}
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="p-2.5 h-10 w-10 bg-card/80 border-border/40 hover:bg-card shadow-sm"
-                onClick={openSearch}
-              >
-                <Search className="h-5 w-5" />
-              </Button>
-              
-              {/* Notifications Button */}
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="relative p-2.5 h-10 w-10 bg-card/80 border-border/40 hover:bg-card shadow-sm"
-                onClick={() => setShowNotifications(true)}
-              >
-                <Bell className="h-5 w-5" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center min-w-0 shadow-sm">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </span>
-                )}
-              </Button>
-            </div>
-          )}
+    <header className="bg-transparent border-b border-white/10 backdrop-blur-sm">
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex items-center gap-4">
+          {/* Logo */}
+          <div 
+            className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0" 
+            style={{ 
+              color: 'hsl(280 85% 75%)',
+              textShadow: '0 0 10px rgba(187, 49, 233, 0.5)'
+            }}
+            onClick={handleLogoClick}
+            role="button"
+            aria-label="Navigate to homepage"
+          >
+            una
+          </div>
           
-          {/* Neighborhood Selector or Search - Center */}
-          <div className="flex-1 max-w-md mx-2 sm:mx-4 min-w-0 flex justify-center">
-            {showSearch && onSearchChange ? (
-              <SearchBar 
-                value={searchValue}
-                onChange={onSearchChange}
-                placeholder={searchPlaceholder}
+          {/* Search Bar - Center */}
+          <div className="flex-1 max-w-lg">
+            <div className="relative">
+              <input 
+                type="text" 
+                placeholder="Search events, tags, or places"
+                className="w-full px-4 py-2.5 pl-10 rounded-full border-2 border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40"
               />
-            ) : (
-              <NeighborhoodIndicator />
-            )}
-          </div>
-
-          {/* Logo and User Greeting - Right side */}
-          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground hidden sm:inline">
-                Hello {user ? (user.email?.split('@')[0] || 'User') : 'Guest'}
-              </span>
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
             </div>
-            <div 
-              className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity" 
-              style={{ 
-                color: 'hsl(280 85% 65%)'
-              }}
-              onClick={handleLogoClick}
-              role="button"
-              aria-label="Navigate to homepage"
+          </div>
+          
+          {/* Location Switcher */}
+          <div className="flex-shrink-0">
+            <Button 
+              variant="outline" 
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm"
             >
-              una
-            </div>
+              📍 Buenos Aires
+            </Button>
           </div>
+          
+          {/* Notifications */}
+          {user && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="relative p-2.5 h-10 w-10 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm"
+              onClick={() => setShowNotifications(true)}
+            >
+              <Bell className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0 shadow-lg border-2 border-white">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </Button>
+          )}
           
         </div>
       </div>
