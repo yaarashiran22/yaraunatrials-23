@@ -39,22 +39,22 @@ export const TimeThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
       if (isNight) {
         // Night theme - colors that complement the gradient
-        root.style.setProperty('--foreground', '280 30% 95%');
-        root.style.setProperty('--card', '260 40% 20%');
-        root.style.setProperty('--card-foreground', '280 25% 90%');
-        root.style.setProperty('--border', '260 30% 35%');
-        root.style.setProperty('--input', '260 30% 25%');
-        root.style.setProperty('--muted', '260 35% 25%');
-        root.style.setProperty('--muted-foreground', '280 20% 70%');
+        root.style.setProperty('--foreground', '280 30% 15%');
+        root.style.setProperty('--card', '280 50% 80%');
+        root.style.setProperty('--card-foreground', '280 25% 15%');
+        root.style.setProperty('--border', '280 30% 60%');
+        root.style.setProperty('--input', '280 30% 70%');
+        root.style.setProperty('--muted', '280 35% 75%');
+        root.style.setProperty('--muted-foreground', '280 20% 40%');
       } else {
         // Day theme - lighter colors that work with gradient
-        root.style.setProperty('--foreground', '280 30% 95%');
-        root.style.setProperty('--card', '260 50% 25%');
-        root.style.setProperty('--card-foreground', '280 25% 92%');
-        root.style.setProperty('--border', '260 30% 40%');
-        root.style.setProperty('--input', '260 30% 30%');
-        root.style.setProperty('--muted', '260 35% 30%');
-        root.style.setProperty('--muted-foreground', '280 20% 75%');
+        root.style.setProperty('--foreground', '280 30% 15%');
+        root.style.setProperty('--card', '280 50% 85%');
+        root.style.setProperty('--card-foreground', '280 25% 15%');
+        root.style.setProperty('--border', '280 30% 65%');
+        root.style.setProperty('--input', '280 30% 75%');
+        root.style.setProperty('--muted', '280 35% 80%');
+        root.style.setProperty('--muted-foreground', '280 20% 35%');
       }
     };
 
