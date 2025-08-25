@@ -207,14 +207,14 @@ const CreateCommunityPage = () => {
         <Header 
           title="Create Community"
         />
-        <div className="absolute top-4 left-4 z-10">
+        <div className="absolute top-4 right-4 z-10">
           <Button 
             variant="ghost" 
             size="icon"
             onClick={() => navigate('/communities')}
             className="h-8 w-8 bg-background/80 backdrop-blur-sm"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <X className="h-4 w-4" />
           </Button>
         </div>
       </div>
@@ -223,14 +223,14 @@ const CreateCommunityPage = () => {
       <DesktopHeader 
         title="Create Community"
       />
-      <div className="hidden lg:block absolute top-4 left-4 z-10">
+      <div className="hidden lg:block absolute top-4 right-4 z-10">
         <Button 
           variant="ghost" 
           size="icon"
           onClick={() => navigate('/communities')}
           className="h-8 w-8 bg-background/80 backdrop-blur-sm"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <X className="h-4 w-4" />
         </Button>
       </div>
 
