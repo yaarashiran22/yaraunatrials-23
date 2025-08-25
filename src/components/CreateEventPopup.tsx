@@ -245,24 +245,6 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
             />
           </div>
 
-          {/* Event Type Field */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">Type*</label>
-            <Select value={eventType} onValueChange={(value: 'event' | 'meetup') => setEventType(value)}>
-              <SelectTrigger className="w-full h-12 text-left bg-background border-2 border-border rounded-full">
-                <SelectValue placeholder="Choose type" />
-              </SelectTrigger>
-              <SelectContent className="bg-background border shadow-lg z-50">
-                <SelectItem value="event" className="text-left cursor-pointer hover:bg-muted">
-                  Event
-                </SelectItem>
-                <SelectItem value="meetup" className="text-left cursor-pointer hover:bg-muted">
-                  Meetup
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
           {/* Date Field */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground block text-left">Date*</label>
