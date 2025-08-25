@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useItemDetails } from "@/hooks/useItemDetails";
 import { useEventRSVP } from "@/hooks/useEventRSVP";
+import { getRelativeDay } from "@/utils/dateUtils";
 import profile1 from "@/assets/profile-1.jpg";
 
 interface EventPopupProps {
@@ -218,7 +219,7 @@ const EventPopup = ({
               )}
               <p className="text-lg font-semibold text-foreground">{displayEvent.title}</p>
               {displayEvent.date && (
-                <p className="text-sm text-primary">Date: {displayEvent.date}</p>
+                <p className="text-sm text-primary">Date: {getRelativeDay(displayEvent.date)}</p>
               )}
             </div>
             

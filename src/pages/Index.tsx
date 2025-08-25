@@ -9,10 +9,12 @@ import MarketplacePopup from "@/components/MarketplacePopup";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import ProfileCard from "@/components/ProfileCard";
 import AddStoryButton from "@/components/AddStoryButton";
+import ScrollAnimatedCard from "@/components/ScrollAnimatedCard";
 import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import FriendMeetupPopup from "@/components/FriendMeetupPopup";
 import CreateEventPopup from "@/components/CreateEventPopup";
+import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import FloatingMapToggle from "@/components/FloatingMapToggle";
@@ -29,7 +31,6 @@ import { useNewItem } from "@/contexts/NewItemContext";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import { useEvents } from "@/hooks/useEvents";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import ScrollAnimatedCard from "@/components/ScrollAnimatedCard";
 
 import profile1 from "@/assets/profile-1.jpg";
 import profile2 from "@/assets/profile-2.jpg";
@@ -272,15 +273,15 @@ const Index = () => {
                     video={(event as any).video_url}
                     title={event.title}
                     subtitle={event.location || 'Tel Aviv'}
-                    date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
-                    type="event"
-                    uploader={event.uploader}
-                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                    onClick={() => handleEventClick({
-                      id: event.id,
-                      title: event.title,
-                      description: event.description || event.title,
-                      date: event.date || 'Date to be determined',
+                     date={getRelativeDay(event.date)}
+                     type="event"
+                     uploader={event.uploader}
+                     onProfileClick={(userId) => navigate(`/profile/${userId}`)}
+                     onClick={() => handleEventClick({
+                       id: event.id,
+                       title: event.title,
+                       description: event.description || event.title,
+                       date: event.date || 'Date to be determined',
                       time: event.time || 'Time to be determined', 
                       location: event.location || 'Tel Aviv',
                       price: event.price,
@@ -350,15 +351,15 @@ const Index = () => {
                     video={(event as any).video_url}
                     title={event.title}
                     subtitle={event.location || 'Tel Aviv'}
-                    date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
-                    type="event"
-                    uploader={event.uploader}
-                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                    onClick={() => handleEventClick({
-                      id: event.id,
-                      title: event.title,
-                      description: event.description || event.title,
-                      date: event.date || 'Date to be determined',
+                     date={getRelativeDay(event.date)}
+                     type="event"
+                     uploader={event.uploader}
+                     onProfileClick={(userId) => navigate(`/profile/${userId}`)}
+                     onClick={() => handleEventClick({
+                       id: event.id,
+                       title: event.title,
+                       description: event.description || event.title,
+                       date: event.date || 'Date to be determined',
                       time: event.time || 'Time to be determined', 
                       location: event.location || 'Tel Aviv',
                       price: event.price,

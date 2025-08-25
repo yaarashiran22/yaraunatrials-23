@@ -17,6 +17,7 @@ import { useUserEvents } from "@/hooks/useUserEvents";
 import { useFriends } from "@/hooks/useFriends";
 import { useProfile } from "@/hooks/useProfile";
 import { useUserPosts } from "@/hooks/useUserPosts";
+import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import UniformCard from "@/components/UniformCard";
 import AddItemPopup from "@/components/AddItemPopup";
@@ -477,7 +478,7 @@ const ProfilePage = () => {
                         </span>
                         {event.date && (
                           <span className="text-xs text-muted-foreground">
-                            {new Date(event.date).toLocaleDateString('en-US')}
+                            {getRelativeDay(event.date)}
                           </span>
                         )}
                       </div>

@@ -17,6 +17,10 @@ export interface Community {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  creator?: {
+    name: string | null;
+    profile_image_url: string | null;
+  };
 }
 
 export interface CommunityMember {
@@ -43,7 +47,13 @@ export const useCommunities = (category?: string) => {
       setLoading(true);
       let query = supabase
         .from('communities')
-        .select('*')
+        .select(`
+          *,
+          creator:profiles!creator_id (
+            name,
+            profile_image_url
+          )
+        `)
         .eq('is_active', true)
         .order('member_count', { ascending: false });
 
@@ -54,7 +64,12 @@ export const useCommunities = (category?: string) => {
       const { data, error } = await query;
 
       if (error) throw error;
-      setCommunities((data || []) as Community[]);
+      setCommunities((data || []).map((community: any) => ({
+        ...community,
+        creator: community.creator && Array.isArray(community.creator) && community.creator.length > 0 
+          ? community.creator[0] 
+          : community.creator
+      })) as Community[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
