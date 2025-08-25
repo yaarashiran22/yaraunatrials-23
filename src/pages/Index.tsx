@@ -398,68 +398,6 @@ const Index = () => {
           )}
         </section>
 
-        {/* Recommendations Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-foreground relative">
-              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
-                המלצות השכונה
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
-            </h2>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => navigate('/all-recommendations')}
-                className="text-xs px-3 py-1"
-              >
-                All
-              </Button>
-            </div>
-          </div>
-          {loading ? (
-            <FastLoadingSkeleton type="cards" count={3} />
-          ) : recommendationItems?.length === 0 ? (
-            <div className="text-center py-6 text-muted-foreground">
-              <p>No recommendations available at the moment</p>
-            </div>
-          ) : (
-            <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-              <AddRecommendationCard className="flex-shrink-0 w-48" />
-              {recommendationItems?.slice(0, 3).map((item, index) => (
-                <ScrollAnimatedCard key={`recommendation-${item.id}`} index={index + 1}>
-                  <UniformCard
-                    id={item.id}
-                    image={item.image_url}
-                    title={item.title}
-                    subtitle={item.description}
-                    price={item.price?.toString()}
-                    type="business"
-                    onClick={() => handleMarketplaceClick({
-                      id: item.id,
-                      title: item.title,
-                      image_url: item.image_url,
-                      description: item.description,
-                      price: item.price,
-                      location: item.location
-                    }, 'recommendation')}
-                    showFavoriteButton={true}
-                    favoriteData={{
-                      id: item.id,
-                      title: item.title,
-                      image: item.image_url,
-                      subtitle: item.description,
-                      price: item.price?.toString(),
-                      type: 'business'
-                    }}
-                  />
-                </ScrollAnimatedCard>
-              ))}
-            </div>
-          )}
-        </section>
-
         {/* Coupons Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
