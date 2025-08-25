@@ -228,7 +228,7 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
   const getBorderColor = (stories: any[]) => {
     const hasAnnouncements = stories.some(story => story.is_announcement);
     if (hasAnnouncements) {
-      return "bg-gradient-to-br from-yellow-400 to-yellow-600";
+      return "bg-gradient-to-br from-orange-400 to-red-400";
     }
     return "bg-gradient-to-br from-pink-400 to-[#BB31E9]";
   };
@@ -261,8 +261,8 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
             </div>
             {/* Story indicator for other users */}
             {!isCurrentUser && stories.length > 0 && (
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 rounded-full border-[3px] border-white flex items-center justify-center depth-3 floating-element glow-accent">
-                <div className="w-4 h-4 bg-yellow-50 rounded-full inner-shadow animate-pulse-glow"></div>
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-orange-400 via-red-400 to-orange-500 rounded-full border-[3px] border-white flex items-center justify-center depth-3 floating-element glow-accent">
+                <div className="w-4 h-4 bg-orange-50 rounded-full inner-shadow animate-pulse-glow"></div>
               </div>
             )}
             {/* Add story button for current user */}
