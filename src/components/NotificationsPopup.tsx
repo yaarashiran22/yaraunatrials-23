@@ -1,8 +1,10 @@
-import { X } from "lucide-react";
+import { X, Check, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useCommunityRequests } from "@/hooks/useCommunityRequests";
 import { formatDistanceToNow } from "date-fns";
 import { he } from "date-fns/locale";
+import { useState, useEffect } from "react";
 
 interface NotificationsPopupProps {
   isOpen: boolean;
@@ -10,9 +12,45 @@ interface NotificationsPopupProps {
 }
 
 const NotificationsPopup = ({ isOpen, onClose }: NotificationsPopupProps) => {
-  const { notifications, loading, markAsRead, markAllAsRead } = useNotifications();
+  const { notifications, loading, markAsRead, markAllAsRead, refreshNotifications } = useNotifications();
+  const { approveMembershipRequest, rejectMembershipRequest, getMembershipRequestDetails, loading: requestLoading } = useCommunityRequests();
+  const [processingRequests, setProcessingRequests] = useState<Set<string>>(new Set());
 
   if (!isOpen) return null;
+
+  const handleCommunityRequestAction = async (notificationId: string, relatedUserId: string, action: 'approve' | 'reject') => {
+    if (processingRequests.has(notificationId)) return;
+    
+    setProcessingRequests(prev => new Set(prev).add(notificationId));
+    
+    try {
+      const details = await getMembershipRequestDetails(notificationId, relatedUserId);
+      if (!details) {
+        throw new Error('Failed to get membership request details');
+      }
+
+      let success = false;
+      if (action === 'approve') {
+        success = await approveMembershipRequest(details.membershipId, details.communityName, details.userName);
+      } else {
+        success = await rejectMembershipRequest(details.membershipId, details.communityName, details.userName);
+      }
+
+      if (success) {
+        // Mark notification as read and refresh notifications
+        markAsRead(notificationId);
+        setTimeout(() => refreshNotifications(), 500);
+      }
+    } catch (error) {
+      console.error('Error handling community request:', error);
+    } finally {
+      setProcessingRequests(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(notificationId);
+        return newSet;
+      });
+    }
+  };
 
   const handleNotificationClick = (notificationId: string, isRead: boolean) => {
     if (!isRead) {
@@ -81,23 +119,62 @@ const NotificationsPopup = ({ isOpen, onClose }: NotificationsPopupProps) => {
                       {notification.related_user?.name?.charAt(0) || '?'}
                     </span>
                   </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm text-foreground leading-relaxed mb-1">
-                      {notification.related_user?.name && (
-                        <span className="font-medium">{notification.related_user.name} </span>
-                      )}
-                      {notification.message}
-                    </p>
-                    {!notification.is_read && (
-                      <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>
-                    )}
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {formatTimeAgo(notification.created_at)}
-                  </span>
-                </div>
+                 )}
+                 <div className="flex-1 min-w-0">
+                   <div className="flex items-start justify-between gap-2">
+                     <p className="text-sm text-foreground leading-relaxed mb-1">
+                       {notification.related_user?.name && (
+                         <span className="font-medium">{notification.related_user.name} </span>
+                       )}
+                       {notification.message}
+                     </p>
+                     {!notification.is_read && (
+                       <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>
+                     )}
+                   </div>
+                   <span className="text-xs text-muted-foreground">
+                     {formatTimeAgo(notification.created_at)}
+                   </span>
+                   
+                   {/* Community Join Request Actions */}
+                   {notification.type === 'community_join_request' && notification.related_user_id && !processingRequests.has(notification.id) && (
+                     <div className="flex gap-2 mt-2">
+                       <Button 
+                         size="sm" 
+                         variant="default"
+                         className="h-7 px-3 text-xs"
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           handleCommunityRequestAction(notification.id, notification.related_user_id!, 'approve');
+                         }}
+                         disabled={requestLoading}
+                       >
+                         <Check className="w-3 h-3 mr-1" />
+                         Approve
+                       </Button>
+                       <Button 
+                         size="sm" 
+                         variant="outline"
+                         className="h-7 px-3 text-xs"
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           handleCommunityRequestAction(notification.id, notification.related_user_id!, 'reject');
+                         }}
+                         disabled={requestLoading}
+                       >
+                         <X className="w-3 h-3 mr-1" />
+                         Reject
+                       </Button>
+                     </div>
+                   )}
+                   
+                   {processingRequests.has(notification.id) && (
+                     <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                       <div className="animate-spin w-3 h-3 border border-current border-t-transparent rounded-full"></div>
+                       Processing...
+                     </div>
+                   )}
+                 </div>
               </div>
             ))
           )}
