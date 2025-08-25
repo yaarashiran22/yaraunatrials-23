@@ -5,13 +5,16 @@ import { Users, Lock, Globe, UserPlus } from "lucide-react";
 import { Community, useCommunityMembership } from "@/hooks/useCommunities";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import EditCommunityDialog from "./EditCommunityDialog";
 
 interface CommunityCardProps {
   community: Community;
   onClick?: () => void;
+  onUpdate?: () => void;
+  onDelete?: () => void;
 }
 
-const CommunityCard = ({ community, onClick }: CommunityCardProps) => {
+const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCardProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { requestToJoin, getMembershipStatus } = useCommunityMembership();
@@ -171,16 +174,32 @@ const CommunityCard = ({ community, onClick }: CommunityCardProps) => {
           </div>
         </div>
 
-        {/* Join Button */}
-        <Button
-          onClick={handleJoinClick}
-          disabled={isJoinDisabled() || joining}
-          className="w-full"
-          variant={membershipStatus?.status === 'approved' ? "secondary" : "default"}
-          size="sm"
-        >
-          {joining ? "..." : getJoinButtonText()}
-        </Button>
+        {/* Action Buttons */}
+        <div className="space-y-2">
+          {/* Edit/Delete for community creator */}
+          {user && community.creator_id === user.id && (
+            <div className="flex gap-2 mb-2">
+              <EditCommunityDialog 
+                community={community} 
+                onUpdate={onUpdate}
+                onDelete={onDelete}
+              />
+            </div>
+          )}
+          
+          {/* Join Button for non-creators */}
+          {(!user || community.creator_id !== user.id) && (
+            <Button
+              onClick={handleJoinClick}
+              disabled={isJoinDisabled() || joining}
+              className="w-full"
+              variant={membershipStatus?.status === 'approved' ? "secondary" : "default"}
+              size="sm"
+            >
+              {joining ? "..." : getJoinButtonText()}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

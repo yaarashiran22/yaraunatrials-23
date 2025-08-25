@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter, Users, Calendar, Gift, MessageSquare } from "lucide-react";
+import { Search, Filter, Users, Calendar, Gift, MessageSquare, Target, Sprout, UserCheck, Home } from "lucide-react";
 import { useCommunities, useCommunityMembership } from "@/hooks/useCommunities";
 import CommunityCard from "@/components/CommunityCard";
 import CreateCommunityDialog from "@/components/CreateCommunityDialog";
@@ -23,10 +23,10 @@ const CommunitiesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const categories = [
-    { id: 'all', label: 'All', icon: '🏘️', color: "text-muted-foreground", activeBg: "bg-muted/80" },
-    { id: 'interests', label: 'Interests', icon: '🎯', color: "text-blue-500", activeBg: "bg-blue-50 dark:bg-blue-950/30" },
-    { id: 'causes', label: 'Causes', icon: '🌱', color: "text-green-500", activeBg: "bg-green-50 dark:bg-green-950/30" },
-    { id: 'identity', label: 'Identity', icon: '👥', color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
+    { id: 'all', label: 'All', icon: Home, color: "text-muted-foreground", activeBg: "bg-muted/80" },
+    { id: 'interests', label: 'Interests', icon: Target, color: "text-blue-500", activeBg: "bg-blue-50 dark:bg-blue-950/30" },
+    { id: 'causes', label: 'Causes', icon: Sprout, color: "text-green-500", activeBg: "bg-green-50 dark:bg-green-950/30" },
+    { id: 'identity', label: 'Identity', icon: UserCheck, color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
   ];
 
   const filteredCommunities = communities.filter(community => {
@@ -106,7 +106,9 @@ const CommunitiesPage = () => {
             <TabsContent value="discover" className="space-y-4">
               {/* Category Filter */}
               <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
-                {categories.map(category => (
+                {categories.map(category => {
+                  const IconComponent = category.icon;
+                  return (
                     <Button
                       key={category.id}
                       variant="ghost"
@@ -121,10 +123,11 @@ const CommunitiesPage = () => {
                         }
                       `}
                     >
-                      <span className="text-base">{category.icon}</span>
+                      <IconComponent className={`h-4 w-4 ${category.color}`} />
                       {category.label}
                     </Button>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Results Count */}
@@ -142,6 +145,8 @@ const CommunitiesPage = () => {
                       // TODO: Navigate to community detail page
                       console.log('Navigate to community:', community.id);
                     }}
+                    onUpdate={() => window.location.reload()}
+                    onDelete={() => window.location.reload()}
                   />
                 ))}
               </div>
@@ -210,6 +215,8 @@ const CommunitiesPage = () => {
                               // TODO: Navigate to community detail page
                               console.log('Navigate to community:', community.id);
                             }}
+                            onUpdate={() => window.location.reload()}
+                            onDelete={() => window.location.reload()}
                           />
                         ))}
                       </div>
