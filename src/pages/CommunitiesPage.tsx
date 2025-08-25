@@ -144,9 +144,9 @@ const CommunitiesPage = () => {
                         </Button>
                       </div>
                     ) : (
-                      <div className="space-y-3 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+                      <div className="space-y-4 max-h-[55vh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
                         {myCommunities.map((community, index) => (
-                          <ScrollAnimatedCard key={community.id} index={index} className="max-w-md mx-auto">
+                          <ScrollAnimatedCard key={community.id} index={index} className="max-w-lg mx-auto">
                             <CommunityCard
                               community={community}
                               onClick={() => {
@@ -213,10 +213,9 @@ const CommunitiesPage = () => {
                 {filteredCommunities.length} communities found
               </div>
 
-              {/* Communities Grid */}
-              <div className="space-y-3 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+              <div className="space-y-4 max-h-[65vh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
                 {filteredCommunities.map((community, index) => (
-                  <ScrollAnimatedCard key={community.id} index={index} className="max-w-md mx-auto">
+                  <ScrollAnimatedCard key={community.id} index={index} className="max-w-lg mx-auto">
                     <CommunityCard
                       community={community}
                       onClick={() => {

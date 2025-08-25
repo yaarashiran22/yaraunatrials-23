@@ -109,86 +109,46 @@ const Index = () => {
 
   const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
 
-  // Optimize story counts fetching with reduced API calls and better caching
+  // Optimize story counts fetching - disable for faster loading
   useEffect(() => {
-    const fetchAllUserStoryCounts = async () => {
-      if (!profiles.length) return;
-      
-      try {
-        // Only fetch if we don't already have the data cached
-        if (Object.keys(userStoryCounts).length > 0) return;
-        
-        // Batch fetch with minimal data and reduced limit
-        const { data, error } = await supabase
-          .from('stories')
-          .select('user_id')
-          .gt('expires_at', new Date().toISOString())
-          .limit(20); // Further reduced limit
+    // Skip story counts for faster initial load
+    return;
+  }, []);
 
-        if (error) {
-          console.error('Error fetching story counts:', error);
-          return;
-        }
-
-        const counts: {[key: string]: number} = {};
-        data?.forEach((story) => {
-          counts[story.user_id] = (counts[story.user_id] || 0) + 1;
-        });
-        
-        setUserStoryCounts(counts);
-      } catch (error) {
-        console.error('Error fetching story counts:', error);
-      }
-    };
-
-    // Only run once per component mount to avoid multiple calls
-    const timeoutId = setTimeout(fetchAllUserStoryCounts, 200);
-    return () => clearTimeout(timeoutId);
-  }, [profiles.length]); // Changed dependency to only trigger when profiles count changes
-
-  // Memoize display profiles with improved performance and immediate current user display
+  // Memoize display profiles with immediate display for performance
   const displayProfiles = useMemo(() => {
     const profilesList = [];
     
-    // Always show current user first if logged in - immediate display with auth data
+    // Always show current user first if logged in - immediate display
     if (user) {
       const currentUserDisplayProfile = {
         id: user.id,
         name: currentUserProfile?.name || user.email?.split('@')[0] || 'You',
         image: currentUserProfile?.profile_image_url || user.user_metadata?.avatar_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
         isCurrentUser: true,
-        hasStories: false // Don't wait for stories count for current user
+        hasStories: false // Skip stories for performance
       };
       profilesList.push(currentUserDisplayProfile);
     }
 
-    // Add other profiles with optimized sorting - limit to first 10 for performance
+    // Add other profiles with strict limits for performance
     if (profiles.length > 0) {
       const otherProfiles = profiles
         .filter(p => p.id !== user?.id)
-        .slice(0, 10) // Limit profiles shown for faster loading
+        .slice(0, 6) // Further reduced for faster loading
         .map(p => ({
           id: p.id,
           name: p.name || "User",
           image: p.image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
-          hasStories: (userStoryCounts[p.id] || 0) > 0,
+          hasStories: false, // Skip stories check for performance
           isCurrentUser: false
-        }))
-        .sort((a, b) => {
-          // Simple sort: stories first, then alphabetical - but don't block on stories
-          if (Object.keys(userStoryCounts).length === 0) {
-            return (a.name || '').localeCompare(b.name || '');
-          }
-          if (a.hasStories && !b.hasStories) return -1;
-          if (!a.hasStories && b.hasStories) return 1;
-          return (a.name || '').localeCompare(b.name || '');
-        });
+        }));
 
       profilesList.push(...otherProfiles);
     }
 
     return profilesList;
-  }, [user, currentUserProfile, profiles, userStoryCounts]);
+  }, [user, currentUserProfile, profiles]); // Removed userStoryCounts dependency
 
   // All business, event, and artwork data now comes from the database
   // Static data has been removed to show only real content
@@ -304,7 +264,7 @@ const Index = () => {
             </div>
           ) : (
             <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-              {meetupEvents.slice(0, 4).map((event, index) => (
+              {meetupEvents.slice(0, 3).map((event, index) => (
                 <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
                   <UniformCard
                     id={event.id}
@@ -382,7 +342,7 @@ const Index = () => {
             </div>
           ) : (
             <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-              {realEvents.slice(0, 4).map((event, index) => (
+              {realEvents.slice(0, 3).map((event, index) => (
                 <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
                   <UniformCard
                     id={event.id}
