@@ -145,12 +145,12 @@ const Index = () => {
   const displayProfiles = useMemo(() => {
     const profilesList = [];
     
-    // Always show current user first if logged in - immediate display
-    if (user && currentUserProfile) {
+    // Always show current user first if logged in - immediate display with auth data
+    if (user) {
       const currentUserDisplayProfile = {
         id: user.id,
-        name: currentUserProfile.name || 'You',
-        image: currentUserProfile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
+        name: currentUserProfile?.name || user.email?.split('@')[0] || 'You',
+        image: currentUserProfile?.profile_image_url || user.user_metadata?.avatar_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
         isCurrentUser: true
       };
       profilesList.push(currentUserDisplayProfile);
