@@ -168,7 +168,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
           <Badge className={`text-xs capitalize ${getCategoryColor(community.category)}`}>
             {community.subcategory || community.category}
           </Badge>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 text-xs font-medium text-foreground bg-muted/50 px-2 py-1 rounded-full">
             <Users className="w-3 h-3" />
             <span>{community.member_count}</span>
           </div>
