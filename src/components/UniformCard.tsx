@@ -127,10 +127,10 @@ const UniformCard = ({
               <p className="text-xs text-muted-foreground line-clamp-1">{subtitle}</p>
             )}
             {date && (
-              <p className="text-xs text-accent font-medium bg-black px-2 py-0.5 rounded-full inline-block">{date}</p>
+              <p className="text-xs font-medium px-2 py-0.5 rounded-full inline-block bg-black" style={{ color: '#10B981' }}>{date}</p>
             )}
             {price && (
-              <p className="text-xs text-foreground font-semibold bg-green-50 dark:bg-green-950/30 px-2 py-0.5 rounded-full inline-block mt-1 ml-2">${price}</p>
+              <p className="text-xs text-foreground font-semibold px-2 py-0.5 rounded-full inline-block mt-1 ml-2">${price}</p>
             )}
           </div>
         </div>
