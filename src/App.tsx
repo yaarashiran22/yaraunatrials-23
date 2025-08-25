@@ -16,15 +16,12 @@ import { useNewItem } from "@/contexts/NewItemContext";
 import LoginPage from "./pages/LoginPage";
 import Index from "./pages/Index";
 import ProfilePage from "./pages/ProfilePage";
-import ArtistsPage from "./pages/ArtistsPage";
 import FeedPage from "./pages/FeedPage";
 import EventsPage from "./pages/EventsPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import ItemDetailsPage from "./pages/ItemDetailsPage";
-import ArtistDetailsPage from "./pages/ArtistDetailsPage";
 import RecommendedPage from "./pages/RecommendedPage";
 import MarketplacePage from "./pages/MarketplacePage";
-import ArtistsCreatorsPage from "./pages/ArtistsCreatorsPage";
 import NeighborhoodProfilePage from "./pages/NeighborhoodProfilePage";
 import NeighborsPage from "./pages/NeighborsPage";
 import AllEventsPage from "./pages/AllEventsPage";
@@ -87,17 +84,14 @@ const AppContent = () => {
               <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/profile/edit" element={<EditProfilePage />} />
               <Route path="/items/:itemId/edit" element={<EditItemPage />} />
-              <Route path="/artists" element={<ArtistsPage />} />
               <Route path="/feed" element={<FeedPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/all-events" element={<AllEventsPage />} />
               <Route path="/all-recommendations" element={<AllRecommendationsPage />} />
               <Route path="/event/:id" element={<EventDetailsPage />} />
               <Route path="/item/:id" element={<ItemDetailsPage />} />
-              <Route path="/artist/:id" element={<ArtistDetailsPage />} />
               <Route path="/recommended" element={<RecommendedPage />} />
               <Route path="/marketplace" element={<MarketplacePage />} />
-              <Route path="/artists-creators" element={<ArtistsCreatorsPage />} />
               <Route path="/neighbors" element={<NeighborsPage />} />
               <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
               <Route path="/settings" element={<SettingsPage />} />
@@ -141,17 +135,14 @@ const AppContent = () => {
             <Route path="/profile/:id" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<EditProfilePage />} />
             <Route path="/items/:itemId/edit" element={<EditItemPage />} />
-            <Route path="/artists" element={<ArtistsPage />} />
             <Route path="/feed" element={<FeedPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/all-events" element={<AllEventsPage />} />
             <Route path="/all-recommendations" element={<AllRecommendationsPage />} />
             <Route path="/event/:id" element={<EventDetailsPage />} />
             <Route path="/item/:id" element={<ItemDetailsPage />} />
-            <Route path="/artist/:id" element={<ArtistDetailsPage />} />
             <Route path="/recommended" element={<RecommendedPage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />
-            <Route path="/artists-creators" element={<ArtistsCreatorsPage />} />
             <Route path="/neighbors" element={<NeighborsPage />} />
             <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
             

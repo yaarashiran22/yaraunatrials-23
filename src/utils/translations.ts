@@ -18,12 +18,6 @@ export const translations = {
       logout: "Logout",
       settings: "Settings"
     },
-    feed: {
-      title: "Neighborhood Feed",
-      searchPlaceholder: "Search feed...",
-      neighborhood: "Know Your Neighborhood",
-      neighbors: "neighbors"
-    },
     events: {
       title: "Happening Around",
       searchPlaceholder: "Search events...",
@@ -46,20 +40,21 @@ export const translations = {
       title: "Marketplace",
       searchPlaceholder: "Search items..."
     },
-    artists: {
-      title: "Photo of the Day",
-      searchPlaceholder: "Search artists..."
-    },
     recommended: {
       title: "Recommended",
       searchPlaceholder: "Search businesses..."
+    },
+    feed: {
+      title: "Neighborhood Feed",
+      searchPlaceholder: "Search feed...",
+      neighborhood: "Know Your Neighborhood",
+      neighbors: "neighbors"
     },
     navigation: {
       home: "Home",
       events: "Events",
       marketplace: "Marketplace", 
       recommended: "Recommended",
-      artists: "Photo of the Day",
       feed: "Discover",
       favorites: "Friends",
       communities: "Communities",
@@ -107,12 +102,6 @@ export const translations = {
       logout: "Cerrar Sesión",
       settings: "Configuración"
     },
-    feed: {
-      title: "Feed del Barrio",
-      searchPlaceholder: "Buscar en el feed...",
-      neighborhood: "Conoce tu Barrio",
-      neighbors: "vecinos"
-    },
     events: {
       title: "Sucediendo Alrededor",
       searchPlaceholder: "Buscar eventos...",
@@ -135,20 +124,21 @@ export const translations = {
       title: "Mercado",
       searchPlaceholder: "Buscar artículos..."
     },
-    artists: {
-      title: "Foto del Día",
-      searchPlaceholder: "Buscar artistas..."
-    },
     recommended: {
       title: "Recomendados",
       searchPlaceholder: "Buscar negocios..."
+    },
+    feed: {
+      title: "Feed del Barrio", 
+      searchPlaceholder: "Buscar en el feed...",
+      neighborhood: "Conoce tu Barrio",
+      neighbors: "vecinos"
     },
     navigation: {
       home: "Inicio",
       events: "Eventos",
       marketplace: "Mercado",
       recommended: "Recomendados", 
-      artists: "Foto del Día",
       feed: "Descubrir",
       favorites: "Amigos",
       communities: "Comunidad",
