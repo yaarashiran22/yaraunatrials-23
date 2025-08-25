@@ -80,7 +80,7 @@ const UniformCard = ({
       className="relative card-elevated rounded-xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
       onClick={onClick}
     >
-      <div className="aspect-[3.5/3] overflow-hidden">
+      <div className="aspect-[3.5/2.8] overflow-hidden">
         {video ? (
           <video 
             src={video} 
@@ -105,17 +105,19 @@ const UniformCard = ({
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-300"></div>
       </div>
       
-      <div className="p-2.5 h-14 flex flex-col justify-between surface-elevated">
+      <div className="p-3 min-h-[80px] flex flex-col justify-between surface-elevated">
         <div className="flex items-start gap-2">
-          <div className="flex-1">
-            <h3 className="font-semibold text-foreground truncate text-sm">{title}</h3>
+          <div className="flex-1 space-y-1">
+            <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-tight">{title}</h3>
             {subtitle && (
-              <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
+              <p className="text-xs text-muted-foreground line-clamp-1">{subtitle}</p>
             )}
             {date && (
-              <p className="text-xs text-muted-foreground/80 truncate mt-0.5">{date}</p>
+              <p className="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full inline-block">{date}</p>
             )}
           </div>
+        </div>
+        <div className="flex items-center justify-between mt-2">
           {/* Display uploader profile image for events and recommendations */}
           {(type === 'event' || type === 'business') && uploader && (
             <div 
@@ -130,14 +132,14 @@ const UniformCard = ({
               <img 
                 src={uploader.small_photo}
                 alt={uploader.name}
-                className="w-8 h-8 rounded-full object-cover border-2 border-white/80 depth-1 hover:depth-2 hover:scale-110 transition-all duration-300"
+                className="w-7 h-7 rounded-full object-cover border-2 border-white/80 depth-1 hover:depth-2 hover:scale-110 transition-all duration-300"
                 onError={(e) => {
                   e.currentTarget.src = uploader.image;
                 }}
               />
             </div>
           )}
-          {/* Save button moved to bottom */}
+          {/* Save button */}
           {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
             <Button
               variant="ghost"
@@ -147,7 +149,7 @@ const UniformCard = ({
               }`}
               onClick={handleFavoriteClick}
             >
-              <Bookmark className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
+              <Bookmark className={`h-3.5 w-3.5 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
             </Button>
           )}
         </div>
