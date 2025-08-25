@@ -32,25 +32,25 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
   // Neighborhoods available in the website
   const neighborhoods = [
-    "לב העיר",
-    "נחלת בנימין", 
-    "רוטשילד",
-    "פלורנטין",
-    "שפירא",
-    "יפו העתיקה",
-    "עג'מי",
-    "נווה צדק",
-    "כרם התימנים",
-    "שכונת מונטיפיורי",
-    "רמת אביב",
-    "צפון ישן",
-    "שינקין",
-    "דיזנגוף",
-    "הרצליה",
-    "בת ים",
-    "רמת גן",
-    "גבעתיים",
-    "חולון"
+    "City Center",
+    "Nachalat Binyamin", 
+    "Rothschild",
+    "Florentin",
+    "Shapira",
+    "Old Jaffa",
+    "Ajami",
+    "Neve Tzedek",
+    "Kerem HaTeimanim",
+    "Montefiore",
+    "Ramat Aviv",
+    "Old North",
+    "Sheinkin",
+    "Dizengoff",
+    "Herzliya",
+    "Bat Yam",
+    "Ramat Gan",
+    "Givatayim",
+    "Holon"
   ];
 
   if (!isOpen) return null;
@@ -73,8 +73,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   const handleSubmit = async () => {
     if (!user) {
       toast({
-        title: "שגיאה",
-        description: "עליך להתחבר כדי ליצור אירוע",
+        title: "Error",
+        description: "You must be logged in to create an event",
         variant: "destructive",
       });
       return;
@@ -82,8 +82,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
     if (!eventName.trim()) {
       toast({
-        title: "שגיאה",
-        description: "נא להזין שם לאירוע",
+        title: "Error",
+        description: "Please enter an event name",
         variant: "destructive",
       });
       return;
@@ -91,8 +91,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
     if (!date.trim()) {
       toast({
-        title: "שגיאה",
-        description: "נא להזין תאריך לאירוע",
+        title: "Error",
+        description: "Please enter an event date",
         variant: "destructive",
       });
       return;
@@ -100,8 +100,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
     if (!location.trim()) {
       toast({
-        title: "שגיאה",
-        description: "נא להזין מיקום לאירוע",
+        title: "Error",
+        description: "Please enter an event location",
         variant: "destructive",
       });
       return;
@@ -109,8 +109,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
     if (!selectedFile) {
       toast({
-        title: "שגיאה", 
-        description: "נא להוסיף תמונה או וידאו לאירוע",
+        title: "Error", 
+        description: "Please add an image or video for the event",
         variant: "destructive",
       });
       return;
@@ -165,8 +165,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
       if (error) throw error;
 
       toast({
-        title: eventType === 'meetup' ? "המפגש נוצר בהצלחה!" : "האירוע נוצר בהצלחה!",
-        description: eventType === 'meetup' ? "המפגש שלך נוסף לעמוד המפגשים" : "האירוע שלך נוסף לעמוד האירועים",
+        title: eventType === 'meetup' ? "Meetup created successfully!" : "Event created successfully!",
+        description: eventType === 'meetup' ? "Your meetup has been added to the meetups page" : "Your event has been added to the events page",
       });
 
       // Reset form
@@ -191,8 +191,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
     } catch (error) {
       console.error('Error creating event:', error);
       toast({
-        title: "שגיאה",
-        description: "לא ניתן היה ליצור את האירוע. נסה שוב.",
+        title: "Error",
+        description: "Could not create the event. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -214,7 +214,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
             <X className="h-5 w-5" />
           </Button>
           <h2 className="text-lg font-bold text-foreground">
-            {eventType === 'meetup' ? 'מפגש חדש' : 'אירוע חדש'}
+            {eventType === 'meetup' ? 'New Meetup' : 'New Event'}
           </h2>
           <div className="w-9" />
         </div>
@@ -223,40 +223,40 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
           {/* Event Name Field */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground block text-right">
-              {eventType === 'meetup' ? 'שם המפגש*' : 'שם האירוע*'}
+              {eventType === 'meetup' ? 'Meetup Name*' : 'Event Name*'}
             </label>
             <Input 
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              placeholder={eventType === 'meetup' ? 'הזן שם למפגש' : 'הזן שם לאירוע'}
+              placeholder={eventType === 'meetup' ? 'Enter meetup name' : 'Enter event name'}
               className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
             />
           </div>
 
           {/* Description Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">תיאור</label>
+            <label className="text-sm font-medium text-foreground block text-right">Description</label>
             <Textarea 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder={eventType === 'meetup' ? 'תאר את המפגש שלך' : 'תאר את האירוע שלך'}
+              placeholder={eventType === 'meetup' ? 'Describe your meetup' : 'Describe your event'}
               className="w-full min-h-24 text-right bg-card border-2 border-border rounded-2xl resize-none"
             />
           </div>
 
           {/* Event Type Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">סוג*</label>
+            <label className="text-sm font-medium text-foreground block text-right">Type*</label>
             <Select value={eventType} onValueChange={(value: 'event' | 'meetup') => setEventType(value)}>
               <SelectTrigger className="w-full h-12 text-right bg-background border-2 border-border rounded-full">
-                <SelectValue placeholder="בחר סוג" />
+                <SelectValue placeholder="Choose type" />
               </SelectTrigger>
               <SelectContent className="bg-background border shadow-lg z-50">
                 <SelectItem value="event" className="text-right cursor-pointer hover:bg-muted">
-                  אירוע
+                  Event
                 </SelectItem>
                 <SelectItem value="meetup" className="text-right cursor-pointer hover:bg-muted">
-                  מפגש
+                  Meetup
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -264,7 +264,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
           {/* Date Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">תאריך*</label>
+            <label className="text-sm font-medium text-foreground block text-right">Date*</label>
             <div className="relative">
               <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
@@ -278,7 +278,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
           {/* Time Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">שעה</label>
+            <label className="text-sm font-medium text-foreground block text-right">Time</label>
             <div className="relative">
               <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
@@ -292,12 +292,12 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
           {/* Location Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">מיקום*</label>
+            <label className="text-sm font-medium text-foreground block text-right">Location*</label>
             <div className="relative">
               <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
               <Select value={location} onValueChange={setLocation}>
                 <SelectTrigger className="w-full h-12 pr-12 text-right bg-background border-2 border-border rounded-full">
-                  <SelectValue placeholder="בחר שכונה" />
+                  <SelectValue placeholder="Choose neighborhood" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border shadow-lg z-50 max-h-60">
                   {neighborhoods.map((neighborhood) => (
@@ -316,18 +316,18 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
           {/* Price Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">מחיר (אופציונלי)</label>
+            <label className="text-sm font-medium text-foreground block text-right">Price (Optional)</label>
             <Input 
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              placeholder="חינם / 50 ₪"
+              placeholder="Free / ₪50"
               className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
             />
           </div>
 
           {/* External Link Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">קישור חיצוני (אופציונלי)</label>
+            <label className="text-sm font-medium text-foreground block text-right">External Link (Optional)</label>
             <Input 
               value={externalLink}
               onChange={(e) => setExternalLink(e.target.value)}
@@ -338,7 +338,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
           {/* Media Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">תמונה או וידאו*</label>
+            <label className="text-sm font-medium text-foreground block text-right">Image or Video*</label>
             <div className="space-y-2">
               <input
                 type="file"
@@ -353,7 +353,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
               >
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Camera className="h-5 w-5" />
-                  <span className="text-sm">{selectedFile ? selectedFile.name : "בחר תמונה או וידאו"}</span>
+                  <span className="text-sm">{selectedFile ? selectedFile.name : "Choose image or video"}</span>
                 </div>
               </label>
               {filePreview && (
@@ -368,7 +368,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
                   ) : (
                     <img 
                       src={filePreview} 
-                      alt="תצוגה מקדימה" 
+                      alt="Preview" 
                       className="w-full h-full object-cover"
                     />
                   )}
@@ -385,8 +385,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
               className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full text-lg font-medium"
             >
               {isSubmitting ? 
-                (eventType === 'meetup' ? "יוצר מפגש..." : "יוצר אירוע...") : 
-                (eventType === 'meetup' ? "צור מפגש" : "צור אירוע")
+                (eventType === 'meetup' ? "Creating meetup..." : "Creating event...") : 
+                (eventType === 'meetup' ? "Create Meetup" : "Create Event")
               }
             </Button>
           </div>

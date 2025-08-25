@@ -263,12 +263,11 @@ const Index = () => {
         {/* Join me Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-foreground relative drop-shadow-lg">
-              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] shadow-black/20">
+            <h2 className="text-lg font-bold text-foreground relative">
+              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
                 {t('sections.joinMe')}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/15 to-primary/10 blur-[6px] -z-10 transform translate-x-1 translate-y-1 rounded-md"></div>
-              <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent blur-sm -z-20 transform -translate-x-0.5 -translate-y-0.5 rounded-md"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
             <div className="flex items-center gap-2">
               <Button 
@@ -346,12 +345,11 @@ const Index = () => {
         {/* Events Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-foreground relative drop-shadow-lg">
-              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] shadow-black/20">
+            <h2 className="text-lg font-bold text-foreground relative">
+              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
                 {t('events.title')}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/15 to-primary/10 blur-[6px] -z-10 transform translate-x-1 translate-y-1 rounded-md"></div>
-              <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent blur-sm -z-20 transform -translate-x-0.5 -translate-y-0.5 rounded-md"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
             <div className="flex items-center gap-2">
               <Button 
@@ -429,12 +427,11 @@ const Index = () => {
         {/* Coupons Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-foreground relative drop-shadow-lg">
-              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] shadow-black/20">
+            <h2 className="text-lg font-bold text-foreground relative">
+              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
                 {t('sections.communityCoupons')}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/15 to-primary/10 blur-[6px] -z-10 transform translate-x-1 translate-y-1 rounded-md"></div>
-              <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent blur-sm -z-20 transform -translate-x-0.5 -translate-y-0.5 rounded-md"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
           </div>
           <div className="flex overflow-x-auto gap-3 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
