@@ -258,7 +258,7 @@ const Index = () => {
         </section>
 
 
-        {/* Join me Section - Vertical Carousel */}
+        {/* Join me Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-foreground relative">
@@ -293,59 +293,54 @@ const Index = () => {
               <p>No meetups available at the moment</p>
             </div>
           ) : (
-            <div className="max-w-sm mx-auto">
-              <div className="space-y-4">
-                {meetupEvents.slice(0, 6).map((event, index) => (
-                  <div
-                    key={`meetup-${event.id}`}
-                    className="transition-all duration-500 ease-out hover-scale"
-                    style={{
-                      transform: `scale(${index === 0 ? 1.05 : index <= 2 ? 1.02 : 1})`,
-                      opacity: index === 0 ? 1 : index <= 2 ? 0.85 : 0.7
+            <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+              {meetupEvents.slice(0, 6).map((event, index) => (
+                <div
+                  key={`meetup-${event.id}`}
+                  className="flex-shrink-0 w-72 animate-fade-in hover-scale"
+                  style={{ animationDelay: `${index * 0.1}s` } as React.CSSProperties}
+                >
+                  <UniformCard
+                    id={event.id}
+                    image={event.image_url || communityEvent}
+                    video={(event as any).video_url}
+                    title={event.title}
+                    subtitle={event.location || 'Tel Aviv'}
+                    date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
+                    type="event"
+                    uploader={event.uploader}
+                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
+                    onClick={() => handleEventClick({
+                      id: event.id,
+                      title: event.title,
+                      description: event.description || event.title,
+                      date: event.date || 'Date to be determined',
+                      time: event.time || 'Time to be determined', 
+                      location: event.location || 'Tel Aviv',
+                      price: event.price,
+                      image: event.image_url || communityEvent,
+                      video: (event as any).video_url,
+                      organizer: {
+                        name: event.uploader?.name || "Event Organizer",
+                        image: event.uploader?.image || profile1
+                      }
+                    })}
+                    showFavoriteButton={true}
+                    favoriteData={{
+                      id: event.id,
+                      title: event.title,
+                      description: event.description || event.title,
+                      image: event.image_url,
+                      type: 'meetup'
                     }}
-                  >
-                    <UniformCard
-                      id={event.id}
-                      image={event.image_url || communityEvent}
-                      video={(event as any).video_url}
-                      title={event.title}
-                      subtitle={event.location || 'Tel Aviv'}
-                      date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
-                      type="event"
-                      uploader={event.uploader}
-                      onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                      onClick={() => handleEventClick({
-                        id: event.id,
-                        title: event.title,
-                        description: event.description || event.title,
-                        date: event.date || 'Date to be determined',
-                        time: event.time || 'Time to be determined', 
-                        location: event.location || 'Tel Aviv',
-                        price: event.price,
-                        image: event.image_url || communityEvent,
-                        video: (event as any).video_url,
-                        organizer: {
-                          name: event.uploader?.name || "Event Organizer",
-                          image: event.uploader?.image || profile1
-                        }
-                      })}
-                      showFavoriteButton={true}
-                      favoriteData={{
-                        id: event.id,
-                        title: event.title,
-                        description: event.description || event.title,
-                        image: event.image_url,
-                        type: 'meetup'
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
+                  />
+                </div>
+              ))}
             </div>
           )}
         </section>
 
-        {/* Events Section - Vertical Carousel */}
+        {/* Events Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-foreground relative">
@@ -380,59 +375,54 @@ const Index = () => {
               <p>No events available at the moment</p>
             </div>
           ) : (
-            <div className="max-w-sm mx-auto">
-              <div className="space-y-4">
-                {realEvents.slice(0, 6).map((event, index) => (
-                  <div
-                    key={`event-${event.id}`}
-                    className="transition-all duration-500 ease-out hover-scale"
-                    style={{
-                      transform: `scale(${index === 0 ? 1.05 : index <= 2 ? 1.02 : 1})`,
-                      opacity: index === 0 ? 1 : index <= 2 ? 0.85 : 0.7
+            <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+              {realEvents.slice(0, 6).map((event, index) => (
+                <div
+                  key={`event-${event.id}`}
+                  className="flex-shrink-0 w-72 animate-fade-in hover-scale"
+                  style={{ animationDelay: `${index * 0.1}s` } as React.CSSProperties}
+                >
+                  <UniformCard
+                    id={event.id}
+                    image={event.image_url || communityEvent}
+                    video={(event as any).video_url}
+                    title={event.title}
+                    subtitle={event.location || 'Tel Aviv'}
+                    date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
+                    type="event"
+                    uploader={event.uploader}
+                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
+                    onClick={() => handleEventClick({
+                      id: event.id,
+                      title: event.title,
+                      description: event.description || event.title,
+                      date: event.date || 'Date to be determined',
+                      time: event.time || 'Time to be determined', 
+                      location: event.location || 'Tel Aviv',
+                      price: event.price,
+                      image: event.image_url || communityEvent,
+                      video: (event as any).video_url,
+                      organizer: {
+                        name: event.uploader?.name || "Event Organizer",
+                        image: event.uploader?.image || profile1
+                      }
+                    })}
+                    showFavoriteButton={true}
+                    favoriteData={{
+                      id: event.id,
+                      title: event.title,
+                      description: event.description || event.title,
+                      image: event.image_url,
+                      type: 'event'
                     }}
-                  >
-                    <UniformCard
-                      id={event.id}
-                      image={event.image_url || communityEvent}
-                      video={(event as any).video_url}
-                      title={event.title}
-                      subtitle={event.location || 'Tel Aviv'}
-                      date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
-                      type="event"
-                      uploader={event.uploader}
-                      onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                      onClick={() => handleEventClick({
-                        id: event.id,
-                        title: event.title,
-                        description: event.description || event.title,
-                        date: event.date || 'Date to be determined',
-                        time: event.time || 'Time to be determined', 
-                        location: event.location || 'Tel Aviv',
-                        price: event.price,
-                        image: event.image_url || communityEvent,
-                        video: (event as any).video_url,
-                        organizer: {
-                          name: event.uploader?.name || "Event Organizer",
-                          image: event.uploader?.image || profile1
-                        }
-                      })}
-                      showFavoriteButton={true}
-                      favoriteData={{
-                        id: event.id,
-                        title: event.title,
-                        description: event.description || event.title,
-                        image: event.image_url,
-                        type: 'event'
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
+                  />
+                </div>
+              ))}
             </div>
           )}
         </section>
 
-        {/* Coupons Section - Vertical Carousel Style */}
+        {/* Coupons Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-foreground relative">
@@ -442,8 +432,8 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-foreground/10 to-transparent blur-sm -z-10 transform translate-x-0.5 translate-y-0.5"></div>
             </h2>
           </div>
-          <div className="max-w-sm mx-auto">
-            <div className="text-center py-8 text-muted-foreground">
+          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+            <div className="text-center py-8 text-muted-foreground w-full">
               <p>No coupons available at the moment</p>
             </div>
           </div>
