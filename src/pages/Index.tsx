@@ -232,7 +232,6 @@ const Index = () => {
           ) : (
             <div className="relative">
               <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-                {user && <AddStoryButton className="flex-shrink-0" />}
                 {displayProfiles.length > 0 ? (
                   displayProfiles.map((profile) => (
                     <ProfileCard
@@ -241,6 +240,7 @@ const Index = () => {
                       image={profile.image}
                       name={profile.name}
                       className="flex-shrink-0 min-w-[80px]"
+                      isCurrentUser={user?.id === profile.id}
                     />
                   ))
                 ) : (
