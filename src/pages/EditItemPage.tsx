@@ -54,8 +54,8 @@ const EditItemPage = () => {
         // Verify user can edit this item
         if (!canUserModifyItem(user.id, data.user_id)) {
           toast({
-            title: "שגיאת הרשאה",
-            description: "אין לך הרשאה לערוך פריט זה",
+            title: "Authorization Error",
+            description: "You don't have permission to edit this item",
             variant: "destructive",
           });
           navigate(-1);
@@ -74,8 +74,8 @@ const EditItemPage = () => {
       } catch (error) {
         console.error('Error loading item:', error);
         toast({
-          title: "שגיאה",
-          description: "לא ניתן לטעון את הפריט",
+          title: "Error",
+          description: "Unable to load item",
           variant: "destructive",
         });
         navigate(-1);
@@ -94,7 +94,7 @@ const EditItemPage = () => {
       const validation = validateImageFile(file);
       if (!validation.isValid) {
         toast({
-          title: "שגיאה בקובץ",
+          title: "File Error",
           description: validation.error,
           variant: "destructive",
         });
@@ -121,7 +121,7 @@ const EditItemPage = () => {
     const titleValidation = validateAndSanitizeText(title, CONTENT_LIMITS.title, true);
     if (!titleValidation.isValid) {
       toast({
-        title: "שגיאה בכותרת",
+        title: "Title Error",
         description: titleValidation.error,
         variant: "destructive",
       });
@@ -131,7 +131,7 @@ const EditItemPage = () => {
     const descValidation = validateAndSanitizeText(description, CONTENT_LIMITS.description);
     if (!descValidation.isValid) {
       toast({
-        title: "שגיאה בתיאור",
+        title: "Description Error",
         description: descValidation.error,
         variant: "destructive",
       });
@@ -141,7 +141,7 @@ const EditItemPage = () => {
     const priceValidation = validatePrice(price);
     if (!priceValidation.isValid) {
       toast({
-        title: "שגיאה במחיר",
+        title: "Price Error",
         description: priceValidation.error,
         variant: "destructive",
       });
@@ -152,8 +152,8 @@ const EditItemPage = () => {
     const contentToCheck = `${titleValidation.value} ${descValidation.value}`;
     if (containsInappropriateContent(contentToCheck)) {
       toast({
-        title: "תוכן לא מתאים",
-        description: "התוכן שהוזן מכיל מילים לא מתאימות",
+        title: "Inappropriate Content",
+        description: "The content contains inappropriate words",
         variant: "destructive",
       });
       return;
@@ -177,8 +177,8 @@ const EditItemPage = () => {
       
       if (result) {
         toast({
-          title: "פריט עודכן בהצלחה!",
-          description: "השינויים נשמרו",
+          title: "Item updated successfully!",
+          description: "Changes have been saved",
         });
         navigate(-1); // Go back to previous page
       }
@@ -186,8 +186,8 @@ const EditItemPage = () => {
     } catch (error) {
       console.error('Unexpected error:', error);
       toast({
-        title: "שגיאה",
-        description: "אירעה שגיאה בלתי צפויה",
+        title: "Error",
+        description: "An unexpected error occurred",
         variant: "destructive",
       });
     } finally {
@@ -197,111 +197,111 @@ const EditItemPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background pb-20" dir="rtl">
+      <div className="min-h-screen bg-background pb-20">
         <div className="flex items-center justify-center h-64">
-          <div className="text-center">טוען פריט...</div>
+          <div className="text-center">Loading item...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="rtl">
+    <div className="min-h-screen bg-background pb-20">
       {/* Custom Header */}
       <div className="flex items-center justify-between p-4 border-b bg-background">
-        <Button variant="ghost" size="sm" onClick={() => setShowNotifications(true)}>
-          <Bell className="h-5 w-5" />
-        </Button>
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-bold">עריכת פריט</span>
-        </div>
         <div className="flex items-center gap-3">
           <div className="text-3xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
             <X className="h-5 w-5" />
           </Button>
         </div>
+        <div className="flex items-center gap-2">
+          <span className="text-lg font-bold">Edit Item</span>
+        </div>
+        <Button variant="ghost" size="sm" onClick={() => setShowNotifications(true)}>
+          <Bell className="h-5 w-5" />
+        </Button>
       </div>
 
       <main className="px-4 py-6">
         <div className="max-w-md mx-auto space-y-4">
           {/* Title Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">כותרת</label>
+            <label className="text-sm text-muted-foreground block">Title</label>
             <Input 
-              placeholder=""
+              placeholder="Enter item title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full h-12 text-right bg-background border border-border rounded-full"
+              className="w-full h-12 bg-background border border-border rounded-full"
             />
           </div>
 
           {/* Price Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">מחיר</label>
+            <label className="text-sm text-muted-foreground block">Price</label>
             <Input 
-              placeholder=""
+              placeholder="Enter price"
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className="w-full h-12 text-right bg-background border border-border rounded-full"
+              className="w-full h-12 bg-background border border-border rounded-full"
             />
           </div>
 
           {/* Category Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">קטגוריה</label>
-            <Select dir="rtl" value={category} onValueChange={setCategory}>
-              <SelectTrigger className="w-full h-12 text-right bg-background border border-border rounded-full">
-                <SelectValue placeholder="בחר קטגוריה" />
+            <label className="text-sm text-muted-foreground block">Category</label>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger className="w-full h-12 bg-background border border-border rounded-full">
+                <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent className="bg-background border border-border z-50">
-                <SelectItem value="art">אמנות</SelectItem>
-                <SelectItem value="event">אירוע</SelectItem>
-                <SelectItem value="מוזמנים להצטרף">מוזמנים להצטרף</SelectItem>
+                <SelectItem value="art">Art</SelectItem>
+                <SelectItem value="event">Event</SelectItem>
+                <SelectItem value="מוזמנים להצטרף">Join Us</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Location Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">מיקום</label>
-            <Select dir="rtl" value={location} onValueChange={setLocation}>
-              <SelectTrigger className="w-full h-12 text-right bg-background border border-border rounded-full">
-                <SelectValue placeholder="בחר מיקום" />
+            <label className="text-sm text-muted-foreground block">Location</label>
+            <Select value={location} onValueChange={setLocation}>
+              <SelectTrigger className="w-full h-12 bg-background border border-border rounded-full">
+                <SelectValue placeholder="Select location" />
               </SelectTrigger>
               <SelectContent className="bg-background border border-border z-50">
-                <SelectItem value="tel-aviv">תל אביב</SelectItem>
-                <SelectItem value="florentin">פלורנטין</SelectItem>
-                <SelectItem value="lev-hair">לב העיר</SelectItem>
-                <SelectItem value="jerusalem">ירושלים</SelectItem>
-                <SelectItem value="ramat-gan">רמת גן</SelectItem>
-                <SelectItem value="givatayim">גבעתיים</SelectItem>
+                <SelectItem value="tel-aviv">Tel Aviv</SelectItem>
+                <SelectItem value="florentin">Florentin</SelectItem>
+                <SelectItem value="lev-hair">City Center</SelectItem>
+                <SelectItem value="jerusalem">Jerusalem</SelectItem>
+                <SelectItem value="ramat-gan">Ramat Gan</SelectItem>
+                <SelectItem value="givatayim">Givatayim</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Description Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">תיאור</label>
+            <label className="text-sm text-muted-foreground block">Description</label>
             <Textarea 
-              placeholder=""
+              placeholder="Enter item description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full min-h-[80px] text-right bg-background border border-border rounded-3xl resize-none p-4"
+              className="w-full min-h-[80px] bg-background border border-border rounded-3xl resize-none p-4"
             />
           </div>
 
           {/* Contact Mobile Number Field */}
           <div className="space-y-2">
-            <label className="text-sm text-muted-foreground block text-right">מספר נייד ליצירת קשר</label>
+            <label className="text-sm text-muted-foreground block">Contact Mobile Number</label>
             <Input 
-              placeholder=""
+              placeholder="Enter mobile number"
               type="tel"
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
-              className="w-full h-12 text-right bg-background border border-border rounded-full"
+              className="w-full h-12 bg-background border border-border rounded-full"
             />
           </div>
 
@@ -317,8 +317,8 @@ const EditItemPage = () => {
               variant="outline"
               className="w-full h-12 bg-background border border-border rounded-full text-foreground hover:bg-muted/20"
             >
-              <Upload className="h-4 w-4 ml-2" />
-              {selectedImage ? 'שנה תמונה' : 'הוסף תמונה'}
+              <Upload className="h-4 w-4 mr-2" />
+              {selectedImage ? 'Change Image' : 'Add Image'}
             </Button>
           </div>
 
@@ -341,7 +341,7 @@ const EditItemPage = () => {
               onClick={handleSubmit}
               disabled={isSubmitting || !title.trim()}
             >
-              {isSubmitting ? 'שומר...' : 'שמור שינויים'}
+              {isSubmitting ? 'Saving...' : 'Save Changes'}
             </Button>
           </div>
         </div>
