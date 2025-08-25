@@ -41,17 +41,17 @@ const EventPopup = ({
 
   const defaultEvent = {
     id: "1",
-    title: "מסיבת בהרדר",
+    title: "Event Party",
     image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=600&fit=crop",
-    price: "100 ₪",
-    description: "מסיבה לציון אפרטהוף במסגרת שב הרדי שכולנו רוצים לו יהיה על הטט",
+    price: "₪100",
+    description: "Join us for an amazing party celebration with great music and good vibes",
     organizer: {
       id: undefined,
-      name: "יערה שיין",
+      name: "Sarah Cohen",
       image: "https://images.unsplash.com/photo-1494790108755-2616b66dfd8d?w=100&h=100&fit=crop",
-      location: "תל אביב"
+      location: "Tel Aviv"
     },
-    date: "15 בדצמבר"
+    date: "December 15"
   };
 
   // Use real data if available, otherwise fallback to passed event or default
@@ -62,18 +62,18 @@ const EventPopup = ({
     price: eventData.price ? `₪${eventData.price}` : defaultEvent.price,
     description: eventData.description || defaultEvent.description,
     organizer: {
-      id: eventData.uploader.id,
-      name: eventData.uploader.name || "משתמש",
-      image: eventData.uploader.profile_image_url || 
-             eventData.uploader.small_profile_photo || 
+      id: eventData.uploader?.id,
+      name: eventData.uploader?.name || "User",
+      image: eventData.uploader?.profile_image_url || 
+             eventData.uploader?.small_profile_photo || 
              profile1,
-      location: eventData.uploader.location || "לא צוין"
+      location: eventData.uploader?.location || "Not specified"
     },
-    date: new Date(eventData.created_at).toLocaleDateString('he-IL', { 
+    date: eventData.created_at ? new Date(eventData.created_at).toLocaleDateString('en-US', { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric' 
-    })
+    }) : null
   } : (event || defaultEvent);
   
   // RSVP functionality
@@ -90,17 +90,33 @@ const EventPopup = ({
   };
 
   const handleContact = () => {
-    toast({
-      title: "פותח צ'אט",
-      description: "מפנה לשיחה עם מארגן האירוע",
-    });
+    const mobileNumber = eventData?.mobile_number;
+    if (mobileNumber) {
+      // Create WhatsApp link
+      const whatsappUrl = `https://wa.me/${mobileNumber.replace(/[^0-9]/g, '')}?text=Hi, I'm interested in your event: ${encodeURIComponent(displayEvent.title)}`;
+      window.open(whatsappUrl, '_blank');
+    } else {
+      toast({
+        title: "Contact Unavailable",
+        description: "No contact information available for this event",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleShare = () => {
-    toast({
-      title: "שותף בהצלחה!",
-      description: "האירוע שותף ברשתות החברתיות"
-    });
+    if (navigator.share) {
+      navigator.share({
+        title: displayEvent.title,
+        text: displayEvent.description,
+        url: window.location.href
+      }).catch(console.error);
+    } else {
+      toast({
+        title: "Shared Successfully!",
+        description: "Event has been shared"
+      });
+    }
   };
 
   const handleViewDetails = () => {
@@ -201,7 +217,7 @@ const EventPopup = ({
               )}
               <p className="text-lg font-semibold text-foreground">{displayEvent.title}</p>
               {displayEvent.date && (
-                <p className="text-sm text-primary">תאריך: {displayEvent.date}</p>
+                <p className="text-sm text-primary">Date: {displayEvent.date}</p>
               )}
             </div>
             
@@ -239,7 +255,7 @@ const EventPopup = ({
           <div className="mt-6 p-4 bg-muted/20 rounded-xl">
             <div className="text-center mb-4">
               <p className="text-sm text-muted-foreground mb-2">
-                {rsvpCount} people are attending this event
+                {rsvpCount} people attending
               </p>
               <div className="flex gap-2 justify-center">
                 <Button
@@ -267,21 +283,22 @@ const EventPopup = ({
           {/* Action Buttons */}
           <div className="mt-6 flex flex-col gap-3">
             <Button 
+              onClick={handleContact}
               variant={eventData?.mobile_number ? "default" : "outline"}
               disabled={!eventData?.mobile_number}
               className={`flex-1 h-12 rounded-2xl text-lg font-medium ${
-                eventData?.mobile_number ? 'cursor-default' : 'cursor-default opacity-60'
+                !eventData?.mobile_number ? 'opacity-60' : ''
               }`}
             >
               <MessageCircle className="h-5 w-5 ml-2" />
-              {eventData?.mobile_number || 'אין נייד'}
+              {eventData?.mobile_number ? 'Contact' : 'No contact info'}
             </Button>
             <Button 
               onClick={handleViewDetails}
               className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl text-lg font-medium"
             >
               <Eye className="h-5 w-5 ml-2" />
-              פרטים מלאים
+              View Details
             </Button>
           </div>
         </div>
