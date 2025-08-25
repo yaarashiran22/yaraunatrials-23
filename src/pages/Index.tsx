@@ -28,6 +28,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import { useEvents } from "@/hooks/useEvents";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import ScrollAnimatedCard from "@/components/ScrollAnimatedCard";
 
 import profile1 from "@/assets/profile-1.jpg";
 import profile2 from "@/assets/profile-2.jpg";
@@ -297,11 +299,7 @@ const Index = () => {
           ) : (
             <div className="flex overflow-x-auto gap-3 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {meetupEvents.slice(0, 6).map((event, index) => (
-                <div
-                  key={`meetup-${event.id}`}
-                  className="flex-shrink-0 w-60 animate-fade-in hover-scale"
-                  style={{ animationDelay: `${index * 0.1}s` } as React.CSSProperties}
-                >
+                <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
                   <UniformCard
                     id={event.id}
                     image={event.image_url || communityEvent}
@@ -336,7 +334,7 @@ const Index = () => {
                       type: 'meetup'
                     }}
                   />
-                </div>
+                </ScrollAnimatedCard>
               ))}
             </div>
           )}
@@ -379,11 +377,7 @@ const Index = () => {
           ) : (
             <div className="flex overflow-x-auto gap-3 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {realEvents.slice(0, 6).map((event, index) => (
-                <div
-                  key={`event-${event.id}`}
-                  className="flex-shrink-0 w-60 animate-fade-in hover-scale"
-                  style={{ animationDelay: `${index * 0.1}s` } as React.CSSProperties}
-                >
+                <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
                   <UniformCard
                     id={event.id}
                     image={event.image_url || communityEvent}
@@ -418,7 +412,7 @@ const Index = () => {
                       type: 'event'
                     }}
                   />
-                </div>
+                </ScrollAnimatedCard>
               ))}
             </div>
           )}

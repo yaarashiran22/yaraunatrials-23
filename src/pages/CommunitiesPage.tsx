@@ -50,10 +50,10 @@ const CommunitiesPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background pb-20">
         <Header />
         <DesktopHeader />
-        <div className="p-4 space-y-6 pb-20">
+        <div className="p-4 space-y-6 pb-24">
           <LoadingSkeleton type="cards" />
         </div>
         <BottomNavigation />
@@ -62,7 +62,7 @@ const CommunitiesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <Header />
       <DesktopHeader />
       
@@ -106,7 +106,7 @@ const CommunitiesPage = () => {
           </div>
         </div>
 
-        <div className="p-4">
+        <div className="p-4 pb-24">
           {!showDiscover ? (
             <div className="space-y-4">
               {!user ? (
