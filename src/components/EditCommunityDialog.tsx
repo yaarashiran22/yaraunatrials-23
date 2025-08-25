@@ -117,18 +117,22 @@ const EditCommunityDialog = ({ community, onUpdate, onDelete }: EditCommunityDia
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
     const filePath = `community-images/${fileName}`;
 
+    console.log('Uploading image to:', filePath);
+
     const { error: uploadError } = await supabase.storage
       .from('photos')
       .upload(filePath, file);
 
     if (uploadError) {
-      throw new Error('Failed to upload image');
+      console.error('Upload error:', uploadError);
+      throw new Error(`Failed to upload image: ${uploadError.message}`);
     }
 
     const { data: { publicUrl } } = supabase.storage
       .from('photos')
       .getPublicUrl(filePath);
 
+    console.log('Upload successful, public URL:', publicUrl);
     return publicUrl;
   };
 
