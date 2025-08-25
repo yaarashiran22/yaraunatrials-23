@@ -111,11 +111,11 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
 
   return (
     <div 
-      className="bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer overflow-hidden"
-      onClick={onClick}
+      className="bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer overflow-hidden w-full aspect-square flex flex-col"
+      onClick={() => onClick && onClick()}
     >
       {/* Cover Image */}
-      <div className="h-36 bg-gradient-to-r from-primary/10 to-primary/20 relative">
+      <div className="h-32 bg-gradient-to-r from-primary/10 to-primary/20 relative flex-shrink-0">
         {community.cover_image_url ? (
           <img 
             src={community.cover_image_url} 
@@ -124,13 +124,13 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <div className="text-6xl opacity-50">🏘️</div>
+            <div className="text-5xl opacity-50">🏘️</div>
           </div>
         )}
         
         {/* Logo */}
-        <div className="absolute -bottom-10 left-4 z-50">
-          <div className="w-20 h-20 bg-white rounded-lg border-2 border-white shadow-lg flex items-center justify-center overflow-hidden relative z-50">
+        <div className="absolute -bottom-8 left-4 z-50">
+          <div className="w-16 h-16 bg-white rounded-lg border-2 border-white shadow-lg flex items-center justify-center overflow-hidden relative z-50">
             {community.logo_url ? (
               <img 
                 src={community.logo_url} 
@@ -138,7 +138,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
                 className="w-full h-full object-cover relative z-50"
               />
             ) : (
-              <div className="text-3xl">🏘️</div>
+              <div className="text-2xl">🏘️</div>
             )}
           </div>
         </div>
@@ -153,12 +153,12 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
       </div>
 
       {/* Content */}
-      <div className="p-5 pt-12">
+      <div className="p-4 pt-10 flex-1 flex flex-col justify-between min-h-0">
         <div className="flex items-start justify-between mb-2">
-          <div className="flex-1">
-            <h3 className="font-semibold text-foreground mb-1 line-clamp-1">{community.name}</h3>
+          <div className="flex-1 min-h-0">
+            <h3 className="font-semibold text-foreground mb-1 line-clamp-1 text-sm">{community.name}</h3>
             {community.tagline && (
-              <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{community.tagline}</p>
+              <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{community.tagline}</p>
             )}
           </div>
         </div>
@@ -168,8 +168,8 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
           <Badge className={`text-xs capitalize ${getCategoryColor(community.category)}`}>
             {community.subcategory || community.category}
           </Badge>
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Users className="w-4 h-4" />
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Users className="w-3 h-3" />
             <span>{community.member_count}</span>
           </div>
         </div>

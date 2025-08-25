@@ -30,6 +30,7 @@ import NeighborsPage from "./pages/NeighborsPage";
 import AllEventsPage from "./pages/AllEventsPage";
 import AllRecommendationsPage from "./pages/AllRecommendationsPage";
 
+import CommunityPage from "./pages/CommunityPage";
 import CommunitiesPage from "./pages/CommunitiesPage";
 import CreateCommunityPage from "./pages/CreateCommunityPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -81,6 +82,7 @@ const AppContent = () => {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/" element={<Index />} />
               <Route path="/communities" element={<CommunitiesPage />} />
+              <Route path="/communities/:id" element={<CommunityPage />} />
               <Route path="/communities/create" element={<CreateCommunityPage />} />
               <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/profile/edit" element={<EditProfilePage />} />
@@ -134,6 +136,7 @@ const AppContent = () => {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/" element={<Index />} />
             <Route path="/communities" element={<CommunitiesPage />} />
+            <Route path="/communities/:id" element={<CommunityPage />} />
             <Route path="/communities/create" element={<CreateCommunityPage />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<EditProfilePage />} />

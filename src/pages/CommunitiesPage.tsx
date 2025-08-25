@@ -149,10 +149,7 @@ const CommunitiesPage = () => {
                           <ScrollAnimatedCard key={community.id} index={index} className="max-w-lg mx-auto">
                             <CommunityCard
                               community={community}
-                              onClick={() => {
-                                // TODO: Navigate to community detail page
-                                console.log('Navigate to community:', community.id);
-                              }}
+                              onClick={() => navigate(`/communities/${community.id}`)}
                               onUpdate={() => window.location.reload()}
                               onDelete={() => window.location.reload()}
                             />
@@ -171,7 +168,7 @@ const CommunitiesPage = () => {
                       <div className="space-y-3 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
                         {pendingRequests.map((community, index) => (
                           <ScrollAnimatedCard key={community.id} index={index} className="max-w-md mx-auto">
-                            <CommunityCard community={community} />
+                            <CommunityCard community={community} onClick={() => navigate(`/communities/${community.id}`)} />
                           </ScrollAnimatedCard>
                         ))}
                       </div>
@@ -218,10 +215,7 @@ const CommunitiesPage = () => {
                   <ScrollAnimatedCard key={community.id} index={index} className="max-w-lg mx-auto">
                     <CommunityCard
                       community={community}
-                      onClick={() => {
-                        // TODO: Navigate to community detail page
-                        console.log('Navigate to community:', community.id);
-                      }}
+                      onClick={() => navigate(`/communities/${community.id}`)}
                       onUpdate={() => window.location.reload()}
                       onDelete={() => window.location.reload()}
                     />
