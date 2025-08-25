@@ -18,6 +18,7 @@ import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import FloatingMapToggle from "@/components/FloatingMapToggle";
+import FloatingMessagesToggle from "@/components/FloatingMessagesToggle";
 import FullscreenMap from "@/components/FullscreenMap";
 import { Button } from "@/components/ui/button";
 import { Bell, Users, Plus } from "lucide-react";
@@ -477,6 +478,9 @@ const Index = () => {
           }}
         />
       )}
+
+      {/* Floating Messages Toggle */}
+      <FloatingMessagesToggle />
 
       {/* Floating Map Toggle */}
       <FloatingMapToggle 
