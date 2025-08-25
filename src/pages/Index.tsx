@@ -150,7 +150,8 @@ const Index = () => {
       const currentUserDisplayProfile = {
         id: user.id,
         name: currentUserProfile.name || 'You',
-        image: currentUserProfile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"
+        image: currentUserProfile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
+        isCurrentUser: true
       };
       profilesList.push(currentUserDisplayProfile);
     }
@@ -163,7 +164,8 @@ const Index = () => {
           id: p.id,
           name: p.name || "User",
           image: p.image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
-          hasStories: (userStoryCounts[p.id] || 0) > 0
+          hasStories: (userStoryCounts[p.id] || 0) > 0,
+          isCurrentUser: false
         }))
         .sort((a, b) => {
           // Simple sort: stories first, then alphabetical

@@ -85,7 +85,7 @@ const CommunitiesPage = () => {
                       My Communities
                     </>
                   ) : (
-                    <>Join New Communities</>
+                    <>Join Communities</>
                   )}
                 </Button>
               )}
@@ -128,7 +128,7 @@ const CommunitiesPage = () => {
                           onClick={() => setShowDiscover(true)}
                           className="flex items-center gap-2 rounded-full"
                         >
-                          Join New Communities
+                          Join Communities
                         </Button>
                       </div>
                     </div>
@@ -143,7 +143,7 @@ const CommunitiesPage = () => {
                           Join communities to connect with like-minded people in your area
                         </p>
                         <Button onClick={() => setShowDiscover(true)} className="rounded-full">
-                          Join New Communities
+                          Join Communities
                         </Button>
                       </div>
                     ) : (
