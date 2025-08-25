@@ -19,9 +19,10 @@ interface ProfileCardProps {
   className?: string;
   id?: string;
   isCurrentUser?: boolean;
+  style?: React.CSSProperties;
 }
 
-const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = false }: ProfileCardProps) => {
+const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = false, style }: ProfileCardProps) => {
   const navigate = useNavigate();
   const { stories, loading, refetch, createStory, createAnnouncement } = useStories(id);
   const [showStories, setShowStories] = useState(false);
@@ -237,6 +238,7 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
       <div 
         className={`flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity ${className}`}
         onClick={handleClick}
+        style={style}
       >
         <div className="relative">
           <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} p-0.5`}>
@@ -251,8 +253,8 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
             </div>
             {/* Story indicator for other users */}
             {!isCurrentUser && stories.length > 0 && (
-              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-full border-3 border-background flex items-center justify-center shadow-lg">
-                <div className="w-3 h-3 bg-yellow-200 rounded-full animate-pulse"></div>
+              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-7 h-7 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-full border-4 border-background flex items-center justify-center shadow-xl animate-pulse">
+                <div className="w-3.5 h-3.5 bg-yellow-100 rounded-full shadow-inner"></div>
               </div>
             )}
             {/* Add story button for current user */}
@@ -261,7 +263,7 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
                 className="absolute -bottom-1 -right-1 w-8 h-8 bg-primary rounded-full border-2 border-background flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
                 onClick={handleAddStoryClick}
               >
-                <Plus className="w-4 h-4 text-primary-foreground" />
+                <Plus className="w-3.5 h-3.5 text-primary-foreground" />
               </div>
             )}
           </div>

@@ -238,13 +238,14 @@ const Index = () => {
             <div className="relative">
               <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
                 {displayProfiles.length > 0 ? (
-                  displayProfiles.map((profile) => (
+                  displayProfiles.map((profile, index) => (
                     <ProfileCard
                       key={profile.id}
                       id={profile.id}
                       image={profile.image}
                       name={profile.name}
-                      className="flex-shrink-0 min-w-[80px]"
+                      className={`flex-shrink-0 min-w-[80px] animate-fade-in ${index === 0 && user?.id === profile.id ? '' : ''}`}
+                      style={{ animationDelay: `${index * 0.05}s` } as React.CSSProperties}
                       isCurrentUser={user?.id === profile.id}
                     />
                   ))
