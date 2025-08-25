@@ -23,6 +23,7 @@ import AddItemPopup from "@/components/AddItemPopup";
 import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 import { FeedImageViewer } from "@/components/FeedImageViewer";
 import { useUserCommunities } from "@/hooks/useUserCommunities";
+import EditEventPopup from "@/components/EditEventPopup";
 
 import profile1 from "@/assets/profile-1.jpg";
 import dressItem from "@/assets/dress-item.jpg";
@@ -71,6 +72,8 @@ const ProfilePage = () => {
   const [showProfilePicture, setShowProfilePicture] = useState(false);
   const [showFeedImages, setShowFeedImages] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
+  const [showEditEvent, setShowEditEvent] = useState(false);
+  const [selectedEventForEdit, setSelectedEventForEdit] = useState<any>(null);
 
   const handleDeleteEvent = async (eventId: string) => {
     // Require authentication
@@ -111,7 +114,8 @@ const ProfilePage = () => {
       return;
     }
 
-    navigate(`/events/${eventId}/edit`);
+    setSelectedEventForEdit(event);
+    setShowEditEvent(true);
   };
 
   const handleDeleteItem = async (itemId: string) => {
@@ -679,6 +683,19 @@ const ProfilePage = () => {
         }}
         images={imagePosts}
         initialImageId={selectedImageId}
+      />
+      <EditEventPopup 
+        isOpen={showEditEvent}
+        onClose={() => {
+          setShowEditEvent(false);
+          setSelectedEventForEdit(null);
+        }}
+        eventData={selectedEventForEdit}
+        onSuccess={() => {
+          refetchEvents();
+          setShowEditEvent(false);
+          setSelectedEventForEdit(null);
+        }}
       />
     </div>
   );
