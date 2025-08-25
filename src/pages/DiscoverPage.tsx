@@ -267,11 +267,7 @@ const DiscoverPage = () => {
       <main className="container mx-auto px-4 py-3 space-y-6">
         {/* Map Section */}
         <div className="relative">
-          <div className="flex items-center justify-between mb-4">
-            <SectionHeader 
-              title="Explora Buenos Aires" 
-              subtitle="Descubre lugares y personas cerca de ti"
-            />
+          <div className="flex items-center justify-end mb-4">
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" />
           </div>
           
@@ -300,11 +296,7 @@ const DiscoverPage = () => {
 
         {/* Recommendations Section */}
         <div>
-          <SectionHeader 
-            title="Recomendaciones" 
-            subtitle="Bares, cafés y lugares recomendados por la comunidad"
-          />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             <AddRecommendationCard />
             {!recommendationsLoading && recommendations.map((item) => (
               <UniformCard
