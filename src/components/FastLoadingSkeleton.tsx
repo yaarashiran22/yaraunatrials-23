@@ -12,7 +12,7 @@ const FastLoadingSkeleton = memo(({ type, count = 4 }: FastLoadingSkeletonProps)
       <div className="flex gap-6 overflow-x-auto pb-2">
         {Array.from({ length: 6 }, (_, i) => (
           <div key={i} className="flex flex-col items-center gap-2 flex-shrink-0">
-            <div className="w-16 h-16 rounded-full bg-muted animate-pulse" />
+            <div className="w-18 h-18 rounded-full bg-muted animate-pulse" />
             <div className="w-12 h-3 rounded bg-muted animate-pulse" />
           </div>
         ))}
