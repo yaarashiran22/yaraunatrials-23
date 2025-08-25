@@ -1,5 +1,5 @@
 
-import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Map, UsersRound } from "lucide-react";
+import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -46,18 +46,6 @@ const BottomNavigation = () => {
             <span className="text-xs font-medium truncate">{t('navigation.home')}</span>
           </Button>
 
-          {/* Communities - קהילות */}
-          <Button
-            variant="ghost"
-            size="lg"
-            onClick={() => navigate('/communities')}
-            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
-              isActive('/communities') ? 'text-primary' : 'text-muted-foreground'
-            }`}
-          >
-            <UsersRound className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">{t('navigation.communities')}</span>
-          </Button>
 
           {/* Neighborhood Feed - פיד שכונתי */}
           <Button

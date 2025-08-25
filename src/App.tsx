@@ -27,9 +27,6 @@ import NeighborsPage from "./pages/NeighborsPage";
 import AllEventsPage from "./pages/AllEventsPage";
 import AllRecommendationsPage from "./pages/AllRecommendationsPage";
 
-import CommunityPage from "./pages/CommunityPage";
-import CommunitiesPage from "./pages/CommunitiesPage";
-import CreateCommunityPage from "./pages/CreateCommunityPage";
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
 import NewItemPage from "./pages/NewItemPage";
@@ -78,9 +75,6 @@ const AppContent = () => {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/" element={<Index />} />
-              <Route path="/communities" element={<CommunitiesPage />} />
-              <Route path="/communities/:id" element={<CommunityPage />} />
-              <Route path="/communities/create" element={<CreateCommunityPage />} />
               <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/profile/edit" element={<EditProfilePage />} />
               <Route path="/items/:itemId/edit" element={<EditItemPage />} />
@@ -129,9 +123,6 @@ const AppContent = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/" element={<Index />} />
-            <Route path="/communities" element={<CommunitiesPage />} />
-            <Route path="/communities/:id" element={<CommunityPage />} />
-            <Route path="/communities/create" element={<CreateCommunityPage />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<EditProfilePage />} />
             <Route path="/items/:itemId/edit" element={<EditItemPage />} />
