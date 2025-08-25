@@ -46,7 +46,18 @@ const BottomNavigation = () => {
             <span className="text-xs font-medium truncate">{t('navigation.home')}</span>
           </Button>
 
-
+          {/* Discover - גלה */}
+          <Button
+            variant="ghost"
+            size="lg"
+            onClick={() => navigate('/discover')}
+            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
+              isActive('/discover') ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            <Map className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-xs font-medium truncate">Discover</span>
+          </Button>
 
           {/* Profile/Login */}
           {user ? (
