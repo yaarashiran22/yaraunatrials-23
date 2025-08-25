@@ -96,7 +96,7 @@ const SearchPopup = () => {
 
   return (
     <Dialog open={isSearchOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col z-[9999]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Search className="h-5 w-5" />

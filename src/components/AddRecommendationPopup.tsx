@@ -22,7 +22,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
   
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [instagramUrl, setInstagramUrl] = useState('');
+  const [linkUrl, setLinkUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -112,7 +112,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
           category: 'recommendation',
           status: 'active',
           market: 'argentina', // Since it's Buenos Aires
-          instagram_url: instagramUrl.trim() || null
+          instagram_url: linkUrl.trim() || null
         });
 
       if (error) {
@@ -126,7 +126,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
       // Reset form
       setTitle('');
       setDescription('');
-      setInstagramUrl('');
+      setLinkUrl('');
       setSelectedFile(null);
       
       onRecommendationAdded?.();
@@ -143,7 +143,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
     // Reset form when closing
     setTitle('');
     setDescription('');
-    setInstagramUrl('');
+    setLinkUrl('');
     setSelectedFile(null);
     
     onClose();
@@ -210,12 +210,12 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
             </div>
 
             <div>
-              <Label htmlFor="instagram">Instagram URL</Label>
+              <Label htmlFor="link">Link</Label>
               <Input
-                id="instagram"
-                placeholder="https://instagram.com/cafetortoni"
-                value={instagramUrl}
-                onChange={(e) => setInstagramUrl(e.target.value)}
+                id="link"
+                placeholder="https://website.com or social media link"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
               />
             </div>
 
