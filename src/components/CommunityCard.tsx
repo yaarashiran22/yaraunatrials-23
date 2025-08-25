@@ -115,7 +115,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
       onClick={onClick}
     >
       {/* Cover Image */}
-      <div className="h-36 bg-gradient-to-r from-primary/10 to-primary/20 relative overflow-hidden">
+      <div className="h-36 bg-gradient-to-r from-primary/10 to-primary/20 relative">
         {community.cover_image_url ? (
           <img 
             src={community.cover_image_url} 
@@ -129,13 +129,13 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
         )}
         
         {/* Logo */}
-        <div className="absolute -bottom-10 left-4 z-20">
-          <div className="w-20 h-20 bg-white rounded-lg border-2 border-white shadow-lg flex items-center justify-center overflow-hidden">
+        <div className="absolute -bottom-10 left-4 z-50">
+          <div className="w-20 h-20 bg-white rounded-lg border-2 border-white shadow-lg flex items-center justify-center overflow-hidden relative z-50">
             {community.logo_url ? (
               <img 
                 src={community.logo_url} 
                 alt={community.name}
-                className="w-full h-full object-cover relative z-30"
+                className="w-full h-full object-cover relative z-50"
               />
             ) : (
               <div className="text-3xl">🏘️</div>
