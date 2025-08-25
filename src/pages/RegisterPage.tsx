@@ -48,8 +48,8 @@ const RegisterPage = () => {
   const handleSubmit = async () => {
     if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !formData.mobileNumber.trim()) {
       toast({
-        title: "שגיאה",
-        description: "נא למלא את כל השדות הנדרשים (שם, מייל, סיסמא ומספר טלפון)",
+        title: "Error",
+        description: "Please fill in all required fields (name, email, password and phone number)",
         variant: "destructive",
       });
       return;
@@ -64,8 +64,8 @@ const RegisterPage = () => {
       if (signUpError) {
         console.error('Sign up error:', signUpError);
         toast({
-          title: "שגיאת רישום",
-          description: signUpError.message || "לא ניתן לבצע רישום",
+          title: "Registration Error",
+          description: signUpError.message || "Unable to register",
           variant: "destructive",
         });
         return;
@@ -103,8 +103,8 @@ const RegisterPage = () => {
       }
 
       toast({
-        title: "רישום הושלם בהצלחה!",
-        description: "הפרופיל שלך נוצר ויופיע בדף הבית",
+        title: "Registration completed successfully!",
+        description: "Your profile has been created and will appear on the home page",
         variant: "default",
       });
 
@@ -114,8 +114,8 @@ const RegisterPage = () => {
     } catch (error) {
       console.error('Registration error:', error);
       toast({
-        title: "שגיאה",
-        description: "אירעה שגיאה בלתי צפויה",
+        title: "Error",
+        description: "An unexpected error occurred",
         variant: "destructive",
       });
     } finally {
@@ -151,7 +151,7 @@ const RegisterPage = () => {
                 <div className="flex items-center justify-center">
                   <div className="text-3xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5">השכונה שלנו כאן</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Our neighborhood is here</p>
               </div>
             </div>
           </div>
@@ -161,7 +161,7 @@ const RegisterPage = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Page Title */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-foreground">הרשמה</h1>
+          <h1 className="text-2xl font-bold text-foreground">Sign Up</h1>
         </div>
 
         <div className="max-w-md mx-auto">
@@ -170,58 +170,58 @@ const RegisterPage = () => {
             <div className="space-y-4">
               <div>
                 <Input 
-                  placeholder="שם"
+                  placeholder="Name"
                   value={formData.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
               
               <div>
                 <Input 
-                  placeholder="מייל"
+                  placeholder="Email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
               
               <div>
                 <Input 
-                  placeholder="סיסמא"
+                  placeholder="Password"
                   type="password"
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
               
               <div>
                 <Input 
-                  placeholder="מספר טלפון *"
+                  placeholder="Phone Number *"
                   type="tel"
                   value={formData.mobileNumber}
                   onChange={(e) => handleInputChange('mobileNumber', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
               
               <div>
                 <Input 
-                  placeholder="שכונה"
+                  placeholder="Neighborhood"
                   value={formData.neighborhood}
                   onChange={(e) => handleInputChange('neighborhood', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
               
               <div>
                 <Input 
-                  placeholder="ביו קצר"
+                  placeholder="Short Bio"
                   value={formData.bio}
                   onChange={(e) => handleInputChange('bio', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
             </div>
@@ -229,15 +229,15 @@ const RegisterPage = () => {
             {/* Email Field with Attachment */}
             <div className="relative mt-4">
               <Input 
-                placeholder="אימייל נוסף (אופציונלי)"
+                placeholder="Additional Email (Optional)"
                 value={formData.socialEmail}
                 onChange={(e) => handleInputChange('socialEmail', e.target.value)}
-                className="w-full h-12 text-right bg-background border border-border rounded-lg pl-12"
+                className="w-full h-12 text-left bg-background border border-border rounded-lg pr-12"
               />
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 p-2"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2"
               >
                 <Paperclip className="h-4 w-4 text-muted-foreground" />
               </Button>
@@ -262,21 +262,21 @@ const RegisterPage = () => {
                     )}
                   </div>
                 </label>
-                <span className="text-foreground font-medium">תמונת פרופיל</span>
+                <span className="text-foreground font-medium">Profile Picture</span>
               </div>
             </div>
           </div>
 
           {/* Social Networks Section */}
           <div className="bg-card rounded-2xl shadow-lg p-6">
-            <h2 className="text-lg font-bold text-foreground mb-4 text-center">@רשתות חברתיות</h2>
+            <h2 className="text-lg font-bold text-foreground mb-4 text-center">Social Networks</h2>
             <div className="space-y-4">
               <div>
                 <Input 
                   placeholder="Instagram @"
                   value={formData.instagram}
                   onChange={(e) => handleInputChange('instagram', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
               
@@ -285,7 +285,7 @@ const RegisterPage = () => {
                   placeholder="Facebook"
                   value={formData.facebook}
                   onChange={(e) => handleInputChange('facebook', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
               
@@ -294,7 +294,7 @@ const RegisterPage = () => {
                   placeholder="TikTok @"
                   value={formData.tiktok}
                   onChange={(e) => handleInputChange('tiktok', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
               
@@ -303,7 +303,7 @@ const RegisterPage = () => {
                   placeholder="LinkedIn"
                   value={formData.linkedin}
                   onChange={(e) => handleInputChange('linkedin', e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
             </div>
@@ -316,7 +316,7 @@ const RegisterPage = () => {
                 className="w-full h-12 text-white text-lg font-medium rounded-lg"
                 style={{ backgroundColor: '#BB31E9' }}
               >
-                {isSubmitting ? 'רושם...' : 'הרשם'}
+                {isSubmitting ? 'Registering...' : 'Sign Up'}
               </Button>
             </div>
           </div>

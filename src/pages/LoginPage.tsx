@@ -27,21 +27,21 @@ const LoginPage = () => {
       
       if (error) {
         toast({
-          title: "שגיאה",
+          title: "Error",
           description: error.message,
           variant: "destructive",
         });
       } else {
         toast({
-          title: "הצלחה!",
-          description: isLogin ? "התחברת בהצלחה" : "נרשמת בהצלחה",
+          title: "Success!",
+          description: isLogin ? "Logged in successfully" : "Registered successfully",
         });
         navigate('/');
       }
     } catch (error) {
       toast({
-        title: "שגיאה",
-        description: "אירעה שגיאה בלתי צפויה",
+        title: "Error",
+        description: "An unexpected error occurred",
         variant: "destructive",
       });
     } finally {
@@ -62,7 +62,7 @@ const LoginPage = () => {
         {/* Form */}
         <div className="bg-card rounded-2xl shadow-lg p-6">
           <h1 className="text-2xl font-bold text-foreground text-center mb-6">
-            {isLogin ? 'התחברות' : 'הרשמה'}
+            {isLogin ? 'Login' : 'Sign Up'}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -70,10 +70,10 @@ const LoginPage = () => {
               <div>
                 <Input
                   type="text"
-                  placeholder="שם"
+                  placeholder="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
                   required
                 />
               </div>
@@ -82,10 +82,10 @@ const LoginPage = () => {
             <div>
               <Input
                 type="email"
-                placeholder="מייל"
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 required
               />
             </div>
@@ -93,10 +93,10 @@ const LoginPage = () => {
             <div>
               <Input
                 type="password"
-                placeholder="סיסמה"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 text-right bg-background border border-border rounded-lg"
+                className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 required
               />
             </div>
@@ -106,7 +106,7 @@ const LoginPage = () => {
               className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg"
               disabled={isLoading}
             >
-              {isLoading ? 'מתחבר...' : (isLogin ? 'התחבר' : 'הרשם')}
+              {isLoading ? 'Logging in...' : (isLogin ? 'Login' : 'Sign Up')}
             </Button>
           </form>
 
@@ -116,7 +116,7 @@ const LoginPage = () => {
               onClick={() => setIsLogin(!isLogin)}
               className="text-primary hover:text-primary/80 font-medium"
             >
-              {isLogin ? 'אין לך חשבון? הירשם' : 'יש לך חשבון? התחבר'}
+              {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Login'}
             </button>
           </div>
 
@@ -127,7 +127,7 @@ const LoginPage = () => {
                 onClick={() => navigate('/register')}
                 className="text-muted-foreground hover:text-foreground text-sm"
               >
-                מעבר לטופס הרשמה מלא
+                Go to full registration form
               </button>
             </div>
           )}
