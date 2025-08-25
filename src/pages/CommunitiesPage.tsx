@@ -71,17 +71,24 @@ const CommunitiesPage = () => {
         <div className="bg-background/95 backdrop-blur-sm sticky top-16 z-10">
           <div className="p-4 space-y-4">
             <div className="flex items-center justify-between gap-3">
-              <CreateCommunityDialog />
-              {user && showDiscover && (
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setShowDiscover(false)}
-                  className="flex items-center gap-2 rounded-full"
-                >
-                  <Users className="w-4 h-4" />
-                  My Communities
-                </Button>
+              <div className="flex items-center gap-3">
+                <CreateCommunityDialog />
+                {user && showDiscover && (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setShowDiscover(false)}
+                    className="flex items-center gap-2 rounded-full"
+                  >
+                    <Users className="w-4 h-4" />
+                    My Communities
+                  </Button>
+                )}
+              </div>
+              {user && (
+                <h3 className="text-lg font-semibold text-foreground">
+                  {showDiscover ? "Join New Communities" : "My Communities"}
+                </h3>
               )}
             </div>
 
@@ -128,7 +135,6 @@ const CommunitiesPage = () => {
                   {/* My Communities */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold text-foreground">My Communities</h3>
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="rounded-full">{myCommunities.length}</Badge>
                         <Button 
@@ -177,10 +183,6 @@ const CommunitiesPage = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-foreground">Join New Communities</h3>
-              </div>
-
               {/* Category Filter */}
               <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-none">
                 {categories.map(category => {
