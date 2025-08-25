@@ -259,9 +259,9 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-foreground relative">
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold text-foreground relative">
               <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
                 {t('sections.joinMe')}
               </span>
@@ -289,15 +289,15 @@ const Index = () => {
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
           ) : meetupEvents.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-6 text-muted-foreground">
               <p>No meetups available at the moment</p>
             </div>
           ) : (
-            <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+            <div className="flex overflow-x-auto gap-3 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {meetupEvents.slice(0, 6).map((event, index) => (
                 <div
                   key={`meetup-${event.id}`}
-                  className="flex-shrink-0 w-72 animate-fade-in hover-scale"
+                  className="flex-shrink-0 w-60 animate-fade-in hover-scale"
                   style={{ animationDelay: `${index * 0.1}s` } as React.CSSProperties}
                 >
                   <UniformCard
@@ -341,9 +341,9 @@ const Index = () => {
         </section>
 
         {/* Events Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-foreground relative">
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold text-foreground relative">
               <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
                 {t('events.title')}
               </span>
@@ -371,15 +371,15 @@ const Index = () => {
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
           ) : realEvents.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-6 text-muted-foreground">
               <p>No events available at the moment</p>
             </div>
           ) : (
-            <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+            <div className="flex overflow-x-auto gap-3 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {realEvents.slice(0, 6).map((event, index) => (
                 <div
                   key={`event-${event.id}`}
-                  className="flex-shrink-0 w-72 animate-fade-in hover-scale"
+                  className="flex-shrink-0 w-60 animate-fade-in hover-scale"
                   style={{ animationDelay: `${index * 0.1}s` } as React.CSSProperties}
                 >
                   <UniformCard
@@ -423,17 +423,17 @@ const Index = () => {
         </section>
 
         {/* Coupons Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-foreground relative">
+        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold text-foreground relative">
               <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
                 {t('sections.communityCoupons')}
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-foreground/10 to-transparent blur-sm -z-10 transform translate-x-0.5 translate-y-0.5"></div>
             </h2>
           </div>
-          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-            <div className="text-center py-8 text-muted-foreground w-full">
+          <div className="flex overflow-x-auto gap-3 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+            <div className="text-center py-6 text-muted-foreground w-full">
               <p>No coupons available at the moment</p>
             </div>
           </div>
