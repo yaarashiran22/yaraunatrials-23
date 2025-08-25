@@ -240,7 +240,7 @@ const Index = () => {
                       id={profile.id}
                       image={profile.image}
                       name={profile.name}
-                      className="flex-shrink-0 min-w-[90px]"
+                      className="flex-shrink-0 min-w-[80px]"
                     />
                   ))
                 ) : (
