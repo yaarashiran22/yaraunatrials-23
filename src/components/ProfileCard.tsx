@@ -60,7 +60,7 @@ const ProfileCard = ({ image, name, className = "", id = "1" }: ProfileCardProps
         onClick={handleClick}
       >
         <div className="relative">
-          <div className={`w-17 h-17 rounded-full ${getBorderColor(stories)} p-0.5`}>
+          <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} p-0.5`}>
             <div 
               className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card"
             >
