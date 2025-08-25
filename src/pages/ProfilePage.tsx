@@ -300,7 +300,7 @@ const ProfilePage = () => {
             {profileData?.specialties && profileData.specialties.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {profileData.specialties.map((specialty, index) => (
-                  <div key={index} className="bg-muted text-muted-foreground rounded-full px-2 py-1 inline-block">
+                  <div key={index} className="bg-coral-50 text-coral-600 border border-coral-200 rounded-full px-2 py-1 inline-block" style={{ backgroundColor: 'hsl(16 100% 95%)', color: 'hsl(16 84% 47%)', borderColor: 'hsl(16 100% 88%)' }}>
                     <span className="text-xs font-medium">{specialty}</span>
                   </div>
                 ))}
