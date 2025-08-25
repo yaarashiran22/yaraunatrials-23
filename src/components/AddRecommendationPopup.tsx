@@ -248,105 +248,109 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Add Recommendation</DialogTitle>
-        </DialogHeader>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Map Section */}
-          <div className="space-y-4">
-            <div>
-              <Label className="text-sm font-medium">Select Location</Label>
-              <p className="text-xs text-muted-foreground mb-2">
-                <strong>Double-click anywhere on the map below</strong> to pin the exact location of the place you're recommending
-              </p>
-            </div>
-            <div className="relative bg-card rounded-lg overflow-hidden border h-64" style={{ zIndex: 1 }}>
-              <div ref={mapContainer} className="w-full h-full cursor-crosshair" />
-              {selectedLocation && (
-                <div className="absolute top-2 left-2 bg-green-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg">
-                  <MapPin className="w-3 h-3 inline mr-1" />
-                  Location pinned! ✓
-                </div>
-              )}
-              {!selectedLocation && (
-                <div className="absolute top-2 left-2 bg-blue-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg animate-pulse">
-                  Double-click on the map to select location
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Form Section */}
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="title">Title *</Label>
-              <Input
-                id="title"
-                placeholder="e.g., Café Tortoni"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                placeholder="Tell us about this place..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="instagram">Instagram URL</Label>
-              <Input
-                id="instagram"
-                placeholder="https://instagram.com/cafetortoni"
-                value={instagramUrl}
-                onChange={(e) => setInstagramUrl(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="photo">Photo</Label>
-              <div className="mt-1">
-                <input
-                  id="photo"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-                <Button
-                  variant="outline"
-                  onClick={() => document.getElementById('photo')?.click()}
-                  className="w-full"
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  {selectedFile ? selectedFile.name : 'Upload Photo'}
-                </Button>
+      <DialogContent className="max-w-5xl w-full max-h-[90vh] overflow-y-auto p-0">
+        <div className="p-6">
+          <DialogHeader className="mb-4">
+            <DialogTitle>Add Recommendation</DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-0">
+            {/* Map Section */}
+            <div className="space-y-4 flex flex-col">
+              <div>
+                <Label className="text-sm font-medium">Select Location</Label>
+                <p className="text-xs text-muted-foreground mb-2">
+                  <strong>Double-click anywhere on the map below</strong> to pin the exact location of the place you're recommending
+                </p>
+              </div>
+              <div className="relative bg-card rounded-lg overflow-hidden border flex-1 min-h-[300px] max-h-[400px]">
+                <div ref={mapContainer} className="w-full h-full cursor-crosshair" />
+                {selectedLocation && (
+                  <div className="absolute top-2 left-2 bg-green-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg z-[1000]">
+                    <MapPin className="w-3 h-3 inline mr-1" />
+                    Location pinned! ✓
+                  </div>
+                )}
+                {!selectedLocation && (
+                  <div className="absolute top-2 left-2 bg-blue-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg animate-pulse z-[1000]">
+                    Double-click on the map to select location
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="flex gap-2 pt-4">
-              <Button
-                onClick={handleSubmit}
-                disabled={isSubmitting || !title.trim() || !selectedLocation}
-                className="flex-1"
-              >
-                {isSubmitting ? 'Adding...' : 'Add Recommendation'}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleClose}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
+            {/* Form Section */}
+            <div className="space-y-4 flex flex-col min-h-0">
+              <div className="flex-1 space-y-4">
+                <div>
+                  <Label htmlFor="title">Title *</Label>
+                  <Input
+                    id="title"
+                    placeholder="e.g., Café Tortoni"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    placeholder="Tell us about this place..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="instagram">Instagram URL</Label>
+                  <Input
+                    id="instagram"
+                    placeholder="https://instagram.com/cafetortoni"
+                    value={instagramUrl}
+                    onChange={(e) => setInstagramUrl(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="photo">Photo</Label>
+                  <div className="mt-1">
+                    <input
+                      id="photo"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                    <Button
+                      variant="outline"
+                      onClick={() => document.getElementById('photo')?.click()}
+                      className="w-full"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      {selectedFile ? selectedFile.name : 'Upload Photo'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4 border-t">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || !title.trim() || !selectedLocation}
+                  className="flex-1"
+                >
+                  {isSubmitting ? 'Adding...' : 'Add Recommendation'}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleClose}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
         </div>
