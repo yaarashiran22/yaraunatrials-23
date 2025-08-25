@@ -107,7 +107,7 @@ const Index = () => {
 
   const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
 
-  // Optimize story counts fetching with debouncing and caching
+  // Optimize story counts fetching with reduced debounce and early return
   useEffect(() => {
     const fetchAllUserStoryCounts = async () => {
       if (!profiles.length) return;
@@ -118,7 +118,7 @@ const Index = () => {
           .from('stories')
           .select('user_id')
           .gt('expires_at', new Date().toISOString())
-          .limit(100); // Limit results for performance
+          .limit(50); // Reduced limit for faster loading
 
         if (error) {
           console.error('Error fetching story counts:', error);
@@ -136,16 +136,16 @@ const Index = () => {
       }
     };
 
-    // Debounce the fetch to prevent excessive API calls
-    const timeoutId = setTimeout(fetchAllUserStoryCounts, 300);
+    // Reduced debounce timeout for faster loading
+    const timeoutId = setTimeout(fetchAllUserStoryCounts, 100);
     return () => clearTimeout(timeoutId);
   }, [profiles]);
 
-  // Memoize display profiles to prevent unnecessary re-calculations
+  // Memoize display profiles with improved performance
   const displayProfiles = useMemo(() => {
-    // Always show current user first if logged in, even before profiles load
     const profilesList = [];
     
+    // Always show current user first if logged in - immediate display
     if (user && currentUserProfile) {
       const currentUserDisplayProfile = {
         id: user.id,
@@ -155,24 +155,24 @@ const Index = () => {
       profilesList.push(currentUserDisplayProfile);
     }
 
+    // Add other profiles with optimized sorting
     if (profiles.length > 0) {
-      // Filter out current user from other profiles to avoid duplicates
-      const otherProfiles = profiles.filter(p => p.id !== user?.id);
-      
-      // Sort other profiles: users with stories first, then alphabetically
-      const sortedOtherProfiles = otherProfiles.sort((a, b) => {
-        const aHasStories = (userStoryCounts[a.id] || 0) > 0;
-        const bHasStories = (userStoryCounts[b.id] || 0) > 0;
-        
-        // If one has stories and the other doesn't, prioritize the one with stories
-        if (aHasStories && !bHasStories) return -1;
-        if (!aHasStories && bHasStories) return 1;
-        
-        // If both have stories or both don't have stories, sort alphabetically
-        return (a.name || '').localeCompare(b.name || '');
-      });
+      const otherProfiles = profiles
+        .filter(p => p.id !== user?.id)
+        .map(p => ({
+          id: p.id,
+          name: p.name || "User",
+          image: p.image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
+          hasStories: (userStoryCounts[p.id] || 0) > 0
+        }))
+        .sort((a, b) => {
+          // Simple sort: stories first, then alphabetical
+          if (a.hasStories && !b.hasStories) return -1;
+          if (!a.hasStories && b.hasStories) return 1;
+          return (a.name || '').localeCompare(b.name || '');
+        });
 
-      profilesList.push(...sortedOtherProfiles);
+      profilesList.push(...otherProfiles);
     }
 
     return profilesList;

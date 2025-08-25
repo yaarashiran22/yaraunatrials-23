@@ -152,7 +152,7 @@ export const translations = {
       artists: "Photo of the Day",
       feed: "Discover",
       favorites: "Friends",
-      communities: "Community",
+      communities: "Communities",
       createPost: "Create Post",
       createEvent: "Create Event",
       createItem: "Create Item for Sale"
