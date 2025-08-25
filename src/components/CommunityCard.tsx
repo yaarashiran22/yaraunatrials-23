@@ -150,6 +150,14 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
             {getAccessLabel(community.access_type)}
           </Badge>
         </div>
+
+        {/* Member Count Badge */}
+        <div className="absolute top-3 left-3">
+          <div className="flex items-center gap-1 text-xs font-bold text-white bg-black/70 backdrop-blur-sm px-2 py-1 rounded-full">
+            <Users className="w-3 h-3" />
+            <span>{community.member_count}</span>
+          </div>
+        </div>
       </div>
 
       {/* Content */}
@@ -163,15 +171,11 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
           </div>
         </div>
 
-        {/* Category and Member Count */}
-        <div className="flex items-center justify-between mb-3">
+        {/* Category */}
+        <div className="flex items-center justify-center mb-3">
           <Badge className={`text-xs capitalize ${getCategoryColor(community.category)}`}>
             {community.subcategory || community.category}
           </Badge>
-          <div className="flex items-center gap-1 text-xs font-medium text-foreground bg-muted/50 px-2 py-1 rounded-full">
-            <Users className="w-3 h-3" />
-            <span>{community.member_count}</span>
-          </div>
         </div>
 
         {/* Action Buttons */}
