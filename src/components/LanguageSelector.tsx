@@ -14,12 +14,11 @@ const LanguageSelector = () => {
   const { language, setLanguage } = useLanguage();
 
   const languages = [
-    { code: 'he', name: 'עברית', flag: '🇮🇱' },
     { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'es', name: 'Español', flag: '🇪🇸' }
   ];
 
-  const handleLanguageChange = useCallback((langCode: 'he' | 'en' | 'es') => {
+  const handleLanguageChange = useCallback((langCode: 'en' | 'es') => {
     setLanguage(langCode);
   }, [setLanguage]);
 
@@ -34,7 +33,7 @@ const LanguageSelector = () => {
         {languages.map((lang) => (
           <DropdownMenuItem 
             key={lang.code}
-            onClick={() => handleLanguageChange(lang.code as 'he' | 'en' | 'es')}
+            onClick={() => handleLanguageChange(lang.code as 'en' | 'es')}
             className={`cursor-pointer ${language === lang.code ? 'bg-primary/10' : ''}`}
           >
             <span className="mr-2">{lang.flag}</span>

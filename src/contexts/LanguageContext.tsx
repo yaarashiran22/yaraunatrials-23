@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { translations } from '@/utils/translations';
 
-type Language = 'he' | 'en' | 'es';
+type Language = 'en' | 'es';
 
 interface LanguageContextType {
   language: Language;
@@ -25,7 +25,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && ['he', 'en', 'es'].includes(savedLanguage)) {
+    if (savedLanguage && ['en', 'es'].includes(savedLanguage)) {
       setLanguage(savedLanguage);
     }
   }, []); // Empty dependency array to prevent infinite loops
