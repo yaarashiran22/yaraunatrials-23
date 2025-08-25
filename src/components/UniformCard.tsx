@@ -142,12 +142,12 @@ const UniformCard = ({
             <Button
               variant="ghost"
               size="sm"
-              className={`p-1.5 rounded-full btn-3d ${
+              className={`p-1.5 rounded-full ${
                 isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
               }`}
               onClick={handleFavoriteClick}
             >
-              <Bookmark className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current animate-bounce-subtle' : ''}`} />
+              <Bookmark className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
             </Button>
           )}
         </div>
