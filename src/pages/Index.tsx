@@ -439,44 +439,56 @@ const Index = () => {
 
       </main>
       
-      <FilterPopup 
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
-      />
+      {/* Conditional Popup Rendering for Performance */}
+      {isFilterOpen && (
+        <FilterPopup 
+          isOpen={isFilterOpen}
+          onClose={() => setIsFilterOpen(false)}
+        />
+      )}
 
-      <EventPopup 
-        isOpen={isEventPopupOpen}
-        onClose={() => setIsEventPopupOpen(false)}
-        eventId={selectedEvent?.id}
-        event={selectedEvent}
-      />
+      {isEventPopupOpen && selectedEvent && (
+        <EventPopup 
+          isOpen={isEventPopupOpen}
+          onClose={() => setIsEventPopupOpen(false)}
+          eventId={selectedEvent?.id}
+          event={selectedEvent}
+        />
+      )}
 
+      {isMarketplacePopupOpen && selectedMarketplaceItem && (
+        <MarketplacePopup 
+          isOpen={isMarketplacePopupOpen}
+          onClose={() => setIsMarketplacePopupOpen(false)}
+          item={selectedMarketplaceItem}
+        />
+      )}
 
-      <MarketplacePopup 
-        isOpen={isMarketplacePopupOpen}
-        onClose={() => setIsMarketplacePopupOpen(false)}
-        item={selectedMarketplaceItem}
-      />
+      {showNotifications && (
+        <NotificationsPopup 
+          isOpen={showNotifications} 
+          onClose={() => setShowNotifications(false)} 
+        />
+      )}
 
-      <NotificationsPopup 
-        isOpen={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
-      />
+      {showFriendMeetup && (
+        <FriendMeetupPopup 
+          isOpen={showFriendMeetup} 
+          onClose={() => setShowFriendMeetup(false)} 
+        />
+      )}
 
-      <FriendMeetupPopup 
-        isOpen={showFriendMeetup} 
-        onClose={() => setShowFriendMeetup(false)} 
-      />
-
-      <CreateEventPopup 
-        isOpen={showCreateEvent} 
-        onClose={() => setShowCreateEvent(false)} 
-        onEventCreated={() => {
-          refetchEvents();
-          refetchMeetups();
-          refetch();
-        }}
-      />
+      {showCreateEvent && (
+        <CreateEventPopup 
+          isOpen={showCreateEvent} 
+          onClose={() => setShowCreateEvent(false)} 
+          onEventCreated={() => {
+            refetchEvents();
+            refetchMeetups();
+            refetch();
+          }}
+        />
+      )}
 
       {/* Floating Map Toggle */}
       <FloatingMapToggle 
