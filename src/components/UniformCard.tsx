@@ -110,27 +110,41 @@ const UniformCard = ({
           <div className="flex-1 space-y-1">
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-tight">{title}</h3>
             {subtitle && (
-              <p className="text-xs text-muted-foreground line-clamp-1">{subtitle}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-muted-foreground line-clamp-1">{subtitle}</p>
+                {/* Save button inline with subtitle */}
+                {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={`p-1 rounded-full flex-shrink-0 ${
+                      isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
+                    }`}
+                    onClick={handleFavoriteClick}
+                  >
+                    <Bookmark className={`h-3.5 w-3.5 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
+                  </Button>
+                )}
+              </div>
+            )}
+            {!subtitle && showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
+              <div className="flex justify-end">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`p-1 rounded-full ${
+                    isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
+                  }`}
+                  onClick={handleFavoriteClick}
+                >
+                  <Bookmark className={`h-3.5 w-3.5 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
+                </Button>
+              </div>
             )}
             {date && (
               <p className="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full inline-block">{date}</p>
             )}
           </div>
-        </div>
-        <div className="flex items-center justify-end mt-2">
-          {/* Save button */}
-          {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className={`p-1.5 rounded-full ${
-                isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
-              }`}
-              onClick={handleFavoriteClick}
-            >
-              <Bookmark className={`h-3.5 w-3.5 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
-            </Button>
-          )}
         </div>
       </div>
     </div>
