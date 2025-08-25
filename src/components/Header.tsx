@@ -61,7 +61,7 @@ const Header = ({
             role="button"
             aria-label="Navigate to homepage"
           >
-            Una
+            una
           </div>
           
           {/* Location Switcher - Center */}
