@@ -149,51 +149,49 @@ const FeedPage = () => {
         onNotificationsClick={() => setShowNotifications(true)}
       />
 
-      <main className="px-4 py-4 pb-32">
-        {/* Buenos Aires Map Section */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 border border-border/20 shadow-sm mb-6">
-          <div className="mb-4 flex items-center justify-between">
-            <SectionHeader title="Around me" />
-            <LocationShareButton size="sm" />
-          </div>
-          <BuenosAiresMap className="w-full h-[70vh]" />
-        </section>
+      {/* Full Screen Map with Messages Overlay */}
+      <main className="relative h-[calc(100vh-64px-80px)]"> {/* Account for header and bottom nav */}
+        {/* Full Screen Buenos Aires Map */}
+        <div className="absolute inset-0">
+          <BuenosAiresMap className="w-full h-full" />
+        </div>
 
-        {/* Neighbor Messages Section - Moved below post sharing */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-1.5 lg:p-2 border border-border/20 shadow-sm mb-6">
-          <div className="mb-3 px-2">
-            <SectionHeader title="Messages" />
-          </div>
-          <div className="flex gap-2.5 overflow-x-auto pb-1.5 scrollbar-hide">
-            <NeighborQuestionCard />
-            {questionsLoading ? (
-              <div className="text-center py-4 flex-shrink-0">
-                <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-              </div>
-            ) : (
-              questions.map((question) => {
-                const userProfile = question.user_id ? questionProfiles[question.user_id] : null;
-                return (
-                  <NeighborQuestionItem
-                    key={`question-${question.id}`}
-                    question={question}
-                    userProfile={userProfile}
-                    getTimeAgo={getTimeAgo}
-                    questionProfiles={questionProfiles}
-                    onDeleteQuestion={deleteQuestion}
-                  />
-                );
-              })
-            )}
-            {questions.length === 0 && !questionsLoading && (
-              <div className="text-center py-8 text-muted-foreground flex-shrink-0">
-                <p>No questions yet</p>
-              </div>
-            )}
-          </div>
-        </section>
-
-
+        {/* Messages Section Overlay at Top */}
+        <div className="absolute top-4 left-4 right-4 z-10">
+          <section className="bg-card/95 backdrop-blur-sm rounded-xl p-1.5 lg:p-2 border border-border/20 shadow-lg">
+            <div className="mb-3 px-2 flex items-center justify-between">
+              <SectionHeader title="Messages" />
+              <LocationShareButton size="sm" />
+            </div>
+            <div className="flex gap-2.5 overflow-x-auto pb-1.5 scrollbar-hide">
+              <NeighborQuestionCard />
+              {questionsLoading ? (
+                <div className="text-center py-4 flex-shrink-0">
+                  <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+                </div>
+              ) : (
+                questions.map((question) => {
+                  const userProfile = question.user_id ? questionProfiles[question.user_id] : null;
+                  return (
+                    <NeighborQuestionItem
+                      key={`question-${question.id}`}
+                      question={question}
+                      userProfile={userProfile}
+                      getTimeAgo={getTimeAgo}
+                      questionProfiles={questionProfiles}
+                      onDeleteQuestion={deleteQuestion}
+                    />
+                  );
+                })
+              )}
+              {questions.length === 0 && !questionsLoading && (
+                <div className="text-center py-8 text-muted-foreground flex-shrink-0">
+                  <p>No questions yet</p>
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
       </main>
       
       <NotificationsPopup 
