@@ -12,6 +12,7 @@ import DesktopHeader from "@/components/DesktopHeader";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import ScrollAnimatedCard from "@/components/ScrollAnimatedCard";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 const CommunitiesPage = () => {
@@ -134,18 +135,19 @@ const CommunitiesPage = () => {
                         </Button>
                       </div>
                     ) : (
-                       <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
-                        {myCommunities.map(community => (
-                          <CommunityCard
-                            key={community.id}
-                            community={community}
-                            onClick={() => {
-                              // TODO: Navigate to community detail page
-                              console.log('Navigate to community:', community.id);
-                            }}
-                            onUpdate={() => window.location.reload()}
-                            onDelete={() => window.location.reload()}
-                          />
+                      <div className="space-y-3 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+                        {myCommunities.map((community, index) => (
+                          <ScrollAnimatedCard key={community.id} index={index} className="max-w-md mx-auto">
+                            <CommunityCard
+                              community={community}
+                              onClick={() => {
+                                // TODO: Navigate to community detail page
+                                console.log('Navigate to community:', community.id);
+                              }}
+                              onUpdate={() => window.location.reload()}
+                              onDelete={() => window.location.reload()}
+                            />
+                          </ScrollAnimatedCard>
                         ))}
                       </div>
                     )}
@@ -157,9 +159,11 @@ const CommunitiesPage = () => {
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary" className="rounded-full">{pendingRequests.length} pending</Badge>
                       </div>
-                       <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
-                        {pendingRequests.map(community => (
-                          <CommunityCard key={community.id} community={community} />
+                      <div className="space-y-3 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+                        {pendingRequests.map((community, index) => (
+                          <ScrollAnimatedCard key={community.id} index={index} className="max-w-md mx-auto">
+                            <CommunityCard community={community} />
+                          </ScrollAnimatedCard>
                         ))}
                       </div>
                     </div>
@@ -201,18 +205,19 @@ const CommunitiesPage = () => {
               </div>
 
               {/* Communities Grid */}
-              <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
-                {filteredCommunities.map(community => (
-                  <CommunityCard
-                    key={community.id}
-                    community={community}
-                    onClick={() => {
-                      // TODO: Navigate to community detail page
-                      console.log('Navigate to community:', community.id);
-                    }}
-                    onUpdate={() => window.location.reload()}
-                    onDelete={() => window.location.reload()}
-                  />
+              <div className="space-y-3 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+                {filteredCommunities.map((community, index) => (
+                  <ScrollAnimatedCard key={community.id} index={index} className="max-w-md mx-auto">
+                    <CommunityCard
+                      community={community}
+                      onClick={() => {
+                        // TODO: Navigate to community detail page
+                        console.log('Navigate to community:', community.id);
+                      }}
+                      onUpdate={() => window.location.reload()}
+                      onDelete={() => window.location.reload()}
+                    />
+                  </ScrollAnimatedCard>
                 ))}
               </div>
 
