@@ -9,12 +9,16 @@ interface LocationShareButtonProps {
   variant?: 'default' | 'outline' | 'ghost';
   size?: 'default' | 'sm' | 'lg' | 'icon';
   className?: string;
+  shareText?: string;
+  removeText?: string;
 }
 
 const LocationShareButton = ({ 
   variant = 'outline', 
   size = 'default',
-  className = ''
+  className = '',
+  shareText = 'שתף מיקום',
+  removeText = 'הסר מיקום'
 }: LocationShareButtonProps) => {
   const { user } = useAuth();
   const { userLocations, sharing, shareLocation, removeLocation, refreshLocations } = useUserLocations();
@@ -126,7 +130,7 @@ const LocationShareButton = ({
         ) : (
           <X className="w-4 h-4 ml-2" />
         )}
-        הסר מיקום
+        {removeText}
       </Button>
     );
   }
@@ -147,7 +151,7 @@ const LocationShareButton = ({
       ) : (
         <MapPin className="w-4 h-4 ml-2" />
       )}
-      {permissionState === 'denied' ? 'גישה נדחתה' : 'שתף מיקום'}
+      {permissionState === 'denied' ? 'גישה נדחתה' : shareText}
     </Button>
   );
 };

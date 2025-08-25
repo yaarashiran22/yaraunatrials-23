@@ -272,7 +272,7 @@ const DiscoverPage = () => {
               title="Explora Buenos Aires" 
               subtitle="Descubre lugares y personas cerca de ti"
             />
-            <LocationShareButton size="sm" />
+            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" />
           </div>
           
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-80">
