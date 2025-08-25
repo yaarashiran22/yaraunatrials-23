@@ -111,7 +111,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
 
   return (
     <div 
-      className="bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer overflow-hidden w-full aspect-[3/2] flex flex-col"
+      className="bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer overflow-hidden w-full aspect-[2/3] flex flex-col"
       onClick={() => onClick && onClick()}
     >
       {/* Cover Image */}
