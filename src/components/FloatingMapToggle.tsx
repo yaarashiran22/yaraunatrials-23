@@ -12,9 +12,9 @@ const FloatingMapToggle = ({ isMapOpen, onToggle }: FloatingMapToggleProps) => {
     <div className="fixed bottom-20 lg:bottom-8 right-4 z-40">
       <Button
         onClick={onToggle}
-        size="lg"
+        size="default"
         className={`
-          w-14 h-14 rounded-full shadow-lg transition-all duration-300 ease-in-out
+          w-12 h-12 rounded-full shadow-lg transition-all duration-300 ease-in-out
           ${isMapOpen 
             ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground' 
             : 'text-white hover:scale-105 active:scale-95'
@@ -35,9 +35,9 @@ const FloatingMapToggle = ({ isMapOpen, onToggle }: FloatingMapToggleProps) => {
         }}
       >
         {isMapOpen ? (
-          <X className="h-6 w-6" />
+          <X className="h-5 w-5" />
         ) : (
-          <Map className="h-6 w-6" />
+          <Map className="h-5 w-5" />
         )}
       </Button>
     </div>
