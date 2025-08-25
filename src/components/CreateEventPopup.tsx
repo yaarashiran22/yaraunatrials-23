@@ -247,7 +247,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
 
           {/* Date Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">Date*</label>
+            <label className="text-sm font-medium text-foreground block text-left">What Day*</label>
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
