@@ -218,8 +218,16 @@ const CreateCommunityDialog = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+        <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle>Create New Community</DialogTitle>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => setOpen(false)}
+            className="h-8 w-8 rounded-full"
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
