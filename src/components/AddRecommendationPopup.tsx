@@ -63,21 +63,33 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
 
       // Add click handler to place marker
       map.on('click', (e) => {
+        console.log('Map clicked at:', e.latlng);
         const { lat, lng } = e.latlng;
         
         // Remove existing marker
         if (markerRef.current) {
+          console.log('Removing existing marker');
           map.removeLayer(markerRef.current);
         }
         
-        // Create new marker
-        const marker = L.marker([lat, lng]).addTo(map);
+        // Create new marker with custom icon
+        const customIcon = L.divIcon({
+          html: `
+            <div style="background: #FF6F50; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>
+          `,
+          className: 'custom-pin-marker',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        });
+        
+        const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
         markerRef.current = marker;
         
         // Update selected location
         setSelectedLocation({ lat, lng });
+        console.log('Location selected:', { lat, lng });
         
-        toast.success('Location selected!');
+        toast.success('Location pinned successfully!');
       });
     };
 
@@ -241,14 +253,21 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
           <div className="space-y-4">
             <div>
               <Label className="text-sm font-medium">Select Location</Label>
-              <p className="text-xs text-muted-foreground mb-2">Click on the map to pin the location</p>
+              <p className="text-xs text-muted-foreground mb-2">
+                <strong>Click anywhere on the map below</strong> to pin the exact location of the place you're recommending
+              </p>
             </div>
-            <div className="relative bg-card rounded-lg overflow-hidden border h-64">
-              <div ref={mapContainer} className="w-full h-full" />
+            <div className="relative bg-card rounded-lg overflow-hidden border h-64" style={{ zIndex: 1 }}>
+              <div ref={mapContainer} className="w-full h-full cursor-crosshair" />
               {selectedLocation && (
-                <div className="absolute top-2 left-2 bg-background/90 backdrop-blur-sm rounded px-2 py-1 text-xs">
+                <div className="absolute top-2 left-2 bg-green-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg">
                   <MapPin className="w-3 h-3 inline mr-1" />
-                  Selected: {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
+                  Location pinned! ✓
+                </div>
+              )}
+              {!selectedLocation && (
+                <div className="absolute top-2 left-2 bg-blue-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg animate-pulse">
+                  Click on the map to select location
                 </div>
               )}
             </div>
