@@ -251,7 +251,7 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
         <div className="relative">
           {/* Story Ring - Instagram-like gradient border */}
           <div className={`
-            w-[76px] h-[76px] rounded-full p-[3px] relative
+            w-[70px] h-[70px] rounded-full p-[3px] relative
             ${stories.length > 0 
               ? `${getBorderColor(stories)} shadow-lg` 
               : 'bg-gradient-to-br from-purple-600/60 to-purple-700/60'
