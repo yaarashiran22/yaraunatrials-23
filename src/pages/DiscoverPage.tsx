@@ -137,14 +137,17 @@ const DiscoverPage = () => {
         // Create custom recommendation icon
         const recommendationIcon = L.divIcon({
           html: `
-            <div class="w-6 h-6 rounded-full bg-primary border-2 border-white shadow-md flex items-center justify-center">
-              <span class="text-xs text-white font-bold">🍸</span>
+            <div class="w-10 h-10 rounded-full bg-orange-500 border-3 border-white shadow-lg flex items-center justify-center relative">
+              <span class="text-lg">📍</span>
+              <div class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 border-2 border-white rounded-full flex items-center justify-center">
+                <span class="text-xs">⭐</span>
+              </div>
             </div>
           `,
           className: 'recommendation-marker',
-          iconSize: [24, 24],
-          iconAnchor: [12, 24],
-          popupAnchor: [0, -24]
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+          popupAnchor: [0, -40]
         });
 
         const marker = L.marker([lat, lng], {
@@ -153,10 +156,24 @@ const DiscoverPage = () => {
         })
           .addTo(mapInstanceRef.current)
           .bindPopup(`
-            <div dir="ltr" class="text-left text-sm p-2 max-w-48">
-              <div class="font-medium mb-1">${recommendation.title}</div>
-              ${recommendation.description ? `<div class="text-muted-foreground text-xs mb-2">${recommendation.description}</div>` : ''}
-              ${recommendation.instagram_url ? `<a href="${recommendation.instagram_url}" target="_blank" class="text-primary text-xs hover:underline">📷 Instagram</a>` : ''}
+            <div dir="ltr" class="text-left text-sm p-3 max-w-64">
+              ${recommendation.image_url ? `
+                <div class="mb-3">
+                  <img 
+                    src="${recommendation.image_url}" 
+                    alt="${recommendation.title}"
+                    class="w-full h-32 object-cover rounded-lg shadow-sm"
+                    loading="lazy"
+                  />
+                </div>
+              ` : ''}
+              <div class="font-semibold text-base mb-2 text-gray-800">${recommendation.title}</div>
+              ${recommendation.description ? `<div class="text-gray-600 text-sm mb-3 leading-relaxed">${recommendation.description}</div>` : ''}
+              ${recommendation.instagram_url ? `
+                <a href="${recommendation.instagram_url}" target="_blank" class="inline-flex items-center gap-1 text-orange-600 text-sm hover:underline font-medium">
+                  🔗 Visit Link
+                </a>
+              ` : ''}
             </div>
           `);
 
