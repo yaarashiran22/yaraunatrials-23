@@ -88,13 +88,13 @@ export const useEventRSVP = (eventId: string) => {
   }, []);
 
   // Only enable query if we have a valid UUID format event ID
-  const isValidEventId = eventId && eventId.length > 10 && eventId !== "1";
+  const isValidEventId = Boolean(eventId && eventId.length > 10 && eventId !== "1");
 
   // Combined query for better performance
   const { data, isLoading } = useQuery({
     queryKey: ['event-rsvp-data', eventId, user?.id],
     queryFn: () => fetchEventRSVPData(eventId, user?.id),
-    enabled: isValidEventId && !!eventId,
+    enabled: isValidEventId,
     staleTime: 2 * 60 * 1000, // 2 minutes
     gcTime: 5 * 60 * 1000, // 5 minutes
   });
