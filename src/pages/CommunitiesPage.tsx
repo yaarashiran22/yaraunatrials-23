@@ -122,14 +122,6 @@ const CommunitiesPage = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="rounded-full">{myCommunities.length}</Badge>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setShowDiscover(true)}
-                          className="flex items-center gap-2 rounded-full"
-                        >
-                          Join Communities
-                        </Button>
                       </div>
                     </div>
                     
