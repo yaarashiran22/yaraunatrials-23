@@ -263,16 +263,16 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
                   <strong>Double-click anywhere on the map below</strong> to pin the exact location of the place you're recommending
                 </p>
               </div>
-              <div className="relative bg-card rounded-lg overflow-hidden border flex-1 min-h-[300px] max-h-[400px]">
-                <div ref={mapContainer} className="w-full h-full cursor-crosshair" />
+              <div className="relative bg-card rounded-lg overflow-hidden border flex-1 min-h-[300px] max-h-[350px] z-0">
+                <div ref={mapContainer} className="w-full h-full cursor-crosshair relative z-0" style={{ maxHeight: '350px', minHeight: '300px' }} />
                 {selectedLocation && (
-                  <div className="absolute top-2 left-2 bg-green-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg z-[1000]">
+                  <div className="absolute top-2 left-2 bg-green-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg z-10">
                     <MapPin className="w-3 h-3 inline mr-1" />
                     Location pinned! ✓
                   </div>
                 )}
                 {!selectedLocation && (
-                  <div className="absolute top-2 left-2 bg-blue-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg animate-pulse z-[1000]">
+                  <div className="absolute top-2 left-2 bg-blue-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg animate-pulse z-10">
                     Double-click on the map to select location
                   </div>
                 )}
