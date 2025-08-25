@@ -137,17 +137,17 @@ const DiscoverPage = () => {
         // Create custom recommendation icon
         const recommendationIcon = L.divIcon({
           html: `
-            <div class="w-10 h-10 rounded-full bg-orange-500 border-3 border-white shadow-lg flex items-center justify-center relative">
-              <span class="text-lg">📍</span>
-              <div class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 border-2 border-white rounded-full flex items-center justify-center">
-                <span class="text-xs">⭐</span>
+            <div class="w-14 h-14 rounded-full bg-orange-500 border-4 border-white shadow-xl flex items-center justify-center relative animate-pulse">
+              <span class="text-2xl">📍</span>
+              <div class="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 border-3 border-white rounded-full flex items-center justify-center shadow-lg">
+                <span class="text-sm font-bold">⭐</span>
               </div>
             </div>
           `,
           className: 'recommendation-marker',
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-          popupAnchor: [0, -40]
+          iconSize: [56, 56],
+          iconAnchor: [28, 56],
+          popupAnchor: [0, -56]
         });
 
         const marker = L.marker([lat, lng], {
