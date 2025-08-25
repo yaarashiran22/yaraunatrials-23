@@ -224,7 +224,8 @@ const CreateCommunityDialog = () => {
             variant="ghost" 
             size="icon"
             onClick={() => setOpen(false)}
-            className="h-8 w-8 rounded-full"
+            className="h-8 w-8 rounded-full hover:bg-destructive/10 hover:text-destructive"
+            aria-label="Close dialog"
           >
             <X className="h-4 w-4" />
           </Button>
