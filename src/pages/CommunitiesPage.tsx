@@ -72,29 +72,31 @@ const CommunitiesPage = () => {
           <div className="p-4 space-y-4">
             <div className="flex items-center justify-between gap-3">
               <CreateCommunityDialog />
-              {user && (
+              {user && showDiscover && (
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => setShowDiscover(!showDiscover)}
+                  onClick={() => setShowDiscover(false)}
                   className="flex items-center gap-2 rounded-full"
                 >
-                  <Search className="w-4 h-4" />
-                  {showDiscover ? "My Communities" : "Discover"}
+                  <Users className="w-4 h-4" />
+                  My Communities
                 </Button>
               )}
             </div>
 
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input
-                placeholder="Search communities..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 rounded-full bg-muted/50 border-0"
-              />
-            </div>
+            {/* Search - only show in discover mode */}
+            {showDiscover && (
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                <Input
+                  placeholder="Search communities..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 rounded-full bg-muted/50 border-0"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -127,7 +129,17 @@ const CommunitiesPage = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-foreground">My Communities</h3>
-                      <Badge variant="outline" className="rounded-full">{myCommunities.length}</Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="rounded-full">{myCommunities.length}</Badge>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setShowDiscover(true)}
+                          className="flex items-center gap-2 rounded-full"
+                        >
+                          Join New Communities
+                        </Button>
+                      </div>
                     </div>
                     
                     {myCommunities.length === 0 ? (
@@ -140,7 +152,7 @@ const CommunitiesPage = () => {
                           Join communities to connect with like-minded people in your area
                         </p>
                         <Button onClick={() => setShowDiscover(true)} className="rounded-full">
-                          Discover Communities
+                          Join New Communities
                         </Button>
                       </div>
                     ) : (
@@ -166,7 +178,7 @@ const CommunitiesPage = () => {
           ) : (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-foreground">Discover Communities</h3>
+                <h3 className="text-lg font-semibold text-foreground">Join New Communities</h3>
               </div>
 
               {/* Category Filter */}
