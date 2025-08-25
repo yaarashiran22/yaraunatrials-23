@@ -142,12 +142,24 @@ export const useCommunityMembership = () => {
     if (!user) throw new Error('User not authenticated');
 
     try {
+      // First, get the community to check its access type
+      const { data: community, error: communityError } = await supabase
+        .from('communities')
+        .select('access_type')
+        .eq('id', communityId)
+        .single();
+
+      if (communityError) throw communityError;
+
+      // Set status based on community access type
+      const status = community.access_type === 'open' ? 'approved' : 'pending';
+
       const { error } = await supabase
         .from('community_members')
         .insert({
           community_id: communityId,
           user_id: user.id,
-          status: 'pending'
+          status: status
         });
 
       if (error) throw error;

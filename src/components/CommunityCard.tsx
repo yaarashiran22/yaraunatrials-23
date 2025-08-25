@@ -77,7 +77,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
       toast({
         title: community.access_type === 'open' ? "Joined!" : "Request Sent!",
         description: community.access_type === 'open' 
-          ? `You've joined ${community.name}` 
+          ? `You're now a member of ${community.name}` 
           : `Your request to join ${community.name} has been sent`,
       });
     } catch (error) {
