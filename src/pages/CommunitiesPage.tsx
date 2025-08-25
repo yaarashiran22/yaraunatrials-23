@@ -68,10 +68,21 @@ const CommunitiesPage = () => {
       
       <div className="pb-20">
         {/* Communities Header */}
-        <div className="bg-card border-b border-border sticky top-16 z-10">
-          <div className="p-4">
-            <div className="flex items-center justify-between mb-4">
+        <div className="bg-background/95 backdrop-blur-sm sticky top-16 z-10">
+          <div className="p-4 space-y-4">
+            <div className="flex items-center justify-between gap-3">
               <CreateCommunityDialog />
+              {user && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowDiscover(!showDiscover)}
+                  className="flex items-center gap-2 rounded-full"
+                >
+                  <Search className="w-4 h-4" />
+                  {showDiscover ? "My Communities" : "Discover"}
+                </Button>
+              )}
             </div>
 
             {/* Search */}
@@ -81,7 +92,7 @@ const CommunitiesPage = () => {
                 placeholder="Search communities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 rounded-full bg-muted/50 border-0"
               />
             </div>
           </div>
@@ -102,10 +113,9 @@ const CommunitiesPage = () => {
                   {pendingRequests.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-foreground">Pending Requests</h3>
-                        <Badge variant="secondary">{pendingRequests.length}</Badge>
+                        <Badge variant="secondary" className="rounded-full">{pendingRequests.length} pending</Badge>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 gap-3">
                         {pendingRequests.map(community => (
                           <CommunityCard key={community.id} community={community} />
                         ))}
@@ -116,31 +126,25 @@ const CommunitiesPage = () => {
                   {/* My Communities */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-medium text-foreground">My Communities ({myCommunities.length})</h3>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => setShowDiscover(true)}
-                        className="flex items-center gap-2"
-                      >
-                        <Search className="w-4 h-4" />
-                        Discover Communities
-                      </Button>
+                      <h3 className="text-lg font-semibold text-foreground">My Communities</h3>
+                      <Badge variant="outline" className="rounded-full">{myCommunities.length}</Badge>
                     </div>
                     
                     {myCommunities.length === 0 ? (
-                      <div className="text-center py-12">
-                        <div className="text-4xl mb-4">👥</div>
-                        <h3 className="text-lg font-medium text-foreground mb-2">No Communities Yet</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Join communities to connect with like-minded people
+                      <div className="text-center py-12 px-6">
+                        <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <Users className="w-8 h-8 text-muted-foreground" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">No Communities Yet</h3>
+                        <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
+                          Join communities to connect with like-minded people in your area
                         </p>
-                        <Button onClick={() => setShowDiscover(true)}>
+                        <Button onClick={() => setShowDiscover(true)} className="rounded-full">
                           Discover Communities
                         </Button>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 gap-3">
                         {myCommunities.map(community => (
                           <CommunityCard
                             key={community.id}
@@ -162,20 +166,11 @@ const CommunitiesPage = () => {
           ) : (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-medium text-foreground">Discover Communities</h3>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setShowDiscover(false)}
-                  className="flex items-center gap-2"
-                >
-                  <Users className="w-4 h-4" />
-                  My Communities
-                </Button>
+                <h3 className="text-lg font-semibold text-foreground">Discover Communities</h3>
               </div>
 
               {/* Category Filter */}
-              <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+              <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-none">
                 {categories.map(category => {
                   const IconComponent = category.icon;
                   return (
@@ -206,7 +201,7 @@ const CommunitiesPage = () => {
               </div>
 
               {/* Communities Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-3">
                 {filteredCommunities.map(community => (
                   <CommunityCard
                     key={community.id}
@@ -222,10 +217,12 @@ const CommunitiesPage = () => {
               </div>
 
               {filteredCommunities.length === 0 && (
-                <div className="text-center py-12">
-                  <div className="text-4xl mb-4">🏘️</div>
-                  <h3 className="text-lg font-medium text-foreground mb-2">No communities found</h3>
-                  <p className="text-muted-foreground mb-4">
+                <div className="text-center py-12 px-6">
+                  <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Search className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">No communities found</h3>
+                  <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
                     {searchQuery ? 'Try adjusting your search terms' : 'Be the first to create a community!'}
                   </p>
                   <CreateCommunityDialog />
