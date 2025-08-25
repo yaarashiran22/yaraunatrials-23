@@ -4,10 +4,13 @@ import BottomNavigation from "@/components/BottomNavigation";
 import BusinessFilterPopup from "@/components/BusinessFilterPopup";
 import BusinessPopup from "@/components/BusinessPopup";
 import UniformCard from "@/components/UniformCard";
+import AddRecommendationCard from "@/components/AddRecommendationCard";
+import SectionHeader from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import { useState } from "react";
 import { useSearch } from "@/hooks/useSearch";
+import { useRecommendations } from "@/hooks/useRecommendations";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 import coffeeShop from "@/assets/coffee-shop.jpg";
@@ -19,8 +22,9 @@ const RecommendedPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedBusiness, setSelectedBusiness] = useState<any>(null);
   const [isBusinessPopupOpen, setIsBusinessPopupOpen] = useState(false);
+  const { recommendations: userRecommendations, loading } = useRecommendations();
 
-  const recommendations = [
+  const featuredPlaces = [
     {
       id: "1",
       image: coffeeShop,
@@ -66,7 +70,7 @@ const RecommendedPage = () => {
   ];
 
   const { searchQuery, setSearchQuery, filteredItems, highlightText } = useSearch({
-    items: recommendations,
+    items: featuredPlaces,
     searchFields: ['title', 'subtitle']
   });
 
@@ -118,40 +122,85 @@ const RecommendedPage = () => {
         </div>
       </div>
       
-      <main className="container mx-auto px-4 py-3">
-        {searchQuery && filteredItems.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">{t('common.noResults')} "{searchQuery}"</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredItems.map((item, index) => (
+      <main className="container mx-auto px-4 py-3 space-y-6">
+        {/* User Recommendations Section */}
+        <div>
+          <SectionHeader 
+            title="המלצות השכונה" 
+            subtitle="קפבר, ברים ומקומות מומלצים מהקהילה"
+          />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+            <AddRecommendationCard />
+            {!loading && userRecommendations.map((item) => (
               <UniformCard
-                key={index}
+                key={item.id}
                 id={item.id}
-                image={item.image}
-                title={searchQuery ? highlightText(item.title, searchQuery) : item.title}
+                image={item.image_url}
+                title={item.title}
                 altText={item.title}
-                subtitle={item.subtitle}
+                subtitle={item.description}
+                price={item.price?.toString()}
                 type="business"
-                isLiked={Math.random() > 0.5}
-                onClick={() => handleBusinessClick(item)}
+                onClick={() => handleBusinessClick({
+                  id: item.id,
+                  title: item.title,
+                  image: item.image_url,
+                  subtitle: item.description,
+                  type: 'business'
+                })}
                 favoriteData={{
                   id: item.id,
                   title: item.title,
-                  image: item.image,
-                  subtitle: item.subtitle,
-                  description: `${item.title} - ${item.subtitle}. מקום מומלץ לבקר בשכונה שלנו.`,
-                  phone: "03-1234567",
-                  address: "תל אביב",
-                  instagram: item.title.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/g, '') + "@",
-                  hours: "08:00-22:00",
-                  type: item.type
+                  image: item.image_url,
+                  subtitle: item.description,
+                  price: item.price?.toString(),
+                  type: 'business'
                 }}
               />
             ))}
           </div>
-        )}
+        </div>
+
+        {/* Featured Places Section */}
+        <div>
+          <SectionHeader 
+            title="מקומות מומלצים" 
+            subtitle="המקומות הטובים ביותר בעיר"
+          />
+          {searchQuery && filteredItems.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">{t('common.noResults')} "{searchQuery}"</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+              {filteredItems.map((item, index) => (
+                <UniformCard
+                  key={index}
+                  id={item.id}
+                  image={item.image}
+                  title={searchQuery ? highlightText(item.title, searchQuery) : item.title}
+                  altText={item.title}
+                  subtitle={item.subtitle}
+                  type="business"
+                  isLiked={Math.random() > 0.5}
+                  onClick={() => handleBusinessClick(item)}
+                  favoriteData={{
+                    id: item.id,
+                    title: item.title,
+                    image: item.image,
+                    subtitle: item.subtitle,
+                    description: `${item.title} - ${item.subtitle}. מקום מומלץ לבקר בשכונה שלנו.`,
+                    phone: "03-1234567",
+                    address: "תל אביב",
+                    instagram: item.title.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/g, '') + "@",
+                    hours: "08:00-22:00",
+                    type: item.type
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </main>
 
       <BusinessFilterPopup 
