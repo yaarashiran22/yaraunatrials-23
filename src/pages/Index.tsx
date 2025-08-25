@@ -109,18 +109,21 @@ const Index = () => {
 
   const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
 
-  // Optimize story counts fetching with reduced debounce and early return
+  // Optimize story counts fetching with reduced API calls and better caching
   useEffect(() => {
     const fetchAllUserStoryCounts = async () => {
       if (!profiles.length) return;
       
       try {
-        // Batch fetch only once for all users to reduce API calls
+        // Only fetch if we don't already have the data cached
+        if (Object.keys(userStoryCounts).length > 0) return;
+        
+        // Batch fetch with minimal data and reduced limit
         const { data, error } = await supabase
           .from('stories')
           .select('user_id')
           .gt('expires_at', new Date().toISOString())
-          .limit(50); // Reduced limit for faster loading
+          .limit(20); // Further reduced limit
 
         if (error) {
           console.error('Error fetching story counts:', error);
@@ -138,12 +141,12 @@ const Index = () => {
       }
     };
 
-    // Reduced debounce timeout for faster loading
-    const timeoutId = setTimeout(fetchAllUserStoryCounts, 100);
+    // Only run once per component mount to avoid multiple calls
+    const timeoutId = setTimeout(fetchAllUserStoryCounts, 200);
     return () => clearTimeout(timeoutId);
-  }, [profiles]);
+  }, [profiles.length]); // Changed dependency to only trigger when profiles count changes
 
-  // Memoize display profiles with improved performance
+  // Memoize display profiles with improved performance and immediate current user display
   const displayProfiles = useMemo(() => {
     const profilesList = [];
     
@@ -153,15 +156,17 @@ const Index = () => {
         id: user.id,
         name: currentUserProfile?.name || user.email?.split('@')[0] || 'You',
         image: currentUserProfile?.profile_image_url || user.user_metadata?.avatar_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
-        isCurrentUser: true
+        isCurrentUser: true,
+        hasStories: false // Don't wait for stories count for current user
       };
       profilesList.push(currentUserDisplayProfile);
     }
 
-    // Add other profiles with optimized sorting
+    // Add other profiles with optimized sorting - limit to first 10 for performance
     if (profiles.length > 0) {
       const otherProfiles = profiles
         .filter(p => p.id !== user?.id)
+        .slice(0, 10) // Limit profiles shown for faster loading
         .map(p => ({
           id: p.id,
           name: p.name || "User",
@@ -170,7 +175,10 @@ const Index = () => {
           isCurrentUser: false
         }))
         .sort((a, b) => {
-          // Simple sort: stories first, then alphabetical
+          // Simple sort: stories first, then alphabetical - but don't block on stories
+          if (Object.keys(userStoryCounts).length === 0) {
+            return (a.name || '').localeCompare(b.name || '');
+          }
           if (a.hasStories && !b.hasStories) return -1;
           if (!a.hasStories && b.hasStories) return 1;
           return (a.name || '').localeCompare(b.name || '');
@@ -236,29 +244,27 @@ const Index = () => {
       <main className="px-4 lg:px-6 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 w-full">
         {/* Community Members Section - Horizontal Carousel */}
         <section className="mb-3 lg:mb-4">
-          {loading ? (
-            <FastLoadingSkeleton type="profiles" />
-          ) : (
-            <div className="relative">
-              <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-                {displayProfiles.length > 0 ? (
-                  displayProfiles.map((profile, index) => (
-                    <ProfileCard
-                      key={profile.id}
-                      id={profile.id}
-                      image={profile.image}
-                      name={profile.name}
-                      className={`flex-shrink-0 min-w-[90px] animate-fade-in ${index === 0 && user?.id === profile.id ? '' : ''}`}
-                      style={{ animationDelay: `${index * 0.05}s` } as React.CSSProperties}
-                      isCurrentUser={user?.id === profile.id}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground w-full">No registered users yet</div>
-                )}
-              </div>
+          <div className="relative">
+            <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+              {loading ? (
+                <FastLoadingSkeleton type="profiles" />
+              ) : displayProfiles.length > 0 ? (
+                displayProfiles.map((profile, index) => (
+                  <ProfileCard
+                    key={profile.id}
+                    id={profile.id}
+                    image={profile.image}
+                    name={profile.name}
+                    className={`flex-shrink-0 min-w-[90px] animate-fade-in ${index === 0 && user?.id === profile.id ? '' : ''}`}
+                    style={{ animationDelay: `${Math.min(index * 0.03, 0.3)}s` } as React.CSSProperties}
+                    isCurrentUser={user?.id === profile.id}
+                  />
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground w-full">No registered users yet</div>
+              )}
             </div>
-          )}
+          </div>
         </section>
 
 
@@ -298,7 +304,7 @@ const Index = () => {
             </div>
           ) : (
             <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-              {meetupEvents.slice(0, 6).map((event, index) => (
+              {meetupEvents.slice(0, 4).map((event, index) => (
                 <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
                   <UniformCard
                     id={event.id}
@@ -376,7 +382,7 @@ const Index = () => {
             </div>
           ) : (
             <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-              {realEvents.slice(0, 6).map((event, index) => (
+              {realEvents.slice(0, 4).map((event, index) => (
                 <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
                   <UniformCard
                     id={event.id}
