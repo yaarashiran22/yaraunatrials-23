@@ -1153,6 +1153,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      update_community_membership_status: {
+        Args: { membership_id: string; new_status: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
