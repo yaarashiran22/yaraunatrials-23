@@ -296,7 +296,7 @@ const Index = () => {
             <div className="relative">
               <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" style={{scrollBehavior: 'smooth'}}>
                 {meetupEvents.slice(0, 6).map((event) => (
-                  <div key={`meetup-${event.id}`} className="flex-shrink-0 w-48 lg:w-56">
+                  <div key={`meetup-${event.id}`} className="flex-shrink-0 w-44 lg:w-52">
                     <UniformCard
                       id={event.id}
                       image={event.image_url || communityEvent}
@@ -376,7 +376,7 @@ const Index = () => {
             <div className="relative">
               <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" style={{scrollBehavior: 'smooth'}}>
                 {realEvents.map((event) => (
-                  <div key={`event-${event.id}`} className="flex-shrink-0 w-48 lg:w-56">
+                  <div key={`event-${event.id}`} className="flex-shrink-0 w-44 lg:w-52">
                     <UniformCard
                       id={event.id}
                       image={event.image_url || communityEvent}

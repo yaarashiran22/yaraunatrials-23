@@ -80,7 +80,7 @@ const UniformCard = ({
       className="relative card-elevated rounded-xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
       onClick={onClick}
     >
-      <div className="aspect-[4/3] overflow-hidden">
+      <div className="aspect-[3.5/3] overflow-hidden">
         {video ? (
           <video 
             src={video} 
@@ -105,7 +105,7 @@ const UniformCard = ({
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-300"></div>
       </div>
       
-      <div className="p-3 h-16 flex flex-col justify-between surface-elevated">
+      <div className="p-2.5 h-14 flex flex-col justify-between surface-elevated">
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <h3 className="font-semibold text-foreground truncate text-sm">{title}</h3>

@@ -116,7 +116,7 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
           size="sm"
           onClick={() => handleFilterClick(allFilter.id)}
           className={`
-            flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 
+            flex-shrink-0 rounded-full px-6 py-3 text-sm font-medium transition-all duration-200 
             flex items-center gap-2 min-w-fit border border-transparent
             ${activeFilter === allFilter.id 
               ? `${allFilter.activeBg} ${allFilter.color} border-current/20` 
@@ -127,17 +127,6 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
           {allFilter.label}
         </Button>
 
-        {/* Search Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleSearchOpen}
-          className="flex-shrink-0 rounded-full px-3 py-2 text-sm font-medium transition-all duration-200 
-                     flex items-center justify-center min-w-fit border border-transparent
-                     text-slate-600 hover:bg-accent/50"
-        >
-          <Search className="h-4 w-4 text-slate-600" />
-        </Button>
 
         {/* Other Filters */}
         {otherFilters.map((filter) => {
@@ -149,7 +138,7 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
               size="sm"
               onClick={() => handleFilterClick(filter.id)}
               className={`
-                flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 
+                flex-shrink-0 rounded-full px-6 py-3 text-sm font-medium transition-all duration-200 
                 flex items-center gap-2 min-w-fit border border-transparent
                 ${activeFilter === filter.id 
                   ? `${filter.activeBg} ${filter.color} border-current/20` 

@@ -69,22 +69,33 @@ const Header = ({
             <NeighborhoodSelector />
           </div>
           
-          {/* Notifications */}
-          {user && (
+          {/* Search and Notifications */}
+          <div className="flex items-center gap-2">
             <Button 
               variant="outline" 
               size="sm" 
-              className="relative p-2.5 h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/80"
-              onClick={() => setShowNotifications(true)}
+              className="p-2.5 h-10 w-10 bg-background text-foreground hover:bg-accent border-border"
+              onClick={openSearch}
             >
-              <Bell className="h-5 w-5" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0 shadow-lg border-2 border-background">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
+              <Search className="h-5 w-5" />
             </Button>
-          )}
+            
+            {user && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="relative p-2.5 h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/80"
+                onClick={() => setShowNotifications(true)}
+              >
+                <Bell className="h-5 w-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0 shadow-lg border-2 border-background">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </Button>
+            )}
+          </div>
           
         </div>
       </div>
