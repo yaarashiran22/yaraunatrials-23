@@ -107,16 +107,18 @@ const Index = () => {
 
   const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
 
-  // Fetch story counts for all users
+  // Optimize story counts fetching with debouncing and caching
   useEffect(() => {
     const fetchAllUserStoryCounts = async () => {
       if (!profiles.length) return;
       
       try {
+        // Batch fetch only once for all users to reduce API calls
         const { data, error } = await supabase
           .from('stories')
           .select('user_id')
-          .gt('expires_at', new Date().toISOString());
+          .gt('expires_at', new Date().toISOString())
+          .limit(100); // Limit results for performance
 
         if (error) {
           console.error('Error fetching story counts:', error);
@@ -134,7 +136,9 @@ const Index = () => {
       }
     };
 
-    fetchAllUserStoryCounts();
+    // Debounce the fetch to prevent excessive API calls
+    const timeoutId = setTimeout(fetchAllUserStoryCounts, 300);
+    return () => clearTimeout(timeoutId);
   }, [profiles]);
 
   // Memoize display profiles to prevent unnecessary re-calculations

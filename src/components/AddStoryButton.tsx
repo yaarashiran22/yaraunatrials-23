@@ -192,13 +192,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
         className={`flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity ${className}`}
         onClick={handleClick}
       >
-        <div className="relative">
-          <div className="w-16 h-16 rounded-full border-2 border-dashed border-primary/50 flex items-center justify-center bg-transparent">
-            <Plus className="w-6 h-6 text-primary" />
-          </div>
-          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-            <Camera className="w-3 h-3 text-primary-foreground" />
-          </div>
+        <div className="w-16 h-16 rounded-full border-2 border-dashed border-primary/50 flex items-center justify-center bg-transparent">
+          <Plus className="w-6 h-6 text-primary" />
         </div>
       </div>
       
