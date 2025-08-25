@@ -261,7 +261,12 @@ const Index = () => {
         {/* Join me Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-foreground">{t('sections.joinMe')}</h2>
+            <h2 className="text-xl font-bold text-foreground relative">
+              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
+                {t('sections.joinMe')}
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-foreground/10 to-transparent blur-sm -z-10 transform translate-x-0.5 translate-y-0.5"></div>
+            </h2>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
@@ -336,7 +341,12 @@ const Index = () => {
         {/* Events Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-4 lg:p-6 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-foreground">{t('events.title')}</h2>
+            <h2 className="text-xl font-bold text-foreground relative">
+              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
+                {t('events.title')}
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-foreground/10 to-transparent blur-sm -z-10 transform translate-x-0.5 translate-y-0.5"></div>
+            </h2>
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
