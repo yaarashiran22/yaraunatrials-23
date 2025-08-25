@@ -1,5 +1,5 @@
 
-import { Bookmark } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import React from "react";
@@ -80,7 +80,7 @@ const UniformCard = ({
       className="relative card-elevated rounded-xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
       onClick={onClick}
     >
-      <div className="aspect-[3.5/2.8] overflow-hidden">
+      <div className="aspect-[3.5/2.8] overflow-hidden relative">
         {video ? (
           <video 
             src={video} 
@@ -103,6 +103,20 @@ const UniformCard = ({
         )}
         {/* Shimmer overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-300"></div>
+        
+        {/* Heart icon positioned over image */}
+        {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className={`absolute top-2 right-2 p-1.5 rounded-full backdrop-blur-sm bg-white/20 hover:bg-white/30 border border-white/30 ${
+              isCurrentlyFavorited ? 'text-red-500' : 'text-white hover:text-red-400'
+            }`}
+            onClick={handleFavoriteClick}
+          >
+            <Heart className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
+          </Button>
+        )}
       </div>
       
       <div className="p-3 min-h-[80px] flex flex-col justify-between surface-elevated">
@@ -110,36 +124,7 @@ const UniformCard = ({
           <div className="flex-1 space-y-1">
             <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-tight">{title}</h3>
             {subtitle && (
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-muted-foreground line-clamp-1">{subtitle}</p>
-                {/* Save button inline with subtitle */}
-                {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={`p-1 rounded-full flex-shrink-0 ${
-                      isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
-                    }`}
-                    onClick={handleFavoriteClick}
-                  >
-                    <Bookmark className={`h-3.5 w-3.5 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
-                  </Button>
-                )}
-              </div>
-            )}
-            {!subtitle && showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
-              <div className="flex justify-end">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`p-1 rounded-full ${
-                    isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
-                  }`}
-                  onClick={handleFavoriteClick}
-                >
-                  <Bookmark className={`h-3.5 w-3.5 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
-                </Button>
-              </div>
+              <p className="text-xs text-muted-foreground line-clamp-1">{subtitle}</p>
             )}
             {date && (
               <p className="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full inline-block">{date}</p>
