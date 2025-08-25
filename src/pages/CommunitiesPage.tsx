@@ -134,7 +134,7 @@ const CommunitiesPage = () => {
                         </Button>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 gap-3">
+                       <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
                         {myCommunities.map(community => (
                           <CommunityCard
                             key={community.id}
@@ -157,7 +157,7 @@ const CommunitiesPage = () => {
                       <div className="flex items-center gap-2">
                         <Badge variant="secondary" className="rounded-full">{pendingRequests.length} pending</Badge>
                       </div>
-                      <div className="grid grid-cols-1 gap-3">
+                       <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
                         {pendingRequests.map(community => (
                           <CommunityCard key={community.id} community={community} />
                         ))}
@@ -201,7 +201,7 @@ const CommunitiesPage = () => {
               </div>
 
               {/* Communities Grid */}
-              <div className="grid grid-cols-1 gap-3">
+              <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
                 {filteredCommunities.map(community => (
                   <CommunityCard
                     key={community.id}
