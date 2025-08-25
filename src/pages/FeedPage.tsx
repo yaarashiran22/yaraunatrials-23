@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import DesktopHeader from "@/components/DesktopHeader";
 import BottomNavigation from "@/components/BottomNavigation";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import StoriesPopup from "@/components/StoriesPopup";
@@ -144,7 +145,14 @@ const FeedPage = () => {
 
   return (
     <div className="min-h-screen bg-background" dir="ltr">
-      <Header 
+      <div className="lg:hidden">
+        <Header 
+          title="Neighborhood Feed"
+          onNotificationsClick={() => setShowNotifications(true)}
+        />
+      </div>
+      
+      <DesktopHeader 
         title="Neighborhood Feed"
         onNotificationsClick={() => setShowNotifications(true)}
       />

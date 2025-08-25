@@ -21,6 +21,7 @@ const CommunitiesPage = () => {
   const { memberships } = useCommunityMembership();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showDiscover, setShowDiscover] = useState(false);
 
   const categories = [
     { id: 'all', label: 'All', icon: Home, color: "text-muted-foreground", activeBg: "bg-muted/80" },
@@ -70,10 +71,6 @@ const CommunitiesPage = () => {
         <div className="bg-card border-b border-border sticky top-16 z-10">
           <div className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Communities</h1>
-                <p className="text-sm text-muted-foreground">Discover and join communities around you</p>
-              </div>
               <CreateCommunityDialog />
             </div>
 
@@ -91,19 +88,92 @@ const CommunitiesPage = () => {
         </div>
 
         <div className="p-4">
-          <Tabs defaultValue="discover" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="discover" className="flex items-center gap-2">
-                <Search className="w-4 h-4" />
-                Discover
-              </TabsTrigger>
-              <TabsTrigger value="my-communities" className="flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                My Communities ({myCommunities.length})
-              </TabsTrigger>
-            </TabsList>
+          {!showDiscover ? (
+            <div className="space-y-4">
+              {!user ? (
+                <div className="text-center py-12">
+                  <div className="text-4xl mb-4">🔐</div>
+                  <h3 className="text-lg font-medium text-foreground mb-2">Login Required</h3>
+                  <p className="text-muted-foreground">Please login to view your communities</p>
+                </div>
+              ) : (
+                <>
+                  {/* Pending Requests */}
+                  {pendingRequests.length > 0 && (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-medium text-foreground">Pending Requests</h3>
+                        <Badge variant="secondary">{pendingRequests.length}</Badge>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {pendingRequests.map(community => (
+                          <CommunityCard key={community.id} community={community} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-            <TabsContent value="discover" className="space-y-4">
+                  {/* My Communities */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-medium text-foreground">My Communities ({myCommunities.length})</h3>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setShowDiscover(true)}
+                        className="flex items-center gap-2"
+                      >
+                        <Search className="w-4 h-4" />
+                        Discover Communities
+                      </Button>
+                    </div>
+                    
+                    {myCommunities.length === 0 ? (
+                      <div className="text-center py-12">
+                        <div className="text-4xl mb-4">👥</div>
+                        <h3 className="text-lg font-medium text-foreground mb-2">No Communities Yet</h3>
+                        <p className="text-muted-foreground mb-4">
+                          Join communities to connect with like-minded people
+                        </p>
+                        <Button onClick={() => setShowDiscover(true)}>
+                          Discover Communities
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {myCommunities.map(community => (
+                          <CommunityCard
+                            key={community.id}
+                            community={community}
+                            onClick={() => {
+                              // TODO: Navigate to community detail page
+                              console.log('Navigate to community:', community.id);
+                            }}
+                            onUpdate={() => window.location.reload()}
+                            onDelete={() => window.location.reload()}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium text-foreground">Discover Communities</h3>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowDiscover(false)}
+                  className="flex items-center gap-2"
+                >
+                  <Users className="w-4 h-4" />
+                  My Communities
+                </Button>
+              </div>
+
               {/* Category Filter */}
               <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
                 {categories.map(category => {
@@ -161,71 +231,8 @@ const CommunitiesPage = () => {
                   <CreateCommunityDialog />
                 </div>
               )}
-            </TabsContent>
-
-            <TabsContent value="my-communities" className="space-y-4">
-              {!user ? (
-                <div className="text-center py-12">
-                  <div className="text-4xl mb-4">🔐</div>
-                  <h3 className="text-lg font-medium text-foreground mb-2">Login Required</h3>
-                  <p className="text-muted-foreground">Please login to view your communities</p>
-                </div>
-              ) : (
-                <>
-                  {/* Pending Requests */}
-                  {pendingRequests.length > 0 && (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-foreground">Pending Requests</h3>
-                        <Badge variant="secondary">{pendingRequests.length}</Badge>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {pendingRequests.map(community => (
-                          <CommunityCard key={community.id} community={community} />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* My Communities */}
-                  <div className="space-y-3">
-                    <h3 className="font-medium text-foreground">Joined Communities</h3>
-                    
-                    {myCommunities.length === 0 ? (
-                      <div className="text-center py-12">
-                        <div className="text-4xl mb-4">👥</div>
-                        <h3 className="text-lg font-medium text-foreground mb-2">No Communities Yet</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Join communities to connect with like-minded people
-                        </p>
-                        <Button onClick={() => {
-                          const discoverTab = document.querySelector('[value="discover"]') as HTMLElement;
-                          discoverTab?.click();
-                        }}>
-                          Discover Communities
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {myCommunities.map(community => (
-                          <CommunityCard
-                            key={community.id}
-                            community={community}
-                            onClick={() => {
-                              // TODO: Navigate to community detail page
-                              console.log('Navigate to community:', community.id);
-                            }}
-                            onUpdate={() => window.location.reload()}
-                            onDelete={() => window.location.reload()}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-            </TabsContent>
-          </Tabs>
+            </div>
+          )}
         </div>
       </div>
       
