@@ -17,6 +17,10 @@ export interface Community {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  creator_profile?: {
+    name: string | null;
+    profile_image_url: string | null;
+  } | null;
 }
 
 export interface CommunityMember {
@@ -43,7 +47,13 @@ export const useCommunities = (category?: string) => {
       setLoading(true);
       let query = supabase
         .from('communities')
-        .select('*')
+        .select(`
+          *,
+          profiles(
+            name,
+            profile_image_url
+          )
+        `)
         .eq('is_active', true)
         .order('member_count', { ascending: false });
 
@@ -54,7 +64,17 @@ export const useCommunities = (category?: string) => {
       const { data, error } = await query;
 
       if (error) throw error;
-      setCommunities((data || []) as Community[]);
+      
+      // Transform the data to match our Community interface
+      const transformedData = (data || []).map((item: any) => ({
+        ...item,
+        creator_profile: item.profiles ? {
+          name: item.profiles.name,
+          profile_image_url: item.profiles.profile_image_url
+        } : null
+      }));
+      
+      setCommunities(transformedData as Community[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

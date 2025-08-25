@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users, Lock, Globe, UserPlus } from "lucide-react";
 import { Community, useCommunityMembership } from "@/hooks/useCommunities";
 import { useAuth } from "@/contexts/AuthContext";
@@ -159,6 +160,24 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
             {community.subcategory || community.category}
           </Badge>
         </div>
+
+        {/* Creator Profile */}
+        {community.creator_profile && (
+          <div className="flex items-center gap-2 mb-3 px-2 py-1 bg-muted/30 rounded-full">
+            <Avatar className="w-5 h-5">
+              <AvatarImage 
+                src={community.creator_profile.profile_image_url || ''} 
+                alt={community.creator_profile.name || 'Creator'} 
+              />
+              <AvatarFallback className="text-xs">
+                {community.creator_profile.name?.charAt(0)?.toUpperCase() || '?'}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-xs text-muted-foreground font-medium">
+              {community.creator_profile.name || 'Anonymous'}
+            </span>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="space-y-2">
