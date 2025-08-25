@@ -123,8 +123,7 @@ const CreateCommunityDialog = () => {
         name: formData.name.trim(),
         tagline: formData.tagline.trim() || null,
         description: formData.description.trim() || null,
-        subcategory: formData.subcategory || null,
-        logo_url: logoUrl
+        subcategory: formData.subcategory || null
       });
 
       toast({

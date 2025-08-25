@@ -47,12 +47,6 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
   };
 
   const handleClick = async () => {
-    if (isCurrentUser) {
-      // Show add story options for current user
-      setShowAddStoryOptions(true);
-      return;
-    }
-
     console.log('ProfileCard clicked for user:', id, 'Current stories count:', stories.length);
     
     // Always refetch stories to ensure we have the latest data
@@ -76,6 +70,11 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
         setShowProfilePicture(true);
       }
     }
+  };
+
+  const handleAddStoryClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowAddStoryOptions(true);
   };
 
   // Mobile camera capture using Capacitor
@@ -258,8 +257,11 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
             )}
             {/* Add story button for current user */}
             {isCurrentUser && (
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full border-2 border-background flex items-center justify-center">
-                <Plus className="w-3 h-3 text-primary-foreground" />
+              <div 
+                className="absolute -bottom-1 -right-1 w-8 h-8 bg-primary rounded-full border-2 border-background flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+                onClick={handleAddStoryClick}
+              >
+                <Plus className="w-4 h-4 text-primary-foreground" />
               </div>
             )}
           </div>
