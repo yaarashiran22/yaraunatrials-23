@@ -224,7 +224,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           {/* Event Name Field */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground block text-left">
-              {eventType === 'meetup' ? 'Meetup Name*' : 'Event Name*'}
+              Title*
             </label>
             <Input 
               value={eventName}
