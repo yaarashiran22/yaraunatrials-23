@@ -71,14 +71,10 @@ export const useDirectMessages = () => {
     if (!user) return;
 
     try {
-      // Get all unique conversations
+      // First get all messages involving the current user
       const { data: messages, error } = await supabase
         .from('direct_messages')
-        .select(`
-          *,
-          sender_profile:profiles!direct_messages_sender_id_fkey(id, name, email, profile_image_url),
-          recipient_profile:profiles!direct_messages_recipient_id_fkey(id, name, email, profile_image_url)
-        `)
+        .select('*')
         .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
         .order('created_at', { ascending: false });
 
@@ -87,19 +83,48 @@ export const useDirectMessages = () => {
         return;
       }
 
+      if (!messages || messages.length === 0) {
+        setConversations([]);
+        return;
+      }
+
+      // Get unique user IDs that the current user has conversations with
+      const conversationUserIds = new Set<string>();
+      messages.forEach(message => {
+        if (message.sender_id === user.id) {
+          conversationUserIds.add(message.recipient_id);
+        } else {
+          conversationUserIds.add(message.sender_id);
+        }
+      });
+
+      // Fetch profile data for all conversation partners
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, name, email, profile_image_url')
+        .in('id', Array.from(conversationUserIds));
+
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+        return;
+      }
+
+      // Create a map of profiles for quick lookup
+      const profileMap = new Map<string, Profile>();
+      profiles?.forEach(profile => {
+        profileMap.set(profile.id, profile);
+      });
+
       // Group messages by conversation partner
       const conversationMap = new Map<string, Conversation>();
 
-      messages?.forEach((message: any) => {
+      messages.forEach((message: any) => {
         const isFromCurrentUser = message.sender_id === user.id;
-        const conversationPartner = isFromCurrentUser 
-          ? message.recipient_profile 
-          : message.sender_profile;
+        const partnerId = isFromCurrentUser ? message.recipient_id : message.sender_id;
+        const conversationPartner = profileMap.get(partnerId);
 
         if (!conversationPartner) return;
 
-        const partnerId = conversationPartner.id;
-        
         if (!conversationMap.has(partnerId)) {
           conversationMap.set(partnerId, {
             user: conversationPartner,
