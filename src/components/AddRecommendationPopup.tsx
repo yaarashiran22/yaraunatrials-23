@@ -61,9 +61,9 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
         minZoom: 10,
       }).addTo(map);
 
-      // Add click handler to place marker
-      map.on('click', (e) => {
-        console.log('Map clicked at:', e.latlng);
+      // Add double-click handler to place marker (prevents conflicts with map navigation)
+      map.on('dblclick', (e) => {
+        console.log('Map double-clicked at:', e.latlng);
         const { lat, lng } = e.latlng;
         
         // Remove existing marker
@@ -75,11 +75,13 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
         // Create new marker with custom icon
         const customIcon = L.divIcon({
           html: `
-            <div style="background: #FF6F50; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>
+            <div style="background: #FF6F50; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); position: relative;">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 12px;">📍</div>
+            </div>
           `,
           className: 'custom-pin-marker',
-          iconSize: [20, 20],
-          iconAnchor: [10, 10]
+          iconSize: [24, 24],
+          iconAnchor: [12, 24]
         });
         
         const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
@@ -91,6 +93,9 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
         
         toast.success('Location pinned successfully!');
       });
+
+      // Disable single-click zoom and prevent interference
+      map.doubleClickZoom.disable();
     };
 
     // Initialize map with small delay
@@ -254,7 +259,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
             <div>
               <Label className="text-sm font-medium">Select Location</Label>
               <p className="text-xs text-muted-foreground mb-2">
-                <strong>Click anywhere on the map below</strong> to pin the exact location of the place you're recommending
+                <strong>Double-click anywhere on the map below</strong> to pin the exact location of the place you're recommending
               </p>
             </div>
             <div className="relative bg-card rounded-lg overflow-hidden border h-64" style={{ zIndex: 1 }}>
@@ -267,7 +272,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
               )}
               {!selectedLocation && (
                 <div className="absolute top-2 left-2 bg-blue-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg animate-pulse">
-                  Click on the map to select location
+                  Double-click on the map to select location
                 </div>
               )}
             </div>

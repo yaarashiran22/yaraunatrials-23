@@ -30,6 +30,8 @@ const DiscoverPage = () => {
   const addUserLocationMarkers = () => {
     if (!mapInstanceRef.current) return;
 
+    console.log('Adding user location markers, count:', userLocations.length);
+
     // Clear existing user markers
     if (userMarkersRef.current.length > 0) {
       userMarkersRef.current.forEach(marker => {
@@ -42,23 +44,25 @@ const DiscoverPage = () => {
     userLocations.forEach((userLocation) => {
       if (!mapInstanceRef.current) return;
 
+      console.log('Adding marker for user:', userLocation.profile?.name, 'at:', userLocation.latitude, userLocation.longitude);
+
       // Create custom user icon
       const userIcon = L.divIcon({
         html: `
-          <div class="w-8 h-8 rounded-full border-2 border-white shadow-md overflow-hidden bg-white relative">
+          <div class="w-10 h-10 rounded-full border-3 border-white shadow-lg overflow-hidden bg-white relative">
             <img 
-              src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
+              src="${userLocation.profile?.profile_image_url || '/placeholder.svg'}" 
               alt=""
               class="w-full h-full object-cover"
               loading="lazy"
             />
-            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border border-white rounded-full"></div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
           </div>
         `,
         className: 'user-location-marker',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
       });
 
       const marker = L.marker([userLocation.latitude, userLocation.longitude], {
@@ -67,16 +71,17 @@ const DiscoverPage = () => {
       })
         .addTo(mapInstanceRef.current)
         .bindPopup(`
-          <div dir="rtl" class="text-right text-sm">
+          <div dir="ltr" class="text-left text-sm">
             <div class="flex items-center gap-2">
               <img 
-                src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
+                src="${userLocation.profile?.profile_image_url || '/placeholder.svg'}" 
                 alt=""
                 class="w-6 h-6 rounded-full object-cover"
                 loading="lazy"
               />
-              <span class="font-medium">${userLocation.profile.name || 'User'}</span>
+              <span class="font-medium">${userLocation.profile?.name || 'User'}</span>
             </div>
+            <div class="text-xs text-muted-foreground mt-1">📍 Current location</div>
           </div>
         `);
 
