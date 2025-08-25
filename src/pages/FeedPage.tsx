@@ -158,8 +158,8 @@ const FeedPage = () => {
       />
 
       {/* Full Screen Map with Messages Overlay */}
-      <main className="relative h-[calc(100vh-64px-80px)]"> {/* Account for header and bottom nav */}
-        {/* Full Screen Buenos Aires Map */}
+      <main className="relative h-[60vh] mx-4 mt-4 rounded-xl overflow-hidden"> {/* Reduced height and added margins */}
+        {/* Buenos Aires Map */}
         <div className="absolute inset-0">
           <BuenosAiresMap className="w-full h-full" />
         </div>

@@ -129,8 +129,8 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
         )}
         
         {/* Logo */}
-        <div className="absolute -bottom-6 left-4">
-          <div className="w-10 h-10 bg-white rounded-lg border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
+        <div className="absolute -bottom-8 left-4">
+          <div className="w-12 h-12 bg-white rounded-lg border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
             {community.logo_url ? (
               <img 
                 src={community.logo_url} 
@@ -138,7 +138,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="text-lg">🏘️</div>
+              <div className="text-xl">🏘️</div>
             )}
           </div>
         </div>
@@ -153,7 +153,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
       </div>
 
       {/* Content */}
-      <div className="p-4 pt-8">
+      <div className="p-4 pt-10">
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1">
             <h3 className="font-semibold text-foreground mb-1 line-clamp-1">{community.name}</h3>
