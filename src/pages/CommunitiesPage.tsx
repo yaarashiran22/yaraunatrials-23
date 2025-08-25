@@ -71,7 +71,9 @@ const CommunitiesPage = () => {
         <div className="bg-background/95 backdrop-blur-sm sticky top-16 z-10">
           <div className="p-4 space-y-4">
             <div className="flex items-center justify-between gap-3">
-              <CreateCommunityDialog />
+              <div className="scale-90">
+                <CreateCommunityDialog />
+              </div>
               {user && (
                 <Button 
                   variant="outline" 
@@ -117,13 +119,8 @@ const CommunitiesPage = () => {
                 </div>
               ) : (
                 <>
-                  {/* My Communities */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="rounded-full">{myCommunities.length}</Badge>
-                      </div>
-                    </div>
+                   {/* My Communities */}
+                   <div className="space-y-3">
                     
                     {myCommunities.length === 0 ? (
                       <div className="text-center py-12 px-6">
