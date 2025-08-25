@@ -1,0 +1,256 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/hooks/use-toast';
+
+export interface DirectMessage {
+  id: string;
+  sender_id: string;
+  recipient_id: string;
+  message: string;
+  created_at: string;
+  updated_at: string;
+  is_read: boolean;
+}
+
+export interface Profile {
+  id: string;
+  name: string;
+  profile_image_url?: string;
+  email: string;
+}
+
+export interface Conversation {
+  user: Profile;
+  lastMessage?: DirectMessage;
+  unreadCount: number;
+}
+
+export const useDirectMessages = () => {
+  const { user } = useAuth();
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [currentMessages, setCurrentMessages] = useState<DirectMessage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+  // Fetch all users (profiles) for user selection
+  const [allUsers, setAllUsers] = useState<Profile[]>([]);
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchConversations();
+    }
+  }, [user]);
+
+  const fetchAllUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, name, email, profile_image_url')
+        .order('name');
+
+      if (error) {
+        console.error('Error fetching users:', error);
+        return;
+      }
+
+      // Filter out current user
+      const filteredUsers = (data || []).filter(profile => profile.id !== user?.id);
+      setAllUsers(filteredUsers);
+    } catch (err) {
+      console.error('Unexpected error fetching users:', err);
+    }
+  };
+
+  const fetchConversations = async () => {
+    if (!user) return;
+
+    try {
+      // Get all unique conversations
+      const { data: messages, error } = await supabase
+        .from('direct_messages')
+        .select(`
+          *,
+          sender_profile:profiles!direct_messages_sender_id_fkey(id, name, email, profile_image_url),
+          recipient_profile:profiles!direct_messages_recipient_id_fkey(id, name, email, profile_image_url)
+        `)
+        .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching conversations:', error);
+        return;
+      }
+
+      // Group messages by conversation partner
+      const conversationMap = new Map<string, Conversation>();
+
+      messages?.forEach((message: any) => {
+        const isFromCurrentUser = message.sender_id === user.id;
+        const conversationPartner = isFromCurrentUser 
+          ? message.recipient_profile 
+          : message.sender_profile;
+
+        if (!conversationPartner) return;
+
+        const partnerId = conversationPartner.id;
+        
+        if (!conversationMap.has(partnerId)) {
+          conversationMap.set(partnerId, {
+            user: conversationPartner,
+            lastMessage: message,
+            unreadCount: 0
+          });
+        }
+
+        // Count unread messages (messages sent to current user that are unread)
+        if (!isFromCurrentUser && !message.is_read) {
+          const conversation = conversationMap.get(partnerId)!;
+          conversation.unreadCount++;
+        }
+      });
+
+      setConversations(Array.from(conversationMap.values()));
+    } catch (err) {
+      console.error('Unexpected error fetching conversations:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchMessagesWithUser = async (userId: string) => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('direct_messages')
+        .select('*')
+        .or(`and(sender_id.eq.${user.id},recipient_id.eq.${userId}),and(sender_id.eq.${userId},recipient_id.eq.${user.id})`)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching messages:', error);
+        return;
+      }
+
+      setCurrentMessages(data || []);
+      setSelectedUserId(userId);
+
+      // Mark messages as read
+      await markMessagesAsRead(userId);
+    } catch (err) {
+      console.error('Unexpected error fetching messages:', err);
+    }
+  };
+
+  const markMessagesAsRead = async (senderId: string) => {
+    if (!user) return;
+
+    try {
+      await supabase
+        .from('direct_messages')
+        .update({ is_read: true })
+        .eq('sender_id', senderId)
+        .eq('recipient_id', user.id)
+        .eq('is_read', false);
+    } catch (err) {
+      console.error('Error marking messages as read:', err);
+    }
+  };
+
+  const sendMessage = async (recipientId: string, messageText: string) => {
+    if (!user || !messageText.trim()) {
+      return false;
+    }
+
+    setSending(true);
+    try {
+      const { data, error } = await supabase
+        .from('direct_messages')
+        .insert({
+          sender_id: user.id,
+          recipient_id: recipientId,
+          message: messageText.trim()
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error sending message:', error);
+        toast({
+          title: "Error",
+          description: "Failed to send message",
+          variant: "destructive",
+        });
+        return false;
+      }
+
+      // Add to current messages if viewing this conversation
+      if (selectedUserId === recipientId) {
+        setCurrentMessages(prev => [...prev, data]);
+      }
+
+      // Refresh conversations
+      fetchConversations();
+
+      return true;
+    } catch (err) {
+      console.error('Unexpected error sending message:', err);
+      return false;
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const deleteMessage = async (messageId: string) => {
+    if (!user) return false;
+
+    try {
+      const { error } = await supabase
+        .from('direct_messages')
+        .delete()
+        .eq('id', messageId)
+        .eq('sender_id', user.id);
+
+      if (error) {
+        console.error('Error deleting message:', error);
+        toast({
+          title: "Error",
+          description: "Failed to delete message",
+          variant: "destructive",
+        });
+        return false;
+      }
+
+      // Remove from current messages
+      setCurrentMessages(prev => prev.filter(msg => msg.id !== messageId));
+      
+      // Refresh conversations
+      fetchConversations();
+
+      return true;
+    } catch (err) {
+      console.error('Unexpected error deleting message:', err);
+      return false;
+    }
+  };
+
+  return {
+    conversations,
+    currentMessages,
+    allUsers,
+    loading,
+    sending,
+    selectedUserId,
+    fetchMessagesWithUser,
+    sendMessage,
+    deleteMessage,
+    clearSelectedUser: () => setSelectedUserId(null),
+    refetch: fetchConversations
+  };
+};
