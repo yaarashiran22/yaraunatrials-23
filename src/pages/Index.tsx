@@ -240,7 +240,7 @@ const Index = () => {
             <FastLoadingSkeleton type="profiles" />
           ) : (
             <div className="relative">
-              <div className="flex overflow-x-auto gap-3 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+              <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
                 {displayProfiles.length > 0 ? (
                   displayProfiles.map((profile, index) => (
                     <ProfileCard

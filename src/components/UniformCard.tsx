@@ -117,28 +117,7 @@ const UniformCard = ({
             )}
           </div>
         </div>
-        <div className="flex items-center justify-between mt-2">
-          {/* Display uploader profile image for events and recommendations */}
-          {(type === 'event' || type === 'business') && uploader && (
-            <div 
-              className="cursor-pointer flex-shrink-0"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onProfileClick && uploader.user_id) {
-                  onProfileClick(uploader.user_id);
-                }
-              }}
-            >
-              <img 
-                src={uploader.small_photo}
-                alt={uploader.name}
-                className="w-7 h-7 rounded-full object-cover border-2 border-white/80 depth-1 hover:depth-2 hover:scale-110 transition-all duration-300"
-                onError={(e) => {
-                  e.currentTarget.src = uploader.image;
-                }}
-              />
-            </div>
-          )}
+        <div className="flex items-center justify-end mt-2">
           {/* Save button */}
           {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
             <Button
