@@ -244,39 +244,54 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
   return (
     <>
       <div 
-        className={`flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity ${className}`}
+        className={`flex flex-col items-center gap-2 cursor-pointer hover:opacity-90 transition-all duration-200 ${className}`}
         onClick={handleClick}
         style={style}
       >
         <div className="relative">
-          <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} ${getBorderThickness(stories)} card-3d`}>
-            <div 
-              className="w-full h-full rounded-full overflow-hidden border-2 border-white depth-2"
-            >
-              <img 
-                src={image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
-                alt={name}
-                className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-              />
-            </div>
-            {/* Story indicator for other users */}
-            {!isCurrentUser && stories.length > 0 && (
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-orange-400 via-red-400 to-orange-500 rounded-full border-[3px] border-white flex items-center justify-center depth-3 floating-element glow-accent">
-                <div className="w-4 h-4 bg-orange-50 rounded-full inner-shadow animate-pulse-glow"></div>
+          {/* Story Ring - Instagram-like gradient border */}
+          <div className={`
+            w-[76px] h-[76px] rounded-full p-[3px] relative
+            ${stories.length > 0 
+              ? `${getBorderColor(stories)} shadow-lg` 
+              : 'bg-muted/20'
+            }
+            transition-all duration-300 hover:scale-105
+          `}>
+            {/* Profile Picture Container */}
+            <div className="w-full h-full rounded-full overflow-hidden bg-background p-[2px]">
+              <div className="w-full h-full rounded-full overflow-hidden">
+                <img 
+                  src={image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
+                  alt={name}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                />
               </div>
-            )}
-            {/* Add story button for current user */}
+            </div>
+
+            {/* Add Story Button for Current User */}
             {isCurrentUser && (
               <div 
-                className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full border-2 border-orange-300 flex items-center justify-center cursor-pointer shadow-sm hover:border-orange-400 hover:bg-orange-50 transition-all duration-200"
+                className="absolute -bottom-0.5 -right-0.5 w-7 h-7 bg-primary rounded-full border-[3px] border-background flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-all duration-200 z-10"
                 onClick={handleAddStoryClick}
               >
-                <Plus className="w-2.5 h-2.5 text-orange-600" />
+                <Plus className="w-3.5 h-3.5 text-primary-foreground" />
+              </div>
+            )}
+
+            {/* Unread Story Indicator for Other Users */}
+            {!isCurrentUser && stories.length > 0 && (
+              <div className="absolute inset-0 rounded-full animate-pulse">
+                <div className={`w-full h-full rounded-full ${getBorderColor(stories)} opacity-20`}></div>
               </div>
             )}
           </div>
         </div>
-        <span className="text-sm font-medium text-foreground text-center">{name}</span>
+
+        {/* Username */}
+        <span className="text-xs font-medium text-foreground text-center max-w-[80px] truncate leading-tight">
+          {isCurrentUser ? 'Your Story' : name}
+        </span>
       </div>
       
       <StoriesPopup 

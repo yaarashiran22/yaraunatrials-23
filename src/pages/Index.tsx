@@ -246,7 +246,7 @@ const Index = () => {
                       id={profile.id}
                       image={profile.image}
                       name={profile.name}
-                      className={`flex-shrink-0 min-w-[80px] animate-fade-in ${index === 0 && user?.id === profile.id ? '' : ''}`}
+                      className={`flex-shrink-0 min-w-[90px] animate-fade-in ${index === 0 && user?.id === profile.id ? '' : ''}`}
                       style={{ animationDelay: `${index * 0.05}s` } as React.CSSProperties}
                       isCurrentUser={user?.id === profile.id}
                     />
