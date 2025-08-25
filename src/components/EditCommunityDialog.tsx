@@ -26,7 +26,10 @@ const EditCommunityDialog = ({ community, onUpdate, onDelete }: EditCommunityDia
   const [isUpdating, setIsUpdating] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(community.logo_url || null);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(community.cover_image_url || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     name: community.name,
@@ -75,10 +78,44 @@ const EditCommunityDialog = ({ community, onUpdate, onDelete }: EditCommunityDia
     reader.readAsDataURL(file);
   };
 
+  const handleCoverSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid File",
+        description: "Please select an image file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File Too Large",
+        description: "Image must be less than 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setCoverFile(file);
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setCoverPreview(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const uploadImage = async (file: File): Promise<string> => {
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-    const filePath = `community-logos/${fileName}`;
+    const filePath = `community-images/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from('photos')
@@ -106,6 +143,11 @@ const EditCommunityDialog = ({ community, onUpdate, onDelete }: EditCommunityDia
         logoUrl = await uploadImage(logoFile);
       }
 
+      let coverUrl = community.cover_image_url;
+      if (coverFile) {
+        coverUrl = await uploadImage(coverFile);
+      }
+
       const { error } = await supabase
         .from('communities')
         .update({
@@ -116,6 +158,7 @@ const EditCommunityDialog = ({ community, onUpdate, onDelete }: EditCommunityDia
           subcategory: formData.subcategory || null,
           access_type: formData.access_type,
           logo_url: logoUrl,
+          cover_image_url: coverUrl,
           updated_at: new Date().toISOString()
         })
         .eq('id', community.id);
@@ -192,6 +235,53 @@ const EditCommunityDialog = ({ community, onUpdate, onDelete }: EditCommunityDia
         </DialogHeader>
         
         <div className="space-y-6 py-4">
+          {/* Cover Image Upload */}
+          <div className="space-y-2">
+            <Label>Cover Image (Optional)</Label>
+            <div className="flex items-center gap-4">
+              {coverPreview ? (
+                <div className="relative w-full h-24 rounded-lg overflow-hidden border">
+                  <img src={coverPreview} alt="Cover preview" className="w-full h-full object-cover" />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute top-1 right-1 h-6 w-6 p-0"
+                    onClick={() => {
+                      setCoverFile(null);
+                      setCoverPreview(community.cover_image_url || null);
+                    }}
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="w-full h-24 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
+                  <Upload className="w-6 h-6 text-muted-foreground/50" />
+                </div>
+              )}
+            </div>
+            <input
+              ref={coverInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleCoverSelect}
+              className="hidden"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => coverInputRef.current?.click()}
+              className="w-full"
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Choose Cover Image
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              Max 5MB, 16:9 aspect ratio recommended
+            </p>
+          </div>
+
           {/* Logo Upload */}
           <div className="space-y-2">
             <Label>Community Logo (Optional)</Label>

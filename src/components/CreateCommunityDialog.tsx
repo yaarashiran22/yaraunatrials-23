@@ -19,7 +19,10 @@ const CreateCommunityDialog = () => {
   const [creating, setCreating] = useState(false);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -68,24 +71,56 @@ const CreateCommunityDialog = () => {
     }
   };
 
+  const handleCoverSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "File too large",
+          description: "Please select an image smaller than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setCoverFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setCoverPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const uploadImage = async (file: File): Promise<string> => {
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-    const filePath = `community-logos/${fileName}`;
+    const filePath = `community-images/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
-      .from('avatars')
+      .from('photos')
       .upload(filePath, file);
 
     if (uploadError) {
       throw uploadError;
     }
 
-    const { data } = supabase.storage
-      .from('avatars')
+    const { data: { publicUrl } } = supabase.storage
+      .from('photos')
       .getPublicUrl(filePath);
 
-    return data.publicUrl;
+    return publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -117,14 +152,29 @@ const CreateCommunityDialog = () => {
         logoUrl = await uploadImage(logoFile);
       }
 
-      await createCommunity({
+      let coverUrl = null;
+      if (coverFile) {
+        coverUrl = await uploadImage(coverFile);
+      }
+
+      const communityData = {
         ...formData,
         creator_id: user.id,
         name: formData.name.trim(),
         tagline: formData.tagline.trim() || null,
         description: formData.description.trim() || null,
         subcategory: formData.subcategory || null
-      });
+      };
+
+      if (logoUrl) {
+        (communityData as any).logo_url = logoUrl;
+      }
+
+      if (coverUrl) {
+        (communityData as any).cover_image_url = coverUrl;
+      }
+
+      await createCommunity(communityData);
 
       toast({
         title: "Community Created!",
@@ -141,6 +191,8 @@ const CreateCommunityDialog = () => {
       });
       setLogoFile(null);
       setLogoPreview(null);
+      setCoverFile(null);
+      setCoverPreview(null);
       setOpen(false);
     } catch (error) {
       toast({
@@ -167,6 +219,101 @@ const CreateCommunityDialog = () => {
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Cover Image Upload */}
+          <div className="space-y-2">
+            <Label>Cover Image (Optional)</Label>
+            <div className="flex items-center gap-4">
+              {coverPreview ? (
+                <div className="relative w-full h-24 rounded-lg overflow-hidden border">
+                  <img src={coverPreview} alt="Cover preview" className="w-full h-full object-cover" />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute top-1 right-1 h-6 w-6 p-0"
+                    onClick={() => {
+                      setCoverFile(null);
+                      setCoverPreview(null);
+                    }}
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="w-full h-24 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
+                  <Upload className="w-6 h-6 text-muted-foreground/50" />
+                </div>
+              )}
+            </div>
+            <input
+              ref={coverInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleCoverSelect}
+              className="hidden"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => coverInputRef.current?.click()}
+              className="w-full"
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Choose Cover Image
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              Max 5MB, 16:9 aspect ratio recommended
+            </p>
+          </div>
+
+          {/* Logo Upload */}
+          <div className="space-y-2">
+            <Label>Community Logo (Optional)</Label>
+            <div className="flex items-center gap-4">
+              {logoPreview ? (
+                <div className="relative">
+                  <img src={logoPreview} alt="Logo preview" className="w-16 h-16 rounded-lg object-cover border" />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute -top-2 -right-2 h-5 w-5 p-0"
+                    onClick={() => {
+                      setLogoFile(null);
+                      setLogoPreview(null);
+                    }}
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="w-16 h-16 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
+                  <Upload className="w-6 h-6 text-muted-foreground/50" />
+                </div>
+              )}
+              <div className="flex-1">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Choose Logo
+                </Button>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Max 5MB, PNG/JPG recommended
+                </p>
+              </div>
+            </div>
+          </div>
           <div className="space-y-2">
             <Label htmlFor="name">Community Name *</Label>
             <Input
@@ -223,61 +370,6 @@ const CreateCommunityDialog = () => {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Community Logo</Label>
-            <div className="flex items-center gap-4">
-              {logoPreview ? (
-                <div className="relative">
-                  <img 
-                    src={logoPreview} 
-                    alt="Logo preview" 
-                    className="w-16 h-16 rounded-lg object-cover border"
-                  />
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0"
-                    onClick={() => {
-                      setLogoFile(null);
-                      setLogoPreview(null);
-                      if (fileInputRef.current) {
-                        fileInputRef.current.value = '';
-                      }
-                    }}
-                  >
-                    <X className="w-3 h-3" />
-                  </Button>
-                </div>
-              ) : (
-                <div className="w-16 h-16 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
-                  <Upload className="w-6 h-6 text-muted-foreground/50" />
-                </div>
-              )}
-              <div className="flex-1">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-full"
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  Choose Logo
-                </Button>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Max 5MB, PNG/JPG recommended
-                </p>
-              </div>
             </div>
           </div>
 
