@@ -298,26 +298,6 @@ const DiscoverPage = () => {
         <div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             <AddRecommendationCard />
-            {!recommendationsLoading && recommendations.map((item) => (
-              <UniformCard
-                key={item.id}
-                id={item.id}
-                image={item.image_url}
-                title={item.title}
-                altText={item.title}
-                subtitle={item.description}
-                price={item.price?.toString()}
-                type="business"
-                favoriteData={{
-                  id: item.id,
-                  title: item.title,
-                  image: item.image_url,
-                  subtitle: item.description,
-                  price: item.price?.toString(),
-                  type: 'business'
-                }}
-              />
-            ))}
           </div>
         </div>
       </main>
