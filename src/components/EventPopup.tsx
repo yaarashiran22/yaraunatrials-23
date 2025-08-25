@@ -239,7 +239,7 @@ const EventPopup = ({
           <div className="mt-6 p-4 bg-muted/20 rounded-xl">
             <div className="text-center mb-4">
               <p className="text-sm text-muted-foreground mb-2">
-                {rsvpCount} אנשים מגיעים לאירוע
+                {rsvpCount} people are attending this event
               </p>
               <div className="flex gap-2 justify-center">
                 <Button
@@ -248,8 +248,8 @@ const EventPopup = ({
                   variant={userRSVP?.status === 'going' ? "default" : "outline"}
                   className="flex-1 h-10 rounded-lg"
                 >
-                  <Check className="h-4 w-4 ml-2" />
-                  מגיע
+                  <Check className="h-4 w-4 mr-2" />
+                  Going
                 </Button>
                 <Button
                   onClick={() => handleRSVP('maybe')}
@@ -257,8 +257,8 @@ const EventPopup = ({
                   variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
                   className="flex-1 h-10 rounded-lg"
                 >
-                  <UserCheck className="h-4 w-4 ml-2" />
-                  אולי
+                  <UserCheck className="h-4 w-4 mr-2" />
+                  Maybe
                 </Button>
               </div>
             </div>
