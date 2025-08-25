@@ -1,22 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import L from 'leaflet';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { X, Upload, MapPin } from 'lucide-react';
+import { Upload, MapPin, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useUserLocations } from '@/hooks/useUserLocations';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-
-// Fix for default markers in Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-});
 
 interface AddRecommendationPopupProps {
   isOpen: boolean;
@@ -26,91 +18,16 @@ interface AddRecommendationPopupProps {
 
 const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddRecommendationPopupProps) => {
   const { user } = useAuth();
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<L.Map | null>(null);
-  const markerRef = useRef<L.Marker | null>(null);
+  const { userLocations } = useUserLocations();
   
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [instagramUrl, setInstagramUrl] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState<{lat: number, lng: number} | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (!isOpen || !mapContainer.current) return;
-
-    const initializeMap = () => {
-      // Buenos Aires coordinates - center of the city
-      const buenosAiresCenter: [number, number] = [-34.6118, -58.3960];
-
-      // Create map with Leaflet
-      const map = L.map(mapContainer.current!, {
-        zoomControl: true,
-        attributionControl: true,
-        fadeAnimation: true,
-        zoomAnimation: true,
-      }).setView(buenosAiresCenter, 13);
-      
-      mapInstanceRef.current = map;
-
-      // Add OpenStreetMap tiles
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 19,
-        minZoom: 10,
-      }).addTo(map);
-
-      // Add double-click handler to place marker (prevents conflicts with map navigation)
-      map.on('dblclick', (e) => {
-        console.log('Map double-clicked at:', e.latlng);
-        const { lat, lng } = e.latlng;
-        
-        // Remove existing marker
-        if (markerRef.current) {
-          console.log('Removing existing marker');
-          map.removeLayer(markerRef.current);
-        }
-        
-        // Create new marker with custom icon
-        const customIcon = L.divIcon({
-          html: `
-            <div style="background: #FF6F50; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); position: relative;">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 12px;">📍</div>
-            </div>
-          `,
-          className: 'custom-pin-marker',
-          iconSize: [24, 24],
-          iconAnchor: [12, 24]
-        });
-        
-        const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
-        markerRef.current = marker;
-        
-        // Update selected location
-        setSelectedLocation({ lat, lng });
-        console.log('Location selected:', { lat, lng });
-        
-        toast.success('Location pinned successfully!');
-      });
-
-      // Disable single-click zoom and prevent interference
-      map.doubleClickZoom.disable();
-    };
-
-    // Initialize map with small delay
-    const timer = setTimeout(() => {
-      initializeMap();
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-    };
-  }, [isOpen]);
+  // Get current user's location
+  const userLocation = userLocations.find(loc => loc.user_id === user?.id);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -156,8 +73,8 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
       return;
     }
 
-    if (!selectedLocation) {
-      toast.error('Please select a location on the map');
+    if (!userLocation) {
+      toast.error('Please share your location first to add recommendations at your current location');
       return;
     }
 
@@ -176,11 +93,11 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
         }
       }
 
-      // Prepare location data
+      // Prepare location data using user's current location
       const locationData = JSON.stringify({
-        lat: selectedLocation.lat,
-        lng: selectedLocation.lng,
-        address: `${selectedLocation.lat.toFixed(6)}, ${selectedLocation.lng.toFixed(6)}`
+        lat: userLocation.latitude,
+        lng: userLocation.longitude,
+        address: userLocation.address || `${userLocation.latitude.toFixed(6)}, ${userLocation.longitude.toFixed(6)}`
       });
 
       // Insert recommendation into items table
@@ -195,7 +112,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
           category: 'recommendation',
           status: 'active',
           market: 'argentina', // Since it's Buenos Aires
-          mobile_number: instagramUrl.trim() // Using mobile_number field for Instagram URL temporarily
+          instagram_url: instagramUrl.trim() || null
         });
 
       if (error) {
@@ -204,20 +121,13 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
         return;
       }
 
-      toast.success('Recommendation added successfully!');
+      toast.success('Recommendation added at your current location!');
       
       // Reset form
       setTitle('');
       setDescription('');
       setInstagramUrl('');
       setSelectedFile(null);
-      setSelectedLocation(null);
-      
-      // Remove marker
-      if (markerRef.current && mapInstanceRef.current) {
-        mapInstanceRef.current.removeLayer(markerRef.current);
-        markerRef.current = null;
-      }
       
       onRecommendationAdded?.();
       onClose();
@@ -235,123 +145,118 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
     setDescription('');
     setInstagramUrl('');
     setSelectedFile(null);
-    setSelectedLocation(null);
-    
-    // Remove marker
-    if (markerRef.current && mapInstanceRef.current) {
-      mapInstanceRef.current.removeLayer(markerRef.current);
-      markerRef.current = null;
-    }
     
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-5xl w-full max-h-[90vh] overflow-y-auto p-0">
-        <div className="p-6">
-          <DialogHeader className="mb-4">
-            <DialogTitle>Add Recommendation</DialogTitle>
-          </DialogHeader>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-0">
-            {/* Map Section */}
-            <div className="space-y-4 flex flex-col">
-              <div>
-                <Label className="text-sm font-medium">Select Location</Label>
-                <p className="text-xs text-muted-foreground mb-2">
-                  <strong>Double-click anywhere on the map below</strong> to pin the exact location of the place you're recommending
-                </p>
+      <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Add Recommendation</DialogTitle>
+        </DialogHeader>
+        
+        <div className="space-y-6">
+          {/* Location Info */}
+          <div className="bg-muted/50 rounded-lg p-4">
+            {userLocation ? (
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">Using your current location</p>
+                  <p className="text-xs text-muted-foreground">
+                    {userLocation.address || `${userLocation.latitude.toFixed(4)}, ${userLocation.longitude.toFixed(4)}`}
+                  </p>
+                </div>
               </div>
-              <div className="relative bg-card rounded-lg overflow-hidden border flex-1 min-h-[300px] max-h-[350px] z-0">
-                <div ref={mapContainer} className="w-full h-full cursor-crosshair relative z-0" style={{ maxHeight: '350px', minHeight: '300px' }} />
-                {selectedLocation && (
-                  <div className="absolute top-2 left-2 bg-green-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg z-10">
-                    <MapPin className="w-3 h-3 inline mr-1" />
-                    Location pinned! ✓
-                  </div>
-                )}
-                {!selectedLocation && (
-                  <div className="absolute top-2 left-2 bg-blue-500 text-white rounded px-2 py-1 text-xs font-medium shadow-lg animate-pulse z-10">
-                    Double-click on the map to select location
-                  </div>
-                )}
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center">
+                  <AlertCircle className="w-5 h-5 text-orange-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">Location not shared</p>
+                  <p className="text-xs text-muted-foreground">
+                    Please share your location first to add recommendations
+                  </p>
+                </div>
               </div>
+            )}
+          </div>
+
+          {/* Form Fields */}
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="title">Title *</Label>
+              <Input
+                id="title"
+                placeholder="e.g., Café Tortoni"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </div>
 
-            {/* Form Section */}
-            <div className="space-y-4 flex flex-col min-h-0">
-              <div className="flex-1 space-y-4">
-                <div>
-                  <Label htmlFor="title">Title *</Label>
-                  <Input
-                    id="title"
-                    placeholder="e.g., Café Tortoni"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </div>
+            <div>
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                placeholder="Tell us about this place..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+              />
+            </div>
 
-                <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Tell us about this place..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    rows={3}
-                  />
-                </div>
+            <div>
+              <Label htmlFor="instagram">Instagram URL</Label>
+              <Input
+                id="instagram"
+                placeholder="https://instagram.com/cafetortoni"
+                value={instagramUrl}
+                onChange={(e) => setInstagramUrl(e.target.value)}
+              />
+            </div>
 
-                <div>
-                  <Label htmlFor="instagram">Instagram URL</Label>
-                  <Input
-                    id="instagram"
-                    placeholder="https://instagram.com/cafetortoni"
-                    value={instagramUrl}
-                    onChange={(e) => setInstagramUrl(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="photo">Photo</Label>
-                  <div className="mt-1">
-                    <input
-                      id="photo"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
-                    <Button
-                      variant="outline"
-                      onClick={() => document.getElementById('photo')?.click()}
-                      className="w-full"
-                    >
-                      <Upload className="w-4 h-4 mr-2" />
-                      {selectedFile ? selectedFile.name : 'Upload Photo'}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex gap-2 pt-4 border-t">
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting || !title.trim() || !selectedLocation}
-                  className="flex-1"
-                >
-                  {isSubmitting ? 'Adding...' : 'Add Recommendation'}
-                </Button>
+            <div>
+              <Label htmlFor="photo">Photo</Label>
+              <div className="mt-1">
+                <input
+                  id="photo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
                 <Button
                   variant="outline"
-                  onClick={handleClose}
-                  disabled={isSubmitting}
+                  onClick={() => document.getElementById('photo')?.click()}
+                  className="w-full"
                 >
-                  Cancel
+                  <Upload className="w-4 h-4 mr-2" />
+                  {selectedFile ? selectedFile.name : 'Upload Photo'}
                 </Button>
               </div>
             </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 pt-4 border-t">
+            <Button
+              onClick={handleSubmit}
+              disabled={isSubmitting || !title.trim() || !userLocation}
+              className="flex-1"
+            >
+              {isSubmitting ? 'Adding...' : 'Add Recommendation'}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleClose}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
           </div>
         </div>
       </DialogContent>
