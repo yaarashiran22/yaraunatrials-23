@@ -387,6 +387,100 @@ const ProfilePage = () => {
           </section>
         )}
 
+        {/* My Items Section - Only shown for own profile */}
+        {isOwnProfile && userItems && userItems.length > 0 && (
+          <section className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">My Items</h3>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => navigate('/items/new')}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Item
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              {userItems.map((item) => (
+                <div key={item.id} className="relative group">
+                  <div 
+                    className="bg-card rounded-lg border overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    <div className="aspect-square bg-muted">
+                      <img 
+                        src={item.image_url || dressItem} 
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-3">
+                      <h4 className="font-medium text-sm mb-1 truncate">{item.title}</h4>
+                      <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{item.description}</p>
+                      {item.price && (
+                        <p className="text-sm font-semibold text-primary">₪{item.price}</p>
+                      )}
+                      <div className="flex items-center gap-1 mt-2">
+                        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full">
+                          {item.category || 'Item'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Edit/Delete buttons - show on hover */}
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditItem(item.id);
+                      }}
+                    >
+                      <Pencil className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteItem(item.id);
+                      }}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Empty state for items */}
+        {isOwnProfile && userItems && userItems.length === 0 && !itemsLoading && (
+          <section className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">My Items</h3>
+            </div>
+            <div className="text-center py-8 bg-muted/30 rounded-lg">
+              <p className="text-muted-foreground mb-4">You haven't added any items yet</p>
+              <Button 
+                onClick={() => navigate('/items/new')}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Your First Item
+              </Button>
+            </div>
+          </section>
+        )}
+
         {/* Logout Button */}
         {isOwnProfile && (
           <div className="mt-8 pt-6 border-t border-border">
