@@ -3,6 +3,7 @@ import L from 'leaflet';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUserLocations } from '@/hooks/useUserLocations';
+import LocationShareButton from '@/components/LocationShareButton';
 
 // Fix for default markers in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -92,8 +93,8 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
       try {
         setIsLoading(true);
         
-        // Tel Aviv coordinates - center of the city
-        const telAvivCenter: [number, number] = [32.0853, 34.7818];
+        // Buenos Aires coordinates - center of the city
+        const buenosAiresCenter: [number, number] = [-34.6118, -58.3960];
 
         // Create map with Leaflet
         const map = L.map(mapContainer.current, {
@@ -101,7 +102,7 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
           attributionControl: true,
           fadeAnimation: true,
           zoomAnimation: true,
-        }).setView(telAvivCenter, 13);
+        }).setView(buenosAiresCenter, 12);
         
         mapInstanceRef.current = map;
 
@@ -112,68 +113,29 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
           minZoom: 10,
         }).addTo(map);
 
-        // Popular locations in Tel Aviv
-        const locations = [
-          {
-            name: 'Dizengoff Center',
-            nameHe: 'דיזינגוף סנטר',
-            position: [32.0740, 34.7740] as [number, number],
-            color: '#BB31E9',
-            type: 'shopping'
-          },
-          {
-            name: 'Carmel Market', 
-            nameHe: 'שוק הכרמל',
-            position: [32.0663, 34.7692] as [number, number],
-            color: '#FF6B6B',
-            type: 'market'
-          },
-          {
-            name: 'Tel Aviv Port',
-            nameHe: 'נמל תל אביב',
-            position: [32.1066, 34.7517] as [number, number],
-            color: '#4ECDC4',
-            type: 'entertainment'
-          },
-          {
-            name: 'Jaffa Old City',
-            nameHe: 'יפו העתיקה',
-            position: [32.0545, 34.7520] as [number, number],
-            color: '#45B7D1',
-            type: 'historic'
-          },
-          {
-            name: 'Rothschild Boulevard',
-            nameHe: 'שדרות רוטשילד',
-            position: [32.0663, 34.7692] as [number, number],
-            color: '#96CEB4',
-            type: 'street'
-          },
-          {
-            name: 'Florentin',
-            nameHe: 'פלורנטין',
-            position: [32.0546, 34.7692] as [number, number],
-            color: '#F39C12',
-            type: 'neighborhood'
-          },
-          {
-            name: 'Neve Tzedek',
-            nameHe: 'נווה צדק',
-            position: [32.0587, 34.7683] as [number, number],
-            color: '#E74C3C',
-            type: 'neighborhood'
-          }
+        // Popular neighborhoods in Buenos Aires
+        const neighborhoods = [
+          { name: "Palermo", lat: -34.5870, lng: -58.4263, color: '#BB31E9' },
+          { name: "San Telmo", lat: -34.6202, lng: -58.3731, color: '#FF6B6B' },
+          { name: "La Boca", lat: -34.6343, lng: -58.3635, color: '#4ECDC4' },
+          { name: "Recoleta", lat: -34.5885, lng: -58.3967, color: '#45B7D1' },
+          { name: "Puerto Madero", lat: -34.6107, lng: -58.3647, color: '#96CEB4' },
         ];
 
-        // Add location markers
-        locations.forEach(location => {
+        // Add Buenos Aires center marker
+        L.marker(buenosAiresCenter)
+          .addTo(map)
+          .bindPopup('Buenos Aires');
+
+        // Add neighborhood markers
+        neighborhoods.forEach(neighborhood => {
           // Create custom marker
           const markerElement = document.createElement('div');
           markerElement.style.cssText = `
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            background-color: ${location.color};
+            background-color: ${neighborhood.color};
             border: 3px solid white;
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             cursor: pointer;
@@ -188,12 +150,11 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
             popupAnchor: [0, -24]
           });
 
-          L.marker(location.position, { icon: customIcon })
+          L.marker([neighborhood.lat, neighborhood.lng], { icon: customIcon })
             .addTo(map)
             .bindPopup(`
               <div class="text-center p-2">
-                <strong class="text-gray-800 block">${location.nameHe}</strong>
-                <span class="text-gray-600 text-sm">${location.name}</span>
+                <strong class="text-gray-800 block">${neighborhood.name}</strong>
               </div>
             `);
         });
@@ -238,14 +199,17 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
       <div className="absolute top-0 left-0 right-0 z-10 bg-background/90 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-4">
           <h2 className="text-lg font-semibold text-foreground">What's Around Me</h2>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={onClose}
-            className="rounded-full"
-          >
-            <X className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <LocationShareButton size="sm" />
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={onClose}
+              className="rounded-full"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </div>
 
