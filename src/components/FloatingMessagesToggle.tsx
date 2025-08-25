@@ -7,7 +7,7 @@ const FloatingMessagesToggle = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="fixed bottom-[9.5rem] lg:bottom-24 right-4 z-40">
+    <div className="fixed bottom-[8.5rem] lg:bottom-20 right-4 z-40">
       <Button
         onClick={() => navigate('/messages')}
         size="default"
