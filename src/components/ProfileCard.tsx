@@ -268,10 +268,10 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
             {/* Add story button for current user */}
             {isCurrentUser && (
               <div 
-                className="absolute -bottom-1 -right-1 w-6 h-6 btn-3d rounded-full border-2 border-gray-300 flex items-center justify-center cursor-pointer shadow-sm bg-white"
+                className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full border-2 border-orange-300 flex items-center justify-center cursor-pointer shadow-sm hover:border-orange-400 hover:bg-orange-50 transition-all duration-200"
                 onClick={handleAddStoryClick}
               >
-                <Plus className="w-2.5 h-2.5 text-black" />
+                <Plus className="w-2.5 h-2.5 text-orange-600" />
               </div>
             )}
           </div>
