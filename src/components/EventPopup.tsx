@@ -35,12 +35,12 @@ const EventPopup = ({
   const { toast } = useToast();
   
   // Always show UI immediately with passed event data
-  // Only fetch additional details if we need mobile_number or other specific data
-  const needsAdditionalData = !event?.organizer?.id && eventId;
+  // Only fetch additional details if we need mobile_number or other specific data AND have a valid ID
+  const needsAdditionalData = !event?.organizer?.id && eventId && eventId !== "1";
   const { item: eventData, loading } = useItemDetails(needsAdditionalData ? eventId : '');
 
   const defaultEvent = {
-    id: "1",
+    id: undefined,
     title: "Event Party",
     image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=600&fit=crop",
     price: "₪100",
@@ -76,8 +76,9 @@ const EventPopup = ({
     }) : null
   } : (event || defaultEvent);
   
-  // RSVP functionality
-  const { userRSVP, rsvpCount, handleRSVP, isUpdating } = useEventRSVP(eventId || displayEvent.id);
+  // RSVP functionality - only enable if we have a valid event ID
+  const validEventId = eventId || (displayEvent.id && displayEvent.id !== "1" ? displayEvent.id : undefined);
+  const { userRSVP, rsvpCount, handleRSVP, isUpdating } = useEventRSVP(validEventId || '');
 
   console.log('EventPopup - eventData:', eventData);
   console.log('EventPopup - mobile_number:', eventData?.mobile_number);
@@ -251,34 +252,36 @@ const EventPopup = ({
             )}
           </div>
 
-          {/* RSVP Section */}
-          <div className="mt-6 p-4 bg-muted/20 rounded-xl">
-            <div className="text-center mb-4">
-              <p className="text-sm text-muted-foreground mb-2">
-                {rsvpCount} people attending
-              </p>
-              <div className="flex gap-2 justify-center">
-                <Button
-                  onClick={() => handleRSVP('going')}
-                  disabled={isUpdating}
-                  variant={userRSVP?.status === 'going' ? "default" : "outline"}
-                  className="flex-1 h-10 rounded-lg"
-                >
-                  <Check className="h-4 w-4 mr-2" />
-                  Going
-                </Button>
-                <Button
-                  onClick={() => handleRSVP('maybe')}
-                  disabled={isUpdating}
-                  variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
-                  className="flex-1 h-10 rounded-lg"
-                >
-                  <UserCheck className="h-4 w-4 mr-2" />
-                  Maybe
-                </Button>
+          {/* RSVP Section - only show if we have a valid event ID */}
+          {validEventId && (
+            <div className="mt-6 p-4 bg-muted/20 rounded-xl">
+              <div className="text-center mb-4">
+                <p className="text-sm text-muted-foreground mb-2">
+                  {rsvpCount} people attending
+                </p>
+                <div className="flex gap-2 justify-center">
+                  <Button
+                    onClick={() => handleRSVP('going')}
+                    disabled={isUpdating}
+                    variant={userRSVP?.status === 'going' ? "default" : "outline"}
+                    className="flex-1 h-10 rounded-lg"
+                  >
+                    <Check className="h-4 w-4 mr-2" />
+                    Going
+                  </Button>
+                  <Button
+                    onClick={() => handleRSVP('maybe')}
+                    disabled={isUpdating}
+                    variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
+                    className="flex-1 h-10 rounded-lg"
+                  >
+                    <UserCheck className="h-4 w-4 mr-2" />
+                    Maybe
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Action Buttons */}
           <div className="mt-6 flex flex-col gap-3">
