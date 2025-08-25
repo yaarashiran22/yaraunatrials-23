@@ -23,7 +23,6 @@ import UniformCard from "@/components/UniformCard";
 import AddItemPopup from "@/components/AddItemPopup";
 import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 import { FeedImageViewer } from "@/components/FeedImageViewer";
-import { useUserCommunities } from "@/hooks/useUserCommunities";
 import EditEventPopup from "@/components/EditEventPopup";
 
 import profile1 from "@/assets/profile-1.jpg";
@@ -57,7 +56,6 @@ const ProfilePage = () => {
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
   const { addFriend, isFriend } = useFriends();
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
-  const { communities: userCommunities, loading: communitiesLoading } = useUserCommunities(actualProfileId);
   
   // Check if this is the current user's profile
   const isOwnProfile = user && (!id || !validateUUID(id) || id === user.id);
@@ -399,26 +397,6 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
-
-        {/* Communities Section - Show instead of interests */}
-        {userCommunities && userCommunities.length > 0 && (
-          <section className="mb-6">
-            <h3 className="text-lg font-semibold mb-3">Communities</h3>
-            <div className="flex flex-wrap gap-2">
-              {userCommunities.map((community) => (
-                <div 
-                  key={community.id} 
-                  className="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium flex items-center gap-2"
-                >
-                  {community.name}
-                  {community.is_creator && (
-                    <span className="text-xs bg-primary/20 rounded-full px-2 py-0.5">Creator</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
 
         {/* Account Type Badge */}
         {profileData?.account_type && (
