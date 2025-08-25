@@ -229,7 +229,7 @@ const Index = () => {
       {/* Mood Filter Strip */}
       <MoodFilterStrip />
       
-      <main className="px-4 lg:px-8 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 max-w-7xl mx-auto">
+      <main className="px-4 lg:px-6 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 w-full">
         {/* Community Members Section - Horizontal Carousel */}
         <section className="mb-3 lg:mb-4">
           {loading ? (
