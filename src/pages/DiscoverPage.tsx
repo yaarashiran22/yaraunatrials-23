@@ -114,10 +114,28 @@ const DiscoverPage = () => {
         return;
       }
 
-      setUserRecommendations(recommendations || []);
+      // Fetch user profiles for recommendations
+      const userIds = recommendations?.map(r => r.user_id).filter(Boolean) || [];
+      let profiles: any[] = [];
+      
+      if (userIds.length > 0) {
+        const { data: profilesData } = await supabase
+          .from('profiles')
+          .select('id, name, profile_image_url')
+          .in('id', userIds);
+        profiles = profilesData || [];
+      }
+
+      // Combine recommendations with profiles
+      const recommendationsWithProfiles = recommendations?.map(recommendation => ({
+        ...recommendation,
+        profile: profiles.find(p => p.id === recommendation.user_id)
+      })) || [];
+
+      setUserRecommendations(recommendationsWithProfiles);
 
       // Add markers for recommendations
-      (recommendations || []).forEach((recommendation) => {
+      recommendationsWithProfiles.forEach((recommendation) => {
         if (!mapInstanceRef.current) return;
 
         let lat, lng;
@@ -169,6 +187,16 @@ const DiscoverPage = () => {
               ` : ''}
               <div class="font-semibold text-base mb-2 text-gray-800">${recommendation.title}</div>
               ${recommendation.description ? `<div class="text-gray-600 text-sm mb-3 leading-relaxed">${recommendation.description}</div>` : ''}
+              ${recommendation.profile ? `
+                <div class="flex items-center gap-2 mb-2 text-xs text-gray-500">
+                  <img 
+                    src="${recommendation.profile.profile_image_url || '/placeholder.svg'}" 
+                    alt=""
+                    class="w-4 h-4 rounded-full object-cover"
+                  />
+                  <span>Recommended by ${recommendation.profile.name || 'User'}</span>
+                </div>
+              ` : ''}
               ${recommendation.instagram_url ? `
                 <a href="${recommendation.instagram_url}" target="_blank" class="inline-flex items-center gap-1 text-orange-600 text-sm hover:underline font-medium">
                   🔗 Visit Link
@@ -305,7 +333,8 @@ const DiscoverPage = () => {
       <main className="container mx-auto px-4 py-3 space-y-6">
         {/* Map Section */}
         <div className="relative">
-          <div className="flex items-center justify-end mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-foreground">Recommendations</h3>
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" />
           </div>
           
@@ -340,44 +369,51 @@ const DiscoverPage = () => {
           
           {/* Display Recommendations */}
           {userRecommendations.length > 0 && (
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-foreground">Recommendations</h3>
-              <div className="grid gap-3">
-                {userRecommendations.map((recommendation) => (
-                  <div 
-                    key={recommendation.id}
-                    className="bg-card rounded-lg p-4 shadow-sm border hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex gap-3">
-                      {recommendation.image_url && (
-                        <img 
-                          src={recommendation.image_url} 
-                          alt={recommendation.title}
-                          className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-                        />
+            <div className="grid gap-3">
+              {userRecommendations.map((recommendation) => (
+                <div 
+                  key={recommendation.id}
+                  className="bg-card rounded-lg p-4 shadow-sm border hover:shadow-md transition-shadow"
+                >
+                  <div className="flex gap-3">
+                    {recommendation.image_url && (
+                      <img 
+                        src={recommendation.image_url} 
+                        alt={recommendation.title}
+                        className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-foreground mb-1">{recommendation.title}</h4>
+                      {recommendation.description && (
+                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+                          {recommendation.description}
+                        </p>
                       )}
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-foreground mb-1">{recommendation.title}</h4>
-                        {recommendation.description && (
-                          <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                            {recommendation.description}
-                          </p>
-                        )}
-                        {recommendation.instagram_url && (
-                          <a 
-                            href={recommendation.instagram_url} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-xs text-primary hover:underline flex items-center gap-1"
-                          >
-                            🔗 Link
-                          </a>
-                        )}
-                      </div>
+                      {recommendation.profile && (
+                        <div className="flex items-center gap-2 mb-2 text-xs text-muted-foreground">
+                          <img 
+                            src={recommendation.profile.profile_image_url || '/placeholder.svg'} 
+                            alt=""
+                            className="w-4 h-4 rounded-full object-cover"
+                          />
+                          <span>Recommended by {recommendation.profile.name || 'User'}</span>
+                        </div>
+                      )}
+                      {recommendation.instagram_url && (
+                        <a 
+                          href={recommendation.instagram_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-primary hover:underline flex items-center gap-1"
+                        >
+                          🔗 Link
+                        </a>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
