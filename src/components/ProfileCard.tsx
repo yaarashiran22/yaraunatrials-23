@@ -241,7 +241,7 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
         style={style}
       >
         <div className="relative">
-          <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} p-0.5`}>
+          <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} p-[3px]`}>
             <div 
               className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card"
             >
@@ -260,10 +260,10 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
             {/* Add story button for current user */}
             {isCurrentUser && (
               <div 
-                className="absolute -bottom-1 -right-1 w-8 h-8 bg-primary rounded-full border-2 border-background flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+                className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full border-2 border-gray-300 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform shadow-sm"
                 onClick={handleAddStoryClick}
               >
-                <Plus className="w-3 h-3 text-primary-foreground" />
+                <Plus className="w-2.5 h-2.5 text-black" />
               </div>
             )}
           </div>
