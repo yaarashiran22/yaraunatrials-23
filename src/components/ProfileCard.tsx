@@ -224,13 +224,21 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
     }
   };
 
-  // Generate border color based on whether user has announcements
+  // Generate border color and thickness based on whether user has announcements
   const getBorderColor = (stories: any[]) => {
     const hasAnnouncements = stories.some(story => story.is_announcement);
     if (hasAnnouncements) {
       return "bg-gradient-to-br from-yellow-400 to-yellow-600";
     }
     return "bg-gradient-to-br from-pink-400 to-[#BB31E9]";
+  };
+
+  const getBorderThickness = (stories: any[]) => {
+    const hasAnnouncements = stories.some(story => story.is_announcement);
+    if (hasAnnouncements) {
+      return "p-[3px]"; // Keep original thickness for yellow (announcement) borders
+    }
+    return "p-[2px]"; // Thinner purple border for regular stories
   };
 
   return (
@@ -241,7 +249,7 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
         style={style}
       >
         <div className="relative">
-          <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} p-[3px]`}>
+          <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} ${getBorderThickness(stories)}`}>
             <div 
               className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card"
             >
