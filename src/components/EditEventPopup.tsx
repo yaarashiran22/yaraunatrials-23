@@ -57,8 +57,8 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
   const handleSave = async () => {
     if (!eventData?.id) {
       toast({
-        title: "שגיאה",
-        description: "לא ניתן לעדכן את האירוע",
+        title: "Error",
+        description: "Unable to update the event",
         variant: "destructive",
       });
       return;
@@ -66,8 +66,8 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
 
     if (!formData.title.trim()) {
       toast({
-        title: "שגיאה",
-        description: "נא להזין כותרת לאירוע",
+        title: "Error",
+        description: "Please enter an event title",
         variant: "destructive",
       });
       return;
@@ -95,16 +95,16 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
       if (error) {
         console.error('Error updating event:', error);
         toast({
-          title: "שגיאה",
-          description: "לא ניתן לעדכן את האירוע",
+          title: "Error",
+          description: "Unable to update the event",
           variant: "destructive",
         });
         return;
       }
 
       toast({
-        title: "האירוע עודכן בהצלחה!",
-        description: "השינויים נשמרו במערכת",
+        title: "Event updated successfully!",
+        description: "Changes have been saved to the system",
       });
 
       onSuccess?.();
@@ -112,8 +112,8 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
     } catch (error) {
       console.error('Error updating event:', error);
       toast({
-        title: "שגיאה",
-        description: "לא ניתן לעדכן את האירוע",
+        title: "Error",
+        description: "Unable to update the event",
         variant: "destructive",
       });
     } finally {
@@ -126,7 +126,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle className="text-xl font-bold">
-            {formData.event_type === 'meetup' ? 'עריכת מפגש' : 'עריכת אירוע'}
+            {formData.event_type === 'meetup' ? 'Edit Meetup' : 'Edit Event'}
           </DialogTitle>
           <Button 
             variant="ghost" 
@@ -142,7 +142,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
           {/* Event Type */}
           <div>
             <Label htmlFor="event_type" className="text-sm font-medium">
-              סוג האירוע
+              Event Type
             </Label>
             <Select 
               value={formData.event_type} 
@@ -152,8 +152,8 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="event">אירוע</SelectItem>
-                <SelectItem value="meetup">מפגש</SelectItem>
+                <SelectItem value="event">Event</SelectItem>
+                <SelectItem value="meetup">Meetup</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -161,13 +161,13 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
           {/* Title */}
           <div>
             <Label htmlFor="title" className="text-sm font-medium">
-              כותרת *
+              Title *
             </Label>
             <Input
               id="title"
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
-              placeholder="הזן כותרת לאירוע..."
+              placeholder="Enter event title..."
               className="mt-1"
             />
           </div>
@@ -175,13 +175,13 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
           {/* Description */}
           <div>
             <Label htmlFor="description" className="text-sm font-medium">
-              תיאור
+              Description
             </Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => handleInputChange('description', e.target.value)}
-              placeholder="הוסף תיאור לאירוע..."
+              placeholder="Add event description..."
               className="mt-1 min-h-[80px]"
             />
           </div>
@@ -190,13 +190,13 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
           <div>
             <Label htmlFor="location" className="text-sm font-medium flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              מיקום
+              Location
             </Label>
             <Input
               id="location"
               value={formData.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
-              placeholder="הוסף מיקום..."
+              placeholder="Add location..."
               className="mt-1"
             />
           </div>
@@ -206,7 +206,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
             <div>
               <Label htmlFor="date" className="text-sm font-medium flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                תאריך
+                Date
               </Label>
               <Input
                 id="date"
@@ -219,7 +219,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
             <div>
               <Label htmlFor="time" className="text-sm font-medium flex items-center gap-2">
                 <Clock className="h-4 w-4" />
-                שעה
+                Time
               </Label>
               <Input
                 id="time"
@@ -235,13 +235,13 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
           <div>
             <Label htmlFor="price" className="text-sm font-medium flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
-              מחיר
+              Price
             </Label>
             <Input
               id="price"
               value={formData.price}
               onChange={(e) => handleInputChange('price', e.target.value)}
-              placeholder="חינם / ₪50 / וכו..."
+              placeholder="Free / $50 / etc..."
               className="mt-1"
             />
           </div>
@@ -250,7 +250,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
           <div>
             <Label htmlFor="image_url" className="text-sm font-medium flex items-center gap-2">
               <Image className="h-4 w-4" />
-              קישור לתמונה
+              Image URL
             </Label>
             <Input
               id="image_url"
@@ -264,7 +264,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
           {/* External Link */}
           <div>
             <Label htmlFor="external_link" className="text-sm font-medium">
-              קישור חיצוני
+              External Link
             </Label>
             <Input
               id="external_link"
@@ -285,12 +285,12 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  שומר...
+                  Saving...
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  שמור שינויים
+                  Save Changes
                 </>
               )}
             </Button>
@@ -299,7 +299,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
               onClick={onClose}
               disabled={isLoading}
             >
-              ביטול
+              Cancel
             </Button>
           </div>
         </div>
