@@ -71,24 +71,23 @@ const CommunitiesPage = () => {
         <div className="bg-background/95 backdrop-blur-sm sticky top-16 z-10">
           <div className="p-4 space-y-4">
             <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <CreateCommunityDialog />
-                {user && showDiscover && (
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setShowDiscover(false)}
-                    className="flex items-center gap-2 rounded-full"
-                  >
-                    <Users className="w-4 h-4" />
-                    My Communities
-                  </Button>
-                )}
-              </div>
+              <CreateCommunityDialog />
               {user && (
-                <h3 className="text-lg font-semibold text-foreground">
-                  {showDiscover ? "Join New Communities" : "My Communities"}
-                </h3>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowDiscover(!showDiscover)}
+                  className="flex items-center gap-2 rounded-full"
+                >
+                  {showDiscover ? (
+                    <>
+                      <Users className="w-4 h-4" />
+                      My Communities
+                    </>
+                  ) : (
+                    <>Join New Communities</>
+                  )}
+                </Button>
               )}
             </div>
 
@@ -118,20 +117,6 @@ const CommunitiesPage = () => {
                 </div>
               ) : (
                 <>
-                  {/* Pending Requests */}
-                  {pendingRequests.length > 0 && (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="rounded-full">{pendingRequests.length} pending</Badge>
-                      </div>
-                      <div className="grid grid-cols-1 gap-3">
-                        {pendingRequests.map(community => (
-                          <CommunityCard key={community.id} community={community} />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
                   {/* My Communities */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
@@ -178,6 +163,20 @@ const CommunitiesPage = () => {
                       </div>
                     )}
                   </div>
+
+                  {/* Pending Requests */}
+                  {pendingRequests.length > 0 && (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary" className="rounded-full">{pendingRequests.length} pending</Badge>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3">
+                        {pendingRequests.map(community => (
+                          <CommunityCard key={community.id} community={community} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             </div>
