@@ -57,12 +57,12 @@ const fetchHomepageData = async () => {
         .eq('category', 'מוזמנים להצטרף')
         .order('created_at', { ascending: false })
         .limit(4), // Reduced for faster loading
-      supabase
-        .from('profiles')
-        .select('id, name, profile_image_url')
-        .not('name', 'is', null)
-        .order('created_at', { ascending: false })
-        .limit(15), // Show newest users regardless of search preference
+        supabase
+          .from('profiles')
+          .select('id, name, profile_image_url')
+          .not('name', 'is', null)
+          .order('created_at', { ascending: false })
+          .limit(10), // Show only top 10 newest users
       supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
