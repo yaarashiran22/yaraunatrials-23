@@ -21,6 +21,7 @@ import UniformCard from "@/components/UniformCard";
 import AddItemPopup from "@/components/AddItemPopup";
 import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 import { FeedImageViewer } from "@/components/FeedImageViewer";
+import { useUserCommunities } from "@/hooks/useUserCommunities";
 
 import profile1 from "@/assets/profile-1.jpg";
 import dressItem from "@/assets/dress-item.jpg";
@@ -52,6 +53,7 @@ const ProfilePage = () => {
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
   const { addFriend, isFriend } = useFriends();
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
+  const { communities: userCommunities, loading: communitiesLoading } = useUserCommunities(actualProfileId);
   
   // Check if this is the current user's profile
   const isOwnProfile = user && (!id || !validateUUID(id) || id === user.id);
@@ -298,8 +300,8 @@ const ProfilePage = () => {
             {profileData?.specialties && profileData.specialties.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {profileData.specialties.map((specialty, index) => (
-                  <div key={index} className="rounded-lg px-3 py-2 inline-block" style={{ backgroundColor: 'hsl(280 60% 55%)' }}>
-                    <span className="text-sm font-medium text-white">{specialty}</span>
+                  <div key={index} className="bg-muted text-muted-foreground rounded-full px-2 py-1 inline-block">
+                    <span className="text-xs font-medium">{specialty}</span>
                   </div>
                 ))}
               </div>
@@ -348,17 +350,20 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Interests Section - Only show if user has interests */}
-        {profileData?.interests && profileData.interests.length > 0 && (
+        {/* Communities Section - Show instead of interests */}
+        {userCommunities && userCommunities.length > 0 && (
           <section className="mb-6">
-            <h3 className="text-lg font-semibold mb-3">Interests</h3>
+            <h3 className="text-lg font-semibold mb-3">Communities</h3>
             <div className="flex flex-wrap gap-2">
-              {profileData.interests.map((interest, index) => (
+              {userCommunities.map((community) => (
                 <div 
-                  key={index} 
-                  className="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium"
+                  key={community.id} 
+                  className="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-medium flex items-center gap-2"
                 >
-                  {interest}
+                  {community.name}
+                  {community.is_creator && (
+                    <span className="text-xs bg-primary/20 rounded-full px-2 py-0.5">Creator</span>
+                  )}
                 </div>
               ))}
             </div>

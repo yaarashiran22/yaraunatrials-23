@@ -279,12 +279,31 @@ const EditProfilePage = () => {
               {formData.interests.map((interest, index) => (
                 <div key={index} className="flex items-center gap-2 bg-muted rounded-full px-3 py-1">
                   <span className="text-sm">{interest}</span>
-                  <Button variant="ghost" size="sm" className="p-0 h-4 w-4">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="p-0 h-4 w-4"
+                    onClick={() => {
+                      const newInterests = formData.interests.filter((_, i) => i !== index);
+                      handleInputChange('interests', newInterests);
+                    }}
+                  >
                     <Plus className="h-3 w-3 rotate-45" />
                   </Button>
                 </div>
               ))}
-              <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="rounded-full px-3 py-1 h-7"
+                onClick={() => {
+                  const newInterest = prompt('הוסף תחום עניין:');
+                  if (newInterest?.trim()) {
+                    const newInterests = [...formData.interests, newInterest.trim()];
+                    handleInputChange('interests', newInterests);
+                  }
+                }}
+              >
                 <Plus className="h-3 w-3 ml-1" />
                 הוסף
               </Button>
