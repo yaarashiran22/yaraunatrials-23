@@ -116,7 +116,7 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
           size="sm"
           onClick={() => handleFilterClick(allFilter.id)}
           className={`
-            flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 
+            flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 
             flex items-center gap-2 min-w-fit border border-transparent
             ${activeFilter === allFilter.id 
               ? `${allFilter.activeBg} ${allFilter.color} border-current/20` 
@@ -149,7 +149,7 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
               size="sm"
               onClick={() => handleFilterClick(filter.id)}
               className={`
-                flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 
+                flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 
                 flex items-center gap-2 min-w-fit border border-transparent
                 ${activeFilter === filter.id 
                   ? `${filter.activeBg} ${filter.color} border-current/20` 

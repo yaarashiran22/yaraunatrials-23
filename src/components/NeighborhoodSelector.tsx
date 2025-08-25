@@ -39,7 +39,6 @@ const NeighborhoodSelector = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex items-center gap-1 bg-accent text-accent-foreground hover:bg-accent/80">
-          📍
           <span className="text-sm">{getDisplayName(neighborhoods.find(n => n.name === selectedNeighborhood))}</span>
           <ChevronDown className="h-4 w-4" />
         </Button>
