@@ -135,7 +135,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
               <img 
                 src={community.logo_url} 
                 alt={community.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover relative z-30"
               />
             ) : (
               <div className="text-3xl">🏘️</div>
