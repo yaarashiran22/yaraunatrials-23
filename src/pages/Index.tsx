@@ -143,34 +143,39 @@ const Index = () => {
 
   // Memoize display profiles to prevent unnecessary re-calculations
   const displayProfiles = useMemo(() => {
-    if (!user || !currentUserProfile) {
-      return profiles;
+    // Always show current user first if logged in, even before profiles load
+    const profilesList = [];
+    
+    if (user && currentUserProfile) {
+      const currentUserDisplayProfile = {
+        id: user.id,
+        name: currentUserProfile.name || 'You',
+        image: currentUserProfile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"
+      };
+      profilesList.push(currentUserDisplayProfile);
     }
 
-    // Filter out current user from other profiles to avoid duplicates
-    const otherProfiles = profiles.filter(p => p.id !== user.id);
-    
-    // Add current user's profile first
-    const currentUserDisplayProfile = {
-      id: user.id,
-      name: currentUserProfile.name || 'You',
-      image: currentUserProfile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"
-    };
-
-    // Sort other profiles: users with stories first, then alphabetically
-    const sortedOtherProfiles = otherProfiles.sort((a, b) => {
-      const aHasStories = (userStoryCounts[a.id] || 0) > 0;
-      const bHasStories = (userStoryCounts[b.id] || 0) > 0;
+    if (profiles.length > 0) {
+      // Filter out current user from other profiles to avoid duplicates
+      const otherProfiles = profiles.filter(p => p.id !== user?.id);
       
-      // If one has stories and the other doesn't, prioritize the one with stories
-      if (aHasStories && !bHasStories) return -1;
-      if (!aHasStories && bHasStories) return 1;
-      
-      // If both have stories or both don't have stories, sort alphabetically
-      return (a.name || '').localeCompare(b.name || '');
-    });
+      // Sort other profiles: users with stories first, then alphabetically
+      const sortedOtherProfiles = otherProfiles.sort((a, b) => {
+        const aHasStories = (userStoryCounts[a.id] || 0) > 0;
+        const bHasStories = (userStoryCounts[b.id] || 0) > 0;
+        
+        // If one has stories and the other doesn't, prioritize the one with stories
+        if (aHasStories && !bHasStories) return -1;
+        if (!aHasStories && bHasStories) return 1;
+        
+        // If both have stories or both don't have stories, sort alphabetically
+        return (a.name || '').localeCompare(b.name || '');
+      });
 
-    return [currentUserDisplayProfile, ...sortedOtherProfiles];
+      profilesList.push(...sortedOtherProfiles);
+    }
+
+    return profilesList;
   }, [user, currentUserProfile, profiles, userStoryCounts]);
 
   // All business, event, and artwork data now comes from the database

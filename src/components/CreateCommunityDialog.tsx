@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus } from "lucide-react";
+import { Plus, Upload, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCommunities } from "@/hooks/useCommunities";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const CreateCommunityDialog = () => {
   const { user } = useAuth();
@@ -16,6 +17,9 @@ const CreateCommunityDialog = () => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -30,6 +34,58 @@ const CreateCommunityDialog = () => {
     interests: ['Skating', 'Salsa', 'Yoga', 'Foodies', 'Techies', 'Expats', 'Photography', 'Music', 'Sports'],
     causes: ['Volunteering', 'Sustainability', 'Arts', 'Education', 'Animals', 'Environment', 'Health'],
     identity: ['Young Expats', 'Digital Nomads', 'Queer Community', 'Parents', 'Students', 'Professionals']
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "File too large",
+          description: "Please select an image smaller than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setLogoFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setLogoPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `community-logos/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,13 +111,20 @@ const CreateCommunityDialog = () => {
 
     try {
       setCreating(true);
+      
+      let logoUrl = null;
+      if (logoFile) {
+        logoUrl = await uploadImage(logoFile);
+      }
+
       await createCommunity({
         ...formData,
         creator_id: user.id,
         name: formData.name.trim(),
         tagline: formData.tagline.trim() || null,
         description: formData.description.trim() || null,
-        subcategory: formData.subcategory || null
+        subcategory: formData.subcategory || null,
+        logo_url: logoUrl
       });
 
       toast({
@@ -77,6 +140,8 @@ const CreateCommunityDialog = () => {
         subcategory: '',
         access_type: 'closed'
       });
+      setLogoFile(null);
+      setLogoPreview(null);
       setOpen(false);
     } catch (error) {
       toast({
@@ -159,6 +224,61 @@ const CreateCommunityDialog = () => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Community Logo</Label>
+            <div className="flex items-center gap-4">
+              {logoPreview ? (
+                <div className="relative">
+                  <img 
+                    src={logoPreview} 
+                    alt="Logo preview" 
+                    className="w-16 h-16 rounded-lg object-cover border"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0"
+                    onClick={() => {
+                      setLogoFile(null);
+                      setLogoPreview(null);
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = '';
+                      }
+                    }}
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="w-16 h-16 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
+                  <Upload className="w-6 h-6 text-muted-foreground/50" />
+                </div>
+              )}
+              <div className="flex-1">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Choose Logo
+                </Button>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Max 5MB, PNG/JPG recommended
+                </p>
+              </div>
             </div>
           </div>
 

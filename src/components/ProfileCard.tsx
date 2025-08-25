@@ -252,8 +252,8 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
             </div>
             {/* Story indicator for other users */}
             {!isCurrentUser && stories.length > 0 && (
-              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-yellow-500 rounded-full border-2 border-background flex items-center justify-center">
-                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 rounded-full border-3 border-background flex items-center justify-center shadow-lg">
+                <div className="w-3 h-3 bg-yellow-200 rounded-full animate-pulse"></div>
               </div>
             )}
             {/* Add story button for current user */}
