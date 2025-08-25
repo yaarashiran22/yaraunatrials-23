@@ -127,12 +127,11 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
           variant="ghost"
           size="sm"
           onClick={handleSearchOpen}
-          className="flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 
-                     flex items-center gap-2 min-w-fit border border-transparent
+          className="flex-shrink-0 rounded-full px-3 py-2 text-sm font-medium transition-all duration-200 
+                     flex items-center justify-center min-w-fit border border-transparent
                      text-slate-600 hover:bg-accent/50"
         >
           <Search className="h-4 w-4 text-slate-600" />
-          Search
         </Button>
 
         {/* Other Filters */}
