@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 export interface SearchResult {
   id: string;
-  type: 'event' | 'post' | 'community' | 'user' | 'item' | 'business';
+  type: 'event' | 'meetup' | 'post' | 'community' | 'user' | 'item' | 'business';
   title: string;
   subtitle?: string;
   description?: string;
@@ -35,7 +35,7 @@ export const useGlobalSearch = () => {
       // Search events
       const { data: events } = await supabase
         .from('events')
-        .select('*')
+        .select('*, event_type')
         .or(`title.ilike.${searchTerm},description.ilike.${searchTerm},location.ilike.${searchTerm}`)
         .limit(10);
 
@@ -48,7 +48,7 @@ export const useGlobalSearch = () => {
 
           allResults.push({
             id: event.id,
-            type: 'event',
+            type: event.event_type === 'meetup' ? 'meetup' : 'event',
             title: event.title,
             subtitle: event.location,
             description: event.description,
@@ -175,8 +175,8 @@ export const useGlobalSearch = () => {
         if (aHasTitle && !bHasTitle) return -1;
         if (!aHasTitle && bHasTitle) return 1;
         
-        // Priority order: events, communities, users, posts, items
-        const typePriority = { event: 1, community: 2, user: 3, post: 4, item: 5, business: 6 };
+        // Priority order: events, meetups, communities, users, posts, items
+        const typePriority = { event: 1, meetup: 2, community: 3, user: 4, post: 5, item: 6, business: 7 };
         return typePriority[a.type] - typePriority[b.type];
       });
 

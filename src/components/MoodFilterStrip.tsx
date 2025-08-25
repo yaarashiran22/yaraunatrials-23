@@ -59,6 +59,9 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
       case 'event':
         navigate(`/events/${result.id}`);
         break;
+      case 'meetup':
+        navigate(`/events/${result.id}`); // Meetups also go to events page but could be differentiated
+        break;
       case 'community':
         navigate(`/communities/${result.id}`);
         break;
@@ -79,6 +82,7 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
   const getResultIcon = (type: string) => {
     switch (type) {
       case 'event': return Calendar;
+      case 'meetup': return Users;
       case 'community': return Building;
       case 'user': return User;
       case 'post': return MapPin;
@@ -90,6 +94,7 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'event': return 'text-blue-500';
+      case 'meetup': return 'text-green-500';
       case 'community': return 'text-purple-500';
       case 'user': return 'text-green-500';
       case 'post': return 'text-orange-500';

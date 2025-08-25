@@ -76,8 +76,9 @@ const Index = () => {
     preloadData
   } = useOptimizedHomepage();
 
-  // Fetch events from the new events table
-  const { events: realEvents = [], refetch: refetchEvents } = useEvents();
+  // Fetch events and meetups separately from the new events table
+  const { events: realEvents = [], refetch: refetchEvents } = useEvents('event');
+  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup');
 
   // Preload data immediately on component mount for instant loading
   useEffect(() => {
@@ -97,8 +98,12 @@ const Index = () => {
 
   // Set refresh callback for new items
   useEffect(() => {
-    setRefreshCallback(() => refetch);
-  }, [setRefreshCallback, refetch]);
+    setRefreshCallback(() => () => {
+      refetch();
+      refetchEvents();
+      refetchMeetups();
+    });
+  }, [setRefreshCallback, refetch, refetchEvents, refetchMeetups]);
 
   const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
 
@@ -268,14 +273,14 @@ const Index = () => {
           </div>
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
-          ) : realEvents.length === 0 ? (
+          ) : meetupEvents.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <p>No meetups available at the moment</p>
             </div>
           ) : (
             <div className="relative">
               <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" style={{scrollBehavior: 'smooth'}}>
-                {realEvents.slice(0, 6).map((event) => (
+                {meetupEvents.slice(0, 6).map((event) => (
                   <div key={`meetup-${event.id}`} className="flex-shrink-0 w-48 lg:w-56">
                     <UniformCard
                       id={event.id}
@@ -284,7 +289,7 @@ const Index = () => {
                       title={event.title}
                       subtitle={event.location || 'Tel Aviv'}
                       date={event.date && event.time ? `${new Date(event.date).toLocaleDateString('en-US')} ${event.time}` : event.date ? new Date(event.date).toLocaleDateString('en-US') : undefined}
-                      type="event"
+                       type="event"
                       uploader={event.uploader}
                       onProfileClick={(userId) => navigate(`/profile/${userId}`)}
                       onClick={() => handleEventClick({
@@ -308,7 +313,7 @@ const Index = () => {
                         title: event.title,
                         description: event.description || event.title,
                         image: event.image_url,
-                        type: 'event'
+                        type: 'meetup'
                       }}
                     />
                   </div>
@@ -439,6 +444,7 @@ const Index = () => {
         onClose={() => setShowCreateEvent(false)} 
         onEventCreated={() => {
           refetchEvents();
+          refetchMeetups();
           refetch();
         }}
       />

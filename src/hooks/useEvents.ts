@@ -12,6 +12,7 @@ export interface Event {
   price?: string;
   image_url?: string;
   market: string;
+  event_type: 'event' | 'meetup';
   created_at: string;
   updated_at: string;
   uploader?: {
@@ -22,8 +23,8 @@ export interface Event {
   };
 }
 
-const fetchEvents = async (): Promise<Event[]> => {
-  const { data: events, error: eventsError } = await supabase
+const fetchEvents = async (eventType?: 'event' | 'meetup'): Promise<Event[]> => {
+  let query = supabase
     .from('events')
     .select(`
       id,
@@ -36,11 +37,18 @@ const fetchEvents = async (): Promise<Event[]> => {
       price,
       image_url,
       market,
+      event_type,
       created_at,
       updated_at
     `)
     .eq('market', 'israel')
     .order('created_at', { ascending: false });
+
+  if (eventType) {
+    query = query.eq('event_type', eventType);
+  }
+
+  const { data: events, error: eventsError } = await query;
 
   if (eventsError) throw eventsError;
 
@@ -64,6 +72,7 @@ const fetchEvents = async (): Promise<Event[]> => {
 
   return events.map(event => ({
     ...event,
+    event_type: event.event_type as 'event' | 'meetup',
     uploader: {
       name: profilesMap[event.user_id]?.name || 'משתמש',
       image: profilesMap[event.user_id]?.profile_image_url || '/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png',
@@ -73,10 +82,10 @@ const fetchEvents = async (): Promise<Event[]> => {
   }));
 };
 
-export const useEvents = () => {
+export const useEvents = (eventType?: 'event' | 'meetup') => {
   const queryResult = useQuery({
-    queryKey: ['events'],
-    queryFn: fetchEvents,
+    queryKey: ['events', eventType],
+    queryFn: () => fetchEvents(eventType),
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
   });

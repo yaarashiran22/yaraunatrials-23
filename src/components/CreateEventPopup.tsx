@@ -24,6 +24,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [externalLink, setExternalLink] = useState("");
+  const [eventType, setEventType] = useState<'event' | 'meetup'>('event');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
@@ -157,14 +158,15 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
           image_url: imageUrl,
           video_url: videoUrl,
           external_link: externalLink.trim() || null,
+          event_type: eventType,
           market: 'israel'
         });
 
       if (error) throw error;
 
       toast({
-        title: "האירוע נוצר בהצלחה!",
-        description: "האירוע שלך נוסף לעמוד האירועים",
+        title: eventType === 'meetup' ? "המפגש נוצר בהצלחה!" : "האירוע נוצר בהצלחה!",
+        description: eventType === 'meetup' ? "המפגש שלך נוסף לעמוד המפגשים" : "האירוע שלך נוסף לעמוד האירועים",
       });
 
       // Reset form
@@ -175,6 +177,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
       setLocation("");
       setPrice("");
       setExternalLink("");
+      setEventType('event');
       setSelectedFile(null);
       setFilePreview(null);
       setFileType(null);
@@ -210,18 +213,22 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
           >
             <X className="h-5 w-5" />
           </Button>
-          <h2 className="text-lg font-bold text-foreground">אירוע חדש</h2>
+          <h2 className="text-lg font-bold text-foreground">
+            {eventType === 'meetup' ? 'מפגש חדש' : 'אירוע חדש'}
+          </h2>
           <div className="w-9" />
         </div>
 
         <div className="p-6 space-y-6">
           {/* Event Name Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">שם האירוע*</label>
+            <label className="text-sm font-medium text-foreground block text-right">
+              {eventType === 'meetup' ? 'שם המפגש*' : 'שם האירוע*'}
+            </label>
             <Input 
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              placeholder="הזן שם לאירוע"
+              placeholder={eventType === 'meetup' ? 'הזן שם למפגש' : 'הזן שם לאירוע'}
               className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
             />
           </div>
@@ -232,9 +239,27 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
             <Textarea 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="תאר את האירוע שלך"
+              placeholder={eventType === 'meetup' ? 'תאר את המפגש שלך' : 'תאר את האירוע שלך'}
               className="w-full min-h-24 text-right bg-card border-2 border-border rounded-2xl resize-none"
             />
+          </div>
+
+          {/* Event Type Field */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-right">סוג*</label>
+            <Select value={eventType} onValueChange={(value: 'event' | 'meetup') => setEventType(value)}>
+              <SelectTrigger className="w-full h-12 text-right bg-background border-2 border-border rounded-full">
+                <SelectValue placeholder="בחר סוג" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border shadow-lg z-50">
+                <SelectItem value="event" className="text-right cursor-pointer hover:bg-muted">
+                  אירוע
+                </SelectItem>
+                <SelectItem value="meetup" className="text-right cursor-pointer hover:bg-muted">
+                  מפגש
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Date Field */}
@@ -359,7 +384,10 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
               disabled={isSubmitting}
               className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full text-lg font-medium"
             >
-              {isSubmitting ? "יוצר אירוע..." : "צור אירוע"}
+              {isSubmitting ? 
+                (eventType === 'meetup' ? "יוצר מפגש..." : "יוצר אירוע...") : 
+                (eventType === 'meetup' ? "צור מפגש" : "צור אירוע")
+              }
             </Button>
           </div>
         </div>
