@@ -77,14 +77,14 @@ const UniformCard = ({
 
   return (
     <div 
-      className="relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer"
+      className="relative card-elevated rounded-xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
       onClick={onClick}
     >
       <div className="aspect-[4/3] overflow-hidden">
         {video ? (
           <video 
             src={video} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             muted
             autoPlay
             loop
@@ -98,12 +98,14 @@ const UniformCard = ({
           <img 
             src={image || '/placeholder.svg'} 
             alt={getAltText()}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
         )}
+        {/* Shimmer overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-300"></div>
       </div>
       
-      <div className="p-3 h-16 flex flex-col justify-between">
+      <div className="p-3 h-16 flex flex-col justify-between surface-elevated">
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <h3 className="font-semibold text-foreground truncate text-sm">{title}</h3>
@@ -128,7 +130,7 @@ const UniformCard = ({
               <img 
                 src={uploader.small_photo}
                 alt={uploader.name}
-                className="w-8 h-8 rounded-full object-cover border-2 border-white/80 shadow-sm hover:ring-2 hover:ring-primary/50 transition-all"
+                className="w-8 h-8 rounded-full object-cover border-2 border-white/80 depth-1 hover:depth-2 hover:scale-110 transition-all duration-300"
                 onError={(e) => {
                   e.currentTarget.src = uploader.image;
                 }}
@@ -140,18 +142,15 @@ const UniformCard = ({
             <Button
               variant="ghost"
               size="sm"
-              className={`p-1.5 rounded-full ${
+              className={`p-1.5 rounded-full btn-3d ${
                 isCurrentlyFavorited ? 'text-red-500' : 'text-muted-foreground hover:text-red-500'
               }`}
               onClick={handleFavoriteClick}
             >
-              <Bookmark className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
+              <Bookmark className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current animate-bounce-subtle' : ''}`} />
             </Button>
           )}
         </div>
-        {price && (
-          <p className="text-sm font-bold text-primary">{price}</p>
-        )}
       </div>
     </div>
   );

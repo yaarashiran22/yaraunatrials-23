@@ -48,10 +48,26 @@ All colors MUST be HSL.
     --input: 0 0% 90%;
     --ring: 157 100% 50%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(0 0% 8%), hsl(0 0% 20%));
-    --gradient-soft: linear-gradient(180deg, hsl(0 0% 98%), hsl(0 0% 96%));
-    --shadow-soft: 0 4px 20px -4px hsl(157 100% 50% / 0.2);
-    --shadow-card: 0 2px 8px -2px hsl(0 0% 8% / 0.1);
+    /* Enhanced 3D Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(0 0% 20%) 50%, hsl(0 0% 8%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(0 0% 98%) 0%, hsl(0 0% 96%) 50%, hsl(0 0% 94%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(157 100% 45%) 0%, hsl(157 100% 50%) 50%, hsl(157 100% 55%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 102%) 0%, hsl(0 0% 98%) 100%);
+    
+    /* Layered 3D Shadows */
+    --shadow-subtle: 0 1px 3px 0 hsl(0 0% 8% / 0.1), 0 1px 2px 0 hsl(0 0% 8% / 0.06);
+    --shadow-card: 0 4px 6px -1px hsl(0 0% 8% / 0.1), 0 2px 4px -1px hsl(0 0% 8% / 0.06);
+    --shadow-medium: 0 10px 15px -3px hsl(0 0% 8% / 0.1), 0 4px 6px -2px hsl(0 0% 8% / 0.05);
+    --shadow-large: 0 20px 25px -5px hsl(0 0% 8% / 0.1), 0 10px 10px -5px hsl(0 0% 8% / 0.04);
+    --shadow-floating: 0 25px 50px -12px hsl(0 0% 8% / 0.25), 0 0 0 1px hsl(0 0% 8% / 0.05);
+    --shadow-glow: 0 0 30px hsl(157 100% 50% / 0.3);
+    --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 8% / 0.06);
+    
+    /* 3D Button Effects */
+    --shadow-button: 0 2px 4px hsl(0 0% 8% / 0.1), 0 1px 2px hsl(0 0% 8% / 0.1);
+    --shadow-button-hover: 0 4px 8px hsl(0 0% 8% / 0.15), 0 2px 4px hsl(0 0% 8% / 0.1);
+    --shadow-button-active: inset 0 2px 4px hsl(0 0% 8% / 0.1);
 
     --radius: 0.75rem;
 
@@ -137,4 +153,90 @@ All colors MUST be HSL.
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+}
+
+@layer components {
+  /* 3D Interactive Components */
+  .card-3d {
+    @apply bg-gradient-to-br from-white to-gray-50 shadow-lg border border-white/20;
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+    transform: translateZ(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .card-3d:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px) scale(1.02);
+  }
+  
+  .card-elevated {
+    background: var(--gradient-elevated);
+    box-shadow: var(--shadow-floating);
+    transform: translateZ(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .card-elevated:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: var(--shadow-floating), var(--shadow-glow);
+  }
+  
+  .btn-3d {
+    @apply relative overflow-hidden;
+    background: var(--gradient-accent);
+    box-shadow: var(--shadow-button);
+    transform: translateZ(0);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-3d:hover {
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
+  }
+  
+  .btn-3d:active {
+    box-shadow: var(--shadow-button-active);
+    transform: translateY(0);
+  }
+  
+  .btn-3d::before {
+    content: '';
+    @apply absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300;
+  }
+  
+  .btn-3d:hover::before {
+    @apply opacity-100;
+  }
+  
+  .surface-elevated {
+    background: var(--gradient-soft);
+    box-shadow: var(--shadow-subtle);
+    backdrop-filter: blur(8px);
+    border: 1px solid hsl(0 0% 100% / 0.2);
+  }
+  
+  .floating-element {
+    @apply animate-float;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .glow-accent {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .inner-shadow {
+    box-shadow: var(--shadow-inner);
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/30 border border-white/20;
+    box-shadow: var(--shadow-card);
+  }
+  
+  .depth-1 { box-shadow: var(--shadow-subtle); }
+  .depth-2 { box-shadow: var(--shadow-card); }
+  .depth-3 { box-shadow: var(--shadow-medium); }
+  .depth-4 { box-shadow: var(--shadow-large); }
+  .depth-5 { box-shadow: var(--shadow-floating); }
 }

@@ -249,26 +249,26 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
         style={style}
       >
         <div className="relative">
-          <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} ${getBorderThickness(stories)}`}>
+          <div className={`w-[66px] h-[66px] rounded-full ${getBorderColor(stories)} ${getBorderThickness(stories)} card-3d`}>
             <div 
-              className="w-full h-full rounded-full overflow-hidden border-2 border-white shadow-card"
+              className="w-full h-full rounded-full overflow-hidden border-2 border-white depth-2"
             >
               <img 
                 src={image || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"} 
                 alt={name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
               />
             </div>
             {/* Story indicator for other users */}
             {!isCurrentUser && stories.length > 0 && (
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 rounded-full border-[3px] border-white flex items-center justify-center shadow-2xl shadow-yellow-400/50 animate-pulse ring-2 ring-yellow-300/60">
-                <div className="w-4 h-4 bg-yellow-50 rounded-full shadow-inner animate-pulse"></div>
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 rounded-full border-[3px] border-white flex items-center justify-center depth-3 floating-element glow-accent">
+                <div className="w-4 h-4 bg-yellow-50 rounded-full inner-shadow animate-pulse-glow"></div>
               </div>
             )}
             {/* Add story button for current user */}
             {isCurrentUser && (
               <div 
-                className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full border-2 border-gray-300 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform shadow-sm"
+                className="absolute -bottom-1 -right-1 w-6 h-6 btn-3d rounded-full border-2 border-gray-300 flex items-center justify-center cursor-pointer shadow-sm bg-white"
                 onClick={handleAddStoryClick}
               >
                 <Plus className="w-2.5 h-2.5 text-black" />
