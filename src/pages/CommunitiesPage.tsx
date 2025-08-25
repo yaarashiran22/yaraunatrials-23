@@ -24,7 +24,7 @@ const CommunitiesPage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [showDiscover, setShowDiscover] = useState(false);
+  const [showDiscover, setShowDiscover] = useState(true);
 
   const categories = [
     { id: 'all', label: 'All', icon: Home, color: "text-muted-foreground", activeBg: "bg-muted/80" },
