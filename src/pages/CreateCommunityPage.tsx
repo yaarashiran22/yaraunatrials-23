@@ -20,11 +20,8 @@ const CreateCommunityPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [creating, setCreating] = useState(false);
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
@@ -40,38 +37,6 @@ const CreateCommunityPage = () => {
     interests: ['Skating', 'Salsa', 'Yoga', 'Foodies', 'Techies', 'Expats', 'Photography', 'Music', 'Sports'],
     causes: ['Volunteering', 'Sustainability', 'Arts', 'Education', 'Animals', 'Environment', 'Health'],
     identity: ['Young Expats', 'Digital Nomads', 'Queer Community', 'Parents', 'Students', 'Professionals']
-  };
-
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        toast({
-          title: "File too large",
-          description: "Please select an image smaller than 5MB",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (!file.type.startsWith('image/')) {
-        toast({
-          title: "Invalid file type",
-          description: "Please select an image file",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      setLogoFile(file);
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setLogoPreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleCoverSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,11 +119,6 @@ const CreateCommunityPage = () => {
     try {
       setCreating(true);
       
-      let logoUrl = null;
-      if (logoFile) {
-        logoUrl = await uploadImage(logoFile);
-      }
-
       let coverUrl = null;
       if (coverFile) {
         coverUrl = await uploadImage(coverFile);
@@ -172,10 +132,6 @@ const CreateCommunityPage = () => {
         description: formData.description.trim() || null,
         subcategory: formData.subcategory || null
       };
-
-      if (logoUrl) {
-        (communityData as any).logo_url = logoUrl;
-      }
 
       if (coverUrl) {
         (communityData as any).cover_image_url = coverUrl;
@@ -284,55 +240,6 @@ const CreateCommunityPage = () => {
             <p className="text-xs text-muted-foreground">
               Max 5MB, 16:9 aspect ratio recommended
             </p>
-          </div>
-
-          {/* Logo Upload */}
-          <div className="space-y-2">
-            <Label>Community Logo (Optional)</Label>
-            <div className="flex items-center gap-4">
-              {logoPreview ? (
-                <div className="relative">
-                  <img src={logoPreview} alt="Logo preview" className="w-20 h-20 rounded-lg object-cover border" />
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    className="absolute -top-2 -right-2 h-5 w-5 p-0"
-                    onClick={() => {
-                      setLogoFile(null);
-                      setLogoPreview(null);
-                    }}
-                  >
-                    <X className="w-3 h-3" />
-                  </Button>
-                </div>
-              ) : (
-                <div className="w-20 h-20 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center">
-                  <Upload className="w-8 h-8 text-muted-foreground/50" />
-                </div>
-              )}
-              <div className="flex-1">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-full"
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  Choose Logo
-                </Button>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Max 5MB, PNG/JPG recommended
-                </p>
-              </div>
-            </div>
           </div>
 
           <div className="space-y-2">

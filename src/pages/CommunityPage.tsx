@@ -233,21 +233,6 @@ const CommunityPage = () => {
                 <div className="text-6xl opacity-50">🏘️</div>
               </div>
             )}
-            
-            {/* Logo */}
-            <div className="absolute -bottom-8 left-4 z-10">
-              <div className="w-16 h-16 bg-white rounded-lg border-2 border-white shadow-lg flex items-center justify-center overflow-hidden">
-                {community.logo_url ? (
-                  <img 
-                    src={community.logo_url} 
-                    alt={community.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="text-2xl">🏘️</div>
-                )}
-              </div>
-            </div>
 
             {/* Access Type Badge */}
             <div className="absolute top-3 right-3">
@@ -259,7 +244,7 @@ const CommunityPage = () => {
           </div>
 
           {/* Community Info */}
-          <div className="pt-10">
+          <div className="pt-4">
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <h1 className="text-2xl font-bold text-foreground mb-2">{community.name}</h1>

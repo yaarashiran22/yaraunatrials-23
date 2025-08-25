@@ -127,21 +127,6 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
             <div className="text-5xl opacity-50">🏘️</div>
           </div>
         )}
-        
-        {/* Logo */}
-        <div className="absolute -bottom-8 left-4 z-50">
-          <div className="w-16 h-16 bg-white rounded-lg border-2 border-white shadow-lg flex items-center justify-center overflow-hidden relative z-50">
-            {community.logo_url ? (
-              <img 
-                src={community.logo_url} 
-                alt={community.name}
-                className="w-full h-full object-cover relative z-50"
-              />
-            ) : (
-              <div className="text-2xl">🏘️</div>
-            )}
-          </div>
-        </div>
 
         {/* Access Type Badge */}
         <div className="absolute top-3 right-3">
@@ -153,7 +138,7 @@ const CommunityCard = ({ community, onClick, onUpdate, onDelete }: CommunityCard
       </div>
 
       {/* Content */}
-      <div className="p-4 pt-10 flex-1 flex flex-col justify-between min-h-0">
+      <div className="p-4 pt-4 flex-1 flex flex-col justify-between min-h-0">
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1 min-h-0 pr-2">
             <h3 className="font-semibold text-foreground mb-1 line-clamp-1 text-sm">{community.name}</h3>

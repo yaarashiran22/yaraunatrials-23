@@ -194,7 +194,7 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-background">
+    <div className="fixed top-16 bottom-20 left-0 right-0 z-40 bg-background">
       {/* Header with close button */}
       <div className="absolute top-0 left-0 right-0 z-10 bg-background/90 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-4">
