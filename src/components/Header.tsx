@@ -64,20 +64,8 @@ const Header = ({
             U.
           </div>
           
-          {/* Search Bar - Center */}
-          <div className="flex-1 max-w-lg">
-            <div className="relative">
-              <input 
-                type="text" 
-                placeholder="Search events, tags, or places"
-                className="w-full px-4 py-2.5 pl-10 rounded-full border-2 border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
-          </div>
-          
-          {/* Location Switcher */}
-          <div className="flex-shrink-0">
+          {/* Location Switcher - Center */}
+          <div className="flex-1 flex justify-center">
             <NeighborhoodSelector />
           </div>
           
