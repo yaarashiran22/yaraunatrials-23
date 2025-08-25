@@ -1,5 +1,5 @@
 
-import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Map, Building2 } from "lucide-react";
+import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Map, UsersRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -55,7 +55,7 @@ const BottomNavigation = () => {
               isActive('/communities') ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
-            <Building2 className="h-4 w-4 sm:h-5 sm:w-5" />
+            <UsersRound className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="text-xs font-medium truncate">{t('navigation.communities')}</span>
           </Button>
 
