@@ -13,6 +13,7 @@ import Header from "@/components/Header";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import { useUserItems } from "@/hooks/useUserItems";
+import { useUserEvents } from "@/hooks/useUserEvents";
 import { useFriends } from "@/hooks/useFriends";
 import { useProfile } from "@/hooks/useProfile";
 import { useUserPosts } from "@/hooks/useUserPosts";
@@ -50,6 +51,7 @@ const ProfilePage = () => {
   const actualProfileId = getActualProfileId();
   const { profile: profileData, loading, error, refetch } = useProfile(actualProfileId);
   const { items: userItems, loading: itemsLoading, deleteItem, refetch: refetchItems } = useUserItems(actualProfileId);
+  const { events: userEvents, loading: eventsLoading, deleteEvent, refetch: refetchEvents } = useUserEvents(actualProfileId);
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
   const { addFriend, isFriend } = useFriends();
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
@@ -69,6 +71,48 @@ const ProfilePage = () => {
   const [showProfilePicture, setShowProfilePicture] = useState(false);
   const [showFeedImages, setShowFeedImages] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
+
+  const handleDeleteEvent = async (eventId: string) => {
+    // Require authentication
+    if (!requireAuth()) {
+      return;
+    }
+
+    // Verify user can delete this event
+    const event = userEvents.find(event => event.id === eventId);
+    if (!event || !canUserModifyItem(user!.id, event.user_id)) {
+      toast({
+        title: "Authorization Error",
+        description: "You don't have permission to delete this event",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (window.confirm('Are you sure you want to delete this event?')) {
+      await deleteEvent(eventId);
+    }
+  };
+
+  const handleEditEvent = (eventId: string) => {
+    // Require authentication
+    if (!requireAuth()) {
+      return;
+    }
+
+    // Verify user can edit this event
+    const event = userEvents.find(event => event.id === eventId);
+    if (!event || !canUserModifyItem(user!.id, event.user_id)) {
+      toast({
+        title: "Authorization Error",
+        description: "You don't have permission to edit this event",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    navigate(`/events/${eventId}/edit`);
+  };
 
   const handleDeleteItem = async (itemId: string) => {
     // Require authentication
@@ -142,11 +186,12 @@ const ProfilePage = () => {
     const handleFocus = () => {
       refetch();
       refetchItems(); // Also refresh items when page regains focus
+      refetchEvents(); // Also refresh events when page regains focus
     };
 
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
-  }, [refetch, refetchItems]);
+  }, [refetch, refetchItems, refetchEvents]);
 
   // Also refetch when returning from navigation
   useEffect(() => {
@@ -383,6 +428,115 @@ const ProfilePage = () => {
               >
                 {profileData.account_type === 'business' ? 'Business' : 'Personal'}
               </span>
+            </div>
+          </section>
+        )}
+
+        {/* My Events Section - Only shown for own profile */}
+        {isOwnProfile && userEvents && userEvents.length > 0 && (
+          <section className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">My Events & Meetups</h3>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => navigate('/events/create')}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Event
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {userEvents.map((event) => (
+                <div key={event.id} className="relative group">
+                  <div 
+                    className="bg-card rounded-lg border overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => navigate(`/events/${event.id}`)}
+                  >
+                    <div className="aspect-video bg-muted">
+                      <img 
+                        src={event.image_url || communityEvent} 
+                        alt={event.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                          event.event_type === 'meetup' 
+                            ? 'bg-blue-100 text-blue-800' 
+                            : 'bg-green-100 text-green-800'
+                        }`}>
+                          {event.event_type === 'meetup' ? 'Meetup' : 'Event'}
+                        </span>
+                        {event.date && (
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(event.date).toLocaleDateString('en-US')}
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-medium text-sm mb-2 line-clamp-2">{event.title}</h4>
+                      <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{event.description}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <MapPin className="h-3 w-3" />
+                          <span>{event.location || 'Location TBD'}</span>
+                        </div>
+                        {event.price && (
+                          <span className="text-sm font-semibold text-primary">₪{event.price}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Edit/Delete buttons - show on hover */}
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditEvent(event.id);
+                      }}
+                    >
+                      <Pencil className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteEvent(event.id);
+                      }}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Empty state for events */}
+        {isOwnProfile && userEvents && userEvents.length === 0 && !eventsLoading && (
+          <section className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">My Events & Meetups</h3>
+            </div>
+            <div className="text-center py-8 bg-muted/30 rounded-lg">
+              <p className="text-muted-foreground mb-4">You haven't created any events or meetups yet</p>
+              <Button 
+                onClick={() => navigate('/events/create')}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Create Your First Event
+              </Button>
             </div>
           </section>
         )}
