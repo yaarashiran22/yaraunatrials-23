@@ -23,10 +23,10 @@ const CommunitiesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const categories = [
-    { id: 'all', label: 'All', icon: '🏘️' },
-    { id: 'interests', label: 'Interests', icon: '🎯' },
-    { id: 'causes', label: 'Causes', icon: '🌱' },
-    { id: 'identity', label: 'Identity', icon: '👥' },
+    { id: 'all', label: 'All', icon: '🏘️', color: "text-muted-foreground", activeBg: "bg-muted/80" },
+    { id: 'interests', label: 'Interests', icon: '🎯', color: "text-blue-500", activeBg: "bg-blue-50 dark:bg-blue-950/30" },
+    { id: 'causes', label: 'Causes', icon: '🌱', color: "text-green-500", activeBg: "bg-green-50 dark:bg-green-950/30" },
+    { id: 'identity', label: 'Identity', icon: '👥', color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
   ];
 
   const filteredCommunities = communities.filter(community => {
@@ -105,16 +105,23 @@ const CommunitiesPage = () => {
 
             <TabsContent value="discover" className="space-y-4">
               {/* Category Filter */}
-              <div className="flex gap-2 overflow-x-auto pb-2">
+              <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
                 {categories.map(category => (
                   <Button
                     key={category.id}
-                    variant={selectedCategory === category.id ? "default" : "outline"}
+                    variant="ghost"
                     size="sm"
                     onClick={() => setSelectedCategory(category.id)}
-                    className="flex items-center gap-2 whitespace-nowrap"
+                    className={`
+                      flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 
+                      flex items-center gap-2 min-w-fit border border-transparent
+                      ${selectedCategory === category.id 
+                        ? `${category.activeBg} ${category.color} border-current/20` 
+                        : `${category.color} hover:bg-accent/50`
+                      }
+                    `}
                   >
-                    <span>{category.icon}</span>
+                    <span className={`text-base ${category.color}`}>{category.icon}</span>
                     {category.label}
                   </Button>
                 ))}
