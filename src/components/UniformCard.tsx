@@ -127,7 +127,7 @@ const UniformCard = ({
               <p className="text-xs text-muted-foreground line-clamp-1">{subtitle}</p>
             )}
             {date && (
-              <p className="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full inline-block">{date}</p>
+              <p className="text-xs text-accent/80 font-normal bg-accent/8 px-2 py-0.5 rounded-full inline-block">{date}</p>
             )}
             {price && (
               <p className="text-xs text-green-600 font-semibold bg-green-50 dark:bg-green-950/30 px-2 py-0.5 rounded-full inline-block mt-1 ml-2">${price}</p>
