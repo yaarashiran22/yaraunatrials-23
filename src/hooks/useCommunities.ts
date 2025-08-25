@@ -45,33 +45,49 @@ export const useCommunities = (category?: string) => {
   const fetchCommunities = async () => {
     try {
       setLoading(true);
-      let query = supabase
+      
+      // First get communities
+      let communityQuery = supabase
         .from('communities')
-        .select(`
-          *,
-          creator:profiles!creator_id (
-            name,
-            profile_image_url
-          )
-        `)
+        .select('*')
         .eq('is_active', true)
         .order('member_count', { ascending: false });
 
       if (category && category !== 'all') {
-        query = query.eq('category', category);
+        communityQuery = communityQuery.eq('category', category);
       }
 
-      const { data, error } = await query;
+      const { data: communityData, error: communityError } = await communityQuery;
+      if (communityError) throw communityError;
 
-      if (error) throw error;
-      setCommunities((data || []).map((community: any) => ({
+      // Then get creator profiles
+      const creatorIds = communityData?.map(c => c.creator_id) || [];
+      let profiles: any[] = [];
+      
+      if (creatorIds.length > 0) {
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('id, name, profile_image_url')
+          .in('id', creatorIds);
+        
+        if (profileError) {
+          console.warn('Error fetching creator profiles:', profileError);
+        } else {
+          profiles = profileData || [];
+        }
+      }
+
+      // Combine the data
+      const communitiesWithCreators = (communityData || []).map(community => ({
         ...community,
-        creator: community.creator && Array.isArray(community.creator) && community.creator.length > 0 
-          ? community.creator[0] 
-          : community.creator
-      })) as Community[]);
+        creator: profiles.find(p => p.id === community.creator_id) || null
+      }));
+
+      setCommunities(communitiesWithCreators as Community[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
+      // Set empty array on error so we don't show stale data
+      setCommunities([]);
     } finally {
       setLoading(false);
     }
