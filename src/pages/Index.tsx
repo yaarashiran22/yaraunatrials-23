@@ -108,6 +108,17 @@ const Index = () => {
     });
   }, [setRefreshCallback, refetch, refetchEvents, refetchMeetups]);
 
+  // Global event listener for event updates
+  useEffect(() => {
+    const handleEventUpdate = () => {
+      refetchEvents();
+      refetchMeetups();
+    };
+
+    window.addEventListener('eventUpdated', handleEventUpdate);
+    return () => window.removeEventListener('eventUpdated', handleEventUpdate);
+  }, [refetchEvents, refetchMeetups]);
+
   const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
 
   // Optimize story counts fetching - disable for faster loading
@@ -273,15 +284,16 @@ const Index = () => {
                     video={(event as any).video_url}
                     title={event.title}
                     subtitle={event.location || 'Tel Aviv'}
-                     date={getRelativeDay(event.date)}
-                     type="event"
-                     uploader={event.uploader}
-                     onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                     onClick={() => handleEventClick({
-                       id: event.id,
-                       title: event.title,
-                       description: event.description || event.title,
-                       date: event.date || 'Date to be determined',
+                    price={event.price}
+                    date={getRelativeDay(event.date)}
+                    type="event"
+                    uploader={event.uploader}
+                    onProfileClick={(userId) => navigate(`/profile/${userId}`)}
+                    onClick={() => handleEventClick({
+                      id: event.id,
+                      title: event.title,
+                      description: event.description || event.title,
+                      date: event.date || 'Date to be determined',
                       time: event.time || 'Time to be determined', 
                       location: event.location || 'Tel Aviv',
                       price: event.price,
@@ -345,12 +357,13 @@ const Index = () => {
             <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {realEvents.slice(0, 3).map((event, index) => (
                 <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
-                  <UniformCard
-                    id={event.id}
-                    image={event.image_url || communityEvent}
-                    video={(event as any).video_url}
-                    title={event.title}
-                    subtitle={event.location || 'Tel Aviv'}
+                   <UniformCard
+                     id={event.id}
+                     image={event.image_url || communityEvent}
+                     video={(event as any).video_url}
+                     title={event.title}
+                     subtitle={event.location || 'Tel Aviv'}
+                     price={event.price}
                      date={getRelativeDay(event.date)}
                      type="event"
                      uploader={event.uploader}
@@ -360,25 +373,25 @@ const Index = () => {
                        title: event.title,
                        description: event.description || event.title,
                        date: event.date || 'Date to be determined',
-                      time: event.time || 'Time to be determined', 
-                      location: event.location || 'Tel Aviv',
-                      price: event.price,
-                      image: event.image_url || communityEvent,
-                      video: (event as any).video_url,
-                      organizer: {
-                        name: event.uploader?.name || "Event Organizer",
-                        image: event.uploader?.image || profile1
-                      }
-                    })}
-                    showFavoriteButton={true}
-                    favoriteData={{
-                      id: event.id,
-                      title: event.title,
-                      description: event.description || event.title,
-                      image: event.image_url,
-                      type: 'event'
-                    }}
-                  />
+                       time: event.time || 'Time to be determined', 
+                       location: event.location || 'Tel Aviv',
+                       price: event.price,
+                       image: event.image_url || communityEvent,
+                       video: (event as any).video_url,
+                       organizer: {
+                         name: event.uploader?.name || "Event Organizer",
+                         image: event.uploader?.image || profile1
+                       }
+                     })}
+                     showFavoriteButton={true}
+                     favoriteData={{
+                       id: event.id,
+                       title: event.title,
+                       description: event.description || event.title,
+                       image: event.image_url,
+                       type: 'event'
+                     }}
+                   />
                 </ScrollAnimatedCard>
               ))}
             </div>

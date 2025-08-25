@@ -107,6 +107,9 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
         description: "Changes have been saved to the system",
       });
 
+      // Trigger global event update
+      window.dispatchEvent(new CustomEvent('eventUpdated'));
+      
       onSuccess?.();
       onClose();
     } catch (error) {
