@@ -63,7 +63,7 @@ export const translations = {
       artists: "גלרייה",
       feed: "גלה",
       favorites: "אנשים",
-      communities: "קהילות",
+      communities: "קהילה",
       createPost: "צור פוסט",
       createEvent: "צור אירוע",
       createItem: "צור פריט למכירה"
@@ -152,7 +152,7 @@ export const translations = {
       artists: "Photo of the Day",
       feed: "Discover",
       favorites: "Friends",
-      communities: "Communities",
+      communities: "Community",
       createPost: "Create Post",
       createEvent: "Create Event",
       createItem: "Create Item for Sale"
@@ -241,7 +241,7 @@ export const translations = {
       artists: "Foto del Día",
       feed: "Descubrir",
       favorites: "Amigos",
-      communities: "Comunidades",
+      communities: "Comunidad",
       createPost: "Crear Publicación",
       createEvent: "Crear Evento",
       createItem: "Crear Artículo en Venta"
