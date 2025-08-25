@@ -212,9 +212,9 @@ const CreateCommunityDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2">
+        <Button size="sm" className="flex items-center gap-2">
           <Plus className="w-4 h-4" />
-          Create Community
+          Create
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
