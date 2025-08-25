@@ -52,16 +52,21 @@ export const useDirectMessages = () => {
       const { data, error } = await supabase
         .from('profiles')
         .select('id, name, email, profile_image_url')
+        .neq('id', user?.id || '') // Exclude current user
         .order('name');
 
       if (error) {
         console.error('Error fetching users:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load users",
+          variant: "destructive",
+        });
         return;
       }
 
-      // Filter out current user
-      const filteredUsers = (data || []).filter(profile => profile.id !== user?.id);
-      setAllUsers(filteredUsers);
+      console.log('Fetched users:', data?.length, 'users');
+      setAllUsers(data || []);
     } catch (err) {
       console.error('Unexpected error fetching users:', err);
     }
