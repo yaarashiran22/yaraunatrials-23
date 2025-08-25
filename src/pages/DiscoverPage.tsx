@@ -287,7 +287,7 @@ const DiscoverPage = () => {
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" />
           </div>
           
-          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-80">
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-96">
             {error ? (
               <div className="flex items-center justify-center h-full bg-muted/30">
                 <div className="text-center p-4">
@@ -312,8 +312,8 @@ const DiscoverPage = () => {
 
         {/* Recommendations Section */}
         <div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} />
+          <div className="flex">
+            <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} className="w-80" />
           </div>
         </div>
       </main>

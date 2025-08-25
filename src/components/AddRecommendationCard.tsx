@@ -21,22 +21,19 @@ const AddRecommendationCard = ({ className = "", onRecommendationAdded }: AddRec
   return (
     <>
       <div 
-        className={`relative bg-card rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group w-full cursor-pointer border-2 border-dashed border-primary/30 hover:border-primary/50 ${className}`}
+        className={`relative bg-coral rounded-lg overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer border border-coral/20 hover:border-coral/40 ${className}`}
         onClick={handleClick}
+        style={{ backgroundColor: '#FF6F50' }}
       >
-        <div className="aspect-[4/3] flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
-          <div className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-              <Plus className="w-6 h-6 text-primary" />
+        <div className="h-16 flex items-center justify-center px-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+              <Plus className="w-4 h-4 text-white" />
             </div>
-            <span className="text-sm font-medium text-primary/80">Add Recommendation</span>
-          </div>
-        </div>
-        
-        <div className="p-3 h-20 flex flex-col justify-center">
-          <div className="text-center">
-            <h3 className="font-semibold text-foreground text-sm">New Place</h3>
-            <p className="text-xs text-muted-foreground">Click to add</p>
+            <div className="text-left">
+              <h3 className="font-semibold text-white text-sm">Add Recommendation</h3>
+              <p className="text-xs text-white/80">Pin a place on the map</p>
+            </div>
           </div>
         </div>
       </div>
