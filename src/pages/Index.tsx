@@ -132,11 +132,11 @@ const Index = () => {
       profilesList.push(currentUserDisplayProfile);
     }
 
-    // Add other profiles with strict limits for performance
+    // Add other profiles (newest users) with increased limit
     if (profiles.length > 0) {
       const otherProfiles = profiles
         .filter(p => p.id !== user?.id)
-        .slice(0, 6) // Further reduced for faster loading
+        .slice(0, 12) // Increased to show more newest users
         .map(p => ({
           id: p.id,
           name: p.name || "User",
