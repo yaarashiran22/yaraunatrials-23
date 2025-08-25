@@ -192,7 +192,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
         className={`flex flex-col items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity ${className}`}
         onClick={handleClick}
       >
-        <div className="w-16 h-16 rounded-full border-2 border-dashed border-primary/50 flex items-center justify-center bg-transparent">
+        <div className="w-18 h-18 rounded-full border-2 border-dashed border-primary/50 flex items-center justify-center bg-transparent">
           <Plus className="w-6 h-6 text-primary" />
         </div>
       </div>
