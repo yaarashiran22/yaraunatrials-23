@@ -3,12 +3,10 @@ import L from 'leaflet';
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import LocationShareButton from '@/components/LocationShareButton';
-import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
-import SectionHeader from "@/components/SectionHeader";
 import { useUserLocations } from '@/hooks/useUserLocations';
-import { useRecommendations } from "@/hooks/useRecommendations";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 // Fix for default markers in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -19,7 +17,6 @@ L.Icon.Default.mergeOptions({
 });
 
 const DiscoverPage = () => {
-  const { t } = useLanguage();
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const userMarkersRef = useRef<L.Marker[]>([]);
@@ -27,7 +24,7 @@ const DiscoverPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { userLocations } = useUserLocations();
-  const { recommendations, loading: recommendationsLoading } = useRecommendations();
+  const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
 
   // Function to add user location markers
   const addUserLocationMarkers = () => {
@@ -88,7 +85,7 @@ const DiscoverPage = () => {
   };
 
   // Function to add recommendation markers
-  const addRecommendationMarkers = () => {
+  const addRecommendationMarkers = async () => {
     if (!mapInstanceRef.current) return;
 
     // Clear existing recommendation markers
@@ -99,51 +96,70 @@ const DiscoverPage = () => {
       recommendationMarkersRef.current = [];
     }
 
-    // Add markers for recommendations (mock locations for now)
-    recommendations.forEach((recommendation, index) => {
-      if (!mapInstanceRef.current) return;
+    // Fetch recommendations from database
+    try {
+      const { data: recommendations, error } = await supabase
+        .from('items')
+        .select('*')
+        .eq('category', 'recommendation')
+        .eq('status', 'active');
 
-      // Mock coordinates around Buenos Aires neighborhoods
-      const mockCoordinates = [
-        [-34.5870, -58.4263], // Palermo
-        [-34.6202, -58.3731], // San Telmo
-        [-34.6343, -58.3635], // La Boca
-        [-34.5885, -58.3967], // Recoleta
-        [-34.6107, -58.3647], // Puerto Madero
-      ];
-      
-      const coord = mockCoordinates[index % mockCoordinates.length];
-      const offsetLat = coord[0] + (Math.random() - 0.5) * 0.01;
-      const offsetLng = coord[1] + (Math.random() - 0.5) * 0.01;
+      if (error) {
+        console.error('Error fetching recommendations:', error);
+        return;
+      }
 
-      // Create custom recommendation icon
-      const recommendationIcon = L.divIcon({
-        html: `
-          <div class="w-6 h-6 rounded-full bg-primary border-2 border-white shadow-md flex items-center justify-center">
-            <span class="text-xs text-white font-bold">🍸</span>
-          </div>
-        `,
-        className: 'recommendation-marker',
-        iconSize: [24, 24],
-        iconAnchor: [12, 24],
-        popupAnchor: [0, -24]
+      setUserRecommendations(recommendations || []);
+
+      // Add markers for recommendations
+      (recommendations || []).forEach((recommendation) => {
+        if (!mapInstanceRef.current) return;
+
+        let lat, lng;
+        try {
+          if (recommendation.location) {
+            const locationData = JSON.parse(recommendation.location);
+            lat = locationData.lat;
+            lng = locationData.lng;
+          }
+        } catch (error) {
+          console.error('Error parsing location data:', error);
+          return;
+        }
+
+        if (!lat || !lng) return;
+
+        // Create custom recommendation icon
+        const recommendationIcon = L.divIcon({
+          html: `
+            <div class="w-6 h-6 rounded-full bg-primary border-2 border-white shadow-md flex items-center justify-center">
+              <span class="text-xs text-white font-bold">🍸</span>
+            </div>
+          `,
+          className: 'recommendation-marker',
+          iconSize: [24, 24],
+          iconAnchor: [12, 24],
+          popupAnchor: [0, -24]
+        });
+
+        const marker = L.marker([lat, lng], {
+          icon: recommendationIcon,
+          riseOnHover: true
+        })
+          .addTo(mapInstanceRef.current)
+          .bindPopup(`
+            <div dir="ltr" class="text-left text-sm p-2 max-w-48">
+              <div class="font-medium mb-1">${recommendation.title}</div>
+              ${recommendation.description ? `<div class="text-muted-foreground text-xs mb-2">${recommendation.description}</div>` : ''}
+              ${recommendation.instagram_url ? `<a href="${recommendation.instagram_url}" target="_blank" class="text-primary text-xs hover:underline">📷 Instagram</a>` : ''}
+            </div>
+          `);
+
+        recommendationMarkersRef.current.push(marker);
       });
-
-      const marker = L.marker([offsetLat, offsetLng], {
-        icon: recommendationIcon,
-        riseOnHover: true
-      })
-        .addTo(mapInstanceRef.current)
-        .bindPopup(`
-          <div dir="rtl" class="text-right text-sm p-2">
-            <div class="font-medium mb-1">${recommendation.title}</div>
-            <div class="text-muted-foreground text-xs">${recommendation.description || 'המלצה מהקהילה'}</div>
-            ${recommendation.price ? `<div class="text-primary text-xs mt-1">₪${recommendation.price}</div>` : ''}
-          </div>
-        `);
-
-      recommendationMarkersRef.current.push(marker);
-    });
+    } catch (error) {
+      console.error('Error fetching recommendations:', error);
+    }
   };
 
   useEffect(() => {
@@ -253,10 +269,10 @@ const DiscoverPage = () => {
   }, [userLocations, isLoading]);
 
   useEffect(() => {
-    if (mapInstanceRef.current && !isLoading && !recommendationsLoading) {
+    if (mapInstanceRef.current && !isLoading) {
       addRecommendationMarkers();
     }
-  }, [recommendations, isLoading, recommendationsLoading]);
+  }, [isLoading]);
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -297,7 +313,7 @@ const DiscoverPage = () => {
         {/* Recommendations Section */}
         <div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            <AddRecommendationCard />
+            <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} />
           </div>
         </div>
       </main>

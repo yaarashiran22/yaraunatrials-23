@@ -554,6 +554,7 @@ export type Database = {
           description: string | null
           id: string
           image_url: string | null
+          instagram_url: string | null
           location: string | null
           market: string | null
           mobile_number: string | null
@@ -570,6 +571,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          instagram_url?: string | null
           location?: string | null
           market?: string | null
           mobile_number?: string | null
@@ -586,6 +588,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          instagram_url?: string | null
           location?: string | null
           market?: string | null
           mobile_number?: string | null
