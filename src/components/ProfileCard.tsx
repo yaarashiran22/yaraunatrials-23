@@ -254,7 +254,7 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
             w-[76px] h-[76px] rounded-full p-[3px] relative
             ${stories.length > 0 
               ? `${getBorderColor(stories)} shadow-lg` 
-              : 'bg-muted/20'
+              : 'bg-gradient-to-br from-purple-400/30 to-purple-500/30'
             }
             transition-all duration-300 hover:scale-105
           `}>
