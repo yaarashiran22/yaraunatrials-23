@@ -97,6 +97,7 @@ const Index = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [createEventType, setCreateEventType] = useState<'event' | 'meetup'>('event');
   const [isMapOpen, setIsMapOpen] = useState(false);
 
   // Set refresh callback for new items
@@ -253,7 +254,10 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => setShowCreateEvent(true)}
+                onClick={() => {
+                  setCreateEventType('meetup');
+                  setShowCreateEvent(true);
+                }}
                 className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1"
               >
                 <Plus className="h-3 w-3" />
@@ -332,7 +336,10 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => setShowCreateEvent(true)}
+                onClick={() => {
+                  setCreateEventType('event');
+                  setShowCreateEvent(true);
+                }}
                 className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1"
               >
                 <Plus className="h-3 w-3" />
@@ -462,6 +469,7 @@ const Index = () => {
         <CreateEventPopup 
           isOpen={showCreateEvent} 
           onClose={() => setShowCreateEvent(false)} 
+          initialEventType={createEventType}
           onEventCreated={() => {
             refetchEvents();
             refetchMeetups();

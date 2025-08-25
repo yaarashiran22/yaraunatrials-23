@@ -12,9 +12,10 @@ interface CreateEventPopupProps {
   isOpen: boolean;
   onClose: () => void;
   onEventCreated?: () => void;
+  initialEventType?: 'event' | 'meetup';
 }
 
-const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupProps) => {
+const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 'event' }: CreateEventPopupProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [eventName, setEventName] = useState("");
@@ -24,7 +25,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [externalLink, setExternalLink] = useState("");
-  const [eventType, setEventType] = useState<'event' | 'meetup'>('event');
+  const [eventType, setEventType] = useState<'event' | 'meetup'>(initialEventType);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
@@ -201,7 +202,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-4" dir="rtl">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-4" dir="ltr">
       <div className="bg-background rounded-t-3xl md:rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
@@ -222,40 +223,40 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
         <div className="p-6 space-y-6">
           {/* Event Name Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">
+            <label className="text-sm font-medium text-foreground block text-left">
               {eventType === 'meetup' ? 'Meetup Name*' : 'Event Name*'}
             </label>
             <Input 
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
               placeholder={eventType === 'meetup' ? 'Enter meetup name' : 'Enter event name'}
-              className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
+              className="w-full h-12 text-left bg-card border-2 border-border rounded-full"
             />
           </div>
 
           {/* Description Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">Description</label>
+            <label className="text-sm font-medium text-foreground block text-left">Description</label>
             <Textarea 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder={eventType === 'meetup' ? 'Describe your meetup' : 'Describe your event'}
-              className="w-full min-h-24 text-right bg-card border-2 border-border rounded-2xl resize-none"
+              className="w-full min-h-24 text-left bg-card border-2 border-border rounded-2xl resize-none"
             />
           </div>
 
           {/* Event Type Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">Type*</label>
+            <label className="text-sm font-medium text-foreground block text-left">Type*</label>
             <Select value={eventType} onValueChange={(value: 'event' | 'meetup') => setEventType(value)}>
-              <SelectTrigger className="w-full h-12 text-right bg-background border-2 border-border rounded-full">
+              <SelectTrigger className="w-full h-12 text-left bg-background border-2 border-border rounded-full">
                 <SelectValue placeholder="Choose type" />
               </SelectTrigger>
               <SelectContent className="bg-background border shadow-lg z-50">
-                <SelectItem value="event" className="text-right cursor-pointer hover:bg-muted">
+                <SelectItem value="event" className="text-left cursor-pointer hover:bg-muted">
                   Event
                 </SelectItem>
-                <SelectItem value="meetup" className="text-right cursor-pointer hover:bg-muted">
+                <SelectItem value="meetup" className="text-left cursor-pointer hover:bg-muted">
                   Meetup
                 </SelectItem>
               </SelectContent>
@@ -264,39 +265,39 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
           {/* Date Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">Date*</label>
+            <label className="text-sm font-medium text-foreground block text-left">Date*</label>
             <div className="relative">
-              <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full h-12 pr-12 text-right bg-card border-2 border-border rounded-full"
+                className="w-full h-12 pl-12 text-left bg-card border-2 border-border rounded-full"
               />
             </div>
           </div>
 
           {/* Time Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">Time</label>
+            <label className="text-sm font-medium text-foreground block text-left">Time</label>
             <div className="relative">
-              <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                className="w-full h-12 pr-12 text-right bg-card border-2 border-border rounded-full"
+                className="w-full h-12 pl-12 text-left bg-card border-2 border-border rounded-full"
               />
             </div>
           </div>
 
           {/* Location Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">Location*</label>
+            <label className="text-sm font-medium text-foreground block text-left">Location*</label>
             <div className="relative">
-              <MapPin className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
               <Select value={location} onValueChange={setLocation}>
-                <SelectTrigger className="w-full h-12 pr-12 text-right bg-background border-2 border-border rounded-full">
+                <SelectTrigger className="w-full h-12 pl-12 text-left bg-background border-2 border-border rounded-full">
                   <SelectValue placeholder="Choose neighborhood" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border shadow-lg z-50 max-h-60">
@@ -304,7 +305,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
                     <SelectItem 
                       key={neighborhood} 
                       value={neighborhood}
-                      className="text-right cursor-pointer hover:bg-muted"
+                      className="text-left cursor-pointer hover:bg-muted"
                     >
                       {neighborhood}
                     </SelectItem>
@@ -316,29 +317,29 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated }: CreateEventPopupP
 
           {/* Price Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">Price (Optional)</label>
+            <label className="text-sm font-medium text-foreground block text-left">Price (Optional)</label>
             <Input 
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="Free / ₪50"
-              className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
+              className="w-full h-12 text-left bg-card border-2 border-border rounded-full"
             />
           </div>
 
           {/* External Link Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">External Link (Optional)</label>
+            <label className="text-sm font-medium text-foreground block text-left">External Link (Optional)</label>
             <Input 
               value={externalLink}
               onChange={(e) => setExternalLink(e.target.value)}
               placeholder="https://example.com"
-              className="w-full h-12 text-right bg-card border-2 border-border rounded-full"
+              className="w-full h-12 text-left bg-card border-2 border-border rounded-full"
             />
           </div>
 
           {/* Media Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-right">Image or Video*</label>
+            <label className="text-sm font-medium text-foreground block text-left">Image or Video*</label>
             <div className="space-y-2">
               <input
                 type="file"
