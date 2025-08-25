@@ -297,7 +297,7 @@ const Index = () => {
               <p>No meetups available at the moment</p>
             </div>
           ) : (
-            <div className="flex overflow-x-auto gap-4 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+            <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {meetupEvents.slice(0, 6).map((event, index) => (
                 <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
                   <UniformCard
@@ -375,7 +375,7 @@ const Index = () => {
               <p>No events available at the moment</p>
             </div>
           ) : (
-            <div className="flex overflow-x-auto gap-4 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+            <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {realEvents.slice(0, 6).map((event, index) => (
                 <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
                   <UniformCard
@@ -428,7 +428,7 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
           </div>
-          <div className="flex overflow-x-auto gap-4 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+          <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
             <div className="text-center py-6 text-muted-foreground w-full">
               <p>No coupons available at the moment</p>
             </div>
