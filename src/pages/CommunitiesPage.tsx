@@ -3,10 +3,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter, Users, Calendar, Gift, MessageSquare, Target, Sprout, UserCheck, Home } from "lucide-react";
+import { Search, Filter, Users, Calendar, Gift, MessageSquare, Target, Sprout, UserCheck, Home, Plus } from "lucide-react";
 import { useCommunities, useCommunityMembership } from "@/hooks/useCommunities";
 import CommunityCard from "@/components/CommunityCard";
 import CreateCommunityDialog from "@/components/CreateCommunityDialog";
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import DesktopHeader from "@/components/DesktopHeader";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -20,6 +21,7 @@ const CommunitiesPage = () => {
   const { t } = useLanguage();
   const { communities, loading } = useCommunities();
   const { memberships } = useCommunityMembership();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showDiscover, setShowDiscover] = useState(false);
@@ -72,7 +74,14 @@ const CommunitiesPage = () => {
         <div className="bg-background/95 backdrop-blur-sm sticky top-16 z-10">
           <div className="p-4 space-y-4">
             <div className="flex items-center justify-between gap-3">
-              <CreateCommunityDialog />
+              <Button 
+                size="sm" 
+                className="flex items-center gap-2"
+                onClick={() => navigate('/communities/create')}
+              >
+                <Plus className="w-4 h-4" />
+                Create
+              </Button>
               {user && (
                 <Button 
                   variant="outline" 
@@ -230,7 +239,14 @@ const CommunitiesPage = () => {
                   <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
                     {searchQuery ? 'Try adjusting your search terms' : 'Be the first to create a community!'}
                   </p>
-                  <CreateCommunityDialog />
+                  <Button 
+                    size="sm" 
+                    className="flex items-center gap-2"
+                    onClick={() => navigate('/communities/create')}
+                  >
+                    <Plus className="w-4 h-4" />
+                    Create Community
+                  </Button>
                 </div>
               )}
             </div>
