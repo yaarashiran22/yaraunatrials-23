@@ -6,14 +6,14 @@ import { useToast } from "@/hooks/use-toast";
 import { useItemDetails } from "@/hooks/useItemDetails";
 import { useState, useRef, useCallback } from "react";
 
-// Location mapping from English to Hebrew
+// Location mapping from English to Spanish (Buenos Aires neighborhoods)
 const locationMapping: Record<string, string> = {
-  'tel-aviv': 'תל אביב',
-  'florentin': 'פלורנטין', 
-  'lev-hair': 'לב העיר',
-  'jerusalem': 'ירושלים',
-  'ramat-gan': 'רמת גן',
-  'givatayim': 'גבעתיים'
+  'palermo': 'Palermo',
+  'san-telmo': 'San Telmo', 
+  'recoleta': 'Recoleta',
+  'puerto-madero': 'Puerto Madero',
+  'belgrano': 'Belgrano',
+  'villa-crespo': 'Villa Crespo'
 };
 
 interface MarketplacePopupProps {

@@ -85,8 +85,8 @@ const FeedUpload = ({ onPostCreated }: FeedUploadProps) => {
           content: content || '',
           image_url: imageUrl || null,
           video_url: videoUrl || null,
-          location: 'תל אביב', // Default location
-          market: 'israel'
+          location: 'Buenos Aires', // Default location
+          market: 'argentina'
         })
         .select()
         .single();

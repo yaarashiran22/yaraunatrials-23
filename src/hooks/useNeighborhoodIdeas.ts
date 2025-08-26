@@ -51,7 +51,7 @@ export const useNeighborhoodIdeas = () => {
             profile_image_url
           )
         `)
-        .eq('market', 'israel')
+        .eq('market', 'argentina')
         .order('created_at', { ascending: false });
 
       if (ideasError) {
@@ -115,7 +115,7 @@ export const useNeighborhoodIdeas = () => {
           question,
           image_url: imageUrl,
           neighborhood,
-          market: 'israel'
+          market: 'argentina'
         }])
         .select()
         .single();

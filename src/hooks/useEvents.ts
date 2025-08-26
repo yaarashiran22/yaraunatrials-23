@@ -41,7 +41,7 @@ const fetchEvents = async (eventType?: 'event' | 'meetup'): Promise<Event[]> => 
       created_at,
       updated_at
     `)
-    .eq('market', 'israel')
+    .eq('market', 'argentina')
     .order('created_at', { ascending: false });
 
   if (eventType) {

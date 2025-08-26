@@ -38,7 +38,7 @@ export const useUserEvents = (userId?: string) => {
           updated_at
         `)
         .eq('user_id', targetUserId)
-        .eq('market', 'israel')
+        .eq('market', 'argentina')
         .order('created_at', { ascending: false });
 
       if (error) throw error;

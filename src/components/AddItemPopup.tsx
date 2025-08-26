@@ -86,7 +86,7 @@ const AddItemPopup = ({ isOpen, onClose }: AddItemPopupProps) => {
           location,
           mobile_number: mobileNumber,
           image_url: imageUrl,
-          market: 'israel'
+          market: 'argentina'
         });
 
       if (insertError) throw insertError;

@@ -22,9 +22,8 @@ const BottomNavigation = () => {
   const { openSearch } = useSearch();
 
   const languages = [
-    { code: 'he', name: 'עברית', flag: '🇮🇱' },
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' }
+    { code: 'es', name: 'Español', flag: '🇦🇷' },
+    { code: 'en', name: 'English', flag: '🇺🇸' }
   ];
 
   const isActive = (path: string) => location.pathname === path;
