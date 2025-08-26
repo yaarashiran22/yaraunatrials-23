@@ -104,6 +104,24 @@ const UniformCard = ({
         {/* Shimmer overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-300"></div>
         
+        {/* Text overlay at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3">
+          <div className="space-y-1">
+            <h3 className="font-semibold text-white line-clamp-2 text-sm leading-tight drop-shadow-lg">{title}</h3>
+            {subtitle && (
+              <p className="text-xs text-white/90 line-clamp-1 drop-shadow-md">{subtitle}</p>
+            )}
+            <div className="flex items-center gap-2 mt-1">
+              {date && (
+                <span className="text-xs font-semibold px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-white border border-white/30">{date}</span>
+              )}
+              {price && (
+                <span className="text-xs font-semibold px-2 py-0.5 bg-primary/80 backdrop-blur-sm rounded-full text-white border border-white/30">${price}</span>
+              )}
+            </div>
+          </div>
+        </div>
+        
         {/* Heart icon positioned over image */}
         {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
           <Button
@@ -117,23 +135,6 @@ const UniformCard = ({
             <Heart className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
           </Button>
         )}
-      </div>
-      
-      <div className="p-3 min-h-[80px] flex flex-col justify-between surface-elevated">
-        <div className="flex items-start gap-2">
-          <div className="flex-1 space-y-1">
-            <h3 className="font-semibold text-foreground line-clamp-2 text-sm leading-tight">{title}</h3>
-            {subtitle && (
-              <p className="text-xs text-muted-foreground line-clamp-1">{subtitle}</p>
-            )}
-            {date && (
-              <p className="text-xs font-semibold px-2 py-0.5 rounded-full inline-block text-foreground">{date}</p>
-            )}
-            {price && (
-              <p className="text-xs text-foreground font-semibold px-2 py-0.5 rounded-full inline-block mt-1 ml-2">${price}</p>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );
