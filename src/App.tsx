@@ -9,6 +9,7 @@ import { NewItemProvider } from "@/contexts/NewItemContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { SearchProvider } from "@/contexts/SearchContext";
 import SearchPopup from "@/components/SearchPopup";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
 import NewItemPopup from "@/components/NewItemPopup";
@@ -62,9 +63,11 @@ const DesktopNavItem = ({ href, icon: Icon, label }: { href: string; icon: any; 
 };
 
 const AppContent = () => {
+  console.log('AppContent rendering');
   const { isOpen, closeNewItem, refreshItems } = useNewItem();
   const { t } = useLanguage();
   
+  console.log('AppContent hooks loaded, rendering router');
   return (
     <BrowserRouter>
       {/* Desktop and mobile responsive layout */}
@@ -161,21 +164,23 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <TooltipProvider>
-    <Toaster />
-    <Sonner />
-    <LanguageProvider>
-      <AuthProvider>
-        <NewItemProvider>
-          <FavoritesProvider>
-            <SearchProvider>
-              <AppContent />
-            </SearchProvider>
-          </FavoritesProvider>
-        </NewItemProvider>
-      </AuthProvider>
-    </LanguageProvider>
-  </TooltipProvider>
+  <ErrorBoundary>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <LanguageProvider>
+        <AuthProvider>
+          <NewItemProvider>
+            <FavoritesProvider>
+              <SearchProvider>
+                <AppContent />
+              </SearchProvider>
+            </FavoritesProvider>
+          </NewItemProvider>
+        </AuthProvider>
+      </LanguageProvider>
+    </TooltipProvider>
+  </ErrorBoundary>
 );
 
 export default App;
