@@ -68,7 +68,6 @@ const Index = () => {
   const { 
     profiles, 
     totalUsersCount,
-    marketplaceItems, 
     databaseEvents,
     recommendationItems, 
     artItems,

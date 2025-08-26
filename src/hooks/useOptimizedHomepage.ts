@@ -35,14 +35,7 @@ export interface OptimizedProfile {
 const fetchHomepageData = async () => {
   try {
     // Batch all queries in a single Promise.all for maximum performance
-    const [marketplaceResult, eventsResult, recommendationsResult, profilesResult, profilesCountResult] = await Promise.all([
-      supabase
-        .from('items')
-        .select('id, title, price, image_url, location')
-        .eq('status', 'active')
-        .eq('category', 'secondhand')
-        .order('created_at', { ascending: false })
-        .limit(3), // Reduced to 3 for faster loading
+    const [eventsResult, recommendationsResult, profilesResult, profilesCountResult] = await Promise.all([
       supabase
         .from('items')
         .select('id, title, image_url, location, user_id')
@@ -70,13 +63,11 @@ const fetchHomepageData = async () => {
     ]);
 
     // Handle errors gracefully
-    if (marketplaceResult.error) throw marketplaceResult.error;
     if (eventsResult.error) throw eventsResult.error;
     if (recommendationsResult.error) throw recommendationsResult.error;
     if (profilesResult.error) throw profilesResult.error;
     if (profilesCountResult.error) throw profilesCountResult.error;
 
-    const marketplaceItems = marketplaceResult.data || [];
     const rawEvents = eventsResult.data || [];
     const rawRecommendationItems = recommendationsResult.data || [];
     
@@ -153,12 +144,11 @@ const fetchHomepageData = async () => {
 
     const totalUsersCount = profilesCountResult.count || 0;
 
-    // Combine all items for backward compatibility - removed unused categories
-    const items = [...marketplaceItems, ...databaseEvents, ...recommendationItems];
+    // Combine items for backward compatibility - removed marketplace items
+    const items = [...databaseEvents, ...recommendationItems];
 
     return { 
       items, 
-      marketplaceItems, 
       databaseEvents, 
       recommendationItems, 
       artItems: [], // Empty for faster loading
@@ -209,7 +199,6 @@ export const useOptimizedHomepage = () => {
   const items = data?.items || [];
   const profiles = data?.profiles || [];
   const totalUsersCount = data?.totalUsersCount || 0;
-  const marketplaceItems = data?.marketplaceItems || [];
   const databaseEvents = data?.databaseEvents || [];
   const recommendationItems = data?.recommendationItems || [];
   const artItems = data?.artItems || [];
@@ -220,7 +209,6 @@ export const useOptimizedHomepage = () => {
     items,
     profiles,
     totalUsersCount,
-    marketplaceItems,
     databaseEvents,
     recommendationItems,
     artItems,
