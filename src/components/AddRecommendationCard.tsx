@@ -32,7 +32,6 @@ const AddRecommendationCard = ({ className = "", onRecommendationAdded }: AddRec
             </div>
             <div className="text-left">
               <h3 className="font-semibold text-white text-sm">Add Recommendation</h3>
-              <p className="text-xs text-white/90">Double-click to pin</p>
             </div>
           </div>
         </div>

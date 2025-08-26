@@ -552,7 +552,8 @@ const DiscoverPage = () => {
       <main className="container mx-auto px-4 py-3 space-y-6">
         {/* Map Section */}
         <div className="relative">
-          <div className="flex items-center justify-end mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} className="w-48" />
             <LocationShareButton size="icon" shareText="Share Location" removeText="Remove Location" />
           </div>
           
@@ -577,11 +578,6 @@ const DiscoverPage = () => {
               </>
             )}
           </div>
-        </div>
-
-        {/* Add Recommendation Button */}
-        <div className="flex">
-          <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} className="w-80" />
         </div>
 
         {/* Most Popular in the Neighborhood */}
