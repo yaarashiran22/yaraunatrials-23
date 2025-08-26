@@ -20,10 +20,7 @@ const NeighborhoodSelector = () => {
     { name: "Palermo Hollywood", nameEn: "Palermo Hollywood", nameEs: "Palermo Hollywood" },
     { name: "Recoleta", nameEn: "Recoleta", nameEs: "Recoleta" },
     { name: "San Telmo", nameEn: "San Telmo", nameEs: "San Telmo" },
-    { name: "Puerto Madero", nameEn: "Puerto Madero", nameEs: "Puerto Madero" },
-    { name: "Belgrano", nameEn: "Belgrano", nameEs: "Belgrano" },
-    { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" },
-    { name: "La Boca", nameEn: "La Boca", nameEs: "La Boca" }
+    { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" }
   ];
 
   const getDisplayName = (neighborhood: any) => {

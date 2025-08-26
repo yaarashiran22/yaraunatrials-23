@@ -119,9 +119,8 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
           { name: "Palermo Soho", lat: -34.5906, lng: -58.4203, color: '#9B59B6' },
           { name: "Palermo Hollywood", lat: -34.5834, lng: -58.4323, color: '#8E44AD' },
           { name: "San Telmo", lat: -34.6202, lng: -58.3731, color: '#FF6B6B' },
-          { name: "La Boca", lat: -34.6343, lng: -58.3635, color: '#4ECDC4' },
           { name: "Recoleta", lat: -34.5885, lng: -58.3967, color: '#45B7D1' },
-          { name: "Puerto Madero", lat: -34.6107, lng: -58.3647, color: '#96CEB4' },
+          { name: "Villa Crespo", lat: -34.5998, lng: -58.4386, color: '#FFA726' },
         ];
 
         // Add Buenos Aires center marker

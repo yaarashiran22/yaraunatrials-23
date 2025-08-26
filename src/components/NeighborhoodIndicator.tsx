@@ -23,10 +23,7 @@ const NeighborhoodIndicator = () => {
     { name: "Palermo Hollywood", nameEn: "Palermo Hollywood", nameEs: "Palermo Hollywood" },
     { name: "Recoleta", nameEn: "Recoleta", nameEs: "Recoleta" },
     { name: "San Telmo", nameEn: "San Telmo", nameEs: "San Telmo" },
-    { name: "La Boca", nameEn: "La Boca", nameEs: "La Boca" },
-    { name: "Puerto Madero", nameEn: "Puerto Madero", nameEs: "Puerto Madero" },
     { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" },
-    { name: "Belgrano", nameEn: "Belgrano", nameEs: "Belgrano" },
     { name: "Caballito", nameEn: "Caballito", nameEs: "Caballito" }
   ], []);
 
