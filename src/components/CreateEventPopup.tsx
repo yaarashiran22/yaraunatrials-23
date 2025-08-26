@@ -31,27 +31,14 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
   const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Neighborhoods available in the website
+  // Neighborhoods available in the website - Buenos Aires neighborhoods
   const neighborhoods = [
-    "City Center",
-    "Nachalat Binyamin", 
-    "Rothschild",
-    "Florentin",
-    "Shapira",
-    "Old Jaffa",
-    "Ajami",
-    "Neve Tzedek",
-    "Kerem HaTeimanim",
-    "Montefiore",
-    "Ramat Aviv",
-    "Old North",
-    "Sheinkin",
-    "Dizengoff",
-    "Herzliya",
-    "Bat Yam",
-    "Ramat Gan",
-    "Givatayim",
-    "Holon"
+    "Palermo",
+    "Palermo Soho",
+    "Palermo Hollywood", 
+    "Recoleta",
+    "San Telmo",
+    "Villa Crespo"
   ];
 
   if (!isOpen) return null;
@@ -160,7 +147,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           video_url: videoUrl,
           external_link: externalLink.trim() || null,
           event_type: eventType,
-          market: 'israel'
+          market: 'argentina' // Buenos Aires market
         });
 
       if (error) throw error;
