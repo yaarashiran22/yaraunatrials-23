@@ -341,7 +341,7 @@ const DiscoverPage = () => {
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" />
           </div>
           
-          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-96">
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-96 z-0">
             {error ? (
               <div className="flex items-center justify-center h-full bg-muted/30">
                 <div className="text-center p-4">
@@ -351,14 +351,14 @@ const DiscoverPage = () => {
             ) : (
               <>
                 {isLoading && (
-                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-[1000] backdrop-blur-sm">
+                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 backdrop-blur-sm">
                     <div className="text-center">
                       <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                       <p className="text-muted-foreground text-sm">Loading map...</p>
                     </div>
                   </div>
                 )}
-                <div ref={mapContainer} className="w-full h-full" />
+                <div ref={mapContainer} className="w-full h-full relative z-0" />
               </>
             )}
           </div>
