@@ -584,7 +584,7 @@ const DiscoverPage = () => {
         {popularRecommendations.length > 0 && (
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              🔥 Most Popular in the Neighborhood
+              🔥 Most Popular
             </h3>
             <div className="grid gap-3">
               {popularRecommendations.map((recommendation) => (
