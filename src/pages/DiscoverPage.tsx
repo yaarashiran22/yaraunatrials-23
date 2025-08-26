@@ -28,6 +28,7 @@ const DiscoverPage = () => {
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
+  const [popularRecommendations, setPopularRecommendations] = useState<any[]>([]);
 
   // Setup global handler for agree clicks in map popups
   useEffect(() => {
@@ -198,6 +199,33 @@ const DiscoverPage = () => {
       })) || [];
 
       setUserRecommendations(recommendationsWithProfiles);
+
+      // Fetch popular recommendations (with most agrees)
+      const recommendationCounts = new Map<string, number>();
+      
+      // Get all agreements and count them manually
+      const { data: allAgreements } = await supabase
+        .from('recommendation_agreements')
+        .select('recommendation_id');
+
+      if (allAgreements) {
+        allAgreements.forEach(agreement => {
+          const count = recommendationCounts.get(agreement.recommendation_id) || 0;
+          recommendationCounts.set(agreement.recommendation_id, count + 1);
+        });
+      }
+
+      // Sort recommendations by agreement count and take top 5
+      const popularRecs = recommendationsWithProfiles
+        .map(rec => ({
+          ...rec,
+          agreementCount: recommendationCounts.get(rec.id) || 0
+        }))
+        .filter(rec => rec.agreementCount > 0)
+        .sort((a, b) => b.agreementCount - a.agreementCount)
+        .slice(0, 5);
+
+      setPopularRecommendations(popularRecs);
 
       // Add markers for recommendations
       for (const recommendation of recommendationsWithProfiles) {
@@ -551,6 +579,67 @@ const DiscoverPage = () => {
             )}
           </div>
         </div>
+
+        {/* Most Popular in the Neighborhood */}
+        {popularRecommendations.length > 0 && (
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+              🔥 Most Popular in the Neighborhood
+            </h3>
+            <div className="grid gap-3">
+              {popularRecommendations.map((recommendation) => (
+                <div 
+                  key={recommendation.id}
+                  className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-950/20 dark:to-yellow-950/20 rounded-lg p-4 shadow-sm border border-orange-200 dark:border-orange-800 hover:shadow-md transition-all"
+                >
+                  <div className="flex gap-3">
+                    {recommendation.image_url && (
+                      <img 
+                        src={recommendation.image_url} 
+                        alt={recommendation.title}
+                        className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between mb-1">
+                        <h4 className="font-medium text-foreground">{recommendation.title}</h4>
+                        <div className="flex items-center gap-1 text-orange-600 dark:text-orange-400 text-sm font-medium">
+                          <span>👍</span>
+                          <span>{recommendation.agreementCount || 0}</span>
+                        </div>
+                      </div>
+                      {recommendation.description && (
+                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+                          {recommendation.description}
+                        </p>
+                      )}
+                      {recommendation.profile && (
+                        <div className="flex items-center gap-2 mb-2 text-xs text-muted-foreground">
+                          <img 
+                            src={recommendation.profile.profile_image_url || '/placeholder.svg'} 
+                            alt=""
+                            className="w-4 h-4 rounded-full object-cover"
+                          />
+                          <span>Recommended by {recommendation.profile.name || 'User'}</span>
+                        </div>
+                      )}
+                      {recommendation.instagram_url && (
+                        <a 
+                          href={recommendation.instagram_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-primary hover:underline flex items-center gap-1"
+                        >
+                          🔗 Visit Link
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Recommendations Section */}
         <div className="space-y-4">
