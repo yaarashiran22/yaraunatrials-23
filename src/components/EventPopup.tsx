@@ -15,6 +15,7 @@ interface EventPopupProps {
     id?: string;
     title: string;
     image: string;
+    video?: string;
     price?: string;
     description: string;
     organizer?: {
@@ -44,6 +45,7 @@ const EventPopup = ({
     id: undefined,
     title: "Event Party",
     image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=600&fit=crop",
+    video: undefined,
     price: "₪100",
     description: "Join us for an amazing party celebration with great music and good vibes",
     organizer: {
@@ -60,6 +62,7 @@ const EventPopup = ({
     id: eventData.id,
     title: eventData.title,
     image: eventData.image_url || defaultEvent.image,
+    video: (eventData as any).video_url, // Type assertion for video_url
     price: eventData.price ? `₪${eventData.price}` : defaultEvent.price,
     description: eventData.description || defaultEvent.description,
     organizer: {
@@ -190,14 +193,28 @@ const EventPopup = ({
 
         {/* Content */}
         <div className="p-4">
-          {/* Event Image */}
+          {/* Event Media */}
           <div className="relative mb-6">
             <div className="border-4 border-yellow-400 rounded-2xl overflow-hidden">
-              <img 
-                src={displayEvent.image}
-                alt={displayEvent.title}
-                className="w-full h-64 object-cover"
-              />
+              {displayEvent.video ? (
+                <video 
+                  src={displayEvent.video}
+                  className="w-full h-64 object-cover"
+                  controls
+                  poster={displayEvent.image}
+                  preload="metadata"
+                  onError={(e) => {
+                    console.log('Video failed to load, showing fallback image');
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <img 
+                  src={displayEvent.image}
+                  alt={displayEvent.title}
+                  className="w-full h-64 object-cover"
+                />
+              )}
             </div>
             
             <div className="absolute top-3 right-3">

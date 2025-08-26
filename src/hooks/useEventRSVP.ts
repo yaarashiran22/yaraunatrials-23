@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -194,7 +194,7 @@ export const useEventRSVP = (eventId: string) => {
     },
   });
 
-  const handleRSVP = (status: string) => {
+  const handleRSVP = useCallback((status: string) => {
     if (!user) {
       toast({
         title: "נדרשת התחברות",
@@ -211,7 +211,7 @@ export const useEventRSVP = (eventId: string) => {
       // Otherwise update RSVP
       rsvpMutation.mutate({ status });
     }
-  };
+  }, [user, userRSVP?.status, removeRSVPMutation, rsvpMutation]);
 
   const memoizedReturn = useMemo(() => ({
     userRSVP,
