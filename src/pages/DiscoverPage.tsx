@@ -229,6 +229,13 @@ const DiscoverPage = () => {
                   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
                   border: 1px solid rgba(255,255,255,0.8);
                 }
+                .text-pin-popup .pin-image {
+                  width: 100%;
+                  height: 120px;
+                  object-fit: cover;
+                  border-radius: 8px;
+                  margin-bottom: 12px;
+                }
                 .text-pin-popup .pin-text {
                   font-size: 14px;
                   line-height: 1.5;
@@ -252,6 +259,7 @@ const DiscoverPage = () => {
                   object-fit: cover;
                 }
               </style>
+              ${textPin.image_url ? `<img src="${textPin.image_url}" alt="Pop image" class="pin-image" />` : ''}
               <div class="pin-text">${textPin.description || textPin.title || 'No message'}</div>
               ${textPin.profile ? `
                 <div class="pin-author">
