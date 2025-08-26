@@ -21,8 +21,6 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
   const { userLocations } = useUserLocations();
   
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [linkUrl, setLinkUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -105,14 +103,14 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
         .from('items')
         .insert({
           title: title.trim(),
-          description: description.trim(),
+          description: title.trim(), // Using title as description for buzz
           image_url: imageUrl,
           location: locationData,
           user_id: user.id,
           category: 'recommendation',
           status: 'active',
           market: 'argentina', // Since it's Buenos Aires
-          instagram_url: linkUrl.trim() || null
+          instagram_url: null
         });
 
       if (error) {
@@ -121,12 +119,10 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
         return;
       }
 
-      toast.success('Recommendation added at your current location!');
+      toast.success('Buzz added at your current location!');
       
       // Reset form
       setTitle('');
-      setDescription('');
-      setLinkUrl('');
       setSelectedFile(null);
       
       onRecommendationAdded?.();
@@ -142,8 +138,6 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
   const handleClose = () => {
     // Reset form when closing
     setTitle('');
-    setDescription('');
-    setLinkUrl('');
     setSelectedFile(null);
     
     onClose();
@@ -153,7 +147,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto z-[9999]">
         <DialogHeader>
-          <DialogTitle>Add Recommendation</DialogTitle>
+          <DialogTitle>Add Buzz</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6">
@@ -179,7 +173,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
                 <div>
                   <p className="font-medium text-foreground">Location not shared</p>
                   <p className="text-xs text-muted-foreground">
-                    Please share your location first to add recommendations
+                    Please share your location first to add buzz
                   </p>
                 </div>
               </div>
@@ -192,30 +186,9 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
               <Label htmlFor="title">Title *</Label>
               <Input
                 id="title"
-                placeholder="e.g., Café Tortoni"
+                placeholder="What's buzzing?"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                placeholder="Tell us about this place..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="link">Link</Label>
-              <Input
-                id="link"
-                placeholder="https://website.com or social media link"
-                value={linkUrl}
-                onChange={(e) => setLinkUrl(e.target.value)}
               />
             </div>
 
@@ -248,7 +221,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
               disabled={isSubmitting || !title.trim() || !userLocation}
               className="flex-1"
             >
-              {isSubmitting ? 'Adding...' : 'Add Recommendation'}
+              {isSubmitting ? 'Adding...' : 'Add Buzz'}
             </Button>
             <Button
               variant="outline"
