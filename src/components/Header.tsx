@@ -23,6 +23,7 @@ interface HeaderProps {
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
   onNotificationsClick?: () => void;
+  onNeighborhoodChange?: (neighborhood: string) => void;
 }
 
 const Header = ({ 
@@ -31,7 +32,8 @@ const Header = ({
   searchValue = "", 
   onSearchChange, 
   searchPlaceholder,
-  onNotificationsClick
+  onNotificationsClick,
+  onNeighborhoodChange
 }: HeaderProps) => {
   const { t } = useLanguage();
   const { user, logout } = useAuth();
@@ -66,7 +68,7 @@ const Header = ({
           
           {/* Location Switcher - Center */}
           <div className="flex-1 flex justify-center">
-            <NeighborhoodSelector />
+            <NeighborhoodSelector onNeighborhoodChange={onNeighborhoodChange} />
           </div>
           
           {/* Search and Notifications */}

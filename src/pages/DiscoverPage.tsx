@@ -574,15 +574,12 @@ const DiscoverPage = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <Header 
-        title="Discover"
+        title="Map"
+        onNeighborhoodChange={handleNeighborhoodChange}
       />
       
       
       <main className="container mx-auto px-4 py-3 space-y-6">
-        {/* Neighborhood Selector */}
-        <div className="flex justify-center mb-4">
-          <NeighborhoodSelector onNeighborhoodChange={handleNeighborhoodChange} />
-        </div>
 
         {/* Map Section */}
         <div className="relative">
