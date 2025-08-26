@@ -435,24 +435,24 @@ const DiscoverPage = () => {
               {userRecommendations.map((textPin) => (
                 <div 
                   key={textPin.id}
-                  className="bg-card rounded-lg p-4 shadow-sm border hover:shadow-md transition-shadow"
+                  className="bg-card rounded-lg p-2 shadow-sm border hover:shadow-md transition-shadow"
                 >
-                  <div className="flex gap-3">
+                  <div className="flex gap-2">
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-foreground mb-1">{textPin.title}</h4>
+                      <h4 className="font-medium text-sm text-foreground mb-1">{textPin.title}</h4>
                       {textPin.description && (
-                        <p className="text-sm text-muted-foreground mb-2 line-clamp-3">
+                        <p className="text-xs text-muted-foreground mb-1 line-clamp-2">
                           {textPin.description}
                         </p>
                       )}
                       {textPin.profile && (
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <img 
                             src={textPin.profile.profile_image_url || '/placeholder.svg'} 
                             alt=""
-                            className="w-4 h-4 rounded-full object-cover"
+                            className="w-3 h-3 rounded-full object-cover"
                           />
-                          <span>Posted by {textPin.profile.name || 'User'}</span>
+                          <span className="text-xs">Posted by {textPin.profile.name || 'User'}</span>
                         </div>
                       )}
                     </div>
