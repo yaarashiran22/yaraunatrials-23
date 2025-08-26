@@ -415,6 +415,7 @@ export type Database = {
           image_url: string | null
           location: string | null
           market: string | null
+          mood: string | null
           price: string | null
           time: string | null
           title: string
@@ -432,6 +433,7 @@ export type Database = {
           image_url?: string | null
           location?: string | null
           market?: string | null
+          mood?: string | null
           price?: string | null
           time?: string | null
           title: string
@@ -449,6 +451,7 @@ export type Database = {
           image_url?: string | null
           location?: string | null
           market?: string | null
+          mood?: string | null
           price?: string | null
           time?: string | null
           title?: string

@@ -158,6 +158,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           video_url: videoUrl,
           external_link: externalLink.trim() || null,
           event_type: eventType,
+          mood: selectedMood || null,
           market: 'argentina' // Buenos Aires market
         });
 
@@ -180,6 +181,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       setSelectedFile(null);
       setFilePreview(null);
       setFileType(null);
+      setSelectedMood("");
 
       // Call callback to refresh data
       if (onEventCreated) {
