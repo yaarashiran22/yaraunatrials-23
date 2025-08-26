@@ -1,4 +1,4 @@
-import { X, Plus, Calendar, Clock, MapPin, Camera, Upload } from "lucide-react";
+import { X, Plus, Calendar, Clock, MapPin, Camera, Upload, Coffee, Zap, Heart, Dumbbell, Palette, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -30,6 +30,17 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedMood, setSelectedMood] = useState<string>("");
+
+  // Mood filters from home page
+  const moodFilters = [
+    { id: "chill", label: "Chill", icon: Coffee, color: "text-blue-500", activeBg: "bg-blue-50 dark:bg-blue-950/30" },
+    { id: "go-out", label: "Go Out", icon: Zap, color: "text-orange-500", activeBg: "bg-orange-50 dark:bg-orange-950/30" },
+    { id: "romantic", label: "Romantic", icon: Heart, color: "text-pink-500", activeBg: "bg-pink-50 dark:bg-pink-950/30" },
+    { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500", activeBg: "bg-green-50 dark:bg-green-950/30" },
+    { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
+    { id: "social", label: "Social", icon: Users, color: "text-indigo-500", activeBg: "bg-indigo-50 dark:bg-indigo-950/30" }
+  ];
 
   // Neighborhoods available in the website - Buenos Aires neighborhoods
   const neighborhoods = [
@@ -304,6 +315,35 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               placeholder="https://example.com"
               className="w-full h-12 text-left bg-card border-2 border-border rounded-full"
             />
+          </div>
+
+          {/* What Mood Section */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-left">What Mood</label>
+            <div className="flex flex-wrap gap-2">
+              {moodFilters.map((mood) => {
+                const IconComponent = mood.icon;
+                return (
+                  <Button
+                    key={mood.id}
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedMood(selectedMood === mood.id ? "" : mood.id)}
+                    className={`
+                      flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200
+                      ${selectedMood === mood.id
+                        ? `${mood.activeBg} ${mood.color} border-current/20`
+                        : `${mood.color} border-border hover:bg-accent/50`
+                      }
+                    `}
+                  >
+                    <IconComponent className={`h-4 w-4 ${mood.color}`} />
+                    <span className="text-sm">{mood.label}</span>
+                  </Button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Media Field */}
