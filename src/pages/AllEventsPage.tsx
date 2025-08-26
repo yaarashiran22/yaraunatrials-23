@@ -1,116 +1,314 @@
-import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import BottomNavigation from '@/components/BottomNavigation';
-import UniformCard from '@/components/UniformCard';
-import ScrollAnimatedCard from '@/components/ScrollAnimatedCard';
-import FastLoadingSkeleton from '@/components/FastLoadingSkeleton';
-import { useEvents } from '@/hooks/useEvents';
-import { getRelativeDay } from '@/utils/dateUtils';
+import { useState, useMemo, useCallback, memo } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "@/components/Header";
+import BottomNavigation from "@/components/BottomNavigation";
+import EventPopup from "@/components/EventPopup";
+import NotificationsPopup from "@/components/NotificationsPopup";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Filter, Search, ArrowLeft, Bell } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useEvents } from "@/hooks/useEvents";
+
 import communityEvent from "@/assets/community-event.jpg";
 import profile1 from "@/assets/profile-1.jpg";
 
+// Predefined neighborhoods in Tel Aviv - memoized for performance
+const neighborhoods = [
+  "כל השכונות",
+  "לב העיר",
+  "נחלת בנימין", 
+  "רוטשילד",
+  "פלורנטין",
+  "שפירא",
+  "יפו העתיקה",
+  "עג'מי",
+  "נווה צדק",
+  "כרם התימנים",
+  "שכונת מונטיפיורי",
+  "רמת אביב",
+  "צפון ישן",
+  "שינקין",
+  "דיזנגוף",
+  "הרצליה",
+  "בת ים",
+  "חולון"
+] as const;
+
+// Price filter options - memoized for performance
+const priceOptions = [
+  "כל המחירים",
+  "חינם", 
+  "עד 50 ₪",
+  "50-100 ₪",
+  "100-200 ₪",
+  "מעל 200 ₪"
+] as const;
+
 const AllEventsPage = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
-  const { events: allEvents = [], loading } = useEvents('event');
+  const { events, loading } = useEvents();
 
+  // State management
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState("כל השכונות");
+  const [priceFilter, setPriceFilter] = useState("כל המחירים");
+  // Removed showFilters state - filters are always visible
+
+  // Optimized filtering with useMemo for better performance
+  const filteredEvents = useMemo(() => {
+    if (!events.length) return [];
+    
+    return events.filter(event => {
+      // Search filter - case insensitive
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase().trim();
+        const matchesSearch = event.title.toLowerCase().includes(query) ||
+                             event.description?.toLowerCase().includes(query) ||
+                             event.location?.toLowerCase().includes(query);
+        if (!matchesSearch) return false;
+      }
+
+      // Neighborhood filter
+      if (selectedNeighborhood !== "כל השכונות") {
+        if (!event.location?.includes(selectedNeighborhood)) return false;
+      }
+
+      // Price filter
+      if (priceFilter !== "כל המחירים") {
+        const priceStr = event.price || "0";
+        const price = typeof priceStr === 'string' ? parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0 : priceStr;
+        switch (priceFilter) {
+          case "חינם":
+            if (price !== 0) return false;
+            break;
+          case "עד 50 ₪":
+            if (price === 0 || price > 50) return false;
+            break;
+          case "50-100 ₪":
+            if (price <= 50 || price > 100) return false;
+            break;
+          case "100-200 ₪":
+            if (price <= 100 || price > 200) return false;
+            break;
+          case "מעל 200 ₪":
+            if (price <= 200) return false;
+            break;
+        }
+      }
+
+      return true;
+    });
+  }, [events, searchQuery, selectedNeighborhood, priceFilter]);
+
+  // Optimized event handlers with useCallback
   const handleEventClick = useCallback((event: any) => {
-    // Navigate to event details or open popup
-    navigate(`/events/${event.id}`);
-  }, [navigate]);
+    setSelectedEvent({
+      id: event.id,
+      title: event.title,
+      description: event.description || event.title,
+      date: 'תאריך יקבע בהמשך',
+      time: 'שעה תקבע בהמשך',
+      location: event.location || 'תל אביב',
+      image: event.image_url || communityEvent,
+      organizer: {
+        name: "מארגן האירוע",
+        image: profile1
+      }
+    });
+    setIsEventPopupOpen(true);
+  }, []);
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+  const clearFilters = useCallback(() => {
+    setSearchQuery("");
+    setSelectedNeighborhood("כל השכונות");
+    setPriceFilter("כל המחירים");
+  }, []);
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      {/* Custom header with back button */}
-      <header className="bg-card border-b border-border shadow-sm">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleBack}
-              className="p-2"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-xl font-bold text-foreground">All Events</h1>
-          </div>
+    <div className="min-h-screen bg-background pb-20" dir="rtl">
+      {/* Custom Header with Back Button */}
+      <div className="bg-card border-b px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="p-2"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <h1 className="text-lg font-semibold">כל האירועים</h1>
         </div>
-      </header>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowNotifications(true)}
+          className="p-2"
+        >
+          <Bell className="h-5 w-5" />
+        </Button>
+      </div>
       
-      <main className="container mx-auto px-4 py-6 space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-sm text-muted-foreground">
-            {allEvents.length} {allEvents.length === 1 ? 'event' : 'events'}
-          </span>
+      {/* Search and Filter Section */}
+      <div className="px-4 py-4 space-y-4 bg-card/30 backdrop-blur-sm border-b">
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder="חיפוש אירועים..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 pr-4"
+          />
+        </div>
+
+        {/* Filter Options - Always Visible */}
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm font-medium mb-2 block">שכונה</label>
+              <Select value={selectedNeighborhood} onValueChange={setSelectedNeighborhood}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {neighborhoods.map((neighborhood) => (
+                    <SelectItem key={neighborhood} value={neighborhood}>
+                      {neighborhood}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">מחיר</label>
+              <Select value={priceFilter} onValueChange={setPriceFilter}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {priceOptions.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          {(selectedNeighborhood !== "כל השכונות" || priceFilter !== "כל המחירים") && (
+            <div className="flex justify-center">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={clearFilters}
+                className="text-xs"
+              >
+                נקה סינונים
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Results Section */}
+      <main className="px-4 py-4">
+        <div className="mb-4 text-sm text-muted-foreground">
+          נמצאו {filteredEvents.length} אירועים
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FastLoadingSkeleton type="cards" count={6} />
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="w-full aspect-[3/4] bg-muted rounded-lg animate-pulse"></div>
+            ))}
           </div>
-        ) : allEvents.length === 0 ? (
-          <div className="text-center py-12">
+        ) : filteredEvents.length === 0 ? (
+          <div className="text-center py-16">
             <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">No events available</h3>
-            <p className="text-muted-foreground mb-6">Be the first to create an event in your area!</p>
-            <Button onClick={() => navigate('/')} variant="outline">
-              Back to Home
+            <h3 className="text-lg font-semibold mb-2">לא נמצאו אירועים</h3>
+            <p className="text-muted-foreground mb-4">נסה לשנות את הסינונים או החיפוש</p>
+            <Button variant="outline" onClick={clearFilters}>
+              נקה סינונים
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allEvents.map((event, index) => (
-              <ScrollAnimatedCard key={`event-${event.id}`} index={index % 6}>
-                <UniformCard
-                  id={event.id}
-                  image={event.image_url || communityEvent}
-                  video={(event as any).video_url}
-                  title={event.title}
-                  subtitle={event.location || 'Location TBD'}
-                  price={event.price}
-                  date={getRelativeDay(event.date)}
-                  type="event"
-                  uploader={event.uploader}
-                  onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                  onClick={() => handleEventClick({
-                    id: event.id,
-                    title: event.title,
-                    description: event.description || event.title,
-                    date: event.date || 'Date to be determined',
-                    time: event.time || 'Time to be determined', 
-                    location: event.location || 'Location TBD',
-                    price: event.price,
-                    image: event.image_url || communityEvent,
-                    video: (event as any).video_url,
-                    organizer: {
-                      name: event.uploader?.name || "Event Organizer",
-                      image: event.uploader?.image || profile1
-                    }
-                  })}
-                  showFavoriteButton={true}
-                  favoriteData={{
-                    id: event.id,
-                    title: event.title,
-                    description: event.description || event.title,
-                    image: event.image_url,
-                    type: 'event'
-                  }}
-                />
-              </ScrollAnimatedCard>
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {filteredEvents.map((event) => (
+              <EventCard
+                key={event.id}
+                event={event}
+                onClick={() => handleEventClick(event)}
+              />
             ))}
           </div>
         )}
       </main>
+
+      <EventPopup 
+        isOpen={isEventPopupOpen}
+        onClose={() => setIsEventPopupOpen(false)}
+        event={selectedEvent}
+      />
+
+      <NotificationsPopup 
+        isOpen={showNotifications} 
+        onClose={() => setShowNotifications(false)} 
+      />
       
       <BottomNavigation />
     </div>
   );
 };
+
+// Memoized EventCard component for better performance
+const EventCard = memo(({ event, onClick }: { event: any; onClick: () => void }) => (
+  <div 
+    onClick={onClick}
+    className="cursor-pointer bg-card rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow"
+  >
+    <div className="aspect-[3/4] w-full">
+      {event.image_url ? (
+        <img 
+          src={event.image_url} 
+          alt={event.title}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div className="w-full h-full bg-muted flex items-center justify-center">
+          <span className="text-lg">🎉</span>
+        </div>
+      )}
+    </div>
+    <div className="p-2">
+      <h3 className="font-semibold text-xs text-right mb-1 truncate leading-tight">
+        {event.title}
+      </h3>
+      {event.location && (
+        <p className="text-[10px] text-muted-foreground text-right truncate">
+          📍 {event.location}
+        </p>
+      )}
+      {event.price && event.price > 0 ? (
+        <p className="text-[10px] font-medium text-primary text-right mt-1">
+          {event.price} ₪
+        </p>
+      ) : (
+        <p className="text-[10px] font-medium text-green-600 text-right mt-1">
+          חינם
+        </p>
+      )}
+    </div>
+  </div>
+));
 
 export default AllEventsPage;
