@@ -218,43 +218,47 @@ const DiscoverPage = () => {
             <div dir="ltr" class="text-pin-popup">
               <style>
                 .text-pin-popup {
-                  text-align: left;
-                  width: 250px;
-                  max-width: 250px;
+                  text-align: center;
+                  width: 180px;
+                  max-width: 180px;
                   font-family: system-ui, -apple-system, sans-serif;
                   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-                  border-radius: 12px;
-                  padding: 16px;
+                  border-radius: 16px;
+                  padding: 12px;
                   margin: 0;
-                  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-                  border: 1px solid rgba(255,255,255,0.8);
+                  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+                  border: 1px solid rgba(255,255,255,0.9);
                 }
                 .text-pin-popup .pin-image {
-                  width: 100%;
-                  height: 120px;
+                  width: 60px;
+                  height: 60px;
                   object-fit: cover;
-                  border-radius: 8px;
-                  margin-bottom: 12px;
+                  border-radius: 50%;
+                  margin: 0 auto 8px auto;
+                  border: 2px solid white;
+                  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
                 }
                 .text-pin-popup .pin-text {
-                  font-size: 14px;
-                  line-height: 1.5;
-                  color: #2d3748;
-                  margin-bottom: 12px;
+                  font-size: 12px;
+                  line-height: 1.4;
+                  color: #374151;
+                  margin-bottom: 8px;
                   white-space: pre-wrap;
+                  text-align: center;
                 }
                 .text-pin-popup .pin-author {
                   display: flex;
                   align-items: center;
-                  gap: 8px;
-                  padding-top: 8px;
-                  border-top: 1px solid #e2e8f0;
-                  font-size: 12px;
-                  color: #718096;
+                  justify-content: center;
+                  gap: 4px;
+                  padding-top: 6px;
+                  border-top: 1px solid #e5e7eb;
+                  font-size: 10px;
+                  color: #9ca3af;
                 }
                 .text-pin-popup .pin-author img {
-                  width: 20px;
-                  height: 20px;
+                  width: 14px;
+                  height: 14px;
                   border-radius: 50%;
                   object-fit: cover;
                 }
@@ -267,11 +271,11 @@ const DiscoverPage = () => {
                     src="${textPin.profile.profile_image_url || '/placeholder.svg'}" 
                     alt=""
                   />
-                  <span>Posted by ${textPin.profile.name || 'User'}</span>
+                  <span>by ${textPin.profile.name || 'User'}</span>
                 </div>
               ` : ''}
             </div>
-          `, { maxWidth: 270, className: 'custom-popup' });
+          `, { maxWidth: 200, className: 'custom-popup' });
 
         recommendationMarkersRef.current.push(marker);
       }
