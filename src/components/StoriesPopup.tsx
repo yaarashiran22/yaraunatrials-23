@@ -168,7 +168,7 @@ const StoriesPopup = ({ isOpen, onClose, userId }: StoriesPopupProps) => {
             /* Text Announcement Display */
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-600 p-8">
               <div className="text-center text-white">
-                <h3 className="text-xl font-bold mb-4">📢 עדכון מהשכונה</h3>
+                
                 <p className="text-lg leading-relaxed max-w-sm">
                   {currentStory.text_content}
                 </p>
