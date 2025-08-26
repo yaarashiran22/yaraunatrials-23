@@ -418,17 +418,8 @@ const ProfilePage = () => {
         {/* My Events Section - Only shown for own profile */}
         {isOwnProfile && userEvents && userEvents.length > 0 && (
           <section className="mb-8">
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4">
               <h3 className="text-lg font-semibold">My Events & Meetups</h3>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => navigate('/events/create')}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Event
-              </Button>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
