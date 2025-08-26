@@ -13,13 +13,13 @@ const FloatingMessagesToggle = () => {
         size="default"
         className="w-12 h-12 rounded-full shadow-lg transition-all duration-300 ease-in-out text-white hover:scale-105 active:scale-95"
         style={{
-          backgroundColor: '#3B82F6'
+          backgroundColor: '#8B5CF6'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = '#2563EB';
+          e.currentTarget.style.backgroundColor = '#7C3AED';
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = '#3B82F6';
+          e.currentTarget.style.backgroundColor = '#8B5CF6';
         }}
       >
         <MessageCircle className="h-5 w-5" />
