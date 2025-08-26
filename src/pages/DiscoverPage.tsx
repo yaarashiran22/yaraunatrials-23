@@ -193,9 +193,21 @@ const DiscoverPage = () => {
 
         if (!lat || !lng) continue;
 
-        // Create custom text pin icon
+        // Create custom text pin icon using uploaded image or fallback
         const textPinIcon = L.divIcon({
-          html: `
+          html: textPin.image_url ? `
+            <div class="w-12 h-12 rounded-full border-3 border-white shadow-lg overflow-hidden relative">
+              <img 
+                src="${textPin.image_url}" 
+                alt="Pop image"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-blue-500 border-2 border-white rounded-full flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+              </div>
+            </div>
+          ` : `
             <div class="w-8 h-8 rounded-full bg-blue-500 border-2 border-white shadow-md flex items-center justify-center relative">
               <div class="w-3 h-3 bg-white rounded-full"></div>
               <div class="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border border-white rounded-full flex items-center justify-center">
@@ -204,9 +216,9 @@ const DiscoverPage = () => {
             </div>
           `,
           className: 'text-pin-marker',
-          iconSize: [32, 32],
-          iconAnchor: [16, 32],
-          popupAnchor: [0, -32]
+          iconSize: textPin.image_url ? [48, 48] : [32, 32],
+          iconAnchor: textPin.image_url ? [24, 48] : [16, 32],
+          popupAnchor: textPin.image_url ? [0, -48] : [0, -32]
         });
 
         const marker = L.marker([lat, lng], {
