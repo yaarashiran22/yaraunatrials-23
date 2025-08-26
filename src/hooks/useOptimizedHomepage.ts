@@ -42,27 +42,27 @@ const fetchHomepageData = async () => {
         .eq('status', 'active')
         .eq('category', 'secondhand')
         .order('created_at', { ascending: false })
-        .limit(4), // Reduced for faster loading
+        .limit(3), // Reduced to 3 for faster loading
       supabase
         .from('items')
         .select('id, title, image_url, location, user_id')
         .eq('status', 'active')
         .eq('category', 'event')
         .order('created_at', { ascending: false })
-        .limit(3), // Reduced for faster loading
+        .limit(2), // Reduced to 2 for faster loading
       supabase
         .from('items')
         .select('id, title, image_url, location, user_id, created_at')
         .eq('status', 'active')
         .eq('category', 'מוזמנים להצטרף')
         .order('created_at', { ascending: false })
-        .limit(4), // Reduced for faster loading
+        .limit(3), // Reduced to 3 for faster loading
         supabase
           .from('profiles')
           .select('id, name, profile_image_url')
           .not('name', 'is', null)
           .order('created_at', { ascending: false })
-          .limit(10), // Show only top 10 newest users
+          .limit(6), // Reduced to 6 for faster loading
       supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
@@ -184,24 +184,25 @@ export const useOptimizedHomepage = () => {
   // Ultra-aggressive preloading for instant loading
   const preloadData = () => {
     queryClient.prefetchQuery({
-      queryKey: ['homepage-data-v6'], // Updated for new ultra-optimizations
+      queryKey: ['homepage-data-v7'], // Updated to match main query
       queryFn: fetchHomepageData,
-      staleTime: 1000 * 60 * 15, // 15 minutes - ultra-aggressive caching
+      staleTime: 1000 * 60 * 30, // Match main query stale time
     });
   };
 
   // Ultra-aggressive caching for instant loading
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['homepage-data-v6'], // Updated for new ultra-optimizations
+    queryKey: ['homepage-data-v7'], // Updated for faster loading optimizations
     queryFn: fetchHomepageData,
-    staleTime: 1000 * 60 * 15, // 15 minutes - ultra-aggressive
-    gcTime: 1000 * 60 * 60, // 1 hour - maximum memory persistence
+    staleTime: 1000 * 60 * 30, // 30 minutes - much more aggressive caching
+    gcTime: 1000 * 60 * 120, // 2 hours - maximum memory persistence
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
     retry: 0, // No retries for instant loading
     enabled: true, // Always enabled for immediate data fetching
     placeholderData: (previousData) => previousData,
+    refetchInterval: false, // Disable background refetching
   });
 
   // Extract pre-filtered data for instant mobile loading

@@ -123,9 +123,10 @@ const Index = () => {
 
   const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
 
-  // Optimize story counts fetching - disable for faster loading
+  // Completely disable story fetching for maximum loading speed
   useEffect(() => {
-    // Skip story counts for faster initial load
+    // Stories are disabled for faster initial loading
+    // This eliminates the multiple story API calls seen in network logs
     return;
   }, []);
 
@@ -145,11 +146,11 @@ const Index = () => {
       profilesList.push(currentUserDisplayProfile);
     }
 
-    // Add other profiles (top 10 newest users only)
+    // Add other profiles (top 6 newest users only for faster loading)
     if (profiles.length > 0) {
       const otherProfiles = profiles
         .filter(p => p.id !== user?.id)
-        .slice(0, 10) // Show only top 10 newest users
+        .slice(0, 6) // Reduced to 6 for faster loading
         .map(p => ({
           id: p.id,
           name: p.name || "User",
