@@ -263,14 +263,6 @@ const Index = () => {
               >
                 <Plus className="h-3 w-3" />
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => navigate('/all-events')}
-                className="text-xs px-3 py-1"
-              >
-                All
-              </Button>
             </div>
           </div>
           {loading ? (
@@ -344,14 +336,6 @@ const Index = () => {
                 className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1"
               >
                 <Plus className="h-3 w-3" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => navigate('/all-events')}
-                className="text-xs px-3 py-1"
-              >
-                All
               </Button>
             </div>
           </div>
