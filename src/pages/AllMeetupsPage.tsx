@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Header from '@/components/Header';
 import BottomNavigation from '@/components/BottomNavigation';
 import UniformCard from '@/components/UniformCard';
 import ScrollAnimatedCard from '@/components/ScrollAnimatedCard';
@@ -11,9 +12,9 @@ import { getRelativeDay } from '@/utils/dateUtils';
 import communityEvent from "@/assets/community-event.jpg";
 import profile1 from "@/assets/profile-1.jpg";
 
-const AllEventsPage = () => {
+const AllMeetupsPage = () => {
   const navigate = useNavigate();
-  const { events: allEvents = [], loading } = useEvents('event');
+  const { events: meetupEvents = [], loading } = useEvents('meetup');
 
   const handleEventClick = useCallback((event: any) => {
     // Navigate to event details or open popup
@@ -38,7 +39,7 @@ const AllEventsPage = () => {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-xl font-bold text-foreground">All Events</h1>
+            <h1 className="text-xl font-bold text-foreground">All Meetups</h1>
           </div>
         </div>
       </header>
@@ -46,7 +47,7 @@ const AllEventsPage = () => {
       <main className="container mx-auto px-4 py-6 space-y-6">
         <div className="flex items-center justify-between mb-6">
           <span className="text-sm text-muted-foreground">
-            {allEvents.length} {allEvents.length === 1 ? 'event' : 'events'}
+            {meetupEvents.length} {meetupEvents.length === 1 ? 'meetup' : 'meetups'}
           </span>
         </div>
 
@@ -54,19 +55,19 @@ const AllEventsPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <FastLoadingSkeleton type="cards" count={6} />
           </div>
-        ) : allEvents.length === 0 ? (
+        ) : meetupEvents.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">No events available</h3>
-            <p className="text-muted-foreground mb-6">Be the first to create an event in your area!</p>
+            <div className="text-6xl mb-4">🤝</div>
+            <h3 className="text-lg font-semibold text-foreground mb-2">No meetups available</h3>
+            <p className="text-muted-foreground mb-6">Be the first to create a meetup in your area!</p>
             <Button onClick={() => navigate('/')} variant="outline">
               Back to Home
             </Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allEvents.map((event, index) => (
-              <ScrollAnimatedCard key={`event-${event.id}`} index={index % 6}>
+            {meetupEvents.map((event, index) => (
+              <ScrollAnimatedCard key={`meetup-${event.id}`} index={index % 6}>
                 <UniformCard
                   id={event.id}
                   image={event.image_url || communityEvent}
@@ -89,7 +90,7 @@ const AllEventsPage = () => {
                     image: event.image_url || communityEvent,
                     video: (event as any).video_url,
                     organizer: {
-                      name: event.uploader?.name || "Event Organizer",
+                      name: event.uploader?.name || "Meetup Organizer",
                       image: event.uploader?.image || profile1
                     }
                   })}
@@ -99,7 +100,7 @@ const AllEventsPage = () => {
                     title: event.title,
                     description: event.description || event.title,
                     image: event.image_url,
-                    type: 'event'
+                    type: 'meetup'
                   }}
                 />
               </ScrollAnimatedCard>
@@ -113,4 +114,4 @@ const AllEventsPage = () => {
   );
 };
 
-export default AllEventsPage;
+export default AllMeetupsPage;

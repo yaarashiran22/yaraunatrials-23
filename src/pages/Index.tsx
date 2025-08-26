@@ -255,6 +255,14 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="sm"
+                onClick={() => navigate('/all-meetups')}
+                className="text-xs px-3 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30"
+              >
+                All
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
                 onClick={() => {
                   setCreateEventType('meetup');
                   setShowCreateEvent(true);
@@ -273,7 +281,7 @@ const Index = () => {
             </div>
           ) : (
             <div className="flex overflow-x-auto gap-6 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-              {meetupEvents.map((event, index) => (
+              {meetupEvents.slice(0, 3).map((event, index) => (
                 <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
                   <UniformCard
                     id={event.id}
@@ -326,6 +334,14 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
             <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate('/all-events')}
+                className="text-xs px-3 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30"
+              >
+                All
+              </Button>
               <Button 
                 variant="outline" 
                 size="sm"
