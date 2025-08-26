@@ -11,6 +11,7 @@ export interface Event {
   location?: string;
   price?: string;
   image_url?: string;
+  video_url?: string;
   market: string;
   event_type: 'event' | 'meetup';
   created_at: string;
@@ -36,6 +37,7 @@ const fetchEvents = async (eventType?: 'event' | 'meetup'): Promise<Event[]> => 
       location,
       price,
       image_url,
+      video_url,
       market,
       event_type,
       created_at,
