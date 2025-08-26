@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import Header from "@/components/Header";
+import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import BottomNavigation from "@/components/BottomNavigation";
 import LocationShareButton from '@/components/LocationShareButton';
 import AddRecommendationCard from "@/components/AddRecommendationCard";
@@ -242,6 +243,8 @@ const DiscoverPage = () => {
         // Popular neighborhoods in Buenos Aires
         const neighborhoods = [
           { name: "Palermo", lat: -34.5870, lng: -58.4263, color: '#BB31E9' },
+          { name: "Palermo Soho", lat: -34.5906, lng: -58.4203, color: '#9B59B6' },
+          { name: "Palermo Hollywood", lat: -34.5834, lng: -58.4323, color: '#8E44AD' },
           { name: "San Telmo", lat: -34.6202, lng: -58.3731, color: '#FF6B6B' },
           { name: "La Boca", lat: -34.6343, lng: -58.3635, color: '#4ECDC4' },
           { name: "Recoleta", lat: -34.5885, lng: -58.3967, color: '#45B7D1' },
@@ -329,6 +332,13 @@ const DiscoverPage = () => {
       <Header 
         title="Discover"
       />
+      
+      {/* Neighborhood Selector */}
+      <div className="bg-background/95 backdrop-blur-sm border-b border-border p-4">
+        <div className="container mx-auto flex justify-center">
+          <NeighborhoodSelector />
+        </div>
+      </div>
       
       <main className="container mx-auto px-4 py-3 space-y-6">
         {/* Map Section */}

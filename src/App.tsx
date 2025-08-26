@@ -85,6 +85,7 @@ const AppContent = () => {
               <Route path="/all-events" element={<AllEventsPage />} />
               <Route path="/all-recommendations" element={<AllRecommendationsPage />} />
               <Route path="/event/:id" element={<EventDetailsPage />} />
+              <Route path="/events/:id" element={<EventDetailsPage />} />
               <Route path="/item/:id" element={<ItemDetailsPage />} />
               <Route path="/recommended" element={<RecommendedPage />} />
               <Route path="/marketplace" element={<MarketplacePage />} />
@@ -135,6 +136,7 @@ const AppContent = () => {
             <Route path="/all-events" element={<AllEventsPage />} />
             <Route path="/all-recommendations" element={<AllRecommendationsPage />} />
             <Route path="/event/:id" element={<EventDetailsPage />} />
+            <Route path="/events/:id" element={<EventDetailsPage />} />
             <Route path="/item/:id" element={<ItemDetailsPage />} />
             <Route path="/recommended" element={<RecommendedPage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />

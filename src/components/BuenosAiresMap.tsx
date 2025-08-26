@@ -138,6 +138,8 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
         // Add simplified neighborhood markers for faster loading
         const neighborhoods = [
           { name: "Palermo", lat: -34.5870, lng: -58.4263 },
+          { name: "Palermo Soho", lat: -34.5906, lng: -58.4203 },
+          { name: "Palermo Hollywood", lat: -34.5834, lng: -58.4323 },
           { name: "San Telmo", lat: -34.6202, lng: -58.3731 },
           { name: "La Boca", lat: -34.6343, lng: -58.3635 },
           { name: "Recoleta", lat: -34.5885, lng: -58.3967 },

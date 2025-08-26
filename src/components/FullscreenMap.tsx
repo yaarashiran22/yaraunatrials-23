@@ -116,6 +116,8 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
         // Popular neighborhoods in Buenos Aires
         const neighborhoods = [
           { name: "Palermo", lat: -34.5870, lng: -58.4263, color: '#BB31E9' },
+          { name: "Palermo Soho", lat: -34.5906, lng: -58.4203, color: '#9B59B6' },
+          { name: "Palermo Hollywood", lat: -34.5834, lng: -58.4323, color: '#8E44AD' },
           { name: "San Telmo", lat: -34.6202, lng: -58.3731, color: '#FF6B6B' },
           { name: "La Boca", lat: -34.6343, lng: -58.3635, color: '#4ECDC4' },
           { name: "Recoleta", lat: -34.5885, lng: -58.3967, color: '#45B7D1' },

@@ -16,6 +16,8 @@ const NeighborhoodSelector = () => {
 
   const neighborhoods = [
     { name: "Palermo", nameEn: "Palermo", nameEs: "Palermo" },
+    { name: "Palermo Soho", nameEn: "Palermo Soho", nameEs: "Palermo Soho" },
+    { name: "Palermo Hollywood", nameEn: "Palermo Hollywood", nameEs: "Palermo Hollywood" },
     { name: "Recoleta", nameEn: "Recoleta", nameEs: "Recoleta" },
     { name: "San Telmo", nameEn: "San Telmo", nameEs: "San Telmo" },
     { name: "Puerto Madero", nameEn: "Puerto Madero", nameEs: "Puerto Madero" },
