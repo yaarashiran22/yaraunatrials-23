@@ -29,7 +29,7 @@ const EditProfilePage = () => {
     bio: "",
     location: "",
     specialties: [],
-    interests: ['צילום', 'יוצר תוכן', 'אמנות', 'מוזיקה'],
+    interests: ['Photography', 'Content Creator', 'Art', 'Music'],
     isPrivate: false,
     showInSearch: true
   });
@@ -62,8 +62,8 @@ const EditProfilePage = () => {
   const handleSaveChanges = async () => {
     if (!user) {
       toast({
-        title: "שגיאה",
-        description: "משתמש לא מחובר",
+        title: "Error",
+        description: "User not logged in",
         variant: "destructive",
       });
       return;
@@ -98,8 +98,8 @@ const EditProfilePage = () => {
       await updateProfile(updateData);
       
       toast({
-        title: "השינויים נשמרו בהצלחה",
-        description: "הפרופיל שלך עודכן",
+        title: "Changes saved successfully",
+        description: "Your profile has been updated",
       });
       
       // Navigate back after successful save
@@ -107,8 +107,8 @@ const EditProfilePage = () => {
     } catch (error: any) {
       console.error('Error saving profile:', error);
       toast({
-        title: "שגיאה בשמירת השינויים",
-        description: error.message || "אנא נסה שוב מאוחר יותר",
+        title: "Error saving changes",
+        description: error.message || "Please try again later",
         variant: "destructive",
       });
     } finally {
@@ -125,7 +125,7 @@ const EditProfilePage = () => {
         bio: profile.bio || "",
         location: profile.location || "",
         specialties: profile.specialties || [],
-        interests: profile.interests || ['צילום', 'יוצר תוכן', 'אמנות', 'מוזיקה'],
+        interests: profile.interests || ['Photography', 'Content Creator', 'Art', 'Music'],
         isPrivate: profile.is_private || false,
         showInSearch: profile.show_in_search !== false // Default to true if null/undefined
       });
@@ -137,11 +137,11 @@ const EditProfilePage = () => {
   }, [profile]);
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-background" dir="ltr">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b bg-background">
         <div></div> {/* Empty div for spacing */}
-        <h2 className="text-lg font-semibold">עריכת פרופיל</h2>
+        <h2 className="text-lg font-semibold">Edit Profile</h2>
         <Button variant="ghost" size="sm" onClick={() => navigate(user ? `/profile/${user.id}` : '/')}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -155,7 +155,7 @@ const EditProfilePage = () => {
           <div className="relative">
             <img 
               src={profileImage}
-              alt="תמונת פרופיל"
+              alt="Profile picture"
               className="rounded-full object-cover"
               style={{ width: '100px', height: '100px' }}
             />
@@ -181,10 +181,10 @@ const EditProfilePage = () => {
         <div className="space-y-6 max-w-md mx-auto">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">שם</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Name</label>
             <Input 
-              placeholder="יערה שיין"
-              className="text-right"
+              placeholder="John Doe"
+              className="text-left"
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
             />
@@ -192,10 +192,10 @@ const EditProfilePage = () => {
 
           {/* Social Page */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">עמוד סושיאל</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Social Page</label>
             <Input 
-              placeholder="https://instagram.com/yaretakingphotos"
-              className="text-right"
+              placeholder="https://instagram.com/johndoe"
+              className="text-left"
               value={formData.username}
               onChange={(e) => handleInputChange('username', e.target.value)}
             />
@@ -203,10 +203,10 @@ const EditProfilePage = () => {
 
           {/* Bio */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">ביו</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Bio</label>
             <Textarea 
-              placeholder="ספר קצת על עצמך..."
-              className="text-right min-h-[80px] resize-none"
+              placeholder="Tell us a little about yourself..."
+              className="text-left min-h-[80px] resize-none"
               value={formData.bio}
               onChange={(e) => handleInputChange('bio', e.target.value)}
             />
@@ -214,10 +214,10 @@ const EditProfilePage = () => {
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">מיקום</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Location</label>
             <Input 
-              placeholder="בת העיר"
-              className="text-right"
+              placeholder="New York City"
+              className="text-left"
               value={formData.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
             />
@@ -225,7 +225,7 @@ const EditProfilePage = () => {
 
           {/* Specialties */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-3">התמחויות</label>
+            <label className="block text-sm font-medium text-foreground mb-3">Specialties</label>
             <div className="flex flex-wrap gap-2">
               {formData.specialties.map((specialty, index) => (
                 <div key={index} className="flex items-center gap-2 bg-muted rounded-full px-3 py-1">
@@ -248,33 +248,33 @@ const EditProfilePage = () => {
                 size="sm" 
                 className="rounded-full px-3 py-1 h-7"
                 onClick={() => {
-                  const newSpecialty = prompt('הוסף התמחות:');
+                  const newSpecialty = prompt('Add specialty:');
                   if (newSpecialty?.trim()) {
                     const newSpecialties = [...formData.specialties, newSpecialty.trim()];
                     handleInputChange('specialties', newSpecialties);
                   }
                 }}
               >
-                <Plus className="h-3 w-3 ml-1" />
-                הוסף
+                <Plus className="h-3 w-3 mr-1" />
+                Add
               </Button>
             </div>
           </div>
 
           {/* Join Date */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">חבר מאז</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Member Since</label>
             <Input 
-              placeholder="מאי 2024"
-              className="text-right"
-              defaultValue="מאי 2024"
+              placeholder="May 2024"
+              className="text-left"
+              defaultValue="May 2024"
               disabled
             />
           </div>
 
           {/* Interests Section */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-3">תחומי עניין</label>
+            <label className="block text-sm font-medium text-foreground mb-3">Interests</label>
             <div className="flex flex-wrap gap-2">
               {formData.interests.map((interest, index) => (
                 <div key={index} className="flex items-center gap-2 bg-muted rounded-full px-3 py-1">
@@ -297,25 +297,25 @@ const EditProfilePage = () => {
                 size="sm" 
                 className="rounded-full px-3 py-1 h-7"
                 onClick={() => {
-                  const newInterest = prompt('הוסף תחום עניין:');
+                  const newInterest = prompt('Add interest:');
                   if (newInterest?.trim()) {
                     const newInterests = [...formData.interests, newInterest.trim()];
                     handleInputChange('interests', newInterests);
                   }
                 }}
               >
-                <Plus className="h-3 w-3 ml-1" />
-                הוסף
+                <Plus className="h-3 w-3 mr-1" />
+                Add
               </Button>
             </div>
           </div>
 
           {/* Privacy Settings */}
           <div className="space-y-4 pt-4 border-t">
-            <h3 className="text-lg font-semibold">הגדרות פרטיות</h3>
+            <h3 className="text-lg font-semibold">Privacy Settings</h3>
             
             <div className="flex items-center justify-between">
-              <span className="text-sm">פרופיל פרטי</span>
+              <span className="text-sm">Private Profile</span>
               <button 
                 onClick={() => handleInputChange('isPrivate', !formData.isPrivate)}
                 className={`w-10 h-5 rounded-full relative transition-colors ${formData.isPrivate ? 'bg-primary' : 'bg-muted'}`}
@@ -325,7 +325,7 @@ const EditProfilePage = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-sm">הצג בחיפוש</span>
+              <span className="text-sm">Show in Search</span>
               <button 
                 onClick={() => handleInputChange('showInSearch', !formData.showInSearch)}
                 className={`w-10 h-5 rounded-full relative transition-colors ${formData.showInSearch ? 'bg-primary' : 'bg-muted'}`}
@@ -341,7 +341,7 @@ const EditProfilePage = () => {
             onClick={handleSaveChanges}
             disabled={isLoading}
           >
-            {isLoading ? "שומר..." : "שמור שינויים"}
+            {isLoading ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </main>
