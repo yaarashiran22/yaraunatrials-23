@@ -184,8 +184,8 @@ export const useOptimizedHomepage = () => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['homepage-data-v7'], // Updated for faster loading optimizations
     queryFn: fetchHomepageData,
-    staleTime: 1000 * 60 * 30, // 30 minutes - much more aggressive caching
-    gcTime: 1000 * 60 * 120, // 2 hours - maximum memory persistence
+    staleTime: 1000 * 60 * 15, // 15 minutes - ultra aggressive
+    gcTime: 1000 * 60 * 60, // 1 hour - keep data longer
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,

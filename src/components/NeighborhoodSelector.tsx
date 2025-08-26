@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NeighborhoodSelectorProps {
@@ -27,7 +27,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
     { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" }
   ];
 
-  const getDisplayName = (neighborhood: any) => {
+  const getDisplayName = useCallback((neighborhood: any) => {
     switch (language) {
       case 'en':
         return neighborhood.nameEn;
@@ -36,7 +36,12 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
       default:
         return neighborhood.name;
     }
-  };
+  }, [language]);
+
+  const handleNeighborhoodSelect = useCallback((neighborhoodName: string) => {
+    setSelectedNeighborhood(neighborhoodName);
+    onNeighborhoodChange?.(neighborhoodName);
+  }, [onNeighborhoodChange]);
 
   return (
     <DropdownMenu>
@@ -51,10 +56,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
         {neighborhoods.map((neighborhood) => (
           <DropdownMenuItem 
             key={neighborhood.name}
-            onClick={() => {
-              setSelectedNeighborhood(neighborhood.name);
-              onNeighborhoodChange?.(neighborhood.name);
-            }}
+            onClick={() => handleNeighborhoodSelect(neighborhood.name)}
             className={`cursor-pointer ${selectedNeighborhood === neighborhood.name ? 'bg-primary/10' : ''}`}
           >
             <MapPin className="h-4 w-4 mr-2 text-primary" />

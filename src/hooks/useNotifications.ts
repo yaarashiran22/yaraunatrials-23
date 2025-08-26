@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
@@ -22,6 +22,7 @@ export const useNotifications = () => {
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
   const { user } = useAuth();
+  const hasFetched = useRef(false);
 
   const fetchNotifications = async () => {
     if (!user) {
@@ -30,6 +31,8 @@ export const useNotifications = () => {
       setLoading(false);
       return;
     }
+
+    if (hasFetched.current) return;
 
     try {
       const { data, error } = await supabase
@@ -77,6 +80,7 @@ export const useNotifications = () => {
 
       setNotifications(notificationsWithProfiles || []);
       setUnreadCount(notificationsWithProfiles?.filter(n => !n.is_read).length || 0);
+      hasFetched.current = true;
     } catch (error) {
       console.error('Error fetching notifications:', error);
     } finally {

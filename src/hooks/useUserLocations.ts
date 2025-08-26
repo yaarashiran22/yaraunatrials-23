@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -27,6 +27,7 @@ export const useUserLocations = () => {
   const [userLocations, setUserLocations] = useState<UserLocationWithProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [sharing, setSharing] = useState(false);
+  const hasFetched = useRef(false);
 
   // Progressive location detection with fallback
   const getLocationWithFallback = async (): Promise<GeolocationPosition> => {
@@ -179,6 +180,7 @@ export const useUserLocations = () => {
 
   // Fetch all user locations with profiles
   const fetchUserLocations = async () => {
+    if (hasFetched.current) return;
     console.log('Fetching user locations...');
     try {
       const { data: locations, error: locationsError } = await supabase
@@ -233,6 +235,7 @@ export const useUserLocations = () => {
 
       console.log(`Setting ${locationsWithProfiles.length} locations with profiles`);
       setUserLocations(locationsWithProfiles);
+      hasFetched.current = true;
     } catch (error) {
       console.error('Error in fetchUserLocations:', error);
     } finally {

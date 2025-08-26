@@ -7,7 +7,7 @@ import FilterPopup from "@/components/FilterPopup";
 import EventPopup from "@/components/EventPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import NotificationsPopup from "@/components/NotificationsPopup";
-import ProfileCard from "@/components/ProfileCard";
+import OptimizedProfileCard from "@/components/OptimizedProfileCard";
 import AddStoryButton from "@/components/AddStoryButton";
 import ScrollAnimatedCard from "@/components/ScrollAnimatedCard";
 import UniformCard from "@/components/UniformCard";
@@ -222,7 +222,7 @@ const Index = () => {
                 <FastLoadingSkeleton type="profiles" />
               ) : displayProfiles.length > 0 ? (
                 displayProfiles.map((profile, index) => (
-                  <ProfileCard
+                  <OptimizedProfileCard
                     key={profile.id}
                     id={profile.id}
                     image={profile.image}

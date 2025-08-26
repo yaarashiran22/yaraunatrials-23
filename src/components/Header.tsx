@@ -12,7 +12,7 @@ import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Search } 
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useSearch } from "@/contexts/SearchContext";
-import { useNotifications } from "@/hooks/useNotifications";
+import { useOptimizedNotifications } from "@/hooks/useOptimizedQueries";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import { useState } from "react";
 
@@ -40,7 +40,8 @@ const Header = ({
   const navigate = useNavigate();
   const { openNewItem } = useNewItem();
   const { openSearch } = useSearch();
-  const { unreadCount } = useNotifications();
+  const { data: notificationData } = useOptimizedNotifications(user?.id);
+  const unreadCount = notificationData?.unreadCount || 0;
   const [showNotifications, setShowNotifications] = useState(false);
 
   const handleLogout = () => {
