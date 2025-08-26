@@ -241,15 +241,6 @@ const DiscoverPage = () => {
                   border: none;
                   box-shadow: none;
                 }
-                .text-pin-popup .pin-image {
-                  width: 50px;
-                  height: 50px;
-                  object-fit: cover;
-                  border-radius: 50%;
-                  margin: 0 auto 6px auto;
-                  border: 2px solid white;
-                  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                }
                 .text-pin-popup .pin-text {
                   font-size: 11px;
                   line-height: 1.3;
@@ -258,7 +249,7 @@ const DiscoverPage = () => {
                   white-space: pre-wrap;
                   text-align: center;
                   background: rgba(255,255,255,0.9);
-                  padding: 4px 6px;
+                  padding: 6px 8px;
                   border-radius: 8px;
                   backdrop-filter: blur(4px);
                 }
@@ -281,7 +272,6 @@ const DiscoverPage = () => {
                   object-fit: cover;
                 }
               </style>
-              ${textPin.image_url ? `<img src="${textPin.image_url}" alt="Pop image" class="pin-image" />` : ''}
               <div class="pin-text">${textPin.description || textPin.title || 'No message'}</div>
               ${textPin.profile ? `
                 <div class="pin-author">
