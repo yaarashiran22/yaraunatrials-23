@@ -9,7 +9,6 @@ import AddRecommendationCard from "@/components/AddRecommendationCard";
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { useRecommendationAgreements } from '@/hooks/useRecommendationAgreements';
 
 // Fix for default markers in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -53,65 +52,12 @@ const DiscoverPage = () => {
     }
   };
 
-  // Setup global handler for agree clicks in map popups
+  // Setup global handler for future functionality if needed
   useEffect(() => {
-    (window as any).handleAgreeClick = async (recommendationId: string) => {
-      if (!user) {
-        alert('Please log in to agree with recommendations');
-        return;
-      }
-
-      try {
-        // Check if user already agreed
-        const { data: existingAgreement } = await supabase
-          .from('recommendation_agreements')
-          .select('id')
-          .eq('recommendation_id', recommendationId)
-          .eq('user_id', user.id)
-          .maybeSingle();
-
-        if (existingAgreement) {
-          // Remove agreement
-          await supabase
-            .from('recommendation_agreements')
-            .delete()
-            .eq('recommendation_id', recommendationId)
-            .eq('user_id', user.id);
-        } else {
-          // Add agreement
-          await supabase
-            .from('recommendation_agreements')
-            .insert({
-              recommendation_id: recommendationId,
-              user_id: user.id
-            });
-        }
-
-        // Update the count in the popup
-        const { count } = await supabase
-          .from('recommendation_agreements')
-          .select('*', { count: 'exact', head: true })
-          .eq('recommendation_id', recommendationId);
-
-        const countElement = document.getElementById(`agree-count-${recommendationId}`);
-        if (countElement) {
-          countElement.textContent = `${count || 0} agrees`;
-        }
-
-        // Update button text
-        const buttonElements = document.querySelectorAll(`[onclick="handleAgreeClick('${recommendationId}')"]`);
-        buttonElements.forEach(button => {
-          button.textContent = existingAgreement ? '👍 Agree' : '✓ Agreed';
-        });
-
-      } catch (error) {
-        console.error('Error handling agreement:', error);
-        alert('Error updating agreement');
-      }
-    };
-
+    // Text pins don't require special click handlers
+    // This is kept for future functionality
     return () => {
-      delete (window as any).handleAgreeClick;
+      // Cleanup if needed
     };
   }, [user]);
 
@@ -183,8 +129,8 @@ const DiscoverPage = () => {
     });
   };
 
-  // Function to add recommendation markers
-  const addRecommendationMarkers = async () => {
+  // Function to add text pin markers
+  const addTextPinMarkers = async () => {
     if (!mapInstanceRef.current) return;
 
     // Clear existing recommendation markers
@@ -195,21 +141,21 @@ const DiscoverPage = () => {
       recommendationMarkersRef.current = [];
     }
 
-    // Fetch recommendations from database
+    // Fetch text pins from database (using items table with category 'text_pin')
     try {
-      const { data: recommendations, error } = await supabase
+      const { data: textPins, error } = await supabase
         .from('items')
         .select('*')
-        .eq('category', 'recommendation')
+        .eq('category', 'text_pin')
         .eq('status', 'active');
 
       if (error) {
-        console.error('Error fetching recommendations:', error);
+        console.error('Error fetching text pins:', error);
         return;
       }
 
-      // Fetch user profiles for recommendations
-      const userIds = recommendations?.map(r => r.user_id).filter(Boolean) || [];
+      // Fetch user profiles for text pins
+      const userIds = textPins?.map(pin => pin.user_id).filter(Boolean) || [];
       let profiles: any[] = [];
       
       if (userIds.length > 0) {
@@ -220,22 +166,22 @@ const DiscoverPage = () => {
         profiles = profilesData || [];
       }
 
-      // Combine recommendations with profiles
-      const recommendationsWithProfiles = recommendations?.map(recommendation => ({
-        ...recommendation,
-        profile: profiles.find(p => p.id === recommendation.user_id)
+      // Combine text pins with profiles
+      const textPinsWithProfiles = textPins?.map(pin => ({
+        ...pin,
+        profile: profiles.find(p => p.id === pin.user_id)
       })) || [];
 
-      setUserRecommendations(recommendationsWithProfiles);
+      setUserRecommendations(textPinsWithProfiles);
 
-      // Add markers for recommendations
-      for (const recommendation of recommendationsWithProfiles) {
+      // Add markers for text pins
+      for (const textPin of textPinsWithProfiles) {
         if (!mapInstanceRef.current) continue;
 
         let lat, lng;
         try {
-          if (recommendation.location) {
-            const locationData = JSON.parse(recommendation.location);
+          if (textPin.location) {
+            const locationData = JSON.parse(textPin.location);
             lat = locationData.lat;
             lng = locationData.lng;
           }
@@ -246,187 +192,82 @@ const DiscoverPage = () => {
 
         if (!lat || !lng) continue;
 
-        // Get current agreement count for this recommendation
-        const { count: agreementCount } = await supabase
-          .from('recommendation_agreements')
-          .select('*', { count: 'exact', head: true })
-          .eq('recommendation_id', recommendation.id);
-
-        // Check if current user has agreed
-        let userHasAgreed = false;
-        if (user) {
-          const { data: userAgreement } = await supabase
-            .from('recommendation_agreements')
-            .select('id')
-            .eq('recommendation_id', recommendation.id)
-            .eq('user_id', user.id)
-            .maybeSingle();
-          userHasAgreed = !!userAgreement;
-        }
-
-        // Create custom recommendation icon
-        const recommendationIcon = L.divIcon({
+        // Create custom text pin icon
+        const textPinIcon = L.divIcon({
           html: `
-            <div class="w-8 h-8 rounded-full bg-orange-500 border-2 border-white shadow-md flex items-center justify-center relative">
+            <div class="w-8 h-8 rounded-full bg-blue-500 border-2 border-white shadow-md flex items-center justify-center relative">
               <div class="w-3 h-3 bg-white rounded-full"></div>
-              <div class="absolute -top-0.5 -right-0.5 w-3 h-3 bg-yellow-400 border border-white rounded-full flex items-center justify-center">
-                <div class="w-1.5 h-1.5 bg-yellow-600 rounded-full"></div>
+              <div class="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 border border-white rounded-full flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
               </div>
             </div>
           `,
-          className: 'recommendation-marker',
+          className: 'text-pin-marker',
           iconSize: [32, 32],
           iconAnchor: [16, 32],
           popupAnchor: [0, -32]
         });
 
         const marker = L.marker([lat, lng], {
-          icon: recommendationIcon,
+          icon: textPinIcon,
           riseOnHover: true
         })
           .addTo(mapInstanceRef.current)
           .bindPopup(`
-            <div dir="ltr" class="recommendation-popup">
+            <div dir="ltr" class="text-pin-popup">
               <style>
-                .recommendation-popup {
-                  text-left: left;
-                  width: 200px;
-                  max-width: 200px;
+                .text-pin-popup {
+                  text-align: left;
+                  width: 250px;
+                  max-width: 250px;
                   font-family: system-ui, -apple-system, sans-serif;
                   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-                  border-radius: 16px;
-                  padding: 0;
-                  margin: 0;
-                  box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);
-                  backdrop-filter: blur(10px);
-                  overflow: hidden;
-                }
-                .recommendation-popup .popup-image {
-                  width: 100%;
-                  height: 120px;
-                  object-fit: cover;
-                  border-radius: 12px 12px 0 0;
-                  margin-bottom: 12px;
-                }
-                .recommendation-popup .popup-content {
+                  border-radius: 12px;
                   padding: 16px;
-                  padding-top: 0;
+                  margin: 0;
+                  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+                  border: 1px solid rgba(255,255,255,0.8);
                 }
-                .recommendation-popup .popup-title {
-                  font-weight: 600;
-                  font-size: 16px;
-                  margin-bottom: 8px;
-                  color: #1a202c;
-                  line-height: 1.3;
-                }
-                .recommendation-popup .popup-description {
-                  color: #4a5568;
-                  font-size: 13px;
+                .text-pin-popup .pin-text {
+                  font-size: 14px;
+                  line-height: 1.5;
+                  color: #2d3748;
                   margin-bottom: 12px;
-                  line-height: 1.4;
-                  display: -webkit-box;
-                  -webkit-line-clamp: 2;
-                  -webkit-box-orient: vertical;
-                  overflow: hidden;
+                  white-space: pre-wrap;
                 }
-                .recommendation-popup .popup-author {
+                .text-pin-popup .pin-author {
                   display: flex;
                   align-items: center;
-                  gap: 6px;
-                  margin-bottom: 12px;
-                  font-size: 11px;
+                  gap: 8px;
+                  padding-top: 8px;
+                  border-top: 1px solid #e2e8f0;
+                  font-size: 12px;
                   color: #718096;
                 }
-                .recommendation-popup .popup-author img {
-                  width: 16px;
-                  height: 16px;
+                .text-pin-popup .pin-author img {
+                  width: 20px;
+                  height: 20px;
                   border-radius: 50%;
                   object-fit: cover;
                 }
-                .recommendation-popup .popup-link {
-                  display: inline-flex;
-                  align-items: center;
-                  gap: 4px;
-                  color: #3182ce;
-                  font-size: 12px;
-                  font-weight: 500;
-                  text-decoration: none;
-                  margin-bottom: 12px;
-                  transition: color 0.2s;
-                }
-                .recommendation-popup .popup-link:hover {
-                  color: #2c5aa0;
-                }
-                .recommendation-popup .agree-section {
-                  display: flex;
-                  align-items: center;
-                  justify-content: space-between;
-                  padding: 8px 12px;
-                  background: rgba(59, 130, 246, 0.05);
-                  border-radius: 8px;
-                  border: 1px solid rgba(59, 130, 246, 0.1);
-                }
-                .recommendation-popup .agree-button {
-                  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                  color: white;
-                  border: none;
-                  padding: 6px 12px;
-                  border-radius: 6px;
-                  font-size: 11px;
-                  font-weight: 500;
-                  cursor: pointer;
-                  transition: all 0.2s;
-                  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-                }
-                .recommendation-popup .agree-button:hover {
-                  transform: translateY(-1px);
-                  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
-                }
-                .recommendation-popup .agree-count {
-                  font-size: 11px;
-                  color: #4a5568;
-                  font-weight: 500;
-                }
               </style>
-              <div class="popup-content">
-                ${recommendation.image_url ? `
+              <div class="pin-text">${textPin.description || textPin.title || 'No message'}</div>
+              ${textPin.profile ? `
+                <div class="pin-author">
                   <img 
-                    src="${recommendation.image_url}" 
-                    alt="${recommendation.title}"
-                    class="popup-image"
-                    loading="lazy"
+                    src="${textPin.profile.profile_image_url || '/placeholder.svg'}" 
+                    alt=""
                   />
-                ` : ''}
-                <div class="popup-title">${recommendation.title}</div>
-                ${recommendation.description ? `<div class="popup-description">${recommendation.description}</div>` : ''}
-                ${recommendation.profile ? `
-                  <div class="popup-author">
-                    <img 
-                      src="${recommendation.profile.profile_image_url || '/placeholder.svg'}" 
-                      alt=""
-                    />
-                    <span>By ${recommendation.profile.name || 'User'}</span>
-                  </div>
-                ` : ''}
-                ${recommendation.instagram_url ? `
-                  <a href="${recommendation.instagram_url}" target="_blank" class="popup-link">
-                    🔗 Visit Link
-                  </a>
-                ` : ''}
-                <div class="agree-section">
-                  <span class="agree-count" id="agree-count-${recommendation.id}">${agreementCount || 0} agrees</span>
-                  <button class="agree-button" onclick="handleAgreeClick('${recommendation.id}')">
-                    ${userHasAgreed ? '✓ Agreed' : '👍 Agree'}
-                  </button>
+                  <span>Posted by ${textPin.profile.name || 'User'}</span>
                 </div>
-              </div>
+              ` : ''}
             </div>
-          `, { maxWidth: 220, className: 'custom-popup' });
+          `, { maxWidth: 270, className: 'custom-popup' });
 
         recommendationMarkersRef.current.push(marker);
       }
     } catch (error) {
-      console.error('Error fetching recommendations:', error);
+      console.error('Error fetching text pins:', error);
     }
   };
 
@@ -504,9 +345,9 @@ const DiscoverPage = () => {
             `);
         });
 
-        // Add user location markers
+        // Add user location and text pin markers
         addUserLocationMarkers();
-        addRecommendationMarkers();
+        addTextPinMarkers();
 
         setIsLoading(false);
       } catch (error) {
@@ -539,7 +380,7 @@ const DiscoverPage = () => {
 
   useEffect(() => {
     if (mapInstanceRef.current && !isLoading) {
-      addRecommendationMarkers();
+      addTextPinMarkers();
     }
   }, [isLoading]);
 
@@ -556,7 +397,7 @@ const DiscoverPage = () => {
         {/* Map Section */}
         <div className="relative">
           <div className="flex items-center justify-between mb-4">
-            <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} className="w-32" />
+            <AddRecommendationCard onRecommendationAdded={addTextPinMarkers} className="w-32" />
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
           
@@ -584,52 +425,34 @@ const DiscoverPage = () => {
         </div>
 
 
-        {/* Recommendations Section */}
+        {/* Text Pins Section */}
         <div className="space-y-4">
           
-          {/* Display Recommendations */}
+          {/* Display Text Pins */}
           {userRecommendations.length > 0 && (
             <div className="grid gap-3">
-              {userRecommendations.map((recommendation) => (
+              {userRecommendations.map((textPin) => (
                 <div 
-                  key={recommendation.id}
+                  key={textPin.id}
                   className="bg-card rounded-lg p-4 shadow-sm border hover:shadow-md transition-shadow"
                 >
                   <div className="flex gap-3">
-                    {recommendation.image_url && (
-                      <img 
-                        src={recommendation.image_url} 
-                        alt={recommendation.title}
-                        className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-                      />
-                    )}
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-foreground mb-1">{recommendation.title}</h4>
-                      {recommendation.description && (
-                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                          {recommendation.description}
+                      <h4 className="font-medium text-foreground mb-1">{textPin.title}</h4>
+                      {textPin.description && (
+                        <p className="text-sm text-muted-foreground mb-2 line-clamp-3">
+                          {textPin.description}
                         </p>
                       )}
-                      {recommendation.profile && (
-                        <div className="flex items-center gap-2 mb-2 text-xs text-muted-foreground">
+                      {textPin.profile && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <img 
-                            src={recommendation.profile.profile_image_url || '/placeholder.svg'} 
+                            src={textPin.profile.profile_image_url || '/placeholder.svg'} 
                             alt=""
                             className="w-4 h-4 rounded-full object-cover"
                           />
-                          <span>Recommended by {recommendation.profile.name || 'User'}</span>
+                          <span>Posted by {textPin.profile.name || 'User'}</span>
                         </div>
-                      )}
-                      {recommendation.instagram_url && (
-                        <a 
-                          href={recommendation.instagram_url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline flex items-center gap-1"
-                        >
-                          <MapPin className="w-3 h-3" />
-                          Link
-                        </a>
                       )}
                     </div>
                   </div>
