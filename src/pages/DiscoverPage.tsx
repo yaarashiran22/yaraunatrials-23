@@ -554,7 +554,7 @@ const DiscoverPage = () => {
         <div className="relative">
           <div className="flex items-center justify-between mb-4">
             <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} className="w-32" />
-            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32" />
+            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
           
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-96 z-0">
