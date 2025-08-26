@@ -8,6 +8,7 @@ import AddRecommendationCard from "@/components/AddRecommendationCard";
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useRecommendationAgreements } from '@/hooks/useRecommendationAgreements';
 
 // Fix for default markers in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -25,7 +26,70 @@ const DiscoverPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { userLocations } = useUserLocations();
+  const { user } = useAuth();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
+
+  // Setup global handler for agree clicks in map popups
+  useEffect(() => {
+    (window as any).handleAgreeClick = async (recommendationId: string) => {
+      if (!user) {
+        alert('Please log in to agree with recommendations');
+        return;
+      }
+
+      try {
+        // Check if user already agreed
+        const { data: existingAgreement } = await supabase
+          .from('recommendation_agreements')
+          .select('id')
+          .eq('recommendation_id', recommendationId)
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (existingAgreement) {
+          // Remove agreement
+          await supabase
+            .from('recommendation_agreements')
+            .delete()
+            .eq('recommendation_id', recommendationId)
+            .eq('user_id', user.id);
+        } else {
+          // Add agreement
+          await supabase
+            .from('recommendation_agreements')
+            .insert({
+              recommendation_id: recommendationId,
+              user_id: user.id
+            });
+        }
+
+        // Update the count in the popup
+        const { count } = await supabase
+          .from('recommendation_agreements')
+          .select('*', { count: 'exact', head: true })
+          .eq('recommendation_id', recommendationId);
+
+        const countElement = document.getElementById(`agree-count-${recommendationId}`);
+        if (countElement) {
+          countElement.textContent = `${count || 0} agrees`;
+        }
+
+        // Update button text
+        const buttonElements = document.querySelectorAll(`[onclick="handleAgreeClick('${recommendationId}')"]`);
+        buttonElements.forEach(button => {
+          button.textContent = existingAgreement ? '👍 Agree' : '✓ Agreed';
+        });
+
+      } catch (error) {
+        console.error('Error handling agreement:', error);
+        alert('Error updating agreement');
+      }
+    };
+
+    return () => {
+      delete (window as any).handleAgreeClick;
+    };
+  }, [user]);
 
   // Function to add user location markers
   const addUserLocationMarkers = () => {
@@ -136,8 +200,8 @@ const DiscoverPage = () => {
       setUserRecommendations(recommendationsWithProfiles);
 
       // Add markers for recommendations
-      recommendationsWithProfiles.forEach((recommendation) => {
-        if (!mapInstanceRef.current) return;
+      for (const recommendation of recommendationsWithProfiles) {
+        if (!mapInstanceRef.current) continue;
 
         let lat, lng;
         try {
@@ -148,10 +212,28 @@ const DiscoverPage = () => {
           }
         } catch (error) {
           console.error('Error parsing location data:', error);
-          return;
+          continue;
         }
 
-        if (!lat || !lng) return;
+        if (!lat || !lng) continue;
+
+        // Get current agreement count for this recommendation
+        const { count: agreementCount } = await supabase
+          .from('recommendation_agreements')
+          .select('*', { count: 'exact', head: true })
+          .eq('recommendation_id', recommendation.id);
+
+        // Check if current user has agreed
+        let userHasAgreed = false;
+        if (user) {
+          const { data: userAgreement } = await supabase
+            .from('recommendation_agreements')
+            .select('id')
+            .eq('recommendation_id', recommendation.id)
+            .eq('user_id', user.id)
+            .maybeSingle();
+          userHasAgreed = !!userAgreement;
+        }
 
         // Create custom recommendation icon
         const recommendationIcon = L.divIcon({
@@ -175,39 +257,145 @@ const DiscoverPage = () => {
         })
           .addTo(mapInstanceRef.current)
           .bindPopup(`
-            <div dir="ltr" class="text-left text-sm p-3 max-w-64">
-              ${recommendation.image_url ? `
-                <div class="mb-3">
+            <div dir="ltr" class="recommendation-popup">
+              <style>
+                .recommendation-popup {
+                  text-left: left;
+                  width: 200px;
+                  max-width: 200px;
+                  font-family: system-ui, -apple-system, sans-serif;
+                  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                  border-radius: 16px;
+                  padding: 0;
+                  margin: 0;
+                  box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5);
+                  backdrop-filter: blur(10px);
+                  overflow: hidden;
+                }
+                .recommendation-popup .popup-image {
+                  width: 100%;
+                  height: 120px;
+                  object-fit: cover;
+                  border-radius: 12px 12px 0 0;
+                  margin-bottom: 12px;
+                }
+                .recommendation-popup .popup-content {
+                  padding: 16px;
+                  padding-top: 0;
+                }
+                .recommendation-popup .popup-title {
+                  font-weight: 600;
+                  font-size: 16px;
+                  margin-bottom: 8px;
+                  color: #1a202c;
+                  line-height: 1.3;
+                }
+                .recommendation-popup .popup-description {
+                  color: #4a5568;
+                  font-size: 13px;
+                  margin-bottom: 12px;
+                  line-height: 1.4;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                }
+                .recommendation-popup .popup-author {
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                  margin-bottom: 12px;
+                  font-size: 11px;
+                  color: #718096;
+                }
+                .recommendation-popup .popup-author img {
+                  width: 16px;
+                  height: 16px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                }
+                .recommendation-popup .popup-link {
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 4px;
+                  color: #3182ce;
+                  font-size: 12px;
+                  font-weight: 500;
+                  text-decoration: none;
+                  margin-bottom: 12px;
+                  transition: color 0.2s;
+                }
+                .recommendation-popup .popup-link:hover {
+                  color: #2c5aa0;
+                }
+                .recommendation-popup .agree-section {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  padding: 8px 12px;
+                  background: rgba(59, 130, 246, 0.05);
+                  border-radius: 8px;
+                  border: 1px solid rgba(59, 130, 246, 0.1);
+                }
+                .recommendation-popup .agree-button {
+                  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                  color: white;
+                  border: none;
+                  padding: 6px 12px;
+                  border-radius: 6px;
+                  font-size: 11px;
+                  font-weight: 500;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+                }
+                .recommendation-popup .agree-button:hover {
+                  transform: translateY(-1px);
+                  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+                }
+                .recommendation-popup .agree-count {
+                  font-size: 11px;
+                  color: #4a5568;
+                  font-weight: 500;
+                }
+              </style>
+              <div class="popup-content">
+                ${recommendation.image_url ? `
                   <img 
                     src="${recommendation.image_url}" 
                     alt="${recommendation.title}"
-                    class="w-full h-32 object-cover rounded-lg shadow-sm"
+                    class="popup-image"
                     loading="lazy"
                   />
+                ` : ''}
+                <div class="popup-title">${recommendation.title}</div>
+                ${recommendation.description ? `<div class="popup-description">${recommendation.description}</div>` : ''}
+                ${recommendation.profile ? `
+                  <div class="popup-author">
+                    <img 
+                      src="${recommendation.profile.profile_image_url || '/placeholder.svg'}" 
+                      alt=""
+                    />
+                    <span>By ${recommendation.profile.name || 'User'}</span>
+                  </div>
+                ` : ''}
+                ${recommendation.instagram_url ? `
+                  <a href="${recommendation.instagram_url}" target="_blank" class="popup-link">
+                    🔗 Visit Link
+                  </a>
+                ` : ''}
+                <div class="agree-section">
+                  <span class="agree-count" id="agree-count-${recommendation.id}">${agreementCount || 0} agrees</span>
+                  <button class="agree-button" onclick="handleAgreeClick('${recommendation.id}')">
+                    ${userHasAgreed ? '✓ Agreed' : '👍 Agree'}
+                  </button>
                 </div>
-              ` : ''}
-              <div class="font-semibold text-base mb-2 text-gray-800">${recommendation.title}</div>
-              ${recommendation.description ? `<div class="text-gray-600 text-sm mb-3 leading-relaxed">${recommendation.description}</div>` : ''}
-              ${recommendation.profile ? `
-                <div class="flex items-center gap-2 mb-2 text-xs text-gray-500">
-                  <img 
-                    src="${recommendation.profile.profile_image_url || '/placeholder.svg'}" 
-                    alt=""
-                    class="w-4 h-4 rounded-full object-cover"
-                  />
-                  <span>Recommended by ${recommendation.profile.name || 'User'}</span>
-                </div>
-              ` : ''}
-              ${recommendation.instagram_url ? `
-                <a href="${recommendation.instagram_url}" target="_blank" class="inline-flex items-center gap-1 text-orange-600 text-sm hover:underline font-medium">
-                  🔗 Visit Link
-                </a>
-              ` : ''}
+              </div>
             </div>
-          `);
+          `, { maxWidth: 220, className: 'custom-popup' });
 
         recommendationMarkersRef.current.push(marker);
-      });
+      }
     } catch (error) {
       console.error('Error fetching recommendations:', error);
     }
