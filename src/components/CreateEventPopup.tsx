@@ -135,7 +135,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       
       if (selectedFile) {
         const fileExt = selectedFile.name.split('.').pop();
-        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        const fileName = `${user.id}/${user.id}-${Date.now()}.${fileExt}`;
         const bucketName = fileType === 'video' ? 'videos' : 'item-images';
         
         console.log('Attempting upload:', { fileName, bucketName, fileSize: selectedFile.size });
