@@ -123,15 +123,23 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       let videoUrl = null;
       
       if (selectedFile) {
+        console.log('Starting file upload...', { fileName: selectedFile.name, fileType, fileSize: selectedFile.size });
         const fileExt = selectedFile.name.split('.').pop();
         const fileName = `${user.id}-${Date.now()}.${fileExt}`;
         const bucketName = fileType === 'video' ? 'videos' : 'item-images';
+        
+        console.log('Upload details:', { fileName, bucketName, fileType });
         
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from(bucketName)
           .upload(fileName, selectedFile);
 
-        if (uploadError) throw uploadError;
+        console.log('Upload result:', { uploadData, uploadError });
+        
+        if (uploadError) {
+          console.error('Upload error details:', uploadError);
+          throw uploadError;
+        }
         
         const { data } = supabase.storage
           .from(bucketName)
