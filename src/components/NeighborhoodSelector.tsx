@@ -10,7 +10,11 @@ import {
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const NeighborhoodSelector = () => {
+interface NeighborhoodSelectorProps {
+  onNeighborhoodChange?: (neighborhood: string) => void;
+}
+
+const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProps) => {
   const { language } = useLanguage();
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("Palermo");
 
@@ -47,7 +51,10 @@ const NeighborhoodSelector = () => {
         {neighborhoods.map((neighborhood) => (
           <DropdownMenuItem 
             key={neighborhood.name}
-            onClick={() => setSelectedNeighborhood(neighborhood.name)}
+            onClick={() => {
+              setSelectedNeighborhood(neighborhood.name);
+              onNeighborhoodChange?.(neighborhood.name);
+            }}
             className={`cursor-pointer ${selectedNeighborhood === neighborhood.name ? 'bg-primary/10' : ''}`}
           >
             <MapPin className="h-4 w-4 mr-2 text-primary" />

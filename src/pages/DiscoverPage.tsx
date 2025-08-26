@@ -31,6 +31,29 @@ const DiscoverPage = () => {
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [popularRecommendations, setPopularRecommendations] = useState<any[]>([]);
 
+  // Function to handle neighborhood change
+  const handleNeighborhoodChange = (neighborhoodName: string) => {
+    if (!mapInstanceRef.current) return;
+
+    // Neighborhood coordinates
+    const neighborhoods: Record<string, [number, number]> = {
+      "Palermo": [-34.5870, -58.4263],
+      "Palermo Soho": [-34.5906, -58.4203],
+      "Palermo Hollywood": [-34.5834, -58.4323],
+      "San Telmo": [-34.6202, -58.3731],
+      "Recoleta": [-34.5885, -58.3967],
+      "Villa Crespo": [-34.5998, -58.4386],
+    };
+
+    const coordinates = neighborhoods[neighborhoodName];
+    if (coordinates) {
+      mapInstanceRef.current.setView(coordinates, 15, {
+        animate: true,
+        duration: 1.5
+      });
+    }
+  };
+
   // Setup global handler for agree clicks in map popups
   useEffect(() => {
     (window as any).handleAgreeClick = async (recommendationId: string) => {
@@ -556,6 +579,11 @@ const DiscoverPage = () => {
       
       
       <main className="container mx-auto px-4 py-3 space-y-6">
+        {/* Neighborhood Selector */}
+        <div className="flex justify-center mb-4">
+          <NeighborhoodSelector onNeighborhoodChange={handleNeighborhoodChange} />
+        </div>
+
         {/* Map Section */}
         <div className="relative">
           <div className="flex items-center justify-between mb-4">
@@ -563,7 +591,7 @@ const DiscoverPage = () => {
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
           
-          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-96 z-0">
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-96 z-0 max-w-none -mx-2">
             {error ? (
               <div className="flex items-center justify-center h-full bg-muted/30">
                 <div className="text-center p-4">
