@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
+import { Flame, MapPin, Star } from 'lucide-react';
 import Header from "@/components/Header";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -147,7 +148,12 @@ const DiscoverPage = () => {
               />
               <span class="font-medium">${userLocation.profile?.name || 'User'}</span>
             </div>
-            <div class="text-xs text-muted-foreground mt-1">📍 Current location</div>
+            <div class="text-xs text-muted-foreground mt-1">
+              <div class="flex items-center gap-1">
+                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                Current location
+              </div>
+            </div>
           </div>
         `);
 
@@ -267,9 +273,9 @@ const DiscoverPage = () => {
         const recommendationIcon = L.divIcon({
           html: `
             <div class="w-8 h-8 rounded-full bg-orange-500 border-2 border-white shadow-md flex items-center justify-center relative">
-              <span class="text-sm">📍</span>
+              <div class="w-3 h-3 bg-white rounded-full"></div>
               <div class="absolute -top-0.5 -right-0.5 w-3 h-3 bg-yellow-400 border border-white rounded-full flex items-center justify-center">
-                <span class="text-xs">⭐</span>
+                <div class="w-1.5 h-1.5 bg-yellow-600 rounded-full"></div>
               </div>
             </div>
           `,
@@ -584,7 +590,8 @@ const DiscoverPage = () => {
         {popularRecommendations.length > 0 && (
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              🔥 Most Popular
+              <Flame className="w-5 h-5 text-orange-500" />
+              Most Popular
             </h3>
             <div className="grid gap-3">
               {popularRecommendations.map((recommendation) => (
@@ -604,7 +611,7 @@ const DiscoverPage = () => {
                       <div className="flex items-start justify-between mb-1">
                         <h4 className="font-medium text-foreground">{recommendation.title}</h4>
                         <div className="flex items-center gap-1 text-orange-600 dark:text-orange-400 text-sm font-medium">
-                          <span>👍</span>
+                          <Star className="w-3 h-3 fill-current" />
                           <span>{recommendation.agreementCount || 0}</span>
                         </div>
                       </div>
@@ -630,7 +637,8 @@ const DiscoverPage = () => {
                           rel="noopener noreferrer"
                           className="text-xs text-primary hover:underline flex items-center gap-1"
                         >
-                          🔗 Visit Link
+                          <MapPin className="w-3 h-3" />
+                          Visit Link
                         </a>
                       )}
                     </div>
@@ -684,7 +692,8 @@ const DiscoverPage = () => {
                           rel="noopener noreferrer"
                           className="text-xs text-primary hover:underline flex items-center gap-1"
                         >
-                          🔗 Link
+                          <MapPin className="w-3 h-3" />
+                          Link
                         </a>
                       )}
                     </div>
