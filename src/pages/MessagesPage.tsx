@@ -20,6 +20,7 @@ const MessagesPage = () => {
     allUsers, 
     loading, 
     sending, 
+    usersLoading,
     selectedUserId,
     fetchMessagesWithUser,
     sendMessage,
@@ -29,6 +30,7 @@ const MessagesPage = () => {
   
   const [newMessage, setNewMessage] = useState('');
   const [showUserSelect, setShowUserSelect] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +45,14 @@ const MessagesPage = () => {
   const handleUserSelect = (userId: string) => {
     fetchMessagesWithUser(userId);
     setShowUserSelect(false);
+    setSearchQuery(''); // Reset search when closing
   };
+
+  // Filter users based on search query
+  const filteredUsers = allUsers.filter(user => 
+    user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const getSelectedUser = () => {
     if (!selectedUserId) return null;
@@ -101,38 +110,58 @@ const MessagesPage = () => {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-background rounded-lg max-w-md w-full max-h-[80vh] overflow-hidden">
             <div className="p-4 border-b border-border">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold">Select User</h2>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setShowUserSelect(false)}
+                  onClick={() => {
+                    setShowUserSelect(false);
+                    setSearchQuery('');
+                  }}
                 >
                   ×
                 </Button>
               </div>
+              <Input
+                placeholder="Search users..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full"
+              />
             </div>
             <ScrollArea className="max-h-96">
               <div className="p-2">
-                {allUsers.map((profile) => (
-                  <Button
-                    key={profile.id}
-                    variant="ghost"
-                    className="w-full justify-start p-3 h-auto"
-                    onClick={() => handleUserSelect(profile.id)}
-                  >
-                    <Avatar className="h-10 w-10 mr-3">
-                      <AvatarImage src={profile.profile_image_url} />
-                      <AvatarFallback>
-                        {(profile.name || profile.email)?.slice(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="text-left">
-                      <p className="font-medium">{profile.name || 'User'}</p>
-                      <p className="text-sm text-muted-foreground">{profile.email}</p>
-                    </div>
-                  </Button>
-                ))}
+                {usersLoading ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-current border-t-transparent mx-auto mb-2" />
+                    Loading users...
+                  </div>
+                ) : filteredUsers.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    {searchQuery ? 'No users found matching your search' : 'No users available'}
+                  </div>
+                ) : (
+                  filteredUsers.map((profile) => (
+                    <Button
+                      key={profile.id}
+                      variant="ghost"
+                      className="w-full justify-start p-3 h-auto"
+                      onClick={() => handleUserSelect(profile.id)}
+                    >
+                      <Avatar className="h-10 w-10 mr-3">
+                        <AvatarImage src={profile.profile_image_url} />
+                        <AvatarFallback>
+                          {(profile.name || profile.email)?.slice(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="text-left">
+                        <p className="font-medium">{profile.name || 'User'}</p>
+                        <p className="text-sm text-muted-foreground">{profile.email}</p>
+                      </div>
+                    </Button>
+                  ))
+                )}
               </div>
             </ScrollArea>
           </div>

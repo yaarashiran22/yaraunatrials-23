@@ -36,23 +36,24 @@ export const useDirectMessages = () => {
 
   // Fetch all users (profiles) for user selection
   const [allUsers, setAllUsers] = useState<Profile[]>([]);
-
-  useEffect(() => {
-    fetchAllUsers();
-  }, []);
+  const [usersLoading, setUsersLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
+      fetchAllUsers();
       fetchConversations();
     }
   }, [user]);
 
   const fetchAllUsers = async () => {
+    if (!user) return;
+    
+    setUsersLoading(true);
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('id, name, email, profile_image_url')
-        .neq('id', user?.id || '') // Exclude current user
+        .neq('id', user.id) // Exclude current user
         .order('name');
 
       if (error) {
@@ -69,6 +70,8 @@ export const useDirectMessages = () => {
       setAllUsers(data || []);
     } catch (err) {
       console.error('Unexpected error fetching users:', err);
+    } finally {
+      setUsersLoading(false);
     }
   };
 
@@ -276,6 +279,7 @@ export const useDirectMessages = () => {
     allUsers,
     loading,
     sending,
+    usersLoading,
     selectedUserId,
     fetchMessagesWithUser,
     sendMessage,
