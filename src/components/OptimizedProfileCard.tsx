@@ -24,7 +24,7 @@ const OptimizedProfileCard = memo(({
       style={style}
     >
       <div className="relative">
-        <Avatar className="w-[66px] h-[66px] cursor-pointer border-3 border-purple-400/70 hover:border-purple-500/90 transition-all duration-200 shadow-lg shadow-purple-500/20">
+        <Avatar className="w-[66px] h-[66px] cursor-pointer border-3 border-purple-600/70 hover:border-purple-700/90 transition-all duration-200 shadow-lg shadow-purple-500/20">
           <AvatarImage 
             src={image} 
             alt={name} 
