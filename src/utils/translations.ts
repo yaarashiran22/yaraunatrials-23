@@ -45,7 +45,7 @@ export const translations = {
       searchPlaceholder: "Search businesses..."
     },
     feed: {
-      title: "Neighborhood Feed",
+      title: "Map",
       searchPlaceholder: "Search feed...",
       neighborhood: "Know Your Neighborhood",
       neighbors: "neighbors"
@@ -129,7 +129,7 @@ export const translations = {
       searchPlaceholder: "Buscar negocios..."
     },
     feed: {
-      title: "Feed del Barrio", 
+      title: "Mapa", 
       searchPlaceholder: "Buscar en el feed...",
       neighborhood: "Conoce tu Barrio",
       neighbors: "vecinos"
