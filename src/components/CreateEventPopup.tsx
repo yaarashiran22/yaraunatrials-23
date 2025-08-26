@@ -161,7 +161,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           external_link: externalLink.trim() || null,
           event_type: eventType,
           mood: selectedMood || null,
-          market: profile?.market || 'israel' // Use user's market
+          market: 'argentina' // Argentina market only
         });
 
       if (error) throw error;
