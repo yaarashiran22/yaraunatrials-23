@@ -183,7 +183,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
           {/* Form Fields */}
           <div className="space-y-4">
             <div>
-              <Label htmlFor="title">Title *</Label>
+              <Label htmlFor="title">Text *</Label>
               <Input
                 id="title"
                 placeholder="What's buzzing?"
