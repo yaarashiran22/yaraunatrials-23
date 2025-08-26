@@ -560,7 +560,7 @@ const DiscoverPage = () => {
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
           
-          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-96 z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
             {error ? (
               <div className="flex items-center justify-center h-full bg-muted/30">
                 <div className="text-center p-4">
