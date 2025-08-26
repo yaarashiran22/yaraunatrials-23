@@ -25,7 +25,7 @@ const AddRecommendationCard = ({ className = "", onRecommendationAdded }: AddRec
         onClick={handleClick}
         style={{ backgroundColor: '#FF9B8A' }}
       >
-        <div className="h-10 flex items-center justify-center px-3">
+        <div className="h-9 flex items-center justify-center px-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center">
               <Plus className="w-4 h-4 text-white" />
