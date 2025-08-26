@@ -77,7 +77,7 @@ const UniformCard = ({
 
   return (
     <div 
-      className="relative card-elevated rounded-2xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
+      className="relative card-elevated rounded-3xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
       onClick={onClick}
     >
       <div className="aspect-[3.5/2.8] overflow-hidden relative">
