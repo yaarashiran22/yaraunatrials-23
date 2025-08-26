@@ -435,8 +435,7 @@ const ProfilePage = () => {
               {userEvents.map((event) => (
                 <div key={event.id} className="relative group">
                   <div 
-                    className="bg-card rounded-lg border overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => navigate(`/events/${event.id}`)}
+                    className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow"
                   >
                     <div className="aspect-video bg-muted">
                       <img 
