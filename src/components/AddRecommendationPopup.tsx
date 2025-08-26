@@ -119,7 +119,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
         return;
       }
 
-      toast.success('Buzz added at your current location!');
+      toast.success('Pop added at your current location!');
       
       // Reset form
       setTitle('');
@@ -147,7 +147,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto z-[9999]">
         <DialogHeader>
-          <DialogTitle>Add Buzz</DialogTitle>
+          <DialogTitle>Add Pop</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6">
@@ -173,7 +173,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
                 <div>
                   <p className="font-medium text-foreground">Location not shared</p>
                    <p className="text-xs text-muted-foreground">
-                     Please share your location first to add buzz
+                     Please share your location first to add pop
                    </p>
                 </div>
               </div>
@@ -186,7 +186,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
               <Label htmlFor="title">Text *</Label>
               <Input
                 id="title"
-                placeholder="What's buzzing?"
+                placeholder="What's popping?"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -221,7 +221,7 @@ const AddRecommendationPopup = ({ isOpen, onClose, onRecommendationAdded }: AddR
               disabled={isSubmitting || !title.trim() || !userLocation}
               className="flex-1"
             >
-              {isSubmitting ? 'Adding...' : 'Add Buzz'}
+              {isSubmitting ? 'Adding...' : 'Add Pop'}
             </Button>
             <Button
               variant="outline"
