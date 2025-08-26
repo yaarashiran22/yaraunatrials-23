@@ -80,7 +80,7 @@ const UniformCard = ({
       className="relative card-elevated rounded-3xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
       onClick={onClick}
     >
-      <div className="aspect-[3.5/2.8] overflow-hidden relative">
+      <div className="aspect-[3.5/3.5] overflow-hidden relative">
         {video ? (
           <video 
             src={video} 
