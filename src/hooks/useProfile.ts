@@ -15,6 +15,7 @@ export interface Profile {
   interests: string[] | null;
   specialties: string[] | null;
   account_type: string | null;
+  market: string | null;
   created_at: string;
   updated_at: string | null;
 }

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 
 interface CreateEventPopupProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface CreateEventPopupProps {
 const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 'event' }: CreateEventPopupProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
+  const { profile } = useProfile(user?.id);
   const [eventName, setEventName] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -159,7 +161,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           external_link: externalLink.trim() || null,
           event_type: eventType,
           mood: selectedMood || null,
-          market: 'argentina' // Buenos Aires market
+          market: profile?.market || 'israel' // Use user's market
         });
 
       if (error) throw error;
