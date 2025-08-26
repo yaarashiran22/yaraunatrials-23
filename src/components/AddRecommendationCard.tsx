@@ -30,7 +30,7 @@ const AddRecommendationCard = ({ className = "", onRecommendationAdded }: AddRec
               <Plus className="w-4 h-4 text-foreground" />
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-foreground text-xs">Recommend</h3>
+              <h3 className="font-semibold text-foreground text-xs">Add Buzz</h3>
             </div>
           </div>
         </div>
