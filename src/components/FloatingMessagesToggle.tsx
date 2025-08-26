@@ -7,19 +7,19 @@ const FloatingMessagesToggle = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="fixed bottom-[8.5rem] lg:bottom-20 right-4 z-40">
+    <div className="fixed bottom-20 lg:bottom-8 right-4 z-40">
       <Button
         onClick={() => navigate('/messages')}
         size="default"
         className="w-12 h-12 rounded-full shadow-lg transition-all duration-300 ease-in-out text-white hover:scale-105 active:scale-95"
         style={{
-          backgroundColor: '#9D71F7'
+          backgroundColor: '#FF6B42'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = '#8B5CF6';
+          e.currentTarget.style.backgroundColor = '#FF5722';
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = '#9D71F7';
+          e.currentTarget.style.backgroundColor = '#FF6B42';
         }}
       >
         <MessageCircle className="h-5 w-5" />
