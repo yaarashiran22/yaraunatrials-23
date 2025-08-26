@@ -17,9 +17,7 @@ import CreateEventPopup from "@/components/CreateEventPopup";
 import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
-import FloatingMapToggle from "@/components/FloatingMapToggle";
 import FloatingMessagesToggle from "@/components/FloatingMessagesToggle";
-import FullscreenMap from "@/components/FullscreenMap";
 import { Button } from "@/components/ui/button";
 import { Bell, Users, Plus } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -98,7 +96,7 @@ const Index = () => {
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [createEventType, setCreateEventType] = useState<'event' | 'meetup'>('event');
-  const [isMapOpen, setIsMapOpen] = useState(false);
+  
 
   // Set refresh callback for new items
   useEffect(() => {
@@ -482,17 +480,6 @@ const Index = () => {
       {/* Floating Messages Toggle */}
       <FloatingMessagesToggle />
 
-      {/* Floating Map Toggle */}
-      <FloatingMapToggle 
-        isMapOpen={isMapOpen}
-        onToggle={() => setIsMapOpen(!isMapOpen)}
-      />
-
-      {/* Fullscreen Map */}
-      <FullscreenMap 
-        isOpen={isMapOpen}
-        onClose={() => setIsMapOpen(false)}
-      />
       
       <BottomNavigation />
     </div>
