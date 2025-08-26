@@ -72,6 +72,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
   };
 
   const handleSubmit = async () => {
+    console.log('Starting event creation...');
+    
     if (!user) {
       toast({
         title: "Error",
@@ -117,6 +119,13 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       return;
     }
 
+    console.log('File details:', {
+      name: selectedFile.name,
+      type: selectedFile.type,
+      fileType: fileType,
+      size: selectedFile.size
+    });
+
     setIsSubmitting(true);
     
     try {
@@ -129,15 +138,24 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
         const fileName = `${user.id}-${Date.now()}.${fileExt}`;
         const bucketName = fileType === 'video' ? 'videos' : 'item-images';
         
+        console.log('Attempting upload:', { fileName, bucketName, fileSize: selectedFile.size });
+        
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from(bucketName)
           .upload(fileName, selectedFile);
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {
+          console.error('Upload error:', uploadError);
+          throw uploadError;
+        }
+        
+        console.log('Upload successful:', uploadData);
         
         const { data } = supabase.storage
           .from(bucketName)
           .getPublicUrl(fileName);
+          
+        console.log('Public URL generated:', data.publicUrl);
           
         if (fileType === 'video') {
           videoUrl = data.publicUrl;
