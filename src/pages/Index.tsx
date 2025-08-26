@@ -280,7 +280,7 @@ const Index = () => {
               <p>No meetups available at the moment</p>
             </div>
           ) : (
-            <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+            <div className="flex overflow-x-auto gap-6 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {meetupEvents.slice(0, 3).map((event, index) => (
                 <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
                   <UniformCard
@@ -362,7 +362,7 @@ const Index = () => {
               <p>No events available at the moment</p>
             </div>
           ) : (
-            <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
+            <div className="flex overflow-x-auto gap-6 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
               {realEvents.slice(0, 3).map((event, index) => (
                 <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
                    <UniformCard
