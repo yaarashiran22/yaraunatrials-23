@@ -579,6 +579,11 @@ const DiscoverPage = () => {
           </div>
         </div>
 
+        {/* Add Recommendation Button */}
+        <div className="flex">
+          <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} className="w-80" />
+        </div>
+
         {/* Most Popular in the Neighborhood */}
         {popularRecommendations.length > 0 && (
           <div className="space-y-3">
@@ -642,9 +647,6 @@ const DiscoverPage = () => {
 
         {/* Recommendations Section */}
         <div className="space-y-4">
-          <div className="flex">
-            <AddRecommendationCard onRecommendationAdded={addRecommendationMarkers} className="w-80" />
-          </div>
           
           {/* Display Recommendations */}
           {userRecommendations.length > 0 && (
