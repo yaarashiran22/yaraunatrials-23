@@ -597,7 +597,7 @@ const DiscoverPage = () => {
               {popularRecommendations.map((recommendation) => (
                 <div 
                   key={recommendation.id}
-                  className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-950/20 dark:to-yellow-950/20 rounded-lg p-4 shadow-sm border border-orange-200 dark:border-orange-800 hover:shadow-md transition-all"
+                  className="bg-gradient-to-r from-orange-100 to-orange-50 dark:from-orange-900/30 dark:to-orange-950/20 rounded-lg p-4 shadow-sm border border-orange-200 dark:border-orange-800 hover:shadow-md transition-all"
                 >
                   <div className="flex gap-3">
                     {recommendation.image_url && (
