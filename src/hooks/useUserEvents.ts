@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
@@ -8,6 +9,7 @@ export const useUserEvents = (userId?: string) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const fetchUserEvents = async () => {
     const targetUserId = userId || user?.id;
@@ -76,6 +78,10 @@ export const useUserEvents = (userId?: string) => {
 
       // Remove event from local state
       setEvents(prevEvents => prevEvents.filter(event => event.id !== id));
+      
+      // Invalidate React Query cache to update home page and other components
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      
       return true;
     } catch (error) {
       console.error('Error deleting event:', error);
