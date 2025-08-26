@@ -552,9 +552,8 @@ const DiscoverPage = () => {
       <main className="container mx-auto px-4 py-3 space-y-6">
         {/* Map Section */}
         <div className="relative">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Recommendations</h3>
-            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" />
+          <div className="flex items-center justify-end mb-4">
+            <LocationShareButton size="icon" shareText="Share Location" removeText="Remove Location" />
           </div>
           
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-96 z-0">
