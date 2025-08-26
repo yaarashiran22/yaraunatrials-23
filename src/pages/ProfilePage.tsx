@@ -438,11 +438,35 @@ const ProfilePage = () => {
                     className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow"
                   >
                     <div className="aspect-video bg-muted">
-                      <img 
-                        src={event.image_url || communityEvent} 
-                        alt={event.title}
-                        className="w-full h-full object-cover"
-                      />
+                      {(event as any).video_url ? (
+                        <video 
+                          src={(event as any).video_url}
+                          className="w-full h-full object-cover"
+                          muted
+                          autoPlay
+                          loop
+                          playsInline
+                          preload="metadata"
+                          poster={event.image_url || communityEvent}
+                          onLoadedData={(e) => {
+                            // Ensure video plays when loaded
+                            e.currentTarget.play().catch(() => {
+                              console.log('Autoplay blocked, video will play on user interaction');
+                            });
+                          }}
+                          onError={(e) => {
+                            // If video fails to load, hide the video element and show fallback image
+                            e.currentTarget.style.display = 'none';
+                            console.log('Video failed to load:', (event as any).video_url);
+                          }}
+                        />
+                      ) : (
+                        <img 
+                          src={event.image_url || communityEvent} 
+                          alt={event.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                     </div>
                     <div className="p-4">
                       <div className="flex items-center gap-2 mb-2">

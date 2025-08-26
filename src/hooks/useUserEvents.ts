@@ -32,6 +32,7 @@ export const useUserEvents = (userId?: string) => {
           location,
           price,
           image_url,
+          video_url,
           market,
           event_type,
           created_at,
