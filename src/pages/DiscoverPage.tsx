@@ -333,12 +333,6 @@ const DiscoverPage = () => {
         title="Discover"
       />
       
-      {/* Neighborhood Selector */}
-      <div className="bg-background/95 backdrop-blur-sm border-b border-border p-4">
-        <div className="container mx-auto flex justify-center">
-          <NeighborhoodSelector />
-        </div>
-      </div>
       
       <main className="container mx-auto px-4 py-3 space-y-6">
         {/* Map Section */}
