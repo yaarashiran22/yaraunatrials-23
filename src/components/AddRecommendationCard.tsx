@@ -21,17 +21,16 @@ const AddRecommendationCard = ({ className = "", onRecommendationAdded }: AddRec
   return (
     <>
       <div 
-        className={`relative rounded-lg overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer border border-orange-200 hover:border-orange-300 ${className}`}
+        className={`relative rounded-lg overflow-hidden shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer border border-input bg-background hover:bg-accent hover:text-accent-foreground ${className}`}
         onClick={handleClick}
-        style={{ backgroundColor: '#FF9B8A' }}
       >
         <div className="h-9 flex items-center justify-center px-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center">
-              <Plus className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+              <Plus className="w-4 h-4 text-foreground" />
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-white text-xs">Recommend</h3>
+              <h3 className="font-semibold text-foreground text-xs">Recommend</h3>
             </div>
           </div>
         </div>
