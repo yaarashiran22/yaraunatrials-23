@@ -89,9 +89,19 @@ const UniformCard = ({
             autoPlay
             loop
             playsInline
+            preload="metadata"
+            poster={image}
+            onLoadedData={(e) => {
+              // Ensure video plays when loaded
+              e.currentTarget.play().catch(() => {
+                // Fallback if autoplay is blocked
+                console.log('Autoplay blocked, video will play on user interaction');
+              });
+            }}
             onError={(e) => {
-              // If video fails to load, hide the video element
+              // If video fails to load, hide the video element and show fallback image
               e.currentTarget.style.display = 'none';
+              console.log('Video failed to load:', video);
             }}
           />
         ) : (
