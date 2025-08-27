@@ -860,6 +860,50 @@ export type Database = {
         }
         Relationships: []
       }
+      user_coupon_claims: {
+        Row: {
+          claimed_at: string
+          created_at: string
+          id: string
+          is_used: boolean
+          perk_id: string
+          qr_code_data: string
+          updated_at: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string
+          created_at?: string
+          id?: string
+          is_used?: boolean
+          perk_id: string
+          qr_code_data: string
+          updated_at?: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string
+          created_at?: string
+          id?: string
+          is_used?: boolean
+          perk_id?: string
+          qr_code_data?: string
+          updated_at?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_coupon_claims_perk_id_fkey"
+            columns: ["perk_id"]
+            isOneToOne: false
+            referencedRelation: "community_perks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_friends: {
         Row: {
           created_at: string
