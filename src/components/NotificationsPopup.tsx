@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useCommunityRequests } from "@/hooks/useCommunityRequests";
 import { formatDistanceToNow } from "date-fns";
-import { he } from "date-fns/locale";
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NotificationsPopupProps {
   isOpen: boolean;
@@ -15,6 +15,7 @@ const NotificationsPopup = ({ isOpen, onClose }: NotificationsPopupProps) => {
   const { notifications, loading, markAsRead, markAllAsRead, refreshNotifications } = useNotifications();
   const { approveMembershipRequest, rejectMembershipRequest, getMembershipRequestDetails, loading: requestLoading } = useCommunityRequests();
   const [processingRequests, setProcessingRequests] = useState<Set<string>>(new Set());
+  const { t } = useLanguage();
 
   if (!isOpen) return null;
 
@@ -61,41 +62,40 @@ const NotificationsPopup = ({ isOpen, onClose }: NotificationsPopupProps) => {
   const formatTimeAgo = (dateString: string) => {
     try {
       return formatDistanceToNow(new Date(dateString), {
-        addSuffix: true,
-        locale: he
+        addSuffix: true
       });
     } catch {
-      return "זמן לא ידוע";
+      return "Unknown time";
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20">
-      <div className="bg-background rounded-t-3xl w-full max-w-md mx-4 max-h-[80vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div className="bg-background rounded-2xl w-full max-w-lg max-h-[85vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center justify-between p-4 border-b bg-background sticky top-0 z-10">
           <Button variant="ghost" size="sm" onClick={onClose}>
             <X className="h-5 w-5" />
           </Button>
-          <h2 className="text-lg font-bold">התראות</h2>
+          <h2 className="text-lg font-bold">Notifications</h2>
           {notifications.length > 0 && (
             <Button variant="ghost" size="sm" onClick={markAllAsRead}>
-              סמן הכל כנקרא
+              Mark all read
             </Button>
           )}
         </div>
 
         {/* Notifications List */}
-        <div className="overflow-y-auto max-h-[calc(80vh-80px)]">
+        <div className="overflow-y-auto flex-1">
           {loading ? (
             <div className="flex items-center justify-center p-8">
-              <div className="text-muted-foreground">טוען התראות...</div>
+              <div className="text-muted-foreground">Loading notifications...</div>
             </div>
           ) : notifications.length === 0 ? (
             <div className="flex items-center justify-center p-8">
               <div className="text-muted-foreground text-center">
-                <div className="mb-2">אין התראות חדשות</div>
-                <div className="text-sm">נעדכן אותך כאן על פעילויות חדשות</div>
+                <div className="mb-2">No new notifications</div>
+                <div className="text-sm">We'll update you here about new activities</div>
               </div>
             </div>
           ) : (
