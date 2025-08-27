@@ -22,7 +22,7 @@ import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import FloatingMessagesToggle from "@/components/FloatingMessagesToggle";
 import { Button } from "@/components/ui/button";
-import { Bell, Users, Plus } from "lucide-react";
+import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -470,6 +470,14 @@ const Index = () => {
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 w-8 p-0 border-primary/30 hover:bg-primary/10 hover:border-primary/50"
+              onClick={() => {/* TODO: Open add coupon dialog */}}
+            >
+              <Plus className="w-4 h-4 text-primary" />
+            </Button>
           </div>
           <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
             <CommunityPerksCarousel />
