@@ -11,8 +11,6 @@ import { useToast } from "@/hooks/use-toast";
 import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/Header";
 import NotificationsPopup from "@/components/NotificationsPopup";
-import MarketplacePopup from "@/components/MarketplacePopup";
-import { useUserItems } from "@/hooks/useUserItems";
 import { useUserEvents } from "@/hooks/useUserEvents";
 import { useFriends } from "@/hooks/useFriends";
 import { useProfile } from "@/hooks/useProfile";
@@ -20,18 +18,12 @@ import { useUserPosts } from "@/hooks/useUserPosts";
 import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import UniformCard from "@/components/UniformCard";
-import AddItemPopup from "@/components/AddItemPopup";
 import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 import { FeedImageViewer } from "@/components/FeedImageViewer";
 import EditEventPopup from "@/components/EditEventPopup";
 
 import profile1 from "@/assets/profile-1.jpg";
-import dressItem from "@/assets/dress-item.jpg";
-import furnitureItem from "@/assets/furniture-item.jpg";
 import communityEvent from "@/assets/community-event.jpg";
-import coffeeShop from "@/assets/coffee-shop.jpg";
-import vintageStore from "@/assets/vintage-store.jpg";
-import artPiece1 from "@/assets/canvas-art-1.jpg";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -51,7 +43,6 @@ const ProfilePage = () => {
   
   const actualProfileId = getActualProfileId();
   const { profile: profileData, loading, error, refetch } = useProfile(actualProfileId);
-  const { items: userItems, loading: itemsLoading, deleteItem, refetch: refetchItems } = useUserItems(actualProfileId);
   const { events: userEvents, loading: eventsLoading, deleteEvent, refetch: refetchEvents } = useUserEvents(actualProfileId);
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
   const { addFriend, isFriend } = useFriends();
@@ -62,9 +53,6 @@ const ProfilePage = () => {
   
   
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showAddItem, setShowAddItem] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [isItemPopupOpen, setIsItemPopupOpen] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editingMessageText, setEditingMessageText] = useState("");
@@ -117,84 +105,16 @@ const ProfilePage = () => {
     setShowEditEvent(true);
   };
 
-  const handleDeleteItem = async (itemId: string) => {
-    // Require authentication
-    if (!requireAuth()) {
-      return;
-    }
-
-    // Verify user can delete this item
-    const item = userItems.find(item => item.id === itemId);
-    if (!item || !canUserModifyItem(user!.id, item.user_id)) {
-      toast({
-        title: "Authorization Error",
-        description: "You don't have permission to delete this item",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (window.confirm('Are you sure you want to delete this item?')) {
-      await deleteItem(itemId);
-    }
-  };
-
-  const handleEditItem = (itemId: string) => {
-    // Require authentication
-    if (!requireAuth()) {
-      return;
-    }
-
-    // Verify user can edit this item
-    const item = userItems.find(item => item.id === itemId);
-    if (!item || !canUserModifyItem(user!.id, item.user_id)) {
-      toast({
-        title: "Authorization Error",
-        description: "You don't have permission to edit this item",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    navigate(`/items/${itemId}/edit`);
-  };
-
-  const handleItemClick = (item: any) => {
-    const itemDetails = {
-      id: item.id,
-      title: item.title,
-      image: item.image_url || dressItem,
-      price: item.price ? `₪${item.price}` : undefined,
-      description: item.description || `${item.title} in excellent condition.`,
-      seller: {
-        name: profileData?.name || "User",
-        image: profileData?.profile_image_url || profile1,
-        location: item.location || profileData?.location || "Tel Aviv"
-      },
-      condition: "Like New",
-      type: item.category
-    };
-    setSelectedItem(itemDetails);
-    setIsItemPopupOpen(true);
-  };
-
-  // Filter items by category
-  const secondHandItems = userItems.filter(item => item.category === 'secondhand' || !item.category);
-  const eventItems = userItems.filter(item => item.category === 'event');
-  const recommendationItems = userItems.filter(item => item.category === 'join me');
-  const artItems = userItems.filter(item => item.category === 'art');
-
   // Listen for profile updates (when returning from edit page)
   useEffect(() => {
     const handleFocus = () => {
       refetch();
-      refetchItems(); // Also refresh items when page regains focus
       refetchEvents(); // Also refresh events when page regains focus
     };
 
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
-  }, [refetch, refetchItems, refetchEvents]);
+  }, [refetch, refetchEvents]);
 
   // Also refetch when returning from navigation
   useEffect(() => {
@@ -538,100 +458,6 @@ const ProfilePage = () => {
           </section>
         )}
 
-        {/* My Items Section - Only shown for own profile */}
-        {isOwnProfile && userItems && userItems.length > 0 && (
-          <section className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">My Items</h3>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => navigate('/items/new')}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Item
-              </Button>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              {userItems.map((item) => (
-                <div key={item.id} className="relative group">
-                  <div 
-                    className="bg-card rounded-lg border overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => handleItemClick(item)}
-                  >
-                    <div className="aspect-square bg-muted">
-                      <img 
-                        src={item.image_url || dressItem} 
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-3">
-                      <h4 className="font-medium text-sm mb-1 truncate">{item.title}</h4>
-                      <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{item.description}</p>
-                      {item.price && (
-                        <p className="text-sm font-semibold text-primary">₪{item.price}</p>
-                      )}
-                      <div className="flex items-center gap-1 mt-2">
-                        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full">
-                          {item.category || 'Item'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Edit/Delete buttons - show on hover */}
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditItem(item.id);
-                      }}
-                    >
-                      <Pencil className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteItem(item.id);
-                      }}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Empty state for items */}
-        {isOwnProfile && userItems && userItems.length === 0 && !itemsLoading && (
-          <section className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">My Items</h3>
-            </div>
-            <div className="text-center py-8 bg-muted/30 rounded-lg">
-              <p className="text-muted-foreground mb-4">You haven't added any items yet</p>
-              <Button 
-                onClick={() => navigate('/items/new')}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Your First Item
-              </Button>
-            </div>
-          </section>
-        )}
-
         {/* Logout Button */}
         {isOwnProfile && (
           <div className="mt-8 pt-6 border-t border-border">
@@ -651,15 +477,6 @@ const ProfilePage = () => {
       <NotificationsPopup 
         isOpen={showNotifications} 
         onClose={() => setShowNotifications(false)} 
-      />
-      <AddItemPopup 
-        isOpen={showAddItem} 
-        onClose={() => setShowAddItem(false)} 
-      />
-      <MarketplacePopup 
-        isOpen={isItemPopupOpen}
-        onClose={() => setIsItemPopupOpen(false)}
-        item={selectedItem}
       />
       <ProfilePictureViewer
         isOpen={showProfilePicture}
