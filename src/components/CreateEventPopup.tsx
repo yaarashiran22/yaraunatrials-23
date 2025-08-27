@@ -226,6 +226,9 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       <div className="bg-background rounded-t-3xl md:rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
+          <h2 className="text-lg font-bold text-foreground">
+            {eventType === 'meetup' ? 'New Meetup' : 'New Event'}
+          </h2>
           <Button 
             variant="ghost" 
             size="sm" 
@@ -234,10 +237,6 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           >
             <X className="h-5 w-5" />
           </Button>
-          <h2 className="text-lg font-bold text-foreground">
-            {eventType === 'meetup' ? 'New Meetup' : 'New Event'}
-          </h2>
-          <div className="w-9" />
         </div>
 
         <div className="p-6 space-y-6">
