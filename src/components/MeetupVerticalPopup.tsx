@@ -58,40 +58,44 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
 
   // Navigation functions
   const handlePrevious = useCallback(() => {
-    if (currentIndex > 0) {
+    if (currentIndex > 0 && allItems.length > 0) {
       const prevItem = allItems[currentIndex - 1];
-      const newItem = {
-        ...item,
-        id: prevItem.id,
-        title: prevItem.title,
-        image: prevItem.image_url || prevItem.image,
-        price: prevItem.price ? `₪${prevItem.price}` : undefined,
-        description: prevItem.description || `${prevItem.title} - Join this meetup!`,
-        currentIndex: currentIndex - 1
-      };
-      onClose();
-      setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('navigateToMeetup', { detail: newItem }));
-      }, 100);
+      if (prevItem) {
+        const newItem = {
+          ...item,
+          id: prevItem.id,
+          title: prevItem.title,
+          image: prevItem.image_url || prevItem.image,
+          price: prevItem.price ? `₪${prevItem.price}` : undefined,
+          description: prevItem.description || `${prevItem.title} - Join this meetup!`,
+          currentIndex: currentIndex - 1
+        };
+        onClose();
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('navigateToMeetup', { detail: newItem }));
+        }, 100);
+      }
     }
   }, [currentIndex, allItems, item, onClose]);
 
   const handleNext = useCallback(() => {
-    if (currentIndex < allItems.length - 1) {
+    if (currentIndex < allItems.length - 1 && allItems.length > 0) {
       const nextItem = allItems[currentIndex + 1];
-      const newItem = {
-        ...item,
-        id: nextItem.id,
-        title: nextItem.title,
-        image: nextItem.image_url || nextItem.image,
-        price: nextItem.price ? `₪${nextItem.price}` : undefined,
-        description: nextItem.description || `${nextItem.title} - Join this meetup!`,
-        currentIndex: currentIndex + 1
-      };
-      onClose();
-      setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('navigateToMeetup', { detail: newItem }));
-      }, 100);
+      if (nextItem) {
+        const newItem = {
+          ...item,
+          id: nextItem.id,
+          title: nextItem.title,
+          image: nextItem.image_url || nextItem.image,
+          price: nextItem.price ? `₪${nextItem.price}` : undefined,
+          description: nextItem.description || `${nextItem.title} - Join this meetup!`,
+          currentIndex: currentIndex + 1
+        };
+        onClose();
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('navigateToMeetup', { detail: newItem }));
+        }, 100);
+      }
     }
   }, [currentIndex, allItems, item, onClose]);
 

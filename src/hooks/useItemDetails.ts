@@ -92,18 +92,8 @@ export const useItemDetails = (itemId: string) => {
     enabled: !!itemId && itemId.trim() !== '',
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
-    retry: 2,
+    retry: 1,
   });
-
-  // Handle errors manually
-  if (error) {
-    console.error('Error fetching item details:', error);
-    toast({
-      title: "שגיאה",
-      description: error.message || "לא ניתן לטעון את פרטי הפריט",
-      variant: "destructive",
-    });
-  }
 
   return {
     item: item || null,

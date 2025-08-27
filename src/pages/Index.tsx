@@ -200,13 +200,13 @@ const Index = () => {
         location: meetup.uploader?.location || meetup.location || "Tel Aviv"
       },
       type: 'meetup',
-      allItems: allMeetups || meetupEvents,
+      allItems: allMeetups,
       currentIndex: currentIndex || 0
     };
     
     setSelectedMeetupItem(meetupDetails);
     setIsMeetupPopupOpen(true);
-  }, [meetupEvents]);
+  }, []);
 
   const handleMarketplaceClick = useCallback((item: any, itemType?: string, items?: any[], currentIndex?: number) => {
     const itemDetails = {
