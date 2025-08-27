@@ -904,6 +904,51 @@ export type Database = {
           },
         ]
       }
+      user_coupons: {
+        Row: {
+          business_name: string | null
+          created_at: string
+          description: string | null
+          discount_amount: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          neighborhood: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          valid_until: string | null
+        }
+        Insert: {
+          business_name?: string | null
+          created_at?: string
+          description?: string | null
+          discount_amount?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          neighborhood?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          valid_until?: string | null
+        }
+        Update: {
+          business_name?: string | null
+          created_at?: string
+          description?: string | null
+          discount_amount?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          neighborhood?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          valid_until?: string | null
+        }
+        Relationships: []
+      }
       user_friends: {
         Row: {
           created_at: string

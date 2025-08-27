@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
+import { AddCouponModal } from "@/components/AddCouponModal";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
@@ -131,6 +132,7 @@ const Index = () => {
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [createEventType, setCreateEventType] = useState<'event' | 'meetup'>('event');
+  const [isAddCouponModalOpen, setIsAddCouponModalOpen] = useState(false);
   
 
   // Set refresh callback for new items
@@ -474,7 +476,7 @@ const Index = () => {
               size="sm"
               variant="outline"
               className="h-8 w-8 p-0 border-primary/30 hover:bg-primary/10 hover:border-primary/50"
-              onClick={() => {/* TODO: Open add coupon dialog */}}
+              onClick={() => setIsAddCouponModalOpen(true)}
             >
               <Plus className="w-4 h-4 text-primary" />
             </Button>
@@ -561,6 +563,12 @@ const Index = () => {
 
       
       <BottomNavigation />
+      {isAddCouponModalOpen && (
+        <AddCouponModal 
+          isOpen={isAddCouponModalOpen}
+          onClose={() => setIsAddCouponModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
