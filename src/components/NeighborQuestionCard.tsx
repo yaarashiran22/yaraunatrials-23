@@ -17,9 +17,9 @@ export const NeighborQuestionCard = () => {
   const { user } = useAuth();
 
   const messageTypeOptions = [
-    { value: "inquiry", label: "בירור", icon: MessageSquare },
-    { value: "alert", label: "התראה", icon: AlertTriangle },
-    { value: "help", label: "צריך עזרה", icon: HelpCircle },
+    { value: "inquiry", label: "Inquiry", icon: MessageSquare },
+    { value: "alert", label: "Alert", icon: AlertTriangle },
+    { value: "help", label: "Need Help", icon: HelpCircle },
   ];
 
   const handleSubmit = async () => {
@@ -51,7 +51,7 @@ export const NeighborQuestionCard = () => {
         <Textarea
           value={questionText}
           onChange={(e) => setQuestionText(e.target.value)}
-          placeholder="כתוב הודעה לשכנים..."
+          placeholder="Write a note to neighbors..."
           className="mb-3 min-h-[80px] resize-none"
           autoFocus
         />
@@ -59,7 +59,7 @@ export const NeighborQuestionCard = () => {
         {/* Message type selector */}
         <div className="mb-3">
           <label className="text-sm text-muted-foreground block mb-2">
-            סוג ההודעה
+            Message type
           </label>
           <Select value={messageType} onValueChange={(value: "alert" | "inquiry" | "help") => setMessageType(value)}>
             <SelectTrigger className="w-full">
@@ -84,7 +84,7 @@ export const NeighborQuestionCard = () => {
         {/* Anonymous posting option */}
         <div className="flex items-center space-x-2 mb-3 justify-end">
           <label htmlFor="anonymous" className="text-sm text-muted-foreground cursor-pointer">
-            פרסם כאנונימי
+            Post anonymously
           </label>
           <Checkbox
             id="anonymous"
@@ -107,7 +107,7 @@ export const NeighborQuestionCard = () => {
             className="flex-1"
           >
             <Send className="h-4 w-4 ml-1" />
-            {creating ? "פורסם..." : "פרסם"}
+            {creating ? "Posting..." : "Post"}
           </Button>
           <Button 
             onClick={handleCancel}
@@ -115,7 +115,7 @@ export const NeighborQuestionCard = () => {
             size="sm"
             disabled={creating}
           >
-            ביטול
+            Cancel
           </Button>
         </div>
       </Card>
