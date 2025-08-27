@@ -129,7 +129,7 @@ export const NeighborQuestionCard = () => {
     >
       <Plus className="h-6 w-6 text-muted-foreground mb-2" />
       <p className="text-xs text-muted-foreground">
-        הוסף הודעה חדשה
+        Add note
       </p>
     </Card>
   );
