@@ -57,17 +57,24 @@ const Index = () => {
   // Listen for navigation events from MarketplacePopup and MeetupPopup
   useEffect(() => {
     const handleNavigateToItem = (event: CustomEvent) => {
-      setSelectedMarketplaceItem(event.detail);
-      setIsMarketplacePopupOpen(true);
+      const itemData = event.detail;
+      if (itemData) {
+        setSelectedMarketplaceItem(itemData);
+        setIsMarketplacePopupOpen(true);
+      }
     };
 
     const handleNavigateToMeetup = (event: CustomEvent) => {
-      setSelectedMeetupItem(event.detail);
-      setIsMeetupPopupOpen(true);
+      const meetupData = event.detail;
+      if (meetupData) {
+        setSelectedMeetupItem(meetupData);
+        setIsMeetupPopupOpen(true);
+      }
     };
 
     window.addEventListener('navigateToItem', handleNavigateToItem);
     window.addEventListener('navigateToMeetup', handleNavigateToMeetup);
+    
     return () => {
       window.removeEventListener('navigateToItem', handleNavigateToItem);
       window.removeEventListener('navigateToMeetup', handleNavigateToMeetup);
@@ -336,7 +343,7 @@ const Index = () => {
                         name: event.uploader?.name || "Meetup Organizer",
                         image: event.uploader?.image || profile1
                       }
-                    }, meetupEvents, index)}
+                    }, [...meetupEvents], index)}
                     showFavoriteButton={true}
                     favoriteData={{
                       id: event.id,
