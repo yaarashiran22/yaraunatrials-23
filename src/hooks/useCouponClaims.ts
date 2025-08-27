@@ -15,6 +15,14 @@ export interface CouponClaim {
   updated_at: string;
 }
 
+export interface UserCouponClaim {
+  id: string;
+  user_id: string;
+  user_coupon_id: string;
+  qr_code_data: string;
+  created_at: string;
+}
+
 const fetchUserCouponClaims = async (userId?: string) => {
   if (!userId) return [];
   
@@ -40,6 +48,39 @@ const fetchUserCouponClaims = async (userId?: string) => {
   } catch (error) {
     console.error('Error fetching user coupon claims:', error);
     return [];
+  }
+};
+
+const generateUserCouponQR = async ({ userCouponId, userId }: { userCouponId: string; userId: string }) => {
+  try {
+    // Generate unique QR code data for user coupon
+    const qrCodeData = JSON.stringify({
+      type: 'user_coupon',
+      userCouponId,
+      userId,
+      generatedAt: new Date().toISOString(),
+      uniqueId: crypto.randomUUID()
+    });
+
+    // Generate QR code
+    const qrCodeUrl = await QRCode.toDataURL(qrCodeData, {
+      width: 300,
+      margin: 2,
+      color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+      }
+    });
+
+    return qrCodeUrl;
+  } catch (error) {
+    console.error('Error generating user coupon QR:', error);
+    toast({
+      title: "Error",
+      description: "Failed to generate QR code. Please try again.",
+      variant: "destructive",
+    });
+    throw error;
   }
 };
 
@@ -110,12 +151,29 @@ export const useCouponClaims = (userId?: string) => {
     },
   });
 
+  const generateQRMutation = useMutation({
+    mutationFn: generateUserCouponQR,
+  });
+
   const checkIfClaimed = (perkId: string) => {
     return claims?.some(claim => claim.perk_id === perkId) || false;
   };
 
   const getClaim = (perkId: string) => {
     return claims?.find(claim => claim.perk_id === perkId);
+  };
+
+  const handleGenerateUserCouponQR = (userCouponId: string) => {
+    if (!userId) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to generate QR codes",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    return generateQRMutation.mutateAsync({ userCouponId, userId });
   };
 
   return {
@@ -125,5 +183,7 @@ export const useCouponClaims = (userId?: string) => {
     claiming: claimMutation.isPending,
     checkIfClaimed,
     getClaim,
+    generateUserCouponQR: handleGenerateUserCouponQR,
+    generatingQR: generateQRMutation.isPending,
   };
 };

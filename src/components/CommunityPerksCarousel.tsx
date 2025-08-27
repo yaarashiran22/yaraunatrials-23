@@ -14,9 +14,11 @@ export const CommunityPerksCarousel = () => {
   const { user } = useAuth();
   const { perks, loading: perksLoading } = useCommunityPerks();
   const { coupons, loading: couponsLoading } = useUserCoupons();
-  const { claims, claimCoupon, claiming, checkIfClaimed, getClaim } = useCouponClaims(user?.id);
+  const { claims, claimCoupon, claiming, checkIfClaimed, getClaim, generateUserCouponQR, generatingQR } = useCouponClaims(user?.id);
   const [selectedPerk, setSelectedPerk] = useState(null);
+  const [selectedUserCoupon, setSelectedUserCoupon] = useState(null);
   const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [currentQRData, setCurrentQRData] = useState<string>('');
 
   const loading = perksLoading || couponsLoading;
   
@@ -43,7 +45,30 @@ export const CommunityPerksCarousel = () => {
     const claim = getClaim(perk.id);
     if (claim) {
       setSelectedPerk(perk);
+      setSelectedUserCoupon(null);
+      setCurrentQRData('');
       setQrModalOpen(true);
+    }
+  };
+
+  const handleShowUserCouponQR = async (userCoupon: any) => {
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to generate QR codes",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const qrData = await generateUserCouponQR(userCoupon.id);
+      setSelectedUserCoupon(userCoupon);
+      setSelectedPerk(null);
+      setCurrentQRData(qrData);
+      setQrModalOpen(true);
+    } catch (error) {
+      console.error('Error generating QR code:', error);
     }
   };
 
@@ -134,11 +159,15 @@ export const CommunityPerksCarousel = () => {
               {/* Action Button */}
               <div className="pt-2">
                 {isUserCoupon ? (
-                  <div className="bg-muted/30 rounded-lg p-3 text-center">
-                    <p className="text-xs text-muted-foreground">
-                      Community coupon - Show this to the business
-                    </p>
-                  </div>
+                  <Button
+                    onClick={() => handleShowUserCouponQR(item)}
+                    disabled={generatingQR}
+                    className="w-full gap-2"
+                    size="sm"
+                  >
+                    <QrCode className="w-4 h-4" />
+                    {generatingQR ? 'Generating...' : 'Show QR Code'}
+                  </Button>
                 ) : isClaimed ? (
                   <Button
                     onClick={() => handleShowQR(item)}
@@ -178,7 +207,9 @@ export const CommunityPerksCarousel = () => {
         isOpen={qrModalOpen}
         onClose={() => setQrModalOpen(false)}
         perk={selectedPerk}
+        userCoupon={selectedUserCoupon}
         claim={selectedPerk ? getClaim(selectedPerk.id) : null}
+        qrCodeData={currentQRData}
       />
     </>
   );

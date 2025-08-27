@@ -3,23 +3,29 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { QrCode, Download, Share, Clock, CheckCircle } from "lucide-react";
 import { CommunityPerk } from "@/hooks/useCommunityPerks";
+import { UserCoupon } from "@/hooks/useUserCoupons";
 import { CouponClaim } from "@/hooks/useCouponClaims";
 
 interface CouponQRModalProps {
   isOpen: boolean;
   onClose: () => void;
-  perk: CommunityPerk | null;
-  claim: CouponClaim | null;
+  perk?: CommunityPerk | null;
+  userCoupon?: UserCoupon | null;
+  claim?: CouponClaim | null;
+  qrCodeData?: string;
 }
 
-export const CouponQRModal = ({ isOpen, onClose, perk, claim }: CouponQRModalProps) => {
-  if (!perk || !claim) return null;
+export const CouponQRModal = ({ isOpen, onClose, perk, userCoupon, claim, qrCodeData }: CouponQRModalProps) => {
+  const item = perk || userCoupon;
+  const displayQRCode = claim?.qr_code_data || qrCodeData;
+  
+  if (!item || !displayQRCode) return null;
 
   const handleDownload = () => {
-    if (claim.qr_code_data) {
+    if (displayQRCode) {
       const link = document.createElement('a');
-      link.href = claim.qr_code_data;
-      link.download = `coupon-${perk.business_name}-${perk.title}.png`;
+      link.href = displayQRCode;
+      link.download = `coupon-${item.business_name || item.title}-${item.title}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -30,8 +36,8 @@ export const CouponQRModal = ({ isOpen, onClose, perk, claim }: CouponQRModalPro
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Coupon: ${perk.title}`,
-          text: `Check out this coupon from ${perk.business_name}!`,
+          title: `Coupon: ${item.title}`,
+          text: `Check out this coupon from ${item.business_name || item.title}!`,
         });
       } catch (error) {
         console.log('Error sharing:', error);
@@ -52,11 +58,11 @@ export const CouponQRModal = ({ isOpen, onClose, perk, claim }: CouponQRModalPro
         <div className="space-y-6 pt-4">
           {/* Business Info */}
           <div className="text-center space-y-2">
-            <h3 className="text-lg font-semibold text-foreground">{perk.business_name}</h3>
-            <p className="text-base font-medium text-primary">{perk.title}</p>
-            {perk.discount_amount && (
+            <h3 className="text-lg font-semibold text-foreground">{item.business_name || item.title}</h3>
+            <p className="text-base font-medium text-primary">{item.title}</p>
+            {item.discount_amount && (
               <div className="bg-primary/10 rounded-lg p-2 inline-block">
-                <span className="text-primary font-bold text-lg">{perk.discount_amount}</span>
+                <span className="text-primary font-bold text-lg">{item.discount_amount}</span>
               </div>
             )}
           </div>
@@ -64,16 +70,16 @@ export const CouponQRModal = ({ isOpen, onClose, perk, claim }: CouponQRModalPro
           {/* QR Code */}
           <Card className="border-2 border-primary/20">
             <CardContent className="p-6 text-center">
-              {claim.qr_code_data && (
+              {displayQRCode && (
                 <img 
-                  src={claim.qr_code_data} 
+                  src={displayQRCode} 
                   alt="Coupon QR Code"
                   className="w-48 h-48 mx-auto rounded-lg border border-border/20"
                 />
               )}
               <div className="mt-4 space-y-2">
                 <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                  {claim.is_used ? (
+                  {claim?.is_used ? (
                     <>
                       <CheckCircle className="w-4 h-4 text-green-500" />
                       <span className="text-green-600">Used</span>
@@ -115,10 +121,10 @@ export const CouponQRModal = ({ isOpen, onClose, perk, claim }: CouponQRModalPro
           </div>
 
           {/* Terms */}
-          {perk.terms && (
+          {(item as any).terms && (
             <div className="bg-muted/30 rounded-lg p-3">
               <h4 className="font-medium text-sm text-foreground mb-2">Terms & Conditions:</h4>
-              <p className="text-xs text-muted-foreground leading-relaxed">{perk.terms}</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{(item as any).terms}</p>
             </div>
           )}
 
