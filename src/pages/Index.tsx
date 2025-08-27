@@ -5,6 +5,7 @@ import DesktopHeader from "@/components/DesktopHeader";
 import MoodFilterStrip from "@/components/MoodFilterStrip";
 import FilterPopup from "@/components/FilterPopup";
 import EventPopup from "@/components/EventPopup";
+import EventVerticalPopup from "@/components/EventVerticalPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
 import MeetupVerticalPopup from "@/components/MeetupVerticalPopup";
 import NotificationsPopup from "@/components/NotificationsPopup";
@@ -54,7 +55,7 @@ const Index = () => {
   const { profile: currentUserProfile } = useProfile(user?.id);
   const navigate = useNavigate();
 
-  // Listen for navigation events from MarketplacePopup and MeetupPopup
+  // Listen for navigation events from MarketplacePopup, MeetupPopup, and EventPopup
   useEffect(() => {
     const handleNavigateToItem = (event: CustomEvent) => {
       const itemData = event.detail;
@@ -72,12 +73,22 @@ const Index = () => {
       }
     };
 
+    const handleNavigateToEvent = (event: CustomEvent) => {
+      const eventData = event.detail;
+      if (eventData) {
+        setSelectedEventItem(eventData);
+        setIsEventVerticalPopupOpen(true);
+      }
+    };
+
     window.addEventListener('navigateToItem', handleNavigateToItem);
     window.addEventListener('navigateToMeetup', handleNavigateToMeetup);
+    window.addEventListener('navigateToEvent', handleNavigateToEvent);
     
     return () => {
       window.removeEventListener('navigateToItem', handleNavigateToItem);
       window.removeEventListener('navigateToMeetup', handleNavigateToMeetup);
+      window.removeEventListener('navigateToEvent', handleNavigateToEvent);
     };
   }, []);
   
@@ -109,6 +120,8 @@ const Index = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
+  const [selectedEventItem, setSelectedEventItem] = useState<any>(null);
+  const [isEventVerticalPopupOpen, setIsEventVerticalPopupOpen] = useState(false);
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
   const [selectedMeetupItem, setSelectedMeetupItem] = useState<any>(null);
@@ -187,9 +200,23 @@ const Index = () => {
   // Static data has been removed to show only real content
 
   // Memoize event handlers to prevent unnecessary re-renders
-  const handleEventClick = useCallback((event: any) => {
-    setSelectedEvent(event);
-    setIsEventPopupOpen(true);
+  const handleEventClick = useCallback((event: any, allEvents?: any[], currentIndex?: number) => {
+    const eventDetails = {
+      id: event.id,
+      title: event.title,
+      image: event.image_url || event.image,
+      price: event.price,
+      description: event.description || event.title,
+      date: event.date,
+      time: event.time,
+      location: event.location,
+      organizer: event.organizer,
+      allEvents: allEvents,
+      currentIndex: currentIndex || 0
+    };
+    
+    setSelectedEventItem(eventDetails);
+    setIsEventVerticalPopupOpen(true);
   }, []);
 
   // Meetup click handler for vertical scrolling popup
@@ -403,21 +430,21 @@ const Index = () => {
                      type="event"
                      uploader={event.uploader}
                      onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                     onClick={() => handleEventClick({
-                       id: event.id,
-                       title: event.title,
-                       description: event.description || event.title,
-                       date: event.date || 'Date to be determined',
-                       time: event.time || 'Time to be determined', 
-                       location: event.location || 'Tel Aviv',
-                       price: event.price,
-                       image: event.image_url || communityEvent,
-                       video: (event as any).video_url,
-                       organizer: {
-                         name: event.uploader?.name || "Event Organizer",
-                         image: event.uploader?.image || profile1
-                       }
-                     })}
+                      onClick={() => handleEventClick({
+                        id: event.id,
+                        title: event.title,
+                        description: event.description || event.title,
+                        date: event.date || 'Date to be determined',
+                        time: event.time || 'Time to be determined', 
+                        location: event.location || 'Tel Aviv',
+                        price: event.price,
+                        image: event.image_url || communityEvent,
+                        video: (event as any).video_url,
+                        organizer: {
+                          name: event.uploader?.name || "Event Organizer",
+                          image: event.uploader?.image || profile1
+                        }
+                      }, [...realEvents], index)}
                      showFavoriteButton={true}
                      favoriteData={{
                        id: event.id,
@@ -468,6 +495,14 @@ const Index = () => {
           onClose={() => setIsEventPopupOpen(false)}
           eventId={selectedEvent?.id}
           event={selectedEvent}
+        />
+      )}
+
+      {isEventVerticalPopupOpen && selectedEventItem && (
+        <EventVerticalPopup 
+          isOpen={isEventVerticalPopupOpen}
+          onClose={() => setIsEventVerticalPopupOpen(false)}
+          event={selectedEventItem}
         />
       )}
 
