@@ -16,6 +16,7 @@ import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import FriendMeetupPopup from "@/components/FriendMeetupPopup";
 import CreateEventPopup from "@/components/CreateEventPopup";
+import { CommunityPerksCarousel } from "@/components/CommunityPerksCarousel";
 import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
@@ -471,9 +472,7 @@ const Index = () => {
             </h2>
           </div>
           <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-            <div className="text-center py-6 text-muted-foreground w-full">
-              <p>No coupons available at the moment</p>
-            </div>
+            <CommunityPerksCarousel />
           </div>
         </section>
 
