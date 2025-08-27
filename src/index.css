@@ -243,4 +243,29 @@ All colors MUST be HSL.
   .depth-3 { box-shadow: var(--shadow-medium); }
   .depth-4 { box-shadow: var(--shadow-large); }
   .depth-5 { box-shadow: var(--shadow-floating); }
+
+  /* Meetup vertical popup specific styles */
+  .meetup-vertical-popup {
+    overscroll-behavior: contain;
+  }
+
+  .meetup-vertical-popup .border-gradient-to-r {
+    border-width: 4px;
+    border-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary))) 1;
+    border-style: solid;
+  }
+
+  /* Enhanced scrollbar styling for meetup sections */
+  .meetup-vertical-popup::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .meetup-vertical-popup::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, hsl(var(--primary)), hsl(var(--secondary)));
+    border-radius: 2px;
+  }
+
+  .meetup-vertical-popup::-webkit-scrollbar-track {
+    background: hsl(var(--muted) / 0.1);
+  }
 }

@@ -23,8 +23,8 @@ export interface ItemWithUploader {
 }
 
 const fetchItemDetails = async (itemId: string): Promise<ItemWithUploader | null> => {
-  if (!itemId) {
-    throw new Error('מזהה פריט לא תקין');
+  if (!itemId || itemId.trim() === '') {
+    return null;
   }
 
   // First fetch the item

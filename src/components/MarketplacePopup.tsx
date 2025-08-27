@@ -248,9 +248,12 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
         ref={contentRef}
         className={`bg-background rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto mx-4 relative transition-transform duration-200 ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
+        } ${
+          itemDetails?.category === 'join me' || item?.type === 'meetup' ? 'meetup-popup' : ''
         }`}
         style={{
-          transform: isDragging ? `translateX(${-swipeOffset}px)` : 'translateX(0px)'
+          transform: isDragging ? `translateX(${-swipeOffset}px)` : 'translateX(0px)',
+          scrollBehavior: 'smooth'
         }}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
@@ -283,11 +286,15 @@ const MarketplacePopup = ({ isOpen, onClose, item }: MarketplacePopupProps) => {
           </Button>
         </div>
 
-        {/* Swipe Instructions - show only if there are multiple items */}
+        {/* Navigation Instructions */}
         {allItems.length > 1 && (
           <div className="flex justify-center py-2 border-b bg-muted/10">
             <div className="text-xs text-muted-foreground flex items-center gap-1">
-              <span>← Swipe to navigate →</span>
+              {itemDetails?.category === 'join me' || item?.type === 'meetup' ? (
+                <span>↕ Scroll vertically to see more meetups</span>
+              ) : (
+                <span>← Swipe to navigate →</span>
+              )}
             </div>
           </div>
         )}

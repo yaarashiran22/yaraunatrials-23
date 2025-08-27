@@ -6,6 +6,7 @@ import MoodFilterStrip from "@/components/MoodFilterStrip";
 import FilterPopup from "@/components/FilterPopup";
 import EventPopup from "@/components/EventPopup";
 import MarketplacePopup from "@/components/MarketplacePopup";
+import MeetupVerticalPopup from "@/components/MeetupVerticalPopup";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import OptimizedProfileCard from "@/components/OptimizedProfileCard";
 import AddStoryButton from "@/components/AddStoryButton";
@@ -53,15 +54,24 @@ const Index = () => {
   const { profile: currentUserProfile } = useProfile(user?.id);
   const navigate = useNavigate();
 
-  // Listen for navigation events from MarketplacePopup
+  // Listen for navigation events from MarketplacePopup and MeetupPopup
   useEffect(() => {
     const handleNavigateToItem = (event: CustomEvent) => {
       setSelectedMarketplaceItem(event.detail);
       setIsMarketplacePopupOpen(true);
     };
 
+    const handleNavigateToMeetup = (event: CustomEvent) => {
+      setSelectedMeetupItem(event.detail);
+      setIsMeetupPopupOpen(true);
+    };
+
     window.addEventListener('navigateToItem', handleNavigateToItem);
-    return () => window.removeEventListener('navigateToItem', handleNavigateToItem);
+    window.addEventListener('navigateToMeetup', handleNavigateToMeetup);
+    return () => {
+      window.removeEventListener('navigateToItem', handleNavigateToItem);
+      window.removeEventListener('navigateToMeetup', handleNavigateToMeetup);
+    };
   }, []);
   
   // Use optimized homepage hook with React Query caching
@@ -94,6 +104,8 @@ const Index = () => {
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
   const [selectedMarketplaceItem, setSelectedMarketplaceItem] = useState<any>(null);
   const [isMarketplacePopupOpen, setIsMarketplacePopupOpen] = useState(false);
+  const [selectedMeetupItem, setSelectedMeetupItem] = useState<any>(null);
+  const [isMeetupPopupOpen, setIsMeetupPopupOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
@@ -172,6 +184,29 @@ const Index = () => {
     setSelectedEvent(event);
     setIsEventPopupOpen(true);
   }, []);
+
+  // Meetup click handler for vertical scrolling popup
+  const handleMeetupClick = useCallback((meetup: any, allMeetups?: any[], currentIndex?: number) => {
+    const meetupDetails = {
+      id: meetup.id,
+      title: meetup.title,
+      image: meetup.image_url || meetup.image,
+      price: meetup.price || 'Free',
+      description: meetup.description || meetup.title,
+      seller: {
+        id: meetup.uploader?.id,
+        name: meetup.uploader?.name || meetup.organizer?.name || "Organizer",
+        image: meetup.uploader?.image || meetup.organizer?.image || profile1,
+        location: meetup.uploader?.location || meetup.location || "Tel Aviv"
+      },
+      type: 'meetup',
+      allItems: allMeetups || meetupEvents,
+      currentIndex: currentIndex || 0
+    };
+    
+    setSelectedMeetupItem(meetupDetails);
+    setIsMeetupPopupOpen(true);
+  }, [meetupEvents]);
 
   const handleMarketplaceClick = useCallback((item: any, itemType?: string, items?: any[], currentIndex?: number) => {
     const itemDetails = {
@@ -286,7 +321,7 @@ const Index = () => {
                     type="event"
                     uploader={event.uploader}
                     onProfileClick={(userId) => navigate(`/profile/${userId}`)}
-                    onClick={() => handleEventClick({
+                    onClick={() => handleMeetupClick({
                       id: event.id,
                       title: event.title,
                       description: event.description || event.title,
@@ -296,11 +331,12 @@ const Index = () => {
                       price: event.price,
                       image: event.image_url || communityEvent,
                       video: (event as any).video_url,
+                      uploader: event.uploader,
                       organizer: {
-                        name: event.uploader?.name || "Event Organizer",
+                        name: event.uploader?.name || "Meetup Organizer",
                         image: event.uploader?.image || profile1
                       }
-                    })}
+                    }, meetupEvents, index)}
                     showFavoriteButton={true}
                     favoriteData={{
                       id: event.id,
@@ -433,6 +469,14 @@ const Index = () => {
           isOpen={isMarketplacePopupOpen}
           onClose={() => setIsMarketplacePopupOpen(false)}
           item={selectedMarketplaceItem}
+        />
+      )}
+
+      {isMeetupPopupOpen && selectedMeetupItem && (
+        <MeetupVerticalPopup 
+          isOpen={isMeetupPopupOpen}
+          onClose={() => setIsMeetupPopupOpen(false)}
+          item={selectedMeetupItem}
         />
       )}
 
