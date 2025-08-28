@@ -69,7 +69,9 @@ const Header = ({
           
           {/* Location Switcher - Center */}
           <div className="flex-1 flex justify-center">
-            <NeighborhoodSelector onNeighborhoodChange={onNeighborhoodChange} />
+            <div className="text-sm text-muted-foreground px-4 py-2 bg-accent rounded-lg">
+              Palermo
+            </div>
           </div>
           
           {/* Search and Notifications */}
