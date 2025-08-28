@@ -1,4 +1,4 @@
-import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil, MessageSquare, Edit3, Bookmark, Gift } from "lucide-react";
+import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil, MessageSquare, Edit3, Bookmark, Gift, UserPlus, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -23,6 +23,7 @@ import { FeedImageViewer } from "@/components/FeedImageViewer";
 import EditEventPopup from "@/components/EditEventPopup";
 import { EditCouponModal } from "@/components/EditCouponModal";
 import { useMyCoupons } from "@/hooks/useUserCoupons";
+import { useFollowing } from "@/hooks/useFollowing";
 
 import profile1 from "@/assets/profile-1.jpg";
 import communityEvent from "@/assets/community-event.jpg";
@@ -48,6 +49,7 @@ const ProfilePage = () => {
   const { events: userEvents, loading: eventsLoading, deleteEvent, refetch: refetchEvents } = useUserEvents(actualProfileId);
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
   const { addFriend, isFriend } = useFriends();
+  const { followUser, unfollowUser, isFollowing } = useFollowing();
   const { myCoupons, loading: couponsLoading, deleteCoupon, deleting: deletingCoupon, refreshCoupons } = useMyCoupons(user?.id);
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
@@ -201,6 +203,16 @@ const ProfilePage = () => {
     }
   };
 
+  const handleFollowUser = async () => {
+    if (!actualProfileId || isOwnProfile) return;
+    
+    if (isFollowing(actualProfileId)) {
+      await unfollowUser(actualProfileId);
+    } else {
+      await followUser(actualProfileId);
+    }
+  };
+
   const handleAddFriend = async () => {
     if (!actualProfileId || isOwnProfile) return;
     
@@ -338,17 +350,37 @@ const ProfilePage = () => {
                 >
                   <Settings className="h-4 w-4" />
                 </Button>
-              )}
-               {!isOwnProfile && (
-                 <Button 
-                   variant="outline" 
-                   size="sm" 
-                   className={`rounded-full px-3 py-1 h-7 text-xs ${isFriend(actualProfileId || '') ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
-                   onClick={handleAddFriend}
-                 >
-                   {isFriend(actualProfileId || '') ? 'Added to friends' : 'Add'}
-                 </Button>
                )}
+               {!isOwnProfile && (
+                 <div className="flex gap-2">
+                   <Button 
+                     variant="outline" 
+                     size="sm" 
+                     className={`rounded-full px-3 py-1 h-7 text-xs ${isFollowing(actualProfileId || '') ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : ''}`}
+                     onClick={handleFollowUser}
+                   >
+                     {isFollowing(actualProfileId || '') ? (
+                       <>
+                         <UserCheck className="h-3 w-3 mr-1" />
+                         Following
+                       </>
+                     ) : (
+                       <>
+                         <UserPlus className="h-3 w-3 mr-1" />
+                         Follow
+                       </>
+                     )}
+                   </Button>
+                   <Button 
+                     variant="outline" 
+                     size="sm" 
+                     className={`rounded-full px-3 py-1 h-7 text-xs ${isFriend(actualProfileId || '') ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
+                     onClick={handleAddFriend}
+                   >
+                     {isFriend(actualProfileId || '') ? 'Friends' : 'Add Friend'}
+                   </Button>
+                 </div>
+                )}
                {isOwnProfile && (
                 <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
                    Edit

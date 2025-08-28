@@ -22,7 +22,7 @@ import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import FloatingMessagesToggle from "@/components/FloatingMessagesToggle";
 import { Button } from "@/components/ui/button";
-import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon } from "lucide-react";
+import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon, UserCheck } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -110,9 +110,9 @@ const Index = () => {
   } = useOptimizedHomepage();
 
   // Fetch events and meetups separately from the new events table
-  const [meetupFilter, setMeetupFilter] = useState<'all' | 'friends'>('all');
+  const [meetupFilter, setMeetupFilter] = useState<'all' | 'following'>('all');
   const { events: realEvents = [], refetch: refetchEvents } = useEvents('event');
-  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup', meetupFilter === 'friends');
+  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup', meetupFilter === 'following');
 
   // Preload data immediately on component mount for instant loading
   useEffect(() => {
@@ -350,14 +350,14 @@ const Index = () => {
               All
             </Button>
             <Button
-              variant={meetupFilter === 'friends' ? 'default' : 'outline'}
+              variant={meetupFilter === 'following' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setMeetupFilter('friends')}
+              onClick={() => setMeetupFilter('following')}
               className="text-xs px-3 py-1 rounded-full"
               disabled={!user}
             >
-              <Users className="h-3 w-3 mr-1" />
-              Friends
+              <UserCheck className="h-3 w-3 mr-1" />
+              Following
             </Button>
           </div>
           {loading ? (
