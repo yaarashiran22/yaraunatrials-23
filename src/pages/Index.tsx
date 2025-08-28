@@ -175,7 +175,7 @@ const Index = () => {
     if (user) {
       const currentUserDisplayProfile = {
         id: user.id,
-        name: currentUserProfile?.name || user.email?.split('@')[0] || 'You',
+        name: currentUserProfile?.name || (user?.email ? user.email.split('@')[0] : 'You'),
         image: currentUserProfile?.profile_image_url || user.user_metadata?.avatar_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
         isCurrentUser: true,
         hasStories: false // Skip stories for performance

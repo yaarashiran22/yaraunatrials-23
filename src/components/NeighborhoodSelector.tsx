@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NeighborhoodSelectorProps {
@@ -18,21 +18,22 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
   const { language } = useLanguage();
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("Palermo");
 
-  const neighborhoods = [
+  // Memoize the neighborhoods array to prevent re-creation
+  const neighborhoods = useMemo(() => [
     { name: "Palermo", nameEn: "Palermo", nameEs: "Palermo" },
     { name: "Palermo Soho", nameEn: "Palermo Soho", nameEs: "Palermo Soho" },
     { name: "Palermo Hollywood", nameEn: "Palermo Hollywood", nameEs: "Palermo Hollywood" },
     { name: "Recoleta", nameEn: "Recoleta", nameEs: "Recoleta" },
     { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" }
-  ];
+  ], []);
 
   const getDisplayName = useCallback((neighborhood: any) => {
     if (!neighborhood) return "";
     switch (language) {
       case 'en':
-        return neighborhood.nameEn;
+        return neighborhood.nameEn || neighborhood.name;
       case 'es':
-        return neighborhood.nameEs;
+        return neighborhood.nameEs || neighborhood.name;
       default:
         return neighborhood.name;
     }
@@ -40,11 +41,21 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
 
   const handleNeighborhoodSelect = useCallback((neighborhoodName: string) => {
     setSelectedNeighborhood(neighborhoodName);
-    onNeighborhoodChange?.(neighborhoodName);
+    if (onNeighborhoodChange) {
+      onNeighborhoodChange(neighborhoodName);
+    }
   }, [onNeighborhoodChange]);
 
-  const selectedNeighborhoodObj = neighborhoods.find(n => n.name === selectedNeighborhood);
-  const displayName = selectedNeighborhoodObj ? getDisplayName(selectedNeighborhoodObj) : selectedNeighborhood;
+  // Memoize the selected neighborhood object and display name
+  const selectedNeighborhoodObj = useMemo(() => 
+    neighborhoods.find(n => n.name === selectedNeighborhood),
+    [neighborhoods, selectedNeighborhood]
+  );
+  
+  const displayName = useMemo(() => 
+    selectedNeighborhoodObj ? getDisplayName(selectedNeighborhoodObj) : selectedNeighborhood,
+    [selectedNeighborhoodObj, getDisplayName, selectedNeighborhood]
+  );
 
   return (
     <DropdownMenu>
@@ -55,7 +66,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background border shadow-lg z-50 relative">
+      <DropdownMenuContent align="end" className="bg-background border shadow-lg z-50">
         {neighborhoods.map((neighborhood) => (
           <DropdownMenuItem 
             key={neighborhood.name}
@@ -70,5 +81,4 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
     </DropdownMenu>
   );
 };
-
 export default NeighborhoodSelector;
