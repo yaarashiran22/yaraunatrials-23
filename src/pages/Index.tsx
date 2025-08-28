@@ -318,8 +318,8 @@ const Index = () => {
         </section>
         
         {/* Neighbors Count */}
-        <div className="text-center -mt-2 mb-4">
-          <p className="text-xs text-muted-foreground">43 neighbors</p>
+        <div className="-mt-2 mb-2 px-4">
+          <p className="text-xs text-muted-foreground text-left">43 neighbors</p>
         </div>
 
         {/* Join me Section - Horizontal Carousel */}
