@@ -1,8 +1,10 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import ProfilePictureViewer from "./ProfilePictureViewer";
 import AddStoryButton from "./AddStoryButton";
+import StoriesPopup from "./StoriesPopup";
+import { supabase } from "@/integrations/supabase/client";
 
 interface OptimizedProfileCardProps {
   id: string;
@@ -23,10 +25,32 @@ const OptimizedProfileCard = memo(({
 }: OptimizedProfileCardProps) => {
   const [showProfileViewer, setShowProfileViewer] = useState(false);
   const [showAddStory, setShowAddStory] = useState(false);
+  const [showStoriesPopup, setShowStoriesPopup] = useState(false);
+  const [hasStories, setHasStories] = useState(false);
   const navigate = useNavigate();
 
+  // Check for active stories
+  useEffect(() => {
+    const checkStories = async () => {
+      const { data: stories } = await supabase
+        .from('stories')
+        .select('id')
+        .eq('user_id', id)
+        .gt('expires_at', new Date().toISOString())
+        .limit(1);
+      
+      setHasStories(stories && stories.length > 0);
+    };
+
+    checkStories();
+  }, [id]);
+
   const handleAvatarClick = () => {
-    setShowProfileViewer(true);
+    if (hasStories) {
+      setShowStoriesPopup(true);
+    } else {
+      setShowProfileViewer(true);
+    }
   };
 
   const handleAddStoryClick = (e: React.MouseEvent) => {
@@ -49,10 +73,11 @@ const OptimizedProfileCard = memo(({
         style={style}
       >
         <div className="relative">
-          <Avatar 
-            className="w-[66px] h-[66px] cursor-pointer border-4 border-purple-400/40 hover:border-purple-500/60 transition-all duration-200 shadow-lg shadow-purple-500/10"
-            onClick={handleAvatarClick}
-          >
+          <div className={`relative ${hasStories ? 'p-0.5 rounded-full bg-gradient-to-r from-orange-400 to-orange-600' : ''}`}>
+            <Avatar 
+              className={`w-[66px] h-[66px] cursor-pointer transition-all duration-200 shadow-lg ${hasStories ? 'border-2 border-white shadow-orange-500/20' : 'border-4 border-purple-400/40 hover:border-purple-500/60 shadow-purple-500/10'}`}
+              onClick={handleAvatarClick}
+            >
             <AvatarImage 
               src={image} 
               alt={name} 
@@ -62,7 +87,8 @@ const OptimizedProfileCard = memo(({
             <AvatarFallback className="bg-muted text-muted-foreground font-semibold">
               {name.charAt(0).toUpperCase()}
             </AvatarFallback>
-          </Avatar>
+            </Avatar>
+          </div>
           
           {isCurrentUser && (
             <div 
@@ -88,6 +114,12 @@ const OptimizedProfileCard = memo(({
         imageUrl={image}
         userName={name}
         userId={isCurrentUser ? undefined : id}
+      />
+
+      <StoriesPopup
+        isOpen={showStoriesPopup}
+        onClose={() => setShowStoriesPopup(false)}
+        userId={id}
       />
       
       {/* Add Story functionality */}
