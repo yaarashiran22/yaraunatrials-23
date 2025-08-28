@@ -23,7 +23,6 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
     { name: "Palermo Soho", nameEn: "Palermo Soho", nameEs: "Palermo Soho" },
     { name: "Palermo Hollywood", nameEn: "Palermo Hollywood", nameEs: "Palermo Hollywood" },
     { name: "Recoleta", nameEn: "Recoleta", nameEs: "Recoleta" },
-    { name: "San Telmo", nameEn: "San Telmo", nameEs: "San Telmo" },
     { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" }
   ];
 
