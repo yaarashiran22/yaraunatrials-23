@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useItemDetails } from "@/hooks/useItemDetails";
 import { useState, useRef, useCallback, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Location mapping from English to Spanish (Buenos Aires neighborhoods)
 const locationMapping: Record<string, string> = {
@@ -41,6 +42,7 @@ interface MeetupVerticalPopupProps {
 const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Navigation state
   const allItems = item?.allItems || [];
@@ -256,7 +258,7 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
 
       <div 
         ref={contentRef}
-        className={`bg-background rounded-2xl w-full max-w-sm max-h-[85vh] overflow-y-auto mx-4 relative transition-transform duration-200 ${
+        className={`bg-background rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
         } meetup-vertical-popup`}
         style={{
@@ -311,14 +313,14 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
         )}
 
         {/* Content */}
-        <div className="p-4">
+        <div className={`${isMobile ? 'p-3' : 'p-4'}`}>
           {/* Meetup Image */}
-          <div className="relative mb-6">
+          <div className={`relative ${isMobile ? 'mb-4' : 'mb-6'}`}>
             <div className="border-4 border-gradient-to-r from-blue-400 to-purple-400 rounded-2xl overflow-hidden">
               <img 
                 src={displayItem.image}
                 alt={displayItem.title}
-                className="w-full h-64 object-cover"
+                className={`w-full ${isMobile ? 'h-48' : 'h-64'} object-cover`}
               />
             </div>
             
@@ -341,32 +343,32 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
           </div>
 
           {/* Meetup Details */}
-          <div className="space-y-4">
+          <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
             <div className="text-center">
-              <h3 className="text-xl font-bold text-foreground mb-2">{displayItem.title}</h3>
+              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-foreground ${isMobile ? 'mb-1' : 'mb-2'}`}>{displayItem.title}</h3>
               {displayItem.price && displayItem.price !== 'Free' && (
-                <p className="text-lg font-semibold text-primary">{displayItem.price}</p>
+                <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-primary`}>{displayItem.price}</p>
               )}
               {displayItem.price === 'Free' && (
-                <p className="text-lg font-semibold text-green-600 dark:text-green-400">Free Event</p>
+                <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-green-600 dark:text-green-400`}>Free Event</p>
               )}
             </div>
             
             {displayItem.description && (
-              <p className="text-foreground leading-relaxed text-center text-sm">
+              <p className={`text-foreground leading-relaxed text-center ${isMobile ? 'text-xs' : 'text-sm'}`}>
                 {displayItem.description}
               </p>
             )}
             
             {/* Meetup Location and Date */}
             {itemDetails && (
-              <div className="space-y-3 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800">
-                <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-                  <MapPin className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
+                  <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-600 dark:text-blue-400`} />
                   <span>{locationMapping[itemDetails.location] || itemDetails.location || 'Location TBD'}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-                  <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
+                  <Calendar className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-600 dark:text-blue-400`} />
                   <span>
                     {new Date(itemDetails.created_at).toLocaleDateString('en-US', { 
                       weekday: 'short', 
@@ -383,18 +385,18 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
             {/* Organizer Info */}
             {displayItem.seller && (
               <div 
-                className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                className={`flex items-center gap-3 ${isMobile ? 'p-2' : 'p-3'} bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors`}
                 onClick={handleViewProfile}
               >
                 <img 
                   src={displayItem.seller.image}
                   alt={displayItem.seller.name}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className={`${isMobile ? 'w-8 h-8' : 'w-10 h-10'} rounded-full object-cover`}
                 />
                 <div className="flex-1">
-                  <p className="font-semibold text-foreground text-sm">{displayItem.seller.name}</p>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <MapPin className="h-3 w-3" />
+                  <p className={`font-semibold text-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>{displayItem.seller.name}</p>
+                  <div className={`flex items-center gap-1 ${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground`}>
+                    <MapPin className={`${isMobile ? 'h-2.5 w-2.5' : 'h-3 w-3'}`} />
                     <span>{(displayItem as any).neighborhood || displayItem.seller.location}</span>
                   </div>
                 </div>
@@ -403,16 +405,16 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
           </div>
 
           {/* Join Request Section */}
-          <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800">
-            <h4 className="text-lg font-semibold text-foreground mb-3 text-center">Join This Meetup</h4>
-            <p className="text-foreground text-center mb-4 text-sm">
+          <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
+            <h4 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground ${isMobile ? 'mb-2' : 'mb-3'} text-center`}>Join This Meetup</h4>
+            <p className={`text-foreground text-center ${isMobile ? 'mb-3' : 'mb-4'} ${isMobile ? 'text-xs' : 'text-sm'}`}>
               Send a request to join this meetup and connect with others
             </p>
             <Button 
               onClick={handleContact}
-              className="w-full h-11 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl text-base font-medium"
+              className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}
             >
-              <MessageCircle className="h-4 w-4 mr-2" />
+              <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
               Join Meetup
             </Button>
           </div>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useRef, useCallback, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Location mapping from English to Spanish (Buenos Aires neighborhoods)
 const locationMapping: Record<string, string> = {
@@ -40,6 +41,7 @@ interface EventVerticalPopupProps {
 const EventVerticalPopup = ({ isOpen, onClose, event }: EventVerticalPopupProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Navigation state
   const allEvents = event?.allEvents || [];
@@ -234,7 +236,7 @@ const EventVerticalPopup = ({ isOpen, onClose, event }: EventVerticalPopupProps)
 
       <div 
         ref={contentRef}
-        className={`bg-background rounded-2xl w-full max-w-sm max-h-[85vh] overflow-y-auto mx-4 relative transition-transform duration-200 ${
+        className={`bg-background rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
         } event-vertical-popup`}
         style={{
@@ -288,14 +290,14 @@ const EventVerticalPopup = ({ isOpen, onClose, event }: EventVerticalPopupProps)
         )}
 
         {/* Content */}
-        <div className="p-4">
+        <div className={`${isMobile ? 'p-3' : 'p-4'}`}>
           {/* Event Image */}
-          <div className="relative mb-6">
+          <div className={`relative ${isMobile ? 'mb-4' : 'mb-6'}`}>
             <div className="border-4 border-gradient-to-r from-green-400 to-blue-400 rounded-2xl overflow-hidden">
               <img 
                 src={displayEvent.image}
                 alt={displayEvent.title}
-                className="w-full h-64 object-cover"
+                className={`w-full ${isMobile ? 'h-48' : 'h-64'} object-cover`}
               />
             </div>
             
@@ -318,40 +320,40 @@ const EventVerticalPopup = ({ isOpen, onClose, event }: EventVerticalPopupProps)
           </div>
 
           {/* Event Details */}
-          <div className="space-y-4">
+          <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
             <div className="text-center">
-              <h3 className="text-xl font-bold text-foreground mb-2">{displayEvent.title}</h3>
+              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-foreground ${isMobile ? 'mb-1' : 'mb-2'}`}>{displayEvent.title}</h3>
               {displayEvent.price && displayEvent.price !== 'Free' && (
-                <p className="text-lg font-semibold text-primary">{displayEvent.price}</p>
+                <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-primary`}>{displayEvent.price}</p>
               )}
               {(!displayEvent.price || displayEvent.price === 'Free') && (
-                <p className="text-lg font-semibold text-green-600 dark:text-green-400">Free Event</p>
+                <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-green-600 dark:text-green-400`}>Free Event</p>
               )}
             </div>
             
             {displayEvent.description && (
-              <p className="text-foreground leading-relaxed text-center text-sm">
+              <p className={`text-foreground leading-relaxed text-center ${isMobile ? 'text-xs' : 'text-sm'}`}>
                 {displayEvent.description}
               </p>
             )}
             
             {/* Event Details Section */}
-            <div className="space-y-3 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-lg border border-green-200 dark:border-blue-800">
+            <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-lg border border-green-200 dark:border-blue-800`}>
               {displayEvent.location && (
-                <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-                  <MapPin className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
+                  <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-green-600 dark:text-green-400`} />
                   <span>{locationMapping[displayEvent.location] || displayEvent.location}</span>
                 </div>
               )}
               
               {displayEvent.date && (
-                <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-                  <Calendar className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
+                  <Calendar className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-green-600 dark:text-green-400`} />
                   <span>
                     {new Date(displayEvent.date).toLocaleDateString('en-US', { 
-                      weekday: 'long', 
+                      weekday: isMobile ? 'short' : 'long', 
                       year: 'numeric', 
-                      month: 'long', 
+                      month: isMobile ? 'short' : 'long', 
                       day: 'numeric' 
                     })}
                   </span>
@@ -359,8 +361,8 @@ const EventVerticalPopup = ({ isOpen, onClose, event }: EventVerticalPopupProps)
               )}
               
               {displayEvent.time && (
-                <div className="flex items-center gap-3 text-sm font-medium text-foreground">
-                  <Clock className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
+                  <Clock className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-green-600 dark:text-green-400`} />
                   <span>{displayEvent.time}</span>
                 </div>
               )}
@@ -369,19 +371,19 @@ const EventVerticalPopup = ({ isOpen, onClose, event }: EventVerticalPopupProps)
             {/* Organizer Info */}
             {displayEvent.organizer && (
               <div 
-                className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                className={`flex items-center gap-3 ${isMobile ? 'p-2' : 'p-3'} bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors`}
                 onClick={handleViewProfile}
               >
                 <img 
                   src={displayEvent.organizer.image}
                   alt={displayEvent.organizer.name}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className={`${isMobile ? 'w-8 h-8' : 'w-10 h-10'} rounded-full object-cover`}
                 />
                 <div className="flex-1">
-                  <p className="font-semibold text-foreground text-sm">{displayEvent.organizer.name}</p>
+                  <p className={`font-semibold text-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>{displayEvent.organizer.name}</p>
                   {displayEvent.organizer.location && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <MapPin className="h-3 w-3" />
+                    <div className={`flex items-center gap-1 ${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground`}>
+                      <MapPin className={`${isMobile ? 'h-2.5 w-2.5' : 'h-3 w-3'}`} />
                       <span>{displayEvent.organizer.location}</span>
                     </div>
                   )}
@@ -391,16 +393,16 @@ const EventVerticalPopup = ({ isOpen, onClose, event }: EventVerticalPopupProps)
           </div>
 
           {/* RSVP Section */}
-          <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-lg border border-green-200 dark:border-blue-800">
-            <h4 className="text-lg font-semibold text-foreground mb-3 text-center">Join This Event</h4>
-            <p className="text-foreground text-center mb-4 text-sm">
+          <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-lg border border-green-200 dark:border-blue-800`}>
+            <h4 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground ${isMobile ? 'mb-2' : 'mb-3'} text-center`}>Join This Event</h4>
+            <p className={`text-foreground text-center ${isMobile ? 'mb-3' : 'mb-4'} ${isMobile ? 'text-xs' : 'text-sm'}`}>
               RSVP to confirm your attendance and stay updated
             </p>
             <Button 
               onClick={handleRSVP}
-              className="w-full h-11 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-2xl text-base font-medium"
+              className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}
             >
-              <MessageCircle className="h-4 w-4 mr-2" />
+              <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
               RSVP for Event
             </Button>
           </div>

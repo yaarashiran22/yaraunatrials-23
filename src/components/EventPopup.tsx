@@ -6,6 +6,7 @@ import { useItemDetails } from "@/hooks/useItemDetails";
 import { useEventRSVP } from "@/hooks/useEventRSVP";
 import { getRelativeDay } from "@/utils/dateUtils";
 import profile1 from "@/assets/profile-1.jpg";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface EventPopupProps {
   isOpen: boolean;
@@ -35,6 +36,7 @@ const EventPopup = ({
 }: EventPopupProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   // Always show UI immediately with passed event data
   // Only fetch additional details if we need mobile_number or other specific data AND have a valid ID
@@ -169,7 +171,7 @@ const EventPopup = ({
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-background rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto mx-4">
+      <div className={`bg-background rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[90vh]'} overflow-y-auto mx-4`}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <Button 
@@ -192,14 +194,14 @@ const EventPopup = ({
         </div>
 
         {/* Content */}
-        <div className="p-4">
+        <div className={`${isMobile ? 'p-3' : 'p-4'}`}>
           {/* Event Media */}
-          <div className="relative mb-6">
+          <div className={`relative ${isMobile ? 'mb-4' : 'mb-6'}`}>
             <div className="border-4 border-yellow-400 rounded-2xl overflow-hidden">
               {displayEvent.video ? (
                 <video 
                   src={displayEvent.video}
-                  className="w-full h-64 object-cover"
+                  className={`w-full ${isMobile ? 'h-48' : 'h-64'} object-cover`}
                   controls
                   poster={displayEvent.image}
                   preload="metadata"
@@ -212,7 +214,7 @@ const EventPopup = ({
                 <img 
                   src={displayEvent.image}
                   alt={displayEvent.title}
-                  className="w-full h-64 object-cover"
+                  className={`w-full ${isMobile ? 'h-48' : 'h-64'} object-cover`}
                 />
               )}
             </div>
@@ -229,40 +231,40 @@ const EventPopup = ({
           </div>
 
           {/* Event Details */}
-          <div className="space-y-4">
+          <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
             <div className="text-center">
               {eventData?.price && (
-                <h3 className="text-2xl font-bold text-foreground mb-2">{displayEvent.price}</h3>
+                <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-foreground ${isMobile ? 'mb-1' : 'mb-2'}`}>{displayEvent.price}</h3>
               )}
-              <p className="text-lg font-semibold text-foreground">{displayEvent.title}</p>
+              <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground`}>{displayEvent.title}</p>
               {displayEvent.date && (
-                <p className="text-sm text-primary">Date: {getRelativeDay(displayEvent.date)}</p>
+                <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-primary`}>Date: {getRelativeDay(displayEvent.date)}</p>
               )}
             </div>
             
-            <p className="text-foreground leading-relaxed text-center">
+            <p className={`text-foreground leading-relaxed text-center ${isMobile ? 'text-xs' : ''}`}>
               {displayEvent.description}
             </p>
             
             {/* Organizer Info */}
             {displayEvent.organizer && (
               <div 
-                className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                className={`flex items-center gap-3 ${isMobile ? 'p-3' : 'p-4'} bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors`}
                 onClick={handleViewProfile}
               >
                 <img 
                   src={displayEvent.organizer.image || profile1}
                   alt={displayEvent.organizer.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className={`${isMobile ? 'w-10 h-10' : 'w-12 h-12'} rounded-full object-cover`}
                   onError={(e) => {
                     console.log('Profile image failed to load, using fallback. Original src:', e.currentTarget.src);
                     e.currentTarget.src = profile1;
                   }}
                 />
                 <div className="flex-1">
-                  <p className="font-semibold text-foreground">{displayEvent.organizer.name}</p>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
+                  <p className={`font-semibold text-foreground ${isMobile ? 'text-sm' : ''}`}>{displayEvent.organizer.name}</p>
+                  <div className={`flex items-center gap-1 ${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
+                    <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
                     <span>{displayEvent.organizer.location}</span>
                   </div>
                 </div>
@@ -272,9 +274,9 @@ const EventPopup = ({
 
           {/* RSVP Section - only show if we have a valid event ID */}
           {validEventId && (
-            <div className="mt-6 p-4 bg-muted/20 rounded-xl">
-              <div className="text-center mb-4">
-                <p className="text-sm text-muted-foreground mb-2">
+            <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-muted/20 rounded-xl`}>
+              <div className={`text-center ${isMobile ? 'mb-3' : 'mb-4'}`}>
+                <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground ${isMobile ? 'mb-1' : 'mb-2'}`}>
                   {rsvpCount} people attending
                 </p>
                 <div className="flex gap-2 justify-center">
@@ -282,18 +284,18 @@ const EventPopup = ({
                     onClick={() => handleRSVP('going')}
                     disabled={isUpdating}
                     variant={userRSVP?.status === 'going' ? "default" : "outline"}
-                    className="flex-1 h-10 rounded-lg"
+                    className={`flex-1 ${isMobile ? 'h-8' : 'h-10'} rounded-lg ${isMobile ? 'text-xs' : ''}`}
                   >
-                    <Check className="h-4 w-4 mr-2" />
+                    <Check className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
                     Going
                   </Button>
                   <Button
                     onClick={() => handleRSVP('maybe')}
                     disabled={isUpdating}
                     variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
-                    className="flex-1 h-10 rounded-lg"
+                    className={`flex-1 ${isMobile ? 'h-8' : 'h-10'} rounded-lg ${isMobile ? 'text-xs' : ''}`}
                   >
-                    <UserCheck className="h-4 w-4 mr-2" />
+                    <UserCheck className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
                     Maybe
                   </Button>
                 </div>
@@ -302,23 +304,23 @@ const EventPopup = ({
           )}
 
           {/* Action Buttons */}
-          <div className="mt-6 flex flex-col gap-3">
+          <div className={`${isMobile ? 'mt-4' : 'mt-6'} flex flex-col ${isMobile ? 'gap-2' : 'gap-3'}`}>
             <Button 
               onClick={handleContact}
               variant={eventData?.mobile_number ? "default" : "outline"}
               disabled={!eventData?.mobile_number}
-              className={`flex-1 h-12 rounded-2xl text-lg font-medium ${
+              className={`flex-1 ${isMobile ? 'h-10' : 'h-12'} rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-medium ${
                 !eventData?.mobile_number ? 'opacity-60' : ''
               }`}
             >
-              <MessageCircle className="h-5 w-5 ml-2" />
+              <MessageCircle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} ml-2`} />
               {eventData?.mobile_number ? 'Contact' : 'No contact info'}
             </Button>
             <Button 
               onClick={handleViewDetails}
-              className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl text-lg font-medium"
+              className={`flex-1 ${isMobile ? 'h-10' : 'h-12'} bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-medium`}
             >
-              <Eye className="h-5 w-5 ml-2" />
+              <Eye className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} ml-2`} />
               View Details
             </Button>
           </div>
