@@ -340,13 +340,24 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Filter Buttons */}
           <div className="flex gap-2 mb-4">
             <Button
               variant={meetupFilter === 'all' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setMeetupFilter('all')}
-              className="text-xs px-3 py-1 rounded-full"
+              className={`text-xs px-3 py-1 rounded-full ${
+                meetupFilter === 'all' 
+                  ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                  : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+              }`}
+              style={meetupFilter === 'all' ? {
+                backgroundColor: 'hsl(var(--accent-subtle))',
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'white'
+              } : {
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'hsl(var(--accent-subtle))'
+              }}
             >
               All
             </Button>
@@ -354,7 +365,19 @@ const Index = () => {
               variant={meetupFilter === 'friends' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setMeetupFilter('friends')}
-              className="text-xs px-3 py-1 rounded-full"
+              className={`text-xs px-3 py-1 rounded-full ${
+                meetupFilter === 'friends' 
+                  ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                  : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+              }`}
+              style={meetupFilter === 'friends' ? {
+                backgroundColor: 'hsl(var(--accent-subtle))',
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'white'
+              } : {
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'hsl(var(--accent-subtle))'
+              }}
               disabled={!user}
             >
               <Users className="h-3 w-3 mr-1" />
@@ -437,13 +460,24 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Filter Buttons */}
           <div className="flex gap-2 mb-4">
             <Button
               variant={eventFilter === 'all' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setEventFilter('all')}
-              className="text-xs px-3 py-1 rounded-full"
+              className={`text-xs px-3 py-1 rounded-full ${
+                eventFilter === 'all' 
+                  ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                  : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+              }`}
+              style={eventFilter === 'all' ? {
+                backgroundColor: 'hsl(var(--accent-subtle))',
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'white'
+              } : {
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'hsl(var(--accent-subtle))'
+              }}
             >
               All
             </Button>
@@ -451,7 +485,19 @@ const Index = () => {
               variant={eventFilter === 'following' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setEventFilter('following')}
-              className="text-xs px-3 py-1 rounded-full"
+              className={`text-xs px-3 py-1 rounded-full ${
+                eventFilter === 'following' 
+                  ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                  : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+              }`}
+              style={eventFilter === 'following' ? {
+                backgroundColor: 'hsl(var(--accent-subtle))',
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'white'
+              } : {
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'hsl(var(--accent-subtle))'
+              }}
               disabled={!user}
             >
               <Users className="h-3 w-3 mr-1" />
