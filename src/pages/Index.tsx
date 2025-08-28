@@ -119,7 +119,7 @@ const Index = () => {
   // Preload data immediately on component mount for instant loading
   useEffect(() => {
     preloadData();
-  }, [preloadData]);
+  }, []); // Removed preloadData dependency
 
   // Popup states
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -138,14 +138,16 @@ const Index = () => {
   const [isAddCouponModalOpen, setIsAddCouponModalOpen] = useState(false);
   
 
-  // Set refresh callback for new items
+  // Set refresh callback for new items - stabilized with useCallback
+  const refreshCallback = useCallback(() => {
+    refetch();
+    refetchEvents();
+    refetchMeetups();
+  }, [refetch, refetchEvents, refetchMeetups]);
+
   useEffect(() => {
-    setRefreshCallback(() => () => {
-      refetch();
-      refetchEvents();
-      refetchMeetups();
-    });
-  }, [setRefreshCallback]); // Removed unstable dependencies
+    setRefreshCallback(() => refreshCallback);
+  }, [setRefreshCallback, refreshCallback]);
 
   // Global event listener for event updates
   useEffect(() => {
