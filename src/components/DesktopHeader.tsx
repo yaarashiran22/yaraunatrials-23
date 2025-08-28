@@ -100,29 +100,14 @@ const DesktopHeader = ({
             
             {/* User menu */}
             {user && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="rounded-full px-5 py-2 h-11">
-                    <User className="h-4 w-4 mr-2" />
-                    {user.email?.split('@')[0] || t('common.profile')}
-                    <ChevronDown className="h-4 w-4 ml-2" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 mt-2">
-                  <DropdownMenuItem onClick={() => navigate('/profile/1')}>
-                    <User className="h-4 w-4 mr-2" />
-                    {t('common.profile')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/settings')}>
-                    <Settings className="h-4 w-4 mr-2" />
-                    {t('common.settings')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    {t('common.logout')}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button 
+                variant="outline" 
+                className="rounded-full px-5 py-2 h-11"
+                onClick={() => navigate('/profile/1')}
+              >
+                <User className="h-4 w-4 mr-2" />
+                {user.email?.split('@')[0] || t('common.profile')}
+              </Button>
             )}
           </div>
         </div>
