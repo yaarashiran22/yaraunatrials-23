@@ -284,13 +284,6 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
             )}
           </div>
           
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={handleShare}
-          >
-            <Share className="h-4 w-4" />
-          </Button>
         </div>
 
         {/* Vertical Navigation Instructions */}
