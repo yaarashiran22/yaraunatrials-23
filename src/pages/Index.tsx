@@ -345,7 +345,7 @@ const Index = () => {
               variant={meetupFilter === 'all' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setMeetupFilter('all')}
-              className={`text-xs px-3 py-1 rounded-full ${
+              className={`text-xs px-2 py-1 rounded-full h-6 ${
                 meetupFilter === 'all' 
                   ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
                   : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
@@ -365,7 +365,7 @@ const Index = () => {
               variant={meetupFilter === 'friends' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setMeetupFilter('friends')}
-              className={`text-xs px-3 py-1 rounded-full ${
+              className={`text-xs px-2 py-1 rounded-full h-6 ${
                 meetupFilter === 'friends' 
                   ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
                   : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
@@ -380,7 +380,7 @@ const Index = () => {
               }}
               disabled={!user}
             >
-              <Users className="h-3 w-3 mr-1" />
+              <Users className="h-2.5 w-2.5 mr-1" />
               Friends
             </Button>
           </div>
@@ -465,7 +465,7 @@ const Index = () => {
               variant={eventFilter === 'all' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setEventFilter('all')}
-              className={`text-xs px-3 py-1 rounded-full ${
+              className={`text-xs px-2 py-1 rounded-full h-6 ${
                 eventFilter === 'all' 
                   ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
                   : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
@@ -485,7 +485,7 @@ const Index = () => {
               variant={eventFilter === 'following' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setEventFilter('following')}
-              className={`text-xs px-3 py-1 rounded-full ${
+              className={`text-xs px-2 py-1 rounded-full h-6 ${
                 eventFilter === 'following' 
                   ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
                   : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
@@ -500,7 +500,7 @@ const Index = () => {
               }}
               disabled={!user}
             >
-              <Users className="h-3 w-3 mr-1" />
+              <Users className="h-2.5 w-2.5 mr-1" />
               Following
             </Button>
           </div>
