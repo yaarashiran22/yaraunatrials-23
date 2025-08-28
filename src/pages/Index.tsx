@@ -175,7 +175,7 @@ const Index = () => {
     if (user) {
       const currentUserDisplayProfile = {
         id: user.id,
-        name: currentUserProfile?.name || (user?.email ? user.email.split('@')[0] : 'You'),
+        name: currentUserProfile?.name || user.email?.split('@')[0] || 'You',
         image: currentUserProfile?.profile_image_url || user.user_metadata?.avatar_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
         isCurrentUser: true,
         hasStories: false // Skip stories for performance
@@ -312,17 +312,13 @@ const Index = () => {
                 ))
               ) : (
                 <div className="text-center py-8 text-muted-foreground w-full">No registered users yet</div>
-               )}
-             </div>
-             
-             {/* Neighbors Count */}
-             <div className="px-2 mt-1">
-               <p className="text-xs text-muted-foreground text-left">43 neighbors</p>
-             </div>
-           </div>
-         </section>
-         
-         {/* Join me Section - Horizontal Carousel */}
+              )}
+            </div>
+          </div>
+        </section>
+
+
+        {/* Join me Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-foreground relative">
