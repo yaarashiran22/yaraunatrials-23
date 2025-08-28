@@ -54,7 +54,8 @@ const fetchHomepageData = async () => {
           .from('profiles')
           .select('id, name, profile_image_url')
           .not('name', 'is', null)
-          .order('created_at', { ascending: false }), // Removed limit to show all users
+          .order('created_at', { ascending: false })
+          .limit(6), // Reduced to 6 for faster loading
       supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
@@ -163,18 +164,7 @@ const fetchHomepageData = async () => {
       description: "לא ניתן לטעון את הנתונים",
       variant: "destructive",
     });
-    
-    // Return fallback data instead of throwing error to prevent page crash
-    return { 
-      items: [], 
-      databaseEvents: [], 
-      recommendationItems: [], 
-      artItems: [], 
-      apartmentItems: [], 
-      businessItems: [], 
-      profiles: [], 
-      totalUsersCount: 0 
-    };
+    throw error;
   }
 };
 
@@ -184,7 +174,7 @@ export const useOptimizedHomepage = () => {
   // Ultra-aggressive preloading for instant loading
   const preloadData = () => {
     queryClient.prefetchQuery({
-      queryKey: ['homepage-data-v8'], // Updated to force refresh
+      queryKey: ['homepage-data-v7'], // Updated to match main query
       queryFn: fetchHomepageData,
       staleTime: 1000 * 60 * 30, // Match main query stale time
     });
@@ -192,7 +182,7 @@ export const useOptimizedHomepage = () => {
 
   // Ultra-aggressive caching for instant loading
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['homepage-data-v8'], // Updated to force refresh with all users
+    queryKey: ['homepage-data-v7'], // Updated for faster loading optimizations
     queryFn: fetchHomepageData,
     staleTime: 1000 * 60 * 15, // 15 minutes - ultra aggressive
     gcTime: 1000 * 60 * 60, // 1 hour - keep data longer

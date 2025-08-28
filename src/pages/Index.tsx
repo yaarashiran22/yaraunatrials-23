@@ -175,7 +175,7 @@ const Index = () => {
     if (user) {
       const currentUserDisplayProfile = {
         id: user.id,
-        name: currentUserProfile?.name || (user.email ? user.email.split('@')[0] : '') || 'You',
+        name: currentUserProfile?.name || user.email?.split('@')[0] || 'You',
         image: currentUserProfile?.profile_image_url || user.user_metadata?.avatar_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
         isCurrentUser: true,
         hasStories: false // Skip stories for performance
@@ -183,10 +183,11 @@ const Index = () => {
       profilesList.push(currentUserDisplayProfile);
     }
 
-    // Add other profiles (all users for complete community view)
+    // Add other profiles (top 6 newest users only for faster loading)
     if (profiles.length > 0) {
       const otherProfiles = profiles
         .filter(p => p.id !== user?.id)
+        .slice(0, 6) // Reduced to 6 for faster loading
         .map(p => ({
           id: p.id,
           name: p.name || "User",
@@ -315,7 +316,7 @@ const Index = () => {
              </div>
              
              {/* Neighbors Count */}
-             <div className="px-4 mt-1">
+             <div className="px-2 mt-1">
                <p className="text-xs text-muted-foreground text-left">43 neighbors</p>
              </div>
            </div>
