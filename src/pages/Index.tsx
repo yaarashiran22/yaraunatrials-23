@@ -318,7 +318,7 @@ const Index = () => {
         </section>
         
         {/* Neighbors Count */}
-        <div className="-mt-4 mb-2 px-4">
+        <div className="-mt-6 mb-2 px-4">
           <p className="text-xs text-muted-foreground text-left">43 neighbors</p>
         </div>
 
