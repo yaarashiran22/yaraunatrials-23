@@ -1,4 +1,4 @@
-import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil, MessageSquare, Edit3, Bookmark } from "lucide-react";
+import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil, MessageSquare, Edit3, Bookmark, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -21,6 +21,8 @@ import UniformCard from "@/components/UniformCard";
 import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 import { FeedImageViewer } from "@/components/FeedImageViewer";
 import EditEventPopup from "@/components/EditEventPopup";
+import { EditCouponModal } from "@/components/EditCouponModal";
+import { useMyCoupons } from "@/hooks/useUserCoupons";
 
 import profile1 from "@/assets/profile-1.jpg";
 import communityEvent from "@/assets/community-event.jpg";
@@ -46,6 +48,7 @@ const ProfilePage = () => {
   const { events: userEvents, loading: eventsLoading, deleteEvent, refetch: refetchEvents } = useUserEvents(actualProfileId);
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
   const { addFriend, isFriend } = useFriends();
+  const { myCoupons, loading: couponsLoading, deleteCoupon, deleting: deletingCoupon, refreshCoupons } = useMyCoupons(user?.id);
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
   // Check if this is the current user's profile
@@ -61,6 +64,8 @@ const ProfilePage = () => {
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
   const [showEditEvent, setShowEditEvent] = useState(false);
   const [selectedEventForEdit, setSelectedEventForEdit] = useState<any>(null);
+  const [showEditCoupon, setShowEditCoupon] = useState(false);
+  const [selectedCouponForEdit, setSelectedCouponForEdit] = useState<any>(null);
 
   const handleDeleteEvent = async (eventId: string) => {
     // Require authentication
@@ -103,6 +108,41 @@ const ProfilePage = () => {
 
     setSelectedEventForEdit(event);
     setShowEditEvent(true);
+  };
+
+  const handleDeleteCoupon = async (couponId: string) => {
+    if (!requireAuth()) return;
+
+    const coupon = myCoupons.find(c => c.id === couponId);
+    if (!coupon || !canUserModifyItem(user!.id, coupon.user_id)) {
+      toast({
+        title: "Authorization Error",
+        description: "You don't have permission to delete this coupon",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (window.confirm('Are you sure you want to delete this coupon?')) {
+      deleteCoupon(couponId);
+    }
+  };
+
+  const handleEditCoupon = (couponId: string) => {
+    if (!requireAuth()) return;
+
+    const coupon = myCoupons.find(c => c.id === couponId);
+    if (!coupon || !canUserModifyItem(user!.id, coupon.user_id)) {
+      toast({
+        title: "Authorization Error",
+        description: "You don't have permission to edit this coupon",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSelectedCouponForEdit(coupon);
+    setShowEditCoupon(true);
   };
 
   // Listen for profile updates (when returning from edit page)
@@ -471,6 +511,110 @@ const ProfilePage = () => {
             </Button>
           </div>
         )}
+
+        {/* My Coupons Section - Only shown for own profile */}
+        {isOwnProfile && myCoupons && myCoupons.length > 0 && (
+          <section className="mb-8">
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold">My Coupons</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {myCoupons.map((coupon) => (
+                <div key={coupon.id} className="relative group">
+                  <div className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
+                    {coupon.image_url && (
+                      <div className="aspect-video bg-muted">
+                        <img 
+                          src={coupon.image_url} 
+                          alt={coupon.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Gift className="h-4 w-4 text-primary" />
+                        <span className="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-800">
+                          Coupon
+                        </span>
+                        {coupon.valid_until && (
+                          <span className="text-xs text-muted-foreground">
+                            Valid until {new Date(coupon.valid_until).toLocaleDateString()}
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-medium text-sm mb-1">{coupon.title}</h4>
+                      {coupon.business_name && (
+                        <p className="text-xs text-primary font-medium mb-2">{coupon.business_name}</p>
+                      )}
+                      {coupon.discount_amount && (
+                        <div className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full inline-block mb-2 font-semibold">
+                          {coupon.discount_amount}
+                        </div>
+                      )}
+                      {coupon.description && (
+                        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{coupon.description}</p>
+                      )}
+                      <div className="flex items-center justify-between">
+                        {coupon.neighborhood && (
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <MapPin className="h-3 w-3" />
+                            <span>{coupon.neighborhood}</span>
+                          </div>
+                        )}
+                        <span className="text-xs text-muted-foreground">
+                          {coupon.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Edit/Delete buttons - show on hover */}
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditCoupon(coupon.id);
+                      }}
+                    >
+                      <Pencil className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteCoupon(coupon.id);
+                      }}
+                      disabled={deletingCoupon}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Empty state for coupons */}
+        {isOwnProfile && myCoupons && myCoupons.length === 0 && !couponsLoading && (
+          <section className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">My Coupons</h3>
+            </div>
+            <div className="text-center py-6 text-muted-foreground bg-muted/30 rounded-lg">
+              <Gift className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p>No coupons created yet</p>
+              <p className="text-sm">Share deals and offers with your community</p>
+            </div>
+          </section>
+        )}
       </main>
       
       <BottomNavigation />
@@ -505,6 +649,19 @@ const ProfilePage = () => {
           refetchEvents();
           setShowEditEvent(false);
           setSelectedEventForEdit(null);
+        }}
+      />
+      <EditCouponModal
+        isOpen={showEditCoupon}
+        onClose={() => {
+          setShowEditCoupon(false);
+          setSelectedCouponForEdit(null);
+        }}
+        coupon={selectedCouponForEdit}
+        onUpdate={() => {
+          refreshCoupons();
+          setShowEditCoupon(false);
+          setSelectedCouponForEdit(null);
         }}
       />
     </div>
