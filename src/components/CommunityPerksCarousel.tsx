@@ -123,7 +123,7 @@ export const CommunityPerksCarousel = () => {
                   <img 
                     src={item.image_url} 
                     alt={item.business_name || item.title}
-                    className="w-12 h-12 rounded-lg object-cover border border-border/20"
+                    className="w-20 h-20 rounded-lg object-cover border border-border/20"
                   />
                 )}
               </div>
