@@ -108,12 +108,6 @@ export const CommunityPerksCarousel = () => {
                     <h3 className="font-semibold text-foreground text-sm leading-tight">
                       {item.business_name}
                     </h3>
-                    {isUserCoupon && (
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5">
-                        <User className="w-3 h-3 mr-1" />
-                        Community
-                      </Badge>
-                    )}
                   </div>
                   <p className="text-xs text-primary font-medium mt-1">
                     {item.title}
