@@ -568,14 +568,16 @@ const Index = () => {
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-8 w-8 p-0 border-primary/30 hover:bg-primary/10 hover:border-primary/50"
-              onClick={() => setIsAddCouponModalOpen(true)}
-            >
-              <Plus className="w-4 h-4 text-primary" />
-            </Button>
+            {currentUserProfile?.account_type === 'business' && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 w-8 p-0 border-primary/30 hover:bg-primary/10 hover:border-primary/50"
+                onClick={() => setIsAddCouponModalOpen(true)}
+              >
+                <Plus className="w-4 h-4 text-primary" />
+              </Button>
+            )}
           </div>
           
           <div className="flex gap-2 mb-4">

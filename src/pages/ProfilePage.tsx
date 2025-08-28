@@ -371,20 +371,44 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Account Type Badge */}
+        {/* Account Type Badge and Business Features */}
         {profileData?.account_type && (
           <section className="mb-6">
-            <div className="inline-flex items-center">
-              <span 
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  profileData.account_type === 'business' 
-                    ? 'bg-purple-100 text-purple-800' 
-                    : 'bg-blue-100 text-blue-800'
-                }`}
-              >
-                {profileData.account_type === 'business' ? 'Business' : 'Personal'}
-              </span>
+            <div className="flex items-center justify-between">
+              <div className="inline-flex items-center">
+                <span 
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    profileData.account_type === 'business' 
+                      ? 'bg-purple-100 text-purple-800' 
+                      : 'bg-blue-100 text-blue-800'
+                  }`}
+                >
+                  {profileData.account_type === 'business' ? 'Business' : 'Personal'}
+                </span>
+              </div>
+              
+              {/* Business Account Features */}
+              {profileData.account_type === 'business' && isOwnProfile && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/profile/' + user?.id + '#coupons')}
+                  className="gap-2 border-purple-400 text-purple-600 hover:bg-purple-50 hover:text-purple-700"
+                >
+                  <Gift className="h-4 w-4" />
+                  Manage Coupons
+                </Button>
+              )}
             </div>
+            
+            {/* Business Profile Info */}
+            {profileData.account_type === 'business' && (
+              <div className="mt-3 p-3 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
+                <p className="text-sm text-purple-700 dark:text-purple-300">
+                  🏢 This is a business profile. {isOwnProfile ? 'You can create and manage coupons for your business.' : 'This business may offer special coupons and deals.'}
+                </p>
+              </div>
+            )}
           </section>
         )}
 

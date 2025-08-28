@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useUserCoupons } from "@/hooks/useUserCoupons";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 
 interface AddCouponModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface AddCouponModalProps {
 export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
   const { user } = useAuth();
   const { createCoupon, creating } = useUserCoupons();
+  const { profile } = useProfile(user?.id);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -81,6 +83,15 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
       toast({
         title: "Authentication required",
         description: "Please log in to create a coupon.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (profile?.account_type !== 'business') {
+      toast({
+        title: "Business account required",
+        description: "Only business accounts can create coupons. Please switch to a business account in settings.",
         variant: "destructive",
       });
       return;

@@ -9,6 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import BottomNavigation from '@/components/BottomNavigation';
+import Header from '@/components/Header';
+import NotificationsPopup from '@/components/NotificationsPopup';
 
 const MessagesPage = () => {
   const { user } = useAuth();
@@ -31,6 +34,7 @@ const MessagesPage = () => {
   const [newMessage, setNewMessage] = useState('');
   const [showUserSelect, setShowUserSelect] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,23 +78,24 @@ const MessagesPage = () => {
   const selectedUser = getSelectedUser();
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => selectedUserId ? clearSelectedUser() : navigate('/')}
-              className="rounded-full"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-xl font-semibold">
-              {selectedUser ? selectedUser.name || 'User' : 'Messages'}
-            </h1>
-          </div>
+    <div className="min-h-screen bg-background pb-20">
+      <Header 
+        title={selectedUser ? selectedUser.name || 'User' : 'Messages'}
+        onNotificationsClick={() => setShowNotifications(true)}
+      />
+
+      <div className="px-4 py-2">
+        <div className="flex items-center justify-between mb-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => selectedUserId ? clearSelectedUser() : navigate('/')}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {selectedUserId ? 'Back to Messages' : 'Back to Home'}
+          </Button>
+          
           {!selectedUserId && (
             <Button
               variant="outline"
@@ -172,7 +177,7 @@ const MessagesPage = () => {
         </div>
       )}
 
-      <div className="flex flex-col h-[calc(100vh-80px)]">
+      <div className="flex flex-col h-[calc(100vh-140px)]">
         {!selectedUserId ? (
           /* Conversations List */
           <ScrollArea className="flex-1 p-4">
@@ -298,6 +303,13 @@ const MessagesPage = () => {
           </>
         )}
       </div>
+
+      <NotificationsPopup 
+        isOpen={showNotifications} 
+        onClose={() => setShowNotifications(false)} 
+      />
+      
+      <BottomNavigation />
     </div>
   );
 };
