@@ -46,10 +46,10 @@ const SettingsPage = () => {
     try {
       setIsUpdatingInterests(true);
       await updateProfile({ interests: updatedInterests });
-      toast.success("תחום עניין נוסף בהצלחה");
+      toast.success("Interest added successfully");
     } catch (error) {
       console.error('Error updating interests:', error);
-      toast.error("שגיאה בהוספת תחום עניין");
+      toast.error("Error adding interest");
       // Revert on error
       setInterests(interests);
     } finally {
@@ -64,10 +64,10 @@ const SettingsPage = () => {
     try {
       setIsUpdatingInterests(true);
       await updateProfile({ interests: updatedInterests });
-      toast.success("תחום עניין הוסר בהצלחה");
+      toast.success("Interest removed successfully");
     } catch (error) {
       console.error('Error updating interests:', error);
-      toast.error("שגיאה בהסרת תחום עניין");
+      toast.error("Error removing interest");
       // Revert on error
       setInterests([...interests]);
     } finally {
@@ -92,22 +92,22 @@ const SettingsPage = () => {
   const settingsOptions = [
     {
       icon: User,
-      title: "המשתמש שלי",
+      title: "My Profile",
       onClick: () => navigate('/profile/1')
     },
     {
       icon: Lock,
-      title: "פרטיות",
+      title: "Privacy",
       onClick: () => console.log('Privacy settings')
     },
     {
       icon: HelpCircle,
-      title: "מידע ויצירת קשר",
+      title: "Help & Contact",
       onClick: () => console.log('Contact info')
     },
     {
       icon: LogOut,
-      title: "התנתק",
+      title: "Logout",
       onClick: handleLogout
     }
   ];
@@ -115,14 +115,14 @@ const SettingsPage = () => {
   return (
     <div className="min-h-screen bg-background pb-20" dir="ltr">
       <Header 
-        title="הגדרות"
+        title="Settings"
         onNotificationsClick={() => setShowNotifications(true)}
       />
 
       <main className="container mx-auto px-4 py-8">
         {/* Page Title */}
         <div className="text-center mb-12">
-          <h1 className="text-2xl font-bold text-foreground">הגדרות</h1>
+          <h1 className="text-2xl font-bold text-foreground">Settings</h1>
         </div>
 
         {/* Account Type Settings */}
@@ -169,19 +169,19 @@ const SettingsPage = () => {
         {/* Language and Location Settings */}
         <div className="max-w-md mx-auto space-y-4 mb-8">
           <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-            <h2 className="text-lg font-semibold text-foreground mb-4">העדפות</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-4">Preferences</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Globe className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-foreground">שפה</span>
+                  <span className="text-foreground">Language</span>
                 </div>
                 <LanguageSelector />
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <MapPin className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-foreground">שכונה</span>
+                  <span className="text-foreground">Neighborhood</span>
                 </div>
                 <NeighborhoodSelector />
               </div>
@@ -194,10 +194,10 @@ const SettingsPage = () => {
           <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
             <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Heart className="h-5 w-5 text-muted-foreground" />
-              תחומי עניין
+              Interests
             </h2>
             <p className="text-sm text-muted-foreground mb-4">
-              הוספת תחומי עניין תעזור לנו להציע לך תוכן מותאם אישית
+              Adding interests will help us suggest personalized content for you
             </p>
             
             {/* Add new interest */}
@@ -205,7 +205,7 @@ const SettingsPage = () => {
               <Input
                 value={newInterest}
                 onChange={(e) => setNewInterest(e.target.value)}
-                placeholder="הוסף תחום עניין..."
+                placeholder="Add interest..."
                 className="flex-1"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -242,7 +242,7 @@ const SettingsPage = () => {
                 </div>
               ))}
               {interests.length === 0 && (
-                <p className="text-muted-foreground text-sm">אין תחומי עניין עדיין</p>
+                <p className="text-muted-foreground text-sm">No interests yet</p>
               )}
             </div>
           </div>
@@ -274,7 +274,7 @@ const SettingsPage = () => {
               <Mail className="h-5 w-5 text-muted-foreground" />
               <div className="text-sm text-muted-foreground">
                 <span className="font-medium">yaara.shiran@gmail.com</span>
-                <span className="mr-2">לציריג קשר שאלות</span>
+                <span className="mr-2">For questions and contact</span>
               </div>
             </div>
           </div>
