@@ -160,9 +160,8 @@ const ProfilePage = () => {
 
   // Also refetch when returning from navigation
   useEffect(() => {
-    console.log('ProfilePage: URL id:', id, 'user.id:', user?.id, 'actualProfileId:', actualProfileId);
     refetch();
-  }, [id, user?.id, actualProfileId, refetch]);
+  }, [id, user?.id]);
 
   const handleLogout = () => {
     navigate('/login');
@@ -289,7 +288,7 @@ const ProfilePage = () => {
         <div className="flex items-start gap-4 mb-6">
           <div className="relative">
             <img 
-              src={profileData?.profile_image_url || profile1}
+              src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
               alt={profileData?.name || "User"}
               className="rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
               style={{ width: '70px', height: '70px', minWidth: '70px', minHeight: '70px' }}

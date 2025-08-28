@@ -254,15 +254,21 @@ const RegisterPage = () => {
                     onChange={handleImageUpload}
                     className="hidden"
                   />
-                  <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center overflow-hidden">
+                  <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center overflow-hidden border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 transition-colors">
                     {profileImage ? (
                       <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
-                      <Paperclip className="h-5 w-5 text-muted-foreground" />
+                      <div className="text-center">
+                        <Paperclip className="h-6 w-6 text-muted-foreground mx-auto" />
+                        <span className="text-xs text-muted-foreground mt-1 block">Upload</span>
+                      </div>
                     )}
                   </div>
                 </label>
-                <span className="text-foreground font-medium">Profile Picture</span>
+                <div>
+                  <span className="text-foreground font-medium">Profile Picture</span>
+                  <p className="text-sm text-muted-foreground">Click to upload your profile photo</p>
+                </div>
               </div>
             </div>
           </div>
