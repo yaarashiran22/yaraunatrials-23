@@ -10,7 +10,12 @@ import { CouponQRModal } from "@/components/CouponQRModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
-export const CommunityPerksCarousel = () => {
+interface CommunityPerksCarouselProps {
+  filter?: 'all' | 'following';
+  following?: string[];
+}
+
+export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: CommunityPerksCarouselProps) => {
   const { user } = useAuth();
   const { perks, loading: perksLoading } = useCommunityPerks();
   const { coupons, loading: couponsLoading } = useUserCoupons();
@@ -23,10 +28,23 @@ export const CommunityPerksCarousel = () => {
   const loading = perksLoading || couponsLoading;
   
   // Combine and sort both community perks and user coupons
-  const allItems = [
+  let allItems = [
     ...perks.map(perk => ({ ...perk, type: 'community_perk' })),
     ...coupons.map(coupon => ({ ...coupon, type: 'user_coupon', business_name: coupon.business_name || coupon.title }))
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+  // Filter based on following users if filter is 'following'
+  if (filter === 'following' && user) {
+    allItems = allItems.filter(item => {
+      // For user coupons, check if the creator is being followed
+      if (item.type === 'user_coupon') {
+        return (item as any).user_id && following.includes((item as any).user_id);
+      }
+      // For community perks, keep them all since they don't have specific user creators
+      // or check if they have a user_id and if that user is being followed
+      return !(item as any).user_id || following.includes((item as any).user_id);
+    });
+  }
 
   const handleClaimCoupon = (perkId: string) => {
     if (!user) {

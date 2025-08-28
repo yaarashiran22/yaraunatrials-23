@@ -34,6 +34,7 @@ import { useNewItem } from "@/contexts/NewItemContext";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import { useEvents } from "@/hooks/useEvents";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useFollowing } from "@/hooks/useFollowing";
 
 import profile1 from "@/assets/profile-1.jpg";
 import profile2 from "@/assets/profile-2.jpg";
@@ -112,8 +113,10 @@ const Index = () => {
   // Fetch events and meetups separately from the new events table
   const [meetupFilter, setMeetupFilter] = useState<'all' | 'friends'>('all');
   const [eventFilter, setEventFilter] = useState<'all' | 'following'>('all');
+  const [couponFilter, setCouponFilter] = useState<'all' | 'following'>('all');
   const { events: realEvents = [], refetch: refetchEvents } = useEvents('event', eventFilter === 'following');
   const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup', meetupFilter === 'friends');
+  const { following, isFollowing } = useFollowing();
 
   // Preload data immediately on component mount for instant loading
   useEffect(() => {
@@ -573,8 +576,53 @@ const Index = () => {
               <Plus className="w-4 h-4 text-primary" />
             </Button>
           </div>
+          
+          <div className="flex gap-2 mb-4">
+            <Button
+              variant={couponFilter === 'all' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setCouponFilter('all')}
+              className={`text-xs px-2 py-1 rounded-full h-6 ${
+                couponFilter === 'all' 
+                  ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                  : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+              }`}
+              style={couponFilter === 'all' ? {
+                backgroundColor: 'hsl(var(--accent-subtle))',
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'white'
+              } : {
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'hsl(var(--accent-subtle))'
+              }}
+            >
+              All
+            </Button>
+            <Button
+              variant={couponFilter === 'following' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setCouponFilter('following')}
+              className={`text-xs px-2 py-1 rounded-full h-6 ${
+                couponFilter === 'following' 
+                  ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                  : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+              }`}
+              style={couponFilter === 'following' ? {
+                backgroundColor: 'hsl(var(--accent-subtle))',
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'white'
+              } : {
+                borderColor: 'hsl(var(--accent-subtle))',
+                color: 'hsl(var(--accent-subtle))'
+              }}
+              disabled={!user}
+            >
+              <Users className="h-2.5 w-2.5 mr-1" />
+              Following
+            </Button>
+          </div>
           <div className="flex overflow-x-auto gap-5 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-            <CommunityPerksCarousel />
+            <CommunityPerksCarousel filter={couponFilter} following={following} />
           </div>
         </section>
 
