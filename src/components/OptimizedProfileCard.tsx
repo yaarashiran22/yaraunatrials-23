@@ -73,7 +73,7 @@ const OptimizedProfileCard = memo(({
         style={style}
       >
         <div className="relative">
-          <div className={`relative ${hasStories ? 'p-0.5 rounded-full bg-gradient-to-r from-orange-400 to-orange-600' : ''}`}>
+          <div className={`relative ${hasStories ? 'p-1 rounded-full bg-gradient-to-r from-orange-300 to-orange-500' : ''}`}>
             <Avatar 
               className={`w-[66px] h-[66px] cursor-pointer transition-all duration-200 shadow-lg ${hasStories ? 'border-2 border-white shadow-orange-500/20' : 'border-4 border-purple-400/40 hover:border-purple-500/60 shadow-purple-500/10'}`}
               onClick={handleAvatarClick}
