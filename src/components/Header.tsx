@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Search } from "lucide-react";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Search, MapPin } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useSearch } from "@/contexts/SearchContext";
@@ -67,8 +67,44 @@ const Header = ({
             una
           </div>
           
-          {/* Spacer */}
-          <div className="flex-1"></div>
+          {/* Neighborhood Selector */}
+          <div className="flex-1 flex justify-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 border-primary">
+                  <MapPin className="h-4 w-4" />
+                  <span className="text-sm font-medium">Palermo</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="bg-background border shadow-lg z-50 min-w-[200px]">
+                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
+                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                  <span>Palermo</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
+                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                  <span>Palermo Soho</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
+                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                  <span>Palermo Hollywood</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
+                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                  <span>Palermo Chico</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
+                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                  <span>Las Cañitas</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
+                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                  <span>Villa Crespo</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           
           {/* Search and Notifications */}
           <div className="flex items-center gap-2">
