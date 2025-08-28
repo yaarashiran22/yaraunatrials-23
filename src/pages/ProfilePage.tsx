@@ -400,16 +400,6 @@ const ProfilePage = () => {
                 </Button>
               )}
             </div>
-            
-            {/* Business Profile Info */}
-            {profileData.account_type === 'business' && (
-              <div className="mt-3 p-3 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
-                <p className="text-sm text-purple-700 dark:text-purple-300">
-                  🏢 This is a business profile. {isOwnProfile ? 'You can create and manage coupons for your business.' : 'This business may offer special coupons and deals.'}
-                </p>
-              </div>
-            )}
-
             {/* Business Coupons Display */}
             {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
               <div className="mt-4">
