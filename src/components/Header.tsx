@@ -71,35 +71,35 @@ const Header = ({
           <div className="flex-1 flex justify-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 border-primary">
+                <Button variant="outline" className="flex items-center gap-2 bg-accent text-accent-foreground hover:bg-accent/90 border-accent">
                   <MapPin className="h-4 w-4" />
                   <span className="text-sm font-medium">Palermo</span>
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" className="bg-background border shadow-lg z-50 min-w-[200px]">
-                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
-                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                <DropdownMenuItem className="cursor-pointer hover:bg-accent/10">
+                  <MapPin className="h-4 w-4 mr-2 text-accent" />
                   <span>Palermo</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
-                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                <DropdownMenuItem className="cursor-pointer hover:bg-accent/10">
+                  <MapPin className="h-4 w-4 mr-2 text-accent" />
                   <span>Palermo Soho</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
-                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                <DropdownMenuItem className="cursor-pointer hover:bg-accent/10">
+                  <MapPin className="h-4 w-4 mr-2 text-accent" />
                   <span>Palermo Hollywood</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
-                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                <DropdownMenuItem className="cursor-pointer hover:bg-accent/10">
+                  <MapPin className="h-4 w-4 mr-2 text-accent" />
                   <span>Palermo Chico</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
-                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                <DropdownMenuItem className="cursor-pointer hover:bg-accent/10">
+                  <MapPin className="h-4 w-4 mr-2 text-accent" />
                   <span>Las Cañitas</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer hover:bg-primary/10">
-                  <MapPin className="h-4 w-4 mr-2 text-primary" />
+                <DropdownMenuItem className="cursor-pointer hover:bg-accent/10">
+                  <MapPin className="h-4 w-4 mr-2 text-accent" />
                   <span>Villa Crespo</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
