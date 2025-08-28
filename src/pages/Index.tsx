@@ -183,11 +183,10 @@ const Index = () => {
       profilesList.push(currentUserDisplayProfile);
     }
 
-    // Add other profiles (top 6 newest users only for faster loading)
+    // Add other profiles (all users for complete community view)
     if (profiles.length > 0) {
       const otherProfiles = profiles
         .filter(p => p.id !== user?.id)
-        .slice(0, 6) // Reduced to 6 for faster loading
         .map(p => ({
           id: p.id,
           name: p.name || "User",
