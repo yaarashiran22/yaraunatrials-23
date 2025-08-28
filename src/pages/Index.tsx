@@ -110,8 +110,9 @@ const Index = () => {
   } = useOptimizedHomepage();
 
   // Fetch events and meetups separately from the new events table
+  const [meetupFilter, setMeetupFilter] = useState<'all' | 'friends'>('all');
   const { events: realEvents = [], refetch: refetchEvents } = useEvents('event');
-  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup');
+  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup', meetupFilter === 'friends');
 
   // Preload data immediately on component mount for instant loading
   useEffect(() => {
@@ -336,6 +337,28 @@ const Index = () => {
                 <Plus className="h-3 w-3" />
               </Button>
             </div>
+          </div>
+          
+          {/* Filter Buttons */}
+          <div className="flex gap-2 mb-4">
+            <Button
+              variant={meetupFilter === 'all' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setMeetupFilter('all')}
+              className="text-xs px-3 py-1 rounded-full"
+            >
+              All
+            </Button>
+            <Button
+              variant={meetupFilter === 'friends' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setMeetupFilter('friends')}
+              className="text-xs px-3 py-1 rounded-full"
+              disabled={!user}
+            >
+              <Users className="h-3 w-3 mr-1" />
+              Friends
+            </Button>
           </div>
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />
