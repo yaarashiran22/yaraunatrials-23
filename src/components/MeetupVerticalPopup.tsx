@@ -24,6 +24,7 @@ interface MeetupVerticalPopupProps {
     image: string;
     price: string;
     description?: string;
+    neighborhood?: string;
     seller?: {
       id?: string;
       name: string;
@@ -394,7 +395,7 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
                   <p className="font-semibold text-foreground text-sm">{displayItem.seller.name}</p>
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <MapPin className="h-3 w-3" />
-                    <span>{displayItem.seller.location}</span>
+                    <span>{(displayItem as any).neighborhood || displayItem.seller.location}</span>
                   </div>
                 </div>
               </div>

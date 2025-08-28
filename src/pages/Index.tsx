@@ -235,6 +235,7 @@ const Index = () => {
       image: meetup.image_url || meetup.image,
       price: meetup.price || 'Free',
       description: meetup.description || meetup.title,
+      neighborhood: meetup.neighborhood || meetup.location,
       seller: {
         id: meetup.uploader?.id,
         name: meetup.uploader?.name || meetup.organizer?.name || "Organizer",
