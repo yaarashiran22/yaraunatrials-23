@@ -2,6 +2,7 @@ import { memo, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import ProfilePictureViewer from "./ProfilePictureViewer";
+import AddStoryButton from "./AddStoryButton";
 
 interface OptimizedProfileCardProps {
   id: string;
@@ -21,10 +22,16 @@ const OptimizedProfileCard = memo(({
   isCurrentUser = false 
 }: OptimizedProfileCardProps) => {
   const [showProfileViewer, setShowProfileViewer] = useState(false);
+  const [showAddStory, setShowAddStory] = useState(false);
   const navigate = useNavigate();
 
   const handleAvatarClick = () => {
     setShowProfileViewer(true);
+  };
+
+  const handleAddStoryClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering avatar click
+    setShowAddStory(true);
   };
 
   const handleNavigateToProfile = () => {
@@ -58,7 +65,10 @@ const OptimizedProfileCard = memo(({
           </Avatar>
           
           {isCurrentUser && (
-            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full border-2 border-background flex items-center justify-center">
+            <div 
+              className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full border-2 border-background flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"
+              onClick={handleAddStoryClick}
+            >
               <span className="text-primary-foreground text-xs">+</span>
             </div>
           )}
@@ -79,6 +89,17 @@ const OptimizedProfileCard = memo(({
         userName={name}
         userId={isCurrentUser ? undefined : id}
       />
+      
+      {/* Add Story functionality */}
+      {showAddStory && (
+        <div className="fixed inset-0 z-50">
+          <AddStoryButton />
+          <div 
+            className="fixed inset-0 bg-black/50 -z-10"
+            onClick={() => setShowAddStory(false)}
+          />
+        </div>
+      )}
     </>
   );
 });
