@@ -48,6 +48,14 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
     [getDisplayName, selectedNeighborhoodObj]
   );
 
+  // Memoize display names for all neighborhoods to prevent re-renders
+  const neighborhoodDisplayNames = useMemo(() => {
+    return neighborhoods.map(neighborhood => ({
+      ...neighborhood,
+      displayName: getDisplayName(neighborhood)
+    }));
+  }, [neighborhoods, getDisplayName]);
+
   const handleNeighborhoodSelect = useCallback((neighborhoodName: string) => {
     setSelectedNeighborhood(neighborhoodName);
     onNeighborhoodChange?.(neighborhoodName);
@@ -63,14 +71,14 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background border shadow-lg z-50 relative">
-        {neighborhoods.map((neighborhood) => (
+        {neighborhoodDisplayNames.map((neighborhood) => (
           <DropdownMenuItem 
             key={neighborhood.name}
             onClick={() => handleNeighborhoodSelect(neighborhood.name)}
             className={`cursor-pointer ${selectedNeighborhood === neighborhood.name ? 'bg-primary/10' : ''}`}
           >
             <MapPin className="h-4 w-4 mr-2 text-primary" />
-            <span>{getDisplayName(neighborhood)}</span>
+            <span>{neighborhood.displayName}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
