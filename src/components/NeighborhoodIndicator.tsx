@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const NeighborhoodIndicator = () => {
@@ -27,16 +27,17 @@ const NeighborhoodIndicator = () => {
     { name: "Caballito", nameEn: "Caballito", nameEs: "Caballito" }
   ], []);
 
-  const getDisplayName = (neighborhood: any) => {
+  const getDisplayName = useCallback((neighborhood: any) => {
+    if (!neighborhood) return 'Palermo';
     switch (language) {
       case 'en':
-        return neighborhood.nameEn;
+        return neighborhood.nameEn || neighborhood.name;
       case 'es':
-        return neighborhood.nameEs;
+        return neighborhood.nameEs || neighborhood.name;
       default:
         return neighborhood.name;
     }
-  };
+  }, [language]);
 
   // Memoize current neighborhood calculation to prevent infinite re-renders
   const currentNeighborhood = useMemo(() => {
@@ -51,7 +52,7 @@ const NeighborhoodIndicator = () => {
 
   const displayName = useMemo(() => {
     return getDisplayName(currentNeighborhoodObj);
-  }, [currentNeighborhoodObj, language]);
+  }, [getDisplayName, currentNeighborhoodObj]);
 
   return (
     <DropdownMenu>
