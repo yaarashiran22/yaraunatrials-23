@@ -54,8 +54,7 @@ const fetchHomepageData = async () => {
           .from('profiles')
           .select('id, name, profile_image_url')
           .not('name', 'is', null)
-          .order('created_at', { ascending: false })
-          .limit(6), // Reduced to 6 for faster loading
+          .order('created_at', { ascending: false }), // Removed limit to show all users
       supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
