@@ -50,11 +50,9 @@ import artPiece3 from "@/assets/canvas-art-3.jpg";
 import artPiece4 from "@/assets/canvas-art-4.jpg";
 
 const Index = () => {
-  console.log('Index component rendering');
   const { t, language } = useLanguage();
   const { setRefreshCallback, openNewItem } = useNewItem();
   const { user } = useAuth();
-  console.log('Auth user:', user);
   const { profile: currentUserProfile } = useProfile(user?.id);
   const navigate = useNavigate();
 

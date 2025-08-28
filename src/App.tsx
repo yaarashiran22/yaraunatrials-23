@@ -63,11 +63,8 @@ const DesktopNavItem = ({ href, icon: Icon, label }: { href: string; icon: any; 
 };
 
 const AppContent = () => {
-  console.log('AppContent rendering');
   const { isOpen, closeNewItem, refreshItems } = useNewItem();
   const { t } = useLanguage();
-  
-  console.log('AppContent hooks loaded, rendering router');
   return (
     <BrowserRouter>
       {/* Desktop and mobile responsive layout */}
