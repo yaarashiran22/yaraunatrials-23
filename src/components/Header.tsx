@@ -67,12 +67,8 @@ const Header = ({
             una
           </div>
           
-          {/* Location Switcher - Center */}
-          <div className="flex-1 flex justify-center">
-            <div className="text-sm text-muted-foreground px-4 py-2 bg-accent rounded-lg">
-              Palermo
-            </div>
-          </div>
+          {/* Spacer */}
+          <div className="flex-1"></div>
           
           {/* Search and Notifications */}
           <div className="flex items-center gap-2">
