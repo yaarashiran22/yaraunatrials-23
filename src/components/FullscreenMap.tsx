@@ -67,7 +67,7 @@ const FullscreenMap = ({ isOpen, onClose }: FullscreenMapProps) => {
       })
         .addTo(mapInstanceRef.current)
         .bindPopup(`
-          <div dir="rtl" class="text-right text-sm">
+          <div dir="rtl" class="text-right text-base">
             <div class="flex items-center gap-2">
               <img 
                 src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 

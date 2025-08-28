@@ -97,7 +97,7 @@ const TelAvivMap = () => {
           const infoWindow = new (window as any).google.maps.InfoWindow({
             content: `
               <div style="text-align: center; font-family: 'Inter', sans-serif; padding: 8px;">
-                <strong style="color: #333; font-size: 14px;">${location.name}</strong>
+                <strong style="color: #333; font-size: 16px;">${location.name}</strong>
               </div>
             `
           });

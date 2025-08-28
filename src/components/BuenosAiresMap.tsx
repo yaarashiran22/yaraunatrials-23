@@ -72,7 +72,7 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
       })
         .addTo(mapInstanceRef.current)
         .bindPopup(`
-          <div dir="rtl" class="text-right text-sm">
+          <div dir="rtl" class="text-right text-base">
             <div class="flex items-center gap-2">
               <img 
                 src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
