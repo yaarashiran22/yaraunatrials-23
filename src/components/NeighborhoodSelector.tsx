@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NeighborhoodSelectorProps {
@@ -18,24 +18,35 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
   const { language } = useLanguage();
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("Palermo");
 
-  const neighborhoods = [
+  const neighborhoods = useMemo(() => [
     { name: "Palermo", nameEn: "Palermo", nameEs: "Palermo" },
     { name: "Palermo Soho", nameEn: "Palermo Soho", nameEs: "Palermo Soho" },
     { name: "Palermo Hollywood", nameEn: "Palermo Hollywood", nameEs: "Palermo Hollywood" },
     { name: "Recoleta", nameEn: "Recoleta", nameEs: "Recoleta" },
     { name: "Villa Crespo", nameEn: "Villa Crespo", nameEs: "Villa Crespo" }
-  ];
+  ], []);
 
   const getDisplayName = useCallback((neighborhood: any) => {
+    if (!neighborhood) return 'Palermo';
     switch (language) {
       case 'en':
-        return neighborhood.nameEn;
+        return neighborhood.nameEn || neighborhood.name;
       case 'es':
-        return neighborhood.nameEs;
+        return neighborhood.nameEs || neighborhood.name;
       default:
         return neighborhood.name;
     }
   }, [language]);
+
+  const selectedNeighborhoodObj = useMemo(() => 
+    neighborhoods.find(n => n.name === selectedNeighborhood) || neighborhoods[0], 
+    [neighborhoods, selectedNeighborhood]
+  );
+
+  const displayName = useMemo(() => 
+    getDisplayName(selectedNeighborhoodObj), 
+    [getDisplayName, selectedNeighborhoodObj]
+  );
 
   const handleNeighborhoodSelect = useCallback((neighborhoodName: string) => {
     setSelectedNeighborhood(neighborhoodName);
@@ -47,7 +58,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex items-center gap-1 bg-accent text-accent-foreground hover:bg-accent/80">
           <MapPin className="h-4 w-4" />
-          <span className="text-sm">{getDisplayName(neighborhoods.find(n => n.name === selectedNeighborhood))}</span>
+          <span className="text-sm">{displayName}</span>
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
