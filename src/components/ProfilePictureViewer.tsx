@@ -50,7 +50,7 @@ const ProfilePictureViewer = ({ isOpen, onClose, imageUrl, userName, userId }: P
               {userName}
             </p>
             {userId && (
-              <p className="text-white/70 text-sm mt-1">Click to view profile</p>
+              <p className="text-white/70 text-sm mt-1">לחץ כדי לצפות בפרופיל</p>
             )}
           </div>
         </div>

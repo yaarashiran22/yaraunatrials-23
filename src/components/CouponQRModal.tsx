@@ -47,15 +47,15 @@ export const CouponQRModal = ({ isOpen, onClose, perk, userCoupon, claim, qrCode
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md mx-auto bg-background border border-border/50 shadow-xl max-h-[95vh] overflow-y-auto">
-        <DialogHeader className="text-center space-y-3 sticky top-0 bg-background z-10 pb-4">
+      <DialogContent className="max-w-md mx-auto bg-background border border-border/50 shadow-xl">
+        <DialogHeader className="text-center space-y-3">
           <DialogTitle className="text-xl font-bold text-foreground flex items-center justify-center gap-2">
             <QrCode className="w-6 h-6 text-primary" />
             Your Coupon
           </DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-6 pt-2 pb-4">
+        <div className="space-y-6 pt-4">
           {/* Business Info */}
           <div className="text-center space-y-2">
             <h3 className="text-lg font-semibold text-foreground">{item.business_name || item.title}</h3>
@@ -128,15 +128,13 @@ export const CouponQRModal = ({ isOpen, onClose, perk, userCoupon, claim, qrCode
             </div>
           )}
 
-          <div className="sticky bottom-0 bg-background pt-4">
-            <Button 
-              onClick={onClose}
-              className="w-full"
-              variant="default"
-            >
-              Close
-            </Button>
-          </div>
+          <Button 
+            onClick={onClose}
+            className="w-full"
+            variant="default"
+          >
+            Close
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

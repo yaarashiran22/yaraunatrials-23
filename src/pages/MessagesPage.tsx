@@ -93,9 +93,10 @@ const MessagesPage = () => {
           </div>
           {!selectedUserId && (
             <Button
-              onClick={() => setShowUserSelect(true)}
-              className="gap-2 bg-coral hover:bg-coral/90 text-white border-coral"
+              variant="outline"
               size="sm"
+              onClick={() => setShowUserSelect(true)}
+              className="gap-2"
             >
               <Users className="h-4 w-4" />
               New Chat

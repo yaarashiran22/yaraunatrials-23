@@ -25,7 +25,7 @@ export interface Event {
   };
 }
 
-const fetchEvents = async (eventType?: 'event' | 'meetup', followingOnly?: boolean, userId?: string): Promise<Event[]> => {
+const fetchEvents = async (eventType?: 'event' | 'meetup', friendsOnly?: boolean, userId?: string): Promise<Event[]> => {
   let query = supabase
     .from('events')
     .select(`
@@ -51,22 +51,23 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', followingOnly?: boole
     query = query.eq('event_type', eventType);
   }
 
-  if (followingOnly && userId) {
-    // Get user's following first
-    const { data: followingData, error: followingError } = await supabase
-      .from('user_following')
-      .select('following_id')
-      .eq('follower_id', userId);
+  if (friendsOnly && userId) {
+    // Get user's friends first
+    const { data: friendsData, error: friendsError } = await supabase
+      .from('user_friends')
+      .select('friend_id')
+      .eq('user_id', userId);
 
-    if (followingError) throw followingError;
+    if (friendsError) throw friendsError;
 
-    const followingIds = followingData?.map(f => f.following_id) || [];
+    const friendIds = friendsData?.map(f => f.friend_id) || [];
     
-    // Filter events to only include those created by users we're following
-    if (followingIds.length > 0) {
-      query = query.in('user_id', followingIds);
+    // Filter events to only include those created by friends or joined by friends
+    // For now, we'll filter by creator only. Later we can add RSVP join filtering
+    if (friendIds.length > 0) {
+      query = query.in('user_id', friendIds);
     } else {
-      // If user is not following anyone, return empty array
+      // If user has no friends, return empty array
       return [];
     }
   }
@@ -105,15 +106,15 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', followingOnly?: boole
   }));
 };
 
-export const useEvents = (eventType?: 'event' | 'meetup', followingOnly?: boolean) => {
+export const useEvents = (eventType?: 'event' | 'meetup', friendsOnly?: boolean) => {
   const { user } = useAuth();
   
   const queryResult = useQuery({
-    queryKey: ['events', eventType, followingOnly, user?.id],
-    queryFn: () => fetchEvents(eventType, followingOnly, user?.id),
+    queryKey: ['events', eventType, friendsOnly, user?.id],
+    queryFn: () => fetchEvents(eventType, friendsOnly, user?.id),
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
-    enabled: !followingOnly || !!user?.id, // Only fetch following events if user is logged in
+    enabled: !friendsOnly || !!user?.id, // Only fetch friends events if user is logged in
   });
 
   return {
