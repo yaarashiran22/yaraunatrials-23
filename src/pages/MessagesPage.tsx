@@ -96,7 +96,11 @@ const MessagesPage = () => {
               variant="outline"
               size="sm"
               onClick={() => setShowUserSelect(true)}
-              className="gap-2"
+              className="gap-2 border-orange-400 text-orange-600 hover:bg-orange-50 hover:text-orange-700"
+              style={{
+                borderColor: 'hsl(20 90% 60%)',
+                color: 'hsl(20 90% 50%)'
+              }}
             >
               <Users className="h-4 w-4" />
               New Chat

@@ -110,9 +110,10 @@ const Index = () => {
   } = useOptimizedHomepage();
 
   // Fetch events and meetups separately from the new events table
-  const [meetupFilter, setMeetupFilter] = useState<'all' | 'friends'>('all');
-  const { events: realEvents = [], refetch: refetchEvents } = useEvents('event');
-  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup', meetupFilter === 'friends');
+  const [meetupFilter, setMeetupFilter] = useState<'all' | 'following'>('all');
+  const [eventFilter, setEventFilter] = useState<'all' | 'following'>('all');
+  const { events: realEvents = [], refetch: refetchEvents } = useEvents('event', eventFilter === 'following');
+  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup', meetupFilter === 'following');
 
   // Preload data immediately on component mount for instant loading
   useEffect(() => {
@@ -350,14 +351,14 @@ const Index = () => {
               All
             </Button>
             <Button
-              variant={meetupFilter === 'friends' ? 'default' : 'outline'}
+              variant={meetupFilter === 'following' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setMeetupFilter('friends')}
+              onClick={() => setMeetupFilter('following')}
               className="text-xs px-3 py-1 rounded-full"
               disabled={!user}
             >
               <Users className="h-3 w-3 mr-1" />
-              Friends
+              Following
             </Button>
           </div>
           {loading ? (
@@ -417,7 +418,7 @@ const Index = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-foreground relative">
               <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
-                {t('events.title')}
+                Happening Now
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
@@ -434,6 +435,28 @@ const Index = () => {
                 <Plus className="h-3 w-3" />
               </Button>
             </div>
+          </div>
+          
+          {/* Filter Buttons */}
+          <div className="flex gap-2 mb-4">
+            <Button
+              variant={eventFilter === 'all' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setEventFilter('all')}
+              className="text-xs px-3 py-1 rounded-full"
+            >
+              All
+            </Button>
+            <Button
+              variant={eventFilter === 'following' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setEventFilter('following')}
+              className="text-xs px-3 py-1 rounded-full"
+              disabled={!user}
+            >
+              <Users className="h-3 w-3 mr-1" />
+              Following
+            </Button>
           </div>
           {loading ? (
             <FastLoadingSkeleton type="cards" count={3} />

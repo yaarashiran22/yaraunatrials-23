@@ -13,6 +13,7 @@ import Header from "@/components/Header";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import { useUserEvents } from "@/hooks/useUserEvents";
 import { useFriends } from "@/hooks/useFriends";
+import { useFollowing } from "@/hooks/useFollowing";
 import { useProfile } from "@/hooks/useProfile";
 import { useUserPosts } from "@/hooks/useUserPosts";
 import { getRelativeDay } from "@/utils/dateUtils";
@@ -48,6 +49,7 @@ const ProfilePage = () => {
   const { events: userEvents, loading: eventsLoading, deleteEvent, refetch: refetchEvents } = useUserEvents(actualProfileId);
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
   const { addFriend, isFriend } = useFriends();
+  const { isFollowing, toggleFollow, isToggling } = useFollowing();
   const { myCoupons, loading: couponsLoading, deleteCoupon, deleting: deletingCoupon, refreshCoupons } = useMyCoupons(user?.id);
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
@@ -340,14 +342,25 @@ const ProfilePage = () => {
                 </Button>
               )}
                {!isOwnProfile && (
-                 <Button 
-                   variant="outline" 
-                   size="sm" 
-                   className={`rounded-full px-3 py-1 h-7 text-xs ${isFriend(actualProfileId || '') ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
-                   onClick={handleAddFriend}
-                 >
-                   {isFriend(actualProfileId || '') ? 'Added to friends' : 'Add'}
-                 </Button>
+                 <div className="flex gap-2">
+                   <Button 
+                     variant="outline" 
+                     size="sm" 
+                     className={`rounded-full px-3 py-1 h-7 text-xs ${isFriend(actualProfileId || '') ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
+                     onClick={handleAddFriend}
+                   >
+                     {isFriend(actualProfileId || '') ? 'Added to friends' : 'Add'}
+                   </Button>
+                   <Button 
+                     variant="outline" 
+                     size="sm" 
+                     className={`rounded-full px-3 py-1 h-7 text-xs ${isFollowing(actualProfileId || '') ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : ''}`}
+                     onClick={() => actualProfileId && toggleFollow(actualProfileId)}
+                     disabled={isToggling}
+                   >
+                     {isFollowing(actualProfileId || '') ? 'Following' : 'Follow'}
+                   </Button>
+                 </div>
                )}
                {isOwnProfile && (
                 <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
