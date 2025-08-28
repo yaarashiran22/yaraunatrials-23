@@ -387,8 +387,8 @@ const ProfilePage = () => {
                 </span>
               </div>
               
-              {/* Business Account Features */}
-              {profileData.account_type === 'business' && isOwnProfile && (
+              {/* Business Account Features - Show manage button only when no coupons */}
+              {profileData.account_type === 'business' && isOwnProfile && (!myCoupons || myCoupons.length === 0) && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -407,6 +407,118 @@ const ProfilePage = () => {
                 <p className="text-sm text-purple-700 dark:text-purple-300">
                   🏢 This is a business profile. {isOwnProfile ? 'You can create and manage coupons for your business.' : 'This business may offer special coupons and deals.'}
                 </p>
+              </div>
+            )}
+
+            {/* Business Coupons Display */}
+            {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-sm font-semibold text-purple-700">Business Coupons</h4>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/profile/' + user?.id + '#coupons')}
+                    className="gap-2 border-purple-400 text-purple-600 hover:bg-purple-50 hover:text-purple-700 text-xs px-2 py-1 h-6"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add More
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {myCoupons.slice(0, 4).map((coupon) => (
+                    <div key={coupon.id} className="relative group">
+                      <div className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
+                        {coupon.image_url && (
+                          <div className="aspect-video bg-muted">
+                            <img 
+                              src={coupon.image_url} 
+                              alt={coupon.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Gift className="h-3 w-3 text-primary" />
+                            <span className="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-800">
+                              Coupon
+                            </span>
+                            {coupon.valid_until && (
+                              <span className="text-xs text-muted-foreground">
+                                Valid until {new Date(coupon.valid_until).toLocaleDateString()}
+                              </span>
+                            )}
+                          </div>
+                          <h5 className="font-medium text-sm mb-1">{coupon.title}</h5>
+                          {coupon.business_name && (
+                            <p className="text-xs text-primary font-medium mb-1">{coupon.business_name}</p>
+                          )}
+                          {coupon.discount_amount && (
+                            <div className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full inline-block mb-2 font-semibold">
+                              {coupon.discount_amount}
+                            </div>
+                          )}
+                          {coupon.description && (
+                            <p className="text-xs text-muted-foreground mb-2 line-clamp-1">{coupon.description}</p>
+                          )}
+                          <div className="flex items-center justify-between">
+                            {coupon.neighborhood && (
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <MapPin className="h-2 w-2" />
+                                <span>{coupon.neighborhood}</span>
+                              </div>
+                            )}
+                            <span className="text-xs text-muted-foreground">
+                              {coupon.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Edit/Delete buttons - show on hover */}
+                      <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="h-6 w-6 p-0 bg-white/90 hover:bg-white"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditCoupon(coupon.id);
+                          }}
+                        >
+                          <Pencil className="h-2 w-2" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="h-6 w-6 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteCoupon(coupon.id);
+                          }}
+                          disabled={deletingCoupon}
+                        >
+                          <Trash2 className="h-2 w-2" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {myCoupons.length > 4 && (
+                  <div className="mt-2 text-center">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => navigate('/profile/' + user?.id + '#coupons')}
+                      className="text-xs text-purple-600 hover:text-purple-700"
+                    >
+                      View all {myCoupons.length} coupons
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
           </section>
@@ -549,109 +661,6 @@ const ProfilePage = () => {
           </div>
         )}
 
-        {/* My Coupons Section - Only shown for own profile */}
-        {isOwnProfile && myCoupons && myCoupons.length > 0 && (
-          <section className="mb-8">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold">My Coupons</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {myCoupons.map((coupon) => (
-                <div key={coupon.id} className="relative group">
-                  <div className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
-                    {coupon.image_url && (
-                      <div className="aspect-video bg-muted">
-                        <img 
-                          src={coupon.image_url} 
-                          alt={coupon.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <div className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Gift className="h-4 w-4 text-primary" />
-                        <span className="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-800">
-                          Coupon
-                        </span>
-                        {coupon.valid_until && (
-                          <span className="text-xs text-muted-foreground">
-                            Valid until {new Date(coupon.valid_until).toLocaleDateString()}
-                          </span>
-                        )}
-                      </div>
-                      <h4 className="font-medium text-sm mb-1">{coupon.title}</h4>
-                      {coupon.business_name && (
-                        <p className="text-xs text-primary font-medium mb-2">{coupon.business_name}</p>
-                      )}
-                      {coupon.discount_amount && (
-                        <div className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full inline-block mb-2 font-semibold">
-                          {coupon.discount_amount}
-                        </div>
-                      )}
-                      {coupon.description && (
-                        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{coupon.description}</p>
-                      )}
-                      <div className="flex items-center justify-between">
-                        {coupon.neighborhood && (
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <MapPin className="h-3 w-3" />
-                            <span>{coupon.neighborhood}</span>
-                          </div>
-                        )}
-                        <span className="text-xs text-muted-foreground">
-                          {coupon.is_active ? 'Active' : 'Inactive'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Edit/Delete buttons - show on hover */}
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditCoupon(coupon.id);
-                      }}
-                    >
-                      <Pencil className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteCoupon(coupon.id);
-                      }}
-                      disabled={deletingCoupon}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Empty state for coupons */}
-        {isOwnProfile && myCoupons && myCoupons.length === 0 && !couponsLoading && (
-          <section className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">My Coupons</h3>
-            </div>
-            <div className="text-center py-6 text-muted-foreground bg-muted/30 rounded-lg">
-              <Gift className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              <p>No coupons created yet</p>
-              <p className="text-sm">Share deals and offers with your community</p>
-            </div>
-          </section>
-        )}
       </main>
       
       <BottomNavigation />
