@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin } from 'lucide-react';
+import { MapPin, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -29,6 +30,7 @@ const DiscoverPage = () => {
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
+  const [filterType, setFilterType] = useState<'all' | 'friends' | 'following'>('all');
 
   // Function to handle neighborhood change
   const handleNeighborhoodChange = (neighborhoodName: string) => {
@@ -144,15 +146,55 @@ const DiscoverPage = () => {
 
     // Fetch text pins from database (using items table with category 'text_pin')
     try {
-      const { data: textPins, error } = await supabase
+      let query = supabase
         .from('items')
         .select('*')
         .eq('category', 'text_pin')
         .eq('status', 'active');
 
-      if (error) {
-        console.error('Error fetching text pins:', error);
-        return;
+      let textPins = [];
+
+      if (filterType === 'friends' && user?.id) {
+        // Get user's friends
+        const { data: friendsData, error: friendsError } = await supabase
+          .from('user_friends')
+          .select('friend_id')
+          .eq('user_id', user.id);
+
+        if (friendsError) {
+          console.error('Error fetching friends:', friendsError);
+          return;
+        }
+
+        const friendIds = friendsData?.map(f => f.friend_id) || [];
+        if (friendIds.length > 0) {
+          const { data, error } = await query.in('user_id', friendIds);
+          if (error) throw error;
+          textPins = data || [];
+        }
+      } else if (filterType === 'following' && user?.id) {
+        // Get users the current user is following
+        const { data: followingData, error: followingError } = await supabase
+          .from('user_following')
+          .select('following_id')
+          .eq('follower_id', user.id);
+
+        if (followingError) {
+          console.error('Error fetching following:', followingError);
+          return;
+        }
+
+        const followingIds = followingData?.map(f => f.following_id) || [];
+        if (followingIds.length > 0) {
+          const { data, error } = await query.in('user_id', followingIds);
+          if (error) throw error;
+          textPins = data || [];
+        }
+      } else {
+        // Show all text pins
+        const { data, error } = await query;
+        if (error) throw error;
+        textPins = data || [];
       }
 
       // Fetch user profiles for text pins
@@ -403,7 +445,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addTextPinMarkers();
     }
-  }, [isLoading]);
+  }, [isLoading, filterType]); // Add filterType dependency
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -414,6 +456,73 @@ const DiscoverPage = () => {
       
       
       <main className="container mx-auto px-4 py-3 space-y-6">
+        {/* Filter Buttons */}
+        <div className="flex gap-2 justify-center">
+          <Button
+            variant={filterType === 'all' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterType('all')}
+            className={`text-xs px-3 py-1 rounded-full ${
+              filterType === 'all' 
+                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+            }`}
+            style={filterType === 'all' ? {
+              backgroundColor: 'hsl(var(--accent-subtle))',
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'white'
+            } : {
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'hsl(var(--accent-subtle))'
+            }}
+          >
+            All
+          </Button>
+          <Button
+            variant={filterType === 'friends' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterType('friends')}
+            className={`text-xs px-3 py-1 rounded-full ${
+              filterType === 'friends' 
+                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+            }`}
+            style={filterType === 'friends' ? {
+              backgroundColor: 'hsl(var(--accent-subtle))',
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'white'
+            } : {
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'hsl(var(--accent-subtle))'
+            }}
+            disabled={!user}
+          >
+            <Users className="h-3 w-3 mr-1" />
+            Friends
+          </Button>
+          <Button
+            variant={filterType === 'following' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterType('following')}
+            className={`text-xs px-3 py-1 rounded-full ${
+              filterType === 'following' 
+                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+            }`}
+            style={filterType === 'following' ? {
+              backgroundColor: 'hsl(var(--accent-subtle))',
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'white'
+            } : {
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'hsl(var(--accent-subtle))'
+            }}
+            disabled={!user}
+          >
+            <Users className="h-3 w-3 mr-1" />
+            Following
+          </Button>
+        </div>
 
         {/* Map Section */}
         <div className="relative">
