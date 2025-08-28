@@ -268,14 +268,6 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={onClose}
-          >
-            <X className="h-5 w-5" />
-          </Button>
-          
           <div className="flex items-center gap-2">
             {allItems.length > 1 && (
               <div className="text-sm text-muted-foreground bg-white/80 dark:bg-black/20 px-3 py-1 rounded-full">
@@ -283,6 +275,14 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
               </div>
             )}
           </div>
+          
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={onClose}
+          >
+            <X className="h-5 w-5" />
+          </Button>
           
         </div>
 
