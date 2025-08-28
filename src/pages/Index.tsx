@@ -145,7 +145,7 @@ const Index = () => {
       refetchEvents();
       refetchMeetups();
     });
-  }, [setRefreshCallback, refetch, refetchEvents, refetchMeetups]);
+  }, [setRefreshCallback]); // Removed unstable dependencies
 
   // Global event listener for event updates
   useEffect(() => {
@@ -156,7 +156,7 @@ const Index = () => {
 
     window.addEventListener('eventUpdated', handleEventUpdate);
     return () => window.removeEventListener('eventUpdated', handleEventUpdate);
-  }, [refetchEvents, refetchMeetups]);
+  }, []); // Removed unstable dependencies
 
   const [userStoryCounts, setUserStoryCounts] = useState<{[key: string]: number}>({});
 
