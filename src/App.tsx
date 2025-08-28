@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Home, User, Users, Settings, Heart } from "lucide-react";
-import { EnhancedAuthProvider } from "@/contexts/EnhancedAuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import { NewItemProvider } from "@/contexts/NewItemContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
@@ -166,7 +166,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <LanguageProvider>
-        <EnhancedAuthProvider>
+        <AuthProvider>
           <NewItemProvider>
             <FavoritesProvider>
               <SearchProvider>
@@ -174,7 +174,7 @@ const App = () => (
               </SearchProvider>
             </FavoritesProvider>
           </NewItemProvider>
-        </EnhancedAuthProvider>
+        </AuthProvider>
       </LanguageProvider>
     </TooltipProvider>
   </ErrorBoundary>

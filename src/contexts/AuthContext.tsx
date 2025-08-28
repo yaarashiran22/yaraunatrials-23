@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { User } from '@supabase/supabase-js';
+import type { User, Session } from '@supabase/supabase-js';
+import { toast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -26,11 +27,16 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Session error:', error);
+      }
+      setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
     });
@@ -38,20 +44,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
+      
+      // Handle authentication events for better UX
+      if (event === 'SIGNED_OUT') {
+        // Clear any cached data on signout
+        setSession(null);
+        setUser(null);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email.toLowerCase().trim(),
+        password,
+      });
+
+      if (error) {
+        console.error('Sign in error:', error);
+        toast({
+          title: "שגיאת התחברות",
+          description: error.message || "שגיאה בהתחברות",
+          variant: "destructive",
+        });
+      }
+
+      return { error };
+    } catch (error) {
+      console.error('Sign in error:', error);
+      return { error };
+    }
   };
 
   const signUp = async (email: string, password: string, name?: string, mobileNumber?: string) => {
@@ -72,8 +101,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Sign out error:', error);
+        toast({
+          title: "שגיאה",
+          description: "בעיה בהתנתקות מהמערכת",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    } catch (error) {
+      console.error('Sign out error:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const signInAnonymously = async () => {

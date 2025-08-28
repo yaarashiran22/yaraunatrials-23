@@ -1,5 +1,5 @@
 
-import { useEnhancedAuth } from "@/contexts/EnhancedAuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, isLoading } = useEnhancedAuth();
+  const { user, isLoading } = useAuth();
 
   if (isLoading) {
     return (
