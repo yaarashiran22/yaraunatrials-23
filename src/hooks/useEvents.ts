@@ -25,7 +25,7 @@ export interface Event {
   };
 }
 
-const fetchEvents = async (eventType?: 'event' | 'meetup', followingOnly?: boolean, userId?: string): Promise<Event[]> => {
+const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean, userId?: string): Promise<Event[]> => {
   let query = supabase
     .from('events')
     .select(`
@@ -51,25 +51,39 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', followingOnly?: boole
     query = query.eq('event_type', eventType);
   }
 
-  if (followingOnly && userId) {
-    // Get users the current user is following
-    const { data: followingData, error: followingError } = await supabase
-      .from('user_following')
-      .select('following_id')
-      .eq('follower_id', userId);
+  if (filterType && userId) {
+    if (eventType === 'meetup') {
+      // For meetups, filter by friends
+      const { data: friendsData, error: friendsError } = await supabase
+        .from('user_friends')
+        .select('friend_id')
+        .eq('user_id', userId);
 
-    if (followingError) throw followingError;
+      if (friendsError) throw friendsError;
 
-    const followingIds = followingData?.map(f => f.following_id) || [];
-    
-    // Filter events to only include those created by users they are following
-    // Also get events with RSVPs from people they follow
-    if (followingIds.length > 0) {
-      // For now, just filter by event creator. We can add RSVP filtering later
-      query = query.in('user_id', followingIds);
+      const friendIds = friendsData?.map(f => f.friend_id) || [];
+      
+      if (friendIds.length > 0) {
+        query = query.in('user_id', friendIds);
+      } else {
+        return [];
+      }
     } else {
-      // If user is not following anyone, return empty array
-      return [];
+      // For events, filter by following
+      const { data: followingData, error: followingError } = await supabase
+        .from('user_following')
+        .select('following_id')
+        .eq('follower_id', userId);
+
+      if (followingError) throw followingError;
+
+      const followingIds = followingData?.map(f => f.following_id) || [];
+      
+      if (followingIds.length > 0) {
+        query = query.in('user_id', followingIds);
+      } else {
+        return [];
+      }
     }
   }
 
@@ -107,15 +121,15 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', followingOnly?: boole
   }));
 };
 
-export const useEvents = (eventType?: 'event' | 'meetup', followingOnly?: boolean) => {
+export const useEvents = (eventType?: 'event' | 'meetup', filterActive?: boolean) => {
   const { user } = useAuth();
   
   const queryResult = useQuery({
-    queryKey: ['events', eventType, followingOnly, user?.id],
-    queryFn: () => fetchEvents(eventType, followingOnly, user?.id),
+    queryKey: ['events', eventType, filterActive, user?.id],
+    queryFn: () => fetchEvents(eventType, filterActive, user?.id),
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
-    enabled: !followingOnly || !!user?.id, // Only fetch following events if user is logged in
+    enabled: !filterActive || !!user?.id, // Only fetch filtered events if user is logged in
   });
 
   return {

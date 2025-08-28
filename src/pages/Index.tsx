@@ -110,10 +110,10 @@ const Index = () => {
   } = useOptimizedHomepage();
 
   // Fetch events and meetups separately from the new events table
-  const [meetupFilter, setMeetupFilter] = useState<'all' | 'following'>('all');
+  const [meetupFilter, setMeetupFilter] = useState<'all' | 'friends'>('all');
   const [eventFilter, setEventFilter] = useState<'all' | 'following'>('all');
   const { events: realEvents = [], refetch: refetchEvents } = useEvents('event', eventFilter === 'following');
-  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup', meetupFilter === 'following');
+  const { events: meetupEvents = [], refetch: refetchMeetups } = useEvents('meetup', meetupFilter === 'friends');
 
   // Preload data immediately on component mount for instant loading
   useEffect(() => {
@@ -351,14 +351,14 @@ const Index = () => {
               All
             </Button>
             <Button
-              variant={meetupFilter === 'following' ? 'default' : 'outline'}
+              variant={meetupFilter === 'friends' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setMeetupFilter('following')}
+              onClick={() => setMeetupFilter('friends')}
               className="text-xs px-3 py-1 rounded-full"
               disabled={!user}
             >
               <Users className="h-3 w-3 mr-1" />
-              Following
+              Friends
             </Button>
           </div>
           {loading ? (

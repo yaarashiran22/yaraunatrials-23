@@ -57,8 +57,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
       console.error('Mobile camera error:', error);
       if (error.message !== 'User cancelled photos app') {
         toast({
-          title: "שגיאה",
-          description: "לא ניתן לגשת למצלמה. נסה שוב.",
+          title: "Error",
+          description: "Could not access camera. Please try again.",
           variant: "destructive",
         });
       }
@@ -89,8 +89,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
     // Validate file type
     if (!file.type.startsWith('image/')) {
       toast({
-        title: "שגיאה",
-        description: "יש לבחור קובץ תמונה בלבד",
+        title: "Error",
+        description: "Please select an image file only",
         variant: "destructive",
       });
       return;
@@ -99,8 +99,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast({
-        title: "שגיאה",
-        description: "גודל התמונה חייב להיות עד 5MB",
+        title: "Error",
+        description: "Image size must be under 5MB",
         variant: "destructive",
       });
       return;
@@ -112,8 +112,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
       console.log('Story created successfully:', result);
       
       toast({
-        title: "סטורי נוסף בהצלחה!",
-        description: "הסטורי שלך יוסר אוטומטית לאחר 24 שעות",
+        title: "Story added successfully!",
+        description: "Your story will be automatically removed after 24 hours",
       });
 
       // Force page refresh to update all profile cards with new story indicator
@@ -121,8 +121,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
     } catch (error: any) {
       console.error('Error creating story:', error);
       toast({
-        title: "שגיאה",
-        description: "לא ניתן להוסיף את הסטורי. נסה שוב.",
+        title: "Error",
+        description: "Could not add story. Please try again.",
         variant: "destructive",
       });
     }
@@ -148,8 +148,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
   const createTextUpdate = async () => {
     if (!updateText.trim()) {
       toast({
-        title: "שגיאה",
-        description: "יש להזין תוכן לעדכון",
+        title: "Error",
+        description: "Please enter content for the update",
         variant: "destructive",
       });
       return;
@@ -161,8 +161,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
       console.log('Text update created successfully:', result);
       
       toast({
-        title: "עדכון פורסם בהצלחה!",
-        description: "העדכון שלך מוצג כעת בפרופיל שלך עם מסגרת צהובה",
+        title: "Update posted successfully!",
+        description: "Your update is now displayed in your profile with a yellow frame",
       });
 
       setUpdateText("");
@@ -175,8 +175,8 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
     } catch (error: any) {
       console.error('Error creating text update:', error);
       toast({
-        title: "שגיאה",
-        description: "לא ניתן להוסיף את העדכון. נסה שוב.",
+        title: "Error",
+        description: "Could not add update. Please try again.",
         variant: "destructive",
       });
     }
@@ -209,7 +209,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
       <Dialog open={showOptions} onOpenChange={setShowOptions}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-center">הוסף סטורי או עדכון</DialogTitle>
+            <DialogTitle className="text-center">Add Story or Update</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-3 gap-4 py-4">
             <Button
@@ -218,7 +218,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
               className="h-20 flex flex-col gap-2"
             >
               <Camera className="w-6 h-6" />
-              <span>צלם עכשיו</span>
+              <span>Take Photo</span>
             </Button>
             <Button
               onClick={handleGallerySelect}
@@ -226,7 +226,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
               className="h-20 flex flex-col gap-2"
             >
               <ImageIcon className="w-6 h-6" />
-              <span>בחר מהגלריה</span>
+              <span>Choose from Gallery</span>
             </Button>
             <Button
               onClick={handleTextUpdate}
@@ -234,7 +234,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
               className="h-20 flex flex-col gap-2"
             >
               <MessageSquare className="w-6 h-6" />
-              <span>עדכון טקסט</span>
+              <span>Text Update</span>
             </Button>
           </div>
         </DialogContent>
@@ -251,18 +251,18 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
       <Dialog open={showTextUpdate} onOpenChange={setShowTextUpdate}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-center">הוסף עדכון טקסט</DialogTitle>
+            <DialogTitle className="text-center">Add Text Update</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <Textarea
-              placeholder="מה קורה אצלך בשכונה?"
+              placeholder="What's happening in your neighborhood?"
               value={updateText}
               onChange={(e) => setUpdateText(e.target.value)}
               className="min-h-[120px]"
               maxLength={500}
             />
             <div className="text-sm text-muted-foreground text-left">
-              {updateText.length}/500 תווים
+              {updateText.length}/500 characters
             </div>
             <div className="flex gap-2">
               <Button
@@ -270,7 +270,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
                 disabled={!updateText.trim()}
                 className="flex-1"
               >
-                פרסם עדכון
+                Post Update
               </Button>
               <Button
                 onClick={() => {
@@ -280,7 +280,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
                 variant="outline"
                 className="flex-1"
               >
-                ביטול
+                Cancel
               </Button>
             </div>
           </div>
