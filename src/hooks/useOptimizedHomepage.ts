@@ -163,7 +163,18 @@ const fetchHomepageData = async () => {
       description: "לא ניתן לטעון את הנתונים",
       variant: "destructive",
     });
-    throw error;
+    
+    // Return fallback data instead of throwing error to prevent page crash
+    return { 
+      items: [], 
+      databaseEvents: [], 
+      recommendationItems: [], 
+      artItems: [], 
+      apartmentItems: [], 
+      businessItems: [], 
+      profiles: [], 
+      totalUsersCount: 0 
+    };
   }
 };
 
