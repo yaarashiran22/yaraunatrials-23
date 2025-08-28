@@ -27,6 +27,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
   ];
 
   const getDisplayName = useCallback((neighborhood: any) => {
+    if (!neighborhood) return "";
     switch (language) {
       case 'en':
         return neighborhood.nameEn;
@@ -42,12 +43,15 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
     onNeighborhoodChange?.(neighborhoodName);
   }, [onNeighborhoodChange]);
 
+  const selectedNeighborhoodObj = neighborhoods.find(n => n.name === selectedNeighborhood);
+  const displayName = selectedNeighborhoodObj ? getDisplayName(selectedNeighborhoodObj) : selectedNeighborhood;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex items-center gap-1 bg-accent text-accent-foreground hover:bg-accent/80">
           <MapPin className="h-4 w-4" />
-          <span className="text-sm">{getDisplayName(neighborhoods.find(n => n.name === selectedNeighborhood))}</span>
+          <span className="text-sm">{displayName}</span>
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
