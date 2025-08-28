@@ -1,15 +1,58 @@
-import { MapPin } from "lucide-react";
+import { MapPin, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface NeighborhoodSelectorProps {
   onNeighborhoodChange?: (neighborhood: string) => void;
 }
 
+const neighborhoods = [
+  "Palermo",
+  "Palermo Chico", 
+  "Palermo Hollywood",
+  "Palermo Soho",
+  "Las Cañitas",
+  "Villa Cañitas",
+  "Palermo Viejo",
+  "Alto Palermo"
+];
+
 const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProps) => {
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState("Palermo");
+
+  const handleNeighborhoodSelect = (neighborhood: string) => {
+    setSelectedNeighborhood(neighborhood);
+    onNeighborhoodChange?.(neighborhood);
+  };
+
   return (
-    <div className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg border border-accent">
-      <MapPin className="h-4 w-4" />
-      <span className="text-sm font-medium">Palermo</span>
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg border border-accent hover:bg-accent/80 transition-colors">
+          <MapPin className="h-4 w-4" />
+          <span className="text-sm font-medium">{selectedNeighborhood}</span>
+          <ChevronDown className="h-4 w-4" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-48 bg-background border border-border">
+        {neighborhoods.map((neighborhood) => (
+          <DropdownMenuItem
+            key={neighborhood}
+            onClick={() => handleNeighborhoodSelect(neighborhood)}
+            className={`cursor-pointer ${
+              selectedNeighborhood === neighborhood ? 'bg-accent text-accent-foreground' : ''
+            }`}
+          >
+            {neighborhood}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
