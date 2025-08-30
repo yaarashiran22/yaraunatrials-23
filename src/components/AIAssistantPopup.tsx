@@ -98,13 +98,23 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
     setInputMessage('');
     setIsLoading(true);
 
+    // Add timeout wrapper
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Request timeout')), 45000); // 45 second timeout
+    });
+
     try {
-      const { data, error } = await supabase.functions.invoke('ai-assistant', {
-        body: {
-          message: inputMessage,
-          userLocation: userLocation
-        }
-      });
+      const result = await Promise.race([
+        supabase.functions.invoke('ai-assistant', {
+          body: {
+            message: inputMessage,
+            userLocation: userLocation
+          }
+        }),
+        timeoutPromise
+      ]);
+
+      const { data, error } = result as any;
 
       if (error) {
         console.error('Supabase function invoke error:', error);
