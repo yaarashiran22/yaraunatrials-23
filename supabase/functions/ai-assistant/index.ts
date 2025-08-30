@@ -137,12 +137,12 @@ Guidelines:
     console.error('Error in ai-assistant function:', error);
     
     // Provide helpful fallback response for rate limiting
-    let fallbackMessage = "I'm currently experiencing high demand. Please try again in a few moments.";
+    let fallbackMessage = "I'm currently experiencing high demand. Here are some general suggestions while I get back online:\n\n• Check the Events section for local meetups\n• Browse Communities to connect with neighbors\n• Look in the Feed for recent activity\n\nPlease try your specific question again in a moment!";
     
     if (error.message.includes('429') || error.message.includes('Too Many Requests')) {
-      fallbackMessage = "I'm experiencing high demand right now. Please wait a moment and try your question again. I'm here to help you find events, communities, and neighbors in your area!";
+      fallbackMessage = "I'm experiencing high demand right now! 🤖\n\nWhile you wait, you can:\n• Browse the Events section for social gatherings\n• Check Communities for interest groups\n• Look at recent posts in the Feed\n\nTry asking me again in just a moment - I'll be right back!";
     } else if (error.message.includes('API key')) {
-      fallbackMessage = "I'm having trouble connecting to my knowledge base. Please try again shortly.";
+      fallbackMessage = "I'm having trouble connecting to my knowledge base. Please try again shortly, or feel free to browse the Events and Communities sections directly!";
     }
     
     return new Response(

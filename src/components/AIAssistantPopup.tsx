@@ -88,6 +88,15 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
           timestamp: new Date()
         };
         setMessages(prev => [...prev, assistantMessage]);
+        
+        // If this was a fallback response, show a toast notification
+        if (data.fallback) {
+          toast({
+            title: "High Demand",
+            description: "I'm experiencing high traffic. Your response may be limited. Please try again in a moment.",
+            variant: "default",
+          });
+        }
       } else {
         throw new Error(data.error || 'Failed to get AI response');
       }
