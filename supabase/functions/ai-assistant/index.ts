@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  console.log('AI Assistant function started - v2.0');
+  console.log('AI Assistant function started - v5.0 - Fresh Deploy!');
   
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
