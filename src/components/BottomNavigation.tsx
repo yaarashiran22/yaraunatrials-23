@@ -5,7 +5,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNewItem } from "@/contexts/NewItemContext";
-import { useSearch } from "@/contexts/SearchContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +18,6 @@ const BottomNavigation = () => {
   const { t, language, setLanguage } = useLanguage();
   const { user } = useAuth();
   const { openNewItem } = useNewItem();
-  const { openSearch } = useSearch();
 
   const languages = [
     { code: 'es', name: 'Español', flag: '🇦🇷' },
