@@ -16,9 +16,9 @@ serve(async (req) => {
   try {
     const { message, userLocation } = await req.json();
     
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not found');
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    if (!anthropicApiKey) {
+      throw new Error('Anthropic API key not found');
     }
 
     // Initialize Supabase client
@@ -60,72 +60,39 @@ Guidelines:
 6. Always mention specific names and details from the available data
 7. If no relevant matches found, suggest general categories or ask for more details`;
 
-    // Create an AbortController for timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-    
-    // Try multiple times with exponential backoff for rate limiting
-    let attempts = 0;
-    const maxAttempts = 2; // Reduced attempts to avoid long delays
-    let response;
-    
-    while (attempts < maxAttempts) {
-      try {
-        response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openAIApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: message }
-            ],
-            temperature: 0.7,
-            max_tokens: 300 // Reduced for faster response
-          }),
-          signal: controller.signal
-        });
-
-        if (response.ok) {
-          clearTimeout(timeoutId); // Clear timeout on success
-          break; // Success, exit retry loop
-        }
-
-        // Check if it's a rate limit error
-        if (response.status === 429) {
-          attempts++;
-          if (attempts < maxAttempts) {
-            // Wait with exponential backoff
-            const waitTime = Math.pow(2, attempts) * 1000; // 2s, 4s, 8s
-            console.log(`Rate limited, waiting ${waitTime}ms before retry ${attempts}/${maxAttempts}`);
-            await new Promise(resolve => setTimeout(resolve, waitTime));
-            continue;
+    // Call Claude API directly with no fallbacks - always get real AI responses
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': anthropicApiKey,
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-haiku-20241022',
+        max_tokens: 300,
+        messages: [
+          { 
+            role: 'user', 
+            content: `${systemPrompt}\n\nUser question: ${message}` 
           }
-        }
-        
-        // If not rate limit error or max attempts reached, throw
-        throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
-        
-      } catch (fetchError) {
-        clearTimeout(timeoutId); // Clear timeout on error
-        if (attempts === maxAttempts - 1) {
-          throw fetchError;
-        }
-        attempts++;
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Claude API error:', response.status, errorData);
+      throw new Error(`Claude API error: ${response.status}`);
     }
 
     const data = await response.json();
     
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      throw new Error('Invalid response format from OpenAI API');
+    if (!data.content || !data.content[0] || !data.content[0].text) {
+      throw new Error('Invalid response format from Claude API');
     }
     
-    const aiResponse = data.choices[0].message.content;
+    const aiResponse = data.content[0].text;
 
     console.log('AI Assistant request processed successfully');
 
@@ -142,22 +109,15 @@ Guidelines:
   } catch (error) {
     console.error('Error in ai-assistant function:', error);
     
-    // Provide helpful fallback response for rate limiting
-    let fallbackMessage = "I'm currently experiencing high demand. Here are some general suggestions while I get back online:\n\n• Check the Events section for local meetups\n• Browse Communities to connect with neighbors\n• Look in the Feed for recent activity\n\nPlease try your specific question again in a moment!";
-    
-    if (error.message.includes('429') || error.message.includes('Too Many Requests')) {
-      fallbackMessage = "I'm experiencing high demand right now! 🤖\n\nWhile you wait, you can:\n• Browse the Events section for social gatherings\n• Check Communities for interest groups\n• Look at recent posts in the Feed\n\nTry asking me again in just a moment - I'll be right back!";
-    } else if (error.message.includes('API key')) {
-      fallbackMessage = "I'm having trouble connecting to my knowledge base. Please try again shortly, or feel free to browse the Events and Communities sections directly!";
-    }
-    
+    // Instead of fallback messages, return an actual error that the client can handle
     return new Response(
       JSON.stringify({ 
-        response: fallbackMessage,
-        success: true, // Return success with fallback message
-        fallback: true
+        response: "I'm having trouble processing your request right now. Please try asking your question again.",
+        success: false,
+        error: error.message
       }),
       {
+        status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
