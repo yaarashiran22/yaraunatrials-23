@@ -23,6 +23,7 @@ import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 import { FeedImageViewer } from "@/components/FeedImageViewer";
 import EditEventPopup from "@/components/EditEventPopup";
 import { EditCouponModal } from "@/components/EditCouponModal";
+import ProfilePhotoUpload from "@/components/ProfilePhotoUpload";
 import { useMyCoupons } from "@/hooks/useUserCoupons";
 
 import profile1 from "@/assets/profile-1.jpg";
@@ -369,6 +370,12 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
+
+        {/* Profile Photos Upload */}
+        <ProfilePhotoUpload 
+          userId={actualProfileId}
+          isOwnProfile={isOwnProfile}
+        />
 
         {/* Account Type Badge and Business Features */}
         {profileData?.account_type && (

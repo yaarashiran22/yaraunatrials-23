@@ -720,6 +720,33 @@ export type Database = {
         }
         Relationships: []
       }
+      profile_photos: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          photo_url: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order: number
+          id?: string
+          photo_url: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          photo_url?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           account_type: string | null
