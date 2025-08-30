@@ -226,19 +226,22 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
             </div>
           </ScrollArea>
           
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <Input
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               placeholder="Ask me anything about events, meetups, or neighbors..."
               className="flex-1"
               disabled={isLoading}
+              autoComplete="off"
+              autoFocus
             />
             <Button
               onClick={sendMessage}
               disabled={!inputMessage.trim() || isLoading}
               size="icon"
+              type="button"
             >
               <Send className="w-4 h-4" />
             </Button>
