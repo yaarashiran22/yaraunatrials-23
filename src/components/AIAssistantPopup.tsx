@@ -161,8 +161,8 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <Card className="w-full max-w-md h-[500px] flex flex-col bg-background">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+      <Card className="w-full max-w-md max-h-[80vh] min-h-[400px] flex flex-col bg-background">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 flex-shrink-0">
           <CardTitle className="text-lg font-semibold flex items-center gap-2">
             <Bot className="w-5 h-5 text-primary" />
             AI Assistant
@@ -177,8 +177,8 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
           </Button>
         </CardHeader>
         
-        <CardContent className="flex-1 flex flex-col p-4 space-y-4">
-          <ScrollArea className="flex-1 pr-4 max-h-[350px]">
+        <CardContent className="flex-1 flex flex-col p-4 space-y-4 min-h-0">
+          <ScrollArea className="flex-1 pr-4 overflow-y-auto">
             <div className="space-y-4">
               {messages.map((message) => (
                 <div
@@ -226,7 +226,7 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
             </div>
           </ScrollArea>
           
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center flex-shrink-0 pt-2">
             <Input
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
