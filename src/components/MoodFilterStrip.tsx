@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Coffee, Zap, Heart, Dumbbell, Palette, Users, Search, X, MapPin, Calendar, User, Building, ShoppingBag } from "lucide-react";
+import { Coffee, Zap, Heart, Dumbbell, Palette, Users, Search, X, MapPin, Calendar, User, Building, ShoppingBag, Camera } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useGlobalSearch, SearchResult } from "@/hooks/useGlobalSearch";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,7 +16,8 @@ const moodFilters = [
   { id: "romantic", label: "Romantic", icon: Heart, color: "text-pink-500", activeBg: "bg-pink-50 dark:bg-pink-950/30" },
   { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500", activeBg: "bg-green-50 dark:bg-green-950/30" },
   { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
-  { id: "social", label: "Social", icon: Users, color: "text-indigo-500", activeBg: "bg-indigo-50 dark:bg-indigo-950/30" }
+  { id: "social", label: "Social", icon: Users, color: "text-indigo-500", activeBg: "bg-indigo-50 dark:bg-indigo-950/30" },
+  { id: "sightseeing", label: "Sightseeing", icon: Camera, color: "text-cyan-500", activeBg: "bg-cyan-50 dark:bg-cyan-950/30" }
 ];
 
 interface MoodFilterStripProps {
