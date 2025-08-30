@@ -23,7 +23,7 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Hi! I\'m your neighborhood assistant. I can help you find events, meetups, communities, and neighbors based on what you\'re looking for. What are you interested in today?',
+      content: "What are you looking for around you?",
       role: 'assistant',
       timestamp: new Date()
     }
