@@ -17,7 +17,7 @@ serve(async (req) => {
 
   try {
     const { message, userLocation } = await req.json();
-    console.log('AI Assistant v6.0 - Simple Chat API - Processing request:', { message, userLocation });
+    console.log('AI Assistant v7.0 - With Real Data - Processing request:', { message, userLocation });
     
     // Get OpenAI API key from environment
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
@@ -35,14 +35,52 @@ serve(async (req) => {
       );
     }
     
-    console.log('✅ API key found! Making simple API call...');
+    console.log('✅ API key found! Fetching website and database data...');
 
-    // Simple system prompt
-    const systemPrompt = `You are a helpful neighborhood assistant. Help users find local events, connect with neighbors, and discover community activities. Keep responses friendly and under 150 words.
+    // Initialize Supabase client to get real data
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
 
-User Location: ${userLocation || 'Not specified'}`;
+    // Fetch real data from your database in parallel
+    const [eventsData, communitiesData, postsData, websiteData] = await Promise.all([
+      supabase.from('events').select('*').limit(10),
+      supabase.from('communities').select('*').limit(10),
+      supabase.from('posts').select('*').limit(5),
+      fetch('https://theunahub.com').then(res => res.text()).catch(() => null)
+    ]);
 
-    // Use simple Chat Completions API (more reliable than Assistants API)
+    console.log('📊 Data fetched - Events:', eventsData.data?.length, 'Communities:', communitiesData.data?.length, 'Posts:', postsData.data?.length);
+
+    // Prepare context with real data
+    const contextData = {
+      events: eventsData.data || [],
+      communities: communitiesData.data || [],
+      posts: postsData.data || [],
+      websiteContent: websiteData ? 'Website accessible' : 'Website not accessible',
+      userLocation: userLocation || 'Not specified'
+    };
+
+    // Enhanced system prompt with real data context
+    const systemPrompt = `You are a helpful assistant for TheUnaHub (theunahub.com), a neighborhood social platform. You help users find events, meetups, communities, and connect with neighbors based on REAL DATA from the platform.
+
+CURRENT REAL DATA AVAILABLE:
+- Events: ${JSON.stringify(contextData.events.slice(0, 5))} (showing first 5)
+- Communities: ${JSON.stringify(contextData.communities.slice(0, 3))} (showing first 3)  
+- Recent Posts: ${JSON.stringify(contextData.posts.slice(0, 3))} (showing first 3)
+- User Location: ${contextData.userLocation}
+
+INSTRUCTIONS:
+1. ALWAYS reference specific events, communities, or posts from the real data when relevant
+2. Mention actual event names, locations, and details from the database
+3. If someone asks about events, mention specific ones like "Picnic in boco park" or "Going to art market"
+4. Be specific about locations (like "Boco Buenos Aires", "Palermo", etc.) from the real data
+5. Keep responses helpful and under 150 words
+6. If no relevant data matches their query, suggest they browse the available events and communities
+7. Always sound like you know the actual content and activities on TheUnaHub`;
+
+    // Make API call with real data context
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -85,7 +123,7 @@ User Location: ${userLocation || 'Not specified'}`;
     }
     
     const aiResponse = data.choices[0].message.content;
-    console.log('🎉 Success! Returning AI response');
+    console.log('🎉 Success! Returning AI response with real data context');
 
     return new Response(
       JSON.stringify({ 
