@@ -69,10 +69,7 @@ const Header = ({
           
           {/* Neighborhood Selector */}
           <div className="flex-1 flex justify-center">
-            <div className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg border border-accent">
-              <MapPin className="h-4 w-4" />
-              <span className="text-sm font-medium">Palermo</span>
-            </div>
+            <NeighborhoodSelector onNeighborhoodChange={onNeighborhoodChange} />
           </div>
           
           {/* Search and Notifications */}
