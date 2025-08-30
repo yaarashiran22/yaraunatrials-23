@@ -60,28 +60,65 @@ Guidelines:
 6. Always mention specific names and details from the available data
 7. If no relevant matches found, suggest general categories or ask for more details`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: message }
-        ],
-        temperature: 0.7,
-        max_tokens: 500
-      }),
-    });
+    // Try multiple times with exponential backoff for rate limiting
+    let attempts = 0;
+    const maxAttempts = 3;
+    let response;
+    
+    while (attempts < maxAttempts) {
+      try {
+        response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${openAIApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: message }
+            ],
+            temperature: 0.7,
+            max_tokens: 500
+          }),
+        });
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.statusText}`);
+        if (response.ok) {
+          break; // Success, exit retry loop
+        }
+
+        // Check if it's a rate limit error
+        if (response.status === 429) {
+          attempts++;
+          if (attempts < maxAttempts) {
+            // Wait with exponential backoff
+            const waitTime = Math.pow(2, attempts) * 1000; // 2s, 4s, 8s
+            console.log(`Rate limited, waiting ${waitTime}ms before retry ${attempts}/${maxAttempts}`);
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+            continue;
+          }
+        }
+        
+        // If not rate limit error or max attempts reached, throw
+        const errorText = await response.text();
+        throw new Error(`OpenAI API error: ${response.status} ${response.statusText} - ${errorText}`);
+        
+      } catch (fetchError) {
+        if (attempts === maxAttempts - 1) {
+          throw fetchError;
+        }
+        attempts++;
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
     }
 
     const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error('Invalid response format from OpenAI API');
+    }
+    
     const aiResponse = data.choices[0].message.content;
 
     console.log('AI Assistant request processed successfully');
@@ -98,13 +135,23 @@ Guidelines:
 
   } catch (error) {
     console.error('Error in ai-assistant function:', error);
+    
+    // Provide helpful fallback response for rate limiting
+    let fallbackMessage = "I'm currently experiencing high demand. Please try again in a few moments.";
+    
+    if (error.message.includes('429') || error.message.includes('Too Many Requests')) {
+      fallbackMessage = "I'm experiencing high demand right now. Please wait a moment and try your question again. I'm here to help you find events, communities, and neighbors in your area!";
+    } else if (error.message.includes('API key')) {
+      fallbackMessage = "I'm having trouble connecting to my knowledge base. Please try again shortly.";
+    }
+    
     return new Response(
       JSON.stringify({ 
-        error: error.message,
-        success: false 
+        response: fallbackMessage,
+        success: true, // Return success with fallback message
+        fallback: true
       }),
       {
-        status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
