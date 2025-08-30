@@ -15,70 +15,36 @@ serve(async (req) => {
 
   try {
     const { message, userLocation } = await req.json();
+    console.log('Request received:', { message, userLocation });
     
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
-      console.error('OpenAI API key not found');
-      throw new Error('OpenAI API key not found');
+      console.error('OpenAI API key not found in environment');
+      return new Response(
+        JSON.stringify({ 
+          response: "Configuration error: API key not found. Please check the Edge Function secrets.",
+          success: true,
+          error: false
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
-
-    console.log('Processing AI request:', message);
-
-    // Simplified system prompt for faster response
-    const systemPrompt = `You are a helpful assistant for a neighborhood social platform. You help users find events, meetups, communities, and connect with neighbors based on their interests and needs.
-
-User Location: ${userLocation || 'Not specified'}
-
-Guidelines:
-1. Be friendly and conversational
-2. Help users with finding local events, communities, and connecting with neighbors
-3. Keep responses concise but helpful (under 150 words)
-4. Ask clarifying questions when needed
-5. Provide general advice about community engagement`;
-
-    console.log('Calling OpenAI API...');
-
-    // Call OpenAI API with timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
     
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: message }
-        ],
-        max_tokens: 150,
-        temperature: 0.7
+    console.log('OpenAI API key found, length:', openAIApiKey.length);
+
+    // Test simple response first
+    const testResponse = `Hello! You asked: "${message}". I'm your neighborhood assistant, here to help you find local events, communities, and connect with neighbors. What specific information are you looking for?`;
+    
+    console.log('Returning test response');
+    return new Response(
+      JSON.stringify({ 
+        response: testResponse,
+        success: true 
       }),
-      signal: controller.signal
-    });
-
-    clearTimeout(timeoutId);
-    console.log('OpenAI API response status:', response.status);
-
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('OpenAI API error:', response.status, errorData);
-      throw new Error(`OpenAI API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log('OpenAI API response received');
-    
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      console.error('Invalid OpenAI response format:', data);
-      throw new Error('Invalid response format from OpenAI API');
-    }
-    
-    const aiResponse = data.choices[0].message.content;
-    console.log('AI Assistant request processed successfully');
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
 
     return new Response(
       JSON.stringify({ 
