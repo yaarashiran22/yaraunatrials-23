@@ -43,18 +43,46 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
   }, [messages]);
 
   useEffect(() => {
-    // Get user location if available
-    if (navigator.geolocation) {
+    // Only get location if we don't have it yet and user hasn't been asked recently
+    const lastLocationRequest = localStorage.getItem('lastLocationRequest');
+    const now = Date.now();
+    const oneHour = 60 * 60 * 1000; // 1 hour in milliseconds
+    
+    // Check if we have a stored location that's less than 1 hour old
+    const storedLocation = localStorage.getItem('userLocation');
+    const storedLocationTime = localStorage.getItem('userLocationTime');
+    
+    if (storedLocation && storedLocationTime && 
+        (now - parseInt(storedLocationTime)) < oneHour) {
+      setUserLocation(storedLocation);
+      return;
+    }
+    
+    // Only request if we haven't asked recently
+    if (lastLocationRequest && (now - parseInt(lastLocationRequest)) < oneHour) {
+      return;
+    }
+    
+    if (navigator.geolocation && !userLocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation(`${position.coords.latitude}, ${position.coords.longitude}`);
+          const location = `${position.coords.latitude}, ${position.coords.longitude}`;
+          setUserLocation(location);
+          localStorage.setItem('userLocation', location);
+          localStorage.setItem('userLocationTime', now.toString());
+          localStorage.setItem('lastLocationRequest', now.toString());
         },
         (error) => {
-          console.log('Location access denied or unavailable');
+          console.log('Location access denied or unavailable:', error);
+          localStorage.setItem('lastLocationRequest', now.toString());
+        },
+        {
+          timeout: 10000,
+          maximumAge: 300000 // Accept cached position up to 5 minutes old
         }
       );
     }
-  }, []);
+  }, [userLocation]);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
