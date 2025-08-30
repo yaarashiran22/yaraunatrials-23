@@ -15,11 +15,11 @@ serve(async (req) => {
 
   try {
     const { message, userLocation } = await req.json();
-    console.log('Request received:', { message, userLocation });
+    console.log('AI Assistant - Processing request:', { message, userLocation });
     
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
-      console.error('OpenAI API key not found in environment');
+      console.error('OpenAI API key not found in environment variables');
       return new Response(
         JSON.stringify({ 
           response: "Configuration error: API key not found. Please check the Edge Function secrets.",
@@ -30,7 +30,7 @@ serve(async (req) => {
       );
     }
     
-    console.log('OpenAI API key found, calling OpenAI API...');
+    console.log('OpenAI API key found successfully, calling OpenAI API...');
 
     // Simplified system prompt for faster response
     const systemPrompt = `You are a helpful assistant for a neighborhood social platform. You help users find events, meetups, communities, and connect with neighbors based on their interests and needs.
