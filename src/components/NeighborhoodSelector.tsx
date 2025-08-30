@@ -16,18 +16,8 @@ const neighborhoods = [
   "Palermo Chico", 
   "Palermo Hollywood",
   "Palermo Soho",
-  "Las Cañitas",
-  "Villa Cañitas",
-  "Palermo Viejo",
-  "Alto Palermo",
   "Recoleta",
-  "Villa Crespo",
-  "Belgrano",
-  "San Telmo",
-  "La Boca",
-  "Puerto Madero",
-  "Barracas",
-  "Caballito"
+  "Villa Crespo"
 ];
 
 const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProps) => {
