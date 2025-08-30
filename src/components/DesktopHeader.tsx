@@ -3,12 +3,13 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Bell, Plus, ChevronDown, Settings, Search } from "lucide-react";
+import { LogOut, User, Bell, Plus, ChevronDown, Settings, MessageCircle } from "lucide-react";
 import { useNewItem } from "@/contexts/NewItemContext";
 import LanguageSelector from "@/components/LanguageSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NeighborhoodIndicator from "@/components/NeighborhoodIndicator";
-import SearchBar from "@/components/SearchBar";
+import AIAssistantPopup from "@/components/AIAssistantPopup";
+import { useState } from "react";
 
 interface DesktopHeaderProps {
   title?: string;
@@ -31,6 +32,7 @@ const DesktopHeader = ({
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { openNewItem } = useNewItem();
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -53,24 +55,16 @@ const DesktopHeader = ({
             </div>
           </div>
           
-          {/* Center section - Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8">
-            {showSearch && onSearchChange ? (
-              <SearchBar 
-                value={searchValue}
-                onChange={onSearchChange}
-                placeholder={searchPlaceholder}
-              />
-            ) : (
-              <div className="relative">
-                <input 
-                  type="text" 
-                  placeholder="Search events, tags, or places"
-                  className="w-full px-5 py-3 pl-12 rounded-full border-2 border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary text-sm"
-                />
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              </div>
-            )}
+          {/* Center section - AI Assistant */}
+          <div className="flex-1 max-w-2xl mx-8 flex justify-center">
+            <Button 
+              variant="outline" 
+              className="bg-background text-foreground hover:bg-accent border-border px-6 py-3 h-11 gap-2"
+              onClick={() => setShowAIAssistant(true)}
+            >
+              <MessageCircle className="h-5 w-5" />
+              Ask AI Assistant
+            </Button>
           </div>
           
           {/* Right section - Actions */}
@@ -112,6 +106,12 @@ const DesktopHeader = ({
           </div>
         </div>
       </div>
+      
+      {/* AI Assistant Popup */}
+      <AIAssistantPopup
+        isOpen={showAIAssistant}
+        onClose={() => setShowAIAssistant(false)}
+      />
     </header>
   );
 };

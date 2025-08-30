@@ -2,7 +2,6 @@
 import LanguageSelector from "@/components/LanguageSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NeighborhoodIndicator from "@/components/NeighborhoodIndicator";
-import SearchBar from "@/components/SearchBar";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, MessageCircle, MapPin } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
-import { useSearch } from "@/contexts/SearchContext";
 import { useOptimizedNotifications } from "@/hooks/useOptimizedQueries";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import AIAssistantPopup from "@/components/AIAssistantPopup";
@@ -40,7 +38,6 @@ const Header = ({
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { openNewItem } = useNewItem();
-  const { openSearch } = useSearch();
   const { data: notificationData } = useOptimizedNotifications(user?.id);
   const unreadCount = notificationData?.unreadCount || 0;
   const [showNotifications, setShowNotifications] = useState(false);
