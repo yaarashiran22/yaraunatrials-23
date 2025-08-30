@@ -17,31 +17,17 @@ serve(async (req) => {
 
   try {
     const { message, userLocation } = await req.json();
-    console.log('AI Assistant v4.0 - Debug Mode - Processing request:', { message, userLocation });
-    
-    // Debug: List all available environment variables
-    console.log('🔍 Available environment variables:');
-    const envVars = Deno.env.toObject();
-    Object.keys(envVars).forEach(key => {
-      console.log(`  - ${key}: ${key.includes('KEY') ? '[REDACTED]' : envVars[key]}`);
-    });
+    console.log('AI Assistant v6.0 - Simple Chat API - Processing request:', { message, userLocation });
     
     // Get OpenAI API key from environment
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    console.log('🔑 OPENAI_API_KEY check result:', openAIApiKey ? 'FOUND' : 'NOT FOUND');
+    console.log('🔑 Checking for API key...');
     
     if (!openAIApiKey) {
-      console.error('❌ CRITICAL: OpenAI API key not found in environment variables');
-      
-      // Check for alternative names
-      const altKey1 = Deno.env.get('OPENAI_KEY');
-      const altKey2 = Deno.env.get('API_KEY');
-      console.log('🔍 Alternative key check - OPENAI_KEY:', altKey1 ? 'FOUND' : 'NOT FOUND');
-      console.log('🔍 Alternative key check - API_KEY:', altKey2 ? 'FOUND' : 'NOT FOUND');
-      
+      console.error('❌ OpenAI API key not found');
       return new Response(
         JSON.stringify({ 
-          response: `I'm missing my API configuration. Available env vars: ${Object.keys(envVars).join(', ')}. Please check the Edge Function secrets.`,
+          response: "I'm having configuration issues. My API key isn't set up properly.",
           success: true,
           error: false
         }),
@@ -49,112 +35,57 @@ serve(async (req) => {
       );
     }
     
-    console.log('✅ OpenAI API key found! Using Assistants API...');
-    
-    const assistantId = 'asst_PxBjnbhjnzWu8u9D6rfnRDGZ';
+    console.log('✅ API key found! Making simple API call...');
 
-    // Step 1: Create a thread
-    console.log('📝 Creating thread...');
-    const threadResponse = await fetch('https://api.openai.com/v1/threads', {
+    // Simple system prompt
+    const systemPrompt = `You are a helpful neighborhood assistant. Help users find local events, connect with neighbors, and discover community activities. Keep responses friendly and under 150 words.
+
+User Location: ${userLocation || 'Not specified'}`;
+
+    // Use simple Chat Completions API (more reliable than Assistants API)
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
-        'OpenAI-Beta': 'assistants=v2'
-      },
-      body: JSON.stringify({})
-    });
-
-    if (!threadResponse.ok) {
-      console.error('❌ Thread creation failed:', threadResponse.status);
-      const errorText = await threadResponse.text();
-      console.error('Thread error details:', errorText);
-      throw new Error(`Failed to create thread: ${threadResponse.status}`);
-    }
-
-    const thread = await threadResponse.json();
-    console.log('✅ Thread created:', thread.id);
-
-    // Step 2: Add message to thread
-    console.log('💬 Adding message to thread...');
-    const messageResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/messages`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-        'OpenAI-Beta': 'assistants=v2'
       },
       body: JSON.stringify({
-        role: 'user',
-        content: `User location: ${userLocation || 'Not specified'}\n\nUser question: ${message}`
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: message }
+        ],
+        max_tokens: 150,
+        temperature: 0.7
       })
     });
 
-    if (!messageResponse.ok) {
-      console.error('❌ Message creation failed:', messageResponse.status);
-      throw new Error('Failed to add message to thread');
-    }
+    console.log('📡 OpenAI response status:', response.status);
 
-    console.log('✅ Message added to thread');
-
-    // Step 3: Run the assistant
-    console.log('🤖 Running assistant...');
-    const runResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/runs`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-        'OpenAI-Beta': 'assistants=v2'
-      },
-      body: JSON.stringify({
-        assistant_id: assistantId
-      })
-    });
-
-    if (!runResponse.ok) {
-      console.error('❌ Run creation failed:', runResponse.status);
-      throw new Error('Failed to run assistant');
-    }
-
-    const run = await runResponse.json();
-    console.log('✅ Run started:', run.id);
-
-    // Step 4: Poll for completion (simplified for now)
-    await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
-
-    // Step 5: Get the response
-    console.log('📖 Getting assistant response...');
-    const messagesResponse = await fetch(`https://api.openai.com/v1/threads/${thread.id}/messages`, {
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'OpenAI-Beta': 'assistants=v2'
-      }
-    });
-
-    if (!messagesResponse.ok) {
-      console.error('❌ Failed to get messages:', messagesResponse.status);
-      throw new Error('Failed to get assistant response');
-    }
-
-    const messagesData = await messagesResponse.json();
-    const assistantMessages = messagesData.data.filter(msg => msg.role === 'assistant');
-    
-    if (assistantMessages.length === 0) {
-      // Fallback response if no assistant message yet
-      const aiResponse = "Hello! I'm your neighborhood assistant. I can help you find events, communities, and connect with neighbors. What are you looking for today?";
-      console.log('🔄 Using fallback response');
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('❌ OpenAI API error:', response.status, errorData);
       
       return new Response(
         JSON.stringify({ 
-          response: aiResponse,
-          success: true 
+          response: "I'm having trouble connecting to my AI service. Please try again in a moment.",
+          success: true,
+          error: false
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const aiResponse = assistantMessages[0].content[0].text.value;
-    console.log('🎉 AI Assistant request completed successfully using Assistants API');
+    const data = await response.json();
+    console.log('✅ Got OpenAI response successfully');
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('❌ Invalid response format');
+      throw new Error('Invalid response format');
+    }
+    
+    const aiResponse = data.choices[0].message.content;
+    console.log('🎉 Success! Returning AI response');
 
     return new Response(
       JSON.stringify({ 
