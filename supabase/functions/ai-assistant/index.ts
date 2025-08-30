@@ -95,15 +95,24 @@ Guidelines:
   } catch (error) {
     console.error('Error in ai-assistant function:', error);
     
-    // Instead of fallback messages, return an actual error that the client can handle
+    // Provide a user-friendly error message based on the error type
+    let errorMessage = "Sorry, I'm having trouble processing your request. Please try again.";
+    
+    if (error.message.includes('API key')) {
+      errorMessage = "I'm having configuration issues. Please contact support.";
+    } else if (error.message.includes('AbortError') || error.message.includes('timeout')) {
+      errorMessage = "The request timed out. Please try a shorter question.";
+    } else if (error.message.includes('Claude API')) {
+      errorMessage = "I'm having trouble connecting to my AI service. Please try again in a moment.";
+    }
+    
     return new Response(
       JSON.stringify({ 
-        response: "I'm having trouble processing your request right now. Please try asking your question again.",
-        success: false,
-        error: error.message
+        response: errorMessage,
+        success: true, // Return as success so the UI shows the message
+        error: false
       }),
       {
-        status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );

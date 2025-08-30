@@ -111,7 +111,8 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
         throw error;
       }
 
-      if (data && data.success) {
+      // Always show the response message if we get data back
+      if (data && data.response) {
         const assistantMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: data.response,
@@ -120,10 +121,10 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
         };
         setMessages(prev => [...prev, assistantMessage]);
       } else {
-        // Handle error response from the function
+        // Fallback if no response
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
-          content: data?.response || 'Sorry, I encountered an error. Please try again.',
+          content: 'Sorry, I encountered an error. Please try again.',
           role: 'assistant',
           timestamp: new Date()
         };
