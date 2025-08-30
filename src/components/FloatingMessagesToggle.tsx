@@ -15,7 +15,17 @@ const FloatingMessagesToggle = () => {
         <Button
           onClick={() => setIsAIPopupOpen(true)}
           size="default"
-          className="w-14 h-14 rounded-full shadow-lg transition-all duration-300 ease-in-out text-white hover:scale-105 active:scale-95 bg-primary hover:bg-primary/90"
+          className="w-14 h-14 rounded-full shadow-lg transition-all duration-300 ease-in-out text-white hover:scale-105 active:scale-95"
+          style={{
+            backgroundColor: 'hsl(var(--accent))',
+            borderColor: 'hsl(var(--accent))'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'hsl(157 100% 55%)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'hsl(var(--accent))';
+          }}
         >
           <Bot className="h-6 w-6" />
         </Button>
