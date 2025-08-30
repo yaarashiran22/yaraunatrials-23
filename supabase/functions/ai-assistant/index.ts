@@ -17,17 +17,15 @@ serve(async (req) => {
 
   try {
     const { message, userLocation } = await req.json();
-    console.log('AI Assistant v7.0 - With Real Data - Processing request:', { message, userLocation });
+    console.log('AI Assistant v8.0 - Full Database Integration - Processing:', { message, userLocation });
     
-    // Get OpenAI API key from environment
+    // Get OpenAI API key
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    console.log('🔑 Checking for API key...');
-    
     if (!openAIApiKey) {
       console.error('❌ OpenAI API key not found');
       return new Response(
         JSON.stringify({ 
-          response: "I'm having configuration issues. My API key isn't set up properly.",
+          response: "I'm having configuration issues. Please try again later.",
           success: true,
           error: false
         }),
@@ -35,52 +33,88 @@ serve(async (req) => {
       );
     }
     
-    console.log('✅ API key found! Fetching website and database data...');
+    console.log('✅ API key found! Fetching comprehensive data from TheUnaHub...');
 
-    // Initialize Supabase client to get real data
+    // Initialize Supabase client
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Fetch real data from your database in parallel
-    const [eventsData, communitiesData, postsData, websiteData] = await Promise.all([
-      supabase.from('events').select('*').limit(10),
-      supabase.from('communities').select('*').limit(10),
-      supabase.from('posts').select('*').limit(5),
-      fetch('https://theunahub.com').then(res => res.text()).catch(() => null)
+    // Fetch comprehensive data from ALL relevant tables in parallel
+    const [
+      eventsData,
+      communitiesData, 
+      postsData,
+      itemsData,
+      neighborIdeasData,
+      neighborQuestionsData,
+      couponsData,
+      storiesData
+    ] = await Promise.all([
+      supabase.from('events').select('id, title, description, location, date, time, price, mood, event_type').limit(8),
+      supabase.from('communities').select('id, name, tagline, description, category, subcategory, member_count').limit(6),
+      supabase.from('posts').select('id, content, location, created_at').limit(5),
+      supabase.from('items').select('id, title, description, category, location, price').eq('status', 'active').limit(6),
+      supabase.from('neighborhood_ideas').select('id, question, neighborhood, market').limit(4),
+      supabase.from('neighbor_questions').select('id, content, market, message_type').limit(4),
+      supabase.from('user_coupons').select('id, title, description, business_name, discount_amount, neighborhood').eq('is_active', true).limit(4),
+      supabase.from('stories').select('id, text_content, story_type').gt('expires_at', 'now()').limit(3)
     ]);
 
-    console.log('📊 Data fetched - Events:', eventsData.data?.length, 'Communities:', communitiesData.data?.length, 'Posts:', postsData.data?.length);
+    console.log('📊 Data fetched - Events:', eventsData.data?.length, 'Communities:', communitiesData.data?.length, 'Posts:', postsData.data?.length, 'Items:', itemsData.data?.length);
 
-    // Prepare context with real data
-    const contextData = {
-      events: eventsData.data || [],
-      communities: communitiesData.data || [],
-      posts: postsData.data || [],
-      websiteContent: websiteData ? 'Website accessible' : 'Website not accessible',
+    // Prepare comprehensive context with REAL data
+    const realData = {
+      currentEvents: eventsData.data || [],
+      activeCommunities: communitiesData.data || [],
+      recentPosts: postsData.data || [],
+      marketplaceItems: itemsData.data || [],
+      neighborhoodIdeas: neighborIdeasData.data || [],
+      neighborQuestions: neighborQuestionsData.data || [],
+      localCoupons: couponsData.data || [],
+      activeStories: storiesData.data || [],
       userLocation: userLocation || 'Not specified'
     };
 
-    // Enhanced system prompt with real data context
-    const systemPrompt = `You are a helpful assistant for TheUnaHub (theunahub.com), a neighborhood social platform. You help users find events, meetups, communities, and connect with neighbors based on REAL DATA from the platform.
+    // Create detailed system prompt with ALL real data
+    const systemPrompt = `You are the AI assistant for TheUnaHub (theunahub.com), a vibrant neighborhood social platform. You have access to REAL, current data and should provide specific, helpful responses based on actual content.
 
-CURRENT REAL DATA AVAILABLE:
-- Events: ${JSON.stringify(contextData.events.slice(0, 5))} (showing first 5)
-- Communities: ${JSON.stringify(contextData.communities.slice(0, 3))} (showing first 3)  
-- Recent Posts: ${JSON.stringify(contextData.posts.slice(0, 3))} (showing first 3)
-- User Location: ${contextData.userLocation}
+🎯 REAL CURRENT DATA AVAILABLE:
 
-INSTRUCTIONS:
-1. ALWAYS reference specific events, communities, or posts from the real data when relevant
-2. Mention actual event names, locations, and details from the database
-3. If someone asks about events, mention specific ones like "Picnic in boco park" or "Going to art market"
-4. Be specific about locations (like "Boco Buenos Aires", "Palermo", etc.) from the real data
-5. Keep responses helpful and under 150 words
-6. If no relevant data matches their query, suggest they browse the available events and communities
-7. Always sound like you know the actual content and activities on TheUnaHub`;
+📅 EVENTS (${realData.currentEvents.length} active):
+${realData.currentEvents.map(e => `- "${e.title}" at ${e.location} on ${e.date} ${e.time ? 'at ' + e.time : ''} ${e.price ? '($' + e.price + ')' : ''} - ${e.description?.substring(0, 100)}...`).join('\n')}
 
-    // Make API call with real data context
+👥 COMMUNITIES (${realData.activeCommunities.length} active):
+${realData.activeCommunities.map(c => `- "${c.name}" (${c.member_count} members) - ${c.category} - ${c.tagline || c.description?.substring(0, 80)}`).join('\n')}
+
+🏪 MARKETPLACE (${realData.marketplaceItems.length} items):
+${realData.marketplaceItems.map(i => `- "${i.title}" in ${i.category} at ${i.location} for $${i.price} - ${i.description?.substring(0, 60)}...`).join('\n')}
+
+💡 NEIGHBORHOOD IDEAS (${realData.neighborhoodIdeas.length} recent):
+${realData.neighborhoodIdeas.map(n => `- "${n.question}" in ${n.neighborhood}`).join('\n')}
+
+❓ NEIGHBOR QUESTIONS (${realData.neighborQuestions.length} recent):
+${realData.neighborQuestions.map(q => `- ${q.content?.substring(0, 80)}...`).join('\n')}
+
+🎫 LOCAL DEALS (${realData.localCoupons.length} active):
+${realData.localCoupons.map(c => `- ${c.discount_amount} off at ${c.business_name} - ${c.title}`).join('\n')}
+
+📍 User Location: ${realData.userLocation}
+
+🤖 INSTRUCTIONS:
+1. ALWAYS mention specific events, communities, or items from the real data when relevant
+2. Reference actual names, locations, dates, and prices from the database
+3. Be conversational and helpful, like a local neighborhood expert
+4. Keep responses under 150 words but packed with specific information
+5. If asked about events, mention specific ones by name and details
+6. If asked about communities, reference actual community names and member counts
+7. For marketplace questions, mention real items and prices
+8. Always sound knowledgeable about the current neighborhood activity`;
+
+    console.log('🤖 Calling OpenAI with comprehensive data context...');
+
+    // Make OpenAI API call with comprehensive context
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -123,7 +157,7 @@ INSTRUCTIONS:
     }
     
     const aiResponse = data.choices[0].message.content;
-    console.log('🎉 Success! Returning AI response with real data context');
+    console.log('🎉 Success! Returning AI response with comprehensive real data');
 
     return new Response(
       JSON.stringify({ 
