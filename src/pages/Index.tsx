@@ -20,6 +20,7 @@ import { CommunityPerksCarousel } from "@/components/CommunityPerksCarousel";
 import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
+import FloatingMessagesToggle from "@/components/FloatingMessagesToggle";
 
 import { Button } from "@/components/ui/button";
 import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon } from "lucide-react";
@@ -701,6 +702,8 @@ const Index = () => {
         />
       )}
 
+      {/* Floating Messages Toggle */}
+      <FloatingMessagesToggle />
       
       <BottomNavigation />
       {isAddCouponModalOpen && (
