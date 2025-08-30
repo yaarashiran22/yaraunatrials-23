@@ -18,49 +18,30 @@ serve(async (req) => {
     
     const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
     if (!anthropicApiKey) {
+      console.error('Anthropic API key not found');
       throw new Error('Anthropic API key not found');
     }
 
-    // Initialize Supabase client
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    console.log('Processing AI request:', message);
 
-    // Fetch relevant data based on the query
-    const [eventsData, communitiesData, postsData] = await Promise.all([
-      supabase.from('events').select('*').limit(10),
-      supabase.from('communities').select('*').limit(10),
-      supabase.from('posts').select('*').limit(10)
-    ]);
-
-    // Prepare context data for AI
-    const contextData = {
-      events: eventsData.data || [],
-      communities: communitiesData.data || [],
-      posts: postsData.data || [],
-      userLocation: userLocation || 'Not specified'
-    };
-
-    // Create system prompt with context
+    // Simplified system prompt without database queries for faster response
     const systemPrompt = `You are a helpful assistant for a neighborhood social platform. You help users find events, meetups, communities, and connect with neighbors based on their interests and needs.
 
-Available data:
-- Events: ${JSON.stringify(contextData.events)}
-- Communities: ${JSON.stringify(contextData.communities)} 
-- Posts: ${JSON.stringify(contextData.posts)}
-- User Location: ${contextData.userLocation}
+User Location: ${userLocation || 'Not specified'}
 
 Guidelines:
 1. Be friendly and conversational
-2. Recommend specific events, communities, or posts based on the user's query
-3. If location is relevant, prioritize nearby options
+2. Help users with finding local events, communities, and connecting with neighbors
+3. Keep responses concise but helpful (under 200 words)
 4. Ask clarifying questions when needed
-5. Keep responses concise but helpful
-6. Always mention specific names and details from the available data
-7. If no relevant matches found, suggest general categories or ask for more details`;
+5. Provide general advice about community engagement if specific data isn't available`;
 
-    // Call Claude API directly with no fallbacks - always get real AI responses
+    console.log('Calling Claude API...');
+
+    // Call Claude API directly with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -70,30 +51,35 @@ Guidelines:
       },
       body: JSON.stringify({
         model: 'claude-3-5-haiku-20241022',
-        max_tokens: 300,
+        max_tokens: 200,
         messages: [
           { 
             role: 'user', 
             content: `${systemPrompt}\n\nUser question: ${message}` 
           }
         ]
-      })
+      }),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
+    console.log('Claude API response status:', response.status);
 
     if (!response.ok) {
       const errorData = await response.text();
       console.error('Claude API error:', response.status, errorData);
-      throw new Error(`Claude API error: ${response.status}`);
+      throw new Error(`Claude API error: ${response.status} - ${errorData}`);
     }
 
     const data = await response.json();
+    console.log('Claude API response received');
     
     if (!data.content || !data.content[0] || !data.content[0].text) {
+      console.error('Invalid Claude response format:', data);
       throw new Error('Invalid response format from Claude API');
     }
     
     const aiResponse = data.content[0].text;
-
     console.log('AI Assistant request processed successfully');
 
     return new Response(
