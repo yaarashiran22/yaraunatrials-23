@@ -16,15 +16,15 @@ serve(async (req) => {
   try {
     const { message, userLocation } = await req.json();
     
-    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
-    if (!anthropicApiKey) {
-      console.error('Anthropic API key not found');
-      throw new Error('Anthropic API key not found');
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAIApiKey) {
+      console.error('OpenAI API key not found');
+      throw new Error('OpenAI API key not found');
     }
 
     console.log('Processing AI request:', message);
 
-    // Simplified system prompt without database queries for faster response
+    // Simplified system prompt for faster response
     const systemPrompt = `You are a helpful assistant for a neighborhood social platform. You help users find events, meetups, communities, and connect with neighbors based on their interests and needs.
 
 User Location: ${userLocation || 'Not specified'}
@@ -32,54 +32,52 @@ User Location: ${userLocation || 'Not specified'}
 Guidelines:
 1. Be friendly and conversational
 2. Help users with finding local events, communities, and connecting with neighbors
-3. Keep responses concise but helpful (under 200 words)
+3. Keep responses concise but helpful (under 150 words)
 4. Ask clarifying questions when needed
-5. Provide general advice about community engagement if specific data isn't available`;
+5. Provide general advice about community engagement`;
 
-    console.log('Calling Claude API...');
+    console.log('Calling OpenAI API...');
 
-    // Call Claude API directly with timeout
+    // Call OpenAI API with timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
     
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'x-api-key': anthropicApiKey,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-haiku-20241022',
-        max_tokens: 200,
+        model: 'gpt-4o-mini',
         messages: [
-          { 
-            role: 'user', 
-            content: `${systemPrompt}\n\nUser question: ${message}` 
-          }
-        ]
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: message }
+        ],
+        max_tokens: 150,
+        temperature: 0.7
       }),
       signal: controller.signal
     });
 
     clearTimeout(timeoutId);
-    console.log('Claude API response status:', response.status);
+    console.log('OpenAI API response status:', response.status);
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('Claude API error:', response.status, errorData);
-      throw new Error(`Claude API error: ${response.status} - ${errorData}`);
+      console.error('OpenAI API error:', response.status, errorData);
+      throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('Claude API response received');
+    console.log('OpenAI API response received');
     
-    if (!data.content || !data.content[0] || !data.content[0].text) {
-      console.error('Invalid Claude response format:', data);
-      throw new Error('Invalid response format from Claude API');
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Invalid OpenAI response format:', data);
+      throw new Error('Invalid response format from OpenAI API');
     }
     
-    const aiResponse = data.content[0].text;
+    const aiResponse = data.choices[0].message.content;
     console.log('AI Assistant request processed successfully');
 
     return new Response(
@@ -102,7 +100,7 @@ Guidelines:
       errorMessage = "I'm having configuration issues. Please contact support.";
     } else if (error.message.includes('AbortError') || error.message.includes('timeout')) {
       errorMessage = "The request timed out. Please try a shorter question.";
-    } else if (error.message.includes('Claude API')) {
+    } else if (error.message.includes('OpenAI API') || error.message.includes('Claude API')) {
       errorMessage = "I'm having trouble connecting to my AI service. Please try again in a moment.";
     }
     
