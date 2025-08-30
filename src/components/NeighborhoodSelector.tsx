@@ -19,7 +19,15 @@ const neighborhoods = [
   "Las Cañitas",
   "Villa Cañitas",
   "Palermo Viejo",
-  "Alto Palermo"
+  "Alto Palermo",
+  "Recoleta",
+  "Villa Crespo",
+  "Belgrano",
+  "San Telmo",
+  "La Boca",
+  "Puerto Madero",
+  "Barracas",
+  "Caballito"
 ];
 
 const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProps) => {
