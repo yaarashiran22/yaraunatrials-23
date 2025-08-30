@@ -10,6 +10,7 @@ import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { SearchProvider } from "@/contexts/SearchContext";
 import SearchPopup from "@/components/SearchPopup";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import AIAssistantButton from "@/components/AIAssistantButton";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
 import NewItemPopup from "@/components/NewItemPopup";
@@ -156,6 +157,7 @@ const AppContent = () => {
       
       <NewItemPopup isOpen={isOpen} onClose={closeNewItem} onItemCreated={refreshItems} />
       <SearchPopup />
+      <AIAssistantButton />
     </BrowserRouter>
   );
 };
