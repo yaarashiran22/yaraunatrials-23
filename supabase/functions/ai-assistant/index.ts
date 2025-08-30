@@ -101,8 +101,7 @@ Guidelines:
         }
         
         // If not rate limit error or max attempts reached, throw
-        const errorText = await response.text();
-        throw new Error(`OpenAI API error: ${response.status} ${response.statusText} - ${errorText}`);
+        throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
         
       } catch (fetchError) {
         if (attempts === maxAttempts - 1) {
