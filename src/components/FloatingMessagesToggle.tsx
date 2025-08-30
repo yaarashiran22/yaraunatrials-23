@@ -17,14 +17,14 @@ const FloatingMessagesToggle = () => {
           size="default"
           className="w-14 h-14 rounded-full shadow-lg transition-all duration-300 ease-in-out text-white hover:scale-105 active:scale-95"
           style={{
-            backgroundColor: 'hsl(157 100% 50%)',
-            borderColor: 'hsl(157 100% 50%)'
+            backgroundColor: 'hsl(157 100% 40%)',
+            borderColor: 'hsl(157 100% 40%)'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'hsl(157 100% 45%)';
+            e.currentTarget.style.backgroundColor = 'hsl(157 100% 35%)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'hsl(157 100% 50%)';
+            e.currentTarget.style.backgroundColor = 'hsl(157 100% 40%)';
           }}
         >
           <Bot className="h-6 w-6" />
