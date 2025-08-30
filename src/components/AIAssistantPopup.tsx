@@ -78,9 +78,12 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function invoke error:', error);
+        throw error;
+      }
 
-      if (data.success) {
+      if (data && data.success) {
         const assistantMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: data.response,
@@ -92,13 +95,13 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
         // If this was a fallback response, show a toast notification
         if (data.fallback) {
           toast({
-            title: "High Demand",
-            description: "I'm experiencing high traffic. Your response may be limited. Please try again in a moment.",
+            title: "Service Issue",
+            description: "I'm experiencing high traffic. Response may be limited.",
             variant: "default",
           });
         }
       } else {
-        throw new Error(data.error || 'Failed to get AI response');
+        throw new Error(data?.error || 'Failed to get AI response');
       }
     } catch (error) {
       console.error('Error sending message:', error);

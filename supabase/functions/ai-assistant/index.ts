@@ -60,9 +60,13 @@ Guidelines:
 6. Always mention specific names and details from the available data
 7. If no relevant matches found, suggest general categories or ask for more details`;
 
+    // Create an AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+    
     // Try multiple times with exponential backoff for rate limiting
     let attempts = 0;
-    const maxAttempts = 3;
+    const maxAttempts = 2; // Reduced attempts to avoid long delays
     let response;
     
     while (attempts < maxAttempts) {
@@ -80,11 +84,13 @@ Guidelines:
               { role: 'user', content: message }
             ],
             temperature: 0.7,
-            max_tokens: 500
+            max_tokens: 300 // Reduced for faster response
           }),
+          signal: controller.signal
         });
 
         if (response.ok) {
+          clearTimeout(timeoutId); // Clear timeout on success
           break; // Success, exit retry loop
         }
 
@@ -104,6 +110,7 @@ Guidelines:
         throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
         
       } catch (fetchError) {
+        clearTimeout(timeoutId); // Clear timeout on error
         if (attempts === maxAttempts - 1) {
           throw fetchError;
         }
