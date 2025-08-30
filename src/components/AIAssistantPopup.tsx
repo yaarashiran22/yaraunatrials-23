@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MessageCircle, Send, X, Bot, User } from 'lucide-react';
+import { MessageCircle, Send, X, Sparkles, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -164,8 +164,8 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
       <Card className="w-full max-w-md max-h-[80vh] min-h-[400px] flex flex-col bg-background">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 flex-shrink-0">
           <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <Bot className="w-5 h-5 text-primary" />
-            AI Assistant
+            <Sparkles className="w-5 h-5 text-primary" />
+            Una's AI Assistant
           </CardTitle>
           <Button
             variant="ghost"
@@ -189,7 +189,7 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
                 >
                   {message.role === 'assistant' && (
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-                      <Bot className="w-4 h-4 text-primary" />
+                      <Sparkles className="w-4 h-4 text-primary" />
                     </div>
                   )}
                   <div
@@ -211,7 +211,7 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
               {isLoading && (
                 <div className="flex gap-2 justify-start">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-primary" />
+                    <Sparkles className="w-4 h-4 text-primary" />
                   </div>
                   <div className="bg-muted text-muted-foreground rounded-lg p-3">
                     <div className="flex space-x-1">
