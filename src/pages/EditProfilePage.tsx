@@ -150,11 +150,11 @@ const EditProfilePage = () => {
     <div className="min-h-screen bg-background" dir="ltr">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b bg-background">
-        <div></div> {/* Empty div for spacing */}
-        <h2 className="text-lg font-semibold">Edit Profile</h2>
         <Button variant="ghost" size="sm" onClick={() => navigate(user ? `/profile/${user.id}` : '/')}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
+        <h2 className="text-lg font-semibold">Edit Profile</h2>
+        <div></div> {/* Empty div for spacing */
       </div>
 
       <main className="px-4 py-6 pb-20">
