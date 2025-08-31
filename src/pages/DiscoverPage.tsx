@@ -598,7 +598,7 @@ const DiscoverPage = () => {
         {/* Map Section */}
         <div className="relative">
           <div className="flex items-center justify-between mb-4">
-            <AddRecommendationCard onRecommendationAdded={addTextPinMarkers} className="w-32" />
+            <AddRecommendationCard onRecommendationAdded={addTextPinMarkers} className="w-20" />
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
           
