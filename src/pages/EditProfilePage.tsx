@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Bell, Camera, Plus } from "lucide-react";
+import { ArrowLeft, Bell, Camera, Plus, Coffee, Zap, Heart, Dumbbell, Palette, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,16 @@ import BottomNavigation from "@/components/BottomNavigation";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import profile1 from "@/assets/profile-1.jpg";
+
+const moodFilters = [
+  { id: "chill", label: "Chill", icon: Coffee, color: "text-blue-500" },
+  { id: "go-out", label: "Go Out", icon: Zap, color: "text-orange-500" },
+  { id: "romantic", label: "Romantic", icon: Heart, color: "text-pink-500" },
+  { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500" },
+  { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500" },
+  { id: "social", label: "Social", icon: Users, color: "text-indigo-500" },
+  { id: "sightseeing", label: "Sightseeing", icon: Camera, color: "text-cyan-500" }
+];
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -29,7 +39,7 @@ const EditProfilePage = () => {
     bio: "",
     location: "",
     specialties: [],
-    interests: ['Photography', 'Content Creator', 'Art', 'Music'],
+    interests: ['chill', 'creative'],
     isPrivate: false,
     showInSearch: true
   });
@@ -125,7 +135,7 @@ const EditProfilePage = () => {
         bio: profile.bio || "",
         location: profile.location || "",
         specialties: profile.specialties || [],
-        interests: profile.interests || ['Photography', 'Content Creator', 'Art', 'Music'],
+        interests: profile.interests || ['chill', 'creative'],
         isPrivate: profile.is_private || false,
         showInSearch: profile.show_in_search !== false // Default to true if null/undefined
       });
@@ -272,41 +282,36 @@ const EditProfilePage = () => {
             />
           </div>
 
-          {/* Interests Section */}
+          {/* Mood Interests Section */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-3">Interests</label>
-            <div className="flex flex-wrap gap-2">
-              {formData.interests.map((interest, index) => (
-                <div key={index} className="flex items-center gap-2 bg-muted rounded-full px-3 py-1">
-                  <span className="text-sm">{interest}</span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="p-0 h-4 w-4"
+            <label className="block text-sm font-medium text-foreground mb-3">Mood Interests</label>
+            <div className="grid grid-cols-2 gap-3">
+              {moodFilters.map((mood) => {
+                const IconComponent = mood.icon;
+                const isSelected = formData.interests.includes(mood.id);
+                
+                return (
+                  <Button
+                    key={mood.id}
+                    variant={isSelected ? "default" : "outline"}
+                    size="sm"
+                    className={`flex items-center gap-2 justify-start px-3 py-2 h-auto ${
+                      isSelected 
+                        ? `${mood.color} bg-muted border-current/20` 
+                        : `${mood.color} hover:bg-muted/50`
+                    }`}
                     onClick={() => {
-                      const newInterests = formData.interests.filter((_, i) => i !== index);
+                      const newInterests = isSelected
+                        ? formData.interests.filter(id => id !== mood.id)
+                        : [...formData.interests, mood.id];
                       handleInputChange('interests', newInterests);
                     }}
                   >
-                    <Plus className="h-3 w-3 rotate-45" />
+                    <IconComponent className={`h-4 w-4 ${mood.color}`} />
+                    <span className="text-sm font-medium">{mood.label}</span>
                   </Button>
-                </div>
-              ))}
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="rounded-full px-3 py-1 h-7"
-                onClick={() => {
-                  const newInterest = prompt('Add interest:');
-                  if (newInterest?.trim()) {
-                    const newInterests = [...formData.interests, newInterest.trim()];
-                    handleInputChange('interests', newInterests);
-                  }
-                }}
-              >
-                <Plus className="h-3 w-3 mr-1" />
-                Add
-              </Button>
+                );
+              })}
             </div>
           </div>
 
