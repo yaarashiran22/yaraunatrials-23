@@ -463,6 +463,36 @@ const DiscoverPage = () => {
           // Handle mood filter change if needed
         }} />
         
+        {/* Map Section */}
+        <div className="relative">
+          <div className="flex items-center justify-between mb-4">
+            <AddRecommendationCard onRecommendationAdded={addTextPinMarkers} className="w-32" />
+            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
+          </div>
+          
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+            {error ? (
+              <div className="flex items-center justify-center h-full bg-muted/30">
+                <div className="text-center p-4">
+                  <p className="text-muted-foreground">{error}</p>
+                </div>
+              </div>
+            ) : (
+              <>
+                {isLoading && (
+                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 backdrop-blur-sm">
+                    <div className="text-center">
+                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                      <p className="text-muted-foreground text-sm">Loading map...</p>
+                    </div>
+                  </div>
+                )}
+                <div ref={mapContainer} className="w-full h-full relative z-0" />
+              </>
+            )}
+          </div>
+        </div>
+
         {/* Filter Buttons */}
         <div className="flex gap-2 justify-center">
           <Button
@@ -507,36 +537,6 @@ const DiscoverPage = () => {
             <Users className="h-3 w-3 mr-1" />
             Friends
           </Button>
-        </div>
-
-        {/* Map Section */}
-        <div className="relative">
-          <div className="flex items-center justify-between mb-4">
-            <AddRecommendationCard onRecommendationAdded={addTextPinMarkers} className="w-32" />
-            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
-          </div>
-          
-          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
-            {error ? (
-              <div className="flex items-center justify-center h-full bg-muted/30">
-                <div className="text-center p-4">
-                  <p className="text-muted-foreground">{error}</p>
-                </div>
-              </div>
-            ) : (
-              <>
-                {isLoading && (
-                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 backdrop-blur-sm">
-                    <div className="text-center">
-                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                      <p className="text-muted-foreground text-sm">Loading map...</p>
-                    </div>
-                  </div>
-                )}
-                <div ref={mapContainer} className="w-full h-full relative z-0" />
-              </>
-            )}
-          </div>
         </div>
       </main>
       
