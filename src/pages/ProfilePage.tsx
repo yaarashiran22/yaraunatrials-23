@@ -55,7 +55,16 @@ const ProfilePage = () => {
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
   // Check if this is the current user's profile
-  const isOwnProfile = user && (!id || !validateUUID(id) || id === user.id);
+  // If the ID is invalid or missing, we're showing the current user's profile
+  const isOwnProfile = user && (!id || !validateUUID(id) || actualProfileId === user.id);
+
+  console.log('ProfilePage - Debug info:', {
+    urlId: id,
+    actualProfileId,
+    currentUserId: user?.id,
+    isOwnProfile,
+    isValidUUID: id ? validateUUID(id) : false
+  });
   
   
   const [showNotifications, setShowNotifications] = useState(false);
