@@ -596,12 +596,7 @@ const DiscoverPage = () => {
         </div>
         
         {/* Map Section */}
-        <div className="relative">
-          <div className="flex items-center justify-between mb-4">
-            <AddRecommendationCard onRecommendationAdded={addTextPinMarkers} className="w-20" />
-            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
-          </div>
-          
+        <div className="relative">          
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
             {error ? (
               <div className="flex items-center justify-center h-full bg-muted/30">
@@ -622,6 +617,11 @@ const DiscoverPage = () => {
                 <div ref={mapContainer} className="w-full h-full relative z-0" />
               </>
             )}
+          </div>
+
+          <div className="flex items-center justify-between mt-4">
+            <AddRecommendationCard onRecommendationAdded={addTextPinMarkers} className="w-20" />
+            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
         </div>
 
