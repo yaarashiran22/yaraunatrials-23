@@ -31,15 +31,28 @@ const OptimizedProfileCard = memo(({
 
   // Check for active stories
   useEffect(() => {
+    if (!id) return;
+    
     const checkStories = async () => {
-      const { data: stories } = await supabase
-        .from('stories')
-        .select('id')
-        .eq('user_id', id)
-        .gt('expires_at', new Date().toISOString())
-        .limit(1);
-      
-      setHasStories(stories && stories.length > 0);
+      try {
+        console.log('Fetching stories for user:', id);
+        const { data: stories, error } = await supabase
+          .from('stories')
+          .select('id')
+          .eq('user_id', id)
+          .gt('expires_at', new Date().toISOString())
+          .limit(1);
+          
+        if (error) {
+          console.error('Error fetching stories:', error);
+          return;
+        }
+        
+        console.log('Fetched stories:', stories?.length || 0, 'stories for user:', id);
+        setHasStories(stories && stories.length > 0);
+      } catch (error) {
+        console.error('Error in checkStories:', error);
+      }
     };
 
     checkStories();

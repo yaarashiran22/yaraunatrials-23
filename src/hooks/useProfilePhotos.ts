@@ -41,35 +41,72 @@ export const useProfilePhotos = (userId?: string) => {
   };
 
   const uploadPhoto = async (file: File, order: number) => {
-    if (!userId) return false;
+    if (!userId) {
+      console.error('No userId provided for photo upload');
+      toast({
+        title: "Error",
+        description: "User ID is required for photo upload",
+        variant: "destructive",
+      });
+      return false;
+    }
 
+    console.log('Starting photo upload for user:', userId, 'order:', order);
     setUploading(true);
+    
     try {
+      // Validate file
+      if (!file.type.startsWith('image/')) {
+        throw new Error('File must be an image');
+      }
+      
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error('File size must be less than 5MB');
+      }
+
       // Upload file to storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${userId}/${order}-${Date.now()}.${fileExt}`;
       
-      const { error: uploadError } = await supabase.storage
+      console.log('Uploading file to storage:', fileName);
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('profile-photos')
-        .upload(fileName, file);
+        .upload(fileName, file, {
+          upsert: true
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw uploadError;
+      }
+      
+      console.log('File uploaded successfully:', uploadData);
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('profile-photos')
         .getPublicUrl(fileName);
+        
+      console.log('Generated public URL:', publicUrl);
 
-      // Save to database
-      const { error: dbError } = await supabase
+      // Save to database - using upsert to handle existing photos for the same order
+      console.log('Saving photo to database...');
+      const { data: dbData, error: dbError } = await supabase
         .from('profile_photos')
         .upsert({
           user_id: userId,
           photo_url: publicUrl,
           display_order: order
+        }, {
+          onConflict: 'user_id,display_order'
         });
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database save error:', dbError);
+        throw dbError;
+      }
+      
+      console.log('Photo saved to database successfully:', dbData);
 
       toast({
         title: "Success",
@@ -78,11 +115,11 @@ export const useProfilePhotos = (userId?: string) => {
 
       await fetchPhotos();
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading photo:', error);
       toast({
         title: "Error",
-        description: "Failed to upload photo",
+        description: error.message || "Failed to upload photo",
         variant: "destructive",
       });
       return false;
