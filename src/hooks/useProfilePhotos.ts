@@ -89,17 +89,59 @@ export const useProfilePhotos = (userId?: string) => {
         
       console.log('Generated public URL:', publicUrl);
 
-      // Save to database - using upsert to handle existing photos for the same order
-      console.log('Saving photo to database...');
-      const { data: dbData, error: dbError } = await supabase
+      // Check if there's an existing photo for this order
+      const { data: existingPhoto } = await supabase
         .from('profile_photos')
-        .upsert({
-          user_id: userId,
-          photo_url: publicUrl,
-          display_order: order
-        }, {
-          onConflict: 'user_id,display_order'
-        });
+        .select('id, photo_url')
+        .eq('user_id', userId)
+        .eq('display_order', order)
+        .maybeSingle();
+
+      // Save to database
+      console.log('Saving photo to database...');
+      let dbData, dbError;
+
+      if (existingPhoto) {
+        // Update existing photo
+        console.log('Updating existing photo...');
+        const result = await supabase
+          .from('profile_photos')
+          .update({
+            photo_url: publicUrl,
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', userId)
+          .eq('display_order', order)
+          .select();
+        
+        dbData = result.data;
+        dbError = result.error;
+
+        // Delete old file from storage if it exists and is different
+        if (existingPhoto.photo_url && existingPhoto.photo_url !== publicUrl) {
+          const oldFileName = existingPhoto.photo_url.split('/').pop();
+          if (oldFileName && oldFileName !== fileName.split('/').pop()) {
+            console.log('Removing old file from storage:', oldFileName);
+            await supabase.storage
+              .from('profile-photos')
+              .remove([`${userId}/${oldFileName}`]);
+          }
+        }
+      } else {
+        // Insert new photo
+        console.log('Inserting new photo...');
+        const result = await supabase
+          .from('profile_photos')
+          .insert({
+            user_id: userId,
+            photo_url: publicUrl,
+            display_order: order
+          })
+          .select();
+        
+        dbData = result.data;
+        dbError = result.error;
+      }
 
       if (dbError) {
         console.error('Database save error:', dbError);
