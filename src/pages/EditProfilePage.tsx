@@ -224,7 +224,7 @@ const EditProfilePage = () => {
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Location</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Neighborhood</label>
             <Input 
               placeholder="New York City"
               className="text-left"
