@@ -538,44 +538,6 @@ const DiscoverPage = () => {
             )}
           </div>
         </div>
-
-
-        {/* Text Pins Section */}
-        <div className="space-y-4">
-          
-          {/* Display Text Pins */}
-          {userRecommendations.length > 0 && (
-            <div className="grid gap-3">
-              {userRecommendations.map((textPin) => (
-                <div 
-                  key={textPin.id}
-                  className="bg-card rounded-lg p-2 shadow-sm border hover:shadow-md transition-shadow"
-                >
-                  <div className="flex gap-2">
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm text-foreground mb-1">{textPin.title}</h4>
-                      {textPin.description && (
-                        <p className="text-xs text-muted-foreground mb-1 line-clamp-2">
-                          {textPin.description}
-                        </p>
-                      )}
-                      {textPin.profile && (
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <img 
-                            src={textPin.profile.profile_image_url || '/placeholder.svg'} 
-                            alt=""
-                            className="w-3 h-3 rounded-full object-cover"
-                          />
-                          <span className="text-xs">Posted by {textPin.profile.name || 'User'}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
       </main>
       
       <BottomNavigation />
