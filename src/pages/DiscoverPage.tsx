@@ -31,7 +31,7 @@ const DiscoverPage = () => {
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
-  const [filterType, setFilterType] = useState<'all' | 'friends' | 'following' | 'meet' | 'event'>('all');
+  const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
 
   // Function to handle neighborhood change
   const handleNeighborhoodChange = (neighborhoodName: string) => {
@@ -509,26 +509,6 @@ const DiscoverPage = () => {
 
         {/* Filter Buttons */}
         <div className="flex gap-2 justify-center flex-wrap">
-          <Button
-            variant={filterType === 'all' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilterType('all')}
-            className={`text-xs px-3 py-1 rounded-full ${
-              filterType === 'all' 
-                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
-                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
-            }`}
-            style={filterType === 'all' ? {
-              backgroundColor: 'hsl(var(--accent-subtle))',
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'white'
-            } : {
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'hsl(var(--accent-subtle))'
-            }}
-          >
-            All
-          </Button>
           <Button
             variant={filterType === 'friends' ? 'default' : 'outline'}
             size="sm"
