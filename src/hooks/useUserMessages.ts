@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { handleAuthError } from '@/utils/authErrorHandler';
 
 export interface UserMessage {
   id: string;
@@ -35,6 +36,12 @@ export const useUserMessages = (userId?: string) => {
 
       if (error) {
         console.error('Error fetching messages:', error);
+        
+        // Handle JWT expiration
+        if (handleAuthError(error)) {
+          return;
+        }
+        
         toast({
           title: "שגיאה",
           description: "לא ניתן לטעון את ההודעות",

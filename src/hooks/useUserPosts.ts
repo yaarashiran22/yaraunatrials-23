@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { handleAuthError } from '@/utils/authErrorHandler';
 
 interface UserPost {
   id: string;
@@ -32,6 +33,12 @@ export const useUserPosts = (userId?: string) => {
 
       if (error) {
         console.error('Error fetching user posts:', error);
+        
+        // Handle JWT expiration
+        if (handleAuthError(error)) {
+          return;
+        }
+        
         toast({
           title: "שגיאה",
           description: "שגיאה בטעינת הפוסטים",

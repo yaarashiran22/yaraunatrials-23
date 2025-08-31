@@ -55,6 +55,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(null);
         setUser(null);
       }
+      
+      // Handle token refresh failure - sign out user
+      if (event === 'TOKEN_REFRESHED' && !session) {
+        console.log('Token refresh failed, signing out user');
+        setSession(null);
+        setUser(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -103,6 +110,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = async () => {
     try {
       setIsLoading(true);
+      
+      // Clear localStorage first to prevent any token issues
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('sb-') || key.includes('supabase')) {
+          localStorage.removeItem(key);
+        }
+      });
+      
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error('Sign out error:', error);
@@ -113,6 +128,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
         throw error;
       }
+      
+      // Force clear state
+      setSession(null);
+      setUser(null);
     } catch (error) {
       console.error('Sign out error:', error);
       throw error;

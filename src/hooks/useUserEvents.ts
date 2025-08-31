@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { handleAuthError } from '@/utils/authErrorHandler';
 import { Event } from './useEvents';
 
 export const useUserEvents = (userId?: string) => {
@@ -49,6 +50,12 @@ export const useUserEvents = (userId?: string) => {
       setEvents((data || []) as Event[]);
     } catch (error) {
       console.error('Error fetching user events:', error);
+      
+      // Handle JWT expiration
+      if (handleAuthError(error)) {
+        return;
+      }
+      
       toast({
         title: "Error",
         description: "Failed to load events",

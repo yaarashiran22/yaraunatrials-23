@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { handleAuthError } from '@/utils/authErrorHandler';
 
 interface Notification {
   id: string;
@@ -51,6 +52,12 @@ export const useNotifications = () => {
 
       if (error) {
         console.error('Error fetching notifications:', error);
+        
+        // Handle JWT expiration
+        if (handleAuthError(error)) {
+          return;
+        }
+        
         toast({
           title: "שגיאה",
           description: "לא ניתן לטעון התראות",
