@@ -271,16 +271,6 @@ const EditProfilePage = () => {
             </div>
           </div>
 
-          {/* Join Date */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Member Since</label>
-            <Input 
-              placeholder="May 2024"
-              className="text-left"
-              defaultValue="May 2024"
-              disabled
-            />
-          </div>
 
           {/* Mood Interests Section */}
           <div>

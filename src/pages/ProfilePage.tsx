@@ -309,7 +309,6 @@ const ProfilePage = () => {
           <div className="flex-1">
             <h1 className="text-xl font-bold mb-1">{profileData?.name || "User"}</h1>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <span>{profileData?.created_at ? new Date(profileData.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : 'May 2024'}</span>
               <div className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
                 <span>{profileData?.location || "Not specified"}</span>
