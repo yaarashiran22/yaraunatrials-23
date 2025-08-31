@@ -29,6 +29,7 @@ export interface OptimizedProfile {
   id: string;
   name: string;
   image: string;
+  interests?: string[];
 }
 
 // Ultra-optimized database queries with aggressive limits for instant mobile loading
@@ -52,7 +53,7 @@ const fetchHomepageData = async () => {
         .limit(3), // Reduced to 3 for faster loading
         supabase
           .from('profiles')
-          .select('id, name, profile_image_url')
+          .select('id, name, profile_image_url, interests')
           .not('name', 'is', null)
           .order('created_at', { ascending: false })
           .limit(6), // Reduced to 6 for faster loading
@@ -139,7 +140,8 @@ const fetchHomepageData = async () => {
     const profiles = (profilesResult.data || []).map((profile) => ({
       id: profile.id,
       image: profile.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png",
-      name: profile.name || 'משתמש'
+      name: profile.name || 'משתמש',
+      interests: profile.interests || []
     }));
 
     const totalUsersCount = profilesCountResult.count || 0;

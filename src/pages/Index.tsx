@@ -122,6 +122,9 @@ const Index = () => {
     preloadData();
   }, []); // Removed preloadData dependency
 
+  // Mood filter state
+  const [selectedMoodFilter, setSelectedMoodFilter] = useState<string>("all");
+
   // Popup states
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -170,7 +173,7 @@ const Index = () => {
     return;
   }, []);
 
-  // Memoize display profiles with immediate display for performance
+  // Memoize display profiles with mood filtering
   const displayProfiles = useMemo(() => {
     const profilesList = [];
     
@@ -186,10 +189,18 @@ const Index = () => {
       profilesList.push(currentUserDisplayProfile);
     }
 
-    // Add other profiles (top 6 newest users only for faster loading)
+    // Filter and add other profiles based on selected mood
     if (profiles.length > 0) {
-      const otherProfiles = profiles
-        .filter(p => p.id !== user?.id)
+      let filteredProfiles = profiles.filter(p => p.id !== user?.id);
+      
+      // Apply mood filter if not "all"
+      if (selectedMoodFilter !== "all") {
+        filteredProfiles = filteredProfiles.filter(p => 
+          p.interests && p.interests.includes(selectedMoodFilter)
+        );
+      }
+      
+      const otherProfiles = filteredProfiles
         .slice(0, 6) // Reduced to 6 for faster loading
         .map(p => ({
           id: p.id,
@@ -203,7 +214,7 @@ const Index = () => {
     }
 
     return profilesList;
-  }, [user, currentUserProfile, profiles]); // Removed userStoryCounts dependency
+  }, [user, currentUserProfile, profiles, selectedMoodFilter]);
 
   // All business, event, and artwork data now comes from the database
   // Static data has been removed to show only real content
@@ -292,7 +303,7 @@ const Index = () => {
       />
       
       {/* Mood Filter Strip */}
-      <MoodFilterStrip />
+      <MoodFilterStrip onFilterChange={setSelectedMoodFilter} />
       
       <main className="px-4 lg:px-6 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 w-full">
         {/* Community Members Section - Horizontal Carousel */}
