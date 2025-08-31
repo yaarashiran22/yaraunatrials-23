@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin, Users } from 'lucide-react';
+import { MapPin, Users, Calendar, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
@@ -31,7 +31,7 @@ const DiscoverPage = () => {
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
-  const [filterType, setFilterType] = useState<'all' | 'friends' | 'following'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'friends' | 'following' | 'meet' | 'event'>('all');
 
   // Function to handle neighborhood change
   const handleNeighborhoodChange = (neighborhoodName: string) => {
@@ -145,61 +145,92 @@ const DiscoverPage = () => {
       recommendationMarkersRef.current = [];
     }
 
-    // Fetch text pins from database (using items table with category 'text_pin')
     try {
-      let query = supabase
-        .from('items')
-        .select('*')
-        .eq('category', 'text_pin')
-        .eq('status', 'active');
+      let items: any[] = [];
+      
+      if (filterType === 'event') {
+        // Fetch events from events table
+        let eventQuery = supabase
+          .from('events')
+          .select('*');
 
-      let textPins = [];
-
-      if (filterType === 'friends' && user?.id) {
-        // Get user's friends
-        const { data: friendsData, error: friendsError } = await supabase
-          .from('user_friends')
-          .select('friend_id')
-          .eq('user_id', user.id);
-
-        if (friendsError) {
-          console.error('Error fetching friends:', friendsError);
-          return;
+        if (user?.id) {
+          const { data: eventsData, error: eventsError } = await eventQuery;
+          if (eventsError) throw eventsError;
+          
+          // Transform events to match the format expected by the markers
+          items = eventsData?.map(event => ({
+            ...event,
+            category: 'event',
+            // Events use different field names, so map them
+            description: event.description || event.title
+          })) || [];
         }
+      } else if (filterType === 'meet') {
+        // Fetch meetup items from items table
+        let meetQuery = supabase
+          .from('items')
+          .select('*')
+          .in('category', ['meetup', 'social', 'community'])
+          .eq('status', 'active');
 
-        const friendIds = friendsData?.map(f => f.friend_id) || [];
-        if (friendIds.length > 0) {
-          const { data, error } = await query.in('user_id', friendIds);
-          if (error) throw error;
-          textPins = data || [];
-        }
-      } else if (filterType === 'following' && user?.id) {
-        // Get users the current user is following
-        const { data: followingData, error: followingError } = await supabase
-          .from('user_following')
-          .select('following_id')
-          .eq('follower_id', user.id);
-
-        if (followingError) {
-          console.error('Error fetching following:', followingError);
-          return;
-        }
-
-        const followingIds = followingData?.map(f => f.following_id) || [];
-        if (followingIds.length > 0) {
-          const { data, error } = await query.in('user_id', followingIds);
-          if (error) throw error;
-          textPins = data || [];
-        }
+        const { data: meetData, error: meetError } = await meetQuery;
+        if (meetError) throw meetError;
+        items = meetData || [];
       } else {
-        // Show all text pins
-        const { data, error } = await query;
-        if (error) throw error;
-        textPins = data || [];
+        // Original logic for text pins and other filters
+        let query = supabase
+          .from('items')
+          .select('*')
+          .eq('category', 'text_pin')
+          .eq('status', 'active');
+
+        if (filterType === 'friends' && user?.id) {
+          // Get user's friends
+          const { data: friendsData, error: friendsError } = await supabase
+            .from('user_friends')
+            .select('friend_id')
+            .eq('user_id', user.id);
+
+          if (friendsError) {
+            console.error('Error fetching friends:', friendsError);
+            return;
+          }
+
+          const friendIds = friendsData?.map(f => f.friend_id) || [];
+          if (friendIds.length > 0) {
+            const { data, error } = await query.in('user_id', friendIds);
+            if (error) throw error;
+            items = data || [];
+          }
+        } else if (filterType === 'following' && user?.id) {
+          // Get users the current user is following
+          const { data: followingData, error: followingError } = await supabase
+            .from('user_following')
+            .select('following_id')
+            .eq('follower_id', user.id);
+
+          if (followingError) {
+            console.error('Error fetching following:', followingError);
+            return;
+          }
+
+          const followingIds = followingData?.map(f => f.following_id) || [];
+          if (followingIds.length > 0) {
+            const { data, error } = await query.in('user_id', followingIds);
+            if (error) throw error;
+            items = data || [];
+          }
+        } else {
+          // Show all text pins
+          const { data, error } = await query;
+          if (error) throw error;
+          items = data || [];
+        }
       }
 
-      // Fetch user profiles for text pins
-      const userIds = textPins?.map(pin => pin.user_id).filter(Boolean) || [];
+      // Fetch user profiles for items
+      const userIds = items?.map(item => item.user_id).filter(Boolean) || [];
       let profiles: any[] = [];
       
       if (userIds.length > 0) {
@@ -210,22 +241,22 @@ const DiscoverPage = () => {
         profiles = profilesData || [];
       }
 
-      // Combine text pins with profiles
-      const textPinsWithProfiles = textPins?.map(pin => ({
-        ...pin,
-        profile: profiles.find(p => p.id === pin.user_id)
+      // Combine items with profiles
+      const itemsWithProfiles = items?.map(item => ({
+        ...item,
+        profile: profiles.find(p => p.id === item.user_id)
       })) || [];
 
-      setUserRecommendations(textPinsWithProfiles);
+      setUserRecommendations(itemsWithProfiles);
 
-      // Add markers for text pins
-      for (const textPin of textPinsWithProfiles) {
+      // Add markers for items
+      for (const item of itemsWithProfiles) {
         if (!mapInstanceRef.current) continue;
 
         let lat, lng;
         try {
-          if (textPin.location) {
-            const locationData = JSON.parse(textPin.location);
+          if (item.location) {
+            const locationData = JSON.parse(item.location);
             lat = locationData.lat;
             lng = locationData.lng;
           }
@@ -236,36 +267,49 @@ const DiscoverPage = () => {
 
         if (!lat || !lng) continue;
 
+        // Create custom icon based on item type
+        const getIconColor = (category: string) => {
+          switch (category) {
+            case 'event': return '#FF6B6B';
+            case 'meetup':
+            case 'social':
+            case 'community': return '#FFA726';
+            default: return '#4F46E5';
+          }
+        };
+
+        const iconColor = getIconColor(item.category);
+
         // Create custom text pin icon using uploaded image or fallback
-        const textPinIcon = L.divIcon({
-          html: textPin.image_url ? `
+        const itemIcon = L.divIcon({
+          html: item.image_url ? `
             <div class="w-8 h-8 rounded-full border-2 border-white shadow-lg overflow-hidden relative">
               <img 
-                src="${textPin.image_url}" 
-                alt="Pop image"
+                src="${item.image_url}" 
+                alt="${item.category} image"
                 class="w-full h-full object-cover"
                 loading="lazy"
               />
-              <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-blue-500 border border-white rounded-full flex items-center justify-center">
+              <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 border border-white rounded-full flex items-center justify-center" style="background-color: ${iconColor}">
                 <div class="w-1 h-1 bg-white rounded-full"></div>
               </div>
             </div>
           ` : `
-            <div class="w-6 h-6 rounded-full bg-blue-500 border-2 border-white shadow-md flex items-center justify-center relative">
+            <div class="w-6 h-6 rounded-full border-2 border-white shadow-md flex items-center justify-center relative" style="background-color: ${iconColor}">
               <div class="w-2 h-2 bg-white rounded-full"></div>
               <div class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-400 border border-white rounded-full flex items-center justify-center">
                 <div class="w-1 h-1 bg-green-600 rounded-full"></div>
               </div>
             </div>
           `,
-          className: 'text-pin-marker',
-          iconSize: textPin.image_url ? [32, 32] : [24, 24],
-          iconAnchor: textPin.image_url ? [16, 32] : [12, 24],
-          popupAnchor: textPin.image_url ? [0, -32] : [0, -24]
+          className: `${item.category}-marker`,
+          iconSize: item.image_url ? [32, 32] : [24, 24],
+          iconAnchor: item.image_url ? [16, 32] : [12, 24],
+          popupAnchor: item.image_url ? [0, -32] : [0, -24]
         });
 
         const marker = L.marker([lat, lng], {
-          icon: textPinIcon,
+          icon: itemIcon,
           riseOnHover: true
         })
           .addTo(mapInstanceRef.current)
@@ -315,14 +359,14 @@ const DiscoverPage = () => {
                   object-fit: cover;
                 }
               </style>
-              <div class="pin-text">${textPin.description || textPin.title || 'No message'}</div>
-              ${textPin.profile ? `
+              <div class="pin-text">${item.description || item.title || 'No message'}</div>
+              ${item.profile ? `
                 <div class="pin-author">
                   <img 
-                    src="${textPin.profile.profile_image_url || '/placeholder.svg'}" 
+                    src="${item.profile.profile_image_url || '/placeholder.svg'}" 
                     alt=""
                   />
-                  <span>by ${textPin.profile.name || 'User'}</span>
+                  <span>by ${item.profile.name || 'User'}</span>
                 </div>
               ` : ''}
             </div>
@@ -331,7 +375,7 @@ const DiscoverPage = () => {
         recommendationMarkersRef.current.push(marker);
       }
     } catch (error) {
-      console.error('Error fetching text pins:', error);
+      console.error('Error fetching items:', error);
     }
   };
 
@@ -494,7 +538,7 @@ const DiscoverPage = () => {
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex gap-2 justify-center">
+        <div className="flex gap-2 justify-center flex-wrap">
           <Button
             variant={filterType === 'all' ? 'default' : 'outline'}
             size="sm"
@@ -536,6 +580,48 @@ const DiscoverPage = () => {
           >
             <Users className="h-3 w-3 mr-1" />
             Friends
+          </Button>
+          <Button
+            variant={filterType === 'meet' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterType('meet')}
+            className={`text-xs px-3 py-1 rounded-full ${
+              filterType === 'meet' 
+                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+            }`}
+            style={filterType === 'meet' ? {
+              backgroundColor: 'hsl(var(--accent-subtle))',
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'white'
+            } : {
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'hsl(var(--accent-subtle))'
+            }}
+          >
+            <Coffee className="h-3 w-3 mr-1" />
+            Meet
+          </Button>
+          <Button
+            variant={filterType === 'event' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterType('event')}
+            className={`text-xs px-3 py-1 rounded-full ${
+              filterType === 'event' 
+                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+            }`}
+            style={filterType === 'event' ? {
+              backgroundColor: 'hsl(var(--accent-subtle))',
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'white'
+            } : {
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'hsl(var(--accent-subtle))'
+            }}
+          >
+            <Calendar className="h-3 w-3 mr-1" />
+            Event
           </Button>
         </div>
       </main>
