@@ -31,13 +31,13 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
     
     return (
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-3">Photos</h3>
+        <h3 className="text-lg font-semibold mb-3">User Photos</h3>
         <div className="flex gap-3 overflow-x-auto">
           {photos.map((photo) => (
             <div key={photo.id} className="flex-shrink-0">
               <img
                 src={photo.photo_url}
-                alt="Profile photo"
+                alt="User photo"
                 className="w-24 h-24 object-cover rounded-lg"
               />
             </div>
@@ -96,7 +96,7 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
           <div className="relative group">
             <img
               src={photo.photo_url}
-              alt={`Profile photo ${order}`}
+              alt={`User photo ${order}`}
               className="w-24 h-24 object-cover rounded-lg"
             />
             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 rounded-lg flex items-center justify-center">
@@ -128,8 +128,8 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold">Photos</h3>
-        <span className="text-sm text-muted-foreground">Up to 3 photos</span>
+        <h3 className="text-lg font-semibold">User Photos</h3>
+        <span className="text-sm text-muted-foreground">Up to 3 photos • Public</span>
       </div>
       
       <div className="flex gap-3">
