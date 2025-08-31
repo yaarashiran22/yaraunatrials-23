@@ -14,21 +14,27 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
   const { photos, loading, uploading, uploadPhoto, deletePhoto } = useProfilePhotos(userId);
   const fileInputRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
 
-  console.log('ProfilePhotoUpload - Props:', { userId, isOwnProfile, currentUser: user?.id });
-  console.log('ProfilePhotoUpload - Photos:', photos);
-  console.log('ProfilePhotoUpload - Loading states:', { loading, uploading });
+  console.log('ProfilePhotoUpload - Render with:', { 
+    userId, 
+    isOwnProfile, 
+    userLoggedIn: !!user,
+    userIdFromProps: userId,
+    currentUserId: user?.id,
+    photosCount: photos.length
+  });
 
-  // Only show to authenticated users on their own profile
-  if (!user || !isOwnProfile || userId !== user.id) {
-    console.log('ProfilePhotoUpload - Access denied or viewing mode:', { 
-      hasUser: !!user, 
-      isOwnProfile, 
-      userIdMatch: userId === user?.id 
-    });
+  // Show upload interface if user is authenticated and this is marked as their own profile
+  const showUploadInterface = user && isOwnProfile;
+  console.log('ProfilePhotoUpload - Show upload interface:', showUploadInterface);
+
+  // If not showing upload interface but has photos, show view-only mode
+  if (!showUploadInterface) {
+    if (photos.length === 0) {
+      console.log('ProfilePhotoUpload - No upload access and no photos, returning null');
+      return null;
+    }
     
-    // Show existing photos for viewing only
-    if (photos.length === 0) return null;
-    
+    console.log('ProfilePhotoUpload - Showing view-only mode with', photos.length, 'photos');
     return (
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-3">User Photos</h3>
