@@ -34,6 +34,11 @@ export default {
 					soft: 'hsl(var(--primary-soft))',
 					glow: 'hsl(var(--primary-glow))'
 				},
+				coral: {
+					DEFAULT: 'hsl(var(--coral))',
+					foreground: 'hsl(var(--coral-foreground))',
+					muted: 'hsl(var(--coral-muted))'
+				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
