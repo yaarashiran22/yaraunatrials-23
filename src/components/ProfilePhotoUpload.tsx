@@ -56,23 +56,39 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
   const handleFileSelect = async (order: number, file: File | null) => {
     console.log('ProfilePhotoUpload - handleFileSelect called:', { order, file: file?.name, fileType: file?.type, fileSize: file?.size });
     
-    if (!file) return;
+    if (!file) {
+      console.log('ProfilePhotoUpload - No file selected');
+      return;
+    }
     
     // Validate file type
     if (!file.type.startsWith('image/')) {
       console.error('ProfilePhotoUpload - Invalid file type:', file.type);
+      alert('Please select an image file');
       return;
     }
     
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       console.error('ProfilePhotoUpload - File too large:', file.size);
+      alert('File too large. Please select an image under 5MB');
       return;
     }
     
     console.log('ProfilePhotoUpload - Calling uploadPhoto...');
-    const result = await uploadPhoto(file, order);
-    console.log('ProfilePhotoUpload - Upload result:', result);
+    try {
+      const result = await uploadPhoto(file, order);
+      console.log('ProfilePhotoUpload - Upload result:', result);
+      if (result) {
+        console.log('ProfilePhotoUpload - Upload successful!');
+      } else {
+        console.error('ProfilePhotoUpload - Upload failed');
+        alert('Upload failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('ProfilePhotoUpload - Upload error:', error);
+      alert('Upload error: ' + error.message);
+    }
   };
 
   const getPhotoByOrder = (order: number) => {
@@ -119,7 +135,10 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
           </div>
         ) : (
           <button
-            onClick={() => fileInputRefs[index].current?.click()}
+            onClick={() => {
+              console.log('ProfilePhotoUpload - Upload button clicked for order:', order);
+              fileInputRefs[index].current?.click();
+            }}
             disabled={uploading}
             className="w-24 h-24 border-2 border-dashed border-muted-foreground/30 rounded-lg flex flex-col items-center justify-center hover:border-muted-foreground/50 transition-colors duration-200 bg-muted/20"
           >
