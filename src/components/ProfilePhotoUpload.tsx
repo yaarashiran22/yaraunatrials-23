@@ -14,8 +14,18 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
   const { photos, loading, uploading, uploadPhoto, deletePhoto } = useProfilePhotos(userId);
   const fileInputRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
 
+  console.log('ProfilePhotoUpload - Props:', { userId, isOwnProfile, currentUser: user?.id });
+  console.log('ProfilePhotoUpload - Photos:', photos);
+  console.log('ProfilePhotoUpload - Loading states:', { loading, uploading });
+
   // Only show to authenticated users on their own profile
   if (!user || !isOwnProfile || userId !== user.id) {
+    console.log('ProfilePhotoUpload - Access denied or viewing mode:', { 
+      hasUser: !!user, 
+      isOwnProfile, 
+      userIdMatch: userId === user?.id 
+    });
+    
     // Show existing photos for viewing only
     if (photos.length === 0) return null;
     
@@ -38,19 +48,25 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
   }
 
   const handleFileSelect = async (order: number, file: File | null) => {
+    console.log('ProfilePhotoUpload - handleFileSelect called:', { order, file: file?.name, fileType: file?.type, fileSize: file?.size });
+    
     if (!file) return;
     
     // Validate file type
     if (!file.type.startsWith('image/')) {
+      console.error('ProfilePhotoUpload - Invalid file type:', file.type);
       return;
     }
     
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
+      console.error('ProfilePhotoUpload - File too large:', file.size);
       return;
     }
     
-    await uploadPhoto(file, order);
+    console.log('ProfilePhotoUpload - Calling uploadPhoto...');
+    const result = await uploadPhoto(file, order);
+    console.log('ProfilePhotoUpload - Upload result:', result);
   };
 
   const getPhotoByOrder = (order: number) => {
