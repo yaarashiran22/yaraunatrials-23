@@ -379,11 +379,11 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Profile Photos Upload - Removed per user request */}
-        {/* <ProfilePhotoUpload 
+        {/* Profile Photos */}
+        <ProfilePhotoUpload 
           userId={actualProfileId}
           isOwnProfile={isOwnProfile}
-        /> */}
+        />
 
         {/* Account Type Badge and Business Features */}
         {profileData?.account_type && (
