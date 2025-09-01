@@ -679,18 +679,6 @@ const DiscoverPage = () => {
         {/* Map Section */}
         <div className="relative">          
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
-            {/* Discovery Button */}
-            <div className="absolute top-4 right-4 z-20">
-              <Button
-                onClick={() => setShowDiscovery(true)}
-                size="sm"
-                className="bg-primary/90 hover:bg-primary text-primary-foreground shadow-lg backdrop-blur-sm"
-              >
-                <Search className="h-4 w-4 mr-2" />
-                Discover Who's Around
-              </Button>
-            </div>
-
             {/* Filtered Users Display */}
             {filteredUsers.length > 0 && (
               <div className="absolute bottom-4 left-4 right-4 z-20">
