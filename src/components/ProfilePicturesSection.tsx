@@ -184,13 +184,23 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
 
   // Handle file selection
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>, slot: number) => {
+    console.log('handleFileSelect called for slot:', slot);
     const file = event.target.files?.[0];
+    console.log('File selected:', file ? { name: file.name, size: file.size, type: file.type } : 'No file');
+    
     if (file) {
+      console.log('Calling uploadPicture...');
       uploadPicture(file, slot);
+    } else {
+      console.log('No file selected');
     }
+    
+    // Reset the input so the same file can be selected again
+    event.target.value = '';
   };
 
   useEffect(() => {
+    console.log('ProfilePicturesSection useEffect triggered, userId:', userId);
     fetchPictures();
   }, [userId]);
 
