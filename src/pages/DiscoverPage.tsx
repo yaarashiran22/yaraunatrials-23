@@ -3,7 +3,6 @@ import { MapPin, Users, Calendar, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
-import AddRecommendationCard from "@/components/AddRecommendationCard";
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -243,10 +242,6 @@ const DiscoverPage = () => {
               )}
             </div>
           )}
-
-          <div className="flex items-center justify-center mt-6">
-            <AddRecommendationCard onRecommendationAdded={fetchItems} className="w-20" />
-          </div>
         </div>
 
       </main>
