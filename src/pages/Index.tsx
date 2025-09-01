@@ -20,7 +20,6 @@ import { CommunityPerksCarousel } from "@/components/CommunityPerksCarousel";
 import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
-import AIAssistantButton from "@/components/AIAssistantButton";
 import FloatingMapToggle from "@/components/FloatingMapToggle";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -829,7 +828,6 @@ const Index = () => {
       )}
 
       {/* Floating AI Assistant Toggle */}
-      <AIAssistantButton />
       
       {/* Map Toggle Button */}
       <FloatingMapToggle isMapOpen={isMapOpen} onToggle={handleMapToggle} />

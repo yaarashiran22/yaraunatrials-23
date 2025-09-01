@@ -3,6 +3,7 @@ import { MapPin, Users, Calendar, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
+import AIAssistantSection from "@/components/AIAssistantSection";
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -112,6 +113,9 @@ const DiscoverPage = () => {
       />
       
       <main className="container mx-auto px-4 py-3 space-y-6">
+        {/* AI Assistant Section */}
+        <AIAssistantSection />
+        
         {/* Filter Buttons */}
         <div className="flex gap-2 justify-center flex-wrap">
           <Button
