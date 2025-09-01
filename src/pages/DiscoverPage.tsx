@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin, Users, Calendar, Coffee } from 'lucide-react';
+import { MapPin, Users, Calendar, Coffee, Heart, HeartOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { toast } from '@/hooks/use-toast';
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import AIAssistantSection from "@/components/AIAssistantSection";
+import SectionHeader from "@/components/SectionHeader";
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -13,6 +16,9 @@ const DiscoverPage = () => {
   const { user } = useAuth();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
+  const [openToConnecting, setOpenToConnecting] = useState(false);
+  const [connectingNeighbors, setConnectingNeighbors] = useState<any[]>([]);
+  const [connectingLoading, setConnectingLoading] = useState(false);
 
   // Function to fetch items based on filter
   const fetchItems = async () => {
@@ -102,8 +108,82 @@ const DiscoverPage = () => {
     }
   };
 
+  // Function to fetch current user's connecting status
+  const fetchUserConnectingStatus = async () => {
+    if (!user?.id) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('open_to_connecting')
+        .eq('id', user.id)
+        .single();
+      
+      if (error) throw error;
+      setOpenToConnecting(data?.open_to_connecting || false);
+    } catch (error) {
+      console.error('Error fetching user connecting status:', error);
+    }
+  };
+
+  // Function to toggle user's connecting status
+  const toggleConnectingStatus = async (newStatus: boolean) => {
+    if (!user?.id) return;
+    
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ open_to_connecting: newStatus })
+        .eq('id', user.id);
+      
+      if (error) throw error;
+      
+      setOpenToConnecting(newStatus);
+      toast({
+        title: newStatus ? "You're open to connecting!" : "Connection status updated",
+        description: newStatus 
+          ? "Other neighbors can now see you want to connect"
+          : "You won't appear in the connecting section",
+      });
+      
+      // Refresh the connecting neighbors list
+      fetchConnectingNeighbors();
+    } catch (error) {
+      console.error('Error updating connecting status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update your connecting status",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Function to fetch neighbors who want to connect
+  const fetchConnectingNeighbors = async () => {
+    if (!user?.id) return;
+    
+    try {
+      setConnectingLoading(true);
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, name, profile_image_url, bio, location')
+        .eq('open_to_connecting', true)
+        .neq('id', user.id); // Exclude current user
+      
+      if (error) throw error;
+      setConnectingNeighbors(data || []);
+    } catch (error) {
+      console.error('Error fetching connecting neighbors:', error);
+    } finally {
+      setConnectingLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchItems();
+    fetchUserConnectingStatus();
+    fetchConnectingNeighbors();
   }, [filterType, user?.id]);
 
   return (
@@ -115,6 +195,68 @@ const DiscoverPage = () => {
       <main className="container mx-auto px-4 py-3 space-y-6">
         {/* AI Assistant Section */}
         <AIAssistantSection />
+        
+        {/* Neighbors that Want to Connect Section */}
+        <div className="bg-card rounded-xl p-4 border border-border/20 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <SectionHeader 
+                title="Neighbors that Want to Connect"
+                subtitle="Find people open to new friendships and connections"
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              {openToConnecting ? <Heart className="h-4 w-4 text-primary" /> : <HeartOff className="h-4 w-4 text-muted-foreground" />}
+              <Switch
+                checked={openToConnecting}
+                onCheckedChange={toggleConnectingStatus}
+              />
+            </div>
+          </div>
+          
+          {connectingLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : connectingNeighbors.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Heart className="h-12 w-12 mx-auto mb-2 opacity-50" />
+              <p className="text-sm">No neighbors are currently open to connecting</p>
+              <p className="text-xs mt-1">Be the first to turn on your connection status!</p>
+            </div>
+          ) : (
+            <div className="grid gap-3">
+              {connectingNeighbors.map((neighbor) => (
+                <div key={neighbor.id} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                  <img
+                    src={neighbor.profile_image_url || '/placeholder.svg'}
+                    alt={neighbor.name}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-medium text-sm text-foreground">
+                      {neighbor.name || 'Neighbor'}
+                    </h4>
+                    {neighbor.bio && (
+                      <p className="text-xs text-muted-foreground truncate">
+                        {neighbor.bio}
+                      </p>
+                    )}
+                    {neighbor.location && (
+                      <p className="text-xs text-muted-foreground flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {neighbor.location}
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-xs text-primary">
+                    <Heart className="h-3 w-3" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         
         {/* Content Section */}
         <div className="relative">
