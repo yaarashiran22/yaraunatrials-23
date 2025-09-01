@@ -39,8 +39,8 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
 
   // Common interests/specialties
   const commonInterests = [
-    "Coffee", "Art", "Music", "Food", "Travel", "Fitness", "Technology", 
-    "Photography", "Reading", "Movies", "Gaming", "Cooking", "Dancing", "Sports"
+    "Wellness", "Art", "Music", "Food", "Travel", "Fitness", 
+    "Photography", "Movies", "Gaming", "Cooking", "Dancing", "Sports"
   ];
 
   return (
