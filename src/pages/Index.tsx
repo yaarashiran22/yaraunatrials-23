@@ -848,7 +848,6 @@ const Index = () => {
               >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <h1 className="text-lg font-semibold text-foreground">Map</h1>
             </div>
           </div>
           
