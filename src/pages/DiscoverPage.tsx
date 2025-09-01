@@ -8,7 +8,7 @@ import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import BottomNavigation from "@/components/BottomNavigation";
 import LocationShareButton from '@/components/LocationShareButton';
 import AddRecommendationCard from "@/components/AddRecommendationCard";
-
+import MoodFilterStrip from '@/components/MoodFilterStrip';
 import DiscoveryPopup from '@/components/DiscoveryPopup';
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
@@ -538,9 +538,83 @@ const DiscoverPage = () => {
       
       
       <main className="container mx-auto px-4 py-3 space-y-6">
+        {/* Mood Filter Strip */}
+        <MoodFilterStrip onFilterChange={(filterId) => {
+          console.log('Mood filter changed:', filterId);
+          // Handle mood filter change if needed
+        }} />
+
+        {/* Filter Buttons */}
+        <div className="flex gap-2 justify-center flex-wrap">
+          <Button
+            variant={filterType === 'friends' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterType('friends')}
+            className={`text-xs px-3 py-1 rounded-full ${
+              filterType === 'friends' 
+                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+            }`}
+            style={filterType === 'friends' ? {
+              backgroundColor: 'hsl(var(--accent-subtle))',
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'white'
+            } : {
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'hsl(var(--accent-subtle))'
+            }}
+            disabled={!user}
+          >
+            <Users className="h-3 w-3 mr-1" />
+            Friends
+          </Button>
+          <Button
+            variant={filterType === 'meet' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterType('meet')}
+            className={`text-xs px-3 py-1 rounded-full ${
+              filterType === 'meet' 
+                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+            }`}
+            style={filterType === 'meet' ? {
+              backgroundColor: 'hsl(var(--accent-subtle))',
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'white'
+            } : {
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'hsl(var(--accent-subtle))'
+            }}
+          >
+            <Coffee className="h-3 w-3 mr-1" />
+            Meet
+          </Button>
+          <Button
+            variant={filterType === 'event' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setFilterType('event')}
+            className={`text-xs px-3 py-1 rounded-full ${
+              filterType === 'event' 
+                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
+                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
+            }`}
+            style={filterType === 'event' ? {
+              backgroundColor: 'hsl(var(--accent-subtle))',
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'white'
+            } : {
+              borderColor: 'hsl(var(--accent-subtle))',
+              color: 'hsl(var(--accent-subtle))'
+            }}
+          >
+            <Calendar className="h-3 w-3 mr-1" />
+            Event
+          </Button>
+        </div>
+        
         {/* Map Section */}
         <div className="relative">          
-          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[calc(100vh-160px)] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
             {/* Discovery Button */}
             <div className="absolute top-4 right-4 z-20">
               <Button
