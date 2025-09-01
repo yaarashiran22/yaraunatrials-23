@@ -11,68 +11,24 @@ const DiscoverPage = () => {
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
-  const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
+  const filterType = 'meet'; // Default to meet content
 
-  // Function to fetch items based on filter
+  // Function to fetch meetup items
   const fetchItems = async () => {
     if (!user?.id) return;
 
     try {
       setIsLoading(true);
-      let items: any[] = [];
       
-      if (filterType === 'event') {
-        // Fetch events from events table
-        const { data: eventsData, error: eventsError } = await supabase
-          .from('events')
-          .select('*');
-        
-        if (eventsError) throw eventsError;
-        
-        items = eventsData?.map(event => ({
-          ...event,
-          category: 'event',
-          description: event.description || event.title
-        })) || [];
-      } else if (filterType === 'meet') {
-        // Fetch meetup items from items table
-        const { data: meetData, error: meetError } = await supabase
-          .from('items')
-          .select('*')
-          .in('category', ['meetup', 'social', 'community'])
-          .eq('status', 'active');
+      // Fetch meetup items from items table
+      const { data: meetData, error: meetError } = await supabase
+        .from('items')
+        .select('*')
+        .in('category', ['meetup', 'social', 'community'])
+        .eq('status', 'active');
 
-        if (meetError) throw meetError;
-        items = meetData || [];
-      } else {
-        // Fetch text pins and other items
-        let query = supabase
-          .from('items')
-          .select('*')
-          .eq('category', 'text_pin')
-          .eq('status', 'active');
-
-        if (filterType === 'friends') {
-          // Get user's friends
-          const { data: friendsData, error: friendsError } = await supabase
-            .from('user_friends')
-            .select('friend_id')
-            .eq('user_id', user.id);
-
-          if (friendsError) throw friendsError;
-
-          const friendIds = friendsData?.map(f => f.friend_id) || [];
-          if (friendIds.length > 0) {
-            const { data, error } = await query.in('user_id', friendIds);
-            if (error) throw error;
-            items = data || [];
-          }
-        } else {
-          const { data, error } = await query;
-          if (error) throw error;
-          items = data || [];
-        }
-      }
+      if (meetError) throw meetError;
+      const items = meetData || [];
 
       // Fetch user profiles for items
       const userIds = items?.map(item => item.user_id).filter(Boolean) || [];
@@ -103,7 +59,7 @@ const DiscoverPage = () => {
 
   useEffect(() => {
     fetchItems();
-  }, [filterType, user?.id]);
+  }, [user?.id]);
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -112,73 +68,6 @@ const DiscoverPage = () => {
       />
       
       <main className="container mx-auto px-4 py-3 space-y-6">
-        {/* Filter Buttons */}
-        <div className="flex gap-2 justify-center flex-wrap">
-          <Button
-            variant={filterType === 'friends' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilterType('friends')}
-            className={`text-xs px-3 py-1 rounded-full ${
-              filterType === 'friends' 
-                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
-                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
-            }`}
-            style={filterType === 'friends' ? {
-              backgroundColor: 'hsl(var(--accent-subtle))',
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'white'
-            } : {
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'hsl(var(--accent-subtle))'
-            }}
-            disabled={!user}
-          >
-            <Users className="h-3 w-3 mr-1" />
-            Friends
-          </Button>
-          <Button
-            variant={filterType === 'meet' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilterType('meet')}
-            className={`text-xs px-3 py-1 rounded-full ${
-              filterType === 'meet' 
-                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
-                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
-            }`}
-            style={filterType === 'meet' ? {
-              backgroundColor: 'hsl(var(--accent-subtle))',
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'white'
-            } : {
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'hsl(var(--accent-subtle))'
-            }}
-          >
-            <Coffee className="h-3 w-3 mr-1" />
-            Meet
-          </Button>
-          <Button
-            variant={filterType === 'event' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilterType('event')}
-            className={`text-xs px-3 py-1 rounded-full ${
-              filterType === 'event' 
-                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
-                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
-            }`}
-            style={filterType === 'event' ? {
-              backgroundColor: 'hsl(var(--accent-subtle))',
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'white'
-            } : {
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'hsl(var(--accent-subtle))'
-            }}
-          >
-            <Calendar className="h-3 w-3 mr-1" />
-            Event
-          </Button>
-        </div>
         
         {/* Content Section */}
         <div className="relative">
