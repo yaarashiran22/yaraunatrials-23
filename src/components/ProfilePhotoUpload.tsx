@@ -129,11 +129,11 @@ const ProfilePhotoUpload = ({ userId, isOwnProfile = false }: ProfilePhotoUpload
     <div className="mb-6">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-lg font-semibold">Photos</h3>
-        <span className="text-sm text-muted-foreground">Up to 3 photos</span>
+        <span className="text-sm text-muted-foreground">Up to 2 photos</span>
       </div>
       
       <div className="flex gap-3">
-        {[1, 2, 3].map(order => renderPhotoSlot(order))}
+        {[1, 2].map(order => renderPhotoSlot(order))}
       </div>
       
       {uploading && (
