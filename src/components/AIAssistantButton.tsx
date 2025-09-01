@@ -10,19 +10,10 @@ const AIAssistantButton: React.FC = () => {
     <>
       <Button
         onClick={() => setIsPopupOpen(true)}
-        className="fixed bottom-32 lg:bottom-20 right-4 z-40 rounded-full w-12 h-12 shadow-lg text-white hover:scale-105 active:scale-95 transition-all duration-300 ease-in-out"
-        style={{
-          backgroundColor: '#FF6F50'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = '#FF5A3D';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = '#FF6F50';
-        }}
+        className="fixed bottom-20 lg:bottom-8 right-4 z-40 rounded-full w-14 h-14 shadow-lg bg-coral hover:bg-coral/90 text-coral-foreground"
         size="icon"
       >
-        <Sparkles className="w-5 h-5" />
+        <Sparkles className="w-7 h-7" />
       </Button>
       
       <AIAssistantPopup

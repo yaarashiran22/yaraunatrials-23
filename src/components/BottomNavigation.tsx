@@ -1,5 +1,5 @@
 
-import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Sparkles } from "lucide-react";
+import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -52,8 +52,8 @@ const BottomNavigation = () => {
               isActive('/discover') ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
-            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">Discover</span>
+            <Map className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-xs font-medium truncate">Map</span>
           </Button>
 
           {/* Profile/Login */}
