@@ -379,7 +379,7 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Profile Pictures Section */}
+        {/* Personal Photos Upload */}
         <ProfilePicturesSection 
           userId={actualProfileId}
           isOwnProfile={isOwnProfile}

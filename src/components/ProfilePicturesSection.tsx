@@ -108,7 +108,7 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
           .insert({
             user_id: userId,
             image_url: publicUrl,
-            title: `Profile Picture ${slot}`
+            title: `Personal Photo ${slot}`
           });
 
         if (insertError) throw insertError;
@@ -190,9 +190,9 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold">Photos</h3>
+        <h3 className="text-lg font-semibold">Personal Photos</h3>
         {isOwnProfile && (
-          <span className="text-sm text-muted-foreground">Up to 2 photos</span>
+          <span className="text-sm text-muted-foreground">Share up to 2 photos</span>
         )}
       </div>
       
@@ -213,8 +213,8 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
             <div className="relative group">
               <img
                 src={pictures[0].image_url}
-                alt="Profile photo 1"
-                className="w-24 h-24 object-cover rounded-lg"
+                alt="Personal photo 1"
+                className="w-32 h-32 object-cover rounded-lg"
               />
               {isOwnProfile && (
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 rounded-lg flex items-center justify-center">
@@ -235,7 +235,7 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
               <button
                 onClick={() => fileInputRef1.current?.click()}
                 disabled={uploading}
-                className="w-24 h-24 border-2 border-dashed border-muted-foreground/30 rounded-lg flex flex-col items-center justify-center hover:border-muted-foreground/50 transition-colors duration-200 bg-muted/20"
+                className="w-32 h-32 border-2 border-dashed border-muted-foreground/30 rounded-lg flex flex-col items-center justify-center hover:border-muted-foreground/50 transition-colors duration-200 bg-muted/20"
               >
                 <Camera className="h-6 w-6 text-muted-foreground mb-1" />
                 <span className="text-xs text-muted-foreground">Add Photo</span>
@@ -260,8 +260,8 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
             <div className="relative group">
               <img
                 src={pictures[1].image_url}
-                alt="Profile photo 2"
-                className="w-24 h-24 object-cover rounded-lg"
+                alt="Personal photo 2"
+                className="w-32 h-32 object-cover rounded-lg"
               />
               {isOwnProfile && (
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 rounded-lg flex items-center justify-center">
@@ -282,7 +282,7 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
               <button
                 onClick={() => fileInputRef2.current?.click()}
                 disabled={uploading}
-                className="w-24 h-24 border-2 border-dashed border-muted-foreground/30 rounded-lg flex flex-col items-center justify-center hover:border-muted-foreground/50 transition-colors duration-200 bg-muted/20"
+                className="w-32 h-32 border-2 border-dashed border-muted-foreground/30 rounded-lg flex flex-col items-center justify-center hover:border-muted-foreground/50 transition-colors duration-200 bg-muted/20"
               >
                 <Camera className="h-6 w-6 text-muted-foreground mb-1" />
                 <span className="text-xs text-muted-foreground">Add Photo</span>
