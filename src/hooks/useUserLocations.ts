@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -179,7 +179,7 @@ export const useUserLocations = () => {
   };
 
   // Fetch all user locations with profiles
-  const fetchUserLocations = async () => {
+  const fetchUserLocations = useCallback(async () => {
     if (hasFetched.current) return;
     console.log('Fetching user locations...');
     try {
@@ -241,7 +241,7 @@ export const useUserLocations = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Empty dependency array since we don't want external deps
 
   // Share current location
   const shareLocation = async (): Promise<{ success: boolean; error?: string }> => {
@@ -359,9 +359,10 @@ export const useUserLocations = () => {
   };
 
   useEffect(() => {
+    if (hasFetched.current) return;
     console.log('useUserLocations: Hook initialized, calling fetchUserLocations');
     fetchUserLocations();
-  }, []);
+  }, [user?.id]); // Add user.id as dependency to prevent infinite loops
 
   return {
     userLocations,

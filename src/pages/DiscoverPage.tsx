@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin, Users, Calendar, Coffee } from 'lucide-react';
+import { MapPin, Users, Calendar, Coffee, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
@@ -9,6 +9,7 @@ import BottomNavigation from "@/components/BottomNavigation";
 import LocationShareButton from '@/components/LocationShareButton';
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import MoodFilterStrip from '@/components/MoodFilterStrip';
+import DiscoveryPopup from '@/components/DiscoveryPopup';
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,10 +29,46 @@ const DiscoverPage = () => {
   const recommendationMarkersRef = useRef<L.Marker[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDiscovery, setShowDiscovery] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
+
+  // Function to filter users based on discovery criteria
+  const handleDiscovery = (selectedMoods: string[], selectedInterests: string[]) => {
+    console.log('Discovery filters:', { selectedMoods, selectedInterests });
+    
+    const filtered = userLocations.filter(userLocation => {
+      const profile = userLocation.profile as any;
+      
+      // Check mood match
+      const moodMatch = selectedMoods.length === 0 || 
+        (profile.interests && Array.isArray(profile.interests) && selectedMoods.some(mood => profile.interests.includes(mood)));
+      
+      // Check interests match
+      const interestMatch = selectedInterests.length === 0 || 
+        (profile.specialties && Array.isArray(profile.specialties) && selectedInterests.some(interest => 
+          profile.specialties.some((specialty: string) => 
+            specialty.toLowerCase().includes(interest.toLowerCase())
+          )
+        ));
+      
+      // If no filters are applied, show all users
+      if (selectedMoods.length === 0 && selectedInterests.length === 0) {
+        return true;
+      }
+      
+      return moodMatch || interestMatch;
+    });
+    
+    setFilteredUsers(filtered);
+    console.log('Filtered users:', filtered.length);
+    
+    // Update markers to show only filtered users
+    addUserLocationMarkers(filtered);
+  };
 
   // Function to handle neighborhood change
   const handleNeighborhoodChange = (neighborhoodName: string) => {
@@ -66,10 +103,10 @@ const DiscoverPage = () => {
   }, [user]);
 
   // Function to add user location markers
-  const addUserLocationMarkers = () => {
+  const addUserLocationMarkers = (usersToShow = userLocations) => {
     if (!mapInstanceRef.current) return;
 
-    console.log('Adding user location markers, count:', userLocations.length);
+    console.log('Adding user location markers, count:', usersToShow.length);
 
     // Clear existing user markers
     if (userMarkersRef.current.length > 0) {
@@ -80,7 +117,7 @@ const DiscoverPage = () => {
     }
 
     // Add markers for each user location
-    userLocations.forEach((userLocation) => {
+    usersToShow.forEach((userLocation) => {
       if (!mapInstanceRef.current) return;
 
       console.log('Adding marker for user:', userLocation.profile?.name, 'at:', userLocation.latitude, userLocation.longitude);
@@ -578,6 +615,55 @@ const DiscoverPage = () => {
         {/* Map Section */}
         <div className="relative">          
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+            {/* Discovery Button */}
+            <div className="absolute top-4 right-4 z-20">
+              <Button
+                onClick={() => setShowDiscovery(true)}
+                size="sm"
+                className="bg-primary/90 hover:bg-primary text-primary-foreground shadow-lg backdrop-blur-sm"
+              >
+                <Search className="h-4 w-4 mr-2" />
+                Discover Who's Around
+              </Button>
+            </div>
+
+            {/* Filtered Users Display */}
+            {filteredUsers.length > 0 && (
+              <div className="absolute bottom-4 left-4 right-4 z-20">
+                <div className="bg-card/95 backdrop-blur-sm rounded-lg p-3 border border-border/20 shadow-lg">
+                  <h3 className="text-sm font-semibold mb-2">Matching Users ({filteredUsers.length})</h3>
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                    {filteredUsers.slice(0, 6).map((userLocation) => (
+                      <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1">
+                        <img 
+                          src={userLocation.profile.profile_image_url || '/placeholder.svg'} 
+                          alt={userLocation.profile.name}
+                          className="w-6 h-6 rounded-full object-cover"
+                        />
+                        <span className="text-xs font-medium">{userLocation.profile.name}</span>
+                      </div>
+                    ))}
+                    {filteredUsers.length > 6 && (
+                      <div className="flex-shrink-0 flex items-center justify-center bg-muted/50 rounded-full w-8 h-8">
+                        <span className="text-xs font-medium">+{filteredUsers.length - 6}</span>
+                      </div>
+                    )}
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => {
+                      setFilteredUsers([]);
+                      addUserLocationMarkers();
+                    }}
+                    className="mt-2 text-xs"
+                  >
+                    Show All Users
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {error ? (
               <div className="flex items-center justify-center h-full bg-muted/30">
                 <div className="text-center p-4">
@@ -604,6 +690,13 @@ const DiscoverPage = () => {
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
         </div>
+
+        {/* Discovery Popup */}
+        <DiscoveryPopup 
+          isOpen={showDiscovery}
+          onClose={() => setShowDiscovery(false)}
+          onDiscover={handleDiscovery}
+        />
 
       </main>
       
