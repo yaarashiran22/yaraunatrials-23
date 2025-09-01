@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Heart, Users } from 'lucide-react';
+import { Heart, Users, Globe } from 'lucide-react';
 
 interface DiscoveryPopupProps {
   isOpen: boolean;
@@ -10,13 +10,14 @@ interface DiscoveryPopupProps {
 }
 
 const connectionTypes = [
+  { id: "all", label: "All", icon: Globe, color: "text-green-500" },
   { id: "friendships", label: "Friendships", icon: Users, color: "text-blue-500" },
   { id: "dating", label: "Dating", icon: Heart, color: "text-pink-500" }
 ];
 
 const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const [connectionType, setConnectionType] = useState<string>('friendships');
+  const [connectionType, setConnectionType] = useState<string>('all');
 
   const handleInterestToggle = (interest: string) => {
     setSelectedInterests(prev => {
@@ -40,7 +41,7 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
 
   const handleClose = () => {
     setSelectedInterests([]);
-    setConnectionType('friendships');
+    setConnectionType('all');
     onClose();
   };
 
