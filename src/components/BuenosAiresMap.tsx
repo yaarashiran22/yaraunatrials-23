@@ -29,16 +29,12 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
 
   console.log('BuenosAiresMap: Component rendered, userLocations:', userLocations.length);
 
-  // Function to filter users based on mood and interests
-  const handleDiscovery = (selectedMoods: string[], selectedInterests: string[]) => {
-    console.log('Discovery filters:', { selectedMoods, selectedInterests });
+  // Function to filter users based on interests
+  const handleDiscovery = (selectedInterests: string[]) => {
+    console.log('Discovery filters:', { selectedInterests });
     
     const filtered = userLocations.filter(userLocation => {
-      const profile = userLocation.profile as any; // Type assertion since we know these might exist
-      
-      // Check mood match (check if profile has interests property)
-      const moodMatch = selectedMoods.length === 0 || 
-        (profile.interests && Array.isArray(profile.interests) && selectedMoods.some(mood => profile.interests.includes(mood)));
+      const profile = userLocation.profile as any;
       
       // Check interests match (check if profile has specialties property)
       const interestMatch = selectedInterests.length === 0 || 
@@ -49,11 +45,11 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
         ));
       
       // If no filters are applied, show all users
-      if (selectedMoods.length === 0 && selectedInterests.length === 0) {
+      if (selectedInterests.length === 0) {
         return true;
       }
       
-      return moodMatch || interestMatch;
+      return interestMatch;
     });
     
     setFilteredUsers(filtered);

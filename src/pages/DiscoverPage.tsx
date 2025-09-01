@@ -37,15 +37,11 @@ const DiscoverPage = () => {
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
 
   // Function to filter users based on discovery criteria
-  const handleDiscovery = (selectedMoods: string[], selectedInterests: string[]) => {
-    console.log('Discovery filters:', { selectedMoods, selectedInterests });
+  const handleDiscovery = (selectedInterests: string[]) => {
+    console.log('Discovery filters:', { selectedInterests });
     
     const filtered = userLocations.filter(userLocation => {
       const profile = userLocation.profile as any;
-      
-      // Check mood match
-      const moodMatch = selectedMoods.length === 0 || 
-        (profile.interests && Array.isArray(profile.interests) && selectedMoods.some(mood => profile.interests.includes(mood)));
       
       // Check interests match
       const interestMatch = selectedInterests.length === 0 || 
@@ -56,11 +52,11 @@ const DiscoverPage = () => {
         ));
       
       // If no filters are applied, show all users
-      if (selectedMoods.length === 0 && selectedInterests.length === 0) {
+      if (selectedInterests.length === 0) {
         return true;
       }
       
-      return moodMatch || interestMatch;
+      return interestMatch;
     });
     
     setFilteredUsers(filtered);
