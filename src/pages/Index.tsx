@@ -304,7 +304,7 @@ const Index = () => {
 
   // Map initialization
   useEffect(() => {
-    if (!isMapOpen || !mapContainer.current) return;
+    if (!isMapOpen || !mapContainer.current || mapInstanceRef.current) return;
 
     const initializeMap = async () => {
       try {
@@ -386,11 +386,15 @@ const Index = () => {
 
     return () => {
       clearTimeout(timer);
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
     };
+  }, [isMapOpen]);
+
+  // Cleanup map when closing
+  useEffect(() => {
+    if (!isMapOpen && mapInstanceRef.current) {
+      mapInstanceRef.current.remove();
+      mapInstanceRef.current = null;
+    }
   }, [isMapOpen]);
 
   const handleMapToggle = useCallback(() => {
