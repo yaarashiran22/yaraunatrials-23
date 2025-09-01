@@ -93,7 +93,7 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
           {/* Interest Selection */}
           <div>
             <h3 className="text-sm font-medium text-foreground mb-3">
-              Select Interests
+              Select Your Interests (up to 4)
             </h3>
             <div className="grid grid-cols-3 gap-2">
               {commonInterests.map((interest) => {
