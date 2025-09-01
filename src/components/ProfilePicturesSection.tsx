@@ -23,6 +23,8 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
   const fileInputRef1 = useRef<HTMLInputElement>(null);
   const fileInputRef2 = useRef<HTMLInputElement>(null);
 
+  console.log('ProfilePicturesSection - Props:', { userId, isOwnProfile });
+
   // Fetch user's profile pictures
   const fetchPictures = async () => {
     if (!userId) return;
@@ -54,7 +56,17 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
 
   // Upload a picture
   const uploadPicture = async (file: File, slot: number) => {
-    if (!userId) return;
+    console.log('uploadPicture called with:', { userId, slot, fileSize: file.size, fileName: file.name });
+    
+    if (!userId) {
+      console.error('No userId provided for photo upload');
+      toast({
+        title: "Error",
+        description: "User ID is required for photo upload",
+        variant: "destructive",
+      });
+      return;
+    }
 
     setUploading(true);
     try {
