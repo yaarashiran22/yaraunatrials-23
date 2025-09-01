@@ -9,7 +9,7 @@ interface FloatingMapToggleProps {
 
 const FloatingMapToggle = ({ isMapOpen, onToggle }: FloatingMapToggleProps) => {
   return (
-    <div className="fixed bottom-32 lg:bottom-20 right-4 z-40">
+    <div className="fixed bottom-44 lg:bottom-32 right-4 z-40">
       <Button
         onClick={onToggle}
         size="default"
