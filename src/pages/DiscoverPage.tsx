@@ -3,7 +3,6 @@ import { MapPin, Users, Calendar, Coffee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
-import LocationShareButton from '@/components/LocationShareButton';
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -245,9 +244,8 @@ const DiscoverPage = () => {
             </div>
           )}
 
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex items-center justify-center mt-6">
             <AddRecommendationCard onRecommendationAdded={fetchItems} className="w-20" />
-            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
         </div>
 
