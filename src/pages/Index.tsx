@@ -26,7 +26,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import { Button } from "@/components/ui/button";
-import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon } from "lucide-react";
+import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon, ArrowLeft } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -833,6 +833,21 @@ const Index = () => {
       {/* Map Overlay */}
       {isMapOpen && (
         <div className="fixed inset-0 bg-background z-50 flex flex-col">
+          {/* Map Header */}
+          <div className="flex items-center justify-between p-4 border-b border-border/20 bg-background/95 backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleMapToggle}
+                className="h-8 w-8"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <h1 className="text-lg font-semibold text-foreground">Map</h1>
+            </div>
+          </div>
+          
           <div className="flex-1 relative">
             <div ref={mapContainer} className="w-full h-full" />
           </div>
