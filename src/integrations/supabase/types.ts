@@ -760,7 +760,6 @@ export type Database = {
           market: string | null
           mobile_number: string | null
           name: string | null
-          open_to_connecting: boolean | null
           profile_image_url: string | null
           show_in_search: boolean | null
           specialties: string[] | null
@@ -779,7 +778,6 @@ export type Database = {
           market?: string | null
           mobile_number?: string | null
           name?: string | null
-          open_to_connecting?: boolean | null
           profile_image_url?: string | null
           show_in_search?: boolean | null
           specialties?: string[] | null
@@ -798,7 +796,6 @@ export type Database = {
           market?: string | null
           mobile_number?: string | null
           name?: string | null
-          open_to_connecting?: boolean | null
           profile_image_url?: string | null
           show_in_search?: boolean | null
           specialties?: string[] | null
