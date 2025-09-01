@@ -19,11 +19,18 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
   const [connectionType, setConnectionType] = useState<string>('friendships');
 
   const handleInterestToggle = (interest: string) => {
-    setSelectedInterests(prev => 
-      prev.includes(interest) 
-        ? prev.filter(id => id !== interest)
-        : [...prev, interest]
-    );
+    setSelectedInterests(prev => {
+      if (prev.includes(interest)) {
+        // Remove if already selected
+        return prev.filter(id => id !== interest);
+      } else {
+        // Add only if less than 4 are selected
+        if (prev.length < 4) {
+          return [...prev, interest];
+        }
+        return prev; // Don't add if already at limit
+      }
+    });
   };
 
   const handleDiscover = () => {
@@ -84,7 +91,9 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
 
           {/* Interest Selection */}
           <div>
-            <h3 className="text-sm font-medium text-foreground mb-3">Select Your Interests</h3>
+            <h3 className="text-sm font-medium text-foreground mb-3">
+              Select Your Interests (up to 4)
+            </h3>
             <div className="grid grid-cols-3 gap-2">
               {commonInterests.map((interest) => {
                 const isSelected = selectedInterests.includes(interest);
@@ -98,8 +107,9 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
                       isSelected 
                         ? 'bg-primary/10 border-primary/20 text-primary' 
                         : 'hover:bg-muted/50'
-                    }`}
+                    } ${!isSelected && selectedInterests.length >= 4 ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={() => handleInterestToggle(interest)}
+                    disabled={!isSelected && selectedInterests.length >= 4}
                   >
                     {interest}
                   </Button>
