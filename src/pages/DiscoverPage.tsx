@@ -133,12 +133,7 @@ const DiscoverPage = () => {
             </div>
           ) : (
             <div className="grid gap-4">
-              {userRecommendations.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p>No items found for the selected filter</p>
-                </div>
-              ) : (
-                userRecommendations.map((item) => (
+              {userRecommendations.map((item) => (
                   <div key={item.id} className="bg-card rounded-xl p-4 border border-border/20 shadow-sm">
                     <div className="flex items-start gap-3">
                       {item.image_url && (
@@ -175,7 +170,7 @@ const DiscoverPage = () => {
                     </div>
                   </div>
                 ))
-              )}
+              }
             </div>
           )}
         </div>
