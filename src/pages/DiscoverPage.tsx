@@ -46,10 +46,16 @@ const DiscoverPage = () => {
     }
 
     try {
-      // Step 1: Get current user's event RSVPs
+      // Step 1: Get current user's event RSVPs with event details
       const { data: userRSVPs, error: rsvpError } = await supabase
         .from('event_rsvps')
-        .select('event_id')
+        .select(`
+          event_id,
+          events!inner(
+            id,
+            title
+          )
+        `)
         .eq('user_id', user.id)
         .eq('status', 'going');
 
@@ -58,14 +64,28 @@ const DiscoverPage = () => {
       }
 
       const userEventIds = userRSVPs?.map(rsvp => rsvp.event_id) || [];
+      const userEvents = userRSVPs?.reduce((acc, rsvp) => {
+        if (rsvp.events) {
+          acc[rsvp.event_id] = (rsvp.events as any).title;
+        }
+        return acc;
+      }, {} as Record<string, string>) || {};
+      
       console.log('User RSVPs for events:', userEventIds);
 
-      // Step 2: Find other users who RSVP'd for the same events
-      let matchingUserIds: string[] = [];
+      // Step 2: Find other users who RSVP'd for the same events with event details
+      let usersWithSharedEvents: Record<string, string[]> = {};
       if (userEventIds.length > 0) {
         const { data: otherRSVPs, error: matchError } = await supabase
           .from('event_rsvps')
-          .select('user_id')
+          .select(`
+            user_id,
+            event_id,
+            events!inner(
+              id,
+              title
+            )
+          `)
           .in('event_id', userEventIds)
           .eq('status', 'going')
           .neq('user_id', user.id);
@@ -73,20 +93,25 @@ const DiscoverPage = () => {
         if (matchError) {
           console.error('Error fetching matching RSVPs:', matchError);
         } else {
-          matchingUserIds = [...new Set(otherRSVPs?.map(rsvp => rsvp.user_id) || [])];
-          console.log('Users with same event RSVPs:', matchingUserIds);
+          // Group shared events by user
+          otherRSVPs?.forEach(rsvp => {
+            if (!usersWithSharedEvents[rsvp.user_id]) {
+              usersWithSharedEvents[rsvp.user_id] = [];
+            }
+            if ((rsvp.events as any)?.title) {
+              usersWithSharedEvents[rsvp.user_id].push((rsvp.events as any).title);
+            }
+          });
+          console.log('Users with shared events:', usersWithSharedEvents);
         }
       }
 
-      // Step 3: Filter users based on discovery criteria
+      // Step 3: Filter users based on discovery criteria (2+ shared interests)
       const filtered = userLocations.filter(userLocation => {
         const profile = userLocation.profile as any;
         
         // Skip current user
         if (profile.id === user.id) return false;
-        
-        // Check if this user RSVP'd for same events
-        const hasSharedEvents = matchingUserIds.includes(profile.id);
         
         // Check interests match (at least 2 similar interests)
         const userInterests = profile.interests || [];
@@ -103,52 +128,34 @@ const DiscoverPage = () => {
         const hasEnoughSharedInterests = sharedInterests.length >= 2;
         
         console.log(`User ${profile.name}:`, {
-          hasSharedEvents,
+          hasSharedEvents: !!usersWithSharedEvents[profile.id],
           sharedInterests: sharedInterests.length,
           connectionType,
           userInterests: allUserInterests
         });
         
-        // User matches if they have:
-        // 1. RSVP'd for same events, AND
-        // 2. At least 2 shared interests, AND  
-        // 3. Same connection type preference (for now we'll assume all match this)
-        const isMatch = hasSharedEvents && hasEnoughSharedInterests;
-        
-        // If no matches found with strict criteria, fall back to interest-only matching
-        if (!isMatch && selectedInterests.length > 0) {
-          return selectedInterests.some(interest => 
-            allUserInterests.some((userInterest: string) => 
-              userInterest.toLowerCase().includes(interest.toLowerCase())
-            )
-          );
-        }
-        
-        return isMatch || selectedInterests.length === 0;
+        // Show users with 2+ shared interests
+        return hasEnoughSharedInterests;
       });
       
-      // Separate matching users from regular filtered users
-      const matchingUsers = filtered.filter(userLocation => {
+      // Separate users with shared events for highlighting
+      const usersWithEvents = filtered.filter(userLocation => {
         const profile = userLocation.profile as any;
-        const hasSharedEvents = matchingUserIds.includes(profile.id);
-        const userInterests = profile.interests || [];
-        const userSpecialties = profile.specialties || [];
-        const allUserInterests = [...userInterests, ...userSpecialties];
-        const sharedInterests = selectedInterests.filter(interest => 
-          allUserInterests.some((userInterest: string) => 
-            userInterest.toLowerCase().includes(interest.toLowerCase()) ||
-            interest.toLowerCase().includes(userInterest.toLowerCase())
-          )
-        );
-        return hasSharedEvents && sharedInterests.length >= 2;
+        return usersWithSharedEvents[profile.id];
       });
       
-      setFilteredUsers(filtered);
-      console.log('Filtered users:', filtered.length, 'Connection type:', connectionType);
-      console.log('Matching users (same events + 2+ interests):', matchingUsers.length);
+      // Add shared event info to user data
+      const filteredWithEventInfo = filtered.map(userLocation => ({
+        ...userLocation,
+        sharedEvents: usersWithSharedEvents[userLocation.profile?.id] || []
+      }));
       
-      // Update markers to show filtered users, with special highlighting for matches
-      addUserLocationMarkers(filtered, matchingUsers);
+      setFilteredUsers(filteredWithEventInfo);
+      console.log('Filtered users:', filtered.length, 'Connection type:', connectionType);
+      console.log('Users with shared events:', usersWithEvents.length);
+      
+      // Update markers to show filtered users, with special highlighting for those with shared events
+      addUserLocationMarkers(filteredWithEventInfo, usersWithEvents);
       
     } catch (error) {
       console.error('Error in handleDiscovery:', error);
@@ -228,23 +235,24 @@ const DiscoverPage = () => {
       console.log('Adding marker for user:', userLocation.profile?.name, 'at:', userLocation.latitude, userLocation.longitude);
 
       const profile = userLocation.profile as any;
+      const hasSharedEvents = (userLocation as any).sharedEvents && (userLocation as any).sharedEvents.length > 0;
       const isHighlighted = highlightedUsers.some(hu => hu.profile?.id === profile?.id);
 
-      // Create custom user icon with highlighting for matches
+      // Create custom user icon with highlighting for users with shared events
       const userIcon = L.divIcon({
         html: `
-          <div class="w-10 h-10 rounded-full border-3 ${isHighlighted ? 'border-red-500' : 'border-white'} shadow-lg overflow-hidden bg-white relative ${isHighlighted ? 'animate-pulse' : ''}">
+          <div class="w-10 h-10 rounded-full border-3 ${hasSharedEvents ? 'border-red-500' : 'border-white'} shadow-lg overflow-hidden bg-white relative ${hasSharedEvents ? 'animate-pulse' : ''}">
             <img 
               src="${profile?.profile_image_url || '/placeholder.svg'}" 
               alt=""
               class="w-full h-full object-cover"
               loading="lazy"
             />
-            <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 ${isHighlighted ? 'bg-red-500' : 'bg-green-500'} border-2 border-white rounded-full"></div>
-            ${isHighlighted ? '<div class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-xs">🎯</span></div>' : ''}
+            <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 ${hasSharedEvents ? 'bg-red-500' : 'bg-green-500'} border-2 border-white rounded-full"></div>
+            ${hasSharedEvents ? '<div class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-xs">🎯</span></div>' : ''}
           </div>
         `,
-        className: `user-location-marker ${isHighlighted ? 'highlighted-match' : ''}`,
+        className: `user-location-marker ${hasSharedEvents ? 'highlighted-match' : ''}`,
         iconSize: [40, 40],
         iconAnchor: [20, 40],
         popupAnchor: [0, -40]
@@ -266,7 +274,11 @@ const DiscoverPage = () => {
               />
               <span class="font-medium">${profile?.name || 'User'}</span>
             </div>
-            ${isHighlighted ? '<div class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mt-1">🎯 Perfect Match!</div>' : ''}
+            ${hasSharedEvents ? `
+              <div class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mt-1">
+                🎯 This user is going to the same event as you: ${(userLocation as any).sharedEvents[0]}
+              </div>
+            ` : ''}
             ${profile?.interests && profile.interests.length > 0 ? `
               <div class="mt-2">
                 <div class="text-xs text-gray-500 mb-1">Interests:</div>
@@ -279,8 +291,8 @@ const DiscoverPage = () => {
             ` : ''}
             <div class="text-xs text-muted-foreground mt-1">
               <div class="flex items-center gap-1">
-                <div class="w-3 h-3 ${isHighlighted ? 'bg-red-500' : 'bg-green-500'} rounded-full"></div>
-                ${isHighlighted ? 'Matched based on events & interests' : 'Current location'}
+                <div class="w-3 h-3 ${hasSharedEvents ? 'bg-red-500' : 'bg-green-500'} rounded-full"></div>
+                ${hasSharedEvents ? 'Same event + shared interests' : 'Shared interests match'}
               </div>
             </div>
           </div>
