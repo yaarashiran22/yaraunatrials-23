@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Heart, Users, Handshake } from 'lucide-react';
+import { Heart, Users } from 'lucide-react';
 
 interface DiscoveryPopupProps {
   isOpen: boolean;
@@ -11,8 +11,7 @@ interface DiscoveryPopupProps {
 
 const connectionTypes = [
   { id: "friendships", label: "Friendships", icon: Users, color: "text-blue-500" },
-  { id: "dating", label: "Dating", icon: Heart, color: "text-pink-500" },
-  { id: "relationships", label: "Relationships", icon: Handshake, color: "text-purple-500" }
+  { id: "dating", label: "Dating", icon: Heart, color: "text-pink-500" }
 ];
 
 const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) => {

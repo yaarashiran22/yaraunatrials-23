@@ -538,6 +538,11 @@ const DiscoverPage = () => {
       
       
       <main className="container mx-auto px-4 py-3 space-y-6">
+        {/* Mood Filter Strip */}
+        <MoodFilterStrip onFilterChange={(filterId) => {
+          console.log('Mood filter changed:', filterId);
+          // Handle mood filter change if needed
+        }} />
         
         {/* Map Section */}
         <div className="relative">          
