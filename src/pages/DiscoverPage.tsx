@@ -119,28 +119,6 @@ const DiscoverPage = () => {
         {/* Filter Buttons */}
         <div className="flex gap-2 justify-center flex-wrap">
           <Button
-            variant={filterType === 'friends' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilterType('friends')}
-            className={`text-xs px-3 py-1 rounded-full ${
-              filterType === 'friends' 
-                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
-                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
-            }`}
-            style={filterType === 'friends' ? {
-              backgroundColor: 'hsl(var(--accent-subtle))',
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'white'
-            } : {
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'hsl(var(--accent-subtle))'
-            }}
-            disabled={!user}
-          >
-            <Users className="h-3 w-3 mr-1" />
-            Friends
-          </Button>
-          <Button
             variant={filterType === 'meet' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setFilterType('meet')}
