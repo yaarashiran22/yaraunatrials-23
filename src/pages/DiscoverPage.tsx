@@ -5,7 +5,6 @@ import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import LocationShareButton from '@/components/LocationShareButton';
 import AddRecommendationCard from "@/components/AddRecommendationCard";
-import MoodFilterStrip from '@/components/MoodFilterStrip';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -115,11 +114,6 @@ const DiscoverPage = () => {
       />
       
       <main className="container mx-auto px-4 py-3 space-y-6">
-        {/* Mood Filter Strip */}
-        <MoodFilterStrip onFilterChange={(filterId) => {
-          console.log('Mood filter changed:', filterId);
-        }} />
-
         {/* Filter Buttons */}
         <div className="flex gap-2 justify-center flex-wrap">
           <Button
