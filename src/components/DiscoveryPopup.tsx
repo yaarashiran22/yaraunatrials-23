@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Heart, Users, Handshake } from 'lucide-react';
 
 interface DiscoveryPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  onDiscover: (selectedInterests: string[]) => void;
+  onDiscover: (selectedInterests: string[], connectionType: string) => void;
 }
+
+const connectionTypes = [
+  { id: "friendships", label: "Friendships", icon: Users, color: "text-blue-500" },
+  { id: "dating", label: "Dating", icon: Heart, color: "text-pink-500" },
+  { id: "relationships", label: "Relationships", icon: Handshake, color: "text-purple-500" }
+];
 
 const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [connectionType, setConnectionType] = useState<string>('friendships');
 
   const handleInterestToggle = (interest: string) => {
     setSelectedInterests(prev => 
@@ -20,12 +28,13 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
   };
 
   const handleDiscover = () => {
-    onDiscover(selectedInterests);
+    onDiscover(selectedInterests, connectionType);
     onClose();
   };
 
   const handleClose = () => {
     setSelectedInterests([]);
+    setConnectionType('friendships');
     onClose();
   };
 
@@ -45,6 +54,34 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
+          {/* Connection Type Selection */}
+          <div>
+            <h3 className="text-sm font-medium text-foreground mb-3">Type of Connection</h3>
+            <div className="grid grid-cols-1 gap-2">
+              {connectionTypes.map((connection) => {
+                const IconComponent = connection.icon;
+                const isSelected = connectionType === connection.id;
+                
+                return (
+                  <Button
+                    key={connection.id}
+                    variant={isSelected ? "default" : "outline"}
+                    size="sm"
+                    className={`flex items-center gap-2 justify-start px-3 py-2 h-auto ${
+                      isSelected 
+                        ? `${connection.color} bg-primary/10 border-primary/20` 
+                        : `${connection.color} hover:bg-muted/50`
+                    }`}
+                    onClick={() => setConnectionType(connection.id)}
+                  >
+                    <IconComponent className={`h-4 w-4 ${connection.color}`} />
+                    <span className="text-sm font-medium">{connection.label}</span>
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Interest Selection */}
           <div>
             <h3 className="text-sm font-medium text-foreground mb-3">Select Your Interests</h3>
@@ -83,7 +120,6 @@ const DiscoveryPopup = ({ isOpen, onClose, onDiscover }: DiscoveryPopupProps) =>
             <Button 
               onClick={handleDiscover}
               className="flex-1"
-              disabled={selectedInterests.length === 0}
             >
               Discover
             </Button>

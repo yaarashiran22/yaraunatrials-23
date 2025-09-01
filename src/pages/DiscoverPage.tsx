@@ -37,8 +37,8 @@ const DiscoverPage = () => {
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
 
   // Function to filter users based on discovery criteria
-  const handleDiscovery = (selectedInterests: string[]) => {
-    console.log('Discovery filters:', { selectedInterests });
+  const handleDiscovery = (selectedInterests: string[], connectionType: string) => {
+    console.log('Discovery filters:', { selectedInterests, connectionType });
     
     const filtered = userLocations.filter(userLocation => {
       const profile = userLocation.profile as any;
@@ -51,6 +51,10 @@ const DiscoverPage = () => {
           )
         ));
       
+      // Filter by connection type if profile has this information
+      // Note: This assumes profiles might have a 'looking_for' field or similar
+      // For now, we'll just log the connection type and filter by interests
+      
       // If no filters are applied, show all users
       if (selectedInterests.length === 0) {
         return true;
@@ -60,7 +64,7 @@ const DiscoverPage = () => {
     });
     
     setFilteredUsers(filtered);
-    console.log('Filtered users:', filtered.length);
+    console.log('Filtered users:', filtered.length, 'Connection type:', connectionType);
     
     // Update markers to show only filtered users
     addUserLocationMarkers(filtered);
