@@ -21,12 +21,12 @@ import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import AIAssistantButton from "@/components/AIAssistantButton";
-import FloatingMapToggle from "@/components/FloatingMapToggle";
+
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import { Button } from "@/components/ui/button";
-import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon, ArrowLeft } from "lucide-react";
+import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon, ArrowLeft, X } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -460,6 +460,22 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="sm"
+                onClick={handleMapToggle}
+                className={`text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent hover:border-black/30 gap-1 transition-all duration-300 ease-in-out ${
+                  isMapOpen 
+                    ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground border-destructive' 
+                    : 'text-foreground hover:scale-105 active:scale-95'
+                }`}
+              >
+                {isMapOpen ? (
+                  <X className="h-3 w-3" />
+                ) : (
+                  <MapIcon className="h-3 w-3" />
+                )}
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
                 onClick={() => {
                   setCreateEventType('meetup');
                   setShowCreateEvent(true);
@@ -830,9 +846,6 @@ const Index = () => {
 
       {/* Floating AI Assistant Toggle */}
       <AIAssistantButton />
-      
-      {/* Map Toggle Button */}
-      <FloatingMapToggle isMapOpen={isMapOpen} onToggle={handleMapToggle} />
       
       {/* Map Overlay */}
       {isMapOpen && (
