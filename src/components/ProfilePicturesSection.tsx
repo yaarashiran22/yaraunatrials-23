@@ -255,7 +255,11 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
           ) : (
             isOwnProfile && (
               <button
-                onClick={() => fileInputRef1.current?.click()}
+                onClick={() => {
+                  console.log('Add Photo button clicked for slot 1');
+                  console.log('fileInputRef1.current:', fileInputRef1.current);
+                  fileInputRef1.current?.click();
+                }}
                 disabled={uploading}
                 className="w-32 h-32 border-2 border-dashed border-muted-foreground/30 rounded-lg flex flex-col items-center justify-center hover:border-muted-foreground/50 transition-colors duration-200 bg-muted/20"
               >
@@ -302,7 +306,11 @@ const ProfilePicturesSection = ({ userId, isOwnProfile = false }: ProfilePicture
           ) : (
             isOwnProfile && (
               <button
-                onClick={() => fileInputRef2.current?.click()}
+                onClick={() => {
+                  console.log('Add Photo button clicked for slot 2');
+                  console.log('fileInputRef2.current:', fileInputRef2.current);
+                  fileInputRef2.current?.click();
+                }}
                 disabled={uploading}
                 className="w-32 h-32 border-2 border-dashed border-muted-foreground/30 rounded-lg flex flex-col items-center justify-center hover:border-muted-foreground/50 transition-colors duration-200 bg-muted/20"
               >
