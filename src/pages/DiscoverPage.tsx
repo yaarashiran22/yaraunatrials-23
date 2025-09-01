@@ -8,7 +8,7 @@ import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import BottomNavigation from "@/components/BottomNavigation";
 import LocationShareButton from '@/components/LocationShareButton';
 import AddRecommendationCard from "@/components/AddRecommendationCard";
-import MoodFilterStrip from '@/components/MoodFilterStrip';
+
 import DiscoveryPopup from '@/components/DiscoveryPopup';
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
@@ -538,15 +538,9 @@ const DiscoverPage = () => {
       
       
       <main className="container mx-auto px-4 py-3 space-y-6">
-        {/* Mood Filter Strip */}
-        <MoodFilterStrip onFilterChange={(filterId) => {
-          console.log('Mood filter changed:', filterId);
-          // Handle mood filter change if needed
-        }} />
-
         {/* Map Section */}
         <div className="relative">          
-          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[calc(100vh-160px)] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
             {/* Discovery Button */}
             <div className="absolute top-4 right-4 z-20">
               <Button
