@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Heart, Users, Globe } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 interface DiscoveryPopupProps {
   isOpen: boolean;
   onClose: () => void;
@@ -30,6 +33,8 @@ const DiscoveryPopup = ({
 }: DiscoveryPopupProps) => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [connectionType, setConnectionType] = useState<string>('all');
+  const { user } = useAuth();
+  const { toast } = useToast();
   const handleInterestToggle = (interest: string) => {
     setSelectedInterests(prev => {
       if (prev.includes(interest)) {
@@ -44,7 +49,33 @@ const DiscoveryPopup = ({
       }
     });
   };
-  const handleDiscover = () => {
+  const handleDiscover = async () => {
+    // Save selected interests to user's profile
+    if (user && selectedInterests.length > 0) {
+      try {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ interests: selectedInterests })
+          .eq('id', user.id);
+
+        if (error) {
+          console.error('Error saving interests:', error);
+          toast({
+            title: "Error",
+            description: "Failed to save your interests",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        toast({
+          title: "Error", 
+          description: "Failed to update profile",
+          variant: "destructive",
+        });
+      }
+    }
+
     onDiscover(selectedInterests, connectionType);
     onClose();
   };
