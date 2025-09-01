@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
+import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useUserLocations } from '@/hooks/useUserLocations';
+import DiscoveryPopup from '@/components/DiscoveryPopup';
 
 // Fix for default markers in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -20,29 +23,67 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   const userMarkersRef = useRef<L.Marker[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDiscovery, setShowDiscovery] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const { userLocations } = useUserLocations();
 
   console.log('BuenosAiresMap: Component rendered, userLocations:', userLocations.length);
 
+  // Function to filter users based on mood and interests
+  const handleDiscovery = (selectedMoods: string[], selectedInterests: string[]) => {
+    console.log('Discovery filters:', { selectedMoods, selectedInterests });
+    
+    const filtered = userLocations.filter(userLocation => {
+      const profile = userLocation.profile as any; // Type assertion since we know these might exist
+      
+      // Check mood match (check if profile has interests property)
+      const moodMatch = selectedMoods.length === 0 || 
+        (profile.interests && Array.isArray(profile.interests) && selectedMoods.some(mood => profile.interests.includes(mood)));
+      
+      // Check interests match (check if profile has specialties property)
+      const interestMatch = selectedInterests.length === 0 || 
+        (profile.specialties && Array.isArray(profile.specialties) && selectedInterests.some(interest => 
+          profile.specialties.some((specialty: string) => 
+            specialty.toLowerCase().includes(interest.toLowerCase())
+          )
+        ));
+      
+      // If no filters are applied, show all users
+      if (selectedMoods.length === 0 && selectedInterests.length === 0) {
+        return true;
+      }
+      
+      return moodMatch || interestMatch;
+    });
+    
+    setFilteredUsers(filtered);
+    console.log('Filtered users:', filtered.length);
+    
+    // Update markers to show only filtered users
+    addUserLocationMarkers(filtered);
+  };
+
   // Function to add user location markers - optimized for performance
-  const addUserLocationMarkers = () => {
+  const addUserLocationMarkers = (usersToShow = userLocations) => {
     if (!mapInstanceRef.current) {
       console.log('BuenosAiresMap: No map instance available for adding markers');
       return;
     }
 
-    console.log(`BuenosAiresMap: Adding markers for ${userLocations.length} user locations`);
+    console.log(`BuenosAiresMap: Adding markers for ${usersToShow.length} user locations`);
 
     // Clear existing user markers efficiently
     if (userMarkersRef.current.length > 0) {
       userMarkersRef.current.forEach(marker => {
-        mapInstanceRef.current?.removeLayer(marker);
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.removeLayer(marker);
+        }
       });
       userMarkersRef.current = [];
     }
 
-    // Add markers for each user location with optimized icons
-    userLocations.forEach((userLocation, index) => {
+    // Add markers for each user location
+    usersToShow.forEach((userLocation, index) => {
       if (!mapInstanceRef.current) return;
 
       console.log(`BuenosAiresMap: Adding marker ${index + 1} for user:`, userLocation.profile.name, 'at', userLocation.latitude, userLocation.longitude);
@@ -199,16 +240,73 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   }
 
   return (
-    <div className={`${className} rounded-xl overflow-hidden border border-border/20 shadow-sm relative bg-muted/10`}>
-      {isLoading && (
-        <div className="absolute inset-0 bg-gradient-to-br from-muted/20 to-muted/40 flex items-center justify-center z-[1000] backdrop-blur-sm">
-          <div className="text-center">
-            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-            <p className="text-muted-foreground text-xs">טוען מפה...</p>
+    <div className={`${className} bg-muted/30 rounded-lg overflow-hidden relative`}>
+      {/* Discovery Button */}
+      <div className="absolute top-4 right-4 z-20">
+        <Button
+          onClick={() => setShowDiscovery(true)}
+          size="sm"
+          className="bg-primary/90 hover:bg-primary text-primary-foreground shadow-lg backdrop-blur-sm"
+        >
+          <Search className="h-4 w-4 mr-2" />
+          Discover Who's Around
+        </Button>
+      </div>
+
+      {/* Filtered Users Display */}
+      {filteredUsers.length > 0 && (
+        <div className="absolute bottom-4 left-4 right-4 z-20">
+          <div className="bg-card/95 backdrop-blur-sm rounded-lg p-3 border border-border/20 shadow-lg">
+            <h3 className="text-sm font-semibold mb-2">Matching Users ({filteredUsers.length})</h3>
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+              {filteredUsers.slice(0, 6).map((userLocation) => (
+                <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1">
+                  <img 
+                    src={userLocation.profile.profile_image_url || '/placeholder.svg'} 
+                    alt={userLocation.profile.name}
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                  <span className="text-xs font-medium">{userLocation.profile.name}</span>
+                </div>
+              ))}
+              {filteredUsers.length > 6 && (
+                <div className="flex-shrink-0 flex items-center justify-center bg-muted/50 rounded-full w-8 h-8">
+                  <span className="text-xs font-medium">+{filteredUsers.length - 6}</span>
+                </div>
+              )}
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => {
+                setFilteredUsers([]);
+                addUserLocationMarkers();
+              }}
+              className="mt-2 text-xs"
+            >
+              Show All Users
+            </Button>
           </div>
         </div>
       )}
-      <div ref={mapRef} className="w-full h-full min-h-[200px]" />
+
+      {isLoading && (
+        <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-[1000] backdrop-blur-sm">
+          <div className="text-center">
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+            <p className="text-muted-foreground text-sm">Loading map...</p>
+          </div>
+        </div>
+      )}
+      
+      <div ref={mapRef} className="w-full h-full" />
+
+      {/* Discovery Popup */}
+      <DiscoveryPopup 
+        isOpen={showDiscovery}
+        onClose={() => setShowDiscovery(false)}
+        onDiscover={handleDiscovery}
+      />
     </div>
   );
 };

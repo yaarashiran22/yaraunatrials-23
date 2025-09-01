@@ -272,38 +272,6 @@ const EditProfilePage = () => {
           </div>
 
 
-          {/* Mood Interests Section */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-3">Mood Interests</label>
-            <div className="grid grid-cols-2 gap-3">
-              {moodFilters.map((mood) => {
-                const IconComponent = mood.icon;
-                const isSelected = formData.interests.includes(mood.id);
-                
-                return (
-                  <Button
-                    key={mood.id}
-                    variant={isSelected ? "default" : "outline"}
-                    size="sm"
-                    className={`flex items-center gap-2 justify-start px-3 py-2 h-auto ${
-                      isSelected 
-                        ? `${mood.color} bg-muted border-current/20` 
-                        : `${mood.color} hover:bg-muted/50`
-                    }`}
-                    onClick={() => {
-                      const newInterests = isSelected
-                        ? formData.interests.filter(id => id !== mood.id)
-                        : [...formData.interests, mood.id];
-                      handleInputChange('interests', newInterests);
-                    }}
-                  >
-                    <IconComponent className={`h-4 w-4 ${mood.color}`} />
-                    <span className="text-sm font-medium">{mood.label}</span>
-                  </Button>
-                );
-              })}
-            </div>
-          </div>
 
           {/* Privacy Settings */}
           <div className="space-y-4 pt-4 border-t">
