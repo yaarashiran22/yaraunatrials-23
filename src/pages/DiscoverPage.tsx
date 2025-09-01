@@ -116,52 +116,6 @@ const DiscoverPage = () => {
         {/* AI Assistant Section */}
         <AIAssistantSection />
         
-        {/* Filter Buttons */}
-        <div className="flex gap-2 justify-center flex-wrap">
-          <Button
-            variant={filterType === 'meet' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilterType('meet')}
-            className={`text-xs px-3 py-1 rounded-full ${
-              filterType === 'meet' 
-                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
-                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
-            }`}
-            style={filterType === 'meet' ? {
-              backgroundColor: 'hsl(var(--accent-subtle))',
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'white'
-            } : {
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'hsl(var(--accent-subtle))'
-            }}
-          >
-            <Coffee className="h-3 w-3 mr-1" />
-            Meet
-          </Button>
-          <Button
-            variant={filterType === 'event' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilterType('event')}
-            className={`text-xs px-3 py-1 rounded-full ${
-              filterType === 'event' 
-                ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' 
-                : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'
-            }`}
-            style={filterType === 'event' ? {
-              backgroundColor: 'hsl(var(--accent-subtle))',
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'white'
-            } : {
-              borderColor: 'hsl(var(--accent-subtle))',
-              color: 'hsl(var(--accent-subtle))'
-            }}
-          >
-            <Calendar className="h-3 w-3 mr-1" />
-            Event
-          </Button>
-        </div>
-        
         {/* Content Section */}
         <div className="relative">
           {isLoading ? (
