@@ -271,7 +271,47 @@ const EditProfilePage = () => {
             </div>
           </div>
 
-
+          {/* Interests */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-3">Select Interests (up to 4)</label>
+            <div className="grid grid-cols-3 gap-2">
+              {["Wellness", "Art", "Music", "Food", "Travel", "Fitness", "Photography", "Movies", "Gaming", "Cooking", "Dancing", "Sports", "Social Media", "Writing", "Raves"].map(interest => {
+                const isSelected = formData.interests.includes(interest);
+                return (
+                  <Button
+                    key={interest}
+                    variant={isSelected ? "default" : "outline"}
+                    size="sm"
+                    className={`text-xs px-2 py-1 h-auto ${
+                      isSelected 
+                        ? 'bg-primary/10 border-primary/20 text-primary' 
+                        : 'hover:bg-muted/50'
+                    } ${
+                      !isSelected && formData.interests.length >= 4 
+                        ? 'opacity-50 cursor-not-allowed' 
+                        : ''
+                    }`}
+                    onClick={() => {
+                      if (isSelected) {
+                        // Remove if already selected
+                        const newInterests = formData.interests.filter(i => i !== interest);
+                        handleInputChange('interests', newInterests);
+                      } else {
+                        // Add only if less than 4 are selected
+                        if (formData.interests.length < 4) {
+                          const newInterests = [...formData.interests, interest];
+                          handleInputChange('interests', newInterests);
+                        }
+                      }
+                    }}
+                    disabled={!isSelected && formData.interests.length >= 4}
+                  >
+                    {interest}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Privacy Settings */}
           <div className="space-y-4 pt-4 border-t">
