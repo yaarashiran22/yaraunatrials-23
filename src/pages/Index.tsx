@@ -21,10 +21,13 @@ import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
 import AIAssistantButton from "@/components/AIAssistantButton";
+import FloatingMapToggle from "@/components/FloatingMapToggle";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 import { Button } from "@/components/ui/button";
 import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon } from "lucide-react";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -36,6 +39,14 @@ import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
 import { useEvents } from "@/hooks/useEvents";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useFollowing } from "@/hooks/useFollowing";
+
+// Fix for default markers in Leaflet
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+});
 
 import profile1 from "@/assets/profile-1.jpg";
 import profile2 from "@/assets/profile-2.jpg";
@@ -140,6 +151,11 @@ const Index = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [createEventType, setCreateEventType] = useState<'event' | 'meetup'>('event');
   const [isAddCouponModalOpen, setIsAddCouponModalOpen] = useState(false);
+  
+  // Map state
+  const [isMapOpen, setIsMapOpen] = useState(false);
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
   
 
   // Set refresh callback for new items - stabilized with useCallback
@@ -285,6 +301,101 @@ const Index = () => {
     });
     setIsMarketplacePopupOpen(true);
   }, []);
+
+  // Map initialization
+  useEffect(() => {
+    if (!isMapOpen || !mapContainer.current) return;
+
+    const initializeMap = async () => {
+      try {
+        // Buenos Aires coordinates - center of the city
+        const buenosAiresCenter: [number, number] = [-34.6118, -58.3960];
+
+        // Create map with Leaflet
+        const map = L.map(mapContainer.current!, {
+          zoomControl: true,
+          attributionControl: true,
+          fadeAnimation: true,
+          zoomAnimation: true,
+        }).setView(buenosAiresCenter, 12);
+        
+        mapInstanceRef.current = map;
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors',
+          maxZoom: 19,
+          minZoom: 10,
+        }).addTo(map);
+
+        // Popular neighborhoods in Buenos Aires
+        const neighborhoods = [
+          { name: "Palermo", lat: -34.5870, lng: -58.4263, color: '#BB31E9' },
+          { name: "Palermo Soho", lat: -34.5906, lng: -58.4203, color: '#9B59B6' },
+          { name: "Palermo Hollywood", lat: -34.5834, lng: -58.4323, color: '#8E44AD' },
+          { name: "San Telmo", lat: -34.6202, lng: -58.3731, color: '#FF6B6B' },
+          { name: "Recoleta", lat: -34.5885, lng: -58.3967, color: '#45B7D1' },
+          { name: "Villa Crespo", lat: -34.5998, lng: -58.4386, color: '#FFA726' },
+        ];
+
+        // Add Buenos Aires center marker
+        L.marker(buenosAiresCenter)
+          .addTo(map)
+          .bindPopup('Buenos Aires');
+
+        // Add neighborhood markers
+        neighborhoods.forEach(neighborhood => {
+          const markerElement = document.createElement('div');
+          markerElement.style.cssText = `
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: ${neighborhood.color};
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+          `;
+
+          const customIcon = L.divIcon({
+            html: markerElement.outerHTML,
+            className: 'custom-location-marker',
+            iconSize: [24, 24],
+            iconAnchor: [12, 24],
+            popupAnchor: [0, -24]
+          });
+
+          L.marker([neighborhood.lat, neighborhood.lng], { icon: customIcon })
+            .addTo(map)
+            .bindPopup(`
+              <div class="text-center p-2">
+                <strong class="text-gray-800 block">${neighborhood.name}</strong>
+              </div>
+            `);
+        });
+
+      } catch (error) {
+        console.error('Error initializing map:', error);
+      }
+    };
+
+    // Initialize map with small delay
+    const timer = setTimeout(() => {
+      initializeMap();
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [isMapOpen]);
+
+  const handleMapToggle = useCallback(() => {
+    setIsMapOpen(!isMapOpen);
+  }, [isMapOpen]);
 
   return (
     <div className="min-h-screen bg-background" dir="ltr">
@@ -715,6 +826,18 @@ const Index = () => {
 
       {/* Floating AI Assistant Toggle */}
       <AIAssistantButton />
+      
+      {/* Map Toggle Button */}
+      <FloatingMapToggle isMapOpen={isMapOpen} onToggle={handleMapToggle} />
+      
+      {/* Map Overlay */}
+      {isMapOpen && (
+        <div className="fixed inset-0 bg-background z-50 flex flex-col">
+          <div className="flex-1 relative">
+            <div ref={mapContainer} className="w-full h-full" />
+          </div>
+        </div>
+      )}
       
       <BottomNavigation />
       {isAddCouponModalOpen && (
