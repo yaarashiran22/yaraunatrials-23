@@ -46,10 +46,10 @@ const RegisterPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !formData.mobileNumber.trim()) {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim()) {
       toast({
         title: "Error",
-        description: "Please fill in all required fields (name, email, password and phone number)",
+        description: "Please fill in all required fields (name, email and password)",
         variant: "destructive",
       });
       return;
@@ -59,7 +59,7 @@ const RegisterPage = () => {
     
     try {
       // Register the user
-      const { error: signUpError } = await signUp(formData.email, formData.password, formData.name, formData.mobileNumber);
+      const { error: signUpError } = await signUp(formData.email, formData.password, formData.name, '');
       
       if (signUpError) {
         console.error('Sign up error:', signUpError);
@@ -83,7 +83,7 @@ const RegisterPage = () => {
           id: user.id,
           email: formData.email,
           name: formData.name,
-          mobile_number: formData.mobileNumber,
+          mobile_number: '',
           location: formData.neighborhood,
           bio: formData.bio,
           profile_image_url: profileImage,
@@ -197,15 +197,6 @@ const RegisterPage = () => {
                 />
               </div>
               
-              <div>
-                <Input 
-                  placeholder="Phone Number *"
-                  type="tel"
-                  value={formData.mobileNumber}
-                  onChange={(e) => handleInputChange('mobileNumber', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
-                />
-              </div>
               
               <div>
                 <Input 
@@ -226,22 +217,6 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            {/* Email Field with Attachment */}
-            <div className="relative mt-4">
-              <Input 
-                placeholder="Additional Email (Optional)"
-                value={formData.socialEmail}
-                onChange={(e) => handleInputChange('socialEmail', e.target.value)}
-                className="w-full h-12 text-left bg-background border border-border rounded-lg pr-12"
-              />
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2"
-              >
-                <Paperclip className="h-4 w-4 text-muted-foreground" />
-              </Button>
-            </div>
 
             {/* Profile Photo Section */}
             <div className="pt-6">
