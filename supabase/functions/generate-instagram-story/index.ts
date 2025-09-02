@@ -56,10 +56,12 @@ serve(async (req) => {
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
       Content to include:
-      - Title: "${data.title || 'Special Offer'}${discount}"
+      - Title: "${data.title || 'Special Offer'}${discount}" (place in a horizontal black semi-transparent overlay box behind the title text)
       - ${businessInfo}${neighborhood}
       - Description: "${data.description || 'Special offer available now!'}"
       - Call to action: "Get Your Coupon!"
+      
+      Layout: Position a horizontal black semi-transparent shadow box specifically behind the title text in the upper portion of the image. The title should be prominent and readable over this dark overlay. Other text elements can be placed on the colorful background or in smaller text boxes as needed.
       
       Style: Modern, vibrant, eye-catching design with gradient background (purple to pink), 
       clean typography, professional business aesthetic, include coupon/discount graphics, 
@@ -77,13 +79,15 @@ serve(async (req) => {
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
       Content to include:
-      - Event Title: "${data.title || 'Event'}"
+      - Event Title: "${data.title || 'Event'}" (place in a horizontal black semi-transparent overlay box behind the title text)
       - ${eventDate}
       - ${eventTime} 
       - ${eventLocation}
       - ${eventPrice}
       - Description: "${data.description || 'Join us for this amazing event!'}"
       - Call to action: "RSVP Now!"
+      
+      Layout: Position a horizontal black semi-transparent shadow box specifically behind the event title text in the upper portion of the image. The title should be prominent and readable over this dark overlay. Other event details can be placed on the colorful background or in smaller text areas as needed.
       
       Style: Dynamic, festive design with vibrant gradient background (blue to purple), 
       modern typography, event-focused aesthetic with celebration elements like confetti 
