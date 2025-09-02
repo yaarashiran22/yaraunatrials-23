@@ -708,14 +708,6 @@ const DiscoverPage = () => {
             >
               Friends
             </Button>
-            <Button
-              variant={filterType === 'following' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilterType('following')}
-              className="text-xs"
-            >
-              Following
-            </Button>
           </div>
           
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
