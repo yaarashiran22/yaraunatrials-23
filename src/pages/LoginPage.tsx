@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { Paperclip } from "lucide-react";
+import { Paperclip, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const LoginPage = () => {
@@ -219,8 +219,21 @@ const LoginPage = () => {
   // Sign up form
   return (
     <div className="min-h-screen bg-background pb-20">
+      {/* Header with X button */}
+      <div className="flex justify-between items-center pt-4 px-4">
+        <Button 
+          variant="ghost" 
+          size="sm"
+          onClick={() => setIsLogin(true)}
+          className="p-2"
+        >
+          <X className="h-5 w-5" />
+        </Button>
+        <div></div> {/* Spacer for centering */}
+      </div>
+
       {/* Logo */}
-      <div className="text-center pt-8 pb-6">
+      <div className="text-center pt-4 pb-6">
         <div className="flex items-center justify-center cursor-pointer" onClick={() => navigate('/')}>
           <div className="text-5xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
         </div>
@@ -285,7 +298,7 @@ const LoginPage = () => {
               
               <div>
                 <Input 
-                  placeholder="Instagram @"
+                  placeholder="Instagram (link to profile)"
                   value={formData.instagram}
                   onChange={(e) => handleInputChange('instagram', e.target.value)}
                   className="w-full h-12 text-left bg-background border border-border rounded-lg"
