@@ -199,7 +199,7 @@ const ProfilePage = () => {
               ctx.fill();
               
               ctx.fillStyle = 'white';
-              ctx.font = 'bold 32px Arial';
+              ctx.font = 'bold 32px Poppins, sans-serif';
               ctx.textAlign = 'center';
               ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
             }
@@ -212,7 +212,7 @@ const ProfilePage = () => {
           ctx.fill();
           
           ctx.fillStyle = 'white';
-          ctx.font = 'bold 32px Arial';
+          ctx.font = 'bold 32px Poppins, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
         }
@@ -220,7 +220,7 @@ const ProfilePage = () => {
         // Add user name next to profile circle
         if (profileData.name) {
           ctx.fillStyle = 'white';
-          ctx.font = 'bold 28px Arial';
+          ctx.font = 'bold 28px Nunito, sans-serif';
           ctx.textAlign = 'left';
           ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
           ctx.lineWidth = 2;
@@ -231,7 +231,7 @@ const ProfilePage = () => {
       
       // Add text content with better positioning
       ctx.fillStyle = 'white';
-      ctx.font = 'bold 72px Arial';
+      ctx.font = 'bold 72px Poppins, sans-serif';
       ctx.textAlign = 'center';
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
       ctx.lineWidth = 4;
@@ -248,7 +248,7 @@ const ProfilePage = () => {
       }
       
       // Event details in bottom section
-      ctx.font = '48px Arial';
+      ctx.font = '48px Nunito, sans-serif';
       let detailY = 1200;
       
       if (eventData.date) {
@@ -280,7 +280,7 @@ const ProfilePage = () => {
       }
       
       // Call to action
-      ctx.font = 'bold 54px Arial';
+      ctx.font = 'bold 54px Montserrat, sans-serif';
       ctx.fillStyle = '#FFD700'; // gold
       ctx.strokeText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
       ctx.fillText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
@@ -415,7 +415,7 @@ const ProfilePage = () => {
               ctx.fill();
               
               ctx.fillStyle = 'white';
-              ctx.font = 'bold 32px Arial';
+              ctx.font = 'bold 32px Poppins, sans-serif';
               ctx.textAlign = 'center';
               ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
             }
@@ -428,7 +428,7 @@ const ProfilePage = () => {
           ctx.fill();
           
           ctx.fillStyle = 'white';
-          ctx.font = 'bold 32px Arial';
+          ctx.font = 'bold 32px Poppins, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
         }
@@ -436,7 +436,7 @@ const ProfilePage = () => {
         // Add user name next to profile circle
         if (profileData.name) {
           ctx.fillStyle = 'white';
-          ctx.font = 'bold 28px Arial';
+          ctx.font = 'bold 28px Nunito, sans-serif';
           ctx.textAlign = 'left';
           ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
           ctx.lineWidth = 2;
@@ -458,7 +458,7 @@ const ProfilePage = () => {
       
       // Add text content with better positioning
       ctx.fillStyle = 'white';
-      ctx.font = 'bold 80px Arial';
+      ctx.font = 'bold 80px Poppins, sans-serif';
       ctx.textAlign = 'center';
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
       ctx.lineWidth = 4;
@@ -476,7 +476,7 @@ const ProfilePage = () => {
       
       // Discount amount (prominent and highlighted)
       if (couponData.discount_amount) {
-        ctx.font = 'bold 100px Arial';
+        ctx.font = 'bold 100px Montserrat, sans-serif';
         ctx.fillStyle = '#FFD700'; // gold
         ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
         ctx.lineWidth = 6;
@@ -486,7 +486,7 @@ const ProfilePage = () => {
       }
       
       // Business and location info in bottom section
-      ctx.font = '52px Arial';
+      ctx.font = '52px Nunito, sans-serif';
       ctx.fillStyle = 'white';
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
       ctx.lineWidth = 3;
@@ -511,7 +511,7 @@ const ProfilePage = () => {
       }
       
       // Call to action
-      ctx.font = 'bold 60px Arial';
+      ctx.font = 'bold 60px Montserrat, sans-serif';
       ctx.fillStyle = '#FFD700'; // gold
       ctx.strokeText('GET YOUR COUPON!', canvas.width / 2, canvas.height - 200);
       ctx.fillText('GET YOUR COUPON!', canvas.width / 2, canvas.height - 200);
