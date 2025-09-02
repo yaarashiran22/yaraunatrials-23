@@ -22,24 +22,8 @@ serve(async (req) => {
     
     console.log('Generating Instagram story for:', type, data);
 
-    // Ensure storage bucket exists
-    try {
-      const { data: buckets } = await supabase.storage.listBuckets();
-      const bucketExists = buckets?.some(bucket => bucket.name === 'instagram-stories');
-      
-      if (!bucketExists) {
-        const { error: bucketError } = await supabase.storage.createBucket('instagram-stories', {
-          public: true,
-          allowedMimeTypes: ['image/png', 'image/jpeg'],
-          fileSizeLimit: 10485760 // 10MB
-        });
-        
-        if (bucketError) {
-          console.error('Error creating bucket:', bucketError);
-        }
-      }
-    } catch (bucketError) {
-      console.error('Bucket check/creation error:', bucketError);
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key not configured');
     }
 
     let prompt = '';
