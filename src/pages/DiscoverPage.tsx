@@ -777,8 +777,7 @@ const DiscoverPage = () => {
             )}
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <AddRecommendationCard onRecommendationAdded={addTextPinMarkers} className="w-20" />
+          <div className="flex justify-center mt-4">
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
           </div>
         </div>
