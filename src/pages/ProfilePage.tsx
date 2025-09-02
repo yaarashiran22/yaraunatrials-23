@@ -236,8 +236,8 @@ const ProfilePage = () => {
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
       ctx.lineWidth = 4;
       
-      // Title - positioned over image or at top
-      const titleY = eventData.image_url || eventData.video_url ? 850 : 300;
+      // Title - positioned over image or at top (moved lower)
+      const titleY = eventData.image_url || eventData.video_url ? 900 : 400;
       const titleWords = eventData.title.split(' ');
       let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
@@ -249,7 +249,7 @@ const ProfilePage = () => {
       
       // Event details in bottom section
       ctx.font = '48px Nunito, sans-serif';
-      let detailY = 1200;
+      let detailY = 1250;
       
       if (eventData.date) {
         ctx.strokeText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
@@ -258,8 +258,8 @@ const ProfilePage = () => {
       }
       
       if (eventData.time) {
-        ctx.strokeText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
-        ctx.fillText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
+        ctx.strokeText(`🕒 ${eventData.time}`, canvas.width / 2, detailY);
+        ctx.fillText(`🕒 ${eventData.time}`, canvas.width / 2, detailY);
         detailY += 70;
       }
       
@@ -270,12 +270,12 @@ const ProfilePage = () => {
       }
       
       if (eventData.price) {
-        ctx.strokeText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
-        ctx.fillText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
+        ctx.strokeText(`💳 ${eventData.price}`, canvas.width / 2, detailY);
+        ctx.fillText(`💳 ${eventData.price}`, canvas.width / 2, detailY);
         detailY += 70;
       } else {
-        ctx.strokeText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
-        ctx.fillText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
+        ctx.strokeText(`🆓 FREE ENTRY`, canvas.width / 2, detailY);
+        ctx.fillText(`🆓 FREE ENTRY`, canvas.width / 2, detailY);
         detailY += 70;
       }
       
@@ -463,8 +463,8 @@ const ProfilePage = () => {
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
       ctx.lineWidth = 4;
       
-      // Title - positioned over image or at top
-      const titleY = couponData.image_url ? 800 : 350;
+      // Title - positioned over image or at top (moved lower)
+      const titleY = couponData.image_url ? 850 : 400;
       const titleWords = couponData.title.split(' ');
       let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
@@ -490,11 +490,11 @@ const ProfilePage = () => {
       ctx.fillStyle = 'white';
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
       ctx.lineWidth = 3;
-      let detailY = 1300;
+      let detailY = 1350;
       
       if (couponData.business_name) {
-        ctx.strokeText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
-        ctx.fillText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
+        ctx.strokeText(`🏬 ${couponData.business_name}`, canvas.width / 2, detailY);
+        ctx.fillText(`🏬 ${couponData.business_name}`, canvas.width / 2, detailY);
         detailY += 80;
       }
       
@@ -505,8 +505,8 @@ const ProfilePage = () => {
       }
       
       if (couponData.valid_until) {
-        ctx.strokeText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
-        ctx.fillText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
+        ctx.strokeText(`⏳ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
+        ctx.fillText(`⏳ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
         detailY += 80;
       }
       
