@@ -110,12 +110,20 @@ export const InstagramStoryPopup = ({
           
           {storyUrl && !isGenerating && (
             <>
-              <div className="aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden">
+              <div className="aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden relative">
                 <img 
                   src={storyUrl} 
                   alt="Generated Instagram Story" 
                   className="w-full h-full object-cover"
                 />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onClose}
+                  className="absolute top-2 right-2 h-8 w-8 rounded-full p-0 bg-black/50 hover:bg-black/70 text-white border-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
               
               <div className="text-sm text-muted-foreground text-center">
