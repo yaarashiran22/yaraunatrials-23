@@ -40,13 +40,13 @@ const priceOptions = [
 // Mood filter options
 const moodOptions = [
   "All",
-  "Music", 
-  "Art",
-  "Sports",
-  "Food",
-  "Technology",
-  "Business",
-  "Education"
+  "Chill", 
+  "Go Out",
+  "Romantic",
+  "Active",
+  "Creative",
+  "Wellness",
+  "Sightseeing"
 ] as const;
 
 // Date filter options
@@ -120,13 +120,13 @@ const AllEventsPage = () => {
         // Check if event description or title contains mood-related keywords
         const eventContent = `${event.title} ${event.description || ''}`.toLowerCase();
         const moodKeywords = {
-          'Music': ['music', 'concert', 'band', 'song', 'מוזיקה', 'קונצרט'],
-          'Art': ['art', 'gallery', 'paint', 'exhibition', 'אמנות', 'גלריה'],
-          'Sports': ['sport', 'game', 'football', 'basketball', 'ספורט', 'כדורגל'],
-          'Food': ['food', 'cooking', 'restaurant', 'chef', 'אוכל', 'מטבח'],
-          'Technology': ['tech', 'startup', 'code', 'digital', 'טכנולוגיה'],
-          'Business': ['business', 'network', 'entrepreneur', 'עסקים'],
-          'Education': ['education', 'workshop', 'learn', 'course', 'חינוך', 'סדנה']
+          'Chill': ['chill', 'relax', 'coffee', 'cafe', 'calm', 'peaceful', 'casual', 'lounge'],
+          'Go Out': ['party', 'night', 'club', 'bar', 'dance', 'nightlife', 'celebration', 'festival'],
+          'Romantic': ['romantic', 'date', 'couple', 'love', 'dinner', 'wine', 'sunset', 'intimate'],
+          'Active': ['sport', 'fitness', 'gym', 'run', 'bike', 'hike', 'workout', 'active', 'exercise'],
+          'Creative': ['art', 'creative', 'workshop', 'paint', 'music', 'craft', 'design', 'artistic'],
+          'Wellness': ['wellness', 'yoga', 'meditation', 'spa', 'health', 'mindfulness', 'therapy'],
+          'Sightseeing': ['tour', 'museum', 'landmark', 'sightseeing', 'explore', 'history', 'culture', 'visit']
         };
         
         const keywords = moodKeywords[moodFilter as keyof typeof moodKeywords] || [];

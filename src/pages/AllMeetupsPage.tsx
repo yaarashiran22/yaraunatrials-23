@@ -40,13 +40,13 @@ const priceOptions = [
 // Mood filter options
 const moodOptions = [
   "All",
-  "Music", 
-  "Art",
-  "Sports",
-  "Food",
-  "Technology",
-  "Business",
-  "Education"
+  "Chill", 
+  "Go Out",
+  "Romantic",
+  "Active",
+  "Creative",
+  "Wellness",
+  "Sightseeing"
 ] as const;
 
 // Date filter options
@@ -120,13 +120,13 @@ const AllMeetupsPage = () => {
         // Check if meetup description or title contains mood-related keywords
         const meetupContent = `${meetup.title} ${meetup.description || ''}`.toLowerCase();
         const moodKeywords = {
-          'Music': ['music', 'concert', 'band', 'song', 'jam', 'musician'],
-          'Art': ['art', 'gallery', 'paint', 'exhibition', 'creative', 'design'],
-          'Sports': ['sport', 'game', 'football', 'basketball', 'fitness', 'gym'],
-          'Food': ['food', 'cooking', 'restaurant', 'chef', 'meal', 'dinner'],
-          'Technology': ['tech', 'startup', 'code', 'digital', 'programming'],
-          'Business': ['business', 'network', 'entrepreneur', 'work', 'professional'],
-          'Education': ['education', 'workshop', 'learn', 'course', 'study', 'lecture']
+          'Chill': ['chill', 'relax', 'coffee', 'cafe', 'calm', 'peaceful', 'casual', 'lounge'],
+          'Go Out': ['party', 'night', 'club', 'bar', 'dance', 'nightlife', 'celebration', 'festival'],
+          'Romantic': ['romantic', 'date', 'couple', 'love', 'dinner', 'wine', 'sunset', 'intimate'],
+          'Active': ['sport', 'fitness', 'gym', 'run', 'bike', 'hike', 'workout', 'active', 'exercise'],
+          'Creative': ['art', 'creative', 'workshop', 'paint', 'music', 'craft', 'design', 'artistic'],
+          'Wellness': ['wellness', 'yoga', 'meditation', 'spa', 'health', 'mindfulness', 'therapy'],
+          'Sightseeing': ['tour', 'museum', 'landmark', 'sightseeing', 'explore', 'history', 'culture', 'visit']
         };
         
         const keywords = moodKeywords[moodFilter as keyof typeof moodKeywords] || [];
