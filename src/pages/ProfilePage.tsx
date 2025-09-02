@@ -153,6 +153,82 @@ const ProfilePage = () => {
         }
       }
       
+      // Add user profile image and name
+      if (profileData?.profile_image_url || profileData?.name) {
+        // Add user profile circle at bottom left
+        const profileCircleX = 120;
+        const profileCircleY = canvas.height - 120;
+        const profileCircleRadius = 50;
+        
+        // Draw profile circle background
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(profileCircleX, profileCircleY, profileCircleRadius + 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        if (profileData.profile_image_url) {
+          try {
+            const profileImg = new Image();
+            profileImg.crossOrigin = 'anonymous';
+            
+            await new Promise((resolve, reject) => {
+              profileImg.onload = resolve;
+              profileImg.onerror = reject;
+              profileImg.src = profileData.profile_image_url;
+            });
+            
+            // Draw circular profile image
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(profileImg, 
+              profileCircleX - profileCircleRadius, 
+              profileCircleY - profileCircleRadius, 
+              profileCircleRadius * 2, 
+              profileCircleRadius * 2
+            );
+            ctx.restore();
+          } catch (error) {
+            console.warn('Failed to load profile image:', error);
+            // Fallback to initials if profile image fails
+            if (profileData.name) {
+              ctx.fillStyle = '#3B82F6';
+              ctx.beginPath();
+              ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
+              ctx.fill();
+              
+              ctx.fillStyle = 'white';
+              ctx.font = 'bold 32px Arial';
+              ctx.textAlign = 'center';
+              ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
+            }
+          }
+        } else if (profileData.name) {
+          // Draw initials circle
+          ctx.fillStyle = '#3B82F6';
+          ctx.beginPath();
+          ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
+          ctx.fill();
+          
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 32px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
+        }
+        
+        // Add user name next to profile circle
+        if (profileData.name) {
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 28px Arial';
+          ctx.textAlign = 'left';
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+          ctx.lineWidth = 2;
+          ctx.strokeText(`Organized by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
+          ctx.fillText(`Organized by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
+        }
+      }
+      
       // Add text content with better positioning
       ctx.fillStyle = 'white';
       ctx.font = 'bold 72px Arial';
@@ -290,6 +366,82 @@ const ProfilePage = () => {
           ctx.fillRect(0, y + drawHeight - 150, canvas.width, 150);
         } catch (error) {
           console.warn('Failed to load coupon image:', error);
+        }
+      }
+      
+      // Add user profile image and name
+      if (profileData?.profile_image_url || profileData?.name) {
+        // Add user profile circle at bottom left
+        const profileCircleX = 120;
+        const profileCircleY = canvas.height - 120;
+        const profileCircleRadius = 50;
+        
+        // Draw profile circle background
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(profileCircleX, profileCircleY, profileCircleRadius + 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        if (profileData.profile_image_url) {
+          try {
+            const profileImg = new Image();
+            profileImg.crossOrigin = 'anonymous';
+            
+            await new Promise((resolve, reject) => {
+              profileImg.onload = resolve;
+              profileImg.onerror = reject;
+              profileImg.src = profileData.profile_image_url;
+            });
+            
+            // Draw circular profile image
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(profileImg, 
+              profileCircleX - profileCircleRadius, 
+              profileCircleY - profileCircleRadius, 
+              profileCircleRadius * 2, 
+              profileCircleRadius * 2
+            );
+            ctx.restore();
+          } catch (error) {
+            console.warn('Failed to load profile image:', error);
+            // Fallback to initials if profile image fails
+            if (profileData.name) {
+              ctx.fillStyle = '#8B5CF6';
+              ctx.beginPath();
+              ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
+              ctx.fill();
+              
+              ctx.fillStyle = 'white';
+              ctx.font = 'bold 32px Arial';
+              ctx.textAlign = 'center';
+              ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
+            }
+          }
+        } else if (profileData.name) {
+          // Draw initials circle
+          ctx.fillStyle = '#8B5CF6';
+          ctx.beginPath();
+          ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
+          ctx.fill();
+          
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 32px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
+        }
+        
+        // Add user name next to profile circle
+        if (profileData.name) {
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 28px Arial';
+          ctx.textAlign = 'left';
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+          ctx.lineWidth = 2;
+          ctx.strokeText(`Posted by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
+          ctx.fillText(`Posted by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
         }
       }
       
