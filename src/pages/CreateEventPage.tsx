@@ -1,5 +1,5 @@
 
-import { X, Plus, Calendar, Clock, MapPin, Bell } from "lucide-react";
+import { X, Plus, Calendar, Clock, MapPin, Bell, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,12 +7,19 @@ import { useNavigate } from "react-router-dom";
 import BottomNavigation from "@/components/BottomNavigation";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NotificationsPopup from "@/components/NotificationsPopup";
+import { InstagramStoryPopup } from "@/components/InstagramStoryPopup";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CreateEventPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showStoryPopup, setShowStoryPopup] = useState(false);
+  const [generatedStoryUrl, setGeneratedStoryUrl] = useState<string | null>(null);
+  const [generatingStory, setGeneratingStory] = useState(false);
   const { toast } = useToast();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [eventName, setEventName] = useState("");
@@ -31,6 +38,39 @@ const CreateEventPage = () => {
         setSelectedImage(e.target?.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const generateInstagramStory = async (eventData: any) => {
+    setGeneratingStory(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-instagram-story', {
+        body: {
+          type: 'event',
+          data: {
+            ...eventData,
+            user_id: user?.id
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.success) {
+        setGeneratedStoryUrl(data.storyUrl);
+        setShowStoryPopup(true);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      console.error('Error generating Instagram story:', error);
+      toast({
+        title: "Story Generation Failed",
+        description: "Failed to generate Instagram story. You can still share your event normally.",
+        variant: "destructive",
+      });
+    } finally {
+      setGeneratingStory(false);
     }
   };
 
@@ -62,6 +102,19 @@ const CreateEventPage = () => {
       title: "האירוע נוצר בהצלחה!",
       description: "האירוע שלך נוסף לעמוד האירועים",
     });
+    
+    // Generate Instagram story after creating event
+    const eventData = {
+      title: eventName,
+      description,
+      date,
+      time,
+      location,
+      price,
+      image_url: selectedImage
+    };
+    
+    await generateInstagramStory(eventData);
     
     setIsSubmitting(false);
     navigate('/events');
@@ -205,6 +258,14 @@ const CreateEventPage = () => {
       <NotificationsPopup 
         isOpen={showNotifications} 
         onClose={() => setShowNotifications(false)} 
+      />
+      
+      <InstagramStoryPopup
+        isOpen={showStoryPopup}
+        onClose={() => setShowStoryPopup(false)}
+        storyUrl={generatedStoryUrl}
+        isGenerating={generatingStory}
+        title={eventName}
       />
       
       <BottomNavigation />
