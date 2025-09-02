@@ -24,10 +24,7 @@ const LoginPage = () => {
     password: '',
     neighborhood: '',
     bio: '',
-    instagram: '',
-    facebook: '',
-    tiktok: '',
-    linkedin: ''
+    instagram: ''
   });
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
@@ -326,33 +323,6 @@ const LoginPage = () => {
                   placeholder="Instagram @"
                   value={formData.instagram}
                   onChange={(e) => handleInputChange('instagram', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
-                />
-              </div>
-              
-              <div>
-                <Input 
-                  placeholder="Facebook"
-                  value={formData.facebook}
-                  onChange={(e) => handleInputChange('facebook', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
-                />
-              </div>
-              
-              <div>
-                <Input 
-                  placeholder="TikTok @"
-                  value={formData.tiktok}
-                  onChange={(e) => handleInputChange('tiktok', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
-                />
-              </div>
-              
-              <div>
-                <Input 
-                  placeholder="LinkedIn"
-                  value={formData.linkedin}
-                  onChange={(e) => handleInputChange('linkedin', e.target.value)}
                   className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
