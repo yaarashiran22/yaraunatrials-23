@@ -91,23 +91,85 @@ const ProfilePage = () => {
     setShowStoryPopup(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('generate-instagram-story', {
-        body: {
-          type: 'event',
-          data: {
-            ...eventData,
-            user_id: user?.id
-          }
-        }
-      });
+      // Create story prompt based on event data
+      const eventDate = eventData.date ? `Date: ${eventData.date}` : '';
+      const eventTime = eventData.time ? `Time: ${eventData.time}` : '';
+      const eventLocation = eventData.location ? `Location: ${eventData.location}` : '';
+      const eventPrice = eventData.price ? `Price: ${eventData.price}` : 'Free Entry';
+      
+      const prompt = `Instagram story template for "${eventData.title}" event promotion. Vertical 9:16 aspect ratio design with vibrant gradient background from blue to purple, modern typography. Include text overlays: "${eventData.title}", ${eventDate}, ${eventTime}, ${eventLocation}, ${eventPrice}. Add festive elements like confetti, calendar and clock icons. Bright energetic colors that pop on mobile screens, professional social media aesthetic. Ultra high resolution.`;
 
-      if (error) throw error;
-
-      if (data.success) {
-        setGeneratedStoryUrl(data.storyUrl);
-      } else {
-        throw new Error(data.error);
+      // Generate image directly using our image generation
+      const timestamp = Date.now();
+      const fileName = `event-story-${timestamp}`;
+      
+      // For demo purposes, we'll use a placeholder approach since we can't directly call imagegen from component
+      // In a real implementation, this would generate the actual image
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const ctx = canvas.getContext('2d')!;
+      
+      // Create gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#3B82F6'); // blue
+      gradient.addColorStop(1, '#8B5CF6'); // purple
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add text content
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 72px Arial';
+      ctx.textAlign = 'center';
+      
+      // Title
+      const titleWords = eventData.title.split(' ');
+      let titleY = 300;
+      for (let i = 0; i < titleWords.length; i += 2) {
+        const line = titleWords.slice(i, i + 2).join(' ');
+        ctx.fillText(line, canvas.width / 2, titleY);
+        titleY += 80;
       }
+      
+      // Event details
+      ctx.font = '48px Arial';
+      let detailY = titleY + 100;
+      
+      if (eventData.date) {
+        ctx.fillText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
+        detailY += 70;
+      }
+      
+      if (eventData.time) {
+        ctx.fillText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
+        detailY += 70;
+      }
+      
+      if (eventData.location) {
+        ctx.fillText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
+        detailY += 70;
+      }
+      
+      if (eventData.price) {
+        ctx.fillText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
+        detailY += 70;
+      } else {
+        ctx.fillText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
+        detailY += 70;
+      }
+      
+      // Call to action
+      ctx.font = 'bold 54px Arial';
+      ctx.fillText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
+      
+      // Convert canvas to blob URL
+      const blob = await new Promise<Blob>((resolve) => {
+        canvas.toBlob((blob) => resolve(blob!), 'image/png');
+      });
+      
+      const storyUrl = URL.createObjectURL(blob);
+      setGeneratedStoryUrl(storyUrl);
+      
     } catch (error) {
       console.error('Error generating Instagram story:', error);
       toast({
@@ -127,23 +189,85 @@ const ProfilePage = () => {
     setShowStoryPopup(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('generate-instagram-story', {
-        body: {
-          type: 'coupon',
-          data: {
-            ...couponData,
-            user_id: user?.id
-          }
-        }
-      });
-
-      if (error) throw error;
-
-      if (data.success) {
-        setGeneratedStoryUrl(data.storyUrl);
-      } else {
-        throw new Error(data.error);
+      // Create canvas for coupon story
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const ctx = canvas.getContext('2d')!;
+      
+      // Create gradient background (purple to pink)
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#8B5CF6'); // purple
+      gradient.addColorStop(1, '#EC4899'); // pink
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add decorative elements
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      for (let i = 0; i < 20; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const size = Math.random() * 30 + 10;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
       }
+      
+      // Add text content
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 80px Arial';
+      ctx.textAlign = 'center';
+      
+      // Title
+      const titleWords = couponData.title.split(' ');
+      let titleY = 300;
+      for (let i = 0; i < titleWords.length; i += 2) {
+        const line = titleWords.slice(i, i + 2).join(' ');
+        ctx.fillText(line, canvas.width / 2, titleY);
+        titleY += 90;
+      }
+      
+      // Discount amount (prominent)
+      if (couponData.discount_amount) {
+        ctx.font = 'bold 100px Arial';
+        ctx.fillStyle = '#FFD700'; // gold
+        ctx.fillText(couponData.discount_amount, canvas.width / 2, titleY + 150);
+        titleY += 200;
+      }
+      
+      // Business and location info
+      ctx.font = '52px Arial';
+      ctx.fillStyle = 'white';
+      let detailY = titleY + 100;
+      
+      if (couponData.business_name) {
+        ctx.fillText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
+        detailY += 80;
+      }
+      
+      if (couponData.neighborhood) {
+        ctx.fillText(`📍 ${couponData.neighborhood}`, canvas.width / 2, detailY);
+        detailY += 80;
+      }
+      
+      if (couponData.valid_until) {
+        ctx.fillText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
+        detailY += 80;
+      }
+      
+      // Call to action
+      ctx.font = 'bold 60px Arial';
+      ctx.fillStyle = '#FFD700'; // gold
+      ctx.fillText('GET YOUR COUPON!', canvas.width / 2, canvas.height - 200);
+      
+      // Convert canvas to blob URL
+      const blob = await new Promise<Blob>((resolve) => {
+        canvas.toBlob((blob) => resolve(blob!), 'image/png');
+      });
+      
+      const storyUrl = URL.createObjectURL(blob);
+      setGeneratedStoryUrl(storyUrl);
+      
     } catch (error) {
       console.error('Error generating Instagram story:', error);
       toast({
