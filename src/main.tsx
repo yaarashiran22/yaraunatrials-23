@@ -18,15 +18,8 @@ const queryClient = new QueryClient({
   },
 })
 
-console.log('Main.tsx: Starting to render');
-
-const rootElement = document.getElementById("root");
-console.log('Main.tsx: Root element found:', rootElement);
-
-createRoot(rootElement!).render(
+createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     <App />
   </QueryClientProvider>
 );
-
-console.log('Main.tsx: Render complete');

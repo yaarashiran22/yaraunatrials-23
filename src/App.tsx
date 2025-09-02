@@ -160,9 +160,7 @@ const AppContent = () => {
   );
 };
 
-const App = () => {
-  console.log('App.tsx: App component rendering');
-  return (
+const App = () => (
   <ErrorBoundary>
     <TooltipProvider>
       <Toaster />
@@ -180,7 +178,6 @@ const App = () => {
       </LanguageProvider>
     </TooltipProvider>
   </ErrorBoundary>
-  );
-};
+);
 
 export default App;
