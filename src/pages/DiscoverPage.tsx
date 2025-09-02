@@ -613,14 +613,14 @@ const DiscoverPage = () => {
         
         {/* Map Section */}
         <div className="relative">
-          {/* People You Should Meet Row */}
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-foreground flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                People You Should Meet
-              </h3>
-              {suggestedUsers.length > 0 && (
+          {/* People You Should Meet Row - Only show if there are suggested users */}
+          {!suggestedUsersLoading && suggestedUsers.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  People You Should Meet
+                </h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -629,50 +629,37 @@ const DiscoverPage = () => {
                 >
                   Refresh
                 </Button>
-              )}
-            </div>
-            
-            {suggestedUsersLoading ? (
-              <div className="flex gap-3 overflow-x-auto pb-2">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="flex-shrink-0">
-                    <div className="w-16 h-16 bg-muted rounded-full animate-pulse" />
-                    <div className="w-16 h-3 bg-muted rounded mt-2 animate-pulse" />
-                  </div>
-                ))}
               </div>
-            ) : suggestedUsers.length > 0 ? (
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+              
+              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
                 {suggestedUsers.slice(0, 10).map((user) => (
-                  <div key={user.id} className="flex-shrink-0 text-center">
+                  <div key={user.id} className="flex-shrink-0 text-center group">
                     <div className="relative">
-                      <img
-                        src={user.profile_image_url || '/placeholder-avatar.png'}
-                        alt={user.name}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-purple-200 hover:border-purple-400 transition-colors cursor-pointer"
-                        onError={(e) => {
-                          e.currentTarget.src = '/placeholder-avatar.png';
-                        }}
-                      />
-                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                        <span className="text-white text-xs">✓</span>
+                      <div className="w-20 h-20 p-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full hover-scale">
+                        <img
+                          src={user.profile_image_url || '/placeholder-avatar.png'}
+                          alt={user.name}
+                          className="w-full h-full rounded-full object-cover border-2 border-white cursor-pointer transition-transform duration-200 group-hover:scale-105"
+                          onError={(e) => {
+                            e.currentTarget.src = '/placeholder-avatar.png';
+                          }}
+                        />
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white flex items-center justify-center animate-pulse">
+                        <span className="text-white text-xs font-bold">✓</span>
                       </div>
                     </div>
-                    <p className="text-xs font-medium mt-2 max-w-[64px] truncate">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{user.sharedEventCount} events</p>
+                    <p className="text-xs font-medium mt-2 max-w-[80px] truncate text-center">{user.name}</p>
+                    <div className="flex items-center justify-center gap-1 mt-1">
+                      <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
+                      <p className="text-xs text-muted-foreground">{user.sharedEventCount}</p>
+                      <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
+                    </div>
                   </div>
                 ))}
               </div>
-            ) : (
-              <div 
-                onClick={findSuggestedUsers}
-                className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-200 text-center"
-              >
-                <Users className="w-6 h-6 text-purple-500 mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">Find people to meet</p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
           
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
             {/* Filtered Users Display */}
