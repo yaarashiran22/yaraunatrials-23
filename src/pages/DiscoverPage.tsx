@@ -251,7 +251,6 @@ const DiscoverPage = () => {
 
       const profile = userLocation.profile as any;
       const hasSharedEvents = (userLocation as any).sharedEvents && (userLocation as any).sharedEvents.length > 0;
-      const isHighlighted = highlightedUsers.some(hu => hu.profile?.id === profile?.id);
 
       // Create custom user icon with highlighting for users with shared events
       const userIcon = L.divIcon({
@@ -294,22 +293,6 @@ const DiscoverPage = () => {
                 🎯 This user is going to the same event as you: ${(userLocation as any).sharedEvents[0]}
               </div>
             ` : ''}
-            ${profile?.interests && profile.interests.length > 0 ? `
-              <div class="mt-2">
-                <div class="text-xs text-gray-500 mb-1">Interests:</div>
-                <div class="flex flex-wrap gap-1">
-                  ${profile.interests.slice(0, 3).map((interest: string) => 
-                    `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">${interest}</span>`
-                  ).join('')}
-                </div>
-              </div>
-            ` : ''}
-            <div class="text-xs text-muted-foreground mt-1">
-              <div class="flex items-center gap-1">
-                <div class="w-3 h-3 ${hasSharedEvents ? 'bg-red-500' : 'bg-green-500'} rounded-full"></div>
-                ${hasSharedEvents ? 'Same event + shared interests' : 'Shared interests match'}
-              </div>
-            </div>
           </div>
         `);
 
