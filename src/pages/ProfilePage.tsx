@@ -236,8 +236,8 @@ const ProfilePage = () => {
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
       ctx.lineWidth = 4;
       
-      // Title - positioned over image or at top (moved lower)
-      const titleY = eventData.image_url || eventData.video_url ? 900 : 400;
+      // Title - positioned over image or at top (moved even lower)
+      const titleY = eventData.image_url || eventData.video_url ? 1000 : 500;
       const titleWords = eventData.title.split(' ');
       let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
