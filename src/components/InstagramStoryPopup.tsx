@@ -83,8 +83,16 @@ export const InstagramStoryPopup = ({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-sm mx-auto bg-background border border-border/50 shadow-xl">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-foreground flex items-center gap-2">
+        <DialogHeader className="relative">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="absolute right-0 top-0 h-6 w-6 rounded-full p-0 hover:bg-destructive hover:text-destructive-foreground"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+          <DialogTitle className="text-xl font-bold text-foreground flex items-center gap-2 pr-8">
             <Instagram className="w-6 h-6 text-pink-500" />
             Instagram Story Ready!
           </DialogTitle>
