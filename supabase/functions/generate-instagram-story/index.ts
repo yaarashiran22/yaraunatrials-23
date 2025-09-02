@@ -44,6 +44,23 @@ serve(async (req) => {
 
     console.log('Generating Instagram story for:', type, data);
 
+    // Fetch user profile information
+    let userProfile = null;
+    if (data.user_id) {
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('name, profile_image_url')
+        .eq('id', data.user_id)
+        .single();
+      
+      if (profileError) {
+        console.warn('Failed to fetch user profile:', profileError);
+      } else {
+        userProfile = profile;
+        console.log('User profile fetched:', { name: profile.name, hasImage: !!profile.profile_image_url });
+      }
+    }
+
     let prompt = '';
     
     if (type === 'coupon' || type === 'community_perk') {
@@ -52,6 +69,11 @@ serve(async (req) => {
       const discount = data.discount_amount ? ` - ${data.discount_amount}` : '';
       const neighborhood = data.neighborhood ? ` in ${data.neighborhood}` : '';
       
+      // Add user profile information to the content
+      const userInfo = userProfile ? `Posted by: ${userProfile.name || 'User'}` : '';
+      const profileImageNote = userProfile?.profile_image_url ? 
+        'Include a small circular profile picture placeholder in the bottom left corner of the story.' : '';
+      
       prompt = `Create a professional Instagram story template for a business coupon offer. 
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
@@ -59,12 +81,17 @@ serve(async (req) => {
       - Title: "${data.title || 'Special Offer'}${discount}"
       - ${businessInfo}${neighborhood}
       - Description: "${data.description || 'Special offer available now!'}"
+      ${userInfo ? `- ${userInfo}` : ''}
       - Call to action: "Get Your Coupon!"
+      
+      ${profileImageNote}
+      
+      User branding: ${userProfile?.name ? `Include "${userProfile.name}" as the creator/poster attribution in small text at the bottom` : 'Include generic user attribution'}
       
       Style: Modern, vibrant, eye-catching design with gradient background (purple to pink), 
       clean typography, professional business aesthetic, include coupon/discount graphics, 
       use bright colors that pop on mobile screens. Add decorative elements like stars or 
-      geometric shapes. Make it look like a premium business promotion.`;
+      geometric shapes. Make it look like a premium business promotion with clear attribution to the poster.`;
       
     } else if (type === 'event' || type === 'community_event') {
       // Create event story prompt  
@@ -72,6 +99,11 @@ serve(async (req) => {
       const eventTime = data.time ? `Time: ${data.time}` : '';
       const eventLocation = data.location ? `Location: ${data.location}` : '';
       const eventPrice = data.price ? `Price: ${data.price}` : 'Free Entry';
+      
+      // Add user profile information to the content
+      const userInfo = userProfile ? `Organized by: ${userProfile.name || 'User'}` : '';
+      const profileImageNote = userProfile?.profile_image_url ? 
+        'Include a small circular profile picture placeholder in the bottom left corner of the story.' : '';
       
       prompt = `Create a professional Instagram story template for an event promotion.
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
@@ -83,12 +115,17 @@ serve(async (req) => {
       - ${eventLocation}
       - ${eventPrice}
       - Description: "${data.description || 'Join us for this amazing event!'}"
+      ${userInfo ? `- ${userInfo}` : ''}
       - Call to action: "RSVP Now!"
+      
+      ${profileImageNote}
+      
+      User branding: ${userProfile?.name ? `Include "${userProfile.name}" as the event organizer attribution in small text at the bottom` : 'Include generic organizer attribution'}
       
       Style: Dynamic, festive design with vibrant gradient background (blue to purple), 
       modern typography, event-focused aesthetic with celebration elements like confetti 
       or party graphics. Use energetic colors, include calendar/clock icons, make it 
-      exciting and inviting for social sharing.`;
+      exciting and inviting for social sharing with clear attribution to the organizer.`;
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
       console.error(errorMsg);
