@@ -121,8 +121,8 @@ const ProfilePage = () => {
             img.src = eventData.image_url || eventData.video_url;
           });
           
-          // Calculate image dimensions to fit in upper portion of story
-          const imageHeight = 800; // Upper portion height
+          // Calculate image dimensions to fit in larger upper portion of story
+          const imageHeight = 1100; // Larger upper portion height (was 800)
           const imageWidth = canvas.width;
           const aspectRatio = img.width / img.height;
           
@@ -135,7 +135,7 @@ const ProfilePage = () => {
           }
           
           const x = (canvas.width - drawWidth) / 2;
-          const y = 100; // Start from top with some margin
+          const y = 50; // Reduced margin for larger image (was 100)
           
           // Draw image with rounded corners effect
           ctx.save();
@@ -261,8 +261,8 @@ const ProfilePage = () => {
             img.src = couponData.image_url;
           });
           
-          // Calculate image dimensions to fit in upper portion of story
-          const imageHeight = 700; // Upper portion height
+          // Calculate image dimensions to fit in larger upper portion of story
+          const imageHeight = 900; // Larger upper portion height (was 700)
           const imageWidth = canvas.width;
           const aspectRatio = img.width / img.height;
           
@@ -275,7 +275,7 @@ const ProfilePage = () => {
           }
           
           const x = (canvas.width - drawWidth) / 2;
-          const y = 150; // Start from top with some margin
+          const y = 100; // Reduced margin for larger image (was 150)
           
           // Draw image with rounded corners effect
           ctx.save();
