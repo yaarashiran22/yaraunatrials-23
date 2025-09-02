@@ -97,14 +97,6 @@ const ProfilePage = () => {
       const eventLocation = eventData.location ? `Location: ${eventData.location}` : '';
       const eventPrice = eventData.price ? `Price: ${eventData.price}` : 'Free Entry';
       
-      const prompt = `Instagram story template for "${eventData.title}" event promotion. Vertical 9:16 aspect ratio design with vibrant gradient background from blue to purple, modern typography. Include text overlays: "${eventData.title}", ${eventDate}, ${eventTime}, ${eventLocation}, ${eventPrice}. Add festive elements like confetti, calendar and clock icons. Bright energetic colors that pop on mobile screens, professional social media aesthetic. Ultra high resolution.`;
-
-      // Generate image directly using our image generation
-      const timestamp = Date.now();
-      const fileName = `event-story-${timestamp}`;
-      
-      // For demo purposes, we'll use a placeholder approach since we can't directly call imagegen from component
-      // In a real implementation, this would generate the actual image
       const canvas = document.createElement('canvas');
       canvas.width = 1080;
       canvas.height = 1920;
@@ -117,49 +109,104 @@ const ProfilePage = () => {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Add text content
+      // Load and add event image if available
+      if (eventData.image_url || eventData.video_url) {
+        try {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          
+          await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            img.src = eventData.image_url || eventData.video_url;
+          });
+          
+          // Calculate image dimensions to fit in upper portion of story
+          const imageHeight = 800; // Upper portion height
+          const imageWidth = canvas.width;
+          const aspectRatio = img.width / img.height;
+          
+          let drawWidth = imageWidth;
+          let drawHeight = imageWidth / aspectRatio;
+          
+          if (drawHeight > imageHeight) {
+            drawHeight = imageHeight;
+            drawWidth = imageHeight * aspectRatio;
+          }
+          
+          const x = (canvas.width - drawWidth) / 2;
+          const y = 100; // Start from top with some margin
+          
+          // Draw image with rounded corners effect
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(x, y, drawWidth, drawHeight, 20);
+          ctx.clip();
+          ctx.drawImage(img, x, y, drawWidth, drawHeight);
+          ctx.restore();
+          
+          // Add semi-transparent overlay for text readability
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+          ctx.fillRect(0, y + drawHeight - 200, canvas.width, 200);
+        } catch (error) {
+          console.warn('Failed to load event image:', error);
+        }
+      }
+      
+      // Add text content with better positioning
       ctx.fillStyle = 'white';
       ctx.font = 'bold 72px Arial';
       ctx.textAlign = 'center';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.lineWidth = 4;
       
-      // Title
+      // Title - positioned over image or at top
+      const titleY = eventData.image_url || eventData.video_url ? 850 : 300;
       const titleWords = eventData.title.split(' ');
-      let titleY = 300;
+      let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
         const line = titleWords.slice(i, i + 2).join(' ');
-        ctx.fillText(line, canvas.width / 2, titleY);
-        titleY += 80;
+        ctx.strokeText(line, canvas.width / 2, currentTitleY);
+        ctx.fillText(line, canvas.width / 2, currentTitleY);
+        currentTitleY += 80;
       }
       
-      // Event details
+      // Event details in bottom section
       ctx.font = '48px Arial';
-      let detailY = titleY + 100;
+      let detailY = 1200;
       
       if (eventData.date) {
+        ctx.strokeText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
         ctx.fillText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
         detailY += 70;
       }
       
       if (eventData.time) {
+        ctx.strokeText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
         ctx.fillText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
         detailY += 70;
       }
       
       if (eventData.location) {
+        ctx.strokeText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
         ctx.fillText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
         detailY += 70;
       }
       
       if (eventData.price) {
+        ctx.strokeText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
         ctx.fillText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
         detailY += 70;
       } else {
+        ctx.strokeText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
         ctx.fillText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
         detailY += 70;
       }
       
       // Call to action
       ctx.font = 'bold 54px Arial';
+      ctx.fillStyle = '#FFD700'; // gold
+      ctx.strokeText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
       ctx.fillText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
       
       // Convert canvas to blob URL
@@ -202,55 +249,111 @@ const ProfilePage = () => {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Add decorative elements
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-      for (let i = 0; i < 20; i++) {
+      // Load and add coupon image if available
+      if (couponData.image_url) {
+        try {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          
+          await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            img.src = couponData.image_url;
+          });
+          
+          // Calculate image dimensions to fit in upper portion of story
+          const imageHeight = 700; // Upper portion height
+          const imageWidth = canvas.width;
+          const aspectRatio = img.width / img.height;
+          
+          let drawWidth = imageWidth;
+          let drawHeight = imageWidth / aspectRatio;
+          
+          if (drawHeight > imageHeight) {
+            drawHeight = imageHeight;
+            drawWidth = imageHeight * aspectRatio;
+          }
+          
+          const x = (canvas.width - drawWidth) / 2;
+          const y = 150; // Start from top with some margin
+          
+          // Draw image with rounded corners effect
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(x, y, drawWidth, drawHeight, 20);
+          ctx.clip();
+          ctx.drawImage(img, x, y, drawWidth, drawHeight);
+          ctx.restore();
+          
+          // Add semi-transparent overlay for text readability
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+          ctx.fillRect(0, y + drawHeight - 150, canvas.width, 150);
+        } catch (error) {
+          console.warn('Failed to load coupon image:', error);
+        }
+      }
+      
+      // Add decorative elements (stars/circles)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      for (let i = 0; i < 15; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
-        const size = Math.random() * 30 + 10;
+        const size = Math.random() * 25 + 8;
         ctx.beginPath();
         ctx.arc(x, y, size, 0, Math.PI * 2);
         ctx.fill();
       }
       
-      // Add text content
+      // Add text content with better positioning
       ctx.fillStyle = 'white';
       ctx.font = 'bold 80px Arial';
       ctx.textAlign = 'center';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.lineWidth = 4;
       
-      // Title
+      // Title - positioned over image or at top
+      const titleY = couponData.image_url ? 800 : 350;
       const titleWords = couponData.title.split(' ');
-      let titleY = 300;
+      let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
         const line = titleWords.slice(i, i + 2).join(' ');
-        ctx.fillText(line, canvas.width / 2, titleY);
-        titleY += 90;
+        ctx.strokeText(line, canvas.width / 2, currentTitleY);
+        ctx.fillText(line, canvas.width / 2, currentTitleY);
+        currentTitleY += 90;
       }
       
-      // Discount amount (prominent)
+      // Discount amount (prominent and highlighted)
       if (couponData.discount_amount) {
         ctx.font = 'bold 100px Arial';
         ctx.fillStyle = '#FFD700'; // gold
-        ctx.fillText(couponData.discount_amount, canvas.width / 2, titleY + 150);
-        titleY += 200;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.lineWidth = 6;
+        ctx.strokeText(couponData.discount_amount, canvas.width / 2, currentTitleY + 120);
+        ctx.fillText(couponData.discount_amount, canvas.width / 2, currentTitleY + 120);
+        currentTitleY += 180;
       }
       
-      // Business and location info
+      // Business and location info in bottom section
       ctx.font = '52px Arial';
       ctx.fillStyle = 'white';
-      let detailY = titleY + 100;
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.lineWidth = 3;
+      let detailY = 1300;
       
       if (couponData.business_name) {
+        ctx.strokeText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
         ctx.fillText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
         detailY += 80;
       }
       
       if (couponData.neighborhood) {
+        ctx.strokeText(`📍 ${couponData.neighborhood}`, canvas.width / 2, detailY);
         ctx.fillText(`📍 ${couponData.neighborhood}`, canvas.width / 2, detailY);
         detailY += 80;
       }
       
       if (couponData.valid_until) {
+        ctx.strokeText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
         ctx.fillText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
         detailY += 80;
       }
@@ -258,6 +361,7 @@ const ProfilePage = () => {
       // Call to action
       ctx.font = 'bold 60px Arial';
       ctx.fillStyle = '#FFD700'; // gold
+      ctx.strokeText('GET YOUR COUPON!', canvas.width / 2, canvas.height - 200);
       ctx.fillText('GET YOUR COUPON!', canvas.width / 2, canvas.height - 200);
       
       // Convert canvas to blob URL
