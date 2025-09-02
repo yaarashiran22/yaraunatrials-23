@@ -491,8 +491,8 @@ const DiscoverPage = () => {
               <style>
                 .text-pin-popup {
                   text-align: center;
-                  width: 160px;
-                  max-width: 160px;
+                  width: 200px;
+                  max-width: 200px;
                   font-family: system-ui, -apple-system, sans-serif;
                   background: transparent;
                   border-radius: 16px;
@@ -501,16 +501,34 @@ const DiscoverPage = () => {
                   border: none;
                   box-shadow: none;
                 }
+                .text-pin-popup .pin-image {
+                  width: 100%;
+                  height: 100px;
+                  object-fit: cover;
+                  border-radius: 8px;
+                  margin-bottom: 8px;
+                }
                 .text-pin-popup .pin-text {
-                  font-size: 11px;
+                  font-size: 12px;
                   line-height: 1.3;
                   color: #1f2937;
-                  margin-bottom: 4px;
+                  margin-bottom: 6px;
                   white-space: pre-wrap;
                   text-align: center;
                   background: rgba(255,255,255,0.9);
                   padding: 6px 8px;
                   border-radius: 8px;
+                  backdrop-filter: blur(4px);
+                  font-weight: 600;
+                }
+                .text-pin-popup .pin-details {
+                  font-size: 10px;
+                  line-height: 1.2;
+                  color: #4b5563;
+                  margin-bottom: 4px;
+                  background: rgba(255,255,255,0.8);
+                  padding: 4px 6px;
+                  border-radius: 6px;
                   backdrop-filter: blur(4px);
                 }
                 .text-pin-popup .pin-author {
@@ -532,7 +550,18 @@ const DiscoverPage = () => {
                   object-fit: cover;
                 }
               </style>
-              <div class="pin-text">${item.description || item.title || 'No message'}</div>
+              ${item.image_url ? `<img src="${item.image_url}" alt="${item.title || 'Event image'}" class="pin-image" />` : ''}
+              <div class="pin-text">${item.title || item.description || 'No title'}</div>
+              ${(item.date || item.time) ? `
+                <div class="pin-details">
+                  ${item.date ? `📅 ${item.date}` : ''}
+                  ${item.date && item.time ? ' • ' : ''}
+                  ${item.time ? `🕐 ${item.time}` : ''}
+                </div>
+              ` : ''}
+              ${item.location && typeof item.location === 'string' && !item.location.startsWith('{') ? `
+                <div class="pin-details">📍 ${item.location}</div>
+              ` : ''}
               ${item.profile ? `
                 <div class="pin-author">
                   <img 
@@ -543,7 +572,7 @@ const DiscoverPage = () => {
                 </div>
               ` : ''}
             </div>
-          `, { maxWidth: 180, className: 'custom-popup' });
+          `, { maxWidth: 220, className: 'custom-popup' });
 
         recommendationMarkersRef.current.push(marker);
       }
