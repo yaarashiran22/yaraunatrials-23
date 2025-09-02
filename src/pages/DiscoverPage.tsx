@@ -50,7 +50,7 @@ const DiscoverPage = () => {
     if (user) {
       checkHangStatus();
     }
-  }, [user]); // checkHangStatus is stable since it doesn't depend on changing values
+  }, [user, checkHangStatus]);
 
   // Function to filter users based on discovery criteria
   const handleDiscovery = async (selectedInterests: string[], connectionType: string) => {

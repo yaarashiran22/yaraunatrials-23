@@ -66,9 +66,23 @@ export const useOpenToHang = () => {
             setIsOpenToHang(false);
           }, timeLeft);
         } else {
-          // Status expired, update in database
-          await stopHanging();
+          // Status expired, update in database silently without causing re-renders
+          try {
+            await supabase
+              .from('user_locations')
+              .update({
+                status: 'normal',
+                status_expires_at: null,
+                updated_at: new Date().toISOString()
+              })
+              .eq('user_id', user.id);
+            setIsOpenToHang(false);
+          } catch (expiredError) {
+            console.error('Error clearing expired status:', expiredError);
+          }
         }
+      } else {
+        setIsOpenToHang(false);
       }
     } catch (error) {
       console.error('Error checking hang status:', error);
