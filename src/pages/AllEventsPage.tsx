@@ -46,6 +46,27 @@ const priceOptions = [
   "מעל 200 ₪"
 ] as const;
 
+// Mood filter options
+const moodOptions = [
+  "הכל",
+  "מוזיקה", 
+  "אמנות",
+  "ספורט",
+  "קולינריה",
+  "טכנולוגיה",
+  "עסקים",
+  "חינוך"
+] as const;
+
+// Date filter options
+const dateOptions = [
+  "הכל",
+  "היום",
+  "מחר", 
+  "השבוע",
+  "החודש"
+] as const;
+
 const AllEventsPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
@@ -58,7 +79,8 @@ const AllEventsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("כל השכונות");
   const [priceFilter, setPriceFilter] = useState("כל המחירים");
-  // Removed showFilters state - filters are always visible
+  const [moodFilter, setMoodFilter] = useState("הכל");
+  const [dateFilter, setDateFilter] = useState("הכל");
 
   // Optimized filtering with useMemo for better performance
   const filteredEvents = useMemo(() => {
@@ -102,9 +124,58 @@ const AllEventsPage = () => {
         }
       }
 
+      // Mood filter - use description as fallback for now
+      if (moodFilter !== "הכל") {
+        // Check if event description or title contains mood-related keywords
+        const eventContent = `${event.title} ${event.description || ''}`.toLowerCase();
+        const moodKeywords = {
+          'מוזיקה': ['music', 'concert', 'band', 'song', 'מוזיקה', 'קונצרט'],
+          'אמנות': ['art', 'gallery', 'paint', 'exhibition', 'אמנות', 'גלריה'],
+          'ספורט': ['sport', 'game', 'football', 'basketball', 'ספורט', 'כדורגל'],
+          'קולינריה': ['food', 'cooking', 'restaurant', 'chef', 'אוכל', 'מטבח'],
+          'טכנולוגיה': ['tech', 'startup', 'code', 'digital', 'טכנולוגיה'],
+          'עסקים': ['business', 'network', 'entrepreneur', 'עסקים'],
+          'חינוך': ['education', 'workshop', 'learn', 'course', 'חינוך', 'סדנה']
+        };
+        
+        const keywords = moodKeywords[moodFilter as keyof typeof moodKeywords] || [];
+        const hasMatchingKeyword = keywords.some(keyword => eventContent.includes(keyword));
+        
+        if (!hasMatchingKeyword) return false;
+      }
+
+      // Date filter
+      if (dateFilter !== "הכל") {
+        const today = new Date();
+        const eventDate = event.date ? new Date(event.date) : null;
+        
+        if (!eventDate) return false;
+        
+        switch (dateFilter) {
+          case "היום":
+            if (eventDate.toDateString() !== today.toDateString()) return false;
+            break;
+          case "מחר":
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            if (eventDate.toDateString() !== tomorrow.toDateString()) return false;
+            break;
+          case "השבוע":
+            const weekFromNow = new Date(today);
+            weekFromNow.setDate(today.getDate() + 7);
+            if (eventDate < today || eventDate > weekFromNow) return false;
+            break;
+          case "החודש":
+            const monthFromNow = new Date(today);
+            monthFromNow.setMonth(today.getMonth() + 1);
+            if (eventDate < today || eventDate > monthFromNow) return false;
+            break;
+        }
+      }
+
       return true;
     });
-  }, [events, searchQuery, selectedNeighborhood, priceFilter]);
+  }, [events, searchQuery, selectedNeighborhood, priceFilter, moodFilter, dateFilter]);
 
   // Optimized event handlers with useCallback
   const handleEventClick = useCallback((event: any) => {
@@ -128,6 +199,8 @@ const AllEventsPage = () => {
     setSearchQuery("");
     setSelectedNeighborhood("כל השכונות");
     setPriceFilter("כל המחירים");
+    setMoodFilter("הכל");
+    setDateFilter("הכל");
   }, []);
 
   return (
@@ -203,8 +276,42 @@ const AllEventsPage = () => {
               </Select>
             </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm font-medium mb-2 block">מצב רוח</label>
+              <Select value={moodFilter} onValueChange={setMoodFilter}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {moodOptions.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">תאריך</label>
+              <Select value={dateFilter} onValueChange={setDateFilter}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {dateOptions.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           
-          {(selectedNeighborhood !== "כל השכונות" || priceFilter !== "כל המחירים") && (
+          {(selectedNeighborhood !== "כל השכונות" || priceFilter !== "כל המחירים" || moodFilter !== "הכל" || dateFilter !== "הכל") && (
             <div className="flex justify-center">
               <Button 
                 variant="ghost" 

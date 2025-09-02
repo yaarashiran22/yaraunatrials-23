@@ -454,26 +454,22 @@ const Index = () => {
 
         {/* Events Section - Horizontal Carousel */}
         <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-foreground relative">
-            <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
-              Events Happening Around
-            </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
-            </h2>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => {
-                  setCreateEventType('event');
-                  setShowCreateEvent(true);
-                }}
-                className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1"
-              >
-                <Plus className="h-3 w-3" />
-              </Button>
-            </div>
+          <SectionHeader 
+            title="Events Happening Around" 
+            viewAllPath="/all-events"
+          />
+          <div className="flex items-center gap-2 mb-4">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                setCreateEventType('event');
+                setShowCreateEvent(true);
+              }}
+              className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1"
+            >
+              <Plus className="h-3 w-3" />
+            </Button>
           </div>
           
           <div className="flex gap-2 mb-4">
