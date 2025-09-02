@@ -61,7 +61,7 @@ const dateOptions = [
 const AllEventsPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const { events, loading } = useEvents();
+  const { events, loading } = useEvents('event'); // Only fetch events, not meetups
 
   // State management
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -202,7 +202,7 @@ const AllEventsPage = () => {
           <Button 
             variant="ghost" 
             size="sm"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/')}
             className="p-2"
           >
             <ArrowLeft className="h-5 w-5" />
