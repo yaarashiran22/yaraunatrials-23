@@ -161,8 +161,8 @@ const DiscoverPage = () => {
       console.log('Filtered users:', filtered.length, 'Connection type:', connectionType);
       console.log('Users with shared events:', usersWithEvents.length);
       
-      // Update markers to show filtered users, with special highlighting for those with shared events
-      addUserLocationMarkers(filteredWithEventInfo, usersWithEvents);
+      // Just show current user location
+      addUserLocationMarkers();
       
     } catch (error) {
       console.error('Error in handleDiscovery:', error);
@@ -185,7 +185,7 @@ const DiscoverPage = () => {
       });
       
       setFilteredUsers(basicFiltered);
-      addUserLocationMarkers(basicFiltered);
+      addUserLocationMarkers();
     }
   };
 
@@ -233,11 +233,9 @@ const DiscoverPage = () => {
     };
   }, [user]);
 
-  // Function to add user location markers
-  const addUserLocationMarkers = (usersToShow = userLocations, highlightedUsers: any[] = []) => {
-    if (!mapInstanceRef.current) return;
-
-    console.log('Adding user location markers, count:', usersToShow.length);
+  // Function to add user location markers (only current user)
+  const addUserLocationMarkers = () => {
+    if (!mapInstanceRef.current || !user) return;
 
     // Clear existing user markers
     if (userMarkersRef.current.length > 0) {
@@ -247,61 +245,56 @@ const DiscoverPage = () => {
       userMarkersRef.current = [];
     }
 
-    // Add markers for each user location
-    usersToShow.forEach((userLocation) => {
-      if (!mapInstanceRef.current) return;
+    // Find current user's location
+    const currentUserLocation = userLocations.find(location => 
+      location.profile?.id === user.id
+    );
 
-      console.log('Adding marker for user:', userLocation.profile?.name, 'at:', userLocation.latitude, userLocation.longitude);
+    if (!currentUserLocation) return;
 
-      const profile = userLocation.profile as any;
-      const hasSharedEvents = (userLocation as any).sharedEvents && (userLocation as any).sharedEvents.length > 0;
+    console.log('Adding marker for current user:', currentUserLocation.profile?.name, 'at:', currentUserLocation.latitude, currentUserLocation.longitude);
 
-      // Create custom user icon with highlighting for users with shared events
-      const userIcon = L.divIcon({
-        html: `
-          <div class="w-8 h-8 rounded-full border-2 ${hasSharedEvents ? 'border-red-500' : 'border-white'} shadow-lg overflow-hidden bg-white relative ${hasSharedEvents ? 'animate-pulse' : ''}">
+    const profile = currentUserLocation.profile as any;
+
+    // Create custom user icon for current user
+    const userIcon = L.divIcon({
+      html: `
+        <div class="w-8 h-8 rounded-full border-2 border-blue-500 shadow-lg overflow-hidden bg-white relative">
+          <img 
+            src="${profile?.profile_image_url || '/placeholder.svg'}" 
+            alt=""
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+          <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-blue-500 border-2 border-white rounded-full"></div>
+        </div>
+      `,
+      className: 'user-location-marker current-user',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+
+    const marker = L.marker([currentUserLocation.latitude, currentUserLocation.longitude], {
+      icon: userIcon,
+      riseOnHover: true
+    })
+      .addTo(mapInstanceRef.current)
+      .bindPopup(`
+        <div dir="ltr" class="text-left text-sm">
+          <div class="flex items-center gap-2">
             <img 
               src="${profile?.profile_image_url || '/placeholder.svg'}" 
               alt=""
-              class="w-full h-full object-cover"
+              class="w-6 h-6 rounded-full object-cover"
               loading="lazy"
             />
-            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 ${hasSharedEvents ? 'bg-red-500' : 'bg-green-500'} border-2 border-white rounded-full"></div>
-            ${hasSharedEvents ? '<div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-[8px]">🎯</span></div>' : ''}
+            <span class="font-medium">${profile?.name || 'You'} (You)</span>
           </div>
-        `,
-        className: `user-location-marker ${hasSharedEvents ? 'highlighted-match' : ''}`,
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-      });
+        </div>
+      `);
 
-      const marker = L.marker([userLocation.latitude, userLocation.longitude], {
-        icon: userIcon,
-        riseOnHover: true
-      })
-        .addTo(mapInstanceRef.current)
-        .bindPopup(`
-          <div dir="ltr" class="text-left text-sm">
-            <div class="flex items-center gap-2">
-              <img 
-                src="${profile?.profile_image_url || '/placeholder.svg'}" 
-                alt=""
-                class="w-6 h-6 rounded-full object-cover"
-                loading="lazy"
-              />
-              <span class="font-medium">${profile?.name || 'User'}</span>
-            </div>
-            ${hasSharedEvents ? `
-              <div class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mt-1">
-                🎯 This user is going to the same event as you: ${(userLocation as any).sharedEvents[0]}
-              </div>
-            ` : ''}
-          </div>
-        `);
-
-      userMarkersRef.current.push(marker);
-    });
+    userMarkersRef.current.push(marker);
   };
 
   // Function to add text pin markers
@@ -610,7 +603,7 @@ const DiscoverPage = () => {
           .addTo(map)
           .bindPopup('Buenos Aires');
 
-        // Add user location and text pin markers
+        // Add current user location and text pin markers
         addUserLocationMarkers();
         addTextPinMarkers();
 
@@ -641,7 +634,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addUserLocationMarkers();
     }
-  }, [userLocations, isLoading]);
+  }, [userLocations, isLoading, user]);
 
   useEffect(() => {
     if (mapInstanceRef.current && !isLoading) {
@@ -683,26 +676,6 @@ const DiscoverPage = () => {
               className="text-xs"
             >
               Events
-            </Button>
-            <Button
-              variant={filterType === 'friends' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilterType('friends')}
-              className="text-xs"
-            >
-              Friends
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setShowPeopleYouShouldMeet(true);
-                findSuggestedUsers();
-              }}
-              className="text-xs bg-primary text-primary-foreground hover:bg-primary/80"
-            >
-              <Users className="w-3 h-3 mr-1" />
-              People to Meet
             </Button>
           </div>
           
