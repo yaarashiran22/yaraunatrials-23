@@ -178,17 +178,14 @@ export const useUserLocations = () => {
     }
   };
 
-  // Fetch all user locations with profiles - only open to hang users
+  // Fetch all user locations with profiles
   const fetchUserLocations = useCallback(async () => {
     if (hasFetched.current) return;
-    console.log('Fetching user locations (open to hang only)...');
+    console.log('Fetching user locations...');
     try {
       const { data: locations, error: locationsError } = await supabase
         .from('user_locations')
         .select('*')
-        .eq('status', 'open_to_hang')
-        .not('status_expires_at', 'is', null)
-        .gte('status_expires_at', new Date().toISOString())
         .order('updated_at', { ascending: false });
 
       if (locationsError) {
@@ -196,17 +193,17 @@ export const useUserLocations = () => {
         return;
       }
 
-      console.log(`Found ${locations?.length || 0} users open to hang`);
+      console.log(`Found ${locations?.length || 0} user locations`);
 
       if (!locations || locations.length === 0) {
-        console.log('No users open to hang found, setting empty array');
+        console.log('No user locations found, setting empty array');
         setUserLocations([]);
         return;
       }
 
       // Get unique user IDs
       const userIds = [...new Set(locations.map(loc => loc.user_id))];
-      console.log('Fetching profiles for open to hang users:', userIds);
+      console.log('Fetching profiles for user IDs:', userIds);
 
       // Fetch profiles for these users
       const { data: profiles, error: profilesError } = await supabase
@@ -236,7 +233,7 @@ export const useUserLocations = () => {
         })
         .filter(Boolean) as UserLocationWithProfile[];
 
-      console.log(`Setting ${locationsWithProfiles.length} open to hang locations with profiles`);
+      console.log(`Setting ${locationsWithProfiles.length} locations with profiles`);
       setUserLocations(locationsWithProfiles);
       hasFetched.current = true;
     } catch (error) {
@@ -364,31 +361,7 @@ export const useUserLocations = () => {
   useEffect(() => {
     if (hasFetched.current) return;
     console.log('useUserLocations: Hook initialized, calling fetchUserLocations');
-    
-    const initializationPromise = fetchUserLocations();
-    
-    // Set up real-time subscription for location updates
-    const channel = supabase
-      .channel('user-locations-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'user_locations'
-        },
-        () => {
-          console.log('Real-time update detected, refreshing locations...');
-          hasFetched.current = false; // Allow refetch
-          fetchUserLocations();
-        }
-      )
-      .subscribe();
-
-    // Clean up subscription on unmount
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    fetchUserLocations();
   }, [user?.id]); // Add user.id as dependency to prevent infinite loops
 
   return {
