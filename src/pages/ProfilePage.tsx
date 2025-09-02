@@ -229,6 +229,33 @@ const ProfilePage = () => {
         }
       }
       
+      // Add una logo in top right corner
+      try {
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+        
+        await new Promise((resolve, reject) => {
+          logoImg.onload = resolve;
+          logoImg.onerror = reject;
+          logoImg.src = '/src/assets/logo.png';
+        });
+        
+        // Draw logo in top right corner
+        const logoSize = 80;
+        const logoX = canvas.width - logoSize - 30;
+        const logoY = 30;
+        
+        // Add white background circle for logo
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+      } catch (error) {
+        console.warn('Failed to load una logo:', error);
+      }
+      
       // Add text content with better positioning
       ctx.fillStyle = 'white';
       ctx.font = 'bold 72px Poppins, sans-serif';
@@ -236,8 +263,8 @@ const ProfilePage = () => {
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
       ctx.lineWidth = 4;
       
-      // Title - positioned over image or at top (moved even lower)
-      const titleY = eventData.image_url || eventData.video_url ? 1000 : 500;
+      // Title - positioned over image or at top (moved slightly lower)
+      const titleY = eventData.image_url || eventData.video_url ? 1050 : 550;
       const titleWords = eventData.title.split(' ');
       let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
@@ -443,6 +470,33 @@ const ProfilePage = () => {
           ctx.strokeText(`Posted by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
           ctx.fillText(`Posted by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
         }
+      }
+      
+      // Add una logo in top right corner
+      try {
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+        
+        await new Promise((resolve, reject) => {
+          logoImg.onload = resolve;
+          logoImg.onerror = reject;
+          logoImg.src = '/src/assets/logo.png';
+        });
+        
+        // Draw logo in top right corner
+        const logoSize = 80;
+        const logoX = canvas.width - logoSize - 30;
+        const logoY = 30;
+        
+        // Add white background circle for logo
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+      } catch (error) {
+        console.warn('Failed to load una logo:', error);
       }
       
       // Add decorative elements (stars/circles)
