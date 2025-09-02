@@ -414,15 +414,6 @@ const ProfilePage = () => {
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="text-sm font-semibold text-purple-700">Business Coupons</h4>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => navigate('/profile/' + user?.id + '#coupons')}
-                    className="gap-2 border-purple-400 text-purple-600 hover:bg-purple-50 hover:text-purple-700 text-xs px-2 py-1 h-6"
-                  >
-                    <Plus className="h-3 w-3" />
-                    Add More
-                  </Button>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
