@@ -8,6 +8,7 @@ interface SuggestedUser {
   profile_image_url?: string;
   sharedEvents: string[];
   sharedEventCount: number;
+  open_to_connecting: boolean;
 }
 
 export const useSuggestedUsers = () => {
@@ -100,12 +101,13 @@ export const useSuggestedUsers = () => {
         return;
       }
 
-      // Step 5: Get profile information for these users
+      // Step 5: Get profile information for these users (only those open to connecting)
       const userIds = usersWithEnoughSharedEvents.map(u => u.userId);
       const { data: profiles, error: profileError } = await supabase
         .from('profiles')
-        .select('id, name, profile_image_url')
-        .in('id', userIds);
+        .select('id, name, profile_image_url, open_to_connecting')
+        .in('id', userIds)
+        .eq('open_to_connecting', true);
 
       if (profileError) {
         console.error('Error fetching profiles:', profileError);
@@ -124,7 +126,8 @@ export const useSuggestedUsers = () => {
             name: profile.name || 'Anonymous User',
             profile_image_url: profile.profile_image_url,
             sharedEvents: events,
-            sharedEventCount: count
+            sharedEventCount: count,
+            open_to_connecting: profile.open_to_connecting || false
           };
         })
         .filter(Boolean) as SuggestedUser[];
