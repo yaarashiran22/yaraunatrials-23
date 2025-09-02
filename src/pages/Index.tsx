@@ -528,7 +528,7 @@ const Index = () => {
             </div>
           ) : (
             <div className="flex overflow-x-auto gap-6 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{scrollBehavior: 'smooth'}}>
-              {realEvents.slice(0, 3).map((event, index) => (
+              {realEvents.map((event, index) => (
                 <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
                    <UniformCard
                      id={event.id}
