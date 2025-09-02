@@ -14,57 +14,57 @@ import { useEvents } from "@/hooks/useEvents";
 import communityEvent from "@/assets/community-event.jpg";
 import profile1 from "@/assets/profile-1.jpg";
 
-// Predefined neighborhoods in Tel Aviv - memoized for performance
+// Predefined neighborhoods - memoized for performance
 const neighborhoods = [
-  "כל השכונות",
-  "לב העיר",
-  "נחלת בנימין", 
-  "רוטשילד",
-  "פלורנטין",
-  "שפירא",
-  "יפו העתיקה",
-  "עג'מי",
-  "נווה צדק",
-  "כרם התימנים",
-  "שכונת מונטיפיורי",
-  "רמת אביב",
-  "צפון ישן",
-  "שינקין",
-  "דיזנגוף",
-  "הרצליה",
-  "בת ים",
-  "חולון"
+  "All Neighborhoods",
+  "City Center",
+  "Nachalat Binyamin", 
+  "Rothschild",
+  "Florentin",
+  "Shapira",
+  "Old Jaffa",
+  "Ajami",
+  "Neve Tzedek",
+  "Kerem HaTeimanim",
+  "Montefiore",
+  "Ramat Aviv",
+  "Old North",
+  "Sheinkin",
+  "Dizengoff",
+  "Herzliya",
+  "Bat Yam",
+  "Holon"
 ] as const;
 
 // Price filter options - memoized for performance
 const priceOptions = [
-  "כל המחירים",
-  "חינם", 
-  "עד 50 ₪",
-  "50-100 ₪",
-  "100-200 ₪",
-  "מעל 200 ₪"
+  "All Prices",
+  "Free", 
+  "Up to ₪50",
+  "₪50-100",
+  "₪100-200",
+  "Over ₪200"
 ] as const;
 
 // Mood filter options
 const moodOptions = [
-  "הכל",
-  "מוזיקה", 
-  "אמנות",
-  "ספורט",
-  "קולינריה",
-  "טכנולוגיה",
-  "עסקים",
-  "חינוך"
+  "All",
+  "Music", 
+  "Art",
+  "Sports",
+  "Food",
+  "Technology",
+  "Business",
+  "Education"
 ] as const;
 
 // Date filter options
 const dateOptions = [
-  "הכל",
-  "היום",
-  "מחר", 
-  "השבוע",
-  "החודש"
+  "All",
+  "Today",
+  "Tomorrow", 
+  "This Week",
+  "This Month"
 ] as const;
 
 const AllEventsPage = () => {
@@ -77,10 +77,10 @@ const AllEventsPage = () => {
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState("כל השכונות");
-  const [priceFilter, setPriceFilter] = useState("כל המחירים");
-  const [moodFilter, setMoodFilter] = useState("הכל");
-  const [dateFilter, setDateFilter] = useState("הכל");
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState("All Neighborhoods");
+  const [priceFilter, setPriceFilter] = useState("All Prices");
+  const [moodFilter, setMoodFilter] = useState("All");
+  const [dateFilter, setDateFilter] = useState("All");
 
   // Optimized filtering with useMemo for better performance
   const filteredEvents = useMemo(() => {
@@ -97,45 +97,45 @@ const AllEventsPage = () => {
       }
 
       // Neighborhood filter
-      if (selectedNeighborhood !== "כל השכונות") {
+      if (selectedNeighborhood !== "All Neighborhoods") {
         if (!event.location?.includes(selectedNeighborhood)) return false;
       }
 
       // Price filter
-      if (priceFilter !== "כל המחירים") {
+      if (priceFilter !== "All Prices") {
         const priceStr = event.price || "0";
         const price = typeof priceStr === 'string' ? parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0 : priceStr;
         switch (priceFilter) {
-          case "חינם":
+          case "Free":
             if (price !== 0) return false;
             break;
-          case "עד 50 ₪":
+          case "Up to ₪50":
             if (price === 0 || price > 50) return false;
             break;
-          case "50-100 ₪":
+          case "₪50-100":
             if (price <= 50 || price > 100) return false;
             break;
-          case "100-200 ₪":
+          case "₪100-200":
             if (price <= 100 || price > 200) return false;
             break;
-          case "מעל 200 ₪":
+          case "Over ₪200":
             if (price <= 200) return false;
             break;
         }
       }
 
       // Mood filter - use description as fallback for now
-      if (moodFilter !== "הכל") {
+      if (moodFilter !== "All") {
         // Check if event description or title contains mood-related keywords
         const eventContent = `${event.title} ${event.description || ''}`.toLowerCase();
         const moodKeywords = {
-          'מוזיקה': ['music', 'concert', 'band', 'song', 'מוזיקה', 'קונצרט'],
-          'אמנות': ['art', 'gallery', 'paint', 'exhibition', 'אמנות', 'גלריה'],
-          'ספורט': ['sport', 'game', 'football', 'basketball', 'ספורט', 'כדורגל'],
-          'קולינריה': ['food', 'cooking', 'restaurant', 'chef', 'אוכל', 'מטבח'],
-          'טכנולוגיה': ['tech', 'startup', 'code', 'digital', 'טכנולוגיה'],
-          'עסקים': ['business', 'network', 'entrepreneur', 'עסקים'],
-          'חינוך': ['education', 'workshop', 'learn', 'course', 'חינוך', 'סדנה']
+          'Music': ['music', 'concert', 'band', 'song', 'מוזיקה', 'קונצרט'],
+          'Art': ['art', 'gallery', 'paint', 'exhibition', 'אמנות', 'גלריה'],
+          'Sports': ['sport', 'game', 'football', 'basketball', 'ספורט', 'כדורגל'],
+          'Food': ['food', 'cooking', 'restaurant', 'chef', 'אוכל', 'מטבח'],
+          'Technology': ['tech', 'startup', 'code', 'digital', 'טכנולוגיה'],
+          'Business': ['business', 'network', 'entrepreneur', 'עסקים'],
+          'Education': ['education', 'workshop', 'learn', 'course', 'חינוך', 'סדנה']
         };
         
         const keywords = moodKeywords[moodFilter as keyof typeof moodKeywords] || [];
@@ -145,27 +145,27 @@ const AllEventsPage = () => {
       }
 
       // Date filter
-      if (dateFilter !== "הכל") {
+      if (dateFilter !== "All") {
         const today = new Date();
         const eventDate = event.date ? new Date(event.date) : null;
         
         if (!eventDate) return false;
         
         switch (dateFilter) {
-          case "היום":
+          case "Today":
             if (eventDate.toDateString() !== today.toDateString()) return false;
             break;
-          case "מחר":
+          case "Tomorrow":
             const tomorrow = new Date(today);
             tomorrow.setDate(today.getDate() + 1);
             if (eventDate.toDateString() !== tomorrow.toDateString()) return false;
             break;
-          case "השבוע":
+          case "This Week":
             const weekFromNow = new Date(today);
             weekFromNow.setDate(today.getDate() + 7);
             if (eventDate < today || eventDate > weekFromNow) return false;
             break;
-          case "החודש":
+          case "This Month":
             const monthFromNow = new Date(today);
             monthFromNow.setMonth(today.getMonth() + 1);
             if (eventDate < today || eventDate > monthFromNow) return false;
@@ -183,12 +183,12 @@ const AllEventsPage = () => {
       id: event.id,
       title: event.title,
       description: event.description || event.title,
-      date: 'תאריך יקבע בהמשך',
-      time: 'שעה תקבע בהמשך',
-      location: event.location || 'תל אביב',
+      date: 'Date to be determined',
+      time: 'Time to be determined',
+      location: event.location || 'Tel Aviv',
       image: event.image_url || communityEvent,
       organizer: {
-        name: "מארגן האירוע",
+        name: "Event Organizer",
         image: profile1
       }
     });
@@ -197,14 +197,14 @@ const AllEventsPage = () => {
 
   const clearFilters = useCallback(() => {
     setSearchQuery("");
-    setSelectedNeighborhood("כל השכונות");
-    setPriceFilter("כל המחירים");
-    setMoodFilter("הכל");
-    setDateFilter("הכל");
+    setSelectedNeighborhood("All Neighborhoods");
+    setPriceFilter("All Prices");
+    setMoodFilter("All");
+    setDateFilter("All");
   }, []);
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="rtl">
+    <div className="min-h-screen bg-background pb-20">
       {/* Custom Header with Back Button */}
       <div className="bg-card border-b px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -216,7 +216,7 @@ const AllEventsPage = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-semibold">כל האירועים</h1>
+          <h1 className="text-lg font-semibold">All Events</h1>
         </div>
         <Button
           variant="ghost"
@@ -234,7 +234,7 @@ const AllEventsPage = () => {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="חיפוש אירועים..."
+            placeholder="Search events..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 pr-4"
@@ -245,7 +245,7 @@ const AllEventsPage = () => {
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium mb-2 block">שכונה</label>
+              <label className="text-sm font-medium mb-2 block">Neighborhood</label>
               <Select value={selectedNeighborhood} onValueChange={setSelectedNeighborhood}>
                 <SelectTrigger>
                   <SelectValue />
@@ -261,7 +261,7 @@ const AllEventsPage = () => {
             </div>
 
             <div>
-              <label className="text-sm font-medium mb-2 block">מחיר</label>
+              <label className="text-sm font-medium mb-2 block">Price</label>
               <Select value={priceFilter} onValueChange={setPriceFilter}>
                 <SelectTrigger>
                   <SelectValue />
@@ -279,7 +279,7 @@ const AllEventsPage = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium mb-2 block">מצב רוח</label>
+              <label className="text-sm font-medium mb-2 block">Mood</label>
               <Select value={moodFilter} onValueChange={setMoodFilter}>
                 <SelectTrigger>
                   <SelectValue />
@@ -295,7 +295,7 @@ const AllEventsPage = () => {
             </div>
 
             <div>
-              <label className="text-sm font-medium mb-2 block">תאריך</label>
+              <label className="text-sm font-medium mb-2 block">Date</label>
               <Select value={dateFilter} onValueChange={setDateFilter}>
                 <SelectTrigger>
                   <SelectValue />
@@ -311,7 +311,7 @@ const AllEventsPage = () => {
             </div>
           </div>
           
-          {(selectedNeighborhood !== "כל השכונות" || priceFilter !== "כל המחירים" || moodFilter !== "הכל" || dateFilter !== "הכל") && (
+          {(selectedNeighborhood !== "All Neighborhoods" || priceFilter !== "All Prices" || moodFilter !== "All" || dateFilter !== "All") && (
             <div className="flex justify-center">
               <Button 
                 variant="ghost" 
@@ -319,7 +319,7 @@ const AllEventsPage = () => {
                 onClick={clearFilters}
                 className="text-xs"
               >
-                נקה סינונים
+                Clear Filters
               </Button>
             </div>
           )}
@@ -329,7 +329,7 @@ const AllEventsPage = () => {
       {/* Results Section */}
       <main className="px-4 py-4">
         <div className="mb-4 text-sm text-muted-foreground">
-          נמצאו {filteredEvents.length} אירועים
+          Found {filteredEvents.length} events
         </div>
 
         {loading ? (
@@ -341,10 +341,10 @@ const AllEventsPage = () => {
         ) : filteredEvents.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-lg font-semibold mb-2">לא נמצאו אירועים</h3>
-            <p className="text-muted-foreground mb-4">נסה לשנות את הסינונים או החיפוש</p>
+            <h3 className="text-lg font-semibold mb-2">No events found</h3>
+            <p className="text-muted-foreground mb-4">Try changing your filters or search</p>
             <Button variant="outline" onClick={clearFilters}>
-              נקה סינונים
+              Clear Filters
             </Button>
           </div>
         ) : (
@@ -397,21 +397,21 @@ const EventCard = memo(({ event, onClick }: { event: any; onClick: () => void })
       )}
     </div>
     <div className="p-2">
-      <h3 className="font-semibold text-xs text-right mb-1 truncate leading-tight">
+      <h3 className="font-semibold text-xs mb-1 truncate leading-tight">
         {event.title}
       </h3>
       {event.location && (
-        <p className="text-[10px] text-muted-foreground text-right truncate">
+        <p className="text-[10px] text-muted-foreground truncate">
           📍 {event.location}
         </p>
       )}
       {event.price && event.price > 0 ? (
-        <p className="text-[10px] font-medium text-primary text-right mt-1">
-          {event.price} ₪
+        <p className="text-[10px] font-medium text-primary mt-1">
+          ₪{event.price}
         </p>
       ) : (
-        <p className="text-[10px] font-medium text-green-600 text-right mt-1">
-          חינם
+        <p className="text-[10px] font-medium text-green-600 mt-1">
+          Free
         </p>
       )}
     </div>
