@@ -13,7 +13,7 @@ import DiscoveryPopup from '@/components/DiscoveryPopup';
 import PeopleYouShouldMeetPopup from '@/components/PeopleYouShouldMeetPopup';
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
-import { useEvents } from '@/hooks/useEvents';
+import { useOptimizedEvents } from '@/hooks/useOptimizedEvents';
 import { useSuggestedUsers } from '@/hooks/useSuggestedUsers';
 import { useOpenToHang } from '@/hooks/useOpenToHang';
 import { supabase } from '@/integrations/supabase/client';
@@ -38,8 +38,7 @@ const DiscoverPage = () => {
   const [showPeopleYouShouldMeet, setShowPeopleYouShouldMeet] = useState(false);
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
-  const { events: allEvents } = useEvents();
-  const { events: allMeetups } = useEvents('meetup');
+  const { data: optimizedEvents } = useOptimizedEvents();
   const { suggestedUsers, loading: suggestedUsersLoading, findSuggestedUsers } = useSuggestedUsers();
   const { shareHangLocation, stopHanging, checkHangStatus, isLoading: hangLoading, isOpenToHang, setIsOpenToHang } = useOpenToHang();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
@@ -385,22 +384,24 @@ const DiscoverPage = () => {
       
       // Filter based on mapFilter state
       if (mapFilter === 'all' || mapFilter === 'events') {
-        const eventItems = allEvents.map(event => ({
-          ...event,
-          category: 'event',
-          description: event.description || event.title,
-          location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
-        }));
+        const eventItems = (optimizedEvents || [])
+          .filter(event => event.category === 'event')
+          .map(event => ({
+            ...event,
+            description: event.description || event.title,
+            location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
+          }));
         items = [...items, ...eventItems];
       }
       
       if (mapFilter === 'all' || mapFilter === 'meetups') {
-        const meetupItems = allMeetups.map(meetup => ({
-          ...meetup,
-          category: 'meetup',
-          description: meetup.description || meetup.title,
-          location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
-        }));
+        const meetupItems = (optimizedEvents || [])
+          .filter(event => event.category === 'meetup')
+          .map(meetup => ({
+            ...meetup,
+            description: meetup.description || meetup.title,
+            location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
+          }));
         items = [...items, ...meetupItems];
       }
 
@@ -667,7 +668,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addTextPinMarkers();
     }
-  }, [isLoading, allEvents, allMeetups, mapFilter]);
+  }, [isLoading, optimizedEvents, mapFilter]);
 
   return (
     <div className="min-h-screen bg-background pb-20">
