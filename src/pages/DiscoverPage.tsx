@@ -10,9 +10,11 @@ import LocationShareButton from '@/components/LocationShareButton';
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import MoodFilterStrip from '@/components/MoodFilterStrip';
 import DiscoveryPopup from '@/components/DiscoveryPopup';
+import PeopleYouShouldMeetPopup from '@/components/PeopleYouShouldMeetPopup';
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEvents } from '@/hooks/useEvents';
+import { useSuggestedUsers } from '@/hooks/useSuggestedUsers';
 import { supabase } from '@/integrations/supabase/client';
 
 // Fix for default markers in Leaflet
@@ -32,10 +34,12 @@ const DiscoverPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [showDiscovery, setShowDiscovery] = useState(false);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
+  const [showPeopleYouShouldMeet, setShowPeopleYouShouldMeet] = useState(false);
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
   const { events: allEvents } = useEvents();
   const { events: allMeetups } = useEvents('meetup');
+  const { suggestedUsers, loading: suggestedUsersLoading, findSuggestedUsers } = useSuggestedUsers();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
 
@@ -663,7 +667,7 @@ const DiscoverPage = () => {
         {/* Map Section */}
         <div className="relative">
           {/* Filter buttons for events and meetups */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             <Button
               variant={filterType === 'meet' ? 'default' : 'outline'}
               size="sm"
@@ -687,6 +691,27 @@ const DiscoverPage = () => {
               className="text-xs"
             >
               Friends
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowDiscovery(true)}
+              className="text-xs bg-background border-border text-foreground hover:bg-accent hover:text-accent-foreground"
+            >
+              <Search className="w-3 h-3 mr-1" />
+              Discovery
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setShowPeopleYouShouldMeet(true);
+                findSuggestedUsers();
+              }}
+              className="text-xs bg-primary text-primary-foreground hover:bg-primary/80"
+            >
+              <Users className="w-3 h-3 mr-1" />
+              People to Meet
             </Button>
           </div>
           
@@ -759,6 +784,14 @@ const DiscoverPage = () => {
           isOpen={showDiscovery}
           onClose={() => setShowDiscovery(false)}
           onDiscover={handleDiscovery}
+        />
+
+        {/* People You Should Meet Popup */}
+        <PeopleYouShouldMeetPopup
+          isOpen={showPeopleYouShouldMeet}
+          onClose={() => setShowPeopleYouShouldMeet(false)}
+          suggestedUsers={suggestedUsers}
+          loading={suggestedUsersLoading}
         />
 
       </main>
