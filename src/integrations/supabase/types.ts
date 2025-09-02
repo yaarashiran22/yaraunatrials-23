@@ -1163,6 +1163,10 @@ export type Database = {
         Args: { membership_id: string; new_status: string }
         Returns: boolean
       }
+      update_meetup_join_status: {
+        Args: { new_status: string; rsvp_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
