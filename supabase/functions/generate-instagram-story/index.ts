@@ -52,34 +52,35 @@ serve(async (req) => {
       const discount = data.discount_amount ? ` - ${data.discount_amount}` : '';
       const neighborhood = data.neighborhood ? ` in ${data.neighborhood}` : '';
       
-      prompt = `Create an ultra-modern, Gen Z Instagram story template for a business coupon offer. 
-      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
-      
-      Layout Structure (top to bottom):
-      1. Top 20% - minimal branding/logo area with subtle background
-      2. Middle 40% - main visual area with electric gradient backgrounds and floating elements
-      3. Bottom 40% - LARGE TEXT SECTION with oversized typography:
-         - Main Title: "${data.title || 'Special Offer'}${discount}" - use EXTRA LARGE bold fonts (72pt+) like Montserrat Black or Poppins ExtraBold
-         - Make title text take up significant space in the lower portion
-      4. Bottom info section with details positioned at the very bottom:
-         - ${businessInfo}${neighborhood}
-         - Description: "${data.description || 'Special offer available now!'}"
-         - Call to action: "Get Your Coupon!"
-      
-       Design Style: Ultra-trendy Gen Z aesthetic with:
-       - Bold geometric shapes with rounded corners and glass morphism effects
-       - Electric gradient backgrounds (neon purple to hot pink to electric blue)
-       - Modern typography with varied font weights and sizes - PRIORITIZE LARGE TEXT SIZING
-       - Glossy black bars with subtle transparency and glow effects
-       - Urban street vibe with geometric patterns and abstract shapes
-       - High contrast neon colors that scream "Gen Z energy"
-       - Sleek modern finish with clean spacing and depth effects
-       - Add trendy elements like floating geometric shapes, subtle grid patterns
-       - Make it look like premium modern branding that would go viral on TikTok
-       - Use dynamic lighting effects and subtle shadows for depth
-       - Include trendy UI elements like rounded rectangles and soft gradients
-       - ENSURE MAIN TITLE TEXT IS MASSIVE AND DOMINATES THE LOWER SECTION
-       - Text should be positioned in the bottom 40% of the image with plenty of breathing room`;
+       prompt = `Create an ultra-modern, Gen Z Instagram story template for a business coupon offer. 
+       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
+       
+       Layout Structure (top to bottom):
+       1. Top 15% - minimal branding/logo area with subtle background
+       2. Middle 25% - main visual area with electric gradient backgrounds and floating elements
+       3. Bottom 60% - MASSIVE TEXT SECTION with oversized typography positioned very low:
+          - Main Title: "${data.title || 'Special Offer'}${discount}" - use GIGANTIC bold fonts (120pt+) like Impact, Bebas Neue, or Oswald ExtraBold
+          - Position title text starting at 65% down the image (very low positioning)
+          - Make title text take up enormous space in the lower two-thirds portion
+       4. Bottom info section with details positioned at the very bottom edge:
+          - ${businessInfo}${neighborhood}
+          - Description: "${data.description || 'Special offer available now!'}"
+          - Call to action: "GET COUPON!"
+       
+        Design Style: Ultra-streetwear, urban Gen Z aesthetic with:
+        - Bold 3D geometric shapes with glass morphism and neon outlines
+        - Cyberpunk-inspired gradient backgrounds (electric cyan to neon pink to acid green)
+        - Streetwear typography with massive, chunky fonts - GIGANTIC TEXT IS PRIORITY
+        - Dark metallic bars with holographic effects and electric glow
+        - Urban street art vibe with graffiti-inspired elements and abstract spray paint textures
+        - High contrast neon colors with street art aesthetics
+        - Futuristic modern finish with industrial elements and tech-inspired spacing
+        - Add trendy elements: floating 3D shapes, cyberpunk grid overlays, holographic textures
+        - Make it look like premium streetwear branding that would dominate Instagram and TikTok
+        - Use dramatic lighting effects, bold shadows, and cyberpunk UI elements
+        - Include urban design trends like distressed textures, neon wireframes, and futuristic typography
+        - ENSURE MAIN TITLE TEXT IS ABSOLUTELY MASSIVE AND POSITIONED VERY LOW (65%+ down)
+        - Text should be positioned in the bottom 60% of the image with enormous sizing and urban spacing`;
        
        
      } else if (type === 'event' || type === 'community_event') {
@@ -89,37 +90,38 @@ serve(async (req) => {
        const eventLocation = data.location ? `Location: ${data.location}` : '';
        const eventPrice = data.price ? `Price: ${data.price}` : 'Free Entry';
        
-       prompt = `Create an ultra-trendy, Gen Z Instagram story template for an event promotion.
-       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
-       
-       Layout Structure (top to bottom):
-       1. Top 20% - minimal branding/logo area with subtle background
-       2. Middle 40% - main visual area with dynamic electric gradient and floating elements
-       3. Bottom 40% - LARGE TEXT SECTION with oversized typography:
-          - Event Title: "${data.title || 'Event'}" - use EXTRA LARGE bold fonts (72pt+) like Montserrat Black or Poppins ExtraBold
-          - Make title text take up significant space in the lower portion
-       4. Bottom info section with event details positioned at the very bottom:
-          - ${eventDate}
-          - ${eventTime} 
-          - ${eventLocation}
-          - ${eventPrice}
-          - Description: "${data.description || 'Join us for this amazing event!'}"
-          - Call to action: "RSVP Now!"
-       
-       Design Style: Ultra-trendy Gen Z aesthetic with:
-       - Bold 3D geometric shapes with glass morphism and depth
-       - Electric gradient backgrounds (neon cyan to electric purple to hot pink)
-       - Contemporary typography mixing bold and light weights - PRIORITIZE LARGE TEXT SIZING
-       - Glossy black bars with transparent effects and neon outline glow 
-       - Urban nightlife/festival vibe with floating abstract elements
-       - High-energy neon colors that look incredible on mobile screens
-       - Sleek, Instagram-worthy finish with perfect spacing and visual hierarchy
-       - Add trendy elements: floating circles, subtle grain texture, holographic effects
-       - Make it look like premium event branding that influencers would repost
-       - Use dynamic lighting effects, subtle 3D shadows, and modern UI elements
-       - Include contemporary design trends like bento box layouts and soft rounded shapes
-       - ENSURE EVENT TITLE TEXT IS MASSIVE AND DOMINATES THE LOWER SECTION
-       - Text should be positioned in the bottom 40% of the image with plenty of breathing room`;
+        prompt = `Create an ultra-trendy, Gen Z Instagram story template for an event promotion.
+        The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
+        
+        Layout Structure (top to bottom):
+        1. Top 15% - minimal branding/logo area with subtle background
+        2. Middle 25% - main visual area with dynamic electric gradient and floating elements
+        3. Bottom 60% - MASSIVE TEXT SECTION with oversized typography positioned very low:
+           - Event Title: "${data.title || 'Event'}" - use GIGANTIC bold fonts (120pt+) like Impact, Bebas Neue, or Oswald ExtraBold
+           - Position title text starting at 65% down the image (very low positioning)
+           - Make title text take up enormous space in the lower two-thirds portion
+        4. Bottom info section with event details positioned at the very bottom edge:
+           - ${eventDate}
+           - ${eventTime} 
+           - ${eventLocation}
+           - ${eventPrice}
+           - Description: "${data.description || 'Join us for this amazing event!'}"
+           - Call to action: "RSVP NOW!"
+        
+        Design Style: Ultra-streetwear, urban Gen Z aesthetic with:
+        - Bold 3D geometric shapes with cyberpunk glass morphism and neon wireframes
+        - Electric gradient backgrounds (neon cyan to electric purple to acid lime green)
+        - Streetwear typography with massive, chunky fonts - GIGANTIC TEXT IS PRIORITY
+        - Dark metallic bars with holographic effects and electric outline glow 
+        - Urban nightlife/festival vibe with graffiti-inspired floating abstract elements
+        - High-energy neon colors with street art aesthetics that dominate mobile screens
+        - Futuristic, Instagram-worthy finish with industrial spacing and cyberpunk visual hierarchy
+        - Add trendy elements: floating 3D cubes, urban grain texture, holographic overlays, spray paint effects
+        - Make it look like premium streetwear event branding that would go viral on TikTok and Instagram
+        - Use dramatic lighting effects, bold industrial shadows, and cyberpunk UI elements
+        - Include urban design trends like distressed overlays, neon grid patterns, and futuristic typography
+        - ENSURE EVENT TITLE TEXT IS ABSOLUTELY MASSIVE AND POSITIONED VERY LOW (65%+ down)
+        - Text should be positioned in the bottom 60% of the image with enormous sizing and urban streetwear spacing`;
       
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
