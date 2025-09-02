@@ -324,6 +324,49 @@ const DiscoverPage = () => {
     });
   };
 
+  // Function to offset overlapping markers
+  const offsetOverlappingMarkers = (items: any[]) => {
+    const locationGroups: { [key: string]: any[] } = {};
+    
+    // Group items by location
+    items.forEach(item => {
+      const locationKey = item.location || 'unknown';
+      if (!locationGroups[locationKey]) {
+        locationGroups[locationKey] = [];
+      }
+      locationGroups[locationKey].push(item);
+    });
+    
+    // Offset overlapping items
+    const offsetItems: any[] = [];
+    Object.values(locationGroups).forEach(group => {
+      if (group.length === 1) {
+        offsetItems.push(group[0]);
+      } else {
+        // Multiple items at same location - create circular offset
+        group.forEach((item, index) => {
+          const angle = (2 * Math.PI * index) / group.length;
+          const radius = 0.003; // Small radius for offset (~300m)
+          
+          try {
+            const baseLocation = JSON.parse(item.location);
+            const offsetLat = baseLocation.lat + radius * Math.cos(angle);
+            const offsetLng = baseLocation.lng + radius * Math.sin(angle);
+            
+            offsetItems.push({
+              ...item,
+              offsetLocation: JSON.stringify({ lat: offsetLat, lng: offsetLng })
+            });
+          } catch (error) {
+            offsetItems.push(item);
+          }
+        });
+      }
+    });
+    
+    return offsetItems;
+  };
+
   // Function to add text pin markers
   const addTextPinMarkers = async () => {
     if (!mapInstanceRef.current) return;
@@ -356,6 +399,9 @@ const DiscoverPage = () => {
       
       items = [...eventItems, ...meetupItems];
 
+      // Offset overlapping markers
+      items = offsetOverlappingMarkers(items);
+
       // Fetch user profiles for items
       const userIds = items?.map(item => item.user_id).filter(Boolean) || [];
       let profiles: any[] = [];
@@ -382,8 +428,10 @@ const DiscoverPage = () => {
 
         let lat, lng;
         try {
-          if (item.location) {
-            const locationData = JSON.parse(item.location);
+          // Use offset location if available, otherwise use original location
+          const locationStr = item.offsetLocation || item.location;
+          if (locationStr) {
+            const locationData = JSON.parse(locationStr);
             lat = locationData.lat;
             lng = locationData.lng;
           }
