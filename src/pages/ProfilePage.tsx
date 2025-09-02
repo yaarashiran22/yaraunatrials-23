@@ -20,7 +20,6 @@ import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import UniformCard from "@/components/UniformCard";
 import ProfilePictureViewer from "@/components/ProfilePictureViewer";
-import ProfilePhotoUpload from "@/components/ProfilePhotoUpload";
 import { FeedImageViewer } from "@/components/FeedImageViewer";
 import EditEventPopup from "@/components/EditEventPopup";
 import { EditCouponModal } from "@/components/EditCouponModal";
@@ -379,12 +378,6 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
-
-        {/* Profile Photos Section */}
-        <ProfilePhotoUpload 
-          userId={actualProfileId}
-          isOwnProfile={isOwnProfile}
-        />
 
 
         {/* Account Type Badge and Business Features */}
