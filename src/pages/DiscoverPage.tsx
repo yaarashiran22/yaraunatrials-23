@@ -319,75 +319,22 @@ const DiscoverPage = () => {
     try {
       let items: any[] = [];
       
-      if (filterType === 'event') {
-        // Use events from the home page (useEvents hook) and add neighborhood-based location
-        items = allEvents.map(event => ({
-          ...event,
-          category: 'event',
-          description: event.description || event.title,
-          // Map event location to neighborhood coordinates for display on map
-          location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
-        }));
-      } else if (filterType === 'meet') {
-        // Use meetups from the home page (useEvents hook) and add neighborhood-based location  
-        items = allMeetups.map(meetup => ({
-          ...meetup,
-          category: 'meetup',
-          description: meetup.description || meetup.title,
-          // Map meetup location to neighborhood coordinates for display on map
-          location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
-        }));
-      } else {
-        // Original logic for text pins and other filters
-        let query = supabase
-          .from('items')
-          .select('*')
-          .eq('category', 'text_pin')
-          .eq('status', 'active');
-
-        if (filterType === 'friends' && user?.id) {
-          // Get user's friends
-          const { data: friendsData, error: friendsError } = await supabase
-            .from('user_friends')
-            .select('friend_id')
-            .eq('user_id', user.id);
-
-          if (friendsError) {
-            console.error('Error fetching friends:', friendsError);
-            return;
-          }
-
-          const friendIds = friendsData?.map(f => f.friend_id) || [];
-          if (friendIds.length > 0) {
-            const { data, error } = await query.in('user_id', friendIds);
-            if (error) throw error;
-            items = data || [];
-          }
-        } else if (filterType === 'following' && user?.id) {
-          // Get users the current user is following
-          const { data: followingData, error: followingError } = await supabase
-            .from('user_following')
-            .select('following_id')
-            .eq('follower_id', user.id);
-
-          if (followingError) {
-            console.error('Error fetching following:', followingError);
-            return;
-          }
-
-          const followingIds = followingData?.map(f => f.following_id) || [];
-          if (followingIds.length > 0) {
-            const { data, error } = await query.in('user_id', followingIds);
-            if (error) throw error;
-            items = data || [];
-          }
-        } else {
-          // Show all text pins
-          const { data, error } = await query;
-          if (error) throw error;
-          items = data || [];
-        }
-      }
+      // Show all events and meetups together
+      const eventItems = allEvents.map(event => ({
+        ...event,
+        category: 'event',
+        description: event.description || event.title,
+        location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
+      }));
+      
+      const meetupItems = allMeetups.map(meetup => ({
+        ...meetup,
+        category: 'meetup',
+        description: meetup.description || meetup.title,
+        location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
+      }));
+      
+      items = [...eventItems, ...meetupItems];
 
       // Fetch user profiles for items
       const userIds = items?.map(item => item.user_id).filter(Boolean) || [];
@@ -647,7 +594,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addTextPinMarkers();
     }
-  }, [isLoading, filterType, allEvents, allMeetups]); // Add events and meetups dependencies
+  }, [isLoading, allEvents, allMeetups]); // Remove filterType dependency
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -666,26 +613,6 @@ const DiscoverPage = () => {
         
         {/* Map Section */}
         <div className="relative">
-          {/* Filter buttons for events and meetups */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            <Button
-              variant={filterType === 'meet' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilterType('meet')}
-              className="text-xs"
-            >
-              Meetups
-            </Button>
-            <Button
-              variant={filterType === 'event' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilterType('event')}
-              className="text-xs"
-            >
-              Events
-            </Button>
-          </div>
-
           {/* People You Should Meet Row */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-3">
