@@ -82,7 +82,7 @@ export const InstagramStoryPopup = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md mx-auto p-0 overflow-hidden border-0 bg-transparent shadow-none">
+      <DialogContent className="max-w-lg mx-auto p-0 overflow-hidden border-0 bg-transparent shadow-none">
         {/* Glass morphism container with modern styling */}
         <div className="glass-effect rounded-3xl backdrop-blur-2xl bg-gradient-to-br from-background/90 via-background/80 to-background/70 border border-white/20 shadow-2xl animate-scale-in">
           
@@ -107,7 +107,7 @@ export const InstagramStoryPopup = ({
               Story Creator
             </DialogTitle>
             
-            <p className="text-sm text-muted-foreground mt-1 font-medium">
+            <p className="text-sm text-muted-foreground mt-2 font-medium leading-relaxed">
               Professional Instagram stories in seconds ✨
             </p>
           </DialogHeader>
@@ -115,16 +115,16 @@ export const InstagramStoryPopup = ({
           <div className="px-6 pb-6 space-y-6">
             {/* Loading State - Modern with shimmer */}
             {isGenerating && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {/* Modern loading animation */}
-                <div className="flex flex-col items-center space-y-4">
+                <div className="flex flex-col items-center space-y-6">
                   <div className="relative">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 animate-pulse-glow flex items-center justify-center border border-pink-500/20">
-                      <Instagram className="w-8 h-8 text-pink-500 animate-bounce-subtle" />
+                    <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 animate-pulse-glow flex items-center justify-center border border-pink-500/20">
+                      <Instagram className="w-10 h-10 text-pink-500 animate-bounce-subtle" />
                     </div>
                     
                     {/* Spinning ring around the icon */}
-                    <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 animate-spin opacity-60" 
+                    <div className="absolute inset-0 rounded-3xl border-2 border-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 animate-spin opacity-60" 
                          style={{ 
                            maskImage: 'linear-gradient(transparent 40%, black 40%, black 60%, transparent 60%)',
                            WebkitMaskImage: 'linear-gradient(transparent 40%, black 40%, black 60%, transparent 60%)'
@@ -132,18 +132,18 @@ export const InstagramStoryPopup = ({
                     </div>
                   </div>
                   
-                  <div className="text-center space-y-2">
-                    <h3 className="text-lg font-semibold text-foreground">Creating Magic ✨</h3>
-                    <p className="text-sm text-muted-foreground">
+                  <div className="text-center space-y-3 max-w-xs">
+                    <h3 className="text-xl font-bold text-foreground tracking-tight">Creating Magic ✨</h3>
+                    <p className="text-base text-muted-foreground leading-relaxed">
                       AI is crafting your perfect Instagram story...
                     </p>
                     
                     {/* Progress dots */}
-                    <div className="flex justify-center space-x-1 mt-4">
+                    <div className="flex justify-center space-x-2 mt-6">
                       {[...Array(3)].map((_, i) => (
                         <div
                           key={i}
-                          className="w-2 h-2 rounded-full bg-pink-500 animate-pulse"
+                          className="w-3 h-3 rounded-full bg-pink-500 animate-pulse"
                           style={{ animationDelay: `${i * 0.2}s` }}
                         />
                       ))}
@@ -151,25 +151,25 @@ export const InstagramStoryPopup = ({
                   </div>
                 </div>
                 
-                {/* Preview placeholder with shimmer */}
-                <div className="aspect-[9/16] rounded-2xl bg-gradient-to-br from-muted/30 to-muted/10 relative overflow-hidden border border-border/30">
+                {/* Larger preview placeholder with shimmer */}
+                <div className="aspect-[9/16] w-full max-w-sm mx-auto rounded-3xl bg-gradient-to-br from-muted/30 to-muted/10 relative overflow-hidden border border-border/30">
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer transform -skew-x-12"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center">
-                      <Instagram className="w-6 h-6 text-pink-500/60" />
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center">
+                      <Instagram className="w-8 h-8 text-pink-500/60" />
                     </div>
                   </div>
                 </div>
               </div>
             )}
             
-            {/* Completed State - Modern story preview */}
+            {/* Completed State - Larger story preview */}
             {storyUrl && !isGenerating && (
-              <div className="space-y-6 animate-slide-up">
-                {/* Story preview with modern frame */}
-                <div className="relative group">
-                  <div className="aspect-[9/16] rounded-2xl overflow-hidden relative border-2 border-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 p-[2px] shadow-2xl hover:shadow-pink-500/25 transition-all duration-500">
-                    <div className="w-full h-full rounded-xl overflow-hidden bg-background relative">
+              <div className="space-y-8 animate-slide-up">
+                {/* Larger story preview with modern frame */}
+                <div className="relative group mx-auto max-w-sm">
+                  <div className="aspect-[9/16] rounded-3xl overflow-hidden relative border-2 border-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 p-[2px] shadow-2xl hover:shadow-pink-500/25 transition-all duration-500">
+                    <div className="w-full h-full rounded-2xl overflow-hidden bg-background relative">
                       <img 
                         src={storyUrl} 
                         alt="Generated Instagram Story" 
@@ -181,45 +181,45 @@ export const InstagramStoryPopup = ({
                         variant="ghost"
                         size="sm"
                         onClick={onClose}
-                        className="absolute top-3 right-3 h-8 w-8 rounded-full p-0 backdrop-blur-md bg-black/30 hover:bg-black/50 text-white border border-white/20 transition-all duration-300 hover:scale-110 opacity-0 group-hover:opacity-100"
+                        className="absolute top-4 right-4 h-10 w-10 rounded-full p-0 backdrop-blur-md bg-black/30 hover:bg-black/50 text-white border border-white/20 transition-all duration-300 hover:scale-110 opacity-0 group-hover:opacity-100"
                       >
-                        <X className="h-4 w-4" />
+                        <X className="h-5 w-5" />
                       </Button>
                       
                       {/* Instagram watermark */}
-                      <div className="absolute bottom-3 left-3 flex items-center gap-1 backdrop-blur-sm bg-black/30 rounded-full px-2 py-1 border border-white/20">
-                        <Instagram className="w-3 h-3 text-white" />
-                        <span className="text-xs text-white font-medium">Story</span>
+                      <div className="absolute bottom-4 left-4 flex items-center gap-2 backdrop-blur-sm bg-black/30 rounded-full px-3 py-2 border border-white/20">
+                        <Instagram className="w-4 h-4 text-white" />
+                        <span className="text-sm text-white font-medium">Story</span>
                       </div>
                     </div>
                   </div>
                   
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-orange-500/20 blur-xl -z-10 opacity-75"></div>
+                  {/* Enhanced glow effect */}
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-orange-500/20 blur-2xl -z-10 opacity-75"></div>
                 </div>
                 
-                {/* Success message with modern styling */}
-                <div className="text-center space-y-2 p-4 rounded-2xl bg-gradient-to-br from-accent/5 to-accent/10 border border-accent/20">
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <h3 className="text-lg font-semibold text-foreground">Story Ready!</h3>
+                {/* Enhanced success message with better typography */}
+                <div className="text-center space-y-4 p-6 rounded-2xl bg-gradient-to-br from-accent/5 to-accent/10 border border-accent/20">
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                    <h3 className="text-xl font-bold text-foreground tracking-tight">Story Ready!</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-base text-muted-foreground leading-relaxed max-w-xs mx-auto">
                     Your professional Instagram story is ready to shine ✨
                   </p>
                 </div>
                 
-                {/* Modern action buttons */}
-                <div className="flex gap-3">
+                {/* Enhanced action buttons with better spacing */}
+                <div className="flex gap-4">
                   <Button 
                     onClick={handleDownload}
                     disabled={downloading}
-                    className="flex-1 h-12 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105 border-0"
+                    className="flex-1 h-14 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold text-base rounded-2xl shadow-lg hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105 border-0"
                   >
-                    <Download className="w-5 h-5 mr-2" />
+                    <Download className="w-6 h-6 mr-3" />
                     {downloading ? (
-                      <span className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span className="flex items-center gap-3">
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         Saving...
                       </span>
                     ) : (
@@ -230,21 +230,21 @@ export const InstagramStoryPopup = ({
                   <Button 
                     variant="outline"
                     onClick={handleShare}
-                    className="flex-1 h-12 border-2 border-accent/30 hover:border-accent/50 bg-background/50 backdrop-blur-sm hover:bg-accent/10 text-foreground font-semibold rounded-xl transition-all duration-300 hover:scale-105"
+                    className="flex-1 h-14 border-2 border-accent/30 hover:border-accent/50 bg-background/50 backdrop-blur-sm hover:bg-accent/10 text-foreground font-bold text-base rounded-2xl transition-all duration-300 hover:scale-105"
                   >
-                    <Share2 className="w-5 h-5 mr-2" />
+                    <Share2 className="w-6 h-6 mr-3" />
                     Share
                   </Button>
                 </div>
               </div>
             )}
             
-            {/* Close button - minimalist when content is visible */}
+            {/* Enhanced close button */}
             {!isGenerating && (
               <Button 
                 variant="ghost" 
                 onClick={onClose}
-                className="w-full h-11 text-muted-foreground hover:text-foreground rounded-xl border border-border/50 hover:border-border transition-all duration-300 hover:bg-muted/30"
+                className="w-full h-12 text-base text-muted-foreground hover:text-foreground rounded-2xl border border-border/50 hover:border-border transition-all duration-300 hover:bg-muted/30 font-medium"
               >
                 Close
               </Button>
