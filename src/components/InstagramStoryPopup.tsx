@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Download, X, Instagram, Sparkles, Share2 } from "lucide-react";
+import { Download, X, Instagram, Sparkles, Share2, RefreshCw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface InstagramStoryPopupProps {
   isOpen: boolean;
@@ -20,6 +21,37 @@ export const InstagramStoryPopup = ({
   title 
 }: InstagramStoryPopupProps) => {
   const [downloading, setDownloading] = useState(false);
+  const [updating, setUpdating] = useState(false);
+
+  const handleUpdateExistingStories = async () => {
+    setUpdating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('update-existing-stories');
+      
+      if (error) {
+        console.error('Update error:', error);
+        toast({
+          title: "Update Failed",
+          description: "Failed to update existing stories. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Stories Updated!",
+          description: `${data.message}. All existing stories now use the new design.`,
+        });
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+      toast({
+        title: "Update Failed",
+        description: "Failed to update existing stories. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setUpdating(false);
+    }
+  };
 
   const handleDownload = async () => {
     if (!storyUrl) return;
@@ -236,6 +268,17 @@ export const InstagramStoryPopup = ({
                     Share
                   </Button>
                 </div>
+                
+                {/* Update existing stories button */}
+                <Button 
+                  onClick={handleUpdateExistingStories}
+                  disabled={updating}
+                  variant="outline"
+                  className="w-full h-11 border-2 border-blue-500/30 hover:border-blue-500/50 bg-background/50 backdrop-blur-sm hover:bg-blue-500/10 text-blue-500 font-semibold text-sm rounded-xl transition-all duration-300 hover:scale-105"
+                >
+                  <RefreshCw className={`w-4 h-4 mr-2 ${updating ? 'animate-spin' : ''}`} />
+                  {updating ? 'Updating All Stories...' : 'Update All Existing Stories'}
+                </Button>
               </div>
             )}
             
