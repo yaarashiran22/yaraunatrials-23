@@ -1,4 +1,4 @@
-import { ArrowLeft, MapPin, Copy, Plus, ChevronLeft, Bell, Settings, LogOut, Trash2, Pencil, MessageSquare, Edit3, Bookmark, Gift } from "lucide-react";
+import { Calendar, MapPin, Users, Trash2, Pencil, Edit, X, Star, Heart, MessageCircle, Share2, Bell, ChevronLeft, ChevronRight, Play, Pause, Instagram, Settings, Gift, Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -12,6 +12,7 @@ import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/Header";
 import NotificationsPopup from "@/components/NotificationsPopup";
 import { useUserEvents } from "@/hooks/useUserEvents";
+import { InstagramStoryPopup } from "@/components/InstagramStoryPopup";
 import { useFriends } from "@/hooks/useFriends";
 import { useFollowing } from "@/hooks/useFollowing";
 import { useProfile } from "@/hooks/useProfile";
@@ -23,6 +24,7 @@ import ProfilePictureViewer from "@/components/ProfilePictureViewer";
 import { FeedImageViewer } from "@/components/FeedImageViewer";
 import EditEventPopup from "@/components/EditEventPopup";
 import { EditCouponModal } from "@/components/EditCouponModal";
+import { supabase } from "@/integrations/supabase/client";
 
 import { useMyCoupons } from "@/hooks/useUserCoupons";
 
@@ -68,6 +70,10 @@ const ProfilePage = () => {
   
   
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showStoryPopup, setShowStoryPopup] = useState(false);
+  const [generatedStoryUrl, setGeneratedStoryUrl] = useState<string | null>(null);
+  const [generatingStory, setGeneratingStory] = useState(false);
+  const [currentEventTitle, setCurrentEventTitle] = useState("");
   const [newMessage, setNewMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editingMessageText, setEditingMessageText] = useState("");
@@ -78,6 +84,78 @@ const ProfilePage = () => {
   const [selectedEventForEdit, setSelectedEventForEdit] = useState<any>(null);
   const [showEditCoupon, setShowEditCoupon] = useState(false);
   const [selectedCouponForEdit, setSelectedCouponForEdit] = useState<any>(null);
+
+  const generateInstagramStory = async (eventData: any) => {
+    setGeneratingStory(true);
+    setCurrentEventTitle(eventData.title);
+    setShowStoryPopup(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-instagram-story', {
+        body: {
+          type: 'event',
+          data: {
+            ...eventData,
+            user_id: user?.id
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.success) {
+        setGeneratedStoryUrl(data.storyUrl);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      console.error('Error generating Instagram story:', error);
+      toast({
+        title: "Story Generation Failed",
+        description: "Failed to generate Instagram story. Please try again.",
+        variant: "destructive",
+      });
+      setShowStoryPopup(false);
+    } finally {
+      setGeneratingStory(false);
+    }
+  };
+
+  const generateCouponInstagramStory = async (couponData: any) => {
+    setGeneratingStory(true);
+    setCurrentEventTitle(couponData.title);
+    setShowStoryPopup(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-instagram-story', {
+        body: {
+          type: 'coupon',
+          data: {
+            ...couponData,
+            user_id: user?.id
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.success) {
+        setGeneratedStoryUrl(data.storyUrl);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      console.error('Error generating Instagram story:', error);
+      toast({
+        title: "Story Generation Failed",
+        description: "Failed to generate Instagram story. Please try again.",
+        variant: "destructive",
+      });
+      setShowStoryPopup(false);
+    } finally {
+      setGeneratingStory(false);
+    }
+  };
 
   const handleDeleteEvent = async (eventId: string) => {
     // Require authentication
@@ -467,32 +545,44 @@ const ProfilePage = () => {
                         </div>
                       </div>
                       
-                      {/* Edit/Delete buttons - show on hover */}
-                      <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="h-6 w-6 p-0 bg-white/90 hover:bg-white"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditCoupon(coupon.id);
-                          }}
-                        >
-                          <Pencil className="h-2 w-2" />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="h-6 w-6 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteCoupon(coupon.id);
-                          }}
-                          disabled={deletingCoupon}
-                        >
-                          <Trash2 className="h-2 w-2" />
-                        </Button>
-                      </div>
+                       {/* Edit/Delete/Instagram buttons - show on hover */}
+                       <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                         <Button
+                           variant="secondary"
+                           size="sm"
+                           className="h-6 w-6 p-0 bg-white/90 hover:bg-white"
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             generateCouponInstagramStory(coupon);
+                           }}
+                           title="Generate Instagram Story"
+                         >
+                           <Instagram className="h-2 w-2 text-pink-500" />
+                         </Button>
+                         <Button
+                           variant="secondary"
+                           size="sm"
+                           className="h-6 w-6 p-0 bg-white/90 hover:bg-white"
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             handleEditCoupon(coupon.id);
+                           }}
+                         >
+                           <Pencil className="h-2 w-2" />
+                         </Button>
+                         <Button
+                           variant="destructive"
+                           size="sm"
+                           className="h-6 w-6 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             handleDeleteCoupon(coupon.id);
+                           }}
+                           disabled={deletingCoupon}
+                         >
+                           <Trash2 className="h-2 w-2" />
+                         </Button>
+                       </div>
                     </div>
                   ))}
                 </div>
@@ -587,31 +677,43 @@ const ProfilePage = () => {
                     </div>
                   </div>
                   
-                  {/* Edit/Delete buttons - show on hover */}
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditEvent(event.id);
-                      }}
-                    >
-                      <Pencil className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteEvent(event.id);
-                      }}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
+                   {/* Edit/Delete/Instagram buttons - show on hover */}
+                   <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                     <Button
+                       variant="secondary"
+                       size="sm"
+                       className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
+                       onClick={(e) => {
+                         e.stopPropagation();
+                         generateInstagramStory(event);
+                       }}
+                       title="Generate Instagram Story"
+                     >
+                       <Instagram className="h-3 w-3 text-pink-500" />
+                     </Button>
+                     <Button
+                       variant="secondary"
+                       size="sm"
+                       className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
+                       onClick={(e) => {
+                         e.stopPropagation();
+                         handleEditEvent(event.id);
+                       }}
+                     >
+                       <Pencil className="h-3 w-3" />
+                     </Button>
+                     <Button
+                       variant="destructive"
+                       size="sm"
+                       className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
+                       onClick={(e) => {
+                         e.stopPropagation();
+                         handleDeleteEvent(event.id);
+                       }}
+                     >
+                       <Trash2 className="h-3 w-3" />
+                     </Button>
+                   </div>
                 </div>
               ))}
             </div>
@@ -699,6 +801,14 @@ const ProfilePage = () => {
           setShowEditCoupon(false);
           setSelectedCouponForEdit(null);
         }}
+      />
+      
+      <InstagramStoryPopup
+        isOpen={showStoryPopup}
+        onClose={() => setShowStoryPopup(false)}
+        storyUrl={generatedStoryUrl}
+        isGenerating={generatingStory}
+        title={currentEventTitle}
       />
     </div>
   );
