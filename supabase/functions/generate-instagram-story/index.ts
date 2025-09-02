@@ -52,21 +52,28 @@ serve(async (req) => {
       const discount = data.discount_amount ? ` - ${data.discount_amount}` : '';
       const neighborhood = data.neighborhood ? ` in ${data.neighborhood}` : '';
       
-      prompt = `Create a professional Instagram story template for a business coupon offer. 
+      prompt = `Create a modern, urban Instagram story template for a business coupon offer. 
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
-      Content to include:
-      - Title: "${data.title || 'Special Offer'}${discount}" (place in a horizontal black semi-transparent overlay box behind the title text)
-      - ${businessInfo}${neighborhood}
-      - Description: "${data.description || 'Special offer available now!'}"
-      - Call to action: "Get Your Coupon!"
+      Layout Structure (top to bottom):
+      1. Main Title: "${data.title || 'Special Offer'}${discount}" - large, bold text at the top
+      2. Black horizontal shadow box/bar - sleek design element below the title
+      3. Main visual area - gradient background with modern graphics
+      4. Bottom info section with details:
+         - ${businessInfo}${neighborhood}
+         - Description: "${data.description || 'Special offer available now!'}"
+         - Call to action: "Get Your Coupon!"
       
-      Layout: Position a horizontal black semi-transparent shadow box specifically behind the title text in the upper portion of the image. The title should be prominent and readable over this dark overlay. Other text elements can be placed on the colorful background or in smaller text boxes as needed.
-      
-      Style: Modern, vibrant, eye-catching design with gradient background (purple to pink), 
-      clean typography, professional business aesthetic, include coupon/discount graphics, 
-      use bright colors that pop on mobile screens. Add decorative elements like stars or 
-      geometric shapes. Make it look like a premium business promotion.`;
+      Design Style: Ultra-modern urban aesthetic with:
+      - Bold geometric shapes and clean lines
+      - Vibrant gradient backgrounds (neon purple to electric pink/orange)
+      - Contemporary typography with strong contrast
+      - Minimalist black shadow bars as design elements
+      - Urban street art inspired graphics
+      - High contrast colors that pop on mobile
+      - Sleek, professional finish with modern spacing
+      - Abstract geometric patterns or city skyline elements
+      Make it look like premium urban branding with sophisticated color grading.`;
       
     } else if (type === 'event' || type === 'community_event') {
       // Create event story prompt  
@@ -75,24 +82,31 @@ serve(async (req) => {
       const eventLocation = data.location ? `Location: ${data.location}` : '';
       const eventPrice = data.price ? `Price: ${data.price}` : 'Free Entry';
       
-      prompt = `Create a professional Instagram story template for an event promotion.
+      prompt = `Create a modern, urban Instagram story template for an event promotion.
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
-      Content to include:
-      - Event Title: "${data.title || 'Event'}" (place in a horizontal black semi-transparent overlay box behind the title text)
-      - ${eventDate}
-      - ${eventTime} 
-      - ${eventLocation}
-      - ${eventPrice}
-      - Description: "${data.description || 'Join us for this amazing event!'}"
-      - Call to action: "RSVP Now!"
+      Layout Structure (top to bottom):
+      1. Event Title: "${data.title || 'Event'}" - large, bold text at the top
+      2. Black horizontal shadow box/bar - sleek design element below the title
+      3. Main visual area - dynamic gradient background with urban graphics
+      4. Bottom info section with event details:
+         - ${eventDate}
+         - ${eventTime} 
+         - ${eventLocation}
+         - ${eventPrice}
+         - Description: "${data.description || 'Join us for this amazing event!'}"
+         - Call to action: "RSVP Now!"
       
-      Layout: Position a horizontal black semi-transparent shadow box specifically behind the event title text in the upper portion of the image. The title should be prominent and readable over this dark overlay. Other event details can be placed on the colorful background or in smaller text areas as needed.
-      
-      Style: Dynamic, festive design with vibrant gradient background (blue to purple), 
-      modern typography, event-focused aesthetic with celebration elements like confetti 
-      or party graphics. Use energetic colors, include calendar/clock icons, make it 
-      exciting and inviting for social sharing.`;
+      Design Style: Ultra-modern urban aesthetic with:
+      - Bold geometric shapes and clean architectural lines
+      - Electric gradient backgrounds (neon blue to vibrant purple/cyan)
+      - Contemporary typography with sharp contrast
+      - Minimalist black shadow bars as structural elements
+      - Urban nightlife/cityscape inspired graphics
+      - High-energy colors perfect for mobile viewing
+      - Sleek, sophisticated finish with modern spacing
+      - Abstract city elements or geometric patterns
+      Make it look like premium event branding with urban sophistication and dynamic energy.`;
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
       console.error(errorMsg);
