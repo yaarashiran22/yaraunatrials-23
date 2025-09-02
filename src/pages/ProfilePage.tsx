@@ -1393,43 +1393,43 @@ const ProfilePage = () => {
                       </div>
                       
                        {/* Edit/Delete/Instagram buttons - show on hover */}
-                       <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                         <Button
-                           variant="secondary"
-                           size="sm"
-                           className="h-6 w-6 p-0 bg-white/90 hover:bg-white"
-                           onClick={(e) => {
-                             e.stopPropagation();
-                             generateCouponInstagramStory(coupon);
-                           }}
-                           title="Generate Instagram Story"
-                         >
-                           <Instagram className="h-2 w-2 text-pink-500" />
-                         </Button>
-                         <Button
-                           variant="secondary"
-                           size="sm"
-                           className="h-6 w-6 p-0 bg-white/90 hover:bg-white"
-                           onClick={(e) => {
-                             e.stopPropagation();
-                             handleEditCoupon(coupon.id);
-                           }}
-                         >
-                           <Pencil className="h-2 w-2" />
-                         </Button>
-                         <Button
-                           variant="destructive"
-                           size="sm"
-                           className="h-6 w-6 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
-                           onClick={(e) => {
-                             e.stopPropagation();
-                             handleDeleteCoupon(coupon.id);
-                           }}
-                           disabled={deletingCoupon}
-                         >
-                           <Trash2 className="h-2 w-2" />
-                         </Button>
-                       </div>
+                        <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="h-10 w-10 p-0 bg-white/90 hover:bg-white"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              generateCouponInstagramStory(coupon);
+                            }}
+                            title="Generate Instagram Story"
+                          >
+                            <Instagram className="h-4 w-4 text-pink-500" />
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="h-10 w-10 p-0 bg-white/90 hover:bg-white"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditCoupon(coupon.id);
+                            }}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="h-10 w-10 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteCoupon(coupon.id);
+                            }}
+                            disabled={deletingCoupon}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                     </div>
                   ))}
                 </div>
