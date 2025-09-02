@@ -282,6 +282,15 @@ const LoginPage = () => {
                   className="w-full h-12 text-left bg-background border border-border rounded-lg"
                 />
               </div>
+              
+              <div>
+                <Input 
+                  placeholder="Instagram @"
+                  value={formData.instagram}
+                  onChange={(e) => handleInputChange('instagram', e.target.value)}
+                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                />
+              </div>
             </div>
 
             {/* Profile Photo Section */}
@@ -312,22 +321,6 @@ const LoginPage = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Social Networks Section */}
-          <div className="bg-card rounded-2xl shadow-lg p-6">
-            <h2 className="text-lg font-bold text-foreground mb-4 text-center">Social Networks</h2>
-            <div className="space-y-4">
-              <div>
-                <Input 
-                  placeholder="Instagram @"
-                  value={formData.instagram}
-                  onChange={(e) => handleInputChange('instagram', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
-                />
-              </div>
-            </div>
-            
             {/* Submit Button */}
             <div className="mt-6">
               <Button 
