@@ -45,7 +45,6 @@ const DiscoverPage = () => {
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
   const [mapFilter, setMapFilter] = useState<'all' | 'events' | 'meetups'>('all');
-  const [selectedMoods, setSelectedMoods] = useState<string[]>([]);
 
   // Check user's hang status on load
   useEffect(() => {
@@ -408,17 +407,6 @@ const DiscoverPage = () => {
       
       items = [...eventItems, ...meetupItems];
 
-      // Apply mood filtering if any moods are selected
-      if (selectedMoods.length > 0) {
-        items = items.filter(item => 
-          selectedMoods.some(mood => 
-            item.mood === mood || 
-            item.title?.toLowerCase().includes(mood.toLowerCase()) ||
-            item.description?.toLowerCase().includes(mood.toLowerCase())
-          )
-        );
-      }
-
       // Offset overlapping markers
       items = offsetOverlappingMarkers(items);
 
@@ -682,7 +670,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addTextPinMarkers();
     }
-  }, [isLoading, allEvents, allMeetups, mapFilter, selectedMoods]); // Add selectedMoods dependency
+  }, [isLoading, allEvents, allMeetups, mapFilter]); // Add mapFilter dependency
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -696,11 +684,7 @@ const DiscoverPage = () => {
         {/* Mood Filter Strip */}
         <MoodFilterStrip onFilterChange={(filterId) => {
           console.log('Mood filter changed:', filterId);
-          setSelectedMoods(prev => 
-            prev.includes(filterId) 
-              ? prev.filter(id => id !== filterId)
-              : [...prev, filterId]
-          );
+          // Handle mood filter change if needed
         }} />
         
         {/* Map Filter Buttons */}
