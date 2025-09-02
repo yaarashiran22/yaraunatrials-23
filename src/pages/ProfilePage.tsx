@@ -368,8 +368,8 @@ const ProfilePage = () => {
       }
       
       if (eventData.time) {
-        ctx.strokeText(`🕒 ${eventData.time}`, canvas.width / 2, detailY);
-        ctx.fillText(`🕒 ${eventData.time}`, canvas.width / 2, detailY);
+        ctx.strokeText(`⏰ ${eventData.time}`, canvas.width / 2, detailY);
+        ctx.fillText(`⏰ ${eventData.time}`, canvas.width / 2, detailY);
         detailY += 70;
       }
       
@@ -380,12 +380,12 @@ const ProfilePage = () => {
       }
       
       if (eventData.price) {
-        ctx.strokeText(`💳 ${eventData.price}`, canvas.width / 2, detailY);
-        ctx.fillText(`💳 ${eventData.price}`, canvas.width / 2, detailY);
+        ctx.strokeText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
+        ctx.fillText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
         detailY += 70;
       } else {
-        ctx.strokeText(`🆓 FREE ENTRY`, canvas.width / 2, detailY);
-        ctx.fillText(`🆓 FREE ENTRY`, canvas.width / 2, detailY);
+        ctx.strokeText(`✅ FREE ENTRY`, canvas.width / 2, detailY);
+        ctx.fillText(`✅ FREE ENTRY`, canvas.width / 2, detailY);
         detailY += 70;
       }
       
@@ -624,8 +624,8 @@ const ProfilePage = () => {
       let detailY = 1350;
       
       if (couponData.business_name) {
-        ctx.strokeText(`🏬 ${couponData.business_name}`, canvas.width / 2, detailY);
-        ctx.fillText(`🏬 ${couponData.business_name}`, canvas.width / 2, detailY);
+        ctx.strokeText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
+        ctx.fillText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
         detailY += 80;
       }
       
@@ -636,8 +636,8 @@ const ProfilePage = () => {
       }
       
       if (couponData.valid_until) {
-        ctx.strokeText(`⏳ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
-        ctx.fillText(`⏳ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
+        ctx.strokeText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
+        ctx.fillText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
         detailY += 80;
       }
       
