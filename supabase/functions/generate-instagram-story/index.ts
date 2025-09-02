@@ -52,28 +52,31 @@ serve(async (req) => {
       const discount = data.discount_amount ? ` - ${data.discount_amount}` : '';
       const neighborhood = data.neighborhood ? ` in ${data.neighborhood}` : '';
       
-      prompt = `Create a modern, urban Instagram story template for a business coupon offer. 
+      prompt = `Create an ultra-modern, Gen Z Instagram story template for a business coupon offer. 
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
       Layout Structure (top to bottom):
-      1. Main Title: "${data.title || 'Special Offer'}${discount}" - large, bold text at the top
-      2. Black horizontal shadow box/bar - sleek design element below the title
-      3. Main visual area - gradient background with modern graphics
+      1. Main Title: "${data.title || 'Special Offer'}${discount}" - use trendy bold fonts like Montserrat or Poppins
+      2. Sleek black gradient bar/stripe - modern design element with subtle transparency
+      3. Main visual area - electric gradient backgrounds with neon accents
       4. Bottom info section with details:
          - ${businessInfo}${neighborhood}
          - Description: "${data.description || 'Special offer available now!'}"
          - Call to action: "Get Your Coupon!"
       
-      Design Style: Ultra-modern urban aesthetic with:
-      - Bold geometric shapes and clean lines
-      - Vibrant gradient backgrounds (neon purple to electric pink/orange)
-      - Contemporary typography with strong contrast
-      - Minimalist black shadow bars as design elements
-      - Urban street art inspired graphics
-      - High contrast colors that pop on mobile
-      - Sleek, professional finish with modern spacing
-      - Abstract geometric patterns or city skyline elements
-      Make it look like premium urban branding with sophisticated color grading.`;
+      Design Style: Ultra-trendy Gen Z aesthetic with:
+      - Bold geometric shapes with rounded corners and glass morphism effects
+      - Electric gradient backgrounds (neon purple to hot pink to electric blue)
+      - Modern typography with varied font weights and sizes
+      - Glossy black bars with subtle transparency and glow effects
+      - Urban street vibe with geometric patterns and abstract shapes
+      - High contrast neon colors that scream "Gen Z energy"
+      - Sleek modern finish with clean spacing and depth effects
+      - Add trendy elements like floating geometric shapes, subtle grid patterns
+      - Make it look like premium modern branding that would go viral on TikTok
+      - Use dynamic lighting effects and subtle shadows for depth
+      - Include trendy UI elements like rounded rectangles and soft gradients`;
+      
       
     } else if (type === 'event' || type === 'community_event') {
       // Create event story prompt  
@@ -82,13 +85,13 @@ serve(async (req) => {
       const eventLocation = data.location ? `Location: ${data.location}` : '';
       const eventPrice = data.price ? `Price: ${data.price}` : 'Free Entry';
       
-      prompt = `Create a modern, urban Instagram story template for an event promotion.
+      prompt = `Create an ultra-trendy, Gen Z Instagram story template for an event promotion.
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
       Layout Structure (top to bottom):
-      1. Event Title: "${data.title || 'Event'}" - large, bold text at the top
-      2. Black horizontal shadow box/bar - sleek design element below the title
-      3. Main visual area - dynamic gradient background with urban graphics
+      1. Event Title: "${data.title || 'Event'}" - use modern bold fonts with creative typography
+      2. Sleek black gradient bar/stripe - glossy design element with neon glow
+      3. Main visual area - dynamic electric gradient with floating elements
       4. Bottom info section with event details:
          - ${eventDate}
          - ${eventTime} 
@@ -97,16 +100,19 @@ serve(async (req) => {
          - Description: "${data.description || 'Join us for this amazing event!'}"
          - Call to action: "RSVP Now!"
       
-      Design Style: Ultra-modern urban aesthetic with:
-      - Bold geometric shapes and clean architectural lines
-      - Electric gradient backgrounds (neon blue to vibrant purple/cyan)
-      - Contemporary typography with sharp contrast
-      - Minimalist black shadow bars as structural elements
-      - Urban nightlife/cityscape inspired graphics
-      - High-energy colors perfect for mobile viewing
-      - Sleek, sophisticated finish with modern spacing
-      - Abstract city elements or geometric patterns
-      Make it look like premium event branding with urban sophistication and dynamic energy.`;
+      Design Style: Ultra-trendy Gen Z aesthetic with:
+      - Bold 3D geometric shapes with glass morphism and depth
+      - Electric gradient backgrounds (neon cyan to electric purple to hot pink)
+      - Contemporary typography mixing bold and light weights
+      - Glossy black bars with transparent effects and neon outline glow 
+      - Urban nightlife/festival vibe with floating abstract elements
+      - High-energy neon colors that look incredible on mobile screens
+      - Sleek, Instagram-worthy finish with perfect spacing and visual hierarchy
+      - Add trendy elements: floating circles, subtle grain texture, holographic effects
+      - Make it look like premium event branding that influencers would repost
+      - Use dynamic lighting effects, subtle 3D shadows, and modern UI elements
+      - Include contemporary design trends like bento box layouts and soft rounded shapes`;
+      
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
       console.error(errorMsg);
