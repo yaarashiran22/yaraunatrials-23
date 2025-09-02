@@ -33,6 +33,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
   const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedMood, setSelectedMood] = useState<string>("");
+  const [isOpenDate, setIsOpenDate] = useState(false);
 
   // Mood filters from home page
   const moodFilters = [
@@ -92,10 +93,10 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       return;
     }
 
-    if (!date.trim()) {
+    if (!date.trim() && !isOpenDate) {
       toast({
         title: "Error",
-        description: "Please enter an event date",
+        description: "Please enter an event date or select open date option",
         variant: "destructive",
       });
       return;
@@ -170,8 +171,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           user_id: user.id,
           title: eventName.trim(),
           description: description.trim() || null,
-          date: date || null,
-          time: time || null,
+          date: isOpenDate ? null : (date || null),
+          time: isOpenDate ? null : (time || null),
           location: location.trim(),
           price: price.trim() || null,
           image_url: imageUrl,
@@ -202,6 +203,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       setFilePreview(null);
       setFileType(null);
       setSelectedMood("");
+      setIsOpenDate(false);
 
       // Call callback to refresh data
       if (onEventCreated) {
@@ -267,30 +269,55 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           {/* Date Field */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground block text-left">What Day*</label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input 
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full h-12 pl-12 text-left bg-card border-2 border-border rounded-full"
+            
+            {/* Open Date Option */}
+            <div className="flex items-center gap-2 mb-3">
+              <input
+                type="checkbox"
+                id="open-date"
+                checked={isOpenDate}
+                onChange={(e) => {
+                  setIsOpenDate(e.target.checked);
+                  if (e.target.checked) {
+                    setDate("");
+                    setTime("");
+                  }
+                }}
+                className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
               />
+              <label htmlFor="open-date" className="text-sm text-foreground cursor-pointer">
+                Open date (no specific day - open invite)
+              </label>
             </div>
+
+            {!isOpenDate && (
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input 
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full h-12 pl-12 text-left bg-card border-2 border-border rounded-full"
+                />
+              </div>
+            )}
           </div>
 
           {/* Time Field */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">Time</label>
-            <div className="relative">
-              <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input 
-                type="time"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                className="w-full h-12 pl-12 text-left bg-card border-2 border-border rounded-full"
-              />
+          {!isOpenDate && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground block text-left">Time</label>
+              <div className="relative">
+                <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input 
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="w-full h-12 pl-12 text-left bg-card border-2 border-border rounded-full"
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Location Field */}
           <div className="space-y-2">
