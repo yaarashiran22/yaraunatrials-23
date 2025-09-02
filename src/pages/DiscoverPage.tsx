@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin, Users, Calendar, Coffee, Search, Heart, HeartOff, Filter } from 'lucide-react';
+import { MapPin, Users, Calendar, Coffee, Search, Heart, HeartOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
@@ -44,7 +44,6 @@ const DiscoverPage = () => {
   const { shareHangLocation, stopHanging, checkHangStatus, isLoading: hangLoading, isOpenToHang, setIsOpenToHang } = useOpenToHang();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
-  const [mapFilter, setMapFilter] = useState<'all' | 'events' | 'meetups'>('all');
 
   // Check user's hang status on load
   useEffect(() => {
@@ -383,27 +382,20 @@ const DiscoverPage = () => {
     try {
       let items: any[] = [];
       
-      // Filter items based on map filter
-      let eventItems: any[] = [];
-      let meetupItems: any[] = [];
+      // Show all events and meetups together
+      const eventItems = allEvents.map(event => ({
+        ...event,
+        category: 'event',
+        description: event.description || event.title,
+        location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
+      }));
       
-      if (mapFilter === 'all' || mapFilter === 'events') {
-        eventItems = allEvents.map(event => ({
-          ...event,
-          category: 'event',
-          description: event.description || event.title,
-          location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
-        }));
-      }
-      
-      if (mapFilter === 'all' || mapFilter === 'meetups') {
-        meetupItems = allMeetups.map(meetup => ({
-          ...meetup,
-          category: 'meetup',
-          description: meetup.description || meetup.title,
-          location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
-        }));
-      }
+      const meetupItems = allMeetups.map(meetup => ({
+        ...meetup,
+        category: 'meetup',
+        description: meetup.description || meetup.title,
+        location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
+      }));
       
       items = [...eventItems, ...meetupItems];
 
@@ -670,7 +662,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addTextPinMarkers();
     }
-  }, [isLoading, allEvents, allMeetups, mapFilter]); // Add mapFilter dependency
+  }, [isLoading, allEvents, allMeetups]); // Remove filterType dependency
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -686,40 +678,6 @@ const DiscoverPage = () => {
           console.log('Mood filter changed:', filterId);
           // Handle mood filter change if needed
         }} />
-        
-        {/* Map Filter Buttons */}
-        <div className="flex justify-center mb-4">
-          <div className="bg-card/90 backdrop-blur-sm rounded-lg shadow-lg p-2 border">
-            <div className="flex gap-1">
-              <Button 
-                onClick={() => setMapFilter('all')}
-                variant={mapFilter === 'all' ? 'default' : 'ghost'}
-                size="sm"
-                className="text-xs px-3 py-2 h-8"
-              >
-                All
-              </Button>
-              <Button 
-                onClick={() => setMapFilter('events')}
-                variant={mapFilter === 'events' ? 'default' : 'ghost'}
-                size="sm"
-                className="text-xs px-3 py-2 h-8"
-              >
-                <Calendar className="w-3 h-3 mr-1" />
-                Events
-              </Button>
-              <Button 
-                onClick={() => setMapFilter('meetups')}
-                variant={mapFilter === 'meetups' ? 'default' : 'ghost'}
-                size="sm"
-                className="text-xs px-3 py-2 h-8"
-              >
-                <Users className="w-3 h-3 mr-1" />
-                Meetups
-              </Button>
-            </div>
-          </div>
-        </div>
         
         {/* Map Section */}
         <div className="relative">
