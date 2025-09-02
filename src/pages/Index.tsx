@@ -457,7 +457,7 @@ const Index = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-foreground relative">
             <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
-              Events Around
+              Events Happening Around
             </span>
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
