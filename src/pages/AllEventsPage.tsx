@@ -17,23 +17,14 @@ import profile1 from "@/assets/profile-1.jpg";
 // Predefined neighborhoods - memoized for performance
 const neighborhoods = [
   "All Neighborhoods",
-  "City Center",
-  "Nachalat Binyamin", 
-  "Rothschild",
-  "Florentin",
-  "Shapira",
-  "Old Jaffa",
-  "Ajami",
-  "Neve Tzedek",
-  "Kerem HaTeimanim",
-  "Montefiore",
-  "Ramat Aviv",
-  "Old North",
-  "Sheinkin",
-  "Dizengoff",
-  "Herzliya",
-  "Bat Yam",
-  "Holon"
+  "Palermo",
+  "Palermo Soho", 
+  "Palermo Hollywood",
+  "Palermo Chico",
+  "Recoleta",
+  "San Telmo",
+  "Villa Crespo",
+  "Caballito"
 ] as const;
 
 // Price filter options - memoized for performance
