@@ -695,15 +695,6 @@ const DiscoverPage = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowDiscovery(true)}
-              className="text-xs bg-background border-border text-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              <Search className="w-3 h-3 mr-1" />
-              Discovery
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
               onClick={() => {
                 setShowPeopleYouShouldMeet(true);
                 findSuggestedUsers();
