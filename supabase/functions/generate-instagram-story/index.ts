@@ -52,31 +52,30 @@ serve(async (req) => {
       const discount = data.discount_amount ? ` - ${data.discount_amount}` : '';
       const neighborhood = data.neighborhood ? ` in ${data.neighborhood}` : '';
       
-      prompt = `Create a cutting-edge urban Instagram story for a business coupon offer with brutal modern aesthetics.
-      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
+      prompt = `Create an ultra-modern, highly creative Instagram story for a business coupon offer with cutting-edge contemporary design.
+      Vertical 9:16 aspect ratio (Instagram story dimensions) with innovative, dynamic layout.
       
-      Layout Structure (top to bottom):
-      1. Main Title: "${data.title || 'Special Offer'}${discount}" - aggressive modern typography with sharp edges
-      2. Dark industrial bar with metallic texture and subtle RGB lighting effects
-      3. Main visual area - dark urban backdrop with cyberpunk neon highlights
-      4. Bottom info section with details:
+      CREATIVE LAYOUT STRUCTURE:
+      • TOP SECTION: Floating "${data.title || 'Special Offer'}${discount}" in futuristic typography with 3D depth, holographic shimmer effects, and dynamic shadow casting
+      • MIDDLE HERO: Sophisticated glassmorphism card with frosted glass effect, floating in space with subtle parallax layers and ambient lighting
+      • DYNAMIC ELEMENTS: Floating geometric shapes, orbiting particles, and interactive-style UI elements positioned asymmetrically
+      • BOTTOM SECTION: Sleek info panel with:
          - ${businessInfo}${neighborhood}
-         - Description: "${data.description || 'Special offer available now!'}"
-         - Call to action: "CLAIM NOW"
+         - "${data.description || 'Special offer available now!'}"
+         - Futuristic "CLAIM NOW" button with holographic glow
       
-      Design Style: Brutal modern urban aesthetic with:
-      - Dark slate/charcoal backgrounds with concrete textures and industrial elements
-      - Sharp angular geometric shapes with metallic chrome accents
-      - Cyberpunk neon highlights in electric blue, hot pink, and acid green
-      - Bold condensed typography with industrial weight and sharp edges
-      - Urban decay meets luxury - weathered textures with premium metallic details  
-      - Street art inspired elements with graffiti-style accents and stencil fonts
-      - Moody dramatic lighting with harsh shadows and neon reflections
-      - Tech-noir atmosphere with glitch effects and digital artifacts
-      - Incorporate brutalist architecture elements, exposed concrete, steel beams
-      - Add urban photography vibes: high contrast, desaturated base with neon pops
-      - Mirror chrome surfaces reflecting neon lights and city elements
-      - Make it look like premium streetwear brand advertising or luxury tech product launch`;
+      ULTRA-MODERN DESIGN LANGUAGE:
+      • BACKGROUND: Deep gradient mesh from midnight black through rich purples to electric blues, with subtle noise texture and floating light particles
+      • TYPOGRAPHY: Ultra-modern variable fonts with dynamic weight changes, kinetic letter spacing, and holographic text effects
+      • GLASSMORPHISM: Frosted glass panels with soft blur, subtle reflections, and rainbow light refractions around edges
+      • NEOMORPHISM: Soft embossed elements with realistic lighting and subtle depth shadows
+      • FLOATING ELEMENTS: 3D geometric shapes (spheres, cubes, pyramids) with realistic materials - chrome, glass, liquid mercury
+      • COLOR PALETTE: Rich midnight gradients with electric accent colors - cyber lime, hot magenta, electric purple, arctic blue
+      • LIGHTING: Sophisticated ambient lighting with realistic ray tracing effects, soft bloom, and atmospheric perspective
+      • CONTEMPORARY TOUCHES: iOS-style blur effects, Apple-inspired minimalism meets maximalist creativity, TikTok-style dynamic elements
+      • TEXTURE LAYERS: Subtle film grain, holographic rainbow sheens, liquid metal surfaces, and prismatic light dispersions
+      • MODERN EFFECTS: Depth-of-field blur, chromatic aberration, lens flares, and realistic material physics
+      • Make it feel like a premium Apple product launch meets cutting-edge fashion brand meets next-gen gaming interface`;
       
       
     } else if (type === 'event' || type === 'community_event') {
@@ -86,34 +85,33 @@ serve(async (req) => {
       const eventLocation = data.location ? `Location: ${data.location}` : '';
       const eventPrice = data.price ? `Price: ${data.price}` : 'Free Entry';
       
-      prompt = `Create a cutting-edge urban Instagram story for an event promotion with brutal modern aesthetics.
-      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
+      prompt = `Create an ultra-sophisticated, creatively modern Instagram story for an event promotion with next-generation design aesthetics.
+      Vertical 9:16 aspect ratio (Instagram story dimensions) with innovative, magazine-quality layout.
       
-      Layout Structure (top to bottom):
-      1. Event Title: "${data.title || 'Event'}" - aggressive modern typography with industrial edges
-      2. Dark metallic bar with chrome finish and RGB underglow effects
-      3. Main visual area - dark urban cityscape with cyberpunk neon accents
-      4. Bottom info section with event details:
+      CREATIVE LAYOUT COMPOSITION:
+      • HERO TITLE: "${data.title || 'Event'}" displayed with kinetic typography, 3D letterforms floating in space with prismatic reflections
+      • VISUAL HIERARCHY: Dynamic asymmetrical layout with floating content cards and interactive-style elements
+      • MAIN FOCAL AREA: Sophisticated depth-layered scene with atmospheric perspective and cinematic lighting
+      • INFORMATION ARCHITECTURE: Elegantly organized details in floating glass panels:
          - ${eventDate}
-         - ${eventTime} 
+         - ${eventTime}
          - ${eventLocation}
          - ${eventPrice}
-         - Description: "${data.description || 'Join us for this amazing event!'}"
-         - Call to action: "JOIN NOW"
+         - "${data.description || 'Join us for this amazing event!'}"
+         - Premium "JOIN NOW" with holographic activation state
       
-      Design Style: Brutal modern urban aesthetic with:
-      - Dark concrete/charcoal backgrounds with raw industrial textures and steel elements
-      - Sharp angular geometric shapes with brushed metal and chrome highlights
-      - Cyberpunk neon accents in electric blue, hot magenta, and toxic green
-      - Bold condensed typography with brutal weight and sharp industrial edges
-      - Urban decay meets high-tech - weathered concrete with premium metallic overlays
-      - Street culture inspired elements with stencil fonts and underground vibes
-      - Harsh dramatic lighting with deep shadows and neon light leaks
-      - Tech-noir atmosphere with glitch effects and digital distortion
-      - Incorporate brutalist architecture: raw concrete, exposed steel, industrial pipes
-      - Add street photography aesthetics: high contrast, moody urban atmosphere
-      - Reflective chrome surfaces bouncing neon lights and urban elements
-      - Make it look like premium underground event or luxury tech conference branding`;
+      CUTTING-EDGE DESIGN SYSTEM:
+      • FOUNDATION: Rich gradient mesh backgrounds transitioning from deep space black through royal purples to electric teals, with subtle particle systems
+      • ADVANCED TYPOGRAPHY: Variable font families with fluid weight transitions, letter-spacing animations, and holographic text rendering
+      • MATERIAL DESIGN 3.0: Elevated surfaces with realistic physics, soft shadows, and dynamic color temperature
+      • GLASSMORPHISM ADVANCED: Multi-layer frosted glass with chromatic aberration, realistic light refraction, and depth-aware transparency
+      • FLOATING ARCHITECTURE: 3D geometric installations - crystalline structures, liquid blobs, metallic frameworks suspended in space
+      • PREMIUM COLOR SCIENCE: Deep saturated gradients with electric accent punctuation - neon lime, hot coral, electric violet, ice blue
+      • CINEMATIC LIGHTING: Realistic global illumination with soft area lighting, rim lights, and atmospheric fog effects
+      • CONTEMPORARY LUXURY: Combines Apple's design philosophy with high-fashion editorial layouts and gaming UI sophistication
+      • SURFACE MATERIALS: Liquid chrome, brushed titanium, frosted acrylics, holographic foils, and prismatic crystals
+      • POST-PRODUCTION EFFECTS: Subtle film grain, lens distortion, color grading, and depth-of-field for photographic realism
+      • Make it feel like a luxury brand launch meets architectural visualization meets premium mobile app interface`;
       
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
