@@ -1043,6 +1043,8 @@ export type Database = {
           id: string
           latitude: number
           longitude: number
+          status: string | null
+          status_expires_at: string | null
           updated_at: string
           user_id: string
         }
@@ -1052,6 +1054,8 @@ export type Database = {
           id?: string
           latitude: number
           longitude: number
+          status?: string | null
+          status_expires_at?: string | null
           updated_at?: string
           user_id: string
         }
@@ -1061,6 +1065,8 @@ export type Database = {
           id?: string
           latitude?: number
           longitude?: number
+          status?: string | null
+          status_expires_at?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -1155,6 +1161,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      expire_hanging_status: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       rotate_daily_challenge: {
         Args: Record<PropertyKey, never>
         Returns: undefined

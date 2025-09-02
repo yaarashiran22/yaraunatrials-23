@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin, Users, Calendar, Coffee, Search } from 'lucide-react';
+import { MapPin, Users, Calendar, Coffee, Search, Heart, HeartOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
@@ -15,6 +15,7 @@ import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEvents } from '@/hooks/useEvents';
 import { useSuggestedUsers } from '@/hooks/useSuggestedUsers';
+import { useOpenToHang } from '@/hooks/useOpenToHang';
 import { supabase } from '@/integrations/supabase/client';
 
 // Fix for default markers in Leaflet
@@ -40,8 +41,16 @@ const DiscoverPage = () => {
   const { events: allEvents } = useEvents();
   const { events: allMeetups } = useEvents('meetup');
   const { suggestedUsers, loading: suggestedUsersLoading, findSuggestedUsers } = useSuggestedUsers();
+  const { shareHangLocation, stopHanging, checkHangStatus, isLoading: hangLoading, isOpenToHang, setIsOpenToHang } = useOpenToHang();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
+
+  // Check user's hang status on load
+  useEffect(() => {
+    if (user) {
+      checkHangStatus();
+    }
+  }, [user]); // checkHangStatus is stable since it doesn't depend on changing values
 
   // Function to filter users based on discovery criteria
   const handleDiscovery = async (selectedInterests: string[], connectionType: string) => {
@@ -255,22 +264,28 @@ const DiscoverPage = () => {
 
       const profile = userLocation.profile as any;
       const hasSharedEvents = (userLocation as any).sharedEvents && (userLocation as any).sharedEvents.length > 0;
+      const isOpenToHang = (userLocation as any).status === 'open_to_hang';
 
-      // Create custom user icon with highlighting for users with shared events
+      // Create custom user icon with different styles for different statuses
+      const borderColor = hasSharedEvents ? 'border-red-500' : isOpenToHang ? 'border-pink-500' : 'border-white';
+      const statusColor = hasSharedEvents ? 'bg-red-500' : isOpenToHang ? 'bg-pink-500' : 'bg-green-500';
+      const pulseClass = (hasSharedEvents || isOpenToHang) ? 'animate-pulse' : '';
+      
       const userIcon = L.divIcon({
         html: `
-          <div class="w-8 h-8 rounded-full border-2 ${hasSharedEvents ? 'border-red-500' : 'border-white'} shadow-lg overflow-hidden bg-white relative ${hasSharedEvents ? 'animate-pulse' : ''}">
+          <div class="w-8 h-8 rounded-full border-2 ${borderColor} shadow-lg overflow-hidden bg-white relative ${pulseClass}">
             <img 
               src="${profile?.profile_image_url || '/placeholder.svg'}" 
               alt=""
               class="w-full h-full object-cover"
               loading="lazy"
             />
-            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 ${hasSharedEvents ? 'bg-red-500' : 'bg-green-500'} border-2 border-white rounded-full"></div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 ${statusColor} border-2 border-white rounded-full"></div>
             ${hasSharedEvents ? '<div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-[8px]">🎯</span></div>' : ''}
+            ${isOpenToHang ? '<div class="absolute top-0 left-0 w-2 h-2 bg-pink-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-[8px]">💕</span></div>' : ''}
           </div>
         `,
-        className: `user-location-marker ${hasSharedEvents ? 'highlighted-match' : ''}`,
+        className: `user-location-marker ${hasSharedEvents ? 'highlighted-match' : ''} ${isOpenToHang ? 'open-to-hang' : ''}`,
         iconSize: [32, 32],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32]
@@ -295,6 +310,11 @@ const DiscoverPage = () => {
             ${hasSharedEvents ? `
               <div class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mt-1">
                 🎯 This user is going to the same event as you: ${(userLocation as any).sharedEvents[0]}
+              </div>
+            ` : ''}
+            ${isOpenToHang ? `
+              <div class="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full mt-1">
+                💕 Open to hang out right now!
               </div>
             ` : ''}
           </div>
@@ -720,8 +740,37 @@ const DiscoverPage = () => {
             )}
           </div>
 
-          <div className="flex justify-center mt-4">
+          <div className="flex flex-col items-center gap-3 mt-4">
             <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
+            
+            {/* Open to Hang Button */}
+            <Button
+              onClick={isOpenToHang ? stopHanging : shareHangLocation}
+              disabled={hangLoading}
+              size="sm"
+              className={`w-32 text-xs transition-all duration-300 ${
+                isOpenToHang 
+                  ? 'bg-pink-500 hover:bg-pink-600 text-white border-pink-500' 
+                  : 'bg-white hover:bg-pink-50 text-pink-600 border border-pink-200'
+              }`}
+            >
+              {hangLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                  Loading...
+                </>
+              ) : isOpenToHang ? (
+                <>
+                  <HeartOff className="h-3 w-3 mr-1" />
+                  Stop Hanging
+                </>
+              ) : (
+                <>
+                  <Heart className="h-3 w-3 mr-1" />
+                  Open to Hang
+                </>
+              )}
+            </Button>
           </div>
         </div>
 
