@@ -109,6 +109,9 @@ const ProfilePage = () => {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
+      // Variables for image positioning - declare outside to use in text positioning
+      let x = 0, y = 0, drawWidth = 0, drawHeight = 0, overlayHeight = 0;
+      
       // Load and add event image if available
       if (eventData.image_url || eventData.video_url) {
         try {
@@ -126,16 +129,16 @@ const ProfilePage = () => {
           const imageWidth = canvas.width;
           const aspectRatio = img.width / img.height;
           
-          let drawWidth = imageWidth;
-          let drawHeight = imageWidth / aspectRatio;
+          drawWidth = imageWidth;
+          drawHeight = imageWidth / aspectRatio;
           
           if (drawHeight > imageHeight) {
             drawHeight = imageHeight;
             drawWidth = imageHeight * aspectRatio;
           }
           
-          const x = (canvas.width - drawWidth) / 2;
-          const y = 50; // Reduced margin for larger image (was 100)
+          x = (canvas.width - drawWidth) / 2;
+          y = 50; // Reduced margin for larger image (was 100)
           
           // Draw image with rounded corners effect
           ctx.save();
@@ -145,69 +148,120 @@ const ProfilePage = () => {
           ctx.drawImage(img, x, y, drawWidth, drawHeight);
           ctx.restore();
           
-          // Add semi-transparent overlay for text readability
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-          ctx.fillRect(0, y + drawHeight - 200, canvas.width, 200);
+          // Add semi-transparent overlay for text readability - make it larger
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+          overlayHeight = 300; // Increased height for more text space
+          ctx.fillRect(0, y + drawHeight - overlayHeight, canvas.width, overlayHeight);
         } catch (error) {
           console.warn('Failed to load event image:', error);
         }
       }
       
-      // Add text content with better positioning
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 72px Arial';
-      ctx.textAlign = 'center';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
-      ctx.lineWidth = 4;
-      
-      // Title - positioned over image or at top
-      const titleY = eventData.image_url || eventData.video_url ? 850 : 300;
-      const titleWords = eventData.title.split(' ');
-      let currentTitleY = titleY;
-      for (let i = 0; i < titleWords.length; i += 2) {
-        const line = titleWords.slice(i, i + 2).join(' ');
-        ctx.strokeText(line, canvas.width / 2, currentTitleY);
-        ctx.fillText(line, canvas.width / 2, currentTitleY);
-        currentTitleY += 80;
-      }
-      
-      // Event details in bottom section
-      ctx.font = '48px Arial';
-      let detailY = 1200;
-      
-      if (eventData.date) {
-        ctx.strokeText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
-        ctx.fillText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
-        detailY += 70;
-      }
-      
-      if (eventData.time) {
-        ctx.strokeText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
-        ctx.fillText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
-        detailY += 70;
-      }
-      
-      if (eventData.location) {
-        ctx.strokeText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
-        ctx.fillText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
-        detailY += 70;
-      }
-      
-      if (eventData.price) {
-        ctx.strokeText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
-        ctx.fillText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
-        detailY += 70;
+      // Add text content positioned within the black overlay box
+      if (eventData.image_url || eventData.video_url) {
+        // Calculate overlay position to position text within it
+        const overlayStartY = y + drawHeight - overlayHeight + 30; // 30px margin from overlay top
+        
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.lineWidth = 2;
+        
+        let currentY = overlayStartY;
+        
+        // Title - within overlay box
+        const titleWords = eventData.title.split(' ');
+        for (let i = 0; i < titleWords.length; i += 3) {
+          const line = titleWords.slice(i, i + 3).join(' ');
+          if (currentY < y + drawHeight - 40) { // Ensure text stays within overlay
+            ctx.strokeText(line, canvas.width / 2, currentY);
+            ctx.fillText(line, canvas.width / 2, currentY);
+            currentY += 55;
+          }
+        }
+        
+        // Event details - smaller font for more info
+        ctx.font = '36px Arial';
+        currentY += 10; // Small gap
+        
+        if (eventData.date && currentY < y + drawHeight - 40) {
+          ctx.strokeText(`📅 ${eventData.date}`, canvas.width / 2, currentY);
+          ctx.fillText(`📅 ${eventData.date}`, canvas.width / 2, currentY);
+          currentY += 45;
+        }
+        
+        const eventDetails = [];
+        if (eventData.time) eventDetails.push(`🕐 ${eventData.time}`);
+        if (eventData.location) eventDetails.push(`📍 ${eventData.location}`);
+        if (eventData.price) eventDetails.push(`💰 ${eventData.price}`);
+        else eventDetails.push(`🎉 FREE`);
+        
+        // Show first 2 details if space allows
+        for (let i = 0; i < Math.min(2, eventDetails.length); i++) {
+          if (currentY < y + drawHeight - 40) {
+            ctx.strokeText(eventDetails[i], canvas.width / 2, currentY);
+            ctx.fillText(eventDetails[i], canvas.width / 2, currentY);
+            currentY += 45;
+          }
+        }
       } else {
-        ctx.strokeText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
-        ctx.fillText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
-        detailY += 70;
+        // No image - position text in center
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 72px Arial';
+        ctx.textAlign = 'center';
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.lineWidth = 4;
+        
+        // Title
+        const titleY = 300;
+        const titleWords = eventData.title.split(' ');
+        let currentTitleY = titleY;
+        for (let i = 0; i < titleWords.length; i += 2) {
+          const line = titleWords.slice(i, i + 2).join(' ');
+          ctx.strokeText(line, canvas.width / 2, currentTitleY);
+          ctx.fillText(line, canvas.width / 2, currentTitleY);
+          currentTitleY += 80;
+        }
+        
+        // Event details
+        ctx.font = '48px Arial';
+        let detailY = 1200;
+        
+        if (eventData.date) {
+          ctx.strokeText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
+          ctx.fillText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
+          detailY += 70;
+        }
+        
+        if (eventData.time) {
+          ctx.strokeText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
+          ctx.fillText(`🕐 ${eventData.time}`, canvas.width / 2, detailY);
+          detailY += 70;
+        }
+        
+        if (eventData.location) {
+          ctx.strokeText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
+          ctx.fillText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
+          detailY += 70;
+        }
+        
+        if (eventData.price) {
+          ctx.strokeText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
+          ctx.fillText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
+          detailY += 70;
+        } else {
+          ctx.strokeText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
+          ctx.fillText(`🎉 FREE ENTRY`, canvas.width / 2, detailY);
+          detailY += 70;
+        }
+        
+        // Call to action
+        ctx.font = 'bold 54px Arial';
+        ctx.fillStyle = '#FFD700'; // gold
+        ctx.strokeText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
+        ctx.fillText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
       }
-      
-      // Call to action
-      ctx.font = 'bold 54px Arial';
-      ctx.fillStyle = '#FFD700'; // gold
-      ctx.strokeText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
-      ctx.fillText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
       
       // Convert canvas to blob URL
       const blob = await new Promise<Blob>((resolve) => {
@@ -285,9 +339,10 @@ const ProfilePage = () => {
           ctx.drawImage(img, x, y, drawWidth, drawHeight);
           ctx.restore();
           
-          // Add semi-transparent overlay for text readability
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-          ctx.fillRect(0, y + drawHeight - 150, canvas.width, 150);
+          // Add semi-transparent overlay for text readability - make it larger
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+          const overlayHeight = 250; // Increased height for more text space
+          ctx.fillRect(0, y + drawHeight - overlayHeight, canvas.width, overlayHeight);
         } catch (error) {
           console.warn('Failed to load coupon image:', error);
         }
