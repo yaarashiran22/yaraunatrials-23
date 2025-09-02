@@ -86,7 +86,7 @@ const ProfilePage = () => {
   const [selectedCouponForEdit, setSelectedCouponForEdit] = useState<any>(null);
 
   // Function to extract dominant colors from an image
-  const extractImageColors = (img: HTMLImageElement): { colors: string[]; } => {
+  const extractImageColors = (img: HTMLImageElement): { primary: string; secondary: string } => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d')!;
     
@@ -112,41 +112,39 @@ const ProfilePage = () => {
       if (alpha < 128) continue;
       
       // Group similar colors together (reduce precision)
-      const rGroup = Math.floor(r / 40) * 40;
-      const gGroup = Math.floor(g / 40) * 40;
-      const bGroup = Math.floor(b / 40) * 40;
+      const rGroup = Math.floor(r / 32) * 32;
+      const gGroup = Math.floor(g / 32) * 32;
+      const bGroup = Math.floor(b / 32) * 32;
       
       const colorKey = `${rGroup},${gGroup},${bGroup}`;
       colorCounts[colorKey] = (colorCounts[colorKey] || 0) + 1;
     }
     
-    // Get the most common colors (top 3)
+    // Get the most common colors
     const sortedColors = Object.entries(colorCounts)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 3);
     
     if (sortedColors.length === 0) {
       // Fallback to default colors
-      return { colors: ['#3B82F6', '#8B5CF6', '#EC4899'] };
+      return { primary: '#3B82F6', secondary: '#8B5CF6' };
     }
     
-    const extractedColors = sortedColors.map(([colorKey]) => {
-      const [r, g, b] = colorKey.split(',').map(Number);
-      return `rgb(${r}, ${g}, ${b})`;
-    });
+    const [r1, g1, b1] = sortedColors[0][0].split(',').map(Number);
+    const primary = `rgb(${r1}, ${g1}, ${b1})`;
     
-    // Ensure we have at least 3 colors by creating variations if needed
-    while (extractedColors.length < 3) {
-      const baseColor = extractedColors[0];
-      const [r, g, b] = baseColor.match(/\d+/g)!.map(Number);
-      const hsl = rgbToHsl(r, g, b);
-      
-      // Create a variation with different lightness
-      const variation = `hsl(${hsl.h}, ${hsl.s}%, ${Math.max(20, Math.min(80, hsl.l + (extractedColors.length === 1 ? 20 : -20)))}%)`;
-      extractedColors.push(variation);
+    let secondary = primary;
+    if (sortedColors.length > 1) {
+      const [r2, g2, b2] = sortedColors[1][0].split(',').map(Number);
+      secondary = `rgb(${r2}, ${g2}, ${b2})`;
+    } else {
+      // Create a complementary color if only one dominant color
+      const hsl = rgbToHsl(r1, g1, b1);
+      const compHue = (hsl.h + 180) % 360;
+      secondary = `hsl(${compHue}, ${hsl.s}%, ${Math.max(30, hsl.l - 20)}%)`;
     }
     
-    return { colors: extractedColors };
+    return { primary, secondary };
   };
 
   // Helper function to convert RGB to HSL
@@ -194,7 +192,8 @@ const ProfilePage = () => {
       const ctx = canvas.getContext('2d')!;
       
       // Default gradient colors
-      let gradientColors = ['#3B82F6', '#8B5CF6', '#EC4899']; // blue, purple, pink
+      let primaryColor = '#3B82F6'; // blue
+      let secondaryColor = '#8B5CF6'; // purple
       
       // Load and add event image if available, and extract colors
       let eventImageElement: HTMLImageElement | null = null;
@@ -213,18 +212,18 @@ const ProfilePage = () => {
           
           // Extract colors from the image
           const extractedColors = extractImageColors(img);
-          gradientColors = extractedColors.colors;
+          primaryColor = extractedColors.primary;
+          secondaryColor = extractedColors.secondary;
           
         } catch (error) {
           console.warn('Failed to load event image for color extraction:', error);
         }
       }
       
-      // Create multi-color gradient background using extracted or default colors
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, gradientColors[0]);
-      gradient.addColorStop(0.5, gradientColors[1]);
-      gradient.addColorStop(1, gradientColors[2] || gradientColors[1]);
+      // Create gradient background using extracted or default colors
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, primaryColor);
+      gradient.addColorStop(1, secondaryColor);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
@@ -339,6 +338,33 @@ const ProfilePage = () => {
         }
       }
       
+      // Add una logo in top right corner
+      try {
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+        
+        await new Promise((resolve, reject) => {
+          logoImg.onload = resolve;
+          logoImg.onerror = reject;
+          logoImg.src = '/src/assets/logo.png';
+        });
+        
+        // Draw logo in top right corner
+        const logoSize = 80;
+        const logoX = canvas.width - logoSize - 30;
+        const logoY = 30;
+        
+        // Add white background circle for logo
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+      } catch (error) {
+        console.warn('Failed to load una logo:', error);
+      }
+      
       // Add text content with better positioning
       ctx.fillStyle = 'white';
       ctx.font = 'bold 72px Poppins, sans-serif';
@@ -429,7 +455,8 @@ const ProfilePage = () => {
       const ctx = canvas.getContext('2d')!;
       
       // Default gradient colors
-      let gradientColors = ['#8B5CF6', '#EC4899', '#F59E0B']; // purple, pink, amber
+      let primaryColor = '#8B5CF6'; // purple
+      let secondaryColor = '#EC4899'; // pink
       
       // Load and add coupon image if available, and extract colors
       let couponImageElement: HTMLImageElement | null = null;
@@ -448,18 +475,18 @@ const ProfilePage = () => {
           
           // Extract colors from the image
           const extractedColors = extractImageColors(img);
-          gradientColors = extractedColors.colors;
+          primaryColor = extractedColors.primary;
+          secondaryColor = extractedColors.secondary;
           
         } catch (error) {
           console.warn('Failed to load coupon image for color extraction:', error);
         }
       }
       
-      // Create multi-color gradient background using extracted or default colors
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, gradientColors[0]);
-      gradient.addColorStop(0.5, gradientColors[1]);
-      gradient.addColorStop(1, gradientColors[2] || gradientColors[1]);
+      // Create gradient background using extracted or default colors
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, primaryColor);
+      gradient.addColorStop(1, secondaryColor);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
@@ -572,6 +599,33 @@ const ProfilePage = () => {
           ctx.strokeText(`Posted by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
           ctx.fillText(`Posted by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
         }
+      }
+      
+      // Add una logo in top right corner
+      try {
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+        
+        await new Promise((resolve, reject) => {
+          logoImg.onload = resolve;
+          logoImg.onerror = reject;
+          logoImg.src = '/src/assets/logo.png';
+        });
+        
+        // Draw logo in top right corner
+        const logoSize = 80;
+        const logoX = canvas.width - logoSize - 30;
+        const logoY = 30;
+        
+        // Add white background circle for logo
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+      } catch (error) {
+        console.warn('Failed to load una logo:', error);
       }
       
       // Add decorative elements (stars/circles)
