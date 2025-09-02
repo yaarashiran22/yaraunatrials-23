@@ -151,7 +151,7 @@ const RegisterPage = () => {
                 <div className="flex items-center justify-center">
                   <div className="text-3xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5">Our neighborhood is here</p>
+                
               </div>
             </div>
           </div>
