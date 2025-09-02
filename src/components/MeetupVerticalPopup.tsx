@@ -9,13 +9,12 @@ import { useIsMobile } from "@/hooks/use-mobile";
 // Location mapping from English to Spanish (Buenos Aires neighborhoods)
 const locationMapping: Record<string, string> = {
   'palermo': 'Palermo',
-  'san-telmo': 'San Telmo', 
+  'san-telmo': 'San Telmo',
   'recoleta': 'Recoleta',
   'puerto-madero': 'Puerto Madero',
   'belgrano': 'Belgrano',
   'villa-crespo': 'Villa Crespo'
 };
-
 interface MeetupVerticalPopupProps {
   isOpen: boolean;
   onClose: () => void;
@@ -38,10 +37,15 @@ interface MeetupVerticalPopupProps {
     currentIndex?: number;
   };
 }
-
-const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps) => {
+const MeetupVerticalPopup = ({
+  isOpen,
+  onClose,
+  item
+}: MeetupVerticalPopupProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const isMobile = useIsMobile();
 
   // Navigation state
@@ -75,12 +79,13 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
         };
         onClose();
         setTimeout(() => {
-          window.dispatchEvent(new CustomEvent('navigateToMeetup', { detail: newItem }));
+          window.dispatchEvent(new CustomEvent('navigateToMeetup', {
+            detail: newItem
+          }));
         }, 100);
       }
     }
   }, [currentIndex, allItems, item, onClose]);
-
   const handleNext = useCallback(() => {
     if (currentIndex < allItems.length - 1 && allItems.length > 0) {
       const nextItem = allItems[currentIndex + 1];
@@ -96,7 +101,9 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
         };
         onClose();
         setTimeout(() => {
-          window.dispatchEvent(new CustomEvent('navigateToMeetup', { detail: newItem }));
+          window.dispatchEvent(new CustomEvent('navigateToMeetup', {
+            detail: newItem
+          }));
         }, 100);
       }
     }
@@ -109,11 +116,9 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
     setIsDragging(false);
     setScrollOffset(0);
   }, []);
-
   const onTouchMove = useCallback((e: React.TouchEvent) => {
     const currentTouch = e.targetTouches[0].clientY;
     const diff = touchStartY - currentTouch;
-    
     if (Math.abs(diff) > 10) {
       setIsDragging(true);
       const maxOffset = 100;
@@ -121,18 +126,15 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
       setScrollOffset(limitedOffset);
     }
   }, [touchStartY]);
-
   const onTouchEnd = useCallback((e: React.TouchEvent) => {
     if (!touchStartY || touchEndY) return;
-    
     setTouchEndY(e.changedTouches[0].clientY);
     const distance = touchStartY - e.changedTouches[0].clientY;
     const isUpSwipe = distance > minScrollDistance;
     const isDownSwipe = distance < -minScrollDistance;
-    
     setIsDragging(false);
     setScrollOffset(0);
-    
+
     // Handle vertical navigation
     if (isUpSwipe && currentIndex < allItems.length - 1) {
       handleNext();
@@ -145,7 +147,6 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
-      
       if (e.key === 'ArrowUp' && currentIndex > 0) {
         e.preventDefault();
         handlePrevious();
@@ -154,29 +155,26 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
         handleNext();
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, currentIndex, allItems.length, handlePrevious, handleNext]);
 
   // Fetch item details
-  const { item: itemDetails, loading: itemLoading } = useItemDetails(item?.id || "");
-
+  const {
+    item: itemDetails,
+    loading: itemLoading
+  } = useItemDetails(item?.id || "");
   const hasItemData = item && item.title && item.image;
-  
   if (itemLoading && !hasItemData && item?.id) {
-    return (
-      <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
+    return <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
         <div className="bg-background rounded-2xl w-full max-w-sm p-8 mx-4">
           <div className="flex flex-col items-center space-y-4">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             <p className="text-foreground">Loading meetup details...</p>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   const defaultItem = {
     id: "1",
     title: "Coffee Meetup",
@@ -191,7 +189,6 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
     },
     condition: "Active"
   };
-
   const displayItem = itemDetails ? {
     id: itemDetails.id,
     title: itemDetails.title,
@@ -205,131 +202,77 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
       location: itemDetails.uploader.location || "Not specified"
     },
     condition: item?.condition || defaultItem.condition
-  } : (item || defaultItem);
-
+  } : item || defaultItem;
   const handleContact = () => {
     toast({
       title: "Join Request Sent",
-      description: "Your request to join has been sent to the organizer",
+      description: "Your request to join has been sent to the organizer"
     });
   };
-
   const handleShare = () => {
     toast({
       title: "Shared Successfully!",
-      description: "Meetup shared on social networks",
+      description: "Meetup shared on social networks"
     });
   };
-
   const handleViewProfile = () => {
     if (displayItem.seller?.id) {
       navigate(`/profile/${displayItem.seller.id}`);
       onClose();
     }
   };
-
   if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4" ref={containerRef}>
+  return <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4" ref={containerRef}>
       {/* Up Navigation Button */}
-      {allItems.length > 1 && currentIndex > 0 && (
-        <Button
-          variant="ghost"
-          size="lg"
-          onClick={handlePrevious}
-          className="absolute top-8 left-1/2 -translate-x-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-lg rounded-full p-3 h-12 w-12"
-        >
+      {allItems.length > 1 && currentIndex > 0 && <Button variant="ghost" size="lg" onClick={handlePrevious} className="absolute top-8 left-1/2 -translate-x-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-lg rounded-full p-3 h-12 w-12">
           <ChevronUp className="h-6 w-6" />
-        </Button>
-      )}
+        </Button>}
       
       {/* Down Navigation Button */}
-      {allItems.length > 1 && currentIndex < allItems.length - 1 && (
-        <Button
-          variant="ghost"
-          size="lg"
-          onClick={handleNext}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-lg rounded-full p-3 h-12 w-12"
-        >
+      {allItems.length > 1 && currentIndex < allItems.length - 1 && <Button variant="ghost" size="lg" onClick={handleNext} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-lg rounded-full p-3 h-12 w-12">
           <ChevronDown className="h-6 w-6" />
-        </Button>
-      )}
+        </Button>}
 
-      <div 
-        ref={contentRef}
-        className={`bg-background rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${
-          isDragging ? 'cursor-grabbing' : 'cursor-grab'
-        } meetup-vertical-popup`}
-        style={{
-          transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
-          scrollBehavior: 'smooth'
-        }}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-      >
+      <div ref={contentRef} className={`bg-background rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} meetup-vertical-popup`} style={{
+      transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
+      scrollBehavior: 'smooth'
+    }} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30">
           <div className="flex items-center gap-2">
-            {allItems.length > 1 && (
-              <div className="text-sm text-muted-foreground bg-white/80 dark:bg-black/20 px-3 py-1 rounded-full">
+            {allItems.length > 1 && <div className="text-sm text-muted-foreground bg-white/80 dark:bg-black/20 px-3 py-1 rounded-full">
                 {currentIndex + 1} / {allItems.length}
-              </div>
-            )}
+              </div>}
           </div>
           
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={onClose}
-          >
+          <Button variant="ghost" size="sm" onClick={onClose}>
             <X className="h-5 w-5" />
           </Button>
           
         </div>
 
         {/* Vertical Navigation Instructions */}
-        {allItems.length > 1 && (
-          <div className="flex justify-center py-2 border-b bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20">
+        {allItems.length > 1 && <div className="flex justify-center py-2 border-b bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20">
             <div className="text-xs text-muted-foreground flex items-center gap-1">
-              <span>↕ Swipe up/down for more meetups</span>
+              
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Vertical Progress Indicators */}
-        {allItems.length > 1 && (
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
-            {allItems.map((_, index) => (
-              <div
-                key={index}
-                className={`w-2 h-8 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? 'bg-primary shadow-sm scale-110' : 'bg-muted-foreground/20'
-                }`}
-              />
-            ))}
-          </div>
-        )}
+        {allItems.length > 1 && <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
+            {allItems.map((_, index) => <div key={index} className={`w-2 h-8 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-primary shadow-sm scale-110' : 'bg-muted-foreground/20'}`} />)}
+          </div>}
 
         {/* Content */}
         <div className={`${isMobile ? 'p-3' : 'p-4'}`}>
           {/* Meetup Image */}
           <div className={`relative ${isMobile ? 'mb-4' : 'mb-6'}`}>
             <div className="border-4 border-gradient-to-r from-blue-400 to-purple-400 rounded-2xl overflow-hidden">
-              <img 
-                src={displayItem.image}
-                alt={displayItem.title}
-                className={`w-full ${isMobile ? 'h-48' : 'h-64'} object-cover`}
-              />
+              <img src={displayItem.image} alt={displayItem.title} className={`w-full ${isMobile ? 'h-48' : 'h-64'} object-cover`} />
             </div>
             
             <div className="absolute top-3 right-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="p-2 rounded-full bg-card/80 backdrop-blur-sm text-red-500"
-              >
+              <Button variant="ghost" size="sm" className="p-2 rounded-full bg-card/80 backdrop-blur-sm text-red-500">
                 <Heart className="h-4 w-4" />
               </Button>
             </div>
@@ -346,23 +289,16 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
           <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
             <div className="text-center">
               <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-foreground ${isMobile ? 'mb-1' : 'mb-2'}`}>{displayItem.title}</h3>
-              {displayItem.price && displayItem.price !== 'Free' && (
-                <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-primary`}>{displayItem.price}</p>
-              )}
-              {displayItem.price === 'Free' && (
-                <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-green-600 dark:text-green-400`}>Free Event</p>
-              )}
+              {displayItem.price && displayItem.price !== 'Free' && <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-primary`}>{displayItem.price}</p>}
+              {displayItem.price === 'Free' && <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-green-600 dark:text-green-400`}>Free Event</p>}
             </div>
             
-            {displayItem.description && (
-              <p className={`text-foreground leading-relaxed text-center ${isMobile ? 'text-xs' : 'text-sm'}`}>
+            {displayItem.description && <p className={`text-foreground leading-relaxed text-center ${isMobile ? 'text-xs' : 'text-sm'}`}>
                 {displayItem.description}
-              </p>
-            )}
+              </p>}
             
             {/* Meetup Location and Date */}
-            {itemDetails && (
-              <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
+            {itemDetails && <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
                 <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
                   <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-600 dark:text-blue-400`} />
                   <span>{locationMapping[itemDetails.location] || itemDetails.location || 'Location TBD'}</span>
@@ -370,29 +306,20 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
                 <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
                   <Calendar className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-600 dark:text-blue-400`} />
                   <span>
-                    {new Date(itemDetails.created_at).toLocaleDateString('en-US', { 
-                      weekday: 'short', 
-                      month: 'short', 
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                    {new Date(itemDetails.created_at).toLocaleDateString('en-US', {
+                  weekday: 'short',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
                   </span>
                 </div>
-              </div>
-            )}
+              </div>}
 
             {/* Organizer Info */}
-            {displayItem.seller && (
-              <div 
-                className={`flex items-center gap-3 ${isMobile ? 'p-2' : 'p-3'} bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors`}
-                onClick={handleViewProfile}
-              >
-                <img 
-                  src={displayItem.seller.image}
-                  alt={displayItem.seller.name}
-                  className={`${isMobile ? 'w-8 h-8' : 'w-10 h-10'} rounded-full object-cover`}
-                />
+            {displayItem.seller && <div className={`flex items-center gap-3 ${isMobile ? 'p-2' : 'p-3'} bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors`} onClick={handleViewProfile}>
+                <img src={displayItem.seller.image} alt={displayItem.seller.name} className={`${isMobile ? 'w-8 h-8' : 'w-10 h-10'} rounded-full object-cover`} />
                 <div className="flex-1">
                   <p className={`font-semibold text-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>{displayItem.seller.name}</p>
                   <div className={`flex items-center gap-1 ${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground`}>
@@ -400,8 +327,7 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
                     <span>{(displayItem as any).neighborhood || displayItem.seller.location}</span>
                   </div>
                 </div>
-              </div>
-            )}
+              </div>}
           </div>
 
           {/* Join Request Section */}
@@ -410,18 +336,13 @@ const MeetupVerticalPopup = ({ isOpen, onClose, item }: MeetupVerticalPopupProps
             <p className={`text-foreground text-center ${isMobile ? 'mb-3' : 'mb-4'} ${isMobile ? 'text-xs' : 'text-sm'}`}>
               Send a request to join this meetup and connect with others
             </p>
-            <Button 
-              onClick={handleContact}
-              className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}
-            >
+            <Button onClick={handleContact} className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}>
               <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
               Join Meetup
             </Button>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default MeetupVerticalPopup;
