@@ -168,12 +168,20 @@ export const InstagramStoryPopup = ({
               <div className="space-y-5 animate-slide-up">
                 {/* Smaller story preview with modern frame */}
                 <div className="relative group mx-auto max-w-xs">
-                  <div className="aspect-[9/16] rounded-2xl overflow-hidden relative border-2 border-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 p-[2px] shadow-xl hover:shadow-pink-500/20 transition-all duration-500">
-                    <div className="w-full h-full rounded-xl overflow-hidden bg-background relative">
+                  {/* Urban-style double frame */}
+                  <div className="aspect-[9/16] rounded-3xl overflow-hidden relative p-1 bg-gradient-to-br from-slate-800 via-zinc-900 to-black shadow-2xl hover:shadow-slate-800/40 transition-all duration-500">
+                    <div className="w-full h-full rounded-[22px] overflow-hidden relative border border-zinc-700/50">
+                      {/* Urban overlay effects */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10 z-10 pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_50%)] z-10 pointer-events-none"></div>
+                      
                       <img 
                         src={storyUrl} 
                         alt="Generated Instagram Story" 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:contrast-110 group-hover:saturate-110 filter contrast-105"
+                        style={{
+                          filter: 'contrast(1.05) saturate(1.1) brightness(0.98)'
+                        }}
                       />
                       
                       {/* Close button overlay on image */}
