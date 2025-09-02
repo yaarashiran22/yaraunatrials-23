@@ -85,6 +85,95 @@ const ProfilePage = () => {
   const [showEditCoupon, setShowEditCoupon] = useState(false);
   const [selectedCouponForEdit, setSelectedCouponForEdit] = useState<any>(null);
 
+  // Function to extract dominant colors from an image
+  const extractImageColors = (img: HTMLImageElement): { primary: string; secondary: string } => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    
+    // Use smaller canvas for color sampling for performance
+    const sampleSize = 50;
+    canvas.width = sampleSize;
+    canvas.height = sampleSize;
+    
+    ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
+    const imageData = ctx.getImageData(0, 0, sampleSize, sampleSize);
+    const data = imageData.data;
+    
+    const colorCounts: { [key: string]: number } = {};
+    
+    // Sample colors from the image
+    for (let i = 0; i < data.length; i += 16) { // Sample every 4th pixel
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const alpha = data[i + 3];
+      
+      // Skip transparent pixels
+      if (alpha < 128) continue;
+      
+      // Group similar colors together (reduce precision)
+      const rGroup = Math.floor(r / 32) * 32;
+      const gGroup = Math.floor(g / 32) * 32;
+      const bGroup = Math.floor(b / 32) * 32;
+      
+      const colorKey = `${rGroup},${gGroup},${bGroup}`;
+      colorCounts[colorKey] = (colorCounts[colorKey] || 0) + 1;
+    }
+    
+    // Get the most common colors
+    const sortedColors = Object.entries(colorCounts)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 3);
+    
+    if (sortedColors.length === 0) {
+      // Fallback to default colors
+      return { primary: '#3B82F6', secondary: '#8B5CF6' };
+    }
+    
+    const [r1, g1, b1] = sortedColors[0][0].split(',').map(Number);
+    const primary = `rgb(${r1}, ${g1}, ${b1})`;
+    
+    let secondary = primary;
+    if (sortedColors.length > 1) {
+      const [r2, g2, b2] = sortedColors[1][0].split(',').map(Number);
+      secondary = `rgb(${r2}, ${g2}, ${b2})`;
+    } else {
+      // Create a complementary color if only one dominant color
+      const hsl = rgbToHsl(r1, g1, b1);
+      const compHue = (hsl.h + 180) % 360;
+      secondary = `hsl(${compHue}, ${hsl.s}%, ${Math.max(30, hsl.l - 20)}%)`;
+    }
+    
+    return { primary, secondary };
+  };
+
+  // Helper function to convert RGB to HSL
+  const rgbToHsl = (r: number, g: number, b: number) => {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+    
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0;
+    let s = 0;
+    const l = (max + min) / 2;
+    
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    
+    return { h: h * 360, s: s * 100, l: l * 100 };
+  };
+
   const generateInstagramStory = async (eventData: any) => {
     setGeneratingStory(true);
     setCurrentEventTitle(eventData.title);
@@ -102,14 +191,12 @@ const ProfilePage = () => {
       canvas.height = 1920;
       const ctx = canvas.getContext('2d')!;
       
-      // Create gradient background
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, '#3B82F6'); // blue
-      gradient.addColorStop(1, '#8B5CF6'); // purple
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Default gradient colors
+      let primaryColor = '#3B82F6'; // blue
+      let secondaryColor = '#8B5CF6'; // purple
       
-      // Load and add event image if available
+      // Load and add event image if available, and extract colors
+      let eventImageElement: HTMLImageElement | null = null;
       if (eventData.image_url || eventData.video_url) {
         try {
           const img = new Image();
@@ -121,10 +208,32 @@ const ProfilePage = () => {
             img.src = eventData.image_url || eventData.video_url;
           });
           
+          eventImageElement = img;
+          
+          // Extract colors from the image
+          const extractedColors = extractImageColors(img);
+          primaryColor = extractedColors.primary;
+          secondaryColor = extractedColors.secondary;
+          
+        } catch (error) {
+          console.warn('Failed to load event image for color extraction:', error);
+        }
+      }
+      
+      // Create gradient background using extracted or default colors
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, primaryColor);
+      gradient.addColorStop(1, secondaryColor);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw the event image if loaded
+      if (eventImageElement) {
+        try {
           // Calculate image dimensions to fit in larger upper portion of story
           const imageHeight = 1100; // Larger upper portion height (was 800)
           const imageWidth = canvas.width;
-          const aspectRatio = img.width / img.height;
+          const aspectRatio = eventImageElement.width / eventImageElement.height;
           
           let drawWidth = imageWidth;
           let drawHeight = imageWidth / aspectRatio;
@@ -142,14 +251,14 @@ const ProfilePage = () => {
           ctx.beginPath();
           ctx.roundRect(x, y, drawWidth, drawHeight, 20);
           ctx.clip();
-          ctx.drawImage(img, x, y, drawWidth, drawHeight);
+          ctx.drawImage(eventImageElement, x, y, drawWidth, drawHeight);
           ctx.restore();
           
           // Add semi-transparent overlay for text readability
           ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
           ctx.fillRect(0, y + drawHeight - 200, canvas.width, 200);
         } catch (error) {
-          console.warn('Failed to load event image:', error);
+          console.warn('Failed to draw event image:', error);
         }
       }
       
@@ -345,14 +454,12 @@ const ProfilePage = () => {
       canvas.height = 1920;
       const ctx = canvas.getContext('2d')!;
       
-      // Create gradient background (purple to pink)
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, '#8B5CF6'); // purple
-      gradient.addColorStop(1, '#EC4899'); // pink
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Default gradient colors
+      let primaryColor = '#8B5CF6'; // purple
+      let secondaryColor = '#EC4899'; // pink
       
-      // Load and add coupon image if available
+      // Load and add coupon image if available, and extract colors
+      let couponImageElement: HTMLImageElement | null = null;
       if (couponData.image_url) {
         try {
           const img = new Image();
@@ -364,10 +471,32 @@ const ProfilePage = () => {
             img.src = couponData.image_url;
           });
           
+          couponImageElement = img;
+          
+          // Extract colors from the image
+          const extractedColors = extractImageColors(img);
+          primaryColor = extractedColors.primary;
+          secondaryColor = extractedColors.secondary;
+          
+        } catch (error) {
+          console.warn('Failed to load coupon image for color extraction:', error);
+        }
+      }
+      
+      // Create gradient background using extracted or default colors
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, primaryColor);
+      gradient.addColorStop(1, secondaryColor);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw the coupon image if loaded
+      if (couponImageElement) {
+        try {
           // Calculate image dimensions to fit in larger upper portion of story
           const imageHeight = 900; // Larger upper portion height (was 700)
           const imageWidth = canvas.width;
-          const aspectRatio = img.width / img.height;
+          const aspectRatio = couponImageElement.width / couponImageElement.height;
           
           let drawWidth = imageWidth;
           let drawHeight = imageWidth / aspectRatio;
@@ -385,14 +514,14 @@ const ProfilePage = () => {
           ctx.beginPath();
           ctx.roundRect(x, y, drawWidth, drawHeight, 20);
           ctx.clip();
-          ctx.drawImage(img, x, y, drawWidth, drawHeight);
+          ctx.drawImage(couponImageElement, x, y, drawWidth, drawHeight);
           ctx.restore();
           
           // Add semi-transparent overlay for text readability
           ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
           ctx.fillRect(0, y + drawHeight - 150, canvas.width, 150);
         } catch (error) {
-          console.warn('Failed to load coupon image:', error);
+          console.warn('Failed to draw coupon image:', error);
         }
       }
       
