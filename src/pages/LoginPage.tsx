@@ -156,6 +156,18 @@ const LoginPage = () => {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="w-full max-w-md">
+          {/* Header with X button */}
+          <div className="flex justify-end mb-4">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => navigate('/')}
+              className="p-2"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center cursor-pointer" onClick={() => navigate('/')}>
