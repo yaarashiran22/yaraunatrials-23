@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Download, X, Instagram } from "lucide-react";
+import { Download, X, Instagram, Sparkles, Share2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface InstagramStoryPopupProps {
@@ -82,84 +82,174 @@ export const InstagramStoryPopup = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-sm mx-auto bg-background border border-border/50 shadow-xl">
-        <DialogHeader className="relative">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="absolute right-0 top-0 h-6 w-6 rounded-full p-0 hover:bg-destructive hover:text-destructive-foreground"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-          <DialogTitle className="text-xl font-bold text-foreground flex items-center gap-2 pr-8">
-            <Instagram className="w-6 h-6 text-pink-500" />
-            Instagram Story Ready!
-          </DialogTitle>
-        </DialogHeader>
-        
-        <div className="space-y-4 pt-4">
-          {isGenerating && (
-            <div className="flex flex-col items-center space-y-3">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-sm text-muted-foreground text-center">
-                Creating your Instagram story...
-              </p>
-            </div>
-          )}
+      <DialogContent className="max-w-md mx-auto p-0 overflow-hidden border-0 bg-transparent shadow-none">
+        {/* Glass morphism container with modern styling */}
+        <div className="glass-effect rounded-3xl backdrop-blur-2xl bg-gradient-to-br from-background/90 via-background/80 to-background/70 border border-white/20 shadow-2xl animate-scale-in">
           
-          {storyUrl && !isGenerating && (
-            <>
-              <div className="aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden relative">
-                <img 
-                  src={storyUrl} 
-                  alt="Generated Instagram Story" 
-                  className="w-full h-full object-cover"
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onClose}
-                  className="absolute top-2 right-2 h-8 w-8 rounded-full p-0 bg-black/50 hover:bg-black/70 text-white border-0"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+          {/* Header with Instagram branding */}
+          <DialogHeader className="relative p-6 pb-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="absolute -right-2 -top-2 h-10 w-10 rounded-full p-0 backdrop-blur-sm bg-black/10 hover:bg-red-500/20 hover:text-red-500 border border-white/10 transition-all duration-300 hover:scale-110 z-10"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+            
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 bg-clip-text text-transparent flex items-center gap-3 pr-10">
+              <div className="relative">
+                <Instagram className="w-8 h-8 text-pink-500" />
+                <div className="absolute -top-1 -right-1 w-3 h-3">
+                  <Sparkles className="w-3 h-3 text-yellow-400 animate-pulse" />
+                </div>
               </div>
-              
-              <div className="text-sm text-muted-foreground text-center">
-                Your Instagram story is ready! Download it to share on your Instagram.
-              </div>
-              
-              <div className="flex gap-3">
-                <Button 
-                  onClick={handleDownload}
-                  disabled={downloading}
-                  className="flex-1 bg-primary hover:bg-primary/90"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  {downloading ? "Downloading..." : "Download"}
-                </Button>
+              Story Creator
+            </DialogTitle>
+            
+            <p className="text-sm text-muted-foreground mt-1 font-medium">
+              Professional Instagram stories in seconds ✨
+            </p>
+          </DialogHeader>
+          
+          <div className="px-6 pb-6 space-y-6">
+            {/* Loading State - Modern with shimmer */}
+            {isGenerating && (
+              <div className="space-y-6">
+                {/* Modern loading animation */}
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="relative">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 animate-pulse-glow flex items-center justify-center border border-pink-500/20">
+                      <Instagram className="w-8 h-8 text-pink-500 animate-bounce-subtle" />
+                    </div>
+                    
+                    {/* Spinning ring around the icon */}
+                    <div className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 animate-spin opacity-60" 
+                         style={{ 
+                           maskImage: 'linear-gradient(transparent 40%, black 40%, black 60%, transparent 60%)',
+                           WebkitMaskImage: 'linear-gradient(transparent 40%, black 40%, black 60%, transparent 60%)'
+                         }}>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center space-y-2">
+                    <h3 className="text-lg font-semibold text-foreground">Creating Magic ✨</h3>
+                    <p className="text-sm text-muted-foreground">
+                      AI is crafting your perfect Instagram story...
+                    </p>
+                    
+                    {/* Progress dots */}
+                    <div className="flex justify-center space-x-1 mt-4">
+                      {[...Array(3)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="w-2 h-2 rounded-full bg-pink-500 animate-pulse"
+                          style={{ animationDelay: `${i * 0.2}s` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
                 
-                <Button 
-                  variant="outline"
-                  onClick={handleShare}
-                  className="flex-1"
-                >
-                  <Instagram className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
+                {/* Preview placeholder with shimmer */}
+                <div className="aspect-[9/16] rounded-2xl bg-gradient-to-br from-muted/30 to-muted/10 relative overflow-hidden border border-border/30">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer transform -skew-x-12"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center">
+                      <Instagram className="w-6 h-6 text-pink-500/60" />
+                    </div>
+                  </div>
+                </div>
               </div>
-            </>
-          )}
-          
-          <Button 
-            variant="outline" 
-            onClick={onClose}
-            className="w-full"
-          >
-            <X className="w-4 h-4 mr-2" />
-            Close
-          </Button>
+            )}
+            
+            {/* Completed State - Modern story preview */}
+            {storyUrl && !isGenerating && (
+              <div className="space-y-6 animate-slide-up">
+                {/* Story preview with modern frame */}
+                <div className="relative group">
+                  <div className="aspect-[9/16] rounded-2xl overflow-hidden relative border-2 border-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 p-[2px] shadow-2xl hover:shadow-pink-500/25 transition-all duration-500">
+                    <div className="w-full h-full rounded-xl overflow-hidden bg-background relative">
+                      <img 
+                        src={storyUrl} 
+                        alt="Generated Instagram Story" 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      
+                      {/* Close button overlay on image */}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onClose}
+                        className="absolute top-3 right-3 h-8 w-8 rounded-full p-0 backdrop-blur-md bg-black/30 hover:bg-black/50 text-white border border-white/20 transition-all duration-300 hover:scale-110 opacity-0 group-hover:opacity-100"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                      
+                      {/* Instagram watermark */}
+                      <div className="absolute bottom-3 left-3 flex items-center gap-1 backdrop-blur-sm bg-black/30 rounded-full px-2 py-1 border border-white/20">
+                        <Instagram className="w-3 h-3 text-white" />
+                        <span className="text-xs text-white font-medium">Story</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Glow effect */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-orange-500/20 blur-xl -z-10 opacity-75"></div>
+                </div>
+                
+                {/* Success message with modern styling */}
+                <div className="text-center space-y-2 p-4 rounded-2xl bg-gradient-to-br from-accent/5 to-accent/10 border border-accent/20">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <h3 className="text-lg font-semibold text-foreground">Story Ready!</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Your professional Instagram story is ready to shine ✨
+                  </p>
+                </div>
+                
+                {/* Modern action buttons */}
+                <div className="flex gap-3">
+                  <Button 
+                    onClick={handleDownload}
+                    disabled={downloading}
+                    className="flex-1 h-12 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105 border-0"
+                  >
+                    <Download className="w-5 h-5 mr-2" />
+                    {downloading ? (
+                      <span className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Saving...
+                      </span>
+                    ) : (
+                      "Download"
+                    )}
+                  </Button>
+                  
+                  <Button 
+                    variant="outline"
+                    onClick={handleShare}
+                    className="flex-1 h-12 border-2 border-accent/30 hover:border-accent/50 bg-background/50 backdrop-blur-sm hover:bg-accent/10 text-foreground font-semibold rounded-xl transition-all duration-300 hover:scale-105"
+                  >
+                    <Share2 className="w-5 h-5 mr-2" />
+                    Share
+                  </Button>
+                </div>
+              </div>
+            )}
+            
+            {/* Close button - minimalist when content is visible */}
+            {!isGenerating && (
+              <Button 
+                variant="ghost" 
+                onClick={onClose}
+                className="w-full h-11 text-muted-foreground hover:text-foreground rounded-xl border border-border/50 hover:border-border transition-all duration-300 hover:bg-muted/30"
+              >
+                Close
+              </Button>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
