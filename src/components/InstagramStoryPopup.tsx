@@ -204,9 +204,6 @@ export const InstagramStoryPopup = ({
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                     <h3 className="text-lg font-bold text-foreground tracking-tight">Story Ready!</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Your professional Instagram story is ready to shine ✨
-                  </p>
                 </div>
                 
                 {/* Compact action buttons */}
