@@ -594,38 +594,6 @@ const DiscoverPage = () => {
           .addTo(map)
           .bindPopup('Buenos Aires');
 
-        // Add neighborhood markers
-        neighborhoods.forEach(neighborhood => {
-          // Create custom marker
-          const markerElement = document.createElement('div');
-          markerElement.style.cssText = `
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: ${neighborhood.color};
-            border: 3px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: transform 0.2s ease;
-          `;
-
-          const customIcon = L.divIcon({
-            html: markerElement.outerHTML,
-            className: 'custom-location-marker',
-            iconSize: [24, 24],
-            iconAnchor: [12, 24],
-            popupAnchor: [0, -24]
-          });
-
-          L.marker([neighborhood.lat, neighborhood.lng], { icon: customIcon })
-            .addTo(map)
-            .bindPopup(`
-              <div class="text-center p-2">
-                <strong class="text-gray-800 block">${neighborhood.name}</strong>
-              </div>
-            `);
-        });
-
         // Add user location and text pin markers
         addUserLocationMarkers();
         addTextPinMarkers();
