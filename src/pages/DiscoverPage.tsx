@@ -50,7 +50,7 @@ const DiscoverPage = () => {
     if (user) {
       checkHangStatus();
     }
-  }, [user, checkHangStatus]);
+  }, [user]);
 
   // Function to filter users based on discovery criteria
   const handleDiscovery = async (selectedInterests: string[], connectionType: string) => {

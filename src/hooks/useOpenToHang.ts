@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
@@ -42,7 +42,7 @@ export const useOpenToHang = () => {
   };
 
   // Check user's current hang status on load
-  const checkHangStatus = async () => {
+  const checkHangStatus = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -66,20 +66,16 @@ export const useOpenToHang = () => {
             setIsOpenToHang(false);
           }, timeLeft);
         } else {
-          // Status expired, update in database silently without causing re-renders
-          try {
-            await supabase
-              .from('user_locations')
-              .update({
-                status: 'normal',
-                status_expires_at: null,
-                updated_at: new Date().toISOString()
-              })
-              .eq('user_id', user.id);
-            setIsOpenToHang(false);
-          } catch (expiredError) {
-            console.error('Error clearing expired status:', expiredError);
-          }
+          // Status expired, update in database silently
+          await supabase
+            .from('user_locations')
+            .update({
+              status: 'normal',
+              status_expires_at: null,
+              updated_at: new Date().toISOString()
+            })
+            .eq('user_id', user.id);
+          setIsOpenToHang(false);
         }
       } else {
         setIsOpenToHang(false);
@@ -87,7 +83,7 @@ export const useOpenToHang = () => {
     } catch (error) {
       console.error('Error checking hang status:', error);
     }
-  };
+  }, [user]);
 
   const shareHangLocation = async () => {
     if (!user) {
