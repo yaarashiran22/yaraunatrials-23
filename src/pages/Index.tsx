@@ -324,6 +324,14 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
             <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate('/all-meetups')}
+                className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground"
+              >
+                All
+              </Button>
               <Button variant="outline" size="sm" onClick={() => {
               setCreateEventType('meetup');
               setShowCreateEvent(true);
@@ -397,6 +405,14 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
             <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate('/all-events')}
+                className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground"
+              >
+                All
+              </Button>
               <Button variant="outline" size="sm" onClick={() => {
               setCreateEventType('event');
               setShowCreateEvent(true);
