@@ -12,6 +12,7 @@ import MoodFilterStrip from '@/components/MoodFilterStrip';
 import DiscoveryPopup from '@/components/DiscoveryPopup';
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
+import { useEvents } from '@/hooks/useEvents';
 import { supabase } from '@/integrations/supabase/client';
 
 // Fix for default markers in Leaflet
@@ -33,6 +34,8 @@ const DiscoverPage = () => {
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
+  const { events: allEvents } = useEvents();
+  const { events: allMeetups } = useEvents('meetup');
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
 
@@ -182,23 +185,35 @@ const DiscoverPage = () => {
     }
   };
 
+  // Function to get neighborhood coordinates
+  const getNeighborhoodCoordinates = (locationName: string) => {
+    const neighborhoods: Record<string, { lat: number, lng: number }> = {
+      "Palermo": { lat: -34.5870, lng: -58.4263 },
+      "Palermo Soho": { lat: -34.5906, lng: -58.4203 },
+      "Palermo Hollywood": { lat: -34.5834, lng: -58.4323 },
+      "San Telmo": { lat: -34.6202, lng: -58.3731 },
+      "Recoleta": { lat: -34.5885, lng: -58.3967 },
+      "Villa Crespo": { lat: -34.5998, lng: -58.4386 },
+      "Buenos Aires": { lat: -34.6118, lng: -58.3960 },
+      "Tel Aviv": { lat: -34.6118, lng: -58.3960 }, // Default to Buenos Aires center
+    };
+
+    // Find matching neighborhood or default to Buenos Aires center
+    const matchedNeighborhood = Object.keys(neighborhoods).find(name => 
+      locationName.toLowerCase().includes(name.toLowerCase()) ||
+      name.toLowerCase().includes(locationName.toLowerCase())
+    );
+
+    return neighborhoods[matchedNeighborhood || "Buenos Aires"];
+  };
+
   // Function to handle neighborhood change
   const handleNeighborhoodChange = (neighborhoodName: string) => {
     if (!mapInstanceRef.current) return;
 
-    // Neighborhood coordinates
-    const neighborhoods: Record<string, [number, number]> = {
-      "Palermo": [-34.5870, -58.4263],
-      "Palermo Soho": [-34.5906, -58.4203],
-      "Palermo Hollywood": [-34.5834, -58.4323],
-      "San Telmo": [-34.6202, -58.3731],
-      "Recoleta": [-34.5885, -58.3967],
-      "Villa Crespo": [-34.5998, -58.4386],
-    };
-
-    const coordinates = neighborhoods[neighborhoodName];
+    const coordinates = getNeighborhoodCoordinates(neighborhoodName);
     if (coordinates) {
-      mapInstanceRef.current.setView(coordinates, 15, {
+      mapInstanceRef.current.setView([coordinates.lat, coordinates.lng], 15, {
         animate: true,
         duration: 1.5
       });
@@ -241,21 +256,21 @@ const DiscoverPage = () => {
       // Create custom user icon with highlighting for users with shared events
       const userIcon = L.divIcon({
         html: `
-          <div class="w-10 h-10 rounded-full border-3 ${hasSharedEvents ? 'border-red-500' : 'border-white'} shadow-lg overflow-hidden bg-white relative ${hasSharedEvents ? 'animate-pulse' : ''}">
+          <div class="w-8 h-8 rounded-full border-2 ${hasSharedEvents ? 'border-red-500' : 'border-white'} shadow-lg overflow-hidden bg-white relative ${hasSharedEvents ? 'animate-pulse' : ''}">
             <img 
               src="${profile?.profile_image_url || '/placeholder.svg'}" 
               alt=""
               class="w-full h-full object-cover"
               loading="lazy"
             />
-            <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 ${hasSharedEvents ? 'bg-red-500' : 'bg-green-500'} border-2 border-white rounded-full"></div>
-            ${hasSharedEvents ? '<div class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-xs">🎯</span></div>' : ''}
+            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 ${hasSharedEvents ? 'bg-red-500' : 'bg-green-500'} border-2 border-white rounded-full"></div>
+            ${hasSharedEvents ? '<div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-[8px]">🎯</span></div>' : ''}
           </div>
         `,
         className: `user-location-marker ${hasSharedEvents ? 'highlighted-match' : ''}`,
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
       });
 
       const marker = L.marker([userLocation.latitude, userLocation.longitude], {
@@ -318,34 +333,23 @@ const DiscoverPage = () => {
       let items: any[] = [];
       
       if (filterType === 'event') {
-        // Fetch events from events table
-        let eventQuery = supabase
-          .from('events')
-          .select('*');
-
-        if (user?.id) {
-          const { data: eventsData, error: eventsError } = await eventQuery;
-          if (eventsError) throw eventsError;
-          
-          // Transform events to match the format expected by the markers
-          items = eventsData?.map(event => ({
-            ...event,
-            category: 'event',
-            // Events use different field names, so map them
-            description: event.description || event.title
-          })) || [];
-        }
+        // Use events from the home page (useEvents hook) and add neighborhood-based location
+        items = allEvents.map(event => ({
+          ...event,
+          category: 'event',
+          description: event.description || event.title,
+          // Map event location to neighborhood coordinates for display on map
+          location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
+        }));
       } else if (filterType === 'meet') {
-        // Fetch meetup items from items table
-        let meetQuery = supabase
-          .from('items')
-          .select('*')
-          .in('category', ['meetup', 'social', 'community'])
-          .eq('status', 'active');
-
-        const { data: meetData, error: meetError } = await meetQuery;
-        if (meetError) throw meetError;
-        items = meetData || [];
+        // Use meetups from the home page (useEvents hook) and add neighborhood-based location  
+        items = allMeetups.map(meetup => ({
+          ...meetup,
+          category: 'meetup',
+          description: meetup.description || meetup.title,
+          // Map meetup location to neighborhood coordinates for display on map
+          location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
+        }));
       } else {
         // Original logic for text pins and other filters
         let query = supabase
@@ -659,7 +663,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addTextPinMarkers();
     }
-  }, [isLoading, filterType]); // Add filterType dependency
+  }, [isLoading, filterType, allEvents, allMeetups]); // Add events and meetups dependencies
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -677,7 +681,43 @@ const DiscoverPage = () => {
         }} />
         
         {/* Map Section */}
-        <div className="relative">          
+        <div className="relative">
+          {/* Filter buttons for events and meetups */}
+          <div className="flex gap-2 mb-4">
+            <Button
+              variant={filterType === 'meet' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilterType('meet')}
+              className="text-xs"
+            >
+              Meetups
+            </Button>
+            <Button
+              variant={filterType === 'event' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilterType('event')}
+              className="text-xs"
+            >
+              Events
+            </Button>
+            <Button
+              variant={filterType === 'friends' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilterType('friends')}
+              className="text-xs"
+            >
+              Friends
+            </Button>
+            <Button
+              variant={filterType === 'following' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilterType('following')}
+              className="text-xs"
+            >
+              Following
+            </Button>
+          </div>
+          
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
             {/* Filtered Users Display */}
             {filteredUsers.length > 0 && (
