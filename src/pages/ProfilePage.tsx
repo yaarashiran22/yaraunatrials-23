@@ -339,61 +339,235 @@ const ProfilePage = () => {
       }
       
       
-      // Add text content with better positioning
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 72px Poppins, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
-      ctx.lineWidth = 4;
+      // Add modern geometric decorations
+      ctx.save();
+      ctx.globalAlpha = 0.1;
       
-      // Title - positioned over image or at top (moved slightly lower)
-      const titleY = eventData.image_url || eventData.video_url ? 1050 : 550;
+      // Add floating geometric shapes
+      for (let i = 0; i < 12; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const size = Math.random() * 40 + 20;
+        
+        if (i % 3 === 0) {
+          // Circles
+          ctx.fillStyle = 'white';
+          ctx.beginPath();
+          ctx.arc(x, y, size, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (i % 3 === 1) {
+          // Triangles
+          ctx.fillStyle = primaryColor;
+          ctx.beginPath();
+          ctx.moveTo(x, y - size);
+          ctx.lineTo(x - size, y + size);
+          ctx.lineTo(x + size, y + size);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          // Rectangles
+          ctx.fillStyle = secondaryColor;
+          ctx.fillRect(x - size/2, y - size/2, size, size);
+        }
+      }
+      ctx.restore();
+
+      // Add glassmorphism info cards
+      const cardWidth = 900;
+      const cardHeight = 450;
+      const cardX = (canvas.width - cardWidth) / 2;
+      const cardY = 1200;
+      
+      // Card background with glassmorphism
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.filter = 'blur(0.5px)';
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 25);
+      ctx.fill();
+      
+      // Card border
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+
+      // Title with modern gradient effect
+      const titleY = eventData.image_url || eventData.video_url ? 1000 : 500;
+      ctx.save();
+      
+      // Create gradient for title
+      const titleGradient = ctx.createLinearGradient(0, titleY - 50, 0, titleY + 50);
+      titleGradient.addColorStop(0, '#FFFFFF');
+      titleGradient.addColorStop(1, '#E0E0E0');
+      
+      ctx.fillStyle = titleGradient;
+      ctx.font = 'bold 75px Poppins, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.lineWidth = 3;
+      
       const titleWords = eventData.title.split(' ');
       let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
         const line = titleWords.slice(i, i + 2).join(' ');
         ctx.strokeText(line, canvas.width / 2, currentTitleY);
         ctx.fillText(line, canvas.width / 2, currentTitleY);
-        currentTitleY += 80;
+        currentTitleY += 85;
       }
+      ctx.restore();
       
-      // Event details in bottom section
-      ctx.font = '48px Nunito, sans-serif';
-      let detailY = 1250;
+      // Modern icon-style info display
+      const infoY = cardY + 80;
+      const iconSize = 35;
+      const textOffsetX = 60;
       
+      ctx.font = '42px Nunito, sans-serif';
+      ctx.fillStyle = 'white';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+      ctx.lineWidth = 2;
+      
+      let currentInfoY = infoY;
+      
+      // Draw modern calendar icon and date
       if (eventData.date) {
-        ctx.strokeText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
-        ctx.fillText(`📅 ${eventData.date}`, canvas.width / 2, detailY);
-        detailY += 70;
+        ctx.save();
+        // Calendar icon (simplified geometric)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.fillRect(canvas.width / 2 - 220, currentInfoY - iconSize/2, iconSize, iconSize);
+        ctx.strokeStyle = 'rgba(100, 100, 100, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(canvas.width / 2 - 220, currentInfoY - iconSize/2, iconSize, iconSize);
+        
+        // Calendar details
+        ctx.fillStyle = primaryColor;
+        ctx.fillRect(canvas.width / 2 - 220, currentInfoY - iconSize/2, iconSize, 8);
+        
+        ctx.restore();
+        
+        ctx.fillStyle = 'white';
+        ctx.strokeText(eventData.date, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        ctx.fillText(eventData.date, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        currentInfoY += 75;
       }
       
+      // Draw modern clock icon and time
       if (eventData.time) {
-        ctx.strokeText(`⏰ ${eventData.time}`, canvas.width / 2, detailY);
-        ctx.fillText(`⏰ ${eventData.time}`, canvas.width / 2, detailY);
-        detailY += 70;
+        ctx.save();
+        // Clock icon (circle with hands)
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2 - 202, currentInfoY - 5, iconSize/2, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Clock hands
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2 - 202, currentInfoY - 5);
+        ctx.lineTo(canvas.width / 2 - 202, currentInfoY - 20);
+        ctx.moveTo(canvas.width / 2 - 202, currentInfoY - 5);
+        ctx.lineTo(canvas.width / 2 - 190, currentInfoY - 5);
+        ctx.stroke();
+        ctx.restore();
+        
+        ctx.fillStyle = 'white';
+        ctx.strokeText(eventData.time, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        ctx.fillText(eventData.time, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        currentInfoY += 75;
       }
       
+      // Draw modern location pin icon
       if (eventData.location) {
-        ctx.strokeText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
-        ctx.fillText(`📍 ${eventData.location}`, canvas.width / 2, detailY);
-        detailY += 70;
+        ctx.save();
+        // Location pin (teardrop shape)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2 - 202, currentInfoY - 15, 12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2 - 202, currentInfoY - 3);
+        ctx.lineTo(canvas.width / 2 - 195, currentInfoY + 10);
+        ctx.lineTo(canvas.width / 2 - 209, currentInfoY + 10);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        
+        ctx.fillStyle = 'white';
+        ctx.strokeText(eventData.location, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        ctx.fillText(eventData.location, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        currentInfoY += 75;
       }
       
+      // Draw modern price tag or free badge
       if (eventData.price) {
-        ctx.strokeText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
-        ctx.fillText(`💰 ${eventData.price}`, canvas.width / 2, detailY);
-        detailY += 70;
+        ctx.save();
+        // Price tag icon
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.roundRect(canvas.width / 2 - 220, currentInfoY - iconSize/2, iconSize, iconSize, 5);
+        ctx.fill();
+        ctx.strokeStyle = primaryColor;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Dollar sign
+        ctx.fillStyle = primaryColor;
+        ctx.font = 'bold 24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('$', canvas.width / 2 - 202, currentInfoY + 6);
+        ctx.restore();
+        
+        ctx.fillStyle = 'white';
+        ctx.font = '42px Nunito, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.strokeText(eventData.price, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        ctx.fillText(eventData.price, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
       } else {
-        ctx.strokeText(`✅ FREE ENTRY`, canvas.width / 2, detailY);
-        ctx.fillText(`✅ FREE ENTRY`, canvas.width / 2, detailY);
-        detailY += 70;
+        ctx.save();
+        // Free badge (star shape)
+        ctx.fillStyle = '#FFD700';
+        const starX = canvas.width / 2 - 202;
+        const starY = currentInfoY - 5;
+        ctx.beginPath();
+        ctx.moveTo(starX, starY - 15);
+        ctx.lineTo(starX + 5, starY - 5);
+        ctx.lineTo(starX + 15, starY - 5);
+        ctx.lineTo(starX + 8, starY + 3);
+        ctx.lineTo(starX + 12, starY + 15);
+        ctx.lineTo(starX, starY + 8);
+        ctx.lineTo(starX - 12, starY + 15);
+        ctx.lineTo(starX - 8, starY + 3);
+        ctx.lineTo(starX - 15, starY - 5);
+        ctx.lineTo(starX - 5, starY - 5);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 42px Nunito, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.strokeText('FREE ENTRY', canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        ctx.fillText('FREE ENTRY', canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
       }
       
-      // Call to action
-      ctx.font = 'bold 54px Montserrat, sans-serif';
-      ctx.fillStyle = '#FFD700'; // gold
-      ctx.strokeText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
-      ctx.fillText('RSVP NOW!', canvas.width / 2, canvas.height - 200);
+      // Modern call to action with neon effect
+      ctx.save();
+      ctx.font = 'bold 58px Montserrat, sans-serif';
+      ctx.textAlign = 'center';
+      
+      // Neon glow effect
+      ctx.shadowColor = '#FFD700';
+      ctx.shadowBlur = 20;
+      ctx.fillStyle = '#FFD700';
+      ctx.fillText('JOIN THE EVENT!', canvas.width / 2, canvas.height - 180);
+      
+      // Add border text effect
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = 'rgba(255, 215, 0, 0.8)';
+      ctx.lineWidth = 3;
+      ctx.strokeText('JOIN THE EVENT!', canvas.width / 2, canvas.height - 180);
+      ctx.restore();
       
       // Convert canvas to blob URL
       const blob = await new Promise<Blob>((resolve) => {
@@ -576,76 +750,238 @@ const ProfilePage = () => {
       }
       
       
-      // Add decorative elements (stars/circles)
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-      for (let i = 0; i < 15; i++) {
+      // Add modern floating elements
+      ctx.save();
+      ctx.globalAlpha = 0.12;
+      
+      // Create dynamic floating shapes
+      for (let i = 0; i < 20; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
-        const size = Math.random() * 25 + 8;
-        ctx.beginPath();
-        ctx.arc(x, y, size, 0, Math.PI * 2);
-        ctx.fill();
+        const size = Math.random() * 35 + 15;
+        
+        ctx.fillStyle = i % 2 === 0 ? 'white' : primaryColor;
+        
+        if (i % 4 === 0) {
+          // Hexagons
+          ctx.beginPath();
+          for (let j = 0; j < 6; j++) {
+            const angle = (j * Math.PI) / 3;
+            const hexX = x + size * Math.cos(angle);
+            const hexY = y + size * Math.sin(angle);
+            if (j === 0) ctx.moveTo(hexX, hexY);
+            else ctx.lineTo(hexX, hexY);
+          }
+          ctx.closePath();
+          ctx.fill();
+        } else if (i % 4 === 1) {
+          // Diamonds
+          ctx.beginPath();
+          ctx.moveTo(x, y - size);
+          ctx.lineTo(x + size, y);
+          ctx.lineTo(x, y + size);
+          ctx.lineTo(x - size, y);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          // Circles
+          ctx.beginPath();
+          ctx.arc(x, y, size, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
+      ctx.restore();
+
+      // Modern coupon card design
+      const cardWidth = 920;
+      const cardHeight = 500;
+      const cardX = (canvas.width - cardWidth) / 2;
+      const cardY = 1150;
       
-      // Add text content with better positioning
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 80px Poppins, sans-serif';
+      // Coupon card with gradient and glassmorphism
+      ctx.save();
+      const cardGradient = ctx.createLinearGradient(cardX, cardY, cardX, cardY + cardHeight);
+      cardGradient.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
+      cardGradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
+      ctx.fillStyle = cardGradient;
+      
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 30);
+      ctx.fill();
+      
+      // Coupon border with dashed effect
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([15, 10]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      // Title with modern typography
+      const titleY = couponData.image_url ? 800 : 350;
+      ctx.save();
+      
+      const titleGradient = ctx.createLinearGradient(0, titleY - 60, 0, titleY + 60);
+      titleGradient.addColorStop(0, '#FFFFFF');
+      titleGradient.addColorStop(1, '#D0D0D0');
+      
+      ctx.fillStyle = titleGradient;
+      ctx.font = 'bold 82px Poppins, sans-serif';
       ctx.textAlign = 'center';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
-      ctx.lineWidth = 4;
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.lineWidth = 3;
       
-      // Title - positioned over image or at top (moved lower)
-      const titleY = couponData.image_url ? 850 : 400;
       const titleWords = couponData.title.split(' ');
       let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
         const line = titleWords.slice(i, i + 2).join(' ');
         ctx.strokeText(line, canvas.width / 2, currentTitleY);
         ctx.fillText(line, canvas.width / 2, currentTitleY);
-        currentTitleY += 90;
+        currentTitleY += 95;
       }
+      ctx.restore();
       
-      // Discount amount (prominent and highlighted)
+      // Prominent discount badge
       if (couponData.discount_amount) {
-        ctx.font = 'bold 100px Montserrat, sans-serif';
-        ctx.fillStyle = '#FFD700'; // gold
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
-        ctx.lineWidth = 6;
-        ctx.strokeText(couponData.discount_amount, canvas.width / 2, currentTitleY + 120);
-        ctx.fillText(couponData.discount_amount, canvas.width / 2, currentTitleY + 120);
-        currentTitleY += 180;
+        ctx.save();
+        
+        // Discount circle background
+        ctx.fillStyle = '#FF6B6B';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, currentTitleY + 100, 85, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Discount circle border
+        ctx.strokeStyle = '#FFD700';
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Discount text with glow
+        ctx.shadowColor = '#FFD700';
+        ctx.shadowBlur = 15;
+        ctx.font = 'bold 95px Montserrat, sans-serif';
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
+        ctx.fillText(couponData.discount_amount, canvas.width / 2, currentTitleY + 115);
+        
+        ctx.restore();
+        currentTitleY += 220;
       }
       
-      // Business and location info in bottom section
-      ctx.font = '52px Nunito, sans-serif';
+      // Modern info display with geometric icons
+      const infoY = cardY + 100;
+      const iconSize = 38;
+      const textOffsetX = 65;
+      
+      ctx.font = '48px Nunito, sans-serif';
       ctx.fillStyle = 'white';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
-      ctx.lineWidth = 3;
-      let detailY = 1350;
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+      ctx.lineWidth = 2;
       
+      let currentInfoY = infoY;
+      
+      // Business icon and name
       if (couponData.business_name) {
-        ctx.strokeText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
-        ctx.fillText(`🏪 ${couponData.business_name}`, canvas.width / 2, detailY);
-        detailY += 80;
+        ctx.save();
+        // Store/building icon (simplified)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.fillRect(canvas.width / 2 - 250, currentInfoY - iconSize/2, iconSize, iconSize);
+        ctx.fillStyle = secondaryColor;
+        ctx.fillRect(canvas.width / 2 - 250, currentInfoY - iconSize/2, iconSize, 12);
+        
+        // Store front details
+        ctx.fillStyle = 'rgba(100, 100, 100, 0.8)';
+        ctx.fillRect(canvas.width / 2 - 240, currentInfoY - 5, 8, 15);
+        ctx.fillRect(canvas.width / 2 - 225, currentInfoY - 5, 8, 15);
+        ctx.restore();
+        
+        ctx.fillStyle = 'white';
+        ctx.strokeText(couponData.business_name, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
+        ctx.fillText(couponData.business_name, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
+        currentInfoY += 85;
       }
       
+      // Location icon and neighborhood
       if (couponData.neighborhood) {
-        ctx.strokeText(`📍 ${couponData.neighborhood}`, canvas.width / 2, detailY);
-        ctx.fillText(`📍 ${couponData.neighborhood}`, canvas.width / 2, detailY);
-        detailY += 80;
+        ctx.save();
+        // Modern location pin
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2 - 232, currentInfoY - 10, 14, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2 - 232, currentInfoY + 4);
+        ctx.lineTo(canvas.width / 2 - 222, currentInfoY + 18);
+        ctx.lineTo(canvas.width / 2 - 242, currentInfoY + 18);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Inner dot
+        ctx.fillStyle = secondaryColor;
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2 - 232, currentInfoY - 10, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        
+        ctx.fillStyle = 'white';
+        ctx.strokeText(couponData.neighborhood, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
+        ctx.fillText(couponData.neighborhood, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
+        currentInfoY += 85;
       }
       
+      // Expiry icon and date
       if (couponData.valid_until) {
-        ctx.strokeText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
-        ctx.fillText(`⏰ Valid until ${couponData.valid_until}`, canvas.width / 2, detailY);
-        detailY += 80;
+        ctx.save();
+        // Modern clock/timer icon
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2 - 232, currentInfoY - 5, iconSize/2.2, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Clock hands
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2 - 232, currentInfoY - 5);
+        ctx.lineTo(canvas.width / 2 - 232, currentInfoY - 18);
+        ctx.moveTo(canvas.width / 2 - 232, currentInfoY - 5);
+        ctx.lineTo(canvas.width / 2 - 218, currentInfoY - 5);
+        ctx.stroke();
+        
+        // Timer indicator dots
+        for (let i = 0; i < 4; i++) {
+          const angle = (i * Math.PI) / 2;
+          const dotX = canvas.width / 2 - 232 + 20 * Math.cos(angle);
+          const dotY = currentInfoY - 5 + 20 * Math.sin(angle);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+          ctx.beginPath();
+          ctx.arc(dotX, dotY, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+        
+        ctx.fillStyle = 'white';
+        ctx.strokeText(`Valid until ${couponData.valid_until}`, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
+        ctx.fillText(`Valid until ${couponData.valid_until}`, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
       }
       
-      // Call to action
-      ctx.font = 'bold 60px Montserrat, sans-serif';
-      ctx.fillStyle = '#FFD700'; // gold
-      ctx.strokeText('GET YOUR COUPON!', canvas.width / 2, canvas.height - 200);
-      ctx.fillText('GET YOUR COUPON!', canvas.width / 2, canvas.height - 200);
+      // Modern call to action with neon effect
+      ctx.save();
+      ctx.font = 'bold 65px Montserrat, sans-serif';
+      ctx.textAlign = 'center';
+      
+      // Create neon glow effect
+      ctx.shadowColor = '#FF6B6B';
+      ctx.shadowBlur = 25;
+      ctx.fillStyle = '#FF6B6B';
+      ctx.fillText('CLAIM OFFER!', canvas.width / 2, canvas.height - 170);
+      
+      // Add bright outline
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = 'rgba(255, 107, 107, 0.8)';
+      ctx.lineWidth = 4;
+      ctx.strokeText('CLAIM OFFER!', canvas.width / 2, canvas.height - 170);
+      ctx.restore();
       
       // Convert canvas to blob URL
       const blob = await new Promise<Blob>((resolve) => {
