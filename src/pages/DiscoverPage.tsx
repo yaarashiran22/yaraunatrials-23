@@ -684,26 +684,32 @@ const DiscoverPage = () => {
             >
               Events
             </Button>
-            <Button
-              variant={filterType === 'friends' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setFilterType('friends')}
-              className="text-xs"
-            >
-              Friends
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
+          </div>
+
+          {/* People to Meet Card - Standalone design */}
+          <div className="mb-4">
+            <div 
               onClick={() => {
                 setShowPeopleYouShouldMeet(true);
                 findSuggestedUsers();
               }}
-              className="text-xs bg-primary text-primary-foreground hover:bg-primary/80"
+              className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
             >
-              <Users className="w-3 h-3 mr-1" />
-              People to Meet
-            </Button>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-foreground">People You Should Meet</h3>
+                  <p className="text-sm text-muted-foreground">Connect with people who attend similar events</p>
+                </div>
+                <div className="text-purple-500">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
           
           <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
