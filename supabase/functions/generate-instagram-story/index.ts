@@ -83,7 +83,7 @@ serve(async (req) => {
         model: 'gpt-image-1',
         prompt: prompt,
         n: 1,
-        size: '1024x1792', // Close to Instagram story ratio
+        size: '1024x1536', // Supported Instagram story-like ratio
         output_format: 'png',
         quality: 'high'
       }),
