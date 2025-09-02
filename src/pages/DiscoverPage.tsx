@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import BottomNavigation from "@/components/BottomNavigation";
-import LocationShareButton from '@/components/LocationShareButton';
+import OpenToHangButton from '@/components/LocationShareButton';
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import MoodFilterStrip from '@/components/MoodFilterStrip';
 import DiscoveryPopup from '@/components/DiscoveryPopup';
@@ -633,36 +633,6 @@ const DiscoverPage = () => {
         
         {/* Map Section */}
         <div className="relative">
-          {/* Open to Hang Button */}
-          <div className="flex justify-center mb-4">
-            <Button
-              onClick={isOpenToHang ? stopHanging : shareHangLocation}
-              disabled={hangLoading}
-              size="sm"
-              className={`w-32 text-xs transition-all duration-300 ${
-                isOpenToHang 
-                  ? 'bg-pink-500 hover:bg-pink-600 text-white border-pink-500' 
-                  : 'bg-white hover:bg-pink-50 text-pink-600 border border-pink-200'
-              }`}
-            >
-              {hangLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
-                  Loading...
-                </>
-              ) : isOpenToHang ? (
-                <>
-                  <HeartOff className="h-3 w-3 mr-1" />
-                  Stop Hanging
-                </>
-              ) : (
-                <>
-                  <Heart className="h-3 w-3 mr-1" />
-                  Open to Hang
-                </>
-              )}
-            </Button>
-          </div>
 
           {/* People You Should Meet Row - Only show if there are suggested users */}
           {!suggestedUsersLoading && suggestedUsers.length > 0 && (
@@ -772,7 +742,7 @@ const DiscoverPage = () => {
           </div>
 
           <div className="flex flex-col items-center gap-3 mt-4">
-            <LocationShareButton size="sm" shareText="Share Location" removeText="Remove Location" className="w-32 text-xs" />
+            <OpenToHangButton size="sm" shareText="Open to Hang" removeText="Stop Hanging" className="w-32 text-xs" />
           </div>
         </div>
 

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { MapPin, X, AlertCircle } from 'lucide-react';
-import { useUserLocations } from '@/hooks/useUserLocations';
+import { MapPin, X, AlertCircle, Heart } from 'lucide-react';
+import { useOpenToHang } from '@/hooks/useOpenToHang';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
-interface LocationShareButtonProps {
+interface OpenToHangButtonProps {
   variant?: 'default' | 'outline' | 'ghost';
   size?: 'default' | 'sm' | 'lg' | 'icon';
   className?: string;
@@ -13,16 +13,15 @@ interface LocationShareButtonProps {
   removeText?: string;
 }
 
-const LocationShareButton = ({ 
+const OpenToHangButton = ({ 
   variant = 'outline', 
   size = 'default',
   className = '',
-  shareText = 'שתף מיקום',
-  removeText = 'הסר מיקום'
-}: LocationShareButtonProps) => {
+  shareText = 'Open to Hang',
+  removeText = 'Stop Hanging'
+}: OpenToHangButtonProps) => {
   const { user } = useAuth();
-  const { userLocations, sharing, shareLocation, removeLocation, refreshLocations } = useUserLocations();
-  const [isRemoving, setIsRemoving] = useState(false);
+  const { shareHangLocation, stopHanging, checkHangStatus, isLoading, isOpenToHang } = useOpenToHang();
   const [permissionState, setPermissionState] = useState<'granted' | 'denied' | 'prompt'>('prompt');
 
   // Check geolocation permission status
@@ -45,87 +44,55 @@ const LocationShareButton = ({
     checkPermission();
   }, []);
 
-  // Check if current user has shared their location
-  const userHasSharedLocation = userLocations.some(loc => loc.user_id === user?.id);
-
-  const handleLocationShare = async () => {
+  const handleOpenToHang = async () => {
     if (!user) {
-      toast.error('יש להתחבר כדי לשתף מיקום');
+      toast.error('Please log in to share your location');
       return;
     }
 
     // Check if geolocation is supported
     if (!navigator.geolocation) {
-      toast.error('הדפדפן שלך לא תומך במיקום');
+      toast.error('Your browser doesn\'t support location sharing');
       return;
     }
 
     // Show helpful message if permission was denied
     if (permissionState === 'denied') {
-      toast.error('גישה למיקום נדחתה. אנא אפשר גישה למיקום בהגדרות הדפדפן ורענן את הדף.');
+      toast.error('Location access denied. Please enable location access in browser settings and refresh.');
       return;
     }
 
-    console.log('LocationShareButton: Starting location share process...');
-    
-    // Show loading message and start location sharing
-    const loadingToast = toast.loading('מחפש מיקום...');
-
-    const result = await shareLocation();
-    
-    // Dismiss the loading toast
-    toast.dismiss(loadingToast);
-    
-    if (result.success) {
-      toast.success('המיקום שותף בהצלחה! 📍');
-      console.log('LocationShareButton: Location shared successfully, refreshing locations...');
-      // Force refresh the locations to update the map immediately
-      await refreshLocations();
-    } else {
-      console.error('LocationShareButton: Location sharing failed:', result.error);
-      toast.error(result.error || 'שגיאה בשיתוף המיקום');
-      
-      // Show additional help for common issues
-      if (result.error?.includes('נדחתה')) {
-        toast.info('💡 בדוק שאפשרת גישה למיקום בדפדפן', {
-          duration: 7000
-        });
-      } else if (result.error?.includes('זמן') || result.error?.includes('timeout')) {
-        toast.info('💡 נסה שוב במקום עם קליטה טובה יותר', {
-          duration: 7000
-        });
-      } else if (result.error?.includes('mock') || result.error?.includes('testing')) {
-        toast.info('🧪 משתמש במיקום בדיקה - בואנוס איירס', {
-          duration: 7000
-        });
-      }
+    const success = await shareHangLocation();
+    if (success) {
+      // Auto-refresh status after sharing
+      setTimeout(() => {
+        checkHangStatus();
+      }, 500);
     }
   };
 
-  const handleRemoveLocation = async () => {
+  const handleStopHanging = async () => {
     if (!user) return;
-
-    setIsRemoving(true);
-    const result = await removeLocation();
     
-    if (result.success) {
-      toast.success('המיקום הוסר בהצלחה');
-    } else {
-      toast.error(result.error || 'שגיאה בהסרת המיקום');
+    const success = await stopHanging();
+    if (success) {
+      // Auto-refresh status after stopping
+      setTimeout(() => {
+        checkHangStatus();
+      }, 500);
     }
-    setIsRemoving(false);
   };
 
-  if (userHasSharedLocation) {
+  if (isOpenToHang) {
     return (
       <Button
-        onClick={handleRemoveLocation}
-        disabled={isRemoving}
+        onClick={handleStopHanging}
+        disabled={isLoading}
         variant="outline"
         size={size}
         className={`${className} text-destructive border-destructive/20 hover:bg-destructive/5 hover:border-destructive/30`}
       >
-        {isRemoving ? (
+        {isLoading ? (
           <div className="w-4 h-4 border-2 border-destructive border-t-transparent rounded-full animate-spin ml-2" />
         ) : (
           <X className="w-4 h-4 ml-2" />
@@ -137,23 +104,23 @@ const LocationShareButton = ({
 
   return (
     <Button
-      onClick={handleLocationShare}
-      disabled={sharing || permissionState === 'denied'}
+      onClick={handleOpenToHang}
+      disabled={isLoading || permissionState === 'denied'}
       variant={variant}
       size={size}
       className={`${className} ${permissionState === 'denied' ? 'opacity-50' : ''}`}
-      title={permissionState === 'denied' ? 'גישה למיקום נדחתה - אנא אפשר גישה בהגדרות הדפדפן' : ''}
+      title={permissionState === 'denied' ? 'Location access denied - please enable access in browser settings' : ''}
     >
-      {sharing ? (
+      {isLoading ? (
         <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin ml-2" />
       ) : permissionState === 'denied' ? (
         <AlertCircle className="w-4 h-4 ml-2" />
       ) : (
-        <MapPin className="w-4 h-4 ml-2" />
+        <Heart className="w-4 h-4 ml-2" />
       )}
-      {permissionState === 'denied' ? 'גישה נדחתה' : shareText}
+      {permissionState === 'denied' ? 'Access Denied' : shareText}
     </Button>
   );
 };
 
-export default LocationShareButton;
+export default OpenToHangButton;
