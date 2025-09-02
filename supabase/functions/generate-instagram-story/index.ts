@@ -52,31 +52,21 @@ serve(async (req) => {
       const discount = data.discount_amount ? ` - ${data.discount_amount}` : '';
       const neighborhood = data.neighborhood ? ` in ${data.neighborhood}` : '';
       
-      prompt = `Create an ultra-modern, Gen Z Instagram story template for a business coupon offer. 
+      prompt = `Create a professional Instagram story template for a business coupon offer. 
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
-      Layout Structure (top to bottom):
-      1. Main Title: "${data.title || 'Special Offer'}${discount}" - use trendy bold fonts like Montserrat or Poppins
-      2. Sleek black gradient bar/stripe - modern design element with subtle transparency
-      3. Main visual area - electric gradient backgrounds with neon accents
-      4. Bottom info section with details:
-         - ${businessInfo}${neighborhood}
-         - Description: "${data.description || 'Special offer available now!'}"
-         - Call to action: "Get Your Coupon!"
+      Content to include:
+      - Title: "${data.title || 'Special Offer'}${discount}" (place in a horizontal black semi-transparent overlay box behind the title text)
+      - ${businessInfo}${neighborhood}
+      - Description: "${data.description || 'Special offer available now!'}"
+      - Call to action: "Get Your Coupon!"
       
-      Design Style: Ultra-trendy Gen Z aesthetic with:
-      - Bold geometric shapes with rounded corners and glass morphism effects
-      - Electric gradient backgrounds (neon purple to hot pink to electric blue)
-      - Modern typography with varied font weights and sizes
-      - Glossy black bars with subtle transparency and glow effects
-      - Urban street vibe with geometric patterns and abstract shapes
-      - High contrast neon colors that scream "Gen Z energy"
-      - Sleek modern finish with clean spacing and depth effects
-      - Add trendy elements like floating geometric shapes, subtle grid patterns
-      - Make it look like premium modern branding that would go viral on TikTok
-      - Use dynamic lighting effects and subtle shadows for depth
-      - Include trendy UI elements like rounded rectangles and soft gradients`;
+      Layout: Position a horizontal black semi-transparent shadow box specifically behind the title text in the upper portion of the image. The title should be prominent and readable over this dark overlay. Other text elements can be placed on the colorful background or in smaller text boxes as needed.
       
+      Style: Modern, vibrant, eye-catching design with gradient background (purple to pink), 
+      clean typography, professional business aesthetic, include coupon/discount graphics, 
+      use bright colors that pop on mobile screens. Add decorative elements like stars or 
+      geometric shapes. Make it look like a premium business promotion.`;
       
     } else if (type === 'event' || type === 'community_event') {
       // Create event story prompt  
@@ -85,34 +75,24 @@ serve(async (req) => {
       const eventLocation = data.location ? `Location: ${data.location}` : '';
       const eventPrice = data.price ? `Price: ${data.price}` : 'Free Entry';
       
-      prompt = `Create an ultra-trendy, Gen Z Instagram story template for an event promotion.
+      prompt = `Create a professional Instagram story template for an event promotion.
       The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
-      Layout Structure (top to bottom):
-      1. Event Title: "${data.title || 'Event'}" - use modern bold fonts with creative typography
-      2. Sleek black gradient bar/stripe - glossy design element with neon glow
-      3. Main visual area - dynamic electric gradient with floating elements
-      4. Bottom info section with event details:
-         - ${eventDate}
-         - ${eventTime} 
-         - ${eventLocation}
-         - ${eventPrice}
-         - Description: "${data.description || 'Join us for this amazing event!'}"
-         - Call to action: "RSVP Now!"
+      Content to include:
+      - Event Title: "${data.title || 'Event'}" (place in a horizontal black semi-transparent overlay box behind the title text)
+      - ${eventDate}
+      - ${eventTime} 
+      - ${eventLocation}
+      - ${eventPrice}
+      - Description: "${data.description || 'Join us for this amazing event!'}"
+      - Call to action: "RSVP Now!"
       
-      Design Style: Ultra-trendy Gen Z aesthetic with:
-      - Bold 3D geometric shapes with glass morphism and depth
-      - Electric gradient backgrounds (neon cyan to electric purple to hot pink)
-      - Contemporary typography mixing bold and light weights
-      - Glossy black bars with transparent effects and neon outline glow 
-      - Urban nightlife/festival vibe with floating abstract elements
-      - High-energy neon colors that look incredible on mobile screens
-      - Sleek, Instagram-worthy finish with perfect spacing and visual hierarchy
-      - Add trendy elements: floating circles, subtle grain texture, holographic effects
-      - Make it look like premium event branding that influencers would repost
-      - Use dynamic lighting effects, subtle 3D shadows, and modern UI elements
-      - Include contemporary design trends like bento box layouts and soft rounded shapes`;
+      Layout: Position a horizontal black semi-transparent shadow box specifically behind the event title text in the upper portion of the image. The title should be prominent and readable over this dark overlay. Other event details can be placed on the colorful background or in smaller text areas as needed.
       
+      Style: Dynamic, festive design with vibrant gradient background (blue to purple), 
+      modern typography, event-focused aesthetic with celebration elements like confetti 
+      or party graphics. Use energetic colors, include calendar/clock icons, make it 
+      exciting and inviting for social sharing.`;
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
       console.error(errorMsg);

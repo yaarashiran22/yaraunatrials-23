@@ -3,7 +3,6 @@ import L from 'leaflet';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUserLocations } from '@/hooks/useUserLocations';
-import { useEvents } from '@/hooks/useEvents';
 import DiscoveryPopup from '@/components/DiscoveryPopup';
 
 // Fix for default markers in Leaflet
@@ -22,135 +21,17 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const userMarkersRef = useRef<L.Marker[]>([]);
-  const eventMarkersRef = useRef<L.Marker[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showDiscovery, setShowDiscovery] = useState(false);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const { userLocations } = useUserLocations();
-  const { events } = useEvents();
 
   console.log('BuenosAiresMap: Component rendered, userLocations:', userLocations.length);
 
-  // Function to spread out overlapping markers
-  const spreadOverlappingMarkers = (items: any[], getCoords: (item: any) => [number, number]) => {
-    const spread = 0.002; // Degrees to spread markers
-    const grouped = new Map<string, any[]>();
-    
-    // Group items by approximate location
-    items.forEach(item => {
-      const [lat, lng] = getCoords(item);
-      const key = `${Math.round(lat * 1000)}-${Math.round(lng * 1000)}`;
-      if (!grouped.has(key)) {
-        grouped.set(key, []);
-      }
-      grouped.get(key)!.push(item);
-    });
-    
-    // Spread overlapping items
-    const result: Array<{item: any, coords: [number, number]}> = [];
-    grouped.forEach(groupItems => {
-      if (groupItems.length === 1) {
-        result.push({
-          item: groupItems[0], 
-          coords: getCoords(groupItems[0])
-        });
-      } else {
-        // Spread items in a circle
-        groupItems.forEach((item, index) => {
-          const [baseLat, baseLng] = getCoords(item);
-          const angle = (2 * Math.PI * index) / groupItems.length;
-          const newLat = baseLat + spread * Math.cos(angle);
-          const newLng = baseLng + spread * Math.sin(angle);
-          result.push({
-            item,
-            coords: [newLat, newLng]
-          });
-        });
-      }
-    });
-    
-    return result;
-  };
-
-  // Function to add event/meetup markers
-  const addEventMarkers = () => {
-    if (!mapInstanceRef.current) return;
-
-    // Clear existing event markers
-    if (eventMarkersRef.current.length > 0) {
-      eventMarkersRef.current.forEach(marker => {
-        mapInstanceRef.current?.removeLayer(marker);
-      });
-      eventMarkersRef.current = [];
-    }
-
-    // Filter events with location data
-    const eventsWithCoords = events.filter(event => {
-      if (!event.location) return false;
-      // Simple coordinate detection - you might want to improve this with geocoding
-      const coordMatch = event.location.match(/-?\d+\.?\d*,-?\d+\.?\d*/);
-      return coordMatch;
-    });
-
-    // Spread overlapping events
-    const spreadEvents = spreadOverlappingMarkers(
-      eventsWithCoords,
-      (event) => {
-        const coords = event.location!.match(/-?\d+\.?\d*,-?\d+\.?\d*/)?.[0].split(',');
-        return [parseFloat(coords![0]), parseFloat(coords![1])];
-      }
-    );
-
-    spreadEvents.forEach(({item: event, coords}) => {
-      if (!mapInstanceRef.current) return;
-
-      const isEvent = event.event_type === 'event';
-      const iconColor = isEvent ? '#FF6B6B' : '#45B7D1';
-      const iconText = isEvent ? '🎉' : '🤝';
-
-      const eventIcon = L.divIcon({
-        html: `
-          <div class="w-10 h-10 rounded-full border-3 border-white shadow-lg flex items-center justify-center text-lg font-bold" 
-               style="background-color: ${iconColor}; color: white;">
-            ${iconText}
-          </div>
-        `,
-        className: 'event-marker',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
-      });
-
-      const marker = L.marker(coords, {
-        icon: eventIcon,
-        riseOnHover: true
-      })
-        .addTo(mapInstanceRef.current)
-        .bindPopup(`
-          <div class="text-center p-2 max-w-xs">
-            <h3 class="font-bold text-sm mb-1">${event.title}</h3>
-            <p class="text-xs text-gray-600 mb-2">${event.description || ''}</p>
-            <div class="text-xs">
-              <div><strong>Date:</strong> ${event.date || 'TBD'}</div>
-              <div><strong>Time:</strong> ${event.time || 'TBD'}</div>
-              <div><strong>Location:</strong> ${event.location || 'TBD'}</div>
-              <div><strong>Price:</strong> ${event.price || 'Free'}</div>
-            </div>
-            <div class="mt-2 text-xs bg-gray-100 rounded px-2 py-1">
-              <strong>${isEvent ? 'Event' : 'Meetup'}</strong> by ${event.uploader?.name}
-            </div>
-          </div>
-        `);
-
-      eventMarkersRef.current.push(marker);
-    });
-
-    console.log(`Added ${eventMarkersRef.current.length} event markers`);
-  };
-
   // Function to filter users based on interests
   const handleDiscovery = (selectedInterests: string[], connectionType: string) => {
+    console.log('Discovery filters:', { selectedInterests, connectionType });
     
     const filtered = userLocations.filter(userLocation => {
       const profile = userLocation.profile as any;
@@ -182,14 +63,14 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
     addUserLocationMarkers(filtered);
   };
 
-  // Function to add user location markers - optimized for performance and shows "open to hang" users
+  // Function to add user location markers - optimized for performance
   const addUserLocationMarkers = (usersToShow = userLocations) => {
     if (!mapInstanceRef.current) {
       console.log('BuenosAiresMap: No map instance available for adding markers');
       return;
     }
 
-    console.log(`BuenosAiresMap: Adding markers for ${usersToShow.length} users open to hang`);
+    console.log(`BuenosAiresMap: Adding markers for ${usersToShow.length} user locations`);
 
     // Clear existing user markers efficiently
     if (userMarkersRef.current.length > 0) {
@@ -201,43 +82,34 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
       userMarkersRef.current = [];
     }
 
-    // Spread overlapping user markers
-    const spreadUsers = spreadOverlappingMarkers(
-      usersToShow,
-      (user) => [user.latitude, user.longitude]
-    );
-
     // Add markers for each user location
-    spreadUsers.forEach(({item: userLocation, coords}, index) => {
+    usersToShow.forEach((userLocation, index) => {
       if (!mapInstanceRef.current) return;
 
-      console.log(`BuenosAiresMap: Adding marker ${index + 1} for open to hang user:`, userLocation.profile.name, 'at', coords);
+      console.log(`BuenosAiresMap: Adding marker ${index + 1} for user:`, userLocation.profile.name, 'at', userLocation.latitude, userLocation.longitude);
 
-      // Create optimized custom icon with pulsing effect for "open to hang" users
+      // Create optimized custom icon with smaller HTML for faster rendering
       const userIcon = L.divIcon({
         html: `
-          <div class="relative">
-            <div class="w-8 h-8 rounded-full border-2 border-white shadow-md overflow-hidden bg-white relative animate-pulse">
-              <img 
-                src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
-                alt=""
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-pink-500 border border-white rounded-full animate-ping"></div>
-            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-pink-500 border border-white rounded-full"></div>
+          <div class="w-8 h-8 rounded-full border-2 border-white shadow-md overflow-hidden bg-white relative">
+            <img 
+              src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
+              alt=""
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border border-white rounded-full"></div>
           </div>
         `,
-        className: 'user-location-marker open-to-hang',
-        iconSize: [32, 32],
+        className: 'user-location-marker',
+        iconSize: [32, 32], // Smaller size for better performance
         iconAnchor: [16, 32],
         popupAnchor: [0, -32]
       });
 
-      const marker = L.marker(coords, {
+      const marker = L.marker([userLocation.latitude, userLocation.longitude], {
         icon: userIcon,
-        riseOnHover: true
+        riseOnHover: true // Better UX without performance cost
       })
         .addTo(mapInstanceRef.current)
         .bindPopup(`
@@ -250,7 +122,6 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
                 loading="lazy"
               />
               <span class="font-medium">${userLocation.profile.name || 'משתמש'}</span>
-              <div class="bg-pink-500 text-white text-xs px-2 py-1 rounded-full">Open to Hang! 💫</div>
             </div>
           </div>
         `);
@@ -258,7 +129,7 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
       userMarkersRef.current.push(marker);
     });
 
-    console.log(`BuenosAiresMap: Successfully added ${userMarkersRef.current.length} open to hang user markers`);
+    console.log(`BuenosAiresMap: Successfully added ${userMarkersRef.current.length} user markers`);
   };
 
   useEffect(() => {
@@ -324,9 +195,6 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
 
         // Add user location markers
         addUserLocationMarkers();
-        
-        // Add event/meetup markers
-        addEventMarkers();
 
         console.log('BuenosAiresMap: Map setup completed successfully');
         setIsLoading(false);
@@ -360,15 +228,6 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
       console.log('BuenosAiresMap: Map not ready yet, isLoading:', isLoading);
     }
   }, [userLocations, isLoading]);
-
-  // Update event markers when events change
-  useEffect(() => {
-    console.log('BuenosAiresMap: events changed, length:', events.length);
-    if (mapInstanceRef.current && !isLoading) {
-      console.log('BuenosAiresMap: Map ready, adding event markers');
-      addEventMarkers();
-    }
-  }, [events, isLoading]);
 
   if (error) {
     return (

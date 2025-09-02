@@ -90,10 +90,7 @@ export const useOpenToHang = () => {
   };
 
   const shareHangLocation = async () => {
-    console.log('shareHangLocation called, user:', user?.id);
-    
     if (!user) {
-      console.log('No user found');
       toast({
         title: "Authentication required",
         description: "Please log in to share your location",
@@ -103,7 +100,6 @@ export const useOpenToHang = () => {
     }
 
     if (!navigator.geolocation) {
-      console.log('Geolocation not supported');
       toast({
         title: "Location not supported",
         description: "Your browser doesn't support location sharing",
@@ -112,11 +108,9 @@ export const useOpenToHang = () => {
       return false;
     }
 
-    console.log('Starting location sharing process...');
     setIsLoading(true);
 
     try {
-      console.log('Getting current location...');
       // Get current location
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
@@ -127,16 +121,13 @@ export const useOpenToHang = () => {
       });
 
       const { latitude, longitude } = position.coords;
-      console.log('Location obtained:', { latitude, longitude });
 
       // Set expiration time to 2 hours from now
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + 2);
-      console.log('Expiration time set:', expiresAt.toISOString());
 
       // Update or insert user location with "open to hang" status
-      console.log('Upserting user location to database...');
-      const { error, data } = await supabase
+      const { error } = await supabase
         .from('user_locations')
         .upsert({
           user_id: user.id,
@@ -147,17 +138,10 @@ export const useOpenToHang = () => {
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'user_id'
-        })
-        .select();
+        });
 
-      console.log('Database response:', { data, error });
+      if (error) throw error;
 
-      if (error) {
-        console.error('Database error:', error);
-        throw error;
-      }
-
-      console.log('Successfully updated location status');
       setIsOpenToHang(true);
       
       toast({
@@ -195,7 +179,7 @@ export const useOpenToHang = () => {
       } else {
         toast({
           title: "Error",
-          description: `Failed to share location: ${error.message || 'Unknown error'}`,
+          description: "Failed to share location. Please try again",
           variant: "destructive",
         });
       }
@@ -204,13 +188,6 @@ export const useOpenToHang = () => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (user) {
-      console.log('useOpenToHang: User found, checking hang status');
-      checkHangStatus();
-    }
-  }, [user]);
 
   return {
     shareHangLocation,
