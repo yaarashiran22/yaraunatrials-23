@@ -22,17 +22,37 @@ serve(async (req) => {
     
     console.log('Generating Instagram story for:', type, data);
 
+    // Ensure storage bucket exists
+    try {
+      const { data: buckets } = await supabase.storage.listBuckets();
+      const bucketExists = buckets?.some(bucket => bucket.name === 'instagram-stories');
+      
+      if (!bucketExists) {
+        const { error: bucketError } = await supabase.storage.createBucket('instagram-stories', {
+          public: true,
+          allowedMimeTypes: ['image/png', 'image/jpeg'],
+          fileSizeLimit: 10485760 // 10MB
+        });
+        
+        if (bucketError) {
+          console.error('Error creating bucket:', bucketError);
+        }
+      }
+    } catch (bucketError) {
+      console.error('Bucket check/creation error:', bucketError);
+    }
+
     let prompt = '';
     let businessInfo = '';
     
-    if (type === 'coupon') {
-      // Create coupon story prompt
+    if (type === 'coupon' || type === 'community_perk') {
+      // Create coupon/perk story prompt
       businessInfo = data.business_name ? `Business: ${data.business_name}` : '';
       const discount = data.discount_amount ? ` - ${data.discount_amount}` : '';
       const neighborhood = data.neighborhood ? ` in ${data.neighborhood}` : '';
       
       prompt = `Create a professional Instagram story template for a business coupon offer. 
-      The story should be 1080x1920 pixels (Instagram story dimensions).
+      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
       Content to include:
       - Title: "${data.title}${discount}"
@@ -45,7 +65,7 @@ serve(async (req) => {
       use bright colors that pop on mobile screens. Add decorative elements like stars or 
       geometric shapes. Make it look like a premium business promotion.`;
       
-    } else if (type === 'event') {
+    } else if (type === 'event' || type === 'community_event') {
       // Create event story prompt  
       const eventDate = data.date ? `Date: ${data.date}` : '';
       const eventTime = data.time ? `Time: ${data.time}` : '';
@@ -53,7 +73,7 @@ serve(async (req) => {
       const eventPrice = data.price ? `Price: ${data.price}` : 'Free Entry';
       
       prompt = `Create a professional Instagram story template for an event promotion.
-      The story should be 1080x1920 pixels (Instagram story dimensions).
+      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
       Content to include:
       - Event Title: "${data.title}"
@@ -68,6 +88,8 @@ serve(async (req) => {
       modern typography, event-focused aesthetic with celebration elements like confetti 
       or party graphics. Use energetic colors, include calendar/clock icons, make it 
       exciting and inviting for social sharing.`;
+    } else {
+      throw new Error(`Unsupported content type: ${type}`);
     }
 
     console.log('Sending request to OpenAI with prompt:', prompt);
