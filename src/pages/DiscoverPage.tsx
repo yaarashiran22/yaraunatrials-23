@@ -44,6 +44,7 @@ const DiscoverPage = () => {
   const { shareHangLocation, stopHanging, checkHangStatus, isLoading: hangLoading, isOpenToHang, setIsOpenToHang } = useOpenToHang();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
   const [filterType, setFilterType] = useState<'friends' | 'following' | 'meet' | 'event'>('meet');
+  const [mapFilter, setMapFilter] = useState<'all' | 'events' | 'meetups'>('all');
 
   // Check user's hang status on load
   useEffect(() => {
@@ -382,22 +383,26 @@ const DiscoverPage = () => {
     try {
       let items: any[] = [];
       
-      // Show all events and meetups together
-      const eventItems = allEvents.map(event => ({
-        ...event,
-        category: 'event',
-        description: event.description || event.title,
-        location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
-      }));
+      // Filter based on mapFilter state
+      if (mapFilter === 'all' || mapFilter === 'events') {
+        const eventItems = allEvents.map(event => ({
+          ...event,
+          category: 'event',
+          description: event.description || event.title,
+          location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
+        }));
+        items = [...items, ...eventItems];
+      }
       
-      const meetupItems = allMeetups.map(meetup => ({
-        ...meetup,
-        category: 'meetup',
-        description: meetup.description || meetup.title,
-        location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
-      }));
-      
-      items = [...eventItems, ...meetupItems];
+      if (mapFilter === 'all' || mapFilter === 'meetups') {
+        const meetupItems = allMeetups.map(meetup => ({
+          ...meetup,
+          category: 'meetup',
+          description: meetup.description || meetup.title,
+          location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
+        }));
+        items = [...items, ...meetupItems];
+      }
 
       // Offset overlapping markers
       items = offsetOverlappingMarkers(items);
@@ -662,7 +667,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addTextPinMarkers();
     }
-  }, [isLoading, allEvents, allMeetups]); // Remove filterType dependency
+  }, [isLoading, allEvents, allMeetups, mapFilter]);
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -678,6 +683,36 @@ const DiscoverPage = () => {
           console.log('Mood filter changed:', filterId);
           // Handle mood filter change if needed
         }} />
+        
+        {/* Map Filter Buttons */}
+        <div className="flex justify-center gap-2 mb-4 px-4">
+          <Button
+            variant={mapFilter === 'all' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setMapFilter('all')}
+            className="text-xs"
+          >
+            All
+          </Button>
+          <Button
+            variant={mapFilter === 'events' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setMapFilter('events')}
+            className="text-xs"
+          >
+            <Calendar className="w-3 h-3 mr-1" />
+            Events
+          </Button>
+          <Button
+            variant={mapFilter === 'meetups' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setMapFilter('meetups')}
+            className="text-xs"
+          >
+            <Users className="w-3 h-3 mr-1" />
+            Meetups
+          </Button>
+        </div>
         
         {/* Map Section */}
         <div className="relative">
