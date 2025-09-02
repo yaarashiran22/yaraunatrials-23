@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin, Users, Calendar, Coffee, Search, Heart, HeartOff } from 'lucide-react';
+import { MapPin, Users, Calendar, Coffee, Search, Heart, HeartOff, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from "@/components/Header";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
@@ -13,7 +13,7 @@ import DiscoveryPopup from '@/components/DiscoveryPopup';
 import PeopleYouShouldMeetPopup from '@/components/PeopleYouShouldMeetPopup';
 import { useUserLocations } from '@/hooks/useUserLocations';
 import { useAuth } from '@/contexts/AuthContext';
-import { useOptimizedEvents } from '@/hooks/useOptimizedEvents';
+import { useEvents } from '@/hooks/useEvents';
 import { useSuggestedUsers } from '@/hooks/useSuggestedUsers';
 import { useOpenToHang } from '@/hooks/useOpenToHang';
 import { supabase } from '@/integrations/supabase/client';
@@ -38,7 +38,8 @@ const DiscoverPage = () => {
   const [showPeopleYouShouldMeet, setShowPeopleYouShouldMeet] = useState(false);
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
-  const { data: optimizedEvents } = useOptimizedEvents();
+  const { events: allEvents } = useEvents();
+  const { events: allMeetups } = useEvents('meetup');
   const { suggestedUsers, loading: suggestedUsersLoading, findSuggestedUsers } = useSuggestedUsers();
   const { shareHangLocation, stopHanging, checkHangStatus, isLoading: hangLoading, isOpenToHang, setIsOpenToHang } = useOpenToHang();
   const [userRecommendations, setUserRecommendations] = useState<any[]>([]);
@@ -382,28 +383,29 @@ const DiscoverPage = () => {
     try {
       let items: any[] = [];
       
-      // Filter based on mapFilter state
+      // Filter items based on map filter
+      let eventItems: any[] = [];
+      let meetupItems: any[] = [];
+      
       if (mapFilter === 'all' || mapFilter === 'events') {
-        const eventItems = (optimizedEvents || [])
-          .filter(event => event.category === 'event')
-          .map(event => ({
-            ...event,
-            description: event.description || event.title,
-            location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
-          }));
-        items = [...items, ...eventItems];
+        eventItems = allEvents.map(event => ({
+          ...event,
+          category: 'event',
+          description: event.description || event.title,
+          location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
+        }));
       }
       
       if (mapFilter === 'all' || mapFilter === 'meetups') {
-        const meetupItems = (optimizedEvents || [])
-          .filter(event => event.category === 'meetup')
-          .map(meetup => ({
-            ...meetup,
-            description: meetup.description || meetup.title,
-            location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
-          }));
-        items = [...items, ...meetupItems];
+        meetupItems = allMeetups.map(meetup => ({
+          ...meetup,
+          category: 'meetup',
+          description: meetup.description || meetup.title,
+          location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
+        }));
       }
+      
+      items = [...eventItems, ...meetupItems];
 
       // Offset overlapping markers
       items = offsetOverlappingMarkers(items);
@@ -668,7 +670,7 @@ const DiscoverPage = () => {
     if (mapInstanceRef.current && !isLoading) {
       addTextPinMarkers();
     }
-  }, [isLoading, optimizedEvents, mapFilter]);
+  }, [isLoading, allEvents, allMeetups, mapFilter]); // Add mapFilter dependency
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -686,33 +688,37 @@ const DiscoverPage = () => {
         }} />
         
         {/* Map Filter Buttons */}
-        <div className="flex justify-center gap-2 mb-4 px-4">
-          <Button
-            variant={mapFilter === 'all' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setMapFilter('all')}
-            className="text-xs"
-          >
-            All
-          </Button>
-          <Button
-            variant={mapFilter === 'events' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setMapFilter('events')}
-            className="text-xs"
-          >
-            <Calendar className="w-3 h-3 mr-1" />
-            Events
-          </Button>
-          <Button
-            variant={mapFilter === 'meetups' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setMapFilter('meetups')}
-            className="text-xs"
-          >
-            <Users className="w-3 h-3 mr-1" />
-            Meetups
-          </Button>
+        <div className="flex justify-center mb-4">
+          <div className="bg-card/90 backdrop-blur-sm rounded-lg shadow-lg p-2 border">
+            <div className="flex gap-1">
+              <Button 
+                onClick={() => setMapFilter('all')}
+                variant={mapFilter === 'all' ? 'default' : 'ghost'}
+                size="sm"
+                className="text-xs px-3 py-2 h-8"
+              >
+                All
+              </Button>
+              <Button 
+                onClick={() => setMapFilter('events')}
+                variant={mapFilter === 'events' ? 'default' : 'ghost'}
+                size="sm"
+                className="text-xs px-3 py-2 h-8"
+              >
+                <Calendar className="w-3 h-3 mr-1" />
+                Events
+              </Button>
+              <Button 
+                onClick={() => setMapFilter('meetups')}
+                variant={mapFilter === 'meetups' ? 'default' : 'ghost'}
+                size="sm"
+                className="text-xs px-3 py-2 h-8"
+              >
+                <Users className="w-3 h-3 mr-1" />
+                Meetups
+              </Button>
+            </div>
+          </div>
         </div>
         
         {/* Map Section */}
