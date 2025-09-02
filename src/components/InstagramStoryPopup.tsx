@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Download, X, Instagram, Sparkles, Share2 } from "lucide-react";
+import { Download, X, Instagram, Sparkles, Share2, Edit } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { AIImageEditor } from "./AIImageEditor";
 
 interface InstagramStoryPopupProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface InstagramStoryPopupProps {
   storyUrl: string | null;
   isGenerating: boolean;
   title: string;
+  onStoryEdited?: (editedStoryUrl: string) => void;
 }
 
 export const InstagramStoryPopup = ({ 
@@ -17,9 +19,11 @@ export const InstagramStoryPopup = ({
   onClose, 
   storyUrl, 
   isGenerating, 
-  title 
+  title,
+  onStoryEdited 
 }: InstagramStoryPopupProps) => {
   const [downloading, setDownloading] = useState(false);
+  const [showImageEditor, setShowImageEditor] = useState(false);
 
   const handleDownload = async () => {
     if (!storyUrl) return;
@@ -78,6 +82,17 @@ export const InstagramStoryPopup = ({
         });
       });
     }
+  };
+
+  const handleEditImage = () => {
+    setShowImageEditor(true);
+  };
+
+  const handleImageEdited = (editedImageUrl: string) => {
+    if (onStoryEdited) {
+      onStoryEdited(editedImageUrl);
+    }
+    setShowImageEditor(false);
   };
 
   return (
@@ -218,7 +233,7 @@ export const InstagramStoryPopup = ({
                 </div>
                 
                 {/* Compact action buttons */}
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <Button 
                     onClick={handleDownload}
                     disabled={downloading}
@@ -233,6 +248,15 @@ export const InstagramStoryPopup = ({
                     ) : (
                       "Download"
                     )}
+                  </Button>
+                  
+                  <Button 
+                    variant="outline"
+                    onClick={handleEditImage}
+                    className="flex-1 h-11 border-2 border-orange-500/30 hover:border-orange-500/50 bg-background/50 backdrop-blur-sm hover:bg-orange-500/10 text-foreground font-semibold text-sm rounded-xl transition-all duration-300 hover:scale-105"
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit
                   </Button>
                   
                   <Button 
@@ -260,6 +284,14 @@ export const InstagramStoryPopup = ({
           </div>
         </div>
       </DialogContent>
+
+      {/* AI Image Editor Modal */}
+      <AIImageEditor
+        isOpen={showImageEditor}
+        onClose={() => setShowImageEditor(false)}
+        initialImage={storyUrl || undefined}
+        onImageEdited={handleImageEdited}
+      />
     </Dialog>
   );
 };
