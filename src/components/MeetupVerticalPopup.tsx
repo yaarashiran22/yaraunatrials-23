@@ -357,7 +357,7 @@ const MeetupVerticalPopup = ({
             {joinStatus === 'approved' ? <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400 mb-2">
                   <CheckCircle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
-                  <span className={`font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}>Joined!</span>
+                  <span className={`font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}>Join Meetup</span>
                 </div>
                 <p className={`text-muted-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>
                   You're part of this meetup
