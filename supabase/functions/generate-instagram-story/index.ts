@@ -52,30 +52,30 @@ serve(async (req) => {
       const discount = data.discount_amount ? ` - ${data.discount_amount}` : '';
       const neighborhood = data.neighborhood ? ` in ${data.neighborhood}` : '';
       
-      prompt = `Create an ultra-modern, highly creative Instagram story for a business coupon offer with cutting-edge contemporary design.
-      Vertical 9:16 aspect ratio (Instagram story dimensions) with innovative, dynamic layout.
+      prompt = `Create an ultra-modern, Gen Z Instagram story template for a business coupon offer. 
+      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
-      CREATIVE LAYOUT STRUCTURE:
-      • TOP SECTION: Floating "${data.title || 'Special Offer'}${discount}" in futuristic typography with 3D depth, holographic shimmer effects, and dynamic shadow casting
-      • MIDDLE HERO: Sophisticated glassmorphism card with frosted glass effect, floating in space with subtle parallax layers and ambient lighting
-      • DYNAMIC ELEMENTS: Floating geometric shapes, orbiting particles, and interactive-style UI elements positioned asymmetrically
-      • BOTTOM SECTION: Sleek info panel with:
+      Layout Structure (top to bottom):
+      1. Main Title: "${data.title || 'Special Offer'}${discount}" - use trendy bold fonts like Montserrat or Poppins
+      2. Sleek black gradient bar/stripe - modern design element with subtle transparency
+      3. Main visual area - electric gradient backgrounds with neon accents
+      4. Bottom info section with details:
          - ${businessInfo}${neighborhood}
-         - "${data.description || 'Special offer available now!'}"
-         - Futuristic "CLAIM NOW" button with holographic glow
+         - Description: "${data.description || 'Special offer available now!'}"
+         - Call to action: "Get Your Coupon!"
       
-      ULTRA-MODERN DESIGN LANGUAGE:
-      • BACKGROUND: Deep gradient mesh from midnight black through rich purples to electric blues, with subtle noise texture and floating light particles
-      • TYPOGRAPHY: Ultra-modern variable fonts with dynamic weight changes, kinetic letter spacing, and holographic text effects
-      • GLASSMORPHISM: Frosted glass panels with soft blur, subtle reflections, and rainbow light refractions around edges
-      • NEOMORPHISM: Soft embossed elements with realistic lighting and subtle depth shadows
-      • FLOATING ELEMENTS: 3D geometric shapes (spheres, cubes, pyramids) with realistic materials - chrome, glass, liquid mercury
-      • COLOR PALETTE: Rich midnight gradients with electric accent colors - cyber lime, hot magenta, electric purple, arctic blue
-      • LIGHTING: Sophisticated ambient lighting with realistic ray tracing effects, soft bloom, and atmospheric perspective
-      • CONTEMPORARY TOUCHES: iOS-style blur effects, Apple-inspired minimalism meets maximalist creativity, TikTok-style dynamic elements
-      • TEXTURE LAYERS: Subtle film grain, holographic rainbow sheens, liquid metal surfaces, and prismatic light dispersions
-      • MODERN EFFECTS: Depth-of-field blur, chromatic aberration, lens flares, and realistic material physics
-      • Make it feel like a premium Apple product launch meets cutting-edge fashion brand meets next-gen gaming interface`;
+      Design Style: Ultra-trendy Gen Z aesthetic with:
+      - Bold geometric shapes with rounded corners and glass morphism effects
+      - Electric gradient backgrounds (neon purple to hot pink to electric blue)
+      - Modern typography with varied font weights and sizes
+      - Glossy black bars with subtle transparency and glow effects
+      - Urban street vibe with geometric patterns and abstract shapes
+      - High contrast neon colors that scream "Gen Z energy"
+      - Sleek modern finish with clean spacing and depth effects
+      - Add trendy elements like floating geometric shapes, subtle grid patterns
+      - Make it look like premium modern branding that would go viral on TikTok
+      - Use dynamic lighting effects and subtle shadows for depth
+      - Include trendy UI elements like rounded rectangles and soft gradients`;
       
       
     } else if (type === 'event' || type === 'community_event') {
@@ -85,33 +85,33 @@ serve(async (req) => {
       const eventLocation = data.location ? `Location: ${data.location}` : '';
       const eventPrice = data.price ? `Price: ${data.price}` : 'Free Entry';
       
-      prompt = `Create an ultra-sophisticated, creatively modern Instagram story for an event promotion with next-generation design aesthetics.
-      Vertical 9:16 aspect ratio (Instagram story dimensions) with innovative, magazine-quality layout.
+      prompt = `Create an ultra-trendy, Gen Z Instagram story template for an event promotion.
+      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
       
-      CREATIVE LAYOUT COMPOSITION:
-      • HERO TITLE: "${data.title || 'Event'}" displayed with kinetic typography, 3D letterforms floating in space with prismatic reflections
-      • VISUAL HIERARCHY: Dynamic asymmetrical layout with floating content cards and interactive-style elements
-      • MAIN FOCAL AREA: Sophisticated depth-layered scene with atmospheric perspective and cinematic lighting
-      • INFORMATION ARCHITECTURE: Elegantly organized details in floating glass panels:
+      Layout Structure (top to bottom):
+      1. Event Title: "${data.title || 'Event'}" - use modern bold fonts with creative typography
+      2. Sleek black gradient bar/stripe - glossy design element with neon glow
+      3. Main visual area - dynamic electric gradient with floating elements
+      4. Bottom info section with event details:
          - ${eventDate}
-         - ${eventTime}
+         - ${eventTime} 
          - ${eventLocation}
          - ${eventPrice}
-         - "${data.description || 'Join us for this amazing event!'}"
-         - Premium "JOIN NOW" with holographic activation state
+         - Description: "${data.description || 'Join us for this amazing event!'}"
+         - Call to action: "RSVP Now!"
       
-      CUTTING-EDGE DESIGN SYSTEM:
-      • FOUNDATION: Rich gradient mesh backgrounds transitioning from deep space black through royal purples to electric teals, with subtle particle systems
-      • ADVANCED TYPOGRAPHY: Variable font families with fluid weight transitions, letter-spacing animations, and holographic text rendering
-      • MATERIAL DESIGN 3.0: Elevated surfaces with realistic physics, soft shadows, and dynamic color temperature
-      • GLASSMORPHISM ADVANCED: Multi-layer frosted glass with chromatic aberration, realistic light refraction, and depth-aware transparency
-      • FLOATING ARCHITECTURE: 3D geometric installations - crystalline structures, liquid blobs, metallic frameworks suspended in space
-      • PREMIUM COLOR SCIENCE: Deep saturated gradients with electric accent punctuation - neon lime, hot coral, electric violet, ice blue
-      • CINEMATIC LIGHTING: Realistic global illumination with soft area lighting, rim lights, and atmospheric fog effects
-      • CONTEMPORARY LUXURY: Combines Apple's design philosophy with high-fashion editorial layouts and gaming UI sophistication
-      • SURFACE MATERIALS: Liquid chrome, brushed titanium, frosted acrylics, holographic foils, and prismatic crystals
-      • POST-PRODUCTION EFFECTS: Subtle film grain, lens distortion, color grading, and depth-of-field for photographic realism
-      • Make it feel like a luxury brand launch meets architectural visualization meets premium mobile app interface`;
+      Design Style: Ultra-trendy Gen Z aesthetic with:
+      - Bold 3D geometric shapes with glass morphism and depth
+      - Electric gradient backgrounds (neon cyan to electric purple to hot pink)
+      - Contemporary typography mixing bold and light weights
+      - Glossy black bars with transparent effects and neon outline glow 
+      - Urban nightlife/festival vibe with floating abstract elements
+      - High-energy neon colors that look incredible on mobile screens
+      - Sleek, Instagram-worthy finish with perfect spacing and visual hierarchy
+      - Add trendy elements: floating circles, subtle grain texture, holographic effects
+      - Make it look like premium event branding that influencers would repost
+      - Use dynamic lighting effects, subtle 3D shadows, and modern UI elements
+      - Include contemporary design trends like bento box layouts and soft rounded shapes`;
       
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
