@@ -45,10 +45,17 @@ const MeetupVerticalPopup = ({
   item
 }: MeetupVerticalPopupProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const { user } = useAuth();
+  const {
+    toast
+  } = useToast();
+  const {
+    user
+  } = useAuth();
   const isMobile = useIsMobile();
-  const { submitJoinRequest, checkJoinStatus } = useMeetupJoinRequests();
+  const {
+    submitJoinRequest,
+    checkJoinStatus
+  } = useMeetupJoinRequests();
   const [joinStatus, setJoinStatus] = useState<string | null>(null);
 
   // Navigation state
@@ -217,7 +224,6 @@ const MeetupVerticalPopup = ({
   } : item || defaultItem;
   const handleContact = async () => {
     if (!item?.id) return;
-    
     const success = await submitJoinRequest(item.id);
     if (success) {
       setJoinStatus('pending');
@@ -348,8 +354,7 @@ const MeetupVerticalPopup = ({
           <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
             <h4 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground ${isMobile ? 'mb-2' : 'mb-3'} text-center`}>Join This Meetup</h4>
             
-            {joinStatus === 'approved' ? (
-              <div className="text-center">
+            {joinStatus === 'approved' ? <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400 mb-2">
                   <CheckCircle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
                   <span className={`font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}>Joined!</span>
@@ -357,9 +362,7 @@ const MeetupVerticalPopup = ({
                 <p className={`text-muted-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>
                   You're part of this meetup
                 </p>
-              </div>
-            ) : joinStatus === 'pending' ? (
-              <div className="text-center">
+              </div> : joinStatus === 'pending' ? <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-orange-600 dark:text-orange-400 mb-2">
                   <Clock className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
                   <span className={`font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}>Request Pending</span>
@@ -367,21 +370,13 @@ const MeetupVerticalPopup = ({
                 <p className={`text-muted-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>
                   Waiting for organizer approval
                 </p>
-              </div>
-            ) : (
-              <>
-                <p className={`text-foreground text-center ${isMobile ? 'mb-3' : 'mb-4'} ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                  Send a request to join this meetup and connect with others
-                </p>
-                <Button 
-                  onClick={handleContact} 
-                  className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}
-                >
+              </div> : <>
+                
+                <Button onClick={handleContact} className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}>
                   <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
                   Request to Join
                 </Button>
-              </>
-            )}
+              </>}
           </div>
         </div>
       </div>
