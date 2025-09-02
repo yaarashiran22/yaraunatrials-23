@@ -383,52 +383,47 @@ const DiscoverPage = () => {
     try {
       let items: any[] = [];
       
-      // Filter based on mapFilter state
+      // Filter based on mapFilter state and prepare items synchronously for better performance
       if (mapFilter === 'all' || mapFilter === 'events') {
-        const eventItems = allEvents.map(event => ({
+        const eventItems = allEvents?.map(event => ({
           ...event,
           category: 'event',
           description: event.description || event.title,
           location: event.location ? JSON.stringify(getNeighborhoodCoordinates(event.location)) : null
-        }));
+        })) || [];
         items = [...items, ...eventItems];
       }
       
       if (mapFilter === 'all' || mapFilter === 'meetups') {
-        const meetupItems = allMeetups.map(meetup => ({
+        const meetupItems = allMeetups?.map(meetup => ({
           ...meetup,
           category: 'meetup',
           description: meetup.description || meetup.title,
           location: meetup.location ? JSON.stringify(getNeighborhoodCoordinates(meetup.location)) : null
-        }));
+        })) || [];
         items = [...items, ...meetupItems];
       }
 
-      // Offset overlapping markers
+      // Offset overlapping markers for better visibility
       items = offsetOverlappingMarkers(items);
 
-      // Fetch user profiles for items
-      const userIds = items?.map(item => item.user_id).filter(Boolean) || [];
-      let profiles: any[] = [];
+      // Fetch user profiles in batch for better performance
+      const userIds = items ? [...new Set(items.map(item => item.user_id).filter(Boolean))] : [];
+      const profilesMap = new Map();
       
       if (userIds.length > 0) {
         const { data: profilesData } = await supabase
           .from('profiles')
           .select('id, name, profile_image_url')
           .in('id', userIds);
-        profiles = profilesData || [];
+        
+        profilesData?.forEach(profile => {
+          profilesMap.set(profile.id, profile);
+        });
       }
 
-      // Combine items with profiles
-      const itemsWithProfiles = items?.map(item => ({
-        ...item,
-        profile: profiles.find(p => p.id === item.user_id)
-      })) || [];
-
-      setUserRecommendations(itemsWithProfiles);
-
-      // Add markers for items
-      for (const item of itemsWithProfiles) {
+      // Add markers for items with optimized rendering
+      for (const item of items) {
         if (!mapInstanceRef.current) continue;
 
         let lat, lng;
@@ -447,144 +442,68 @@ const DiscoverPage = () => {
 
         if (!lat || !lng) continue;
 
-        // Create custom icon based on item type
-        const getIconColor = (category: string) => {
+        // Create colored pin markers - coral orange for meetups, blue for events
+        const getMarkerColor = (category: string) => {
           switch (category) {
-            case 'event': return '#FF6B6B';
-            case 'meetup':
-            case 'social':
-            case 'community': return '#FFA726';
-            default: return '#4F46E5';
+            case 'event': return '#3B82F6'; // Blue
+            case 'meetup': return '#FF7F50'; // Coral orange
+            default: return '#6366F1'; // Default purple
           }
         };
 
-        const iconColor = getIconColor(item.category);
-
-        // Create custom text pin icon using uploaded image or fallback
-        const itemIcon = L.divIcon({
-          html: item.image_url ? `
-            <div class="w-8 h-8 rounded-full border-2 border-white shadow-lg overflow-hidden relative">
-              <img 
-                src="${item.image_url}" 
-                alt="${item.category} image"
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 border border-white rounded-full flex items-center justify-center" style="background-color: ${iconColor}">
-                <div class="w-1 h-1 bg-white rounded-full"></div>
-              </div>
-            </div>
-          ` : `
-            <div class="w-6 h-6 rounded-full border-2 border-white shadow-md flex items-center justify-center relative" style="background-color: ${iconColor}">
-              <div class="w-2 h-2 bg-white rounded-full"></div>
-              <div class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-400 border border-white rounded-full flex items-center justify-center">
-                <div class="w-1 h-1 bg-green-600 rounded-full"></div>
+        const markerColor = getMarkerColor(item.category);
+        const profile = profilesMap.get(item.user_id);
+        
+        const customIcon = L.divIcon({
+          html: `
+            <div class="relative">
+              <div class="w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-sm font-medium" style="background-color: ${markerColor};">
+                ${item.category === 'event' ? '📅' : '👥'}
               </div>
             </div>
           `,
-          className: `${item.category}-marker`,
-          iconSize: item.image_url ? [32, 32] : [24, 24],
-          iconAnchor: item.image_url ? [16, 32] : [12, 24],
-          popupAnchor: item.image_url ? [0, -32] : [0, -24]
+          className: `custom-pin-marker ${item.category}-marker`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -32]
         });
 
         const marker = L.marker([lat, lng], {
-          icon: itemIcon,
+          icon: customIcon,
           riseOnHover: true
         })
           .addTo(mapInstanceRef.current)
           .bindPopup(`
-            <div dir="ltr" class="text-pin-popup">
-              <style>
-                .text-pin-popup {
-                  text-align: center;
-                  width: 200px;
-                  max-width: 200px;
-                  font-family: system-ui, -apple-system, sans-serif;
-                  background: transparent;
-                  border-radius: 16px;
-                  padding: 8px;
-                  margin: 0;
-                  border: none;
-                  box-shadow: none;
-                }
-                .text-pin-popup .pin-image {
-                  width: 100%;
-                  height: 100px;
-                  object-fit: cover;
-                  border-radius: 8px;
-                  margin-bottom: 8px;
-                }
-                .text-pin-popup .pin-text {
-                  font-size: 12px;
-                  line-height: 1.3;
-                  color: #1f2937;
-                  margin-bottom: 6px;
-                  white-space: pre-wrap;
-                  text-align: center;
-                  background: rgba(255,255,255,0.9);
-                  padding: 6px 8px;
-                  border-radius: 8px;
-                  backdrop-filter: blur(4px);
-                  font-weight: 600;
-                }
-                .text-pin-popup .pin-details {
-                  font-size: 10px;
-                  line-height: 1.2;
-                  color: #4b5563;
-                  margin-bottom: 4px;
-                  background: rgba(255,255,255,0.8);
-                  padding: 4px 6px;
-                  border-radius: 6px;
-                  backdrop-filter: blur(4px);
-                }
-                .text-pin-popup .pin-author {
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  gap: 3px;
-                  font-size: 9px;
-                  color: #6b7280;
-                  background: rgba(255,255,255,0.8);
-                  padding: 2px 4px;
-                  border-radius: 6px;
-                  backdrop-filter: blur(4px);
-                }
-                .text-pin-popup .pin-author img {
-                  width: 12px;
-                  height: 12px;
-                  border-radius: 50%;
-                  object-fit: cover;
-                }
-              </style>
-              ${item.image_url ? `<img src="${item.image_url}" alt="${item.title || 'Event image'}" class="pin-image" />` : ''}
-              <div class="pin-text">${item.title || item.description || 'No title'}</div>
-              ${(item.date || item.time) ? `
-                <div class="pin-details">
-                  ${item.date ? `📅 ${item.date}` : ''}
-                  ${item.date && item.time ? ' • ' : ''}
-                  ${item.time ? `🕐 ${item.time}` : ''}
+            <div class="text-left text-sm max-w-xs">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-5 h-5 rounded-full flex items-center justify-center text-white text-sm" style="background-color: ${markerColor};">
+                  ${item.category === 'event' ? '📅' : '👥'}
                 </div>
-              ` : ''}
-              ${item.location && typeof item.location === 'string' && !item.location.startsWith('{') ? `
-                <div class="pin-details">📍 ${item.location}</div>
-              ` : ''}
-              ${item.profile ? `
-                <div class="pin-author">
+                <span class="font-medium text-sm">${item.title || 'Untitled'}</span>
+              </div>
+              ${item.description ? `<p class="text-xs text-gray-600 mb-2">${item.description.substring(0, 100)}${item.description.length > 100 ? '...' : ''}</p>` : ''}
+              ${item.date ? `<p class="text-xs text-gray-500 mb-1">📅 ${item.date}</p>` : ''}
+              ${item.time ? `<p class="text-xs text-gray-500 mb-1">⏰ ${item.time}</p>` : ''}
+              ${item.location && typeof item.location === 'string' && !item.location.startsWith('{') ? `<p class="text-xs text-gray-500 mb-1">📍 ${item.location}</p>` : ''}
+              ${profile ? `
+                <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-200">
                   <img 
-                    src="${item.profile.profile_image_url || '/placeholder.svg'}" 
+                    src="${profile.profile_image_url || '/placeholder.svg'}" 
                     alt=""
+                    class="w-4 h-4 rounded-full object-cover"
+                    loading="lazy"
                   />
-                  <span>by ${item.profile.name || 'User'}</span>
+                  <span class="text-xs text-gray-600">by ${profile.name}</span>
                 </div>
               ` : ''}
             </div>
-          `, { maxWidth: 220, className: 'custom-popup' });
+          `);
 
         recommendationMarkersRef.current.push(marker);
       }
+
     } catch (error) {
-      console.error('Error fetching items:', error);
+      console.error('Error adding text pin markers:', error);
     }
   };
 
