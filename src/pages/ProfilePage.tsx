@@ -338,32 +338,6 @@ const ProfilePage = () => {
         }
       }
       
-      // Add una logo in top right corner
-      try {
-        const logoImg = new Image();
-        logoImg.crossOrigin = 'anonymous';
-        
-        await new Promise((resolve, reject) => {
-          logoImg.onload = resolve;
-          logoImg.onerror = reject;
-          logoImg.src = '/src/assets/logo.png';
-        });
-        
-        // Draw logo in top right corner
-        const logoSize = 80;
-        const logoX = canvas.width - logoSize - 30;
-        const logoY = 30;
-        
-        // Add white background circle for logo
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.beginPath();
-        ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 5, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
-      } catch (error) {
-        console.warn('Failed to load una logo:', error);
-      }
       
       // Add text content with better positioning
       ctx.fillStyle = 'white';
@@ -601,32 +575,6 @@ const ProfilePage = () => {
         }
       }
       
-      // Add una logo in top right corner
-      try {
-        const logoImg = new Image();
-        logoImg.crossOrigin = 'anonymous';
-        
-        await new Promise((resolve, reject) => {
-          logoImg.onload = resolve;
-          logoImg.onerror = reject;
-          logoImg.src = '/src/assets/logo.png';
-        });
-        
-        // Draw logo in top right corner
-        const logoSize = 80;
-        const logoX = canvas.width - logoSize - 30;
-        const logoY = 30;
-        
-        // Add white background circle for logo
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.beginPath();
-        ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2 + 5, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
-      } catch (error) {
-        console.warn('Failed to load una logo:', error);
-      }
       
       // Add decorative elements (stars/circles)
       ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
