@@ -296,7 +296,7 @@ const EventVerticalPopup = ({
               
               {displayEvent.time && <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
                   <Clock className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-green-600 dark:text-green-400`} />
-                  <span>{displayEvent.time}</span>
+                  <span>{displayEvent.time ? displayEvent.time.slice(0, 5) : ''}</span>
                 </div>}
             </div>
 
