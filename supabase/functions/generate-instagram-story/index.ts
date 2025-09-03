@@ -74,7 +74,7 @@ serve(async (req) => {
       const profileImageNote = userProfile?.profile_image_url ? 
         'Include a small circular profile picture placeholder in the bottom left corner of the story.' : '';
       
-      prompt = `Create an ultra-modern, artistic Instagram story for a business coupon offer with maximum visual impact.
+      prompt = `Create an ultra-trendy, Instagram-worthy story for a business coupon with maximum artistic impact and viral potential.
       DIMENSIONS: Vertical 9:16 aspect ratio (1080x1920px Instagram story format).
       
       CONTENT HIERARCHY:
@@ -85,40 +85,46 @@ serve(async (req) => {
       - CTA: "CLAIM NOW!" or "GET YOURS!"
       
       ARTISTIC DESIGN SPECIFICATIONS:
-      🎨 COLOR PALETTE: 
-      - Primary: Vibrant gradient from electric blue (#00D4FF) to neon purple (#8A2BE2) to hot pink (#FF1493)
-      - Secondary: Holographic rainbow accents, metallic gold highlights
-      - Text: High contrast white/black with neon glows
+      🎨 ULTRA-TRENDY COLOR PALETTE: 
+      - Primary: Instagram-trendy gradient from sunset coral (#FF6B6B) through lavender (#C44569) to deep purple (#6C5CE7)
+      - Secondary: Neon lime (#00FF88), electric cyan (#00D2FF), hot magenta (#FF0080)
+      - Accent: Metallic rose gold, holographic silver, chrome finishes
+      - Background: Dark mode aesthetic with rich blacks (#0D1117) and deep purples
       
-      🌟 VISUAL ELEMENTS:
-      - Holographic glass morphism background with subtle transparency layers
-      - 3D floating geometric shapes (spheres, cubes, pyramids) with neon outlines
-      - Animated-style lightning bolts, sparkles, and energy waves
-      - Gradient mesh overlays with iridescent effects
-      - Floating particles and light rays emanating from corners
+      🔥 TYPOGRAPHY REVOLUTION:
+      - Main Title: Ultra-bold sans-serif with EXTREME letter spacing, 3D extrusion, and rainbow gradient fill
+      - Use trendy fonts like: Futura, Helvetica Black, or custom display fonts
+      - Text shadows: Multi-layer neon glows (pink, blue, purple halos)
+      - Text effects: Chromatic aberration, holographic reflections, liquid metal finish
       
-      💫 TYPOGRAPHY STYLE:
-      - Main title: Bold, futuristic sans-serif with 3D extrusion and neon glow
-      - Body text: Clean, modern fonts with subtle shadow effects
-      - Add text stroke outlines for maximum readability
+      ✨ INSTAGRAM-VIRAL VISUAL ELEMENTS:
+      - Y2K aesthetic: Chrome spheres, liquid mercury drops, iridescent textures
+      - Neo-brutalism: Bold geometric shapes, overlapping elements, harsh contrasts
+      - Glitch effects: Digital noise, pixelated edges, scan lines
+      - Trending elements: Floating crystals, aurora borealis backgrounds, space gradients
+      - Hologram stickers, emoji explosions, abstract blob shapes
       
-      🎭 COMPOSITION:
-      - Dynamic diagonal layouts with asymmetric balance
-      - Layered depth with foreground, midground, background elements
-      - Strategic negative space for text readability
-      - Curved flowing lines connecting design elements
+      🌈 ADVANCED EFFECTS:
+      - Gradient mesh backgrounds with 5+ color stops
+      - Chromatic aberration on text edges
+      - Gaussian blur overlays for depth
+      - Iridescent foil textures
+      - Neon tube lighting effects
+      - Liquid chrome text treatments
       
-      ✨ SPECIAL EFFECTS:
-      - Chrome/metallic text treatments with reflections
-      - Prismatic light refractions and lens flares
-      - Subtle animation-ready motion blur effects
-      - Instagram-style modern filters with high saturation
+      📱 INSTAGRAM-SPECIFIC DESIGN:
+      - Stories-optimized layout with thumb-stopping power
+      - Swipe-up friendly CTA placement
+      - Trendy aspect ratios and safe zones
+      - Filter-ready color schemes that look good with Instagram filters
+      - Mobile-first readability with high contrast
       
       ${profileImageNote}
       
-      🏷️ BRANDING: ${userProfile?.name ? `Include "${userProfile.name}" in stylized modern typography at bottom corner` : 'Modern user attribution'}
+      🏷️ CREATOR BRANDING: ${userProfile?.name ? `Feature "${userProfile.name}" in stylized graffiti-style or neon typography` : 'Edgy creator attribution'}
       
-      STYLE REFERENCE: Think Cyberpunk 2077 meets Apple's modern design - ultra-futuristic, premium, Instagram-worthy with maximum visual punch. Should look like it belongs in a high-end design portfolio.`;
+      STYLE REFERENCE: Think TikTok viral aesthetic meets high-end fashion brand - Gen Z approved, maximalist design with controlled chaos. Should look like it belongs on Euphoria's Instagram or a Supreme drop announcement. Every element should scream "screenshot this!"`;
+      
       
     } else if (type === 'event' || type === 'community_event') {
       // Create event story prompt  
@@ -132,7 +138,7 @@ serve(async (req) => {
       const profileImageNote = userProfile?.profile_image_url ? 
         'Include a small circular profile picture placeholder in the bottom left corner of the story.' : '';
       
-      prompt = `Create a stunning, artistic Instagram story for an event promotion with festival-level visual impact.
+      prompt = `Create a viral-worthy, Instagram-trending event story with maximum artistic flair and social media appeal.
       DIMENSIONS: Vertical 9:16 aspect ratio (1080x1920px Instagram story format).
       
       EVENT DETAILS:
@@ -143,44 +149,56 @@ serve(async (req) => {
       - ${eventPrice}
       - "${data.description || 'Join us for this amazing event!'}"
       ${userInfo ? `- Organizer: ${userInfo}` : ''}
-      - CTA: "RSVP NOW!" or "JOIN US!"
+      - CTA: "RSVP NOW!" or "JOIN THE VIBE!"
       
-      ARTISTIC DESIGN SPECIFICATIONS:
-      🎪 COLOR PALETTE: 
-      - Primary: Explosive gradient from sunset orange (#FF6B35) to cosmic purple (#6A0572) to electric teal (#17C3B2)
-      - Accent: Holographic gold, neon yellow (#FFE66D), pure white highlights
-      - Energy: Pulsating neon borders and glowing accents
+      TRENDING DESIGN SPECIFICATIONS:
+      🎪 VIRAL COLOR PALETTE: 
+      - Primary: Instagram-fire gradient from neon orange (#FF3E00) through electric pink (#FF006B) to cosmic blue (#8338EC)
+      - Accent: Lime green (#32D74B), sunshine yellow (#FFD60A), pure white highlights
+      - Special: Holographic chrome, liquid gold, iridescent rainbow effects
+      - Background: Rich dark gradients with neon pops
       
-      🎊 VISUAL ELEMENTS:
-      - Festival-style confetti explosions with metallic shine
-      - 3D floating music notes, geometric crystals, and celebration icons
-      - Dynamic wave patterns and flowing ribbons
-      - Starburst patterns radiating from corners
-      - Floating balloons, fireworks, and party streamers in 3D space
+      🎊 VIRAL VISUAL ELEMENTS:
+      - Y2K revival: Holographic textures, chrome bubbles, liquid mercury effects
+      - Festival vibes: Neon light trails, concert spotlights, laser beam effects
+      - Trending shapes: Organic blobs, fluid forms, morphing geometries
+      - Social elements: Floating hearts, fire emojis, sparkle explosions
+      - 3D elements: Floating crystals, holographic pyramids, neon tubes
       
-      🎵 TYPOGRAPHY MAGIC:
-      - Event title: Bold, festival-style lettering with 3D depth and chrome finish
-      - Details: Modern, clean fonts with colorful highlights
-      - Date/time in eye-catching badge designs
+      🎵 TYPOGRAPHY THAT POPS:
+      - Event title: Ultra-bold display font with extreme letter spacing and gradient fills
+      - Trending fonts: Impact, Bebas Neue, or custom bubble letters
+      - Text effects: Outline strokes, drop shadows, neon glows, chromatic shift
+      - Date/time: Badge-style with metallic finish and glow effects
       
-      🎨 COMPOSITION:
-      - Celebration-focused layout with explosive energy
-      - Layered elements creating depth and movement
-      - Strategic use of negative space around text
-      - Curved, flowing design elements suggesting music and movement
+      🎨 INSTAGRAM-VIRAL COMPOSITION:
+      - Asymmetric layouts with controlled chaos
+      - Layered transparency effects for depth
+      - Strategic emoji placement for engagement
+      - Thumb-stopping color combinations
+      - Stories-optimized text hierarchy
       
-      ⚡ SPECIAL EFFECTS:
-      - Holographic shimmer overlays
-      - Light beam effects and spotlight illumination
-      - Particle systems with glowing trails
-      - Festival-style stage lighting effects
-      - Prism refractions creating rainbow highlights
+      ⚡ NEXT-LEVEL EFFECTS:
+      - Holographic foil textures
+      - Neon tube lighting simulation
+      - Liquid metal text treatments
+      - Prismatic light dispersions
+      - Aurora borealis backgrounds
+      - Glitch art overlays
+      - Particle system explosions
+      
+      📱 SOCIAL MEDIA OPTIMIZATION:
+      - High contrast for mobile viewing
+      - Filter-friendly color schemes
+      - Screenshot-worthy composition
+      - Swipe-up action friendly layout
+      - Stories engagement optimized
       
       ${profileImageNote}
       
-      🎤 BRANDING: ${userProfile?.name ? `Feature "${userProfile.name}" as event curator in modern, stylized text` : 'Contemporary organizer attribution'}
+      🎤 ORGANIZER BRANDING: ${userProfile?.name ? `Feature "${userProfile.name}" in trendy graffiti or neon sign style typography` : 'Street art style organizer credit'}
       
-      STYLE REFERENCE: Think Coachella poster meets Apple's WWDC graphics - ultra-modern festival aesthetics with premium tech conference polish. Should scream "unmissable event" and look like professional concert promotion material.`;
+      STYLE REFERENCE: Think Travis Scott concert poster meets Billie Eilish album cover - Gen Z aesthetic with maximalist energy. Should look like it belongs on a viral TikTok or Instagram's trending page. Every pixel should demand attention and screenshots.`;
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
       console.error(errorMsg);
