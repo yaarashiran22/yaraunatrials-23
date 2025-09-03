@@ -22,6 +22,27 @@ export default {
 				'lxgw': ['LXGW WenKai TC', 'sans-serif'],
 				'nunito': ['Nunito', 'sans-serif'],
 			},
+			fontSize: {
+				'xs': ['0.75rem', { lineHeight: '1rem' }],
+				'sm': ['0.875rem', { lineHeight: '1.25rem' }],
+				'base': ['1rem', { lineHeight: '1.5rem' }],
+				'lg': ['1.125rem', { lineHeight: '1.75rem' }],
+				'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+				'2xl': ['1.5rem', { lineHeight: '2rem' }],
+				'3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+			},
+			spacing: {
+				'content-tight': 'var(--content-tight)',
+				'content-normal': 'var(--content-normal)',
+				'content-loose': 'var(--content-loose)',
+				'content-spacious': 'var(--content-spacious)',
+			},
+			minHeight: {
+				'touch': 'var(--touch-md)',
+				'touch-sm': 'var(--touch-sm)',
+				'touch-lg': 'var(--touch-lg)',
+				'touch-xl': 'var(--touch-xl)',
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

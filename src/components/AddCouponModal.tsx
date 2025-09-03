@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { 
+  SimplifiedModal, 
+  SimplifiedModalContent, 
+  SimplifiedModalHeader, 
+  SimplifiedModalTitle,
+  SimplifiedModalBody 
+} from "@/components/ui/simplified-modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -174,19 +180,20 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md mx-auto bg-background border border-border/50 shadow-xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-foreground flex items-center gap-2">
-            <Upload className="w-6 h-6 text-primary" />
+    <SimplifiedModal open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <SimplifiedModalContent className="max-w-lg">
+        <SimplifiedModalHeader>
+          <SimplifiedModalTitle className="flex items-center gap-3">
+            <Upload className="w-7 h-7 text-primary" />
             Add Community Coupon
-          </DialogTitle>
-        </DialogHeader>
+          </SimplifiedModalTitle>
+        </SimplifiedModalHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-4 pt-4">
+        <SimplifiedModalBody>
+          <form onSubmit={handleSubmit} className="space-y-content-normal">
           {/* Image Upload */}
-          <div className="space-y-2">
-            <Label htmlFor="image" className="text-sm font-medium">
+          <div className="space-y-4">
+            <Label htmlFor="image" className="text-lg font-medium">
               Coupon Image
             </Label>
             {imagePreview ? (
@@ -199,16 +206,16 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                 <Button
                   type="button"
                   onClick={removeImage}
-                  className="absolute top-2 right-2 h-8 w-8 p-0 bg-destructive hover:bg-destructive/90"
-                  size="sm"
+                  className="absolute top-3 right-3 bg-destructive hover:bg-destructive/90"
+                  size="icon-sm"
                 >
                   <X className="w-4 h-4" />
                 </Button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-border/50 rounded-lg p-6 text-center">
-                <Camera className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mb-4">
+              <div className="border-2 border-dashed border-border/50 rounded-xl p-8 text-center">
+                <Camera className="w-16 h-16 mx-auto mb-6 text-muted-foreground" />
+                <p className="text-base text-muted-foreground mb-6">
                   Upload a picture of your coupon
                 </p>
                 <Input
@@ -221,7 +228,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                 />
                 <Label 
                   htmlFor="image"
-                  className="cursor-pointer inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
+                  className="cursor-pointer inline-flex items-center gap-3 bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors text-base font-medium min-h-touch"
                 >
                   {uploading ? "Uploading..." : "Choose Image"}
                 </Label>
@@ -230,8 +237,8 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
           </div>
 
           {/* Title */}
-          <div className="space-y-2">
-            <Label htmlFor="title" className="text-sm font-medium">
+          <div className="space-y-4">
+            <Label htmlFor="title" className="text-lg font-medium">
               Title *
             </Label>
             <Input
@@ -240,6 +247,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
               placeholder="e.g., 20% off pizza"
               required
+              className="text-base min-h-touch"
             />
           </div>
 
@@ -313,25 +321,28 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col gap-4 pt-content-normal">
+            <Button 
+              type="submit"
+              disabled={creating || uploading || !formData.title.trim()}
+              className="w-full"
+              size="lg"
+            >
+              {creating ? "Creating..." : "Upload Coupon"}
+            </Button>
             <Button 
               type="button"
               variant="outline" 
               onClick={onClose}
-              className="flex-1"
+              className="w-full"
+              size="default"
             >
               Cancel
             </Button>
-            <Button 
-              type="submit"
-              disabled={creating || uploading || !formData.title.trim()}
-              className="flex-1"
-            >
-              {creating ? "Creating..." : "Upload Coupon"}
-            </Button>
           </div>
-        </form>
-      </DialogContent>
+          </form>
+        </SimplifiedModalBody>
+      </SimplifiedModalContent>
       
       <InstagramStoryPopup
         isOpen={showStoryPopup}
@@ -340,6 +351,6 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
         isGenerating={generatingStory}
         title={formData.title}
       />
-    </Dialog>
+    </SimplifiedModal>
   );
 };
