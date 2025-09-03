@@ -209,14 +209,6 @@ const AllMeetupsPage = () => {
           </Button>
           <h1 className="text-lg font-semibold">All Meetups</h1>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowNotifications(true)}
-          className="p-2"
-        >
-          <Bell className="h-5 w-5" />
-        </Button>
       </div>
       
       {/* Search and Filter Section */}
