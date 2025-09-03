@@ -35,6 +35,11 @@ All colors MUST be HSL.
     --coral: 16 100% 65%;
     --coral-foreground: 0 0% 100%;
     --coral-muted: 16 100% 95%;
+    
+    /* Warm button colors */
+    --warm-orange: 25 100% 70%;
+    --warm-peach: 35 100% 75%;
+    --warm-muted: 30 100% 92%;
 
     --secondary: 210 20% 94%;
     --secondary-foreground: 222 84% 15%;

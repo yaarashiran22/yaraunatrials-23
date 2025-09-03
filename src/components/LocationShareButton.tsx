@@ -124,7 +124,7 @@ const OpenToHangButton = ({
         disabled={isLoading || permissionState === 'denied'}
         variant="default"
         size={size}
-        className={`${className} bg-gradient-to-r from-coral to-primary text-white hover:from-coral-muted hover:to-primary-glow shadow-md hover:shadow-lg transition-all duration-200 font-medium ${permissionState === 'denied' ? 'opacity-50' : ''}`}
+        className={`${className} bg-gradient-to-r from-warm-peach to-warm-orange text-white hover:from-warm-muted hover:to-warm-peach shadow-md hover:shadow-lg transition-all duration-200 font-medium ${permissionState === 'denied' ? 'opacity-50' : ''}`}
         title={permissionState === 'denied' ? 'Location access denied - please enable access in browser settings' : ''}
       >
         {isLoading ? (

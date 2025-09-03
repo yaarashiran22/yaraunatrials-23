@@ -60,6 +60,11 @@ export default {
 					foreground: 'hsl(var(--coral-foreground))',
 					muted: 'hsl(var(--coral-muted))'
 				},
+				warm: {
+					orange: 'hsl(var(--warm-orange))',
+					peach: 'hsl(var(--warm-peach))',
+					muted: 'hsl(var(--warm-muted))'
+				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
