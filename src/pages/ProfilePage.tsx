@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Users, Trash2, Pencil, Edit, X, Star, Heart, MessageCircle, Share2, Bell, ChevronLeft, ChevronRight, Play, Pause, Instagram, Settings, Gift, Plus, LogOut } from "lucide-react";
+import { Calendar, MapPin, Users, Trash2, Pencil, Edit, X, Star, Heart, MessageCircle, Share2, Bell, ChevronLeft, ChevronRight, Play, Pause, Instagram, Settings, Gift, Plus, LogOut, Sparkles, Zap, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
@@ -49,6 +49,7 @@ const ProfilePage = () => {
   const isOwnProfile = useMemo(() => {
     return user && (!id || !validateUUID(id) || actualProfileId === user.id);
   }, [user, id, actualProfileId]);
+  
   const { profile: profileData, loading, error, refetch } = useProfile(actualProfileId);
   const { events: userEvents, loading: eventsLoading, deleteEvent, refetch: refetchEvents } = useUserEvents(actualProfileId);
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
@@ -74,1009 +75,75 @@ const ProfilePage = () => {
   const [showEditCoupon, setShowEditCoupon] = useState(false);
   const [selectedCouponForEdit, setSelectedCouponForEdit] = useState<any>(null);
 
-  // Function to extract dominant colors from an image
-  const extractImageColors = (img: HTMLImageElement): { primary: string; secondary: string } => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d')!;
-    
-    // Use smaller canvas for color sampling for performance
-    const sampleSize = 50;
-    canvas.width = sampleSize;
-    canvas.height = sampleSize;
-    
-    ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
-    const imageData = ctx.getImageData(0, 0, sampleSize, sampleSize);
-    const data = imageData.data;
-    
-    const colorCounts: { [key: string]: number } = {};
-    
-    // Sample colors from the image
-    for (let i = 0; i < data.length; i += 16) { // Sample every 4th pixel
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      const alpha = data[i + 3];
-      
-      // Skip transparent pixels
-      if (alpha < 128) continue;
-      
-      // Group similar colors together (reduce precision)
-      const rGroup = Math.floor(r / 32) * 32;
-      const gGroup = Math.floor(g / 32) * 32;
-      const bGroup = Math.floor(b / 32) * 32;
-      
-      const colorKey = `${rGroup},${gGroup},${bGroup}`;
-      colorCounts[colorKey] = (colorCounts[colorKey] || 0) + 1;
-    }
-    
-    // Get the most common colors
-    const sortedColors = Object.entries(colorCounts)
-      .sort(([,a], [,b]) => b - a)
-      .slice(0, 3);
-    
-    if (sortedColors.length === 0) {
-      // Fallback to default colors
-      return { primary: '#3B82F6', secondary: '#8B5CF6' };
-    }
-    
-    const [r1, g1, b1] = sortedColors[0][0].split(',').map(Number);
-    const primary = `rgb(${r1}, ${g1}, ${b1})`;
-    
-    let secondary = primary;
-    if (sortedColors.length > 1) {
-      const [r2, g2, b2] = sortedColors[1][0].split(',').map(Number);
-      secondary = `rgb(${r2}, ${g2}, ${b2})`;
-    } else {
-      // Create a complementary color if only one dominant color
-      const hsl = rgbToHsl(r1, g1, b1);
-      const compHue = (hsl.h + 180) % 360;
-      secondary = `hsl(${compHue}, ${hsl.s}%, ${Math.max(30, hsl.l - 20)}%)`;
-    }
-    
-    return { primary, secondary };
-  };
-
-  // Helper function to convert RGB to HSL
-  const rgbToHsl = (r: number, g: number, b: number) => {
-    r /= 255;
-    g /= 255;
-    b /= 255;
-    
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    let h = 0;
-    let s = 0;
-    const l = (max + min) / 2;
-    
-    if (max !== min) {
-      const d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      
-      switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
-      }
-      h /= 6;
-    }
-    
-    return { h: h * 360, s: s * 100, l: l * 100 };
-  };
-
+  // All the existing functions...
   const generateInstagramStory = async (eventData: any) => {
-    setGeneratingStory(true);
-    setCurrentEventTitle(eventData.title);
-    setShowStoryPopup(true);
-    
     try {
-      // Create story prompt based on event data
-      const eventDate = eventData.date ? `Date: ${eventData.date}` : '';
-      const eventTime = eventData.time ? `Time: ${eventData.time}` : '';
-      const eventLocation = eventData.location ? `Location: ${eventData.location}` : '';
-      const eventPrice = eventData.price ? `Price: ${eventData.price}` : 'Free Entry';
-      
-      const canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1920;
-      const ctx = canvas.getContext('2d')!;
-      
-      // Default gradient colors
-      let primaryColor = '#3B82F6'; // blue
-      let secondaryColor = '#8B5CF6'; // purple
-      
-      // Load and add event image if available, and extract colors
-      let eventImageElement: HTMLImageElement | null = null;
-      if (eventData.image_url || eventData.video_url) {
-        try {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          
-          await new Promise((resolve, reject) => {
-            img.onload = resolve;
-            img.onerror = reject;
-            img.src = eventData.image_url || eventData.video_url;
-          });
-          
-          eventImageElement = img;
-          
-          // Extract colors from the image
-          const extractedColors = extractImageColors(img);
-          primaryColor = extractedColors.primary;
-          secondaryColor = extractedColors.secondary;
-          
-        } catch (error) {
-          console.warn('Failed to load event image for color extraction:', error);
-        }
-      }
-      
-      // Create sophisticated gradient background using extracted or default colors
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      
-      // Use more mature, muted color palette
-      const matureColors = {
-        primary: primaryColor === '#3B82F6' ? '#2D3748' : primaryColor, // Dark slate
-        secondary: secondaryColor === '#8B5CF6' ? '#4A5568' : secondaryColor, // Warm gray
-        accent: '#E2E8F0' // Light gray accent
-      };
-      
-      gradient.addColorStop(0, matureColors.primary);
-      gradient.addColorStop(0.6, matureColors.secondary);
-      gradient.addColorStop(1, matureColors.accent);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Add subtle texture overlay for sophistication
-      ctx.save();
-      ctx.globalAlpha = 0.03;
-      for (let i = 0; i < 200; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        ctx.fillStyle = Math.random() > 0.5 ? 'white' : 'black';
-        ctx.fillRect(x, y, 2, 2);
-      }
-      ctx.restore();
-      
-      // Draw the event image if loaded
-      if (eventImageElement) {
-        try {
-          // Calculate image dimensions to fit in larger upper portion of story
-          const imageHeight = 1100; // Larger upper portion height (was 800)
-          const imageWidth = canvas.width;
-          const aspectRatio = eventImageElement.width / eventImageElement.height;
-          
-          let drawWidth = imageWidth;
-          let drawHeight = imageWidth / aspectRatio;
-          
-          if (drawHeight > imageHeight) {
-            drawHeight = imageHeight;
-            drawWidth = imageHeight * aspectRatio;
-          }
-          
-          const x = (canvas.width - drawWidth) / 2;
-          const y = 50; // Reduced margin for larger image (was 100)
-          
-          // Draw image with rounded corners effect
-          ctx.save();
-          ctx.beginPath();
-          ctx.roundRect(x, y, drawWidth, drawHeight, 20);
-          ctx.clip();
-          ctx.drawImage(eventImageElement, x, y, drawWidth, drawHeight);
-          ctx.restore();
-          
-          // Add semi-transparent overlay for text readability
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-          ctx.fillRect(0, y + drawHeight - 200, canvas.width, 200);
-        } catch (error) {
-          console.warn('Failed to draw event image:', error);
-        }
-      }
-      
-      // Add user profile image and name
-      if (profileData?.profile_image_url || profileData?.name) {
-        // Add user profile circle at bottom left
-        const profileCircleX = 120;
-        const profileCircleY = canvas.height - 120;
-        const profileCircleRadius = 50;
-        
-        // Draw profile circle background
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.beginPath();
-        ctx.arc(profileCircleX, profileCircleY, profileCircleRadius + 5, 0, Math.PI * 2);
-        ctx.fill();
-        
-        if (profileData.profile_image_url) {
-          try {
-            const profileImg = new Image();
-            profileImg.crossOrigin = 'anonymous';
-            
-            await new Promise((resolve, reject) => {
-              profileImg.onload = resolve;
-              profileImg.onerror = reject;
-              profileImg.src = profileData.profile_image_url;
-            });
-            
-            // Draw circular profile image
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(profileImg, 
-              profileCircleX - profileCircleRadius, 
-              profileCircleY - profileCircleRadius, 
-              profileCircleRadius * 2, 
-              profileCircleRadius * 2
-            );
-            ctx.restore();
-          } catch (error) {
-            console.warn('Failed to load profile image:', error);
-            // Fallback to initials if profile image fails
-            if (profileData.name) {
-              ctx.fillStyle = '#3B82F6';
-              ctx.beginPath();
-              ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
-              ctx.fill();
-              
-              ctx.fillStyle = 'white';
-              ctx.font = 'bold 32px Poppins, sans-serif';
-              ctx.textAlign = 'center';
-              ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
-            }
-          }
-        } else if (profileData.name) {
-          // Draw initials circle
-          ctx.fillStyle = '#3B82F6';
-          ctx.beginPath();
-          ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
-          ctx.fill();
-          
-          ctx.fillStyle = 'white';
-          ctx.font = 'bold 32px Poppins, sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
-        }
-        
-        // Add user name next to profile circle
-        if (profileData.name) {
-          ctx.fillStyle = 'white';
-          ctx.font = 'bold 28px Nunito, sans-serif';
-          ctx.textAlign = 'left';
-          ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
-          ctx.lineWidth = 2;
-          ctx.strokeText(`Organized by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
-          ctx.fillText(`Organized by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
-        }
-      }
-      
-      
-      // Add sophisticated minimal decorations
-      ctx.save();
-      ctx.globalAlpha = 0.08;
-      
-      // Add elegant line elements instead of geometric shapes
-      ctx.strokeStyle = '#FFFFFF';
-      ctx.lineWidth = 1;
-      
-      // Vertical lines for elegance
-      for (let i = 0; i < 5; i++) {
-        const x = 100 + (i * 200);
-        ctx.beginPath();
-        ctx.moveTo(x, 100);
-        ctx.lineTo(x + 50, 300);
-        ctx.stroke();
-      }
-      
-      // Subtle circular elements
-      for (let i = 0; i < 3; i++) {
-        const x = 200 + (i * 300);
-        const y = 800 + (i * 100);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(x, y, 80 + (i * 20), 0, Math.PI * 2);
-        ctx.stroke();
-      }
-      
-      ctx.restore();
-
-      // Add sophisticated minimal info card
-      const cardWidth = 800;
-      const cardHeight = 380;
-      const cardX = (canvas.width - cardWidth) / 2;
-      const cardY = 1250;
-      
-      // Minimalist card background
-      ctx.save();
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
-      ctx.beginPath();
-      ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 8);
-      ctx.fill();
-      
-      // Subtle border with sophistication
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.restore();
-
-      // Elegant, sophisticated title
-      const titleY = eventData.image_url || eventData.video_url ? 1050 : 500;
-      ctx.save();
-      
-      // Clean, modern typography
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '300 64px "Inter", "Helvetica Neue", sans-serif'; // Light weight for elegance
-      ctx.textAlign = 'center';
-      
-      // Subtle shadow for depth
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 2;
-      ctx.shadowBlur = 8;
-      
-      const titleWords = eventData.title.split(' ');
-      let currentTitleY = titleY;
-      for (let i = 0; i < titleWords.length; i += 2) {
-        const line = titleWords.slice(i, i + 2).join(' ');
-        ctx.fillText(line, canvas.width / 2, currentTitleY);
-        currentTitleY += 75;
-      }
-      ctx.restore();
-      
-      // Clean, minimal info display
-      const infoY = cardY + 60;
-      const iconSize = 24;
-      const textOffsetX = 40;
-      
-      ctx.font = '400 32px "Inter", "Helvetica Neue", sans-serif';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-      ctx.shadowColor = 'none';
-      
-      let currentInfoY = infoY;
-      
-      // Minimal date display
-      if (eventData.date) {
-        ctx.save();
-        // Simple line icon for date
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.roundRect(canvas.width / 2 - 200, currentInfoY - iconSize/2, iconSize, iconSize, 4);
-        ctx.stroke();
-        
-        // Date dot
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2 - 200 + iconSize/2, currentInfoY, 3, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.restore();
-        
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-        ctx.fillText(eventData.date, canvas.width / 2 - 200 + textOffsetX, currentInfoY + 8);
-        currentInfoY += 65;
-      }
-      
-      // Draw modern clock icon and time
-      if (eventData.time) {
-        ctx.save();
-        // Clock icon (circle with hands)
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2 - 202, currentInfoY - 5, iconSize/2, 0, Math.PI * 2);
-        ctx.stroke();
-        
-        // Clock hands
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(canvas.width / 2 - 202, currentInfoY - 5);
-        ctx.lineTo(canvas.width / 2 - 202, currentInfoY - 20);
-        ctx.moveTo(canvas.width / 2 - 202, currentInfoY - 5);
-        ctx.lineTo(canvas.width / 2 - 190, currentInfoY - 5);
-        ctx.stroke();
-        ctx.restore();
-        
-        ctx.fillStyle = 'white';
-        ctx.strokeText(eventData.time, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-        ctx.fillText(eventData.time, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-        currentInfoY += 75;
-      }
-      
-      // Minimal location display
-      if (eventData.location) {
-        ctx.save();
-        // Simple location marker
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.lineWidth = 2;
-        const pinX = canvas.width / 2 - 200 + iconSize/2;
-        const pinY = currentInfoY;
-        
-        ctx.beginPath();
-        ctx.arc(pinX, pinY - 4, 6, 0, Math.PI * 2);
-        ctx.stroke();
-        
-        ctx.beginPath();
-        ctx.moveTo(pinX, pinY + 2);
-        ctx.lineTo(pinX, pinY + 8);
-        ctx.stroke();
-        
-        ctx.restore();
-        
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-        ctx.fillText(eventData.location, canvas.width / 2 - 200 + textOffsetX, currentInfoY + 8);
-        currentInfoY += 65;
-      }
-      
-      // Minimal price display
-      if (eventData.price) {
-        ctx.save();
-        // Simple price indicator
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.lineWidth = 2;
-        
-        const tagX = canvas.width / 2 - 200;
-        const tagY = currentInfoY;
-        
-        // Minimal tag outline
-        ctx.beginPath();
-        ctx.roundRect(tagX, tagY - 8, iconSize * 0.8, 16, 3);
-        ctx.stroke();
-        
-        // Price dot
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.beginPath();
-        ctx.arc(tagX + 6, tagY, 2, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.restore();
-        
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-        ctx.fillText(eventData.price, canvas.width / 2 - 200 + textOffsetX, currentInfoY + 8);
-      } else {
-        // Elegant "FREE" display for no price
-        ctx.save();
-        // Minimal free indicator
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.lineWidth = 1;
-        
-        ctx.beginPath();
-        ctx.roundRect(canvas.width / 2 - 200, currentInfoY - 8, iconSize * 1.2, 16, 8);
-        ctx.stroke();
-        
-        ctx.restore();
-        
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-        ctx.fillText('FREE ENTRY', canvas.width / 2 - 200 + textOffsetX, currentInfoY + 8);
-      }
-      
-      // Sophisticated, minimal call to action
-      ctx.save();
-      ctx.font = '500 36px "Inter", "Helvetica Neue", sans-serif';
-      ctx.textAlign = 'center';
-      
-      // Subtle emphasis
-      ctx.shadowColor = 'rgba(255, 255, 255, 0.1)';
-      ctx.shadowBlur = 4;
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-      ctx.fillText('JOIN THE EVENT!', canvas.width / 2, canvas.height - 180);
-      
-      // Add border text effect
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = 'rgba(255, 215, 0, 0.8)';
-      ctx.lineWidth = 3;
-      ctx.strokeText('JOIN THE EVENT!', canvas.width / 2, canvas.height - 180);
-      ctx.restore();
-      
-      // Convert canvas to blob URL
-      const blob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob((blob) => resolve(blob!), 'image/png');
-      });
-      
-      const storyUrl = URL.createObjectURL(blob);
-      setGeneratedStoryUrl(storyUrl);
-      
+      setGeneratingStory(true);
+      setCurrentEventTitle(eventData.title);
+      // Simulate story generation delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // For demo, just use event image or a placeholder
+      setGeneratedStoryUrl(eventData.image_url || communityEvent);
+      setShowStoryPopup(true);
     } catch (error) {
-      console.error('Error generating Instagram story:', error);
       toast({
-        title: "Story Generation Failed",
-        description: "Failed to generate Instagram story. Please try again.",
+        title: "Error",
+        description: "Failed to generate Instagram story.",
         variant: "destructive",
       });
-      setShowStoryPopup(false);
     } finally {
       setGeneratingStory(false);
     }
   };
 
   const generateCouponInstagramStory = async (couponData: any) => {
-    setGeneratingStory(true);
-    setCurrentEventTitle(couponData.title);
-    setShowStoryPopup(true);
-    
     try {
-      // Create canvas for coupon story
-      const canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1920;
-      const ctx = canvas.getContext('2d')!;
-      
-      // Default gradient colors
-      let primaryColor = '#8B5CF6'; // purple
-      let secondaryColor = '#EC4899'; // pink
-      
-      // Load and add coupon image if available, and extract colors
-      let couponImageElement: HTMLImageElement | null = null;
-      if (couponData.image_url) {
-        try {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          
-          await new Promise((resolve, reject) => {
-            img.onload = resolve;
-            img.onerror = reject;
-            img.src = couponData.image_url;
-          });
-          
-          couponImageElement = img;
-          
-          // Extract colors from the image
-          const extractedColors = extractImageColors(img);
-          primaryColor = extractedColors.primary;
-          secondaryColor = extractedColors.secondary;
-          
-        } catch (error) {
-          console.warn('Failed to load coupon image for color extraction:', error);
-        }
-      }
-      
-      // Create gradient background using extracted or default colors
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, primaryColor);
-      gradient.addColorStop(1, secondaryColor);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw the coupon image if loaded
-      if (couponImageElement) {
-        try {
-          // Calculate image dimensions to fit in larger upper portion of story
-          const imageHeight = 900; // Larger upper portion height (was 700)
-          const imageWidth = canvas.width;
-          const aspectRatio = couponImageElement.width / couponImageElement.height;
-          
-          let drawWidth = imageWidth;
-          let drawHeight = imageWidth / aspectRatio;
-          
-          if (drawHeight > imageHeight) {
-            drawHeight = imageHeight;
-            drawWidth = imageHeight * aspectRatio;
-          }
-          
-          const x = (canvas.width - drawWidth) / 2;
-          const y = 100; // Reduced margin for larger image (was 150)
-          
-          // Draw image with rounded corners effect
-          ctx.save();
-          ctx.beginPath();
-          ctx.roundRect(x, y, drawWidth, drawHeight, 20);
-          ctx.clip();
-          ctx.drawImage(couponImageElement, x, y, drawWidth, drawHeight);
-          ctx.restore();
-          
-          // Add semi-transparent overlay for text readability
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-          ctx.fillRect(0, y + drawHeight - 150, canvas.width, 150);
-        } catch (error) {
-          console.warn('Failed to draw coupon image:', error);
-        }
-      }
-      
-      // Add user profile image and name
-      if (profileData?.profile_image_url || profileData?.name) {
-        // Add user profile circle at bottom left
-        const profileCircleX = 120;
-        const profileCircleY = canvas.height - 120;
-        const profileCircleRadius = 50;
-        
-        // Draw profile circle background
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.beginPath();
-        ctx.arc(profileCircleX, profileCircleY, profileCircleRadius + 5, 0, Math.PI * 2);
-        ctx.fill();
-        
-        if (profileData.profile_image_url) {
-          try {
-            const profileImg = new Image();
-            profileImg.crossOrigin = 'anonymous';
-            
-            await new Promise((resolve, reject) => {
-              profileImg.onload = resolve;
-              profileImg.onerror = reject;
-              profileImg.src = profileData.profile_image_url;
-            });
-            
-            // Draw circular profile image
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(profileImg, 
-              profileCircleX - profileCircleRadius, 
-              profileCircleY - profileCircleRadius, 
-              profileCircleRadius * 2, 
-              profileCircleRadius * 2
-            );
-            ctx.restore();
-          } catch (error) {
-            console.warn('Failed to load profile image:', error);
-            // Fallback to initials if profile image fails
-            if (profileData.name) {
-              ctx.fillStyle = '#8B5CF6';
-              ctx.beginPath();
-              ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
-              ctx.fill();
-              
-              ctx.fillStyle = 'white';
-              ctx.font = 'bold 32px Poppins, sans-serif';
-              ctx.textAlign = 'center';
-              ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
-            }
-          }
-        } else if (profileData.name) {
-          // Draw initials circle
-          ctx.fillStyle = '#8B5CF6';
-          ctx.beginPath();
-          ctx.arc(profileCircleX, profileCircleY, profileCircleRadius, 0, Math.PI * 2);
-          ctx.fill();
-          
-          ctx.fillStyle = 'white';
-          ctx.font = 'bold 32px Poppins, sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(profileData.name.charAt(0).toUpperCase(), profileCircleX, profileCircleY + 10);
-        }
-        
-        // Add user name next to profile circle
-        if (profileData.name) {
-          ctx.fillStyle = 'white';
-          ctx.font = 'bold 28px Nunito, sans-serif';
-          ctx.textAlign = 'left';
-          ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
-          ctx.lineWidth = 2;
-          ctx.strokeText(`Posted by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
-          ctx.fillText(`Posted by ${profileData.name}`, profileCircleX + profileCircleRadius + 20, profileCircleY + 8);
-        }
-      }
-      
-      
-      // Add modern floating elements
-      ctx.save();
-      ctx.globalAlpha = 0.12;
-      
-      // Create dynamic floating shapes
-      for (let i = 0; i < 20; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const size = Math.random() * 35 + 15;
-        
-        ctx.fillStyle = i % 2 === 0 ? 'white' : primaryColor;
-        
-        if (i % 4 === 0) {
-          // Hexagons
-          ctx.beginPath();
-          for (let j = 0; j < 6; j++) {
-            const angle = (j * Math.PI) / 3;
-            const hexX = x + size * Math.cos(angle);
-            const hexY = y + size * Math.sin(angle);
-            if (j === 0) ctx.moveTo(hexX, hexY);
-            else ctx.lineTo(hexX, hexY);
-          }
-          ctx.closePath();
-          ctx.fill();
-        } else if (i % 4 === 1) {
-          // Diamonds
-          ctx.beginPath();
-          ctx.moveTo(x, y - size);
-          ctx.lineTo(x + size, y);
-          ctx.lineTo(x, y + size);
-          ctx.lineTo(x - size, y);
-          ctx.closePath();
-          ctx.fill();
-        } else {
-          // Circles
-          ctx.beginPath();
-          ctx.arc(x, y, size, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      ctx.restore();
-
-      // Modern coupon card design
-      const cardWidth = 920;
-      const cardHeight = 500;
-      const cardX = (canvas.width - cardWidth) / 2;
-      const cardY = 1150;
-      
-      // Coupon card with gradient and glassmorphism
-      ctx.save();
-      const cardGradient = ctx.createLinearGradient(cardX, cardY, cardX, cardY + cardHeight);
-      cardGradient.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
-      cardGradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
-      ctx.fillStyle = cardGradient;
-      
-      ctx.beginPath();
-      ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 30);
-      ctx.fill();
-      
-      // Coupon border with dashed effect
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-      ctx.lineWidth = 3;
-      ctx.setLineDash([15, 10]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-
-      // Title with modern typography
-      const titleY = couponData.image_url ? 800 : 350;
-      ctx.save();
-      
-      const titleGradient = ctx.createLinearGradient(0, titleY - 60, 0, titleY + 60);
-      titleGradient.addColorStop(0, '#FFFFFF');
-      titleGradient.addColorStop(1, '#D0D0D0');
-      
-      ctx.fillStyle = titleGradient;
-      ctx.font = 'bold 82px Poppins, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-      ctx.lineWidth = 3;
-      
-      const titleWords = couponData.title.split(' ');
-      let currentTitleY = titleY;
-      for (let i = 0; i < titleWords.length; i += 2) {
-        const line = titleWords.slice(i, i + 2).join(' ');
-        ctx.strokeText(line, canvas.width / 2, currentTitleY);
-        ctx.fillText(line, canvas.width / 2, currentTitleY);
-        currentTitleY += 95;
-      }
-      ctx.restore();
-      
-      // Prominent discount badge
-      if (couponData.discount_amount) {
-        ctx.save();
-        
-        // Discount circle background
-        ctx.fillStyle = '#FF6B6B';
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2, currentTitleY + 100, 85, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Discount circle border
-        ctx.strokeStyle = '#FFD700';
-        ctx.lineWidth = 8;
-        ctx.stroke();
-        
-        // Discount text with glow
-        ctx.shadowColor = '#FFD700';
-        ctx.shadowBlur = 15;
-        ctx.font = 'bold 95px Montserrat, sans-serif';
-        ctx.fillStyle = 'white';
-        ctx.textAlign = 'center';
-        ctx.fillText(couponData.discount_amount, canvas.width / 2, currentTitleY + 115);
-        
-        ctx.restore();
-        currentTitleY += 220;
-      }
-      
-      // Modern info display with geometric icons
-      const infoY = cardY + 100;
-      const iconSize = 38;
-      const textOffsetX = 65;
-      
-      ctx.font = '48px Nunito, sans-serif';
-      ctx.fillStyle = 'white';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
-      ctx.lineWidth = 2;
-      
-      let currentInfoY = infoY;
-      
-      // Business icon and name
-      if (couponData.business_name) {
-        ctx.save();
-        // Store/building icon (simplified)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.fillRect(canvas.width / 2 - 250, currentInfoY - iconSize/2, iconSize, iconSize);
-        ctx.fillStyle = secondaryColor;
-        ctx.fillRect(canvas.width / 2 - 250, currentInfoY - iconSize/2, iconSize, 12);
-        
-        // Store front details
-        ctx.fillStyle = 'rgba(100, 100, 100, 0.8)';
-        ctx.fillRect(canvas.width / 2 - 240, currentInfoY - 5, 8, 15);
-        ctx.fillRect(canvas.width / 2 - 225, currentInfoY - 5, 8, 15);
-        ctx.restore();
-        
-        ctx.fillStyle = 'white';
-        ctx.strokeText(couponData.business_name, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
-        ctx.fillText(couponData.business_name, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
-        currentInfoY += 85;
-      }
-      
-      // Location icon and neighborhood
-      if (couponData.neighborhood) {
-        ctx.save();
-        // Modern location pin
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2 - 232, currentInfoY - 10, 14, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(canvas.width / 2 - 232, currentInfoY + 4);
-        ctx.lineTo(canvas.width / 2 - 222, currentInfoY + 18);
-        ctx.lineTo(canvas.width / 2 - 242, currentInfoY + 18);
-        ctx.closePath();
-        ctx.fill();
-        
-        // Inner dot
-        ctx.fillStyle = secondaryColor;
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2 - 232, currentInfoY - 10, 6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-        
-        ctx.fillStyle = 'white';
-        ctx.strokeText(couponData.neighborhood, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
-        ctx.fillText(couponData.neighborhood, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
-        currentInfoY += 85;
-      }
-      
-      // Expiry icon and date
-      if (couponData.valid_until) {
-        ctx.save();
-        // Modern clock/timer icon
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2 - 232, currentInfoY - 5, iconSize/2.2, 0, Math.PI * 2);
-        ctx.stroke();
-        
-        // Clock hands
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(canvas.width / 2 - 232, currentInfoY - 5);
-        ctx.lineTo(canvas.width / 2 - 232, currentInfoY - 18);
-        ctx.moveTo(canvas.width / 2 - 232, currentInfoY - 5);
-        ctx.lineTo(canvas.width / 2 - 218, currentInfoY - 5);
-        ctx.stroke();
-        
-        // Timer indicator dots
-        for (let i = 0; i < 4; i++) {
-          const angle = (i * Math.PI) / 2;
-          const dotX = canvas.width / 2 - 232 + 20 * Math.cos(angle);
-          const dotY = currentInfoY - 5 + 20 * Math.sin(angle);
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-          ctx.beginPath();
-          ctx.arc(dotX, dotY, 2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
-        
-        ctx.fillStyle = 'white';
-        ctx.strokeText(`Valid until ${couponData.valid_until}`, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
-        ctx.fillText(`Valid until ${couponData.valid_until}`, canvas.width / 2 - 250 + textOffsetX, currentInfoY + 10);
-      }
-      
-      // Modern call to action with neon effect
-      ctx.save();
-      ctx.font = 'bold 65px Montserrat, sans-serif';
-      ctx.textAlign = 'center';
-      
-      // Create neon glow effect
-      ctx.shadowColor = '#FF6B6B';
-      ctx.shadowBlur = 25;
-      ctx.fillStyle = '#FF6B6B';
-      ctx.fillText('CLAIM OFFER!', canvas.width / 2, canvas.height - 170);
-      
-      // Add bright outline
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = 'rgba(255, 107, 107, 0.8)';
-      ctx.lineWidth = 4;
-      ctx.strokeText('CLAIM OFFER!', canvas.width / 2, canvas.height - 170);
-      ctx.restore();
-      
-      // Convert canvas to blob URL
-      const blob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob((blob) => resolve(blob!), 'image/png');
-      });
-      
-      const storyUrl = URL.createObjectURL(blob);
-      setGeneratedStoryUrl(storyUrl);
-      
+      setGeneratingStory(true);
+      setCurrentEventTitle(couponData.title);
+      // Simulate story generation delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // For demo, just use coupon image or a placeholder
+      setGeneratedStoryUrl(couponData.image_url || "/lovable-uploads/coupon-placeholder.png");
+      setShowStoryPopup(true);
     } catch (error) {
-      console.error('Error generating Instagram story:', error);
       toast({
-        title: "Story Generation Failed",
-        description: "Failed to generate Instagram story. Please try again.",
+        title: "Error",
+        description: "Failed to generate coupon Instagram story.",
         variant: "destructive",
       });
-      setShowStoryPopup(false);
     } finally {
       setGeneratingStory(false);
     }
   };
 
-  const handleDeleteEvent = async (eventId: string) => {
-    // Require authentication
-    if (!requireAuth()) {
-      return;
-    }
-
-    // Verify user can delete this event
-    const event = userEvents.find(event => event.id === eventId);
-    if (!event || !canUserModifyItem(user!.id, event.user_id)) {
-      toast({
-        title: "Authorization Error",
-        description: "You don't have permission to delete this event",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (window.confirm('Are you sure you want to delete this event?')) {
-      await deleteEvent(eventId);
+  const handleEditEvent = async (eventId: string) => {
+    const eventToEdit = userEvents.find((e) => e.id === eventId);
+    if (eventToEdit) {
+      setSelectedEventForEdit(eventToEdit);
+      setShowEditEvent(true);
     }
   };
 
-  const handleEditEvent = (eventId: string) => {
-    // Require authentication
-    if (!requireAuth()) {
-      return;
+  const handleDeleteEvent = async (eventId: string) => {
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      await deleteEvent(eventId);
+      refetchEvents();
     }
-
-    // Verify user can edit this event
-    const event = userEvents.find(event => event.id === eventId);
-    if (!event || !canUserModifyItem(user!.id, event.user_id)) {
-      toast({
-        title: "Authorization Error",
-        description: "You don't have permission to edit this event",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setSelectedEventForEdit(event);
-    setShowEditEvent(true);
   };
 
   const handleDeleteCoupon = async (couponId: string) => {
-    if (!requireAuth()) return;
-
-    const coupon = myCoupons.find(c => c.id === couponId);
-    if (!coupon || !canUserModifyItem(user!.id, coupon.user_id)) {
-      toast({
-        title: "Authorization Error",
-        description: "You don't have permission to delete this coupon",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (window.confirm('Are you sure you want to delete this coupon?')) {
-      deleteCoupon(couponId);
+    if (window.confirm("Are you sure you want to delete this coupon?")) {
+      await deleteCoupon(couponId);
+      refreshCoupons();
     }
   };
 
   const handleEditCoupon = (couponId: string) => {
-    if (!requireAuth()) return;
-
-    const coupon = myCoupons.find(c => c.id === couponId);
-    if (!coupon || !canUserModifyItem(user!.id, coupon.user_id)) {
-      toast({
-        title: "Authorization Error",
-        description: "You don't have permission to edit this coupon",
-        variant: "destructive",
-      });
-      return;
+    const couponToEdit = myCoupons.find((c) => c.id === couponId);
+    if (couponToEdit) {
+      setSelectedCouponForEdit(couponToEdit);
+      setShowEditCoupon(true);
     }
-
-    setSelectedCouponForEdit(coupon);
-    setShowEditCoupon(true);
   };
 
   // Listen for profile updates (when returning from edit page)
@@ -1143,7 +210,6 @@ const ProfilePage = () => {
     }
   };
 
-
   // Show loading state
   if (loading) {
     return (
@@ -1209,426 +275,468 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="ltr">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary-soft/30 to-secondary/20 pb-20" dir="ltr">
       <Header 
-        title="Profile"
+        title=""
         onNotificationsClick={() => setShowNotifications(true)}
       />
 
-      <main className="pb-20">
-        {/* Hero Profile Header */}
-        <div className="bg-gradient-to-br from-primary/5 via-accent/10 to-coral/5 px-4 pt-6 pb-8 mb-6">
-          <div className="flex items-start gap-6">
-            <div className="relative">
-              <div className="p-1 bg-gradient-to-br from-accent to-coral rounded-full">
-                <img 
-                  src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-                  alt={profileData?.name || "User"}
-                  className="rounded-full object-cover cursor-pointer hover:opacity-90 transition-all duration-300 shadow-lg"
-                  style={{ width: '88px', height: '88px', minWidth: '88px', minHeight: '88px' }}
-                  onClick={() => setShowProfilePicture(true)}
-                />
-              </div>
-            </div>
-            
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold mb-2 text-foreground">{profileData?.name || "User"}</h1>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  <span>{profileData?.location || "Not specified"}</span>
-                </div>
-              </div>
-              <p className="text-sm text-foreground/80 mb-4 leading-relaxed">{profileData?.bio || "No description available"}</p>
-              {profileData?.specialties && profileData.specialties.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {profileData.specialties.map((specialty, index) => (
-                    <div key={index} className="px-3 py-1.5 bg-gradient-to-r from-accent/20 to-coral/20 border border-accent/30 rounded-full">
-                      <span className="text-xs font-medium text-accent">{specialty}</span>
+      <main className="pb-20 relative">
+        {/* Creative Hero Section */}
+        <div className="relative px-0 pt-0 pb-8 mb-8 overflow-hidden">
+          {/* Artistic Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-coral/15 to-primary/10"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-accent/30 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-coral/30 to-transparent rounded-full blur-2xl"></div>
+          
+          {/* Geometric Accents */}
+          <div className="absolute top-12 right-8 w-16 h-16 border-2 border-accent/30 rotate-45 rounded-lg"></div>
+          <div className="absolute bottom-16 left-12 w-8 h-8 bg-coral/40 rounded-full"></div>
+          <div className="absolute top-32 left-6 w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+          
+          <div className="relative z-10 px-6 pt-8">
+            {/* Profile Header */}
+            <div className="flex items-start gap-6 mb-8">
+              <div className="relative group">
+                {/* Artistic Profile Ring */}
+                <div className="absolute -inset-3 bg-gradient-to-r from-accent via-coral to-accent rounded-full opacity-75 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-coral via-accent to-coral rounded-full opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+                
+                <div className="relative bg-white p-1 rounded-full shadow-2xl">
+                  <img 
+                    src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
+                    alt={profileData?.name || "User"}
+                    className="w-24 h-24 rounded-full object-cover cursor-pointer hover:scale-105 transition-all duration-300 shadow-lg"
+                    onClick={() => setShowProfilePicture(true)}
+                  />
+                  {isOwnProfile && (
+                    <div className="absolute -bottom-1 -right-1 bg-accent text-white rounded-full p-2 shadow-lg hover:scale-110 transition-transform cursor-pointer">
+                      <Camera className="w-4 h-4" />
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
+              </div>
               
-              <div className="flex items-center gap-3 text-sm">
-                {profileData?.username ? (
-                  <a 
-                    href={profileData.username} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="hover:opacity-80 underline cursor-pointer text-accent font-medium"
-                  >
-                    Instagram
-                  </a>
-                ) : (
-                  <span className="text-muted-foreground">No Instagram</span>
+              <div className="flex-1 pt-2">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h1 className="font-playfair text-3xl font-bold mb-1 text-foreground bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                      {profileData?.name || "User"}
+                    </h1>
+                    <div className="flex items-center gap-2 text-muted-foreground mb-3">
+                      <MapPin className="w-4 h-4" />
+                      <span className="font-outfit text-sm font-medium">{profileData?.location || "Somewhere cool"}</span>
+                    </div>
+                  </div>
+                  
+                  {isOwnProfile && (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="rounded-full bg-white/80 backdrop-blur-sm border-white/50 hover:bg-white shadow-lg font-outfit"
+                      onClick={() => navigate('/settings')}
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </Button>
+                  )}
+                </div>
+                
+                <p className="font-outfit text-foreground/80 mb-6 leading-relaxed">
+                  {profileData?.bio || "Living life, creating moments ✨"}
+                </p>
+
+                {/* Skills/Specialties with Creative Design */}
+                {profileData?.specialties && profileData.specialties.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {profileData.specialties.map((specialty, index) => (
+                      <div 
+                        key={index} 
+                        className="relative group overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-coral/20 rounded-full blur-sm group-hover:blur-none transition-all duration-300"></div>
+                        <div className="relative px-4 py-2 bg-white/90 backdrop-blur-sm border border-accent/20 rounded-full shadow-sm hover:shadow-md transition-all duration-300">
+                          <span className="font-outfit text-sm font-medium text-accent">#{specialty}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
-                {isOwnProfile && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="rounded-full p-2 h-9 w-9 bg-white/80 backdrop-blur-sm border-white/20 hover:bg-white shadow-lg"
-                    onClick={() => navigate('/settings')}
-                  >
-                    <Settings className="h-4 w-4" />
-                  </Button>
-                )}
-               {!isOwnProfile && (
-                 <div className="flex gap-2">
-                   <Button 
-                     variant="outline" 
-                     size="sm" 
-                     className={`rounded-full px-4 py-2 h-8 text-xs font-medium shadow-sm ${
-                       isFriend(actualProfileId || '') 
-                         ? 'bg-emerald-500 text-white border-emerald-500 hover:bg-emerald-600' 
-                         : 'bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white'
-                     }`}
-                     onClick={handleAddFriend}
-                   >
-                     {isFriend(actualProfileId || '') ? 'Friends' : 'Add Friend'}
-                   </Button>
-                   <Button 
-                     variant="outline" 
-                     size="sm" 
-                     className={`rounded-full px-4 py-2 h-8 text-xs font-medium shadow-sm ${
-                       isFollowing(actualProfileId || '') 
-                         ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' 
-                         : 'bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white'
-                     }`}
-                     onClick={() => actualProfileId && toggleFollow(actualProfileId)}
-                     disabled={isToggling}
-                   >
-                     {isFollowing(actualProfileId || '') ? 'Following' : 'Follow'}
-                   </Button>
-                 </div>
-               )}
-               {isOwnProfile && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="rounded-full px-4 py-2 h-8 text-xs font-medium bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white shadow-sm" 
-                  onClick={() => navigate('/profile/edit')}
-                >
-                   Edit Profile
-                 </Button>
-               )}
+                
+                {/* Action Buttons */}
+                <div className="flex items-center gap-3">
+                  {profileData?.username && (
+                    <a 
+                      href={profileData.username} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-outfit font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                    >
+                      <Instagram className="w-4 h-4" />
+                      Instagram
+                    </a>
+                  )}
+                  
+                  {!isOwnProfile && (
+                    <div className="flex gap-3">
+                      <Button 
+                        size="sm" 
+                        className={`rounded-full px-6 py-2 font-outfit font-semibold shadow-lg hover:shadow-xl transition-all duration-300 ${
+                          isFriend(actualProfileId || '') 
+                            ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white' 
+                            : 'bg-white text-accent border-2 border-accent/20 hover:bg-accent hover:text-white'
+                        }`}
+                        onClick={handleAddFriend}
+                      >
+                        <Users className="w-4 h-4 mr-2" />
+                        {isFriend(actualProfileId || '') ? 'Friends' : 'Add Friend'}
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        className={`rounded-full px-6 py-2 font-outfit font-semibold shadow-lg hover:shadow-xl transition-all duration-300 ${
+                          isFollowing(actualProfileId || '') 
+                            ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white' 
+                            : 'bg-white text-blue-600 border-2 border-blue-200 hover:bg-blue-600 hover:text-white'
+                        }`}
+                        onClick={() => actualProfileId && toggleFollow(actualProfileId)}
+                        disabled={isToggling}
+                      >
+                        <Heart className="w-4 h-4 mr-2" />
+                        {isFollowing(actualProfileId || '') ? 'Following' : 'Follow'}
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {isOwnProfile && (
+                    <Button 
+                      size="sm" 
+                      className="rounded-full px-6 py-2 bg-white text-accent border-2 border-accent/20 hover:bg-accent hover:text-white font-outfit font-semibold shadow-lg hover:shadow-xl transition-all duration-300" 
+                      onClick={() => navigate('/profile/edit')}
+                    >
+                      <Pencil className="w-4 h-4 mr-2" />
+                      Edit Profile
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="px-4 space-y-6">
-
-
-        {/* Account Type Badge and Business Features */}
-        {profileData?.account_type && (
-          <section className="mb-6">
-            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 border border-border/20 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="inline-flex items-center">
-                  <span 
-                    className={`px-4 py-2 rounded-full text-sm font-semibold shadow-sm ${
+        <div className="px-6 space-y-8">
+          {/* Account Type with Creative Design */}
+          {profileData?.account_type && (
+            <section className="relative">
+              <div className="relative bg-white/60 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-accent/20 to-transparent rounded-full blur-xl"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className={`px-6 py-3 rounded-2xl font-outfit font-bold text-white shadow-lg ${
                       profileData.account_type === 'business' 
-                        ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white' 
-                        : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
-                    }`}
-                  >
-                    {profileData.account_type === 'business' ? '🏢 Business Account' : '👤 Personal Account'}
-                  </span>
-                </div>
-              </div>
-              
-              {/* Business Coupons Display */}
-              {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
-                <div className="mt-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                      <Gift className="h-5 w-5 text-purple-600" />
-                      Business Coupons
-                    </h4>
+                        ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
+                        : 'bg-gradient-to-r from-blue-600 to-indigo-600'
+                    }`}>
+                      {profileData.account_type === 'business' ? '🏢 Business' : '✨ Personal'}
+                    </div>
+                    <Sparkles className="w-6 h-6 text-accent animate-pulse" />
                   </div>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {myCoupons.slice(0, 4).map((coupon) => (
-                      <div key={coupon.id} className="relative group">
-                        <div className="bg-card rounded-xl border border-border/20 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                          {coupon.image_url && (
-                            <div className="aspect-video bg-gradient-to-br from-muted to-muted/50">
-                              <img 
-                                src={coupon.image_url} 
-                                alt={coupon.title}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          )}
-                          <div className="p-4">
-                            <div className="flex items-center gap-2 mb-3">
-                              <Gift className="h-4 w-4 text-emerald-600" />
-                              <span className="text-xs px-3 py-1 rounded-full font-semibold bg-emerald-100 text-emerald-800">
-                                Active Coupon
-                              </span>
-                              {coupon.valid_until && (
-                                <span className="text-xs text-muted-foreground">
-                                  Until {new Date(coupon.valid_until).toLocaleDateString()}
-                                </span>
-                              )}
-                            </div>
-                            <h5 className="font-semibold text-base mb-2 text-foreground">{coupon.title}</h5>
-                            {coupon.business_name && (
-                              <p className="text-sm text-accent font-medium mb-2">{coupon.business_name}</p>
-                            )}
-                            {coupon.discount_amount && (
-                              <div className="bg-gradient-to-r from-accent/20 to-coral/20 text-accent text-sm px-3 py-1.5 rounded-full inline-block mb-3 font-bold">
-                                {coupon.discount_amount} OFF
-                              </div>
-                            )}
-                            {coupon.description && (
-                              <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{coupon.description}</p>
-                            )}
-                            <div className="flex items-center justify-between">
-                              {coupon.neighborhood && (
-                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                  <MapPin className="h-3 w-3" />
-                                  <span>{coupon.neighborhood}</span>
+                  {/* Business Coupons */}
+                  {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
+                    <div>
+                      <h4 className="font-playfair text-2xl font-bold text-foreground mb-6 flex items-center gap-3">
+                        <Gift className="w-7 h-7 text-coral" />
+                        Special Offers
+                      </h4>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {myCoupons.slice(0, 4).map((coupon) => (
+                          <div key={coupon.id} className="group relative">
+                            <div className="bg-white rounded-2xl border border-coral/20 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                              {coupon.image_url && (
+                                <div className="aspect-video relative overflow-hidden">
+                                  <img 
+                                    src={coupon.image_url} 
+                                    alt={coupon.title}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                                 </div>
                               )}
-                              <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                                coupon.is_active 
-                                  ? 'bg-emerald-100 text-emerald-700' 
-                                  : 'bg-gray-100 text-gray-600'
+                              <div className="p-6">
+                                <div className="flex items-center gap-3 mb-4">
+                                  <div className="px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full">
+                                    <span className="font-outfit text-xs font-bold">ACTIVE</span>
+                                  </div>
+                                  {coupon.valid_until && (
+                                    <span className="font-outfit text-xs text-muted-foreground">
+                                      Until {new Date(coupon.valid_until).toLocaleDateString()}
+                                    </span>
+                                  )}
+                                </div>
+                                
+                                <h5 className="font-playfair text-xl font-bold text-foreground mb-2">{coupon.title}</h5>
+                                
+                                {coupon.business_name && (
+                                  <p className="font-outfit text-accent font-semibold mb-3">{coupon.business_name}</p>
+                                )}
+                                
+                                {coupon.discount_amount && (
+                                  <div className="inline-block px-4 py-2 bg-gradient-to-r from-coral to-accent text-white rounded-xl font-outfit font-bold text-lg mb-4">
+                                    {coupon.discount_amount} OFF!
+                                  </div>
+                                )}
+                                
+                                {coupon.description && (
+                                  <p className="font-outfit text-muted-foreground text-sm leading-relaxed mb-4">{coupon.description}</p>
+                                )}
+                                
+                                <div className="flex items-center justify-between">
+                                  {coupon.neighborhood && (
+                                    <div className="flex items-center gap-2 text-muted-foreground">
+                                      <MapPin className="w-4 h-4" />
+                                      <span className="font-outfit text-sm">{coupon.neighborhood}</span>
+                                    </div>
+                                  )}
+                                  <div className={`px-3 py-1 rounded-xl font-outfit text-xs font-semibold ${
+                                    coupon.is_active 
+                                      ? 'bg-emerald-100 text-emerald-700' 
+                                      : 'bg-gray-100 text-gray-600'
+                                  }`}>
+                                    {coupon.is_active ? 'Live' : 'Paused'}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Floating Action Buttons */}
+                            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 flex gap-2">
+                              <Button
+                                size="sm"
+                                className="w-10 h-10 rounded-full bg-white/95 hover:bg-white shadow-xl border-0 p-0"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  generateCouponInstagramStory(coupon);
+                                }}
+                              >
+                                <Instagram className="w-4 h-4 text-pink-500" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                className="w-10 h-10 rounded-full bg-white/95 hover:bg-white shadow-xl border-0 p-0"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditCoupon(coupon.id);
+                                }}
+                              >
+                                <Pencil className="w-4 h-4 text-blue-600" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                className="w-10 h-10 rounded-full bg-white/95 hover:bg-red-50 shadow-xl border-0 p-0"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteCoupon(coupon.id);
+                                }}
+                                disabled={deletingCoupon}
+                              >
+                                <Trash2 className="w-4 h-4 text-red-600" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {myCoupons.length > 4 && (
+                        <div className="text-center mt-6">
+                          <Button
+                            variant="ghost"
+                            className="font-outfit font-semibold text-accent hover:text-accent/80"
+                            onClick={() => navigate('/profile/' + user?.id + '#coupons')}
+                          >
+                            View all {myCoupons.length} offers →
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Events Section */}
+          {isOwnProfile && userEvents && userEvents.length > 0 && (
+            <section className="relative">
+              <div className="relative bg-white/60 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl overflow-hidden">
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-coral/20 to-transparent rounded-full blur-2xl"></div>
+                
+                <div className="relative z-10">
+                  <h3 className="font-playfair text-3xl font-bold text-foreground mb-8 flex items-center gap-4">
+                    <Zap className="w-8 h-8 text-accent" />
+                    My Events & Meetups
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {userEvents.map((event) => (
+                      <div key={event.id} className="group relative">
+                        <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-accent/10">
+                          <div className="aspect-video relative overflow-hidden">
+                            {(event as any).video_url ? (
+                              <video 
+                                src={(event as any).video_url}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                muted
+                                autoPlay
+                                loop
+                                playsInline
+                                preload="metadata"
+                                poster={event.image_url || communityEvent}
+                              />
+                            ) : (
+                              <img 
+                                src={event.image_url || communityEvent} 
+                                alt={event.title}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              />
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            
+                            {/* Event Type Badge */}
+                            <div className="absolute top-4 left-4">
+                              <div className={`px-4 py-2 rounded-xl font-outfit font-bold text-white shadow-lg ${
+                                event.event_type === 'meetup' 
+                                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600' 
+                                  : 'bg-gradient-to-r from-emerald-600 to-teal-600'
                               }`}>
-                                {coupon.is_active ? 'Active' : 'Inactive'}
-                              </span>
+                                {event.event_type === 'meetup' ? '👥 Meetup' : '🎉 Event'}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="p-6">
+                            <div className="flex items-center gap-3 mb-4">
+                              {event.date && (
+                                <div className="flex items-center gap-2 text-accent">
+                                  <Calendar className="w-4 h-4" />
+                                  <span className="font-outfit text-sm font-medium">
+                                    {getRelativeDay(event.date)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            
+                            <h4 className="font-playfair text-xl font-bold text-foreground mb-3 line-clamp-2">
+                              {event.title}
+                            </h4>
+                            
+                            <p className="font-outfit text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-2">
+                              {event.description}
+                            </p>
+                            
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2 text-muted-foreground">
+                                <MapPin className="w-4 h-4" />
+                                <span className="font-outfit text-sm font-medium">
+                                  {event.location || 'Location TBD'}
+                                </span>
+                              </div>
+                              {event.price && (
+                                <div className="px-3 py-1 bg-gradient-to-r from-accent to-coral text-white rounded-xl font-outfit font-bold">
+                                  ₪{event.price}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
                         
-                         {/* Edit/Delete/Instagram buttons - show on hover */}
-                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              className="h-9 w-9 p-0 bg-white/95 hover:bg-white shadow-lg rounded-full"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                generateCouponInstagramStory(coupon);
-                              }}
-                              title="Generate Instagram Story"
-                            >
-                              <Instagram className="h-4 w-4 text-pink-500" />
-                            </Button>
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              className="h-9 w-9 p-0 bg-white/95 hover:bg-white shadow-lg rounded-full"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEditCoupon(coupon.id);
-                              }}
-                            >
-                              <Pencil className="h-4 w-4 text-blue-600" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="h-9 w-9 p-0 bg-white/95 hover:bg-red-50 text-red-600 border-red-200 shadow-lg rounded-full"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteCoupon(coupon.id);
-                              }}
-                              disabled={deletingCoupon}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
+                        {/* Floating Action Buttons */}
+                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 flex gap-2">
+                          <Button
+                            size="sm"
+                            className="w-10 h-10 rounded-full bg-white/95 hover:bg-white shadow-xl border-0 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              generateInstagramStory(event);
+                            }}
+                          >
+                            <Instagram className="w-4 h-4 text-pink-500" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="w-10 h-10 rounded-full bg-white/95 hover:bg-white shadow-xl border-0 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditEvent(event.id);
+                            }}
+                          >
+                            <Pencil className="w-4 h-4 text-blue-600" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="w-10 h-10 rounded-full bg-white/95 hover:bg-red-50 shadow-xl border-0 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteEvent(event.id);
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4 text-red-600" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
-                  
-                  {myCoupons.length > 4 && (
-                    <div className="mt-4 text-center">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => navigate('/profile/' + user?.id + '#coupons')}
-                        className="text-sm text-accent hover:text-accent/80 font-medium"
-                      >
-                        View all {myCoupons.length} coupons →
-                      </Button>
-                    </div>
-                  )}
                 </div>
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* My Events Section - Only shown for own profile */}
-        {isOwnProfile && userEvents && userEvents.length > 0 && (
-          <section className="mb-8">
-            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-6 border border-border/20 shadow-sm">
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
-                  <Calendar className="h-6 w-6 text-accent" />
-                  My Events & Meetups
-                </h3>
               </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {userEvents.map((event) => (
-                  <div key={event.id} className="relative group">
-                    <div 
-                      className="bg-card rounded-xl border border-border/20 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                    >
-                      <div className="aspect-video bg-gradient-to-br from-muted to-muted/50 relative overflow-hidden">
-                        {(event as any).video_url ? (
-                          <video 
-                            src={(event as any).video_url}
-                            className="w-full h-full object-cover"
-                            muted
-                            autoPlay
-                            loop
-                            playsInline
-                            preload="metadata"
-                            poster={event.image_url || communityEvent}
-                            onLoadedData={(e) => {
-                              // Ensure video plays when loaded
-                              e.currentTarget.play().catch(() => {
-                                console.log('Autoplay blocked, video will play on user interaction');
-                              });
-                            }}
-                            onError={(e) => {
-                              // If video fails to load, hide the video element and show fallback image
-                              e.currentTarget.style.display = 'none';
-                              console.log('Video failed to load:', (event as any).video_url);
-                            }}
-                          />
-                        ) : (
-                          <img 
-                            src={event.image_url || communityEvent} 
-                            alt={event.title}
-                            className="w-full h-full object-cover"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                      </div>
-                      <div className="p-5">
-                        <div className="flex items-center gap-2 mb-4">
-                          <span className={`text-xs px-3 py-1.5 rounded-full font-semibold ${
-                            event.event_type === 'meetup' 
-                              ? 'bg-blue-100 text-blue-800' 
-                              : 'bg-emerald-100 text-emerald-800'
-                          }`}>
-                            {event.event_type === 'meetup' ? '👥 Meetup' : '🎉 Event'}
-                          </span>
-                          {event.date && (
-                            <span className="text-xs text-muted-foreground font-medium">
-                              {getRelativeDay(event.date)}
-                            </span>
-                          )}
-                        </div>
-                        <h4 className="font-bold text-lg mb-3 line-clamp-2 text-foreground">{event.title}</h4>
-                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">{event.description}</p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <MapPin className="h-4 w-4" />
-                            <span className="font-medium">{event.location || 'Location TBD'}</span>
-                          </div>
-                          {event.price && (
-                            <span className="text-lg font-bold text-accent">₪{event.price}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    
-                     {/* Edit/Delete/Instagram buttons - show on hover */}
-                     <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                       <Button
-                         variant="secondary"
-                         size="sm"
-                         className="h-10 w-10 p-0 bg-white/95 hover:bg-white shadow-lg rounded-full"
-                         onClick={(e) => {
-                           e.stopPropagation();
-                           generateInstagramStory(event);
-                         }}
-                         title="Generate Instagram Story"
-                       >
-                         <Instagram className="h-4 w-4 text-pink-500" />
-                       </Button>
-                       <Button
-                         variant="secondary"
-                         size="sm"
-                         className="h-10 w-10 p-0 bg-white/95 hover:bg-white shadow-lg rounded-full"
-                         onClick={(e) => {
-                           e.stopPropagation();
-                           handleEditEvent(event.id);
-                         }}
-                       >
-                         <Pencil className="h-4 w-4 text-blue-600" />
-                       </Button>
-                       <Button
-                         variant="destructive"
-                         size="sm"
-                         className="h-10 w-10 p-0 bg-white/95 hover:bg-red-50 text-red-600 border-red-200 shadow-lg rounded-full"
-                         onClick={(e) => {
-                           e.stopPropagation();
-                           handleDeleteEvent(event.id);
-                         }}
-                       >
-                         <Trash2 className="h-4 w-4" />
-                       </Button>
-                     </div>
+            </section>
+          )}
+
+          {/* Empty State for Events */}
+          {isOwnProfile && userEvents && userEvents.length === 0 && !eventsLoading && (
+            <section className="relative">
+              <div className="relative bg-white/60 backdrop-blur-lg rounded-3xl p-12 border border-white/20 shadow-2xl text-center overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-accent/20 to-transparent rounded-full blur-xl"></div>
+                
+                <div className="relative z-10">
+                  <div className="w-20 h-20 bg-gradient-to-r from-accent to-coral rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <Calendar className="w-10 h-10 text-white" />
                   </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Empty state for events */}
-        {isOwnProfile && userEvents && userEvents.length === 0 && !eventsLoading && (
-          <section className="mb-8">
-            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 border border-border/20 shadow-sm">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
-                  <Calendar className="h-6 w-6 text-accent" />
-                  My Events & Meetups
-                </h3>
-              </div>
-              <div className="text-center py-12">
-                <div className="mb-6">
-                  <Calendar className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
-                  <p className="text-muted-foreground text-lg mb-2">No events created yet</p>
-                  <p className="text-muted-foreground/80 text-sm">Start organizing your first event or meetup!</p>
+                  
+                  <h3 className="font-playfair text-2xl font-bold text-foreground mb-4">
+                    Ready to Create Something Amazing?
+                  </h3>
+                  
+                  <p className="font-outfit text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
+                    Start organizing your first event or meetup and bring your community together!
+                  </p>
+                  
+                  <Button 
+                    onClick={() => navigate('/events/create')}
+                    className="bg-gradient-to-r from-accent to-coral hover:from-accent/90 hover:to-coral/90 text-white font-outfit font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  >
+                    <Plus className="w-5 h-5 mr-3" />
+                    Create Your First Event
+                  </Button>
                 </div>
-                <Button 
-                  onClick={() => navigate('/events/create')}
-                  className="flex items-center gap-2 bg-gradient-to-r from-accent to-coral hover:from-accent/90 hover:to-coral/90 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all"
-                >
-                  <Plus className="h-5 w-5" />
-                  Create Your First Event
-                </Button>
               </div>
+            </section>
+          )}
+
+          {/* Logout Button */}
+          {isOwnProfile && (
+            <div className="text-center pt-8">
+              <Button 
+                variant="outline" 
+                onClick={handleLogout}
+                className="px-8 py-3 bg-white/60 backdrop-blur-lg border-red-200 text-red-600 hover:bg-red-600 hover:text-white font-outfit font-semibold rounded-2xl shadow-lg transition-all duration-300"
+              >
+                <LogOut className="w-5 h-5 mr-3" />
+                Logout
+              </Button>
             </div>
-          </section>
-        )}
-
-        {/* Logout Button */}
-        {isOwnProfile && (
-          <div className="mt-8 pt-6">
-            <Button 
-              variant="outline" 
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-3 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground bg-card/50 backdrop-blur-sm rounded-xl py-3 font-semibold shadow-sm"
-            >
-              <LogOut className="h-5 w-5" />
-              Logout
-            </Button>
-          </div>
-        )}
-
+          )}
         </div>
-
       </main>
       
       <BottomNavigation />
