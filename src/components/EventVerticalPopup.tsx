@@ -315,7 +315,7 @@ const EventVerticalPopup = ({
 
           {/* RSVP Section */}
           <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-lg border border-green-200 dark:border-blue-800`}>
-            <h4 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground ${isMobile ? 'mb-2' : 'mb-3'} text-center`}>Join This Event</h4>
+            
             
             <Button onClick={handleRSVP} className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}>
               <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
