@@ -492,8 +492,11 @@ const DiscoverPage = () => {
         }} />
         
         {/* Open to Hang Button */}
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-2">
           <OpenToHangButton size="sm" shareText="Open to Hang" removeText="Stop Hanging" className="w-32 text-xs" />
+          <p className="text-xs text-muted-foreground text-center max-w-xs">
+            Share your live location to find nearby people ready to hang out
+          </p>
         </div>
         
         {/* Map Section */}
