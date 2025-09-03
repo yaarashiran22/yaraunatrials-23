@@ -352,7 +352,6 @@ const MeetupVerticalPopup = ({
 
           {/* Join Request Section */}
           <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
-            <h4 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-foreground ${isMobile ? 'mb-2' : 'mb-3'} text-center`}>Join This Meetup</h4>
             
             {joinStatus === 'approved' ? <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400 mb-2">
