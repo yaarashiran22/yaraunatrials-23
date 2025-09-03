@@ -74,24 +74,51 @@ serve(async (req) => {
       const profileImageNote = userProfile?.profile_image_url ? 
         'Include a small circular profile picture placeholder in the bottom left corner of the story.' : '';
       
-      prompt = `Create a professional Instagram story template for a business coupon offer. 
-      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
+      prompt = `Create an ultra-modern, artistic Instagram story for a business coupon offer with maximum visual impact.
+      DIMENSIONS: Vertical 9:16 aspect ratio (1080x1920px Instagram story format).
       
-      Content to include:
-      - Title: "${data.title || 'Special Offer'}${discount}"
+      CONTENT HIERARCHY:
+      - Main Title: "${data.title || 'Special Offer'}${discount}" (Bold, eye-catching)
       - ${businessInfo}${neighborhood}
       - Description: "${data.description || 'Special offer available now!'}"
-      ${userInfo ? `- ${userInfo}` : ''}
-      - Call to action: "Get Your Coupon!"
+      ${userInfo ? `- Creator: ${userInfo}` : ''}
+      - CTA: "CLAIM NOW!" or "GET YOURS!"
+      
+      ARTISTIC DESIGN SPECIFICATIONS:
+      🎨 COLOR PALETTE: 
+      - Primary: Vibrant gradient from electric blue (#00D4FF) to neon purple (#8A2BE2) to hot pink (#FF1493)
+      - Secondary: Holographic rainbow accents, metallic gold highlights
+      - Text: High contrast white/black with neon glows
+      
+      🌟 VISUAL ELEMENTS:
+      - Holographic glass morphism background with subtle transparency layers
+      - 3D floating geometric shapes (spheres, cubes, pyramids) with neon outlines
+      - Animated-style lightning bolts, sparkles, and energy waves
+      - Gradient mesh overlays with iridescent effects
+      - Floating particles and light rays emanating from corners
+      
+      💫 TYPOGRAPHY STYLE:
+      - Main title: Bold, futuristic sans-serif with 3D extrusion and neon glow
+      - Body text: Clean, modern fonts with subtle shadow effects
+      - Add text stroke outlines for maximum readability
+      
+      🎭 COMPOSITION:
+      - Dynamic diagonal layouts with asymmetric balance
+      - Layered depth with foreground, midground, background elements
+      - Strategic negative space for text readability
+      - Curved flowing lines connecting design elements
+      
+      ✨ SPECIAL EFFECTS:
+      - Chrome/metallic text treatments with reflections
+      - Prismatic light refractions and lens flares
+      - Subtle animation-ready motion blur effects
+      - Instagram-style modern filters with high saturation
       
       ${profileImageNote}
       
-      User branding: ${userProfile?.name ? `Include "${userProfile.name}" as the creator/poster attribution in small text at the bottom` : 'Include generic user attribution'}
+      🏷️ BRANDING: ${userProfile?.name ? `Include "${userProfile.name}" in stylized modern typography at bottom corner` : 'Modern user attribution'}
       
-      Style: Modern, vibrant, eye-catching design with gradient background (purple to pink), 
-      clean typography, professional business aesthetic, include coupon/discount graphics, 
-      use bright colors that pop on mobile screens. Add decorative elements like stars or 
-      geometric shapes. Make it look like a premium business promotion with clear attribution to the poster.`;
+      STYLE REFERENCE: Think Cyberpunk 2077 meets Apple's modern design - ultra-futuristic, premium, Instagram-worthy with maximum visual punch. Should look like it belongs in a high-end design portfolio.`;
       
     } else if (type === 'event' || type === 'community_event') {
       // Create event story prompt  
@@ -105,27 +132,55 @@ serve(async (req) => {
       const profileImageNote = userProfile?.profile_image_url ? 
         'Include a small circular profile picture placeholder in the bottom left corner of the story.' : '';
       
-      prompt = `Create a professional Instagram story template for an event promotion.
-      The story should be vertical 9:16 aspect ratio (Instagram story dimensions).
+      prompt = `Create a stunning, artistic Instagram story for an event promotion with festival-level visual impact.
+      DIMENSIONS: Vertical 9:16 aspect ratio (1080x1920px Instagram story format).
       
-      Content to include:
-      - Event Title: "${data.title || 'Event'}"
+      EVENT DETAILS:
+      - Event: "${data.title || 'Event'}"
       - ${eventDate}
       - ${eventTime} 
       - ${eventLocation}
       - ${eventPrice}
-      - Description: "${data.description || 'Join us for this amazing event!'}"
-      ${userInfo ? `- ${userInfo}` : ''}
-      - Call to action: "RSVP Now!"
+      - "${data.description || 'Join us for this amazing event!'}"
+      ${userInfo ? `- Organizer: ${userInfo}` : ''}
+      - CTA: "RSVP NOW!" or "JOIN US!"
+      
+      ARTISTIC DESIGN SPECIFICATIONS:
+      🎪 COLOR PALETTE: 
+      - Primary: Explosive gradient from sunset orange (#FF6B35) to cosmic purple (#6A0572) to electric teal (#17C3B2)
+      - Accent: Holographic gold, neon yellow (#FFE66D), pure white highlights
+      - Energy: Pulsating neon borders and glowing accents
+      
+      🎊 VISUAL ELEMENTS:
+      - Festival-style confetti explosions with metallic shine
+      - 3D floating music notes, geometric crystals, and celebration icons
+      - Dynamic wave patterns and flowing ribbons
+      - Starburst patterns radiating from corners
+      - Floating balloons, fireworks, and party streamers in 3D space
+      
+      🎵 TYPOGRAPHY MAGIC:
+      - Event title: Bold, festival-style lettering with 3D depth and chrome finish
+      - Details: Modern, clean fonts with colorful highlights
+      - Date/time in eye-catching badge designs
+      
+      🎨 COMPOSITION:
+      - Celebration-focused layout with explosive energy
+      - Layered elements creating depth and movement
+      - Strategic use of negative space around text
+      - Curved, flowing design elements suggesting music and movement
+      
+      ⚡ SPECIAL EFFECTS:
+      - Holographic shimmer overlays
+      - Light beam effects and spotlight illumination
+      - Particle systems with glowing trails
+      - Festival-style stage lighting effects
+      - Prism refractions creating rainbow highlights
       
       ${profileImageNote}
       
-      User branding: ${userProfile?.name ? `Include "${userProfile.name}" as the event organizer attribution in small text at the bottom` : 'Include generic organizer attribution'}
+      🎤 BRANDING: ${userProfile?.name ? `Feature "${userProfile.name}" as event curator in modern, stylized text` : 'Contemporary organizer attribution'}
       
-      Style: Dynamic, festive design with vibrant gradient background (blue to purple), 
-      modern typography, event-focused aesthetic with celebration elements like confetti 
-      or party graphics. Use energetic colors, include calendar/clock icons, make it 
-      exciting and inviting for social sharing with clear attribution to the organizer.`;
+      STYLE REFERENCE: Think Coachella poster meets Apple's WWDC graphics - ultra-modern festival aesthetics with premium tech conference polish. Should scream "unmissable event" and look like professional concert promotion material.`;
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
       console.error(errorMsg);

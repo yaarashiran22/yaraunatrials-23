@@ -108,7 +108,7 @@ export const InstagramStoryPopup = ({
             </DialogTitle>
             
             <p className="text-xs text-muted-foreground mt-1 font-medium leading-relaxed">
-              Professional Instagram stories in seconds ✨
+              ✨ AI-powered artistic stories in stunning HD quality
             </p>
           </DialogHeader>
           
@@ -133,9 +133,9 @@ export const InstagramStoryPopup = ({
                   </div>
                   
                   <div className="text-center space-y-2 max-w-xs">
-                    <h3 className="text-lg font-bold text-foreground tracking-tight">Creating Magic ✨</h3>
+                    <h3 className="text-lg font-bold text-foreground tracking-tight">Creating Artistic Magic ✨</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      AI is crafting your perfect Instagram story...
+                      AI is crafting your ultra-modern, cinematic Instagram story with holographic effects and 3D elements...
                     </p>
                     
                     {/* Progress dots */}
@@ -202,8 +202,11 @@ export const InstagramStoryPopup = ({
                 <div className="text-center space-y-2 p-4 rounded-xl bg-gradient-to-br from-accent/5 to-accent/10 border border-accent/20">
                   <div className="flex items-center justify-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <h3 className="text-lg font-bold text-foreground tracking-tight">Story Ready!</h3>
+                    <h3 className="text-lg font-bold text-foreground tracking-tight">Artistic Story Ready! 🎨</h3>
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Premium HD quality with cinematic effects
+                  </p>
                 </div>
                 
                 {/* Compact action buttons */}
