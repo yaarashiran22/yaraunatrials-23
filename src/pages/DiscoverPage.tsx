@@ -550,13 +550,6 @@ const DiscoverPage = () => {
       
       
       <main className="container mx-auto px-4 py-3 space-y-6">
-        {/* Mood Filter Strip - Only show when open to hang */}
-        {isOpenToHang && (
-          <MoodFilterStrip 
-            onFilterChange={handleMoodFilterChange}
-            showTitle={false}
-          />
-        )}
         
         {/* Open to Hang Button */}
         <div className="flex flex-col items-center gap-2">
