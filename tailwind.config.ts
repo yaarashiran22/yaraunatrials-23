@@ -21,8 +21,6 @@ export default {
 			fontFamily: {
 				'lxgw': ['LXGW WenKai TC', 'sans-serif'],
 				'nunito': ['Nunito', 'sans-serif'],
-				'outfit': ['Outfit', 'sans-serif'],
-				'playfair': ['Playfair Display', 'serif'],
 			},
 			fontSize: {
 				'xs': ['0.75rem', { lineHeight: '1rem' }],
