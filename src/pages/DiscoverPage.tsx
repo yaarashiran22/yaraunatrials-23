@@ -599,10 +599,7 @@ const DiscoverPage = () => {
         {/* Enhanced Mood Filter - only show when open to hang */}
         {isOpenToHang && (
           <div className="card-3d p-3 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/30">
-            <MoodFilterStrip 
-              selectedMood={selectedMood} 
-              onMoodChange={handleMoodFilterChange}
-            />
+            <MoodFilterStrip />
           </div>
         )}
 
@@ -652,11 +649,7 @@ const DiscoverPage = () => {
               </Button>
 
               <div className="transform hover:scale-105 transition-all duration-300">
-                <OpenToHangButton 
-                  onMoodChange={handleMoodFilterChange}
-                  isOpenToHang={isOpenToHang}
-                  setIsOpenToHang={setIsOpenToHang}
-                />
+                <OpenToHangButton />
               </div>
             </div>
 
