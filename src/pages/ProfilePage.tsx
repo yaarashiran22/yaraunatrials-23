@@ -1209,15 +1209,96 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="ltr">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 pb-20" dir="ltr">
       <Header 
         title="Profile"
         onNotificationsClick={() => setShowNotifications(true)}
       />
 
       <main className="px-4 py-6 pb-20">
-        {/* Profile Header */}
-        <div className="flex items-start gap-4 mb-6">
+        {/* Enhanced Profile Header with colorful card */}
+        <div className="card-elevated p-8 rounded-3xl bg-gradient-to-br from-white via-purple-50/30 to-blue-50/30 backdrop-blur-sm border border-white/20 mb-8">
+          <div className="flex items-start gap-6">
+            {/* Profile Image with glow effect */}
+            <div 
+              className="w-28 h-28 rounded-full overflow-hidden bg-gradient-to-br from-purple-400 to-blue-500 p-1 cursor-pointer transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl flex-shrink-0"
+              onClick={() => setShowProfilePicture(true)}
+            >
+              <div className="w-full h-full rounded-full overflow-hidden bg-white">
+                <img
+                  src={profileData.profile_image_url || '/placeholder.svg'}
+                  alt={profileData.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            
+            {/* Profile Details with enhanced styling */}
+            <div className="flex-1 space-y-4">
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                  {profileData.name}
+                </h1>
+                {profileData.bio && (
+                  <p className="text-gray-600 mt-2 leading-relaxed font-medium">{profileData.bio}</p>
+                )}
+              </div>
+              
+              {/* Enhanced Action Buttons */}
+              <div className="flex gap-3 flex-wrap">
+                {!isOwnProfile && (
+                  <>
+                    <Button
+                      onClick={() => addFriend(actualProfileId!)}
+                      className={`${isFriend(actualProfileId!) ? 
+                        "btn-3d bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700" : 
+                        "btn-3d bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700"
+                      } text-white border-0 px-4 py-2 font-medium`}
+                      size="sm"
+                    >
+                      {isFriend(actualProfileId!) ? "Friends" : "Add Friend"}
+                    </Button>
+                    
+                    <Button
+                      onClick={() => toggleFollow(actualProfileId!)}
+                      className={`${isFollowing(actualProfileId!) ? 
+                        "btn-3d bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white" : 
+                        "card-3d border-2 border-purple-200 hover:border-purple-300 text-purple-600 hover:text-purple-700"
+                      } px-4 py-2 font-medium`}
+                      size="sm"
+                      disabled={isToggling}
+                    >
+                      {isFollowing(actualProfileId!) ? "Following" : "Follow"}
+                    </Button>
+                  </>
+                )}
+                
+                {isOwnProfile && (
+                  <>
+                    <Button 
+                      onClick={() => navigate('/edit-profile')} 
+                      className="btn-3d bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white border-0 px-4 py-2 font-medium"
+                      size="sm"
+                    >
+                      <Edit className="w-4 h-4 mr-2" />
+                      Edit Profile
+                    </Button>
+                    <Button 
+                      onClick={() => navigate('/settings')} 
+                      className="card-3d border-2 border-gray-200 hover:border-gray-300 text-gray-600 hover:text-gray-700 px-4 py-2 font-medium"
+                      size="sm"
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ... keep existing code (rest of profile sections) */}
           <div className="relative">
             <img 
               src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
