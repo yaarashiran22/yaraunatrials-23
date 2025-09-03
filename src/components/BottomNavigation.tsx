@@ -53,7 +53,7 @@ const BottomNavigation = () => {
             }`}
           >
             <Map className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">Map</span>
+            <span className="text-xs font-medium truncate">Hangout</span>
           </Button>
 
           {/* Profile/Login */}
