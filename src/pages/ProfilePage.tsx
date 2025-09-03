@@ -209,12 +209,32 @@ const ProfilePage = () => {
         }
       }
       
-      // Create gradient background using extracted or default colors
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, primaryColor);
-      gradient.addColorStop(1, secondaryColor);
+      // Create sophisticated gradient background using extracted or default colors
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      
+      // Use more mature, muted color palette
+      const matureColors = {
+        primary: primaryColor === '#3B82F6' ? '#2D3748' : primaryColor, // Dark slate
+        secondary: secondaryColor === '#8B5CF6' ? '#4A5568' : secondaryColor, // Warm gray
+        accent: '#E2E8F0' // Light gray accent
+      };
+      
+      gradient.addColorStop(0, matureColors.primary);
+      gradient.addColorStop(0.6, matureColors.secondary);
+      gradient.addColorStop(1, matureColors.accent);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add subtle texture overlay for sophistication
+      ctx.save();
+      ctx.globalAlpha = 0.03;
+      for (let i = 0; i < 200; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        ctx.fillStyle = Math.random() > 0.5 ? 'white' : 'black';
+        ctx.fillRect(x, y, 2, 2);
+      }
+      ctx.restore();
       
       // Draw the event image if loaded
       if (eventImageElement) {
@@ -328,116 +348,111 @@ const ProfilePage = () => {
       }
       
       
-      // Add modern geometric decorations
+      // Add sophisticated minimal decorations
       ctx.save();
-      ctx.globalAlpha = 0.1;
+      ctx.globalAlpha = 0.08;
       
-      // Add floating geometric shapes
-      for (let i = 0; i < 12; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const size = Math.random() * 40 + 20;
-        
-        if (i % 3 === 0) {
-          // Circles
-          ctx.fillStyle = 'white';
-          ctx.beginPath();
-          ctx.arc(x, y, size, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (i % 3 === 1) {
-          // Triangles
-          ctx.fillStyle = primaryColor;
-          ctx.beginPath();
-          ctx.moveTo(x, y - size);
-          ctx.lineTo(x - size, y + size);
-          ctx.lineTo(x + size, y + size);
-          ctx.closePath();
-          ctx.fill();
-        } else {
-          // Rectangles
-          ctx.fillStyle = secondaryColor;
-          ctx.fillRect(x - size/2, y - size/2, size, size);
-        }
+      // Add elegant line elements instead of geometric shapes
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 1;
+      
+      // Vertical lines for elegance
+      for (let i = 0; i < 5; i++) {
+        const x = 100 + (i * 200);
+        ctx.beginPath();
+        ctx.moveTo(x, 100);
+        ctx.lineTo(x + 50, 300);
+        ctx.stroke();
       }
+      
+      // Subtle circular elements
+      for (let i = 0; i < 3; i++) {
+        const x = 200 + (i * 300);
+        const y = 800 + (i * 100);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 80 + (i * 20), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      
       ctx.restore();
 
-      // Add glassmorphism info cards
-      const cardWidth = 900;
-      const cardHeight = 450;
+      // Add sophisticated minimal info card
+      const cardWidth = 800;
+      const cardHeight = 380;
       const cardX = (canvas.width - cardWidth) / 2;
-      const cardY = 1200;
+      const cardY = 1250;
       
-      // Card background with glassmorphism
+      // Minimalist card background
       ctx.save();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.filter = 'blur(0.5px)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
       ctx.beginPath();
-      ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 25);
+      ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 8);
       ctx.fill();
       
-      // Card border
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-      ctx.lineWidth = 2;
+      // Subtle border with sophistication
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.lineWidth = 1;
       ctx.stroke();
       ctx.restore();
 
-      // Title with modern gradient effect
-      const titleY = eventData.image_url || eventData.video_url ? 1000 : 500;
+      // Elegant, sophisticated title
+      const titleY = eventData.image_url || eventData.video_url ? 1050 : 500;
       ctx.save();
       
-      // Create gradient for title
-      const titleGradient = ctx.createLinearGradient(0, titleY - 50, 0, titleY + 50);
-      titleGradient.addColorStop(0, '#FFFFFF');
-      titleGradient.addColorStop(1, '#E0E0E0');
-      
-      ctx.fillStyle = titleGradient;
-      ctx.font = 'bold 75px Poppins, sans-serif';
+      // Clean, modern typography
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '300 64px "Inter", "Helvetica Neue", sans-serif'; // Light weight for elegance
       ctx.textAlign = 'center';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-      ctx.lineWidth = 3;
+      
+      // Subtle shadow for depth
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 2;
+      ctx.shadowBlur = 8;
       
       const titleWords = eventData.title.split(' ');
       let currentTitleY = titleY;
       for (let i = 0; i < titleWords.length; i += 2) {
         const line = titleWords.slice(i, i + 2).join(' ');
-        ctx.strokeText(line, canvas.width / 2, currentTitleY);
         ctx.fillText(line, canvas.width / 2, currentTitleY);
-        currentTitleY += 85;
+        currentTitleY += 75;
       }
       ctx.restore();
       
-      // Modern icon-style info display
-      const infoY = cardY + 80;
-      const iconSize = 35;
-      const textOffsetX = 60;
+      // Clean, minimal info display
+      const infoY = cardY + 60;
+      const iconSize = 24;
+      const textOffsetX = 40;
       
-      ctx.font = '42px Nunito, sans-serif';
-      ctx.fillStyle = 'white';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
-      ctx.lineWidth = 2;
+      ctx.font = '400 32px "Inter", "Helvetica Neue", sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.shadowColor = 'none';
       
       let currentInfoY = infoY;
       
-      // Draw modern calendar icon and date
+      // Minimal date display
       if (eventData.date) {
         ctx.save();
-        // Calendar icon (simplified geometric)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.fillRect(canvas.width / 2 - 220, currentInfoY - iconSize/2, iconSize, iconSize);
-        ctx.strokeStyle = 'rgba(100, 100, 100, 0.8)';
+        // Simple line icon for date
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
         ctx.lineWidth = 2;
-        ctx.strokeRect(canvas.width / 2 - 220, currentInfoY - iconSize/2, iconSize, iconSize);
+        ctx.beginPath();
+        ctx.roundRect(canvas.width / 2 - 200, currentInfoY - iconSize/2, iconSize, iconSize, 4);
+        ctx.stroke();
         
-        // Calendar details
-        ctx.fillStyle = primaryColor;
-        ctx.fillRect(canvas.width / 2 - 220, currentInfoY - iconSize/2, iconSize, 8);
+        // Date dot
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2 - 200 + iconSize/2, currentInfoY, 3, 0, Math.PI * 2);
+        ctx.fill();
         
         ctx.restore();
         
-        ctx.fillStyle = 'white';
-        ctx.strokeText(eventData.date, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-        ctx.fillText(eventData.date, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-        currentInfoY += 75;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+        ctx.fillText(eventData.date, canvas.width / 2 - 200 + textOffsetX, currentInfoY + 8);
+        currentInfoY += 65;
       }
       
       // Draw modern clock icon and time
@@ -466,89 +481,82 @@ const ProfilePage = () => {
         currentInfoY += 75;
       }
       
-      // Draw modern location pin icon
+      // Minimal location display
       if (eventData.location) {
         ctx.save();
-        // Location pin (teardrop shape)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2 - 202, currentInfoY - 15, 12, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(canvas.width / 2 - 202, currentInfoY - 3);
-        ctx.lineTo(canvas.width / 2 - 195, currentInfoY + 10);
-        ctx.lineTo(canvas.width / 2 - 209, currentInfoY + 10);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-        
-        ctx.fillStyle = 'white';
-        ctx.strokeText(eventData.location, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-        ctx.fillText(eventData.location, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-        currentInfoY += 75;
-      }
-      
-      // Draw modern price tag or free badge
-      if (eventData.price) {
-        ctx.save();
-        // Price tag icon
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.beginPath();
-        ctx.roundRect(canvas.width / 2 - 220, currentInfoY - iconSize/2, iconSize, iconSize, 5);
-        ctx.fill();
-        ctx.strokeStyle = primaryColor;
+        // Simple location marker
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
         ctx.lineWidth = 2;
+        const pinX = canvas.width / 2 - 200 + iconSize/2;
+        const pinY = currentInfoY;
+        
+        ctx.beginPath();
+        ctx.arc(pinX, pinY - 4, 6, 0, Math.PI * 2);
         ctx.stroke();
         
-        // Dollar sign
-        ctx.fillStyle = primaryColor;
-        ctx.font = 'bold 24px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('$', canvas.width / 2 - 202, currentInfoY + 6);
-        ctx.restore();
-        
-        ctx.fillStyle = 'white';
-        ctx.font = '42px Nunito, sans-serif';
-        ctx.textAlign = 'left';
-        ctx.strokeText(eventData.price, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-        ctx.fillText(eventData.price, canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-      } else {
-        ctx.save();
-        // Free badge (star shape)
-        ctx.fillStyle = '#FFD700';
-        const starX = canvas.width / 2 - 202;
-        const starY = currentInfoY - 5;
         ctx.beginPath();
-        ctx.moveTo(starX, starY - 15);
-        ctx.lineTo(starX + 5, starY - 5);
-        ctx.lineTo(starX + 15, starY - 5);
-        ctx.lineTo(starX + 8, starY + 3);
-        ctx.lineTo(starX + 12, starY + 15);
-        ctx.lineTo(starX, starY + 8);
-        ctx.lineTo(starX - 12, starY + 15);
-        ctx.lineTo(starX - 8, starY + 3);
-        ctx.lineTo(starX - 15, starY - 5);
-        ctx.lineTo(starX - 5, starY - 5);
-        ctx.closePath();
-        ctx.fill();
+        ctx.moveTo(pinX, pinY + 2);
+        ctx.lineTo(pinX, pinY + 8);
+        ctx.stroke();
+        
         ctx.restore();
         
-        ctx.fillStyle = '#FFD700';
-        ctx.font = 'bold 42px Nunito, sans-serif';
-        ctx.textAlign = 'left';
-        ctx.strokeText('FREE ENTRY', canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
-        ctx.fillText('FREE ENTRY', canvas.width / 2 - 220 + textOffsetX, currentInfoY + 8);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+        ctx.fillText(eventData.location, canvas.width / 2 - 200 + textOffsetX, currentInfoY + 8);
+        currentInfoY += 65;
       }
       
-      // Modern call to action with neon effect
+      // Minimal price display
+      if (eventData.price) {
+        ctx.save();
+        // Simple price indicator
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 2;
+        
+        const tagX = canvas.width / 2 - 200;
+        const tagY = currentInfoY;
+        
+        // Minimal tag outline
+        ctx.beginPath();
+        ctx.roundRect(tagX, tagY - 8, iconSize * 0.8, 16, 3);
+        ctx.stroke();
+        
+        // Price dot
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.beginPath();
+        ctx.arc(tagX + 6, tagY, 2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.restore();
+        
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+        ctx.fillText(eventData.price, canvas.width / 2 - 200 + textOffsetX, currentInfoY + 8);
+      } else {
+        // Elegant "FREE" display for no price
+        ctx.save();
+        // Minimal free indicator
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 1;
+        
+        ctx.beginPath();
+        ctx.roundRect(canvas.width / 2 - 200, currentInfoY - 8, iconSize * 1.2, 16, 8);
+        ctx.stroke();
+        
+        ctx.restore();
+        
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+        ctx.fillText('FREE ENTRY', canvas.width / 2 - 200 + textOffsetX, currentInfoY + 8);
+      }
+      
+      // Sophisticated, minimal call to action
       ctx.save();
-      ctx.font = 'bold 58px Montserrat, sans-serif';
+      ctx.font = '500 36px "Inter", "Helvetica Neue", sans-serif';
       ctx.textAlign = 'center';
       
-      // Neon glow effect
-      ctx.shadowColor = '#FFD700';
-      ctx.shadowBlur = 20;
-      ctx.fillStyle = '#FFD700';
+      // Subtle emphasis
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.1)';
+      ctx.shadowBlur = 4;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
       ctx.fillText('JOIN THE EVENT!', canvas.width / 2, canvas.height - 180);
       
       // Add border text effect
