@@ -39,6 +39,10 @@ export default {
 					foreground: 'hsl(var(--coral-foreground))',
 					muted: 'hsl(var(--coral-muted))'
 				},
+				pink: {
+					DEFAULT: 'hsl(var(--pink))',
+					foreground: 'hsl(var(--pink-foreground))'
+				},
 				success: {
 					DEFAULT: 'hsl(var(--success))',
 					foreground: 'hsl(var(--success-foreground))'
@@ -61,7 +65,9 @@ export default {
 				},
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					foreground: 'hsl(var(--accent-foreground))',
+					muted: 'hsl(var(--accent-muted))',
+					subtle: 'hsl(var(--accent-subtle))'
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
