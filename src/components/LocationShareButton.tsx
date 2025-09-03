@@ -98,7 +98,7 @@ const OpenToHangButton = ({
           disabled={isLoading}
           variant="outline"
           size={size}
-          className={`${className} relative overflow-hidden bg-gradient-to-r from-destructive/10 to-destructive/5 text-destructive border-destructive/30 hover:bg-gradient-to-r hover:from-destructive/20 hover:to-destructive/15 hover:border-destructive/40 shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse-glow font-semibold`}
+          className={`${className} bg-destructive/5 text-destructive border-destructive/30 hover:bg-destructive/10 hover:border-destructive/40 transition-all duration-200 font-medium`}
         >
           {isLoading ? (
             <div className="w-4 h-4 border-2 border-destructive border-t-transparent rounded-full animate-spin ml-2" />
@@ -106,7 +106,6 @@ const OpenToHangButton = ({
             <X className="w-4 h-4 ml-2" />
           )}
           {removeText}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-shimmer"></div>
         </Button>
         
         <MoodSelectionDialog 
@@ -125,7 +124,7 @@ const OpenToHangButton = ({
         disabled={isLoading || permissionState === 'denied'}
         variant="default"
         size={size}
-        className={`${className} relative overflow-hidden bg-gradient-to-r from-coral to-primary text-white border-0 hover:from-coral-muted hover:to-primary-glow shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 animate-pulse-glow font-semibold ${permissionState === 'denied' ? 'opacity-50' : ''}`}
+        className={`${className} bg-gradient-to-r from-coral to-primary text-white hover:from-coral-muted hover:to-primary-glow shadow-md hover:shadow-lg transition-all duration-200 font-medium ${permissionState === 'denied' ? 'opacity-50' : ''}`}
         title={permissionState === 'denied' ? 'Location access denied - please enable access in browser settings' : ''}
       >
         {isLoading ? (
@@ -133,10 +132,9 @@ const OpenToHangButton = ({
         ) : permissionState === 'denied' ? (
           <AlertCircle className="w-4 h-4 ml-2" />
         ) : (
-          <Heart className="w-4 h-4 ml-2 animate-bounce-subtle" />
+          <Heart className="w-4 h-4 ml-2" />
         )}
         {permissionState === 'denied' ? 'Access Denied' : shareText}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer"></div>
       </Button>
       
       <MoodSelectionDialog 
