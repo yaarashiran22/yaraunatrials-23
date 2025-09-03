@@ -687,39 +687,6 @@ const DiscoverPage = () => {
           // Handle mood filter change if needed
         }} />
         
-        {/* Map Filter Buttons */}
-        <div className="flex justify-center mb-4">
-          <div className="bg-card/90 backdrop-blur-sm rounded-lg shadow-lg p-2 border">
-            <div className="flex gap-1">
-              <Button 
-                onClick={() => setMapFilter('all')}
-                variant={mapFilter === 'all' ? 'default' : 'ghost'}
-                size="sm"
-                className="text-xs px-3 py-2 h-8"
-              >
-                All
-              </Button>
-              <Button 
-                onClick={() => setMapFilter('events')}
-                variant={mapFilter === 'events' ? 'default' : 'ghost'}
-                size="sm"
-                className="text-xs px-3 py-2 h-8"
-              >
-                <Calendar className="w-3 h-3 mr-1" />
-                Events
-              </Button>
-              <Button 
-                onClick={() => setMapFilter('meetups')}
-                variant={mapFilter === 'meetups' ? 'default' : 'ghost'}
-                size="sm"
-                className="text-xs px-3 py-2 h-8"
-              >
-                <Users className="w-3 h-3 mr-1" />
-                Meetups
-              </Button>
-            </div>
-          </div>
-        </div>
         
         {/* Map Section */}
         <div className="relative">
