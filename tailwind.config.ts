@@ -43,6 +43,20 @@ export default {
 					DEFAULT: 'hsl(var(--pink))',
 					foreground: 'hsl(var(--pink-foreground))'
 				},
+				teal: {
+					DEFAULT: 'hsl(var(--teal))',
+					foreground: 'hsl(var(--teal-foreground))',
+					light: 'hsl(var(--teal-light))'
+				},
+				violet: {
+					DEFAULT: 'hsl(var(--violet))',
+					foreground: 'hsl(var(--violet-foreground))',
+					light: 'hsl(var(--violet-light))'
+				},
+				'una-purple': {
+					DEFAULT: 'hsl(var(--una-purple))',
+					foreground: 'hsl(var(--una-purple-foreground))'
+				},
 				success: {
 					DEFAULT: 'hsl(var(--success))',
 					foreground: 'hsl(var(--success-foreground))'

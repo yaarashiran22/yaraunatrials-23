@@ -36,6 +36,14 @@ All colors MUST be HSL.
     --coral-foreground: 0 0% 100%;
     --coral-muted: 16 100% 95%;
 
+    --teal: 173 80% 40%;
+    --teal-foreground: 0 0% 100%;
+    --teal-light: 173 60% 85%;
+
+    --violet: 258 90% 66%;
+    --violet-foreground: 0 0% 100%;
+    --violet-light: 258 70% 90%;
+
     --secondary: 16 60% 92%;
     --secondary-foreground: 230 35% 15%;
 
@@ -61,13 +69,17 @@ All colors MUST be HSL.
     --ring: 16 95% 68%;
 
     /* Enhanced Colorful Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(230 45% 20%) 0%, hsl(280 100% 70%) 50%, hsl(16 95% 68%) 100%);
-    --gradient-soft: linear-gradient(145deg, hsl(16 30% 98%) 0%, hsl(230 20% 96%) 50%, hsl(16 60% 95%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(16 95% 68%) 0%, hsl(38 95% 65%) 50%, hsl(333 85% 68%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(16 95% 68%) 0%, hsl(38 95% 65%) 50%, hsl(280 100% 70%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(16 30% 99%) 0%, hsl(230 20% 98%) 100%);
-    --gradient-elevated: linear-gradient(145deg, hsl(16 25% 99%) 0%, hsl(280 40% 98%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(16 95% 68%) 0%, hsl(38 95% 65%) 25%, hsl(333 85% 68%) 50%, hsl(280 100% 70%) 75%, hsl(230 55% 35%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(230 45% 20%) 0%, hsl(258 90% 66%) 50%, hsl(173 80% 40%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(16 30% 98%) 0%, hsl(258 70% 95%) 50%, hsl(173 60% 95%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(16 95% 68%) 0%, hsl(333 85% 68%) 50%, hsl(280 100% 70%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(16 95% 68%) 0%, hsl(38 95% 65%) 50%, hsl(333 85% 68%) 100%);
+    --gradient-cool: linear-gradient(135deg, hsl(173 80% 40%) 0%, hsl(258 90% 66%) 50%, hsl(280 100% 70%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(16 30% 99%) 0%, hsl(258 70% 98%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(173 60% 98%) 0%, hsl(258 70% 98%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(16 95% 68%) 0%, hsl(333 85% 68%) 20%, hsl(280 100% 70%) 40%, hsl(258 90% 66%) 60%, hsl(173 80% 40%) 80%, hsl(230 55% 35%) 100%);
+    --gradient-teal: linear-gradient(135deg, hsl(173 80% 40%) 0%, hsl(173 60% 65%) 100%);
+    --gradient-violet: linear-gradient(135deg, hsl(258 90% 66%) 0%, hsl(280 100% 70%) 100%);
+    --gradient-coral: linear-gradient(135deg, hsl(16 95% 68%) 0%, hsl(333 85% 68%) 100%);
     
     /* Enhanced Colorful Shadows */
     --shadow-subtle: 0 1px 3px 0 hsl(230 35% 12% / 0.08);

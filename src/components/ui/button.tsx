@@ -20,6 +20,11 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         accent: "bg-gradient-to-r from-accent via-pink to-coral text-accent-foreground hover:shadow-lg hover:shadow-accent/25 shadow-md",
         warm: "bg-gradient-to-r from-coral via-warning to-success text-white hover:shadow-lg hover:shadow-coral/25 shadow-md",
+        teal: "bg-teal text-teal-foreground hover:bg-teal/90 shadow-md hover:shadow-lg hover:shadow-teal/25",
+        violet: "bg-violet text-violet-foreground hover:bg-violet/90 shadow-md hover:shadow-lg hover:shadow-violet/25",
+        coral: "bg-coral text-coral-foreground hover:bg-coral/90 shadow-md hover:shadow-lg hover:shadow-coral/25",
+        pink: "bg-pink text-pink-foreground hover:bg-pink/90 shadow-md hover:shadow-lg hover:shadow-pink/25",
+        gradient: "bg-gradient-to-r from-teal via-violet to-pink text-white hover:shadow-lg hover:shadow-violet/25 shadow-md",
       },
       size: {
         default: "h-12 px-6 py-3 min-w-[120px]",
