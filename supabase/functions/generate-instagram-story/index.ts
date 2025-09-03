@@ -138,7 +138,7 @@ serve(async (req) => {
       const profileImageNote = userProfile?.profile_image_url ? 
         'Include a small circular profile picture placeholder in the bottom left corner of the story.' : '';
       
-      prompt = `Create a viral-worthy, Instagram-trending event story with maximum artistic flair and social media appeal.
+      prompt = `Create an INSANELY viral, TikTok-aesthetic Instagram story for an event with next-level artistic flair that breaks the internet.
       DIMENSIONS: Vertical 9:16 aspect ratio (1080x1920px Instagram story format).
       
       EVENT DETAILS:
@@ -149,56 +149,58 @@ serve(async (req) => {
       - ${eventPrice}
       - "${data.description || 'Join us for this amazing event!'}"
       ${userInfo ? `- Organizer: ${userInfo}` : ''}
-      - CTA: "RSVP NOW!" or "JOIN THE VIBE!"
+      - CTA: "RSVP NOW!" or "JOIN THE CHAOS!"
       
-      TRENDING DESIGN SPECIFICATIONS:
-      🎪 VIRAL COLOR PALETTE: 
-      - Primary: Instagram-fire gradient from neon orange (#FF3E00) through electric pink (#FF006B) to cosmic blue (#8338EC)
-      - Accent: Lime green (#32D74B), sunshine yellow (#FFD60A), pure white highlights
-      - Special: Holographic chrome, liquid gold, iridescent rainbow effects
-      - Background: Rich dark gradients with neon pops
+      🔥 INTERNET-BREAKING DESIGN SPECS:
+      🎨 DOPAMINE-HIT COLOR EXPLOSION: 
+      - Primary: Radioactive gradient from plasma pink (#FF0080) through laser green (#39FF14) to cyber purple (#BF00FF)
+      - Chaos colors: Electric lime (#CCFF00), plasma orange (#FF4500), toxic blue (#00FFFF)
+      - Meta elements: Holographic chrome, liquid mercury, prismatic rainbow chaos
+      - Vibes: Dark-core with explosive neon bursts and glitch aesthetics
       
-      🎊 VIRAL VISUAL ELEMENTS:
-      - Y2K revival: Holographic textures, chrome bubbles, liquid mercury effects
-      - Festival vibes: Neon light trails, concert spotlights, laser beam effects
-      - Trending shapes: Organic blobs, fluid forms, morphing geometries
-      - Social elements: Floating hearts, fire emojis, sparkle explosions
-      - 3D elements: Floating crystals, holographic pyramids, neon tubes
+      💥 VIRAL VISUAL CHAOS:
+      - Hyperpop aesthetic: Oversaturated colors, digital artifacts, glitch storms
+      - Rave culture: Laser grids, strobing effects, bassline visualizations
+      - Anime influence: Speed lines, energy auras, explosion effects
+      - Gen Z chaos: Emoji rain, meme elements, digital noise patterns
+      - 3D madness: Floating holograms, liquid chrome spheres, neon wireframes
       
-      🎵 TYPOGRAPHY THAT POPS:
-      - Event title: Ultra-bold display font with extreme letter spacing and gradient fills
-      - Trending fonts: Impact, Bebas Neue, or custom bubble letters
-      - Text effects: Outline strokes, drop shadows, neon glows, chromatic shift
-      - Date/time: Badge-style with metallic finish and glow effects
+      🚀 TYPOGRAPHY REVOLUTION:
+      - Event title: EXTREME bold with chromatic aberration, rainbow gradient, and digital glitch
+      - Fonts: Cyber grunge, rave poster style, or custom holographic letters  
+      - Effects: Triple shadow layers, neon outlines, liquid metal finish, scan line distortion
+      - Date/time: Futuristic HUD display with glowing elements and digital countdown aesthetic
       
-      🎨 INSTAGRAM-VIRAL COMPOSITION:
-      - Asymmetric layouts with controlled chaos
-      - Layered transparency effects for depth
-      - Strategic emoji placement for engagement
-      - Thumb-stopping color combinations
-      - Stories-optimized text hierarchy
+      ⚡ CHAOS COMPOSITION:
+      - Maximalist overload with controlled visual hierarchy  
+      - Overlapping transparent layers creating depth illusions
+      - Strategic chaos placement for dopamine triggers
+      - Attention-deficit-friendly rapid visual elements
+      - Stories addiction-optimized design psychology
       
-      ⚡ NEXT-LEVEL EFFECTS:
-      - Holographic foil textures
-      - Neon tube lighting simulation
-      - Liquid metal text treatments
-      - Prismatic light dispersions
-      - Aurora borealis backgrounds
-      - Glitch art overlays
-      - Particle system explosions
+      🌈 REALITY-BENDING EFFECTS:
+      - Liquid chrome text that appears molten
+      - Holographic foil with rainbow interference patterns  
+      - Neon tube lighting with realistic glow falloff
+      - Chromatic aberration creating 3D depth illusion
+      - Particle explosions with trailing light effects
+      - Digital glitch artifacts and pixel sorting
+      - Aurora borealis with hypersaturated colors
+      - Prismatic light refraction creating rainbow cascades
       
-      📱 SOCIAL MEDIA OPTIMIZATION:
-      - High contrast for mobile viewing
-      - Filter-friendly color schemes
-      - Screenshot-worthy composition
-      - Swipe-up action friendly layout
-      - Stories engagement optimized
+      📲 VIRAL OPTIMIZATION:
+      - Thumb-stopping power within 0.3 seconds
+      - Screenshot-bait composition elements
+      - Filter-proof color schemes for any Instagram filter
+      - ADHD-friendly rapid visual stimulation
+      - Dopamine-triggering color combinations
+      - Social proof elements (fire emojis, etc.)
       
       ${profileImageNote}
       
-      🎤 ORGANIZER BRANDING: ${userProfile?.name ? `Feature "${userProfile.name}" in trendy graffiti or neon sign style typography` : 'Street art style organizer credit'}
+      🎭 ORGANIZER FLEX: ${userProfile?.name ? `Showcase "${userProfile.name}" in cyber-grunge style with holographic name tag effect` : 'Futuristic organizer signature'}
       
-      STYLE REFERENCE: Think Travis Scott concert poster meets Billie Eilish album cover - Gen Z aesthetic with maximalist energy. Should look like it belongs on a viral TikTok or Instagram's trending page. Every pixel should demand attention and screenshots.`;
+      REFERENCE VIBE: Think 100 gecs album cover meets Cyberpunk 2077 meets TikTok's most viral content - absolute visual overload that somehow still works. Should look like it was designed by AI from the year 3000 specifically to break Instagram's algorithm. Every pixel should scream "THIS IS THE EVENT OF THE CENTURY!"`;
     } else {
       const errorMsg = `Unsupported content type: ${type}`;
       console.error(errorMsg);
