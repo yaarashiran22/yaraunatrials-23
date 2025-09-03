@@ -35,7 +35,7 @@ const FriendsProfileRow = () => {
 
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-semibold mb-3">החברים שלי</h3>
+      <h3 className="text-lg font-semibold mb-3">חברים ושכנים</h3>
       <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
         {friends.map((friend) => (
           <div 
