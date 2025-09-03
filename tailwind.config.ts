@@ -39,24 +39,6 @@ export default {
 					foreground: 'hsl(var(--coral-foreground))',
 					muted: 'hsl(var(--coral-muted))'
 				},
-				pink: {
-					DEFAULT: 'hsl(var(--pink))',
-					foreground: 'hsl(var(--pink-foreground))'
-				},
-				teal: {
-					DEFAULT: 'hsl(var(--teal))',
-					foreground: 'hsl(var(--teal-foreground))',
-					light: 'hsl(var(--teal-light))'
-				},
-				violet: {
-					DEFAULT: 'hsl(var(--violet))',
-					foreground: 'hsl(var(--violet-foreground))',
-					light: 'hsl(var(--violet-light))'
-				},
-				'una-purple': {
-					DEFAULT: 'hsl(var(--una-purple))',
-					foreground: 'hsl(var(--una-purple-foreground))'
-				},
 				success: {
 					DEFAULT: 'hsl(var(--success))',
 					foreground: 'hsl(var(--success-foreground))'
@@ -79,9 +61,7 @@ export default {
 				},
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))',
-					muted: 'hsl(var(--accent-muted))',
-					subtle: 'hsl(var(--accent-subtle))'
+					foreground: 'hsl(var(--accent-foreground))'
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
