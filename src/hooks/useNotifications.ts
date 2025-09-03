@@ -33,7 +33,11 @@ export const useNotifications = () => {
       return;
     }
 
-    if (hasFetched.current) return;
+    // Prevent multiple concurrent fetches
+    if (hasFetched.current) {
+      setLoading(false);
+      return;
+    }
 
     try {
       const { data, error } = await supabase

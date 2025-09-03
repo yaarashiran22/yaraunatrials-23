@@ -23,6 +23,7 @@ export const useUserMessages = (userId?: string) => {
 
   const fetchMessages = async () => {
     if (!targetUserId) {
+      setMessages([]);
       setLoading(false);
       return;
     }

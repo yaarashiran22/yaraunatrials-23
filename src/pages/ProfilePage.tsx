@@ -1,7 +1,7 @@
 import { Calendar, MapPin, Users, Trash2, Pencil, Edit, X, Star, Heart, MessageCircle, Share2, Bell, ChevronLeft, ChevronRight, Play, Pause, Instagram, Settings, Gift, Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSecureAuth } from "@/hooks/useSecureAuth";
 import { format } from "date-fns";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -37,17 +37,18 @@ const ProfilePage = () => {
   const { user, requireAuth, canAccessResource } = useSecureAuth();
   const { toast } = useToast();
   
-  // Use security utility for UUID validation
-  
-  // Handle profile ID logic: if no ID or invalid ID, use current user's profile
-  const getActualProfileId = () => {
+  // Use security utility for UUID validation - memoized to prevent re-renders
+  const actualProfileId = useMemo(() => {
     if (!id || !validateUUID(id)) {
       return user?.id;
     }
     return id;
-  };
+  }, [id, user?.id]);
   
-  const actualProfileId = getActualProfileId();
+  // Check if this is the current user's profile - memoized
+  const isOwnProfile = useMemo(() => {
+    return user && (!id || !validateUUID(id) || actualProfileId === user.id);
+  }, [user, id, actualProfileId]);
   const { profile: profileData, loading, error, refetch } = useProfile(actualProfileId);
   const { events: userEvents, loading: eventsLoading, deleteEvent, refetch: refetchEvents } = useUserEvents(actualProfileId);
   const { imagePosts, loading: postsLoading } = useUserPosts(actualProfileId);
@@ -55,18 +56,6 @@ const ProfilePage = () => {
   const { isFollowing, toggleFollow, isToggling } = useFollowing();
   const { myCoupons, loading: couponsLoading, deleteCoupon, deleting: deletingCoupon, refreshCoupons } = useMyCoupons(user?.id);
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
-  
-  // Check if this is the current user's profile
-  // If the ID is invalid or missing, we're showing the current user's profile
-  const isOwnProfile = user && (!id || !validateUUID(id) || actualProfileId === user.id);
-
-  console.log('ProfilePage - Debug info:', {
-    urlId: id,
-    actualProfileId,
-    currentUserId: user?.id,
-    isOwnProfile,
-    isValidUUID: id ? validateUUID(id) : false
-  });
   
   
   const [showNotifications, setShowNotifications] = useState(false);
