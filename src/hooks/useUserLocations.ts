@@ -8,6 +8,7 @@ interface UserLocation {
   latitude: number;
   longitude: number;
   address?: string;
+  status?: string;
   created_at: string;
   updated_at: string;
 }

@@ -247,7 +247,12 @@ const DiscoverPage = () => {
   const addUserLocationMarkers = (usersToShow = userLocations, highlightedUsers: any[] = []) => {
     if (!mapInstanceRef.current) return;
 
-    console.log('Adding user location markers, count:', usersToShow.length);
+    // Filter users based on isOpenToHang state
+    const displayUsers = isOpenToHang 
+      ? usersToShow.filter(user => user.status === 'open_to_hang')
+      : usersToShow;
+
+    console.log('Adding user location markers, count:', displayUsers.length, 'isOpenToHang:', isOpenToHang);
 
     // Clear existing user markers
     if (userMarkersRef.current.length > 0) {
@@ -258,7 +263,7 @@ const DiscoverPage = () => {
     }
 
     // Add markers for each user location
-    usersToShow.forEach((userLocation) => {
+    displayUsers.forEach((userLocation) => {
       if (!mapInstanceRef.current) return;
 
       console.log('Adding marker for user:', userLocation.profile?.name, 'at:', userLocation.latitude, userLocation.longitude);
@@ -452,7 +457,13 @@ const DiscoverPage = () => {
     };
   }, []);
 
-  // Update markers when data changes
+  // Update markers when user locations or hang status changes
+  useEffect(() => {
+    if (mapInstanceRef.current && !isLoading) {
+      console.log('Updating markers based on hang status:', isOpenToHang);
+      addUserLocationMarkers();
+    }
+  }, [userLocations, isOpenToHang]);
   useEffect(() => {
     if (mapInstanceRef.current && !isLoading) {
       addUserLocationMarkers();

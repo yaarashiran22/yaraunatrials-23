@@ -15,9 +15,10 @@ L.Icon.Default.mergeOptions({
 
 interface BuenosAiresMapProps {
   className?: string;
+  showOpenToHangOnly?: boolean;
 }
 
-const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
+const BuenosAiresMap = ({ className = "w-full h-64", showOpenToHangOnly = false }: BuenosAiresMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const userMarkersRef = useRef<L.Marker[]>([]);
@@ -64,13 +65,18 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
   };
 
   // Function to add user location markers - optimized for performance
-  const addUserLocationMarkers = (usersToShow = userLocations) => {
+  const addUserLocationMarkers = (usersToShow?: any[]) => {
+    // Filter users based on showOpenToHangOnly prop
+    const filteredUsers = usersToShow || userLocations;
+    const displayUsers = showOpenToHangOnly 
+      ? filteredUsers.filter(user => user.status === 'open_to_hang')
+      : filteredUsers;
     if (!mapInstanceRef.current) {
       console.log('BuenosAiresMap: No map instance available for adding markers');
       return;
     }
 
-    console.log(`BuenosAiresMap: Adding markers for ${usersToShow.length} user locations`);
+    console.log(`BuenosAiresMap: Adding markers for ${displayUsers.length} user locations`);
 
     // Clear existing user markers efficiently
     if (userMarkersRef.current.length > 0) {
@@ -83,22 +89,28 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
     }
 
     // Add markers for each user location
-    usersToShow.forEach((userLocation, index) => {
+    displayUsers.forEach((userLocation, index) => {
       if (!mapInstanceRef.current) return;
 
       console.log(`BuenosAiresMap: Adding marker ${index + 1} for user:`, userLocation.profile.name, 'at', userLocation.latitude, userLocation.longitude);
 
-      // Create optimized custom icon with smaller HTML for faster rendering
+      const isOpenToHang = userLocation.status === 'open_to_hang';
+      const statusColor = isOpenToHang ? 'bg-pink-500' : 'bg-green-500';
+      const borderColor = isOpenToHang ? 'border-pink-200' : 'border-white';
+      const pulseClass = isOpenToHang ? 'animate-pulse' : '';
+
+      // Create optimized custom icon with different styles for open to hang status
       const userIcon = L.divIcon({
         html: `
-          <div class="w-8 h-8 rounded-full border-2 border-white shadow-md overflow-hidden bg-white relative">
+          <div class="w-8 h-8 rounded-full border-2 ${borderColor} shadow-md overflow-hidden bg-white relative ${pulseClass}">
             <img 
               src="${userLocation.profile.profile_image_url || '/placeholder.svg'}" 
               alt=""
               class="w-full h-full object-cover"
               loading="lazy"
             />
-            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border border-white rounded-full"></div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 ${statusColor} border border-white rounded-full"></div>
+            ${isOpenToHang ? '<div class="absolute top-0 left-0 w-2 h-2 bg-pink-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-[8px]">💕</span></div>' : ''}
           </div>
         `,
         className: 'user-location-marker',
@@ -123,6 +135,11 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
               />
               <span class="font-medium">${userLocation.profile.name || 'משתמש'}</span>
             </div>
+            ${isOpenToHang ? `
+              <div class="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full mt-1">
+                💕 Open to hang out right now!
+              </div>
+            ` : ''}
           </div>
         `);
 
@@ -218,7 +235,7 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
     };
   }, []);
 
-  // Update user markers when userLocations change
+  // Update user markers when userLocations change or showOpenToHangOnly changes
   useEffect(() => {
     console.log('BuenosAiresMap: userLocations changed, length:', userLocations.length);
     if (mapInstanceRef.current && !isLoading) {
@@ -227,7 +244,7 @@ const BuenosAiresMap = ({ className = "w-full h-64" }: BuenosAiresMapProps) => {
     } else {
       console.log('BuenosAiresMap: Map not ready yet, isLoading:', isLoading);
     }
-  }, [userLocations, isLoading]);
+  }, [userLocations, isLoading, showOpenToHangOnly]);
 
   if (error) {
     return (
