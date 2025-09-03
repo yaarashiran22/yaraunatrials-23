@@ -212,12 +212,12 @@ const EventVerticalPopup = ({
           <ChevronDown className="h-6 w-6" />
         </Button>}
 
-      <div ref={contentRef} className={`backdrop-blur-xl bg-gradient-to-br from-purple-50/95 via-pink-50/95 to-orange-50/95 dark:from-purple-950/95 dark:via-pink-950/95 dark:to-orange-950/95 rounded-3xl border border-white/20 shadow-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-300 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} event-vertical-popup`} style={{
+      <div ref={contentRef} className={`backdrop-blur-xl bg-gradient-to-br from-emerald-50/95 via-green-50/95 to-teal-50/95 dark:from-emerald-950/95 dark:via-green-950/95 dark:to-teal-950/95 rounded-3xl border border-white/20 shadow-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-300 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} event-vertical-popup`} style={{
       transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
       scrollBehavior: 'smooth'
     }} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-orange-500/10 backdrop-blur-sm">
+        <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-emerald-500/10 via-green-500/10 to-teal-500/10 backdrop-blur-sm">
           <Button variant="ghost" size="sm" onClick={onClose} className="hover:bg-white/20 transition-all duration-300 rounded-full p-2">
             <X className="h-5 w-5 text-gray-700 dark:text-gray-300" />
           </Button>
@@ -230,7 +230,7 @@ const EventVerticalPopup = ({
         </div>
 
         {/* Vertical Navigation Instructions */}
-        {allEvents.length > 1 && <div className="flex justify-center py-3 border-b border-white/10 bg-gradient-to-r from-purple-400/5 via-pink-400/5 to-orange-400/5">
+        {allEvents.length > 1 && <div className="flex justify-center py-3 border-b border-white/10 bg-gradient-to-r from-emerald-400/5 via-green-400/5 to-teal-400/5">
             <div className="text-xs font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2 px-4 py-1 rounded-full bg-white/30 dark:bg-black/20 backdrop-blur-sm">
               
             </div>
@@ -238,7 +238,7 @@ const EventVerticalPopup = ({
 
         {/* Vertical Progress Indicators */}
         {allEvents.length > 1 && <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
-            {allEvents.map((_, index) => <div key={index} className={`w-3 h-10 rounded-full transition-all duration-500 backdrop-blur-sm border border-white/20 ${index === currentIndex ? 'bg-gradient-to-b from-purple-400 to-pink-400 shadow-lg shadow-purple-400/40 scale-110' : 'bg-white/20 dark:bg-black/20'}`} />)}
+            {allEvents.map((_, index) => <div key={index} className={`w-3 h-10 rounded-full transition-all duration-500 backdrop-blur-sm border border-white/20 ${index === currentIndex ? 'bg-gradient-to-b from-emerald-400 to-green-400 shadow-lg shadow-emerald-400/40 scale-110' : 'bg-white/20 dark:bg-black/20'}`} />)}
           </div>}
 
         {/* Content */}
@@ -246,7 +246,7 @@ const EventVerticalPopup = ({
           {/* Event Image */}
           <div className={`relative ${isMobile ? 'mb-6' : 'mb-8'}`}>
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-orange-500/20 z-10"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-teal-500/20 z-10"></div>
               <img src={displayEvent.image} alt={displayEvent.title} className={`w-full ${isMobile ? 'h-56' : 'h-72'} object-cover`} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10"></div>
             </div>
@@ -259,7 +259,7 @@ const EventVerticalPopup = ({
             
             {/* Event Badge */}
             <div className="absolute top-4 left-4 z-20">
-              <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg backdrop-blur-sm">
+              <div className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg backdrop-blur-sm">
                 ✨ Event
               </div>
             </div>
@@ -268,8 +268,8 @@ const EventVerticalPopup = ({
           {/* Event Details */}
           <div className={`${isMobile ? 'space-y-5' : 'space-y-6'}`}>
             <div className="text-center">
-              <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent ${isMobile ? 'mb-2' : 'mb-3'} leading-tight`} style={{ fontFamily: 'Playfair Display, serif' }}>{displayEvent.title}</h3>
-              {displayEvent.price && displayEvent.price !== 'Free' && <p className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-purple-600 dark:text-purple-400`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{displayEvent.price}</p>}
+              <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent ${isMobile ? 'mb-2' : 'mb-3'} leading-tight`} style={{ fontFamily: 'Playfair Display, serif' }}>{displayEvent.title}</h3>
+              {displayEvent.price && displayEvent.price !== 'Free' && <p className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-emerald-600 dark:text-emerald-400`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{displayEvent.price}</p>}
               {(!displayEvent.price || displayEvent.price === 'Free') && <p className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-emerald-500 dark:text-emerald-400`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>✨ Free Event</p>}
             </div>
             
@@ -278,16 +278,16 @@ const EventVerticalPopup = ({
               </p>}
             
             {/* Event Details Section */}
-            <div className={`${isMobile ? 'space-y-3' : 'space-y-4'} ${isMobile ? 'p-4' : 'p-6'} bg-gradient-to-br from-purple-50/70 via-pink-50/70 to-orange-50/70 dark:from-purple-950/50 dark:via-pink-950/50 dark:to-orange-950/50 rounded-2xl border border-white/30 backdrop-blur-sm shadow-lg`}>
+            <div className={`${isMobile ? 'space-y-3' : 'space-y-4'} ${isMobile ? 'p-4' : 'p-6'} bg-gradient-to-br from-emerald-50/70 via-green-50/70 to-teal-50/70 dark:from-emerald-950/50 dark:via-green-950/50 dark:to-teal-950/50 rounded-2xl border border-white/30 backdrop-blur-sm shadow-lg`}>
               {displayEvent.location && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-gray-700 dark:text-gray-300`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                  <div className="p-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400">
+                  <div className="p-2 rounded-full bg-gradient-to-r from-emerald-400 to-green-400">
                     <MapPin className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-white`} />
                   </div>
                   <span>{locationMapping[displayEvent.location] || displayEvent.location}</span>
                 </div>}
               
               {displayEvent.date && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-gray-700 dark:text-gray-300`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                  <div className="p-2 rounded-full bg-gradient-to-r from-pink-400 to-orange-400">
+                  <div className="p-2 rounded-full bg-gradient-to-r from-green-400 to-teal-400">
                     <Calendar className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-white`} />
                   </div>
                   <span>
@@ -301,7 +301,7 @@ const EventVerticalPopup = ({
                 </div>}
               
               {displayEvent.time && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-gray-700 dark:text-gray-300`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                  <div className="p-2 rounded-full bg-gradient-to-r from-orange-400 to-purple-400">
+                  <div className="p-2 rounded-full bg-gradient-to-r from-teal-400 to-emerald-400">
                     <Clock className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-white`} />
                   </div>
                   <span>{displayEvent.time ? displayEvent.time.slice(0, 5) : ''}</span>
@@ -325,10 +325,10 @@ const EventVerticalPopup = ({
           </div>
 
           {/* RSVP Section */}
-          <div className={`${isMobile ? 'mt-6' : 'mt-8'} ${isMobile ? 'p-5' : 'p-6'} bg-gradient-to-br from-purple-50/70 via-pink-50/70 to-orange-50/70 dark:from-purple-950/50 dark:via-pink-950/50 dark:to-orange-950/50 rounded-2xl border border-white/30 backdrop-blur-sm shadow-xl`}>
+          <div className={`${isMobile ? 'mt-6' : 'mt-8'} ${isMobile ? 'p-5' : 'p-6'} bg-gradient-to-br from-emerald-50/70 via-green-50/70 to-teal-50/70 dark:from-emerald-950/50 dark:via-green-950/50 dark:to-teal-950/50 rounded-2xl border border-white/30 backdrop-blur-sm shadow-xl`}>
             
             
-            <Button onClick={handleRSVP} className={`w-full ${isMobile ? 'h-12' : 'h-14'} bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            <Button onClick={handleRSVP} className={`w-full ${isMobile ? 'h-12' : 'h-14'} bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 hover:from-emerald-600 hover:via-green-600 hover:to-teal-600 text-white rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
               <MessageCircle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} mr-3`} />
               ✨ RSVP for Event
             </Button>
