@@ -1317,19 +1317,6 @@ const ProfilePage = () => {
                   {profileData.account_type === 'business' ? 'Business' : 'Personal'}
                 </span>
               </div>
-              
-              {/* Business Account Features - Show manage button only when no coupons */}
-              {profileData.account_type === 'business' && isOwnProfile && (!myCoupons || myCoupons.length === 0) && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/profile/' + user?.id + '#coupons')}
-                  className="gap-2 border-purple-400 text-purple-600 hover:bg-purple-50 hover:text-purple-700"
-                >
-                  <Gift className="h-4 w-4" />
-                  Manage Coupons
-                </Button>
-              )}
             </div>
             {/* Business Coupons Display */}
             {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
