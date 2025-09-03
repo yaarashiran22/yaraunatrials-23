@@ -137,7 +137,7 @@ const BuenosAiresMap = ({ className = "w-full h-64", showOpenToHangOnly = false 
             </div>
             ${isOpenToHang ? `
               <div class="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full mt-1">
-                💕 Open to hang out right now!
+                💕 Open to hang out!
               </div>
             ` : ''}
           </div>
