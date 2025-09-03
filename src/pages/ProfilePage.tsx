@@ -1215,76 +1215,86 @@ const ProfilePage = () => {
         onNotificationsClick={() => setShowNotifications(true)}
       />
 
-      <main className="px-4 py-6 pb-20">
-        {/* Profile Header */}
-        <div className="flex items-start gap-4 mb-6">
-          <div className="relative">
-            <img 
-              src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-              alt={profileData?.name || "User"}
-              className="rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
-              style={{ width: '70px', height: '70px', minWidth: '70px', minHeight: '70px' }}
-              onClick={() => setShowProfilePicture(true)}
-            />
-          </div>
-          
-          <div className="flex-1">
-            <h1 className="text-xl font-bold mb-1">{profileData?.name || "User"}</h1>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <div className="flex items-center gap-1">
-                <MapPin className="h-3 w-3" />
-                <span>{profileData?.location || "Not specified"}</span>
+      <main className="pb-20">
+        {/* Hero Profile Header */}
+        <div className="bg-gradient-to-br from-primary/5 via-accent/10 to-coral/5 px-4 pt-6 pb-8 mb-6">
+          <div className="flex items-start gap-6">
+            <div className="relative">
+              <div className="p-1 bg-gradient-to-br from-accent to-coral rounded-full">
+                <img 
+                  src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
+                  alt={profileData?.name || "User"}
+                  className="rounded-full object-cover cursor-pointer hover:opacity-90 transition-all duration-300 shadow-lg"
+                  style={{ width: '88px', height: '88px', minWidth: '88px', minHeight: '88px' }}
+                  onClick={() => setShowProfilePicture(true)}
+                />
               </div>
             </div>
-            <p className="text-sm text-foreground mb-4">{profileData?.bio || "No description"}</p>
-            {profileData?.specialties && profileData.specialties.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {profileData.specialties.map((specialty, index) => (
-                  <div key={index} className="rounded-full px-2 py-1 inline-block" style={{ backgroundColor: 'hsl(var(--coral-muted))', color: 'hsl(var(--coral))', borderColor: 'hsl(var(--coral))' }}>
-                    <span className="text-xs font-medium">{specialty}</span>
-                  </div>
-                ))}
-              </div>
-            )}
             
-            <div className="flex items-center gap-3 text-sm">
-              {profileData?.username ? (
-                <a 
-                  href={profileData.username} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:opacity-80 underline cursor-pointer"
-                  style={{ color: 'hsl(280 60% 55%)' }}
-                >
-                  Instagram
-                </a>
-              ) : (
-                <span className="text-muted-foreground">No Instagram</span>
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold mb-2 text-foreground">{profileData?.name || "User"}</h1>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                <div className="flex items-center gap-1">
+                  <MapPin className="h-4 w-4" />
+                  <span>{profileData?.location || "Not specified"}</span>
+                </div>
+              </div>
+              <p className="text-sm text-foreground/80 mb-4 leading-relaxed">{profileData?.bio || "No description available"}</p>
+              {profileData?.specialties && profileData.specialties.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {profileData.specialties.map((specialty, index) => (
+                    <div key={index} className="px-3 py-1.5 bg-gradient-to-r from-accent/20 to-coral/20 border border-accent/30 rounded-full">
+                      <span className="text-xs font-medium text-accent">{specialty}</span>
+                    </div>
+                  ))}
+                </div>
               )}
-              {isOwnProfile && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="rounded-full p-2 h-8 w-8"
-                  onClick={() => navigate('/settings')}
-                >
-                  <Settings className="h-4 w-4" />
-                </Button>
-              )}
+              
+              <div className="flex items-center gap-3 text-sm">
+                {profileData?.username ? (
+                  <a 
+                    href={profileData.username} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:opacity-80 underline cursor-pointer text-accent font-medium"
+                  >
+                    Instagram
+                  </a>
+                ) : (
+                  <span className="text-muted-foreground">No Instagram</span>
+                )}
+                {isOwnProfile && (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-full p-2 h-9 w-9 bg-white/80 backdrop-blur-sm border-white/20 hover:bg-white shadow-lg"
+                    onClick={() => navigate('/settings')}
+                  >
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                )}
                {!isOwnProfile && (
                  <div className="flex gap-2">
                    <Button 
                      variant="outline" 
                      size="sm" 
-                     className={`rounded-full px-3 py-1 h-7 text-xs ${isFriend(actualProfileId || '') ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
+                     className={`rounded-full px-4 py-2 h-8 text-xs font-medium shadow-sm ${
+                       isFriend(actualProfileId || '') 
+                         ? 'bg-emerald-500 text-white border-emerald-500 hover:bg-emerald-600' 
+                         : 'bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white'
+                     }`}
                      onClick={handleAddFriend}
                    >
-                     {isFriend(actualProfileId || '') ? 'Added to friends' : 'Add'}
+                     {isFriend(actualProfileId || '') ? 'Friends' : 'Add Friend'}
                    </Button>
                    <Button 
                      variant="outline" 
                      size="sm" 
-                     className={`rounded-full px-3 py-1 h-7 text-xs ${isFollowing(actualProfileId || '') ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : ''}`}
+                     className={`rounded-full px-4 py-2 h-8 text-xs font-medium shadow-sm ${
+                       isFollowing(actualProfileId || '') 
+                         ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' 
+                         : 'bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white'
+                     }`}
                      onClick={() => actualProfileId && toggleFollow(actualProfileId)}
                      disabled={isToggling}
                    >
@@ -1293,260 +1303,284 @@ const ProfilePage = () => {
                  </div>
                )}
                {isOwnProfile && (
-                <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
-                   Edit
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="rounded-full px-4 py-2 h-8 text-xs font-medium bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white shadow-sm" 
+                  onClick={() => navigate('/profile/edit')}
+                >
+                   Edit Profile
                  </Button>
                )}
+              </div>
             </div>
           </div>
         </div>
+
+        <div className="px-4 space-y-6">
 
 
         {/* Account Type Badge and Business Features */}
         {profileData?.account_type && (
           <section className="mb-6">
-            <div className="flex items-center justify-between">
-              <div className="inline-flex items-center">
-                <span 
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    profileData.account_type === 'business' 
-                      ? 'bg-purple-100 text-purple-800' 
-                      : 'bg-blue-100 text-blue-800'
-                  }`}
-                >
-                  {profileData.account_type === 'business' ? 'Business' : 'Personal'}
-                </span>
-              </div>
-            </div>
-            {/* Business Coupons Display */}
-            {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
-              <div className="mt-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-semibold text-purple-700">Business Coupons</h4>
+            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 border border-border/20 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <div className="inline-flex items-center">
+                  <span 
+                    className={`px-4 py-2 rounded-full text-sm font-semibold shadow-sm ${
+                      profileData.account_type === 'business' 
+                        ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white' 
+                        : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
+                    }`}
+                  >
+                    {profileData.account_type === 'business' ? '🏢 Business Account' : '👤 Personal Account'}
+                  </span>
                 </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {myCoupons.slice(0, 4).map((coupon) => (
-                    <div key={coupon.id} className="relative group">
-                      <div className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
-                        {coupon.image_url && (
-                          <div className="aspect-video bg-muted">
-                            <img 
-                              src={coupon.image_url} 
-                              alt={coupon.title}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        )}
-                        <div className="p-3">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Gift className="h-3 w-3 text-primary" />
-                            <span className="text-xs px-2 py-1 rounded-full font-medium bg-green-100 text-green-800">
-                              Coupon
-                            </span>
-                            {coupon.valid_until && (
-                              <span className="text-xs text-muted-foreground">
-                                Valid until {new Date(coupon.valid_until).toLocaleDateString()}
-                              </span>
-                            )}
-                          </div>
-                          <h5 className="font-medium text-sm mb-1">{coupon.title}</h5>
-                          {coupon.business_name && (
-                            <p className="text-xs text-primary font-medium mb-1">{coupon.business_name}</p>
-                          )}
-                          {coupon.discount_amount && (
-                            <div className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full inline-block mb-2 font-semibold">
-                              {coupon.discount_amount}
+              </div>
+              
+              {/* Business Coupons Display */}
+              {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
+                <div className="mt-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                      <Gift className="h-5 w-5 text-purple-600" />
+                      Business Coupons
+                    </h4>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {myCoupons.slice(0, 4).map((coupon) => (
+                      <div key={coupon.id} className="relative group">
+                        <div className="bg-card rounded-xl border border-border/20 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                          {coupon.image_url && (
+                            <div className="aspect-video bg-gradient-to-br from-muted to-muted/50">
+                              <img 
+                                src={coupon.image_url} 
+                                alt={coupon.title}
+                                className="w-full h-full object-cover"
+                              />
                             </div>
                           )}
-                          {coupon.description && (
-                            <p className="text-xs text-muted-foreground mb-2 line-clamp-1">{coupon.description}</p>
-                          )}
-                          <div className="flex items-center justify-between">
-                            {coupon.neighborhood && (
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                <MapPin className="h-2 w-2" />
-                                <span>{coupon.neighborhood}</span>
+                          <div className="p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Gift className="h-4 w-4 text-emerald-600" />
+                              <span className="text-xs px-3 py-1 rounded-full font-semibold bg-emerald-100 text-emerald-800">
+                                Active Coupon
+                              </span>
+                              {coupon.valid_until && (
+                                <span className="text-xs text-muted-foreground">
+                                  Until {new Date(coupon.valid_until).toLocaleDateString()}
+                                </span>
+                              )}
+                            </div>
+                            <h5 className="font-semibold text-base mb-2 text-foreground">{coupon.title}</h5>
+                            {coupon.business_name && (
+                              <p className="text-sm text-accent font-medium mb-2">{coupon.business_name}</p>
+                            )}
+                            {coupon.discount_amount && (
+                              <div className="bg-gradient-to-r from-accent/20 to-coral/20 text-accent text-sm px-3 py-1.5 rounded-full inline-block mb-3 font-bold">
+                                {coupon.discount_amount} OFF
                               </div>
                             )}
-                            <span className="text-xs text-muted-foreground">
-                              {coupon.is_active ? 'Active' : 'Inactive'}
-                            </span>
+                            {coupon.description && (
+                              <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{coupon.description}</p>
+                            )}
+                            <div className="flex items-center justify-between">
+                              {coupon.neighborhood && (
+                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                  <MapPin className="h-3 w-3" />
+                                  <span>{coupon.neighborhood}</span>
+                                </div>
+                              )}
+                              <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                                coupon.is_active 
+                                  ? 'bg-emerald-100 text-emerald-700' 
+                                  : 'bg-gray-100 text-gray-600'
+                              }`}>
+                                {coupon.is_active ? 'Active' : 'Inactive'}
+                              </span>
+                            </div>
                           </div>
                         </div>
+                        
+                         {/* Edit/Delete/Instagram buttons - show on hover */}
+                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              className="h-9 w-9 p-0 bg-white/95 hover:bg-white shadow-lg rounded-full"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                generateCouponInstagramStory(coupon);
+                              }}
+                              title="Generate Instagram Story"
+                            >
+                              <Instagram className="h-4 w-4 text-pink-500" />
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              className="h-9 w-9 p-0 bg-white/95 hover:bg-white shadow-lg rounded-full"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditCoupon(coupon.id);
+                              }}
+                            >
+                              <Pencil className="h-4 w-4 text-blue-600" />
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="h-9 w-9 p-0 bg-white/95 hover:bg-red-50 text-red-600 border-red-200 shadow-lg rounded-full"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteCoupon(coupon.id);
+                              }}
+                              disabled={deletingCoupon}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                       </div>
-                      
-                       {/* Edit/Delete/Instagram buttons - show on hover */}
-                        <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            className="h-10 w-10 p-0 bg-white/90 hover:bg-white"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              generateCouponInstagramStory(coupon);
-                            }}
-                            title="Generate Instagram Story"
-                          >
-                            <Instagram className="h-4 w-4 text-pink-500" />
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            className="h-10 w-10 p-0 bg-white/90 hover:bg-white"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleEditCoupon(coupon.id);
-                            }}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="h-10 w-10 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteCoupon(coupon.id);
-                            }}
-                            disabled={deletingCoupon}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                    </div>
-                  ))}
-                </div>
-                
-                {myCoupons.length > 4 && (
-                  <div className="mt-2 text-center">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => navigate('/profile/' + user?.id + '#coupons')}
-                      className="text-xs text-purple-600 hover:text-purple-700"
-                    >
-                      View all {myCoupons.length} coupons
-                    </Button>
+                    ))}
                   </div>
-                )}
-              </div>
-            )}
+                  
+                  {myCoupons.length > 4 && (
+                    <div className="mt-4 text-center">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => navigate('/profile/' + user?.id + '#coupons')}
+                        className="text-sm text-accent hover:text-accent/80 font-medium"
+                      >
+                        View all {myCoupons.length} coupons →
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </section>
         )}
 
         {/* My Events Section - Only shown for own profile */}
         {isOwnProfile && userEvents && userEvents.length > 0 && (
           <section className="mb-8">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold">My Events & Meetups</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {userEvents.map((event) => (
-                <div key={event.id} className="relative group">
-                  <div 
-                    className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow"
-                  >
-                    <div className="aspect-video bg-muted">
-                      {(event as any).video_url ? (
-                        <video 
-                          src={(event as any).video_url}
-                          className="w-full h-full object-cover"
-                          muted
-                          autoPlay
-                          loop
-                          playsInline
-                          preload="metadata"
-                          poster={event.image_url || communityEvent}
-                          onLoadedData={(e) => {
-                            // Ensure video plays when loaded
-                            e.currentTarget.play().catch(() => {
-                              console.log('Autoplay blocked, video will play on user interaction');
-                            });
-                          }}
-                          onError={(e) => {
-                            // If video fails to load, hide the video element and show fallback image
-                            e.currentTarget.style.display = 'none';
-                            console.log('Video failed to load:', (event as any).video_url);
-                          }}
-                        />
-                      ) : (
-                        <img 
-                          src={event.image_url || communityEvent} 
-                          alt={event.title}
-                          className="w-full h-full object-cover"
-                        />
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                          event.event_type === 'meetup' 
-                            ? 'bg-blue-100 text-blue-800' 
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {event.event_type === 'meetup' ? 'Meetup' : 'Event'}
-                        </span>
-                        {event.date && (
-                          <span className="text-xs text-muted-foreground">
-                            {getRelativeDay(event.date)}
+            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-6 border border-border/20 shadow-sm">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+                  <Calendar className="h-6 w-6 text-accent" />
+                  My Events & Meetups
+                </h3>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {userEvents.map((event) => (
+                  <div key={event.id} className="relative group">
+                    <div 
+                      className="bg-card rounded-xl border border-border/20 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+                    >
+                      <div className="aspect-video bg-gradient-to-br from-muted to-muted/50 relative overflow-hidden">
+                        {(event as any).video_url ? (
+                          <video 
+                            src={(event as any).video_url}
+                            className="w-full h-full object-cover"
+                            muted
+                            autoPlay
+                            loop
+                            playsInline
+                            preload="metadata"
+                            poster={event.image_url || communityEvent}
+                            onLoadedData={(e) => {
+                              // Ensure video plays when loaded
+                              e.currentTarget.play().catch(() => {
+                                console.log('Autoplay blocked, video will play on user interaction');
+                              });
+                            }}
+                            onError={(e) => {
+                              // If video fails to load, hide the video element and show fallback image
+                              e.currentTarget.style.display = 'none';
+                              console.log('Video failed to load:', (event as any).video_url);
+                            }}
+                          />
+                        ) : (
+                          <img 
+                            src={event.image_url || communityEvent} 
+                            alt={event.title}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                      </div>
+                      <div className="p-5">
+                        <div className="flex items-center gap-2 mb-4">
+                          <span className={`text-xs px-3 py-1.5 rounded-full font-semibold ${
+                            event.event_type === 'meetup' 
+                              ? 'bg-blue-100 text-blue-800' 
+                              : 'bg-emerald-100 text-emerald-800'
+                          }`}>
+                            {event.event_type === 'meetup' ? '👥 Meetup' : '🎉 Event'}
                           </span>
-                        )}
-                      </div>
-                      <h4 className="font-medium text-sm mb-2 line-clamp-2">{event.title}</h4>
-                      <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{event.description}</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <MapPin className="h-3 w-3" />
-                          <span>{event.location || 'Location TBD'}</span>
+                          {event.date && (
+                            <span className="text-xs text-muted-foreground font-medium">
+                              {getRelativeDay(event.date)}
+                            </span>
+                          )}
                         </div>
-                        {event.price && (
-                          <span className="text-sm font-semibold text-primary">₪{event.price}</span>
-                        )}
+                        <h4 className="font-bold text-lg mb-3 line-clamp-2 text-foreground">{event.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">{event.description}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <MapPin className="h-4 w-4" />
+                            <span className="font-medium">{event.location || 'Location TBD'}</span>
+                          </div>
+                          {event.price && (
+                            <span className="text-lg font-bold text-accent">₪{event.price}</span>
+                          )}
+                        </div>
                       </div>
                     </div>
+                    
+                     {/* Edit/Delete/Instagram buttons - show on hover */}
+                     <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                       <Button
+                         variant="secondary"
+                         size="sm"
+                         className="h-10 w-10 p-0 bg-white/95 hover:bg-white shadow-lg rounded-full"
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           generateInstagramStory(event);
+                         }}
+                         title="Generate Instagram Story"
+                       >
+                         <Instagram className="h-4 w-4 text-pink-500" />
+                       </Button>
+                       <Button
+                         variant="secondary"
+                         size="sm"
+                         className="h-10 w-10 p-0 bg-white/95 hover:bg-white shadow-lg rounded-full"
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           handleEditEvent(event.id);
+                         }}
+                       >
+                         <Pencil className="h-4 w-4 text-blue-600" />
+                       </Button>
+                       <Button
+                         variant="destructive"
+                         size="sm"
+                         className="h-10 w-10 p-0 bg-white/95 hover:bg-red-50 text-red-600 border-red-200 shadow-lg rounded-full"
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           handleDeleteEvent(event.id);
+                         }}
+                       >
+                         <Trash2 className="h-4 w-4" />
+                       </Button>
+                     </div>
                   </div>
-                  
-                   {/* Edit/Delete/Instagram buttons - show on hover */}
-                   <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                     <Button
-                       variant="secondary"
-                       size="sm"
-                       className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
-                       onClick={(e) => {
-                         e.stopPropagation();
-                         generateInstagramStory(event);
-                       }}
-                       title="Generate Instagram Story"
-                     >
-                       <Instagram className="h-3 w-3 text-pink-500" />
-                     </Button>
-                     <Button
-                       variant="secondary"
-                       size="sm"
-                       className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
-                       onClick={(e) => {
-                         e.stopPropagation();
-                         handleEditEvent(event.id);
-                       }}
-                     >
-                       <Pencil className="h-3 w-3" />
-                     </Button>
-                     <Button
-                       variant="destructive"
-                       size="sm"
-                       className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
-                       onClick={(e) => {
-                         e.stopPropagation();
-                         handleDeleteEvent(event.id);
-                       }}
-                     >
-                       <Trash2 className="h-3 w-3" />
-                     </Button>
-                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
         )}
@@ -1554,35 +1588,46 @@ const ProfilePage = () => {
         {/* Empty state for events */}
         {isOwnProfile && userEvents && userEvents.length === 0 && !eventsLoading && (
           <section className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">My Events & Meetups</h3>
-            </div>
-            <div className="text-center py-8 bg-muted/30 rounded-lg">
-              <p className="text-muted-foreground mb-4">You haven't created any events or meetups yet</p>
-              <Button 
-                onClick={() => navigate('/events/create')}
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Create Your First Event
-              </Button>
+            <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 border border-border/20 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+                  <Calendar className="h-6 w-6 text-accent" />
+                  My Events & Meetups
+                </h3>
+              </div>
+              <div className="text-center py-12">
+                <div className="mb-6">
+                  <Calendar className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
+                  <p className="text-muted-foreground text-lg mb-2">No events created yet</p>
+                  <p className="text-muted-foreground/80 text-sm">Start organizing your first event or meetup!</p>
+                </div>
+                <Button 
+                  onClick={() => navigate('/events/create')}
+                  className="flex items-center gap-2 bg-gradient-to-r from-accent to-coral hover:from-accent/90 hover:to-coral/90 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all"
+                >
+                  <Plus className="h-5 w-5" />
+                  Create Your First Event
+                </Button>
+              </div>
             </div>
           </section>
         )}
 
         {/* Logout Button */}
         {isOwnProfile && (
-          <div className="mt-8 pt-6 border-t border-border">
+          <div className="mt-8 pt-6">
             <Button 
               variant="outline" 
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+              className="w-full flex items-center justify-center gap-3 text-destructive border-destructive/30 hover:bg-destructive hover:text-destructive-foreground bg-card/50 backdrop-blur-sm rounded-xl py-3 font-semibold shadow-sm"
             >
-              <LogOut className="h-4 w-4" />
+              <LogOut className="h-5 w-5" />
               Logout
             </Button>
           </div>
         )}
+
+        </div>
 
       </main>
       
