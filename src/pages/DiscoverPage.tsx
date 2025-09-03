@@ -434,100 +434,71 @@ const DiscoverPage = () => {
   };
 
   // Function to add text pin markers - removed event and meetup markers
-  const addTextPinMarkers = () => {
+  const addTextPinMarkers = async () => {
     if (!mapInstanceRef.current) return;
 
     // Clear existing recommendation markers
-    recommendationMarkersRef.current.forEach(marker => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.removeLayer(marker);
-      }
-    });
-    recommendationMarkersRef.current = [];
-
-    // Only show recommendations (users will see them through text pins)
-    if (userRecommendations.length > 0) {
-      const offsetRecommendations = offsetOverlappingMarkers(userRecommendations);
-      
-      offsetRecommendations.forEach((recommendation) => {
-        if (!mapInstanceRef.current) return;
-
-        try {
-          const location = recommendation.offsetLocation ? JSON.parse(recommendation.offsetLocation) : JSON.parse(recommendation.location);
-          
-          if (!location.lat || !location.lng) return;
-
-          const recommendationIcon = L.divIcon({
-            html: `
-              <div class="relative">
-                <div class="bg-white rounded-lg px-3 py-2 shadow-lg border border-gray-200 text-xs font-medium text-gray-800 max-w-[150px]">
-                  <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 bg-green-500 rounded-full flex-shrink-0"></div>
-                    <span class="truncate">${recommendation.title}</span>
-                  </div>
-                </div>
-                <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
-              </div>
-            `,
-            className: 'recommendation-text-pin',
-            iconSize: [150, 40],
-            iconAnchor: [75, 40],
-            popupAnchor: [0, -40]
-          });
-
-          const marker = L.marker([location.lat, location.lng], { 
-            icon: recommendationIcon,
-            riseOnHover: true 
-          })
-            .addTo(mapInstanceRef.current)
-            .bindPopup(`
-              <div dir="ltr" class="text-left text-sm">
-                <div class="font-medium">${recommendation.title}</div>
-                <div class="text-gray-600 mt-1">${recommendation.description}</div>
-                <div class="text-green-600 text-xs mt-2">💡 Recommendation</div>
-              </div>
-            `);
-
-          recommendationMarkersRef.current.push(marker);
-        } catch (error) {
-          console.error('Error parsing recommendation location:', error);
-        }
+    if (recommendationMarkersRef.current.length > 0) {
+      recommendationMarkersRef.current.forEach(marker => {
+        mapInstanceRef.current?.removeLayer(marker);
       });
+      recommendationMarkersRef.current = [];
     }
+
+    // No longer adding event and meetup markers per user request
+    setUserRecommendations([]);
   };
 
-  // Initialize map
   useEffect(() => {
     const initializeMap = async () => {
+      if (!mapContainer.current) return;
+
       try {
-        if (!mapContainer.current) return;
+        setIsLoading(true);
+        
+        // Buenos Aires coordinates - center of the city
+        const buenosAiresCenter: [number, number] = [-34.6118, -58.3960];
 
-        // Remove existing map if it exists
-        if (mapInstanceRef.current) {
-          mapInstanceRef.current.remove();
-          mapInstanceRef.current = null;
-        }
-
+        // Create map with Leaflet
         const map = L.map(mapContainer.current, {
-          center: [-34.6118, -58.3960], // Buenos Aires coordinates
-          zoom: 13,
           zoomControl: true,
-          attributionControl: false
-        });
+          attributionControl: true,
+          fadeAnimation: true,
+          zoomAnimation: true,
+        }).setView(buenosAiresCenter, 12);
+        
+        mapInstanceRef.current = map;
 
+        // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors',
-          maxZoom: 19
+          maxZoom: 19,
+          minZoom: 10,
         }).addTo(map);
 
-        mapInstanceRef.current = map;
-        console.log('Map initialized successfully');
-        
-        setError(null);
-      } catch (err) {
-        console.error('Error initializing map:', err);
-        setError('Failed to load map');
-      } finally {
+        // Popular neighborhoods in Buenos Aires
+        const neighborhoods = [
+          { name: "Palermo", lat: -34.5870, lng: -58.4263, color: '#BB31E9' },
+          { name: "Palermo Soho", lat: -34.5906, lng: -58.4203, color: '#9B59B6' },
+          { name: "Palermo Hollywood", lat: -34.5834, lng: -58.4323, color: '#8E44AD' },
+          { name: "San Telmo", lat: -34.6202, lng: -58.3731, color: '#FF6B6B' },
+          { name: "Recoleta", lat: -34.5885, lng: -58.3967, color: '#45B7D1' },
+          { name: "Villa Crespo", lat: -34.5998, lng: -58.4386, color: '#FFA726' },
+        ];
+
+        // Add Buenos Aires center marker
+        L.marker(buenosAiresCenter)
+          .addTo(map)
+          .bindPopup('Buenos Aires');
+
+        // Add user location and text pin markers
+        addUserLocationMarkers();
+        addTextPinMarkers();
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error initializing map:', error);
+        setError('Error loading map');
         setIsLoading(false);
       }
     };
@@ -549,13 +520,18 @@ const DiscoverPage = () => {
   // Update markers when user locations or hang status changes
   useEffect(() => {
     if (mapInstanceRef.current && !isLoading) {
-      if (filteredUsers.length > 0) {
-        // Show filtered users when there's an active filter
-        addUserLocationMarkers(filteredUsers);
-      } else {
-        // Show all users when no filter is active
-        addUserLocationMarkers();
+      console.log('Updating markers based on hang status:', isOpenToHang);
+      // Reset mood filter when not open to hang
+      if (!isOpenToHang) {
+        setSelectedMood('all');
+        setFilteredUsers([]);
       }
+      addUserLocationMarkers();
+    }
+  }, [userLocations, isOpenToHang, selectedMood]);
+  useEffect(() => {
+    if (mapInstanceRef.current && !isLoading) {
+      addUserLocationMarkers();
     }
   }, [userLocations, isLoading]);
 
@@ -566,99 +542,131 @@ const DiscoverPage = () => {
   }, [isLoading, allEvents, allMeetups, mapFilter]); // Add mapFilter dependency
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 pb-20">
+    <div className="min-h-screen bg-background pb-20">
       <Header 
-        title="Discover"
+        title="Map"
         onNeighborhoodChange={handleNeighborhoodChange}
       />
       
+      
       <main className="container mx-auto px-4 py-3 space-y-6">
-        {/* Enhanced Discovery Controls */}
-        <div className="flex gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowDiscovery(true)}
-            className="flex-1 btn-3d bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0 hover:from-emerald-600 hover:to-teal-700 font-medium"
-          >
-            <Search className="w-4 h-4 mr-2" />
-            Discover People
-          </Button>
-          
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowPeopleYouShouldMeet(true)}
-            className="flex-1 btn-3d bg-gradient-to-r from-orange-500 to-pink-600 text-white border-0 hover:from-orange-600 hover:to-pink-700 font-medium"
-          >
-            <Users className="w-4 h-4 mr-2" />
-            Suggested
-          </Button>
+        
+        {/* Open to Hang Button */}
+        <div className="flex flex-col items-center gap-2">
+          <OpenToHangButton size="sm" shareText="Open to Hang" removeText="Stop Hanging" className="w-32 text-xs" />
+          <p className="text-xs text-muted-foreground text-center max-w-xs">
+            Share your live location to find nearby people ready to hang out
+          </p>
         </div>
+        
+        {/* Map Section */}
+        <div className="relative">
 
-        {/* Enhanced Mood Filter - only show when open to hang */}
-        {isOpenToHang && (
-          <div className="card-3d p-3 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/30">
-            <MoodFilterStrip />
-          </div>
-        )}
-
-        {/* Enhanced Map Container */}
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-white to-gray-50">
-          <div className="h-[calc(100vh-280px)] relative">
-            {/* Gradient overlay for depth */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent pointer-events-none z-10" />
-            
-            {error ? (
-              <div className="flex items-center justify-center h-full bg-gradient-to-br from-red-50 to-orange-50">
-                <div className="text-center p-6">
-                  <div className="card-3d p-4 rounded-2xl border-red-200 bg-red-50">
-                    <p className="text-red-600 font-medium">{error}</p>
+          {/* People You Should Meet Row - Only show if there are suggested users */}
+          {!suggestedUsersLoading && suggestedUsers.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  People You Should Meet
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={findSuggestedUsers}
+                  className="text-xs"
+                >
+                  Refresh
+                </Button>
+              </div>
+              
+              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+                {suggestedUsers.slice(0, 10).map((user) => (
+                  <div key={user.id} className="flex-shrink-0 text-center group">
+                    <div className="relative">
+                      <div className="w-20 h-20 p-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full hover-scale">
+                        <img
+                          src={user.profile_image_url || '/placeholder-avatar.png'}
+                          alt={user.name}
+                          className="w-full h-full rounded-full object-cover border-2 border-white cursor-pointer transition-transform duration-200 group-hover:scale-105"
+                          onError={(e) => {
+                            e.currentTarget.src = '/placeholder-avatar.png';
+                          }}
+                        />
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white flex items-center justify-center animate-pulse">
+                        <span className="text-white text-xs font-bold">✓</span>
+                      </div>
+                    </div>
+                    <p className="text-xs font-medium mt-2 max-w-[80px] truncate text-center">{user.name}</p>
+                    <div className="flex items-center justify-center gap-1 mt-1">
+                      <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
+                      <p className="text-xs text-muted-foreground">{user.sharedEventCount}</p>
+                      <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
+                    </div>
                   </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+            {/* Filtered Users Display */}
+            {filteredUsers.length > 0 && (
+              <div className="absolute bottom-4 left-4 right-4 z-20">
+                <div className="bg-card/95 backdrop-blur-sm rounded-lg p-3 border border-border/20 shadow-lg">
+                  <h3 className="text-sm font-semibold mb-2">Matching Users ({filteredUsers.length})</h3>
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                    {filteredUsers.slice(0, 6).map((userLocation) => (
+                      <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1">
+                        <img 
+                          src={userLocation.profile.profile_image_url || '/placeholder.svg'} 
+                          alt={userLocation.profile.name}
+                          className="w-6 h-6 rounded-full object-cover"
+                        />
+                        <span className="text-xs font-medium">{userLocation.profile.name}</span>
+                      </div>
+                    ))}
+                    {filteredUsers.length > 6 && (
+                      <div className="flex-shrink-0 flex items-center justify-center bg-muted/50 rounded-full w-8 h-8">
+                        <span className="text-xs font-medium">+{filteredUsers.length - 6}</span>
+                      </div>
+                    )}
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => {
+                      setFilteredUsers([]);
+                      addUserLocationMarkers();
+                    }}
+                    className="mt-2 text-xs"
+                  >
+                    Show All Users
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {error ? (
+              <div className="flex items-center justify-center h-full bg-muted/30">
+                <div className="text-center p-4">
+                  <p className="text-muted-foreground">{error}</p>
                 </div>
               </div>
             ) : (
               <>
                 {isLoading && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-purple-50/90 backdrop-blur-sm flex items-center justify-center z-20">
-                    <div className="card-elevated p-6 rounded-2xl">
-                      <div className="text-center">
-                        <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-                        <p className="text-gray-700 font-medium">Loading map...</p>
-                      </div>
+                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 backdrop-blur-sm">
+                    <div className="text-center">
+                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                      <p className="text-muted-foreground text-sm">Loading map...</p>
                     </div>
                   </div>
                 )}
                 <div ref={mapContainer} className="w-full h-full relative z-0" />
               </>
             )}
-            
-            {/* Enhanced Floating Action Buttons */}
-            <div className="absolute bottom-6 right-6 flex flex-col gap-4 z-30">
-              {/* Map Filter Toggle */}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setMapFilter(mapFilter === 'all' ? 'events' : mapFilter === 'events' ? 'meetups' : 'all')}
-                className="btn-3d bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 hover:from-blue-600 hover:to-purple-700 px-4 py-2 font-medium shadow-xl"
-              >
-                <Filter className="w-4 h-4 mr-2" />
-                <span className="text-sm capitalize">
-                  {mapFilter === 'all' ? 'All' : mapFilter}
-                </span>
-              </Button>
-
-              <div className="transform hover:scale-105 transition-all duration-300">
-                <OpenToHangButton />
-              </div>
-            </div>
-
-            {/* Enhanced Add Recommendation Card */}
-            <div className="absolute bottom-6 left-6 z-30 transform hover:scale-105 transition-all duration-300">
-              <div className="card-elevated rounded-2xl overflow-hidden bg-white/90 backdrop-blur-sm">
-                <AddRecommendationCard />
-              </div>
-            </div>
           </div>
         </div>
 
