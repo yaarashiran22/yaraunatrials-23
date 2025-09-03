@@ -53,7 +53,13 @@ export const useOpenToHang = () => {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        // Handle network errors gracefully - don't spam console
+        if (error.message?.includes('Failed to fetch')) {
+          return; // Silently fail for network issues
+        }
+        throw error;
+      }
 
       if (data?.status === 'open_to_hang' && data?.status_expires_at) {
         const expiryTime = new Date(data.status_expires_at);
@@ -79,14 +85,20 @@ export const useOpenToHang = () => {
               .eq('user_id', user.id);
             setIsOpenToHang(false);
           } catch (expiredError) {
-            console.error('Error clearing expired status:', expiredError);
+            // Silently handle expired status update errors
+            if (!expiredError.message?.includes('Failed to fetch')) {
+              console.error('Error clearing expired status:', expiredError);
+            }
           }
         }
       } else {
         setIsOpenToHang(false);
       }
-    } catch (error) {
-      console.error('Error checking hang status:', error);
+    } catch (error: any) {
+      // Only log non-network errors
+      if (!error.message?.includes('Failed to fetch')) {
+        console.error('Error checking hang status:', error);
+      }
     }
   };
 
@@ -142,7 +154,11 @@ export const useOpenToHang = () => {
           onConflict: 'user_id'
         });
 
-      if (error) throw error;
+      if (error) {
+        // Provide more specific error message for database issues
+        console.error('Database error when sharing location:', error);
+        throw new Error('Unable to connect to server. Please check your connection and try again.');
+      }
 
       setIsOpenToHang(true);
       
