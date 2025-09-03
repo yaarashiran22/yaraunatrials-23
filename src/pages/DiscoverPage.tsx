@@ -554,7 +554,6 @@ const DiscoverPage = () => {
         {isOpenToHang && (
           <MoodFilterStrip 
             onFilterChange={handleMoodFilterChange}
-            showTitle={true}
           />
         )}
         

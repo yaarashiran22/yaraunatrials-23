@@ -296,8 +296,6 @@ const Index = () => {
       {/* Desktop Header */}
       <DesktopHeader title={t('common.home')} onNotificationsClick={() => setShowNotifications(true)} />
       
-      {/* Mood Filter Strip */}
-      <MoodFilterStrip onFilterChange={setSelectedMoodFilter} />
       
       <main className="px-4 lg:px-6 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 w-full">
         {/* Community Members Section - Horizontal Carousel */}
