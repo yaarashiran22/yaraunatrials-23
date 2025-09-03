@@ -480,6 +480,10 @@ const DiscoverPage = () => {
           // Handle mood filter change if needed
         }} />
         
+        {/* Open to Hang Button */}
+        <div className="flex justify-center">
+          <OpenToHangButton size="sm" shareText="Open to Hang" removeText="Stop Hanging" className="w-32 text-xs" />
+        </div>
         
         {/* Map Section */}
         <div className="relative">
@@ -589,10 +593,6 @@ const DiscoverPage = () => {
                 <div ref={mapContainer} className="w-full h-full relative z-0" />
               </>
             )}
-          </div>
-
-          <div className="flex flex-col items-center gap-3 mt-4">
-            <OpenToHangButton size="sm" shareText="Open to Hang" removeText="Stop Hanging" className="w-32 text-xs" />
           </div>
         </div>
 
