@@ -22,9 +22,10 @@ const moodFilters = [
 
 interface MoodFilterStripProps {
   onFilterChange?: (filterId: string) => void;
+  showTitle?: boolean;
 }
 
-const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
+const MoodFilterStrip = ({ onFilterChange, showTitle = true }: MoodFilterStripProps) => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -160,6 +161,11 @@ const MoodFilterStrip = ({ onFilterChange }: MoodFilterStripProps) => {
     <>
       <div className="sticky top-[var(--header-height,64px)] z-20 bg-background/95 backdrop-blur-sm border-b border-border/20">
         <div className="px-4 lg:px-8 py-3">
+          {showTitle && (
+            <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
+              What mood are you in?
+            </h3>
+          )}
           <div className="flex overflow-x-auto gap-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
             {renderFilterButtons()}
           </div>

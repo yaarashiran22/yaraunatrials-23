@@ -9,6 +9,7 @@ interface UserLocation {
   longitude: number;
   address?: string;
   status?: string;
+  mood?: string;
   created_at: string;
   updated_at: string;
 }

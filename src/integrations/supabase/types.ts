@@ -1043,6 +1043,7 @@ export type Database = {
           id: string
           latitude: number
           longitude: number
+          mood: string | null
           status: string | null
           status_expires_at: string | null
           updated_at: string
@@ -1054,6 +1055,7 @@ export type Database = {
           id?: string
           latitude: number
           longitude: number
+          mood?: string | null
           status?: string | null
           status_expires_at?: string | null
           updated_at?: string
@@ -1065,6 +1067,7 @@ export type Database = {
           id?: string
           latitude?: number
           longitude?: number
+          mood?: string | null
           status?: string | null
           status_expires_at?: string | null
           updated_at?: string

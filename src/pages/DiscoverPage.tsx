@@ -36,6 +36,7 @@ const DiscoverPage = () => {
   const [showDiscovery, setShowDiscovery] = useState(false);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [showPeopleYouShouldMeet, setShowPeopleYouShouldMeet] = useState(false);
+  const [selectedMood, setSelectedMood] = useState<string>('all');
   const { userLocations } = useUserLocations();
   const { user } = useAuth();
   const { events: allEvents } = useEvents();
@@ -53,7 +54,28 @@ const DiscoverPage = () => {
     }
   }, [user, checkHangStatus]);
 
-  // Function to filter users based on discovery criteria
+  // Function to filter users by mood
+  const handleMoodFilterChange = (mood: string) => {
+    setSelectedMood(mood);
+    
+    if (!isOpenToHang) return; // Only filter when open to hang
+    
+    // Filter users based on mood and open to hang status
+    let moodFilteredUsers = userLocations.filter(userLocation => {
+      const profile = userLocation.profile as any;
+      if (profile.id === user?.id) return false; // Skip current user
+      if (userLocation.status !== 'open_to_hang') return false; // Only show users open to hang
+      
+      // If "all" mood selected, show all open to hang users
+      if (mood === 'all') return true;
+      
+      // Filter by selected mood
+      return userLocation.mood === mood;
+    });
+    
+    setFilteredUsers(moodFilteredUsers);
+    addUserLocationMarkers(moodFilteredUsers);
+  };
   const handleDiscovery = async (selectedInterests: string[], connectionType: string) => {
     console.log('Discovery filters:', { selectedInterests, connectionType });
     
@@ -247,10 +269,15 @@ const DiscoverPage = () => {
   const addUserLocationMarkers = (usersToShow = userLocations, highlightedUsers: any[] = []) => {
     if (!mapInstanceRef.current) return;
 
-    // Filter users based on isOpenToHang state
-    const displayUsers = isOpenToHang 
+    // Filter users based on isOpenToHang state and mood
+    let displayUsers = isOpenToHang 
       ? usersToShow.filter(user => user.status === 'open_to_hang')
       : usersToShow;
+    
+    // Apply mood filter if a specific mood is selected and user is open to hang
+    if (isOpenToHang && selectedMood !== 'all') {
+      displayUsers = displayUsers.filter(user => user.mood === selectedMood);
+    }
 
     console.log('Adding user location markers, count:', displayUsers.length, 'isOpenToHang:', isOpenToHang);
 
@@ -270,12 +297,39 @@ const DiscoverPage = () => {
 
       const profile = userLocation.profile as any;
       const hasSharedEvents = (userLocation as any).sharedEvents && (userLocation as any).sharedEvents.length > 0;
-      const isOpenToHang = (userLocation as any).status === 'open_to_hang';
+      const isOpenToHangStatus = (userLocation as any).status === 'open_to_hang';
+      const userMood = userLocation.mood;
 
-      // Create custom user icon with different styles for different statuses
-      const borderColor = hasSharedEvents ? 'border-red-500' : isOpenToHang ? 'border-pink-500' : 'border-white';
-      const statusColor = hasSharedEvents ? 'bg-red-500' : isOpenToHang ? 'bg-pink-500' : 'bg-green-500';
-      const pulseClass = (hasSharedEvents || isOpenToHang) ? 'animate-pulse' : '';
+      // Create custom user icon with mood-based colors
+      const getMoodColor = (mood?: string) => {
+        switch (mood) {
+          case 'chill': return 'border-blue-500';
+          case 'go-out': return 'border-orange-500';
+          case 'romantic': return 'border-pink-500';
+          case 'active': return 'border-green-500';
+          case 'creative': return 'border-purple-500';
+          case 'wellness': return 'border-green-600';
+          case 'sightseeing': return 'border-cyan-500';
+          default: return 'border-white';
+        }
+      };
+
+      const getMoodEmoji = (mood?: string) => {
+        switch (mood) {
+          case 'chill': return '☕';
+          case 'go-out': return '⚡';
+          case 'romantic': return '💕';
+          case 'active': return '💪';
+          case 'creative': return '🎨';
+          case 'wellness': return '🧘';
+          case 'sightseeing': return '📸';
+          default: return '😊';
+        }
+      };
+
+      const borderColor = hasSharedEvents ? 'border-red-500' : getMoodColor(userMood);
+      const statusColor = hasSharedEvents ? 'bg-red-500' : isOpenToHangStatus ? 'bg-pink-500' : 'bg-green-500';
+      const pulseClass = (hasSharedEvents || isOpenToHangStatus) ? 'animate-pulse' : '';
       
       const userIcon = L.divIcon({
         html: `
@@ -288,10 +342,11 @@ const DiscoverPage = () => {
             />
             <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 ${statusColor} border-2 border-white rounded-full"></div>
             ${hasSharedEvents ? '<div class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-[8px]">🎯</span></div>' : ''}
-            ${isOpenToHang ? '<div class="absolute top-0 left-0 w-2 h-2 bg-pink-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-[8px]">💕</span></div>' : ''}
+            ${isOpenToHangStatus && userMood ? `<div class="absolute top-0 left-0 w-4 h-4 bg-white/90 rounded-full border border-white flex items-center justify-center"><span class="text-[10px]">${getMoodEmoji(userMood)}</span></div>` : ''}
+            ${isOpenToHangStatus && !userMood ? '<div class="absolute top-0 left-0 w-2 h-2 bg-pink-500 rounded-full border border-white flex items-center justify-center"><span class="text-white text-[8px]">💕</span></div>' : ''}
           </div>
         `,
-        className: `user-location-marker ${hasSharedEvents ? 'highlighted-match' : ''} ${isOpenToHang ? 'open-to-hang' : ''}`,
+        className: `user-location-marker ${hasSharedEvents ? 'highlighted-match' : ''} ${isOpenToHangStatus ? 'open-to-hang' : ''}`,
         iconSize: [32, 32],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32]
@@ -318,7 +373,12 @@ const DiscoverPage = () => {
                 🎯 This user is going to the same event as you: ${(userLocation as any).sharedEvents[0]}
               </div>
             ` : ''}
-            ${isOpenToHang ? `
+            ${isOpenToHangStatus && userMood ? `
+              <div class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mt-1">
+                ${getMoodEmoji(userMood)} In a ${userMood} mood
+              </div>
+            ` : ''}
+            ${isOpenToHangStatus && !userMood ? `
               <div class="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full mt-1">
                 💕 Open to hang out right now!
               </div>
@@ -461,9 +521,14 @@ const DiscoverPage = () => {
   useEffect(() => {
     if (mapInstanceRef.current && !isLoading) {
       console.log('Updating markers based on hang status:', isOpenToHang);
+      // Reset mood filter when not open to hang
+      if (!isOpenToHang) {
+        setSelectedMood('all');
+        setFilteredUsers([]);
+      }
       addUserLocationMarkers();
     }
-  }, [userLocations, isOpenToHang]);
+  }, [userLocations, isOpenToHang, selectedMood]);
   useEffect(() => {
     if (mapInstanceRef.current && !isLoading) {
       addUserLocationMarkers();
@@ -485,11 +550,13 @@ const DiscoverPage = () => {
       
       
       <main className="container mx-auto px-4 py-3 space-y-6">
-        {/* Mood Filter Strip */}
-        <MoodFilterStrip onFilterChange={(filterId) => {
-          console.log('Mood filter changed:', filterId);
-          // Handle mood filter change if needed
-        }} />
+        {/* Mood Filter Strip - Only show when open to hang */}
+        {isOpenToHang && (
+          <MoodFilterStrip 
+            onFilterChange={handleMoodFilterChange}
+            showTitle={true}
+          />
+        )}
         
         {/* Open to Hang Button */}
         <div className="flex flex-col items-center gap-2">

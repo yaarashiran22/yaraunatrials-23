@@ -4,6 +4,7 @@ import { MapPin, X, AlertCircle, Heart } from 'lucide-react';
 import { useOpenToHang } from '@/hooks/useOpenToHang';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import MoodSelectionDialog from './MoodSelectionDialog';
 
 interface OpenToHangButtonProps {
   variant?: 'default' | 'outline' | 'ghost';
@@ -23,6 +24,7 @@ const OpenToHangButton = ({
   const { user } = useAuth();
   const { shareHangLocation, stopHanging, checkHangStatus, isLoading, isOpenToHang } = useOpenToHang();
   const [permissionState, setPermissionState] = useState<'granted' | 'denied' | 'prompt'>('prompt');
+  const [showMoodDialog, setShowMoodDialog] = useState(false);
 
   // Check geolocation permission status
   useEffect(() => {
@@ -62,7 +64,12 @@ const OpenToHangButton = ({
       return;
     }
 
-    const success = await shareHangLocation();
+    // Show mood selection dialog instead of immediately sharing location
+    setShowMoodDialog(true);
+  };
+
+  const handleMoodSelect = async (mood: string) => {
+    const success = await shareHangLocation(mood);
     if (success) {
       // Auto-refresh status after sharing
       setTimeout(() => {
@@ -85,41 +92,57 @@ const OpenToHangButton = ({
 
   if (isOpenToHang) {
     return (
-      <Button
-        onClick={handleStopHanging}
-        disabled={isLoading}
-        variant="outline"
-        size={size}
-        className={`${className} text-destructive border-destructive/20 hover:bg-destructive/5 hover:border-destructive/30`}
-      >
-        {isLoading ? (
-          <div className="w-4 h-4 border-2 border-destructive border-t-transparent rounded-full animate-spin ml-2" />
-        ) : (
-          <X className="w-4 h-4 ml-2" />
-        )}
-        {removeText}
-      </Button>
+      <>
+        <Button
+          onClick={handleStopHanging}
+          disabled={isLoading}
+          variant="outline"
+          size={size}
+          className={`${className} text-destructive border-destructive/20 hover:bg-destructive/5 hover:border-destructive/30`}
+        >
+          {isLoading ? (
+            <div className="w-4 h-4 border-2 border-destructive border-t-transparent rounded-full animate-spin ml-2" />
+          ) : (
+            <X className="w-4 h-4 ml-2" />
+          )}
+          {removeText}
+        </Button>
+        
+        <MoodSelectionDialog 
+          isOpen={showMoodDialog}
+          onClose={() => setShowMoodDialog(false)}
+          onMoodSelect={handleMoodSelect}
+        />
+      </>
     );
   }
 
   return (
-    <Button
-      onClick={handleOpenToHang}
-      disabled={isLoading || permissionState === 'denied'}
-      variant={variant}
-      size={size}
-      className={`${className} ${permissionState === 'denied' ? 'opacity-50' : ''}`}
-      title={permissionState === 'denied' ? 'Location access denied - please enable access in browser settings' : ''}
-    >
-      {isLoading ? (
-        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin ml-2" />
-      ) : permissionState === 'denied' ? (
-        <AlertCircle className="w-4 h-4 ml-2" />
-      ) : (
-        <Heart className="w-4 h-4 ml-2" />
-      )}
-      {permissionState === 'denied' ? 'Access Denied' : shareText}
-    </Button>
+    <>
+      <Button
+        onClick={handleOpenToHang}
+        disabled={isLoading || permissionState === 'denied'}
+        variant={variant}
+        size={size}
+        className={`${className} ${permissionState === 'denied' ? 'opacity-50' : ''}`}
+        title={permissionState === 'denied' ? 'Location access denied - please enable access in browser settings' : ''}
+      >
+        {isLoading ? (
+          <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin ml-2" />
+        ) : permissionState === 'denied' ? (
+          <AlertCircle className="w-4 h-4 ml-2" />
+        ) : (
+          <Heart className="w-4 h-4 ml-2" />
+        )}
+        {permissionState === 'denied' ? 'Access Denied' : shareText}
+      </Button>
+      
+      <MoodSelectionDialog 
+        isOpen={showMoodDialog}
+        onClose={() => setShowMoodDialog(false)}
+        onMoodSelect={handleMoodSelect}
+      />
+    </>
   );
 };
 

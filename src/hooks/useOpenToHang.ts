@@ -16,6 +16,7 @@ export const useOpenToHang = () => {
         .from('user_locations')
         .update({
           status: 'normal',
+          mood: null, // Clear mood when stopping
           status_expires_at: null,
           updated_at: new Date().toISOString()
         })
@@ -89,7 +90,7 @@ export const useOpenToHang = () => {
     }
   };
 
-  const shareHangLocation = async () => {
+  const shareHangLocation = async (mood?: string) => {
     if (!user) {
       toast({
         title: "Authentication required",
@@ -126,7 +127,7 @@ export const useOpenToHang = () => {
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + 2);
 
-      // Update or insert user location with "open to hang" status
+      // Update or insert user location with "open to hang" status and mood
       const { error } = await supabase
         .from('user_locations')
         .upsert({
@@ -134,6 +135,7 @@ export const useOpenToHang = () => {
           latitude: latitude,
           longitude: longitude,
           status: 'open_to_hang',
+          mood: mood || 'chill', // Default to chill mood
           status_expires_at: expiresAt.toISOString(),
           updated_at: new Date().toISOString()
         }, {
