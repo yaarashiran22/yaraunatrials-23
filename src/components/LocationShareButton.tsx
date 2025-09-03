@@ -124,11 +124,11 @@ const OpenToHangButton = ({
         disabled={isLoading || permissionState === 'denied'}
         variant="default"
         size={size}
-        className={`${className} bg-gradient-to-r from-warm-soft to-warm-cream text-foreground hover:from-warm-light hover:to-warm-soft border border-warm-light shadow-md hover:shadow-lg transition-all duration-200 font-medium ${permissionState === 'denied' ? 'opacity-50' : ''}`}
+        className={`${className} bg-gradient-to-r from-warm-peach to-warm-orange text-white hover:from-warm-muted hover:to-warm-peach shadow-md hover:shadow-lg transition-all duration-200 font-medium ${permissionState === 'denied' ? 'opacity-50' : ''}`}
         title={permissionState === 'denied' ? 'Location access denied - please enable access in browser settings' : ''}
       >
         {isLoading ? (
-          <div className="w-4 h-4 border-2 border-foreground border-t-transparent rounded-full animate-spin ml-2" />
+          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2" />
         ) : permissionState === 'denied' ? (
           <AlertCircle className="w-4 h-4 ml-2" />
         ) : (
