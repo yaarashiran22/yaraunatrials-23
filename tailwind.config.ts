@@ -63,7 +63,10 @@ export default {
 				warm: {
 					orange: 'hsl(var(--warm-orange))',
 					peach: 'hsl(var(--warm-peach))',
-					muted: 'hsl(var(--warm-muted))'
+					muted: 'hsl(var(--warm-muted))',
+					light: 'hsl(var(--warm-light))',
+					cream: 'hsl(var(--warm-cream))',
+					soft: 'hsl(var(--warm-soft))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',

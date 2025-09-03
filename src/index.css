@@ -40,6 +40,11 @@ All colors MUST be HSL.
     --warm-orange: 25 100% 70%;
     --warm-peach: 35 100% 75%;
     --warm-muted: 30 100% 92%;
+    
+    /* Light warm colors */
+    --warm-light: 40 90% 85%;
+    --warm-cream: 45 85% 88%;
+    --warm-soft: 35 80% 90%;
 
     --secondary: 210 20% 94%;
     --secondary-foreground: 222 84% 15%;
