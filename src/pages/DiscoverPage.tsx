@@ -542,139 +542,105 @@ const DiscoverPage = () => {
   }, [isLoading, allEvents, allMeetups, mapFilter]); // Add mapFilter dependency
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-accent/5 pb-20 relative overflow-hidden">
-      {/* Background texture overlay */}
-      <div className="absolute inset-0 bg-gradient-mesh opacity-30 pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, hsl(var(--accent)) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsl(var(--primary)) 0%, transparent 50%), radial-gradient(circle at 40% 80%, hsl(var(--coral)) 0%, transparent 50%)' }} />
-      
+    <div className="min-h-screen bg-background pb-20">
       <Header 
-        title="Discover"
+        title="Map"
         onNeighborhoodChange={handleNeighborhoodChange}
       />
       
-      <main className="container mx-auto px-4 py-6 space-y-8 relative z-10">
+      
+      <main className="container mx-auto px-4 py-3 space-y-6">
         
-        {/* Hero Section with Open to Hang */}
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-3 bg-card/80 backdrop-blur-xl rounded-2xl px-6 py-4 shadow-floating border border-border/50">
-            <div className="w-3 h-3 bg-accent rounded-full animate-pulse-glow"></div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-foreground via-accent to-foreground bg-clip-text text-transparent">
-              Find Your Vibe
-            </h1>
-            <div className="w-3 h-3 bg-coral rounded-full animate-pulse-glow"></div>
-          </div>
-          
-          <div className="flex flex-col items-center gap-4">
-            <OpenToHangButton 
-              size="lg" 
-              shareText="Share My Location" 
-              removeText="Stop Sharing" 
-              className="px-8 py-3 text-sm font-semibold bg-gradient-to-r from-accent to-coral hover:from-coral hover:to-accent transition-all duration-300 border-0 shadow-medium hover:shadow-floating transform hover:scale-105"
-            />
-            <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
-              Connect with like-minded people in your neighborhood who are ready to hang out right now
-            </p>
-          </div>
+        {/* Open to Hang Button */}
+        <div className="flex flex-col items-center gap-2">
+          <OpenToHangButton size="sm" shareText="Open to Hang" removeText="Stop Hanging" className="w-32 text-xs" />
+          <p className="text-xs text-muted-foreground text-center max-w-xs">
+            Share your live location to find nearby people ready to hang out
+          </p>
         </div>
-
-        {/* People You Should Meet - Enhanced Design */}
-        {!suggestedUsersLoading && suggestedUsers.length > 0 && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-accent to-coral rounded-full flex items-center justify-center shadow-medium">
-                  <Users className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-foreground">People You Should Meet</h2>
-                  <p className="text-sm text-muted-foreground">Based on shared interests & events</p>
-                </div>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={findSuggestedUsers}
-                className="bg-card/50 backdrop-blur-sm border-accent/30 hover:bg-accent/10 hover:border-accent transition-all duration-300"
-              >
-                <Search className="w-4 h-4 mr-2" />
-                Refresh
-              </Button>
-            </div>
-            
-            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-accent/20 hover:scrollbar-thumb-accent/40">
-              {suggestedUsers.slice(0, 10).map((user) => (
-                <div key={user.id} className="flex-shrink-0 text-center group">
-                  <div className="relative transform transition-all duration-300 group-hover:scale-105">
-                    <div className="w-24 h-24 p-1 bg-gradient-to-br from-accent via-coral to-accent rounded-2xl shadow-medium group-hover:shadow-floating transition-all duration-300">
-                      <img
-                        src={user.profile_image_url || '/placeholder-avatar.png'}
-                        alt={user.name}
-                        className="w-full h-full rounded-xl object-cover border-2 border-white/50 cursor-pointer"
-                        onError={(e) => {
-                          e.currentTarget.src = '/placeholder-avatar.png';
-                        }}
-                      />
-                    </div>
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-br from-accent to-coral rounded-full border-3 border-white flex items-center justify-center animate-bounce-subtle shadow-medium">
-                      <span className="text-white text-sm font-bold">✨</span>
-                    </div>
-                  </div>
-                  <div className="mt-3 space-y-1">
-                    <p className="text-sm font-semibold max-w-[90px] truncate text-center text-foreground">{user.name}</p>
-                    <div className="flex items-center justify-center gap-2 bg-accent/10 rounded-full px-3 py-1">
-                      <div className="w-2 h-2 bg-accent rounded-full animate-pulse-glow"></div>
-                      <p className="text-xs font-medium text-accent">{user.sharedEventCount} shared</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
         
-        {/* Enhanced Map Section */}
+        {/* Map Section */}
         <div className="relative">
-          <div className="bg-card/60 backdrop-blur-xl rounded-3xl overflow-hidden shadow-floating border border-border/30 h-[600px] relative group">
-            {/* Map overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-accent/5 z-10 pointer-events-none rounded-3xl" />
-            
-            {/* Filtered Users Display - Enhanced */}
-            {filteredUsers.length > 0 && (
-              <div className="absolute bottom-6 left-6 right-6 z-20">
-                <div className="bg-card/95 backdrop-blur-xl rounded-2xl p-4 border border-accent/20 shadow-floating">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-accent to-coral rounded-full flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">{filteredUsers.length}</span>
+
+          {/* People You Should Meet Row - Only show if there are suggested users */}
+          {!suggestedUsersLoading && suggestedUsers.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  People You Should Meet
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={findSuggestedUsers}
+                  className="text-xs"
+                >
+                  Refresh
+                </Button>
+              </div>
+              
+              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+                {suggestedUsers.slice(0, 10).map((user) => (
+                  <div key={user.id} className="flex-shrink-0 text-center group">
+                    <div className="relative">
+                      <div className="w-20 h-20 p-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full hover-scale">
+                        <img
+                          src={user.profile_image_url || '/placeholder-avatar.png'}
+                          alt={user.name}
+                          className="w-full h-full rounded-full object-cover border-2 border-white cursor-pointer transition-transform duration-200 group-hover:scale-105"
+                          onError={(e) => {
+                            e.currentTarget.src = '/placeholder-avatar.png';
+                          }}
+                        />
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white flex items-center justify-center animate-pulse">
+                        <span className="text-white text-xs font-bold">✓</span>
+                      </div>
                     </div>
-                    <h3 className="text-lg font-bold text-foreground">Perfect Matches Found</h3>
+                    <p className="text-xs font-medium mt-2 max-w-[80px] truncate text-center">{user.name}</p>
+                    <div className="flex items-center justify-center gap-1 mt-1">
+                      <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
+                      <p className="text-xs text-muted-foreground">{user.sharedEventCount}</p>
+                      <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
+                    </div>
                   </div>
-                  
-                  <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+            {/* Filtered Users Display */}
+            {filteredUsers.length > 0 && (
+              <div className="absolute bottom-4 left-4 right-4 z-20">
+                <div className="bg-card/95 backdrop-blur-sm rounded-lg p-3 border border-border/20 shadow-lg">
+                  <h3 className="text-sm font-semibold mb-2">Matching Users ({filteredUsers.length})</h3>
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
                     {filteredUsers.slice(0, 6).map((userLocation) => (
-                      <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-accent/10 to-coral/10 backdrop-blur-sm rounded-2xl px-4 py-2 border border-accent/20">
+                      <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1">
                         <img 
                           src={userLocation.profile.profile_image_url || '/placeholder.svg'} 
                           alt={userLocation.profile.name}
-                          className="w-8 h-8 rounded-full object-cover border-2 border-white/50"
+                          className="w-6 h-6 rounded-full object-cover"
                         />
-                        <span className="text-sm font-semibold text-foreground">{userLocation.profile.name}</span>
+                        <span className="text-xs font-medium">{userLocation.profile.name}</span>
                       </div>
                     ))}
                     {filteredUsers.length > 6 && (
-                      <div className="flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-muted to-accent/20 rounded-2xl w-12 h-12 border border-accent/20">
-                        <span className="text-sm font-bold text-accent">+{filteredUsers.length - 6}</span>
+                      <div className="flex-shrink-0 flex items-center justify-center bg-muted/50 rounded-full w-8 h-8">
+                        <span className="text-xs font-medium">+{filteredUsers.length - 6}</span>
                       </div>
                     )}
                   </div>
-                  
                   <Button 
-                    variant="outline"
+                    variant="ghost" 
                     size="sm" 
                     onClick={() => {
                       setFilteredUsers([]);
                       addUserLocationMarkers();
                     }}
-                    className="mt-3 bg-accent/10 border-accent/30 hover:bg-accent/20 text-accent font-medium transition-all duration-300"
+                    className="mt-2 text-xs"
                   >
                     Show All Users
                   </Button>
@@ -683,33 +649,22 @@ const DiscoverPage = () => {
             )}
 
             {error ? (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center p-8 bg-card/80 backdrop-blur-xl rounded-2xl border border-destructive/20">
-                  <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <MapPin className="w-8 h-8 text-destructive" />
-                  </div>
-                  <p className="text-foreground font-medium">{error}</p>
+              <div className="flex items-center justify-center h-full bg-muted/30">
+                <div className="text-center p-4">
+                  <p className="text-muted-foreground">{error}</p>
                 </div>
               </div>
             ) : (
               <>
                 {isLoading && (
-                  <div className="absolute inset-0 bg-card/90 backdrop-blur-xl flex items-center justify-center z-30 rounded-3xl">
-                    <div className="text-center space-y-4">
-                      <div className="w-16 h-16 relative mx-auto">
-                        <div className="absolute inset-0 bg-gradient-to-r from-accent to-coral rounded-full animate-spin"></div>
-                        <div className="absolute inset-2 bg-card rounded-full flex items-center justify-center">
-                          <MapPin className="w-6 h-6 text-accent animate-pulse-glow" />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <p className="text-lg font-semibold text-foreground">Loading your world...</p>
-                        <p className="text-sm text-muted-foreground">Finding amazing people nearby</p>
-                      </div>
+                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 backdrop-blur-sm">
+                    <div className="text-center">
+                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                      <p className="text-muted-foreground text-sm">Loading map...</p>
                     </div>
                   </div>
                 )}
-                <div ref={mapContainer} className="w-full h-full relative z-0 rounded-3xl" />
+                <div ref={mapContainer} className="w-full h-full relative z-0" />
               </>
             )}
           </div>

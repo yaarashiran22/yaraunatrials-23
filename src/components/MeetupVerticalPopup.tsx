@@ -253,84 +253,78 @@ const MeetupVerticalPopup = ({
           <ChevronDown className="h-6 w-6" />
         </Button>}
 
-      <div ref={contentRef} className={`backdrop-blur-xl bg-gradient-to-br from-cyan-50/95 via-blue-50/95 to-indigo-50/95 dark:from-cyan-950/95 dark:via-blue-950/95 dark:to-indigo-950/95 rounded-3xl border border-white/20 shadow-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-300 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} meetup-vertical-popup`} style={{
+      <div ref={contentRef} className={`bg-background rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} meetup-vertical-popup`} style={{
       transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
       scrollBehavior: 'smooth'
     }} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-indigo-500/10 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
-            {allItems.length > 1 && <div className="text-sm font-medium text-gray-600 dark:text-gray-400 bg-white/60 dark:bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm border border-white/30">
+        <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30">
+          <div className="flex items-center gap-2">
+            {allItems.length > 1 && <div className="text-sm text-muted-foreground bg-white/80 dark:bg-black/20 px-3 py-1 rounded-full">
                 {currentIndex + 1} / {allItems.length}
               </div>}
           </div>
           
-          <Button variant="ghost" size="sm" onClick={onClose} className="hover:bg-white/20 transition-all duration-300 rounded-full p-2">
-            <X className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+          <Button variant="ghost" size="sm" onClick={onClose}>
+            <X className="h-5 w-5" />
           </Button>
           
         </div>
 
         {/* Vertical Navigation Instructions */}
-        {allItems.length > 1 && <div className="flex justify-center py-3 border-b border-white/10 bg-gradient-to-r from-cyan-400/5 via-blue-400/5 to-indigo-400/5">
-            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2 px-4 py-1 rounded-full bg-white/30 dark:bg-black/20 backdrop-blur-sm">
+        {allItems.length > 1 && <div className="flex justify-center py-2 border-b bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20">
+            <div className="text-xs text-muted-foreground flex items-center gap-1">
               
             </div>
           </div>}
 
         {/* Vertical Progress Indicators */}
-        {allItems.length > 1 && <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
-            {allItems.map((_, index) => <div key={index} className={`w-3 h-10 rounded-full transition-all duration-500 backdrop-blur-sm border border-white/20 ${index === currentIndex ? 'bg-gradient-to-b from-cyan-400 to-blue-400 shadow-lg shadow-cyan-400/40 scale-110' : 'bg-white/20 dark:bg-black/20'}`} />)}
+        {allItems.length > 1 && <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
+            {allItems.map((_, index) => <div key={index} className={`w-2 h-8 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-primary shadow-sm scale-110' : 'bg-muted-foreground/20'}`} />)}
           </div>}
 
         {/* Content */}
-        <div className={`${isMobile ? 'p-4' : 'p-6'}`}>
+        <div className={`${isMobile ? 'p-3' : 'p-4'}`}>
           {/* Meetup Image */}
-          <div className={`relative ${isMobile ? 'mb-6' : 'mb-8'}`}>
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-blue-500/20 to-indigo-500/20 z-10"></div>
-              <img src={displayItem.image} alt={displayItem.title} className={`w-full ${isMobile ? 'h-56' : 'h-72'} object-cover`} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10"></div>
+          <div className={`relative ${isMobile ? 'mb-4' : 'mb-6'}`}>
+            <div className="border-4 border-gradient-to-r from-blue-400 to-purple-400 rounded-2xl overflow-hidden">
+              <img src={displayItem.image} alt={displayItem.title} className={`w-full ${isMobile ? 'h-48' : 'h-64'} object-cover`} />
             </div>
             
-            <div className="absolute top-4 right-4 z-20">
-              <Button variant="ghost" size="sm" className="p-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-red-400 hover:bg-white/30 transition-all duration-300 shadow-lg">
-                <Heart className="h-5 w-5" />
+            <div className="absolute top-3 right-3">
+              <Button variant="ghost" size="sm" className="p-2 rounded-full bg-card/80 backdrop-blur-sm text-red-500">
+                <Heart className="h-4 w-4" />
               </Button>
             </div>
             
             {/* Meetup Badge */}
-            <div className="absolute top-4 left-4 z-20">
-              <div className="bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg backdrop-blur-sm">
-                🤝 Meetup
+            <div className="absolute top-3 left-3">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                Meetup
               </div>
             </div>
           </div>
 
           {/* Meetup Details */}
-          <div className={`${isMobile ? 'space-y-5' : 'space-y-6'}`}>
+          <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
             <div className="text-center">
-              <h3 className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent ${isMobile ? 'mb-2' : 'mb-3'} leading-tight`} style={{ fontFamily: 'Playfair Display, serif' }}>{displayItem.title}</h3>
-              {displayItem.price && displayItem.price !== 'Free' && <p className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-cyan-600 dark:text-cyan-400`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{displayItem.price}</p>}
-              {displayItem.price === 'Free' && <p className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-emerald-500 dark:text-emerald-400`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>🎉 Free Meetup</p>}
+              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-foreground ${isMobile ? 'mb-1' : 'mb-2'}`}>{displayItem.title}</h3>
+              {displayItem.price && displayItem.price !== 'Free' && <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-primary`}>{displayItem.price}</p>}
+              {displayItem.price === 'Free' && <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-green-600 dark:text-green-400`}>Free Event</p>}
             </div>
             
-            {displayItem.description && <p className={`text-gray-600 dark:text-gray-300 leading-relaxed text-center ${isMobile ? 'text-sm' : 'text-base'} px-2`} style={{ fontFamily: 'DM Sans, sans-serif' }}>
+            {displayItem.description && <p className={`text-foreground leading-relaxed text-center ${isMobile ? 'text-xs' : 'text-sm'}`}>
                 {displayItem.description}
               </p>}
             
             {/* Meetup Location and Date */}
-            {itemDetails && <div className={`${isMobile ? 'space-y-3' : 'space-y-4'} ${isMobile ? 'p-4' : 'p-6'} bg-gradient-to-br from-cyan-50/70 via-blue-50/70 to-indigo-50/70 dark:from-cyan-950/50 dark:via-blue-950/50 dark:to-indigo-950/50 rounded-2xl border border-white/30 backdrop-blur-sm shadow-lg`}>
-                <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-gray-700 dark:text-gray-300`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                  <div className="p-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400">
-                    <MapPin className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-white`} />
-                  </div>
+            {itemDetails && <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
+                  <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-600 dark:text-blue-400`} />
                   <span>{locationMapping[itemDetails.location] || itemDetails.location || 'Location TBD'}</span>
                 </div>
-                <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-gray-700 dark:text-gray-300`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                  <div className="p-2 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400">
-                    <Calendar className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-white`} />
-                  </div>
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
+                  <Calendar className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-600 dark:text-blue-400`} />
                   <span>
                     {new Date(itemDetails.created_at).toLocaleDateString('en-US', {
                   weekday: 'short',
@@ -344,15 +338,12 @@ const MeetupVerticalPopup = ({
               </div>}
 
             {/* Organizer Info */}
-            {displayItem.seller && <div className={`flex items-center gap-4 ${isMobile ? 'p-4' : 'p-5'} bg-white/40 dark:bg-black/20 rounded-2xl cursor-pointer hover:bg-white/60 dark:hover:bg-black/30 transition-all duration-300 backdrop-blur-sm border border-white/30 shadow-lg`} onClick={handleViewProfile}>
-                <div className="relative">
-                  <img src={displayItem.seller.image} alt={displayItem.seller.name} className={`${isMobile ? 'w-12 h-12' : 'w-14 h-14'} rounded-full object-cover border-2 border-white shadow-lg`} />
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full border-2 border-white"></div>
-                </div>
+            {displayItem.seller && <div className={`flex items-center gap-3 ${isMobile ? 'p-2' : 'p-3'} bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors`} onClick={handleViewProfile}>
+                <img src={displayItem.seller.image} alt={displayItem.seller.name} className={`${isMobile ? 'w-8 h-8' : 'w-10 h-10'} rounded-full object-cover`} />
                 <div className="flex-1">
-                  <p className={`font-bold text-gray-800 dark:text-gray-200 ${isMobile ? 'text-sm' : 'text-base'}`} style={{ fontFamily: 'Outfit, sans-serif' }}>{displayItem.seller.name}</p>
-                  <div className={`flex items-center gap-2 ${isMobile ? 'text-xs' : 'text-sm'} text-gray-500 dark:text-gray-400 mt-1`} style={{ fontFamily: 'DM Sans, sans-serif' }}>
-                    <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
+                  <p className={`font-semibold text-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>{displayItem.seller.name}</p>
+                  <div className={`flex items-center gap-1 ${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground`}>
+                    <MapPin className={`${isMobile ? 'h-2.5 w-2.5' : 'h-3 w-3'}`} />
                     <span>{(displayItem as any).neighborhood || displayItem.seller.location}</span>
                   </div>
                 </div>
@@ -360,7 +351,7 @@ const MeetupVerticalPopup = ({
           </div>
 
           {/* Join Request Section */}
-          <div className={`${isMobile ? 'mt-6' : 'mt-8'} ${isMobile ? 'p-5' : 'p-6'} bg-gradient-to-br from-cyan-50/70 via-blue-50/70 to-indigo-50/70 dark:from-cyan-950/50 dark:via-blue-950/50 dark:to-indigo-950/50 rounded-2xl border border-white/30 backdrop-blur-sm shadow-xl`}>
+          <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
             
             {joinStatus === 'approved' ? <div className="text-center">
                 <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400 mb-2">
@@ -380,9 +371,9 @@ const MeetupVerticalPopup = ({
                 </p>
               </div> : <>
                 
-                <Button onClick={handleContact} className={`w-full ${isMobile ? 'h-12' : 'h-14'} bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 hover:from-cyan-600 hover:via-blue-600 hover:to-indigo-600 text-white rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105`} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                  <MessageCircle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} mr-3`} />
-                  🤝 Request to Join
+                <Button onClick={handleContact} className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}>
+                  <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
+                  Request to Join
                 </Button>
               </>}
           </div>
