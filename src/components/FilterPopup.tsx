@@ -1,5 +1,12 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { 
+  SimplifiedModal, 
+  SimplifiedModalContent, 
+  SimplifiedModalHeader, 
+  SimplifiedModalTitle, 
+  SimplifiedModalBody 
+} from "@/components/ui/simplified-modal";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
@@ -41,32 +48,21 @@ const FilterPopup = ({ isOpen, onClose }: FilterPopupProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto shadow-2xl">
-        {/* Header with una logo */}
-        <div className="flex items-center justify-between p-4 pb-6">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={onClose}
-            className="text-gray-600 hover:text-gray-800"
-          >
-            <X className="h-5 w-5" />
-          </Button>
-          
-          <div className="text-center">
-            <span className="text-3xl font-bold font-nunito" style={{ color: '#BB31E9' }}>una</span>
-            <div className="text-xs text-gray-500 mt-1">פילטר</div>
-          </div>
-          
-          <div className="w-8 h-8"></div>
-        </div>
+    <SimplifiedModal open={isOpen} onOpenChange={onClose}>
+      <SimplifiedModalContent className="max-w-sm">
+        <SimplifiedModalHeader>
+          <SimplifiedModalTitle className="text-center">
+            <div>
+              <span className="text-3xl font-bold" style={{ color: 'hsl(var(--accent))' }}>una</span>
+              <div className="text-sm text-muted-foreground mt-1">פילטר</div>
+            </div>
+          </SimplifiedModalTitle>
+        </SimplifiedModalHeader>
 
-        {/* Content */}
-        <div className="px-6 pb-6 space-y-8">
+        <SimplifiedModalBody className="space-y-content-spacious">
           {/* Price Range */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800 text-center">טווח מחירים</h3>
+            <h3 className="text-lg font-semibold text-foreground text-center">טווח מחירים</h3>
             <div className="px-4">
               <Slider
                 value={priceRange}
@@ -76,7 +72,7 @@ const FilterPopup = ({ isOpen, onClose }: FilterPopupProps) => {
                 step={10}
                 className="w-full"
               />
-              <div className="flex justify-between text-sm text-gray-500 mt-2">
+              <div className="flex justify-between text-base text-muted-foreground mt-3">
                 <span>₪{priceRange[0]}</span>
                 <span>₪{priceRange[1]}</span>
               </div>
@@ -85,7 +81,7 @@ const FilterPopup = ({ isOpen, onClose }: FilterPopupProps) => {
 
           {/* Distance */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800 text-center">מרחק</h3>
+            <h3 className="text-lg font-semibold text-foreground text-center">מרחק</h3>
             <div className="px-4">
               <Slider
                 value={distance}
@@ -95,7 +91,7 @@ const FilterPopup = ({ isOpen, onClose }: FilterPopupProps) => {
                 step={0.5}
                 className="w-full"
               />
-              <div className="flex justify-between text-sm text-gray-500 mt-2">
+              <div className="flex justify-between text-base text-muted-foreground mt-3">
                 <span>0 ק"מ</span>
                 <span>{distance[0]} ק"מ</span>
               </div>
@@ -104,69 +100,75 @@ const FilterPopup = ({ isOpen, onClose }: FilterPopupProps) => {
 
           {/* Categories */}
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-y-3 gap-x-4">
-              <div className="flex items-center space-x-2 space-x-reverse">
+            <div className="grid grid-cols-2 gap-y-4 gap-x-4">
+              <div className="flex items-center space-x-3 space-x-reverse">
                 <Checkbox 
                   id="women"
                   checked={categories.women}
                   onCheckedChange={(checked) => handleCategoryChange('women', checked as boolean)}
+                  className="h-5 w-5"
                 />
-                <label htmlFor="women" className="text-sm font-medium text-gray-700">
+                <label htmlFor="women" className="text-base font-medium text-foreground cursor-pointer">
                   נשים
                 </label>
               </div>
               
-              <div className="flex items-center space-x-2 space-x-reverse">
+              <div className="flex items-center space-x-3 space-x-reverse">
                 <Checkbox 
                   id="men"
                   checked={categories.men}
                   onCheckedChange={(checked) => handleCategoryChange('men', checked as boolean)}
+                  className="h-5 w-5"
                 />
-                <label htmlFor="men" className="text-sm font-medium text-gray-700">
+                <label htmlFor="men" className="text-base font-medium text-foreground cursor-pointer">
                   גברים
                 </label>
               </div>
               
-              <div className="flex items-center space-x-2 space-x-reverse">
+              <div className="flex items-center space-x-3 space-x-reverse">
                 <Checkbox 
                   id="vintage"
                   checked={categories.vintage}
                   onCheckedChange={(checked) => handleCategoryChange('vintage', checked as boolean)}
+                  className="h-5 w-5"
                 />
-                <label htmlFor="vintage" className="text-sm font-medium text-gray-700">
+                <label htmlFor="vintage" className="text-base font-medium text-foreground cursor-pointer">
                   וינטג׳
                 </label>
               </div>
               
-              <div className="flex items-center space-x-2 space-x-reverse">
+              <div className="flex items-center space-x-3 space-x-reverse">
                 <Checkbox 
                   id="sports"
                   checked={categories.sports}
                   onCheckedChange={(checked) => handleCategoryChange('sports', checked as boolean)}
+                  className="h-5 w-5"
                 />
-                <label htmlFor="sports" className="text-sm font-medium text-gray-700">
+                <label htmlFor="sports" className="text-base font-medium text-foreground cursor-pointer">
                   ספורט
                 </label>
               </div>
               
-              <div className="flex items-center space-x-2 space-x-reverse">
+              <div className="flex items-center space-x-3 space-x-reverse">
                 <Checkbox 
                   id="clothing"
                   checked={categories.clothing}
                   onCheckedChange={(checked) => handleCategoryChange('clothing', checked as boolean)}
+                  className="h-5 w-5"
                 />
-                <label htmlFor="clothing" className="text-sm font-medium text-gray-700">
+                <label htmlFor="clothing" className="text-base font-medium text-foreground cursor-pointer">
                   לבוש
                 </label>
               </div>
               
-              <div className="flex items-center space-x-2 space-x-reverse">
+              <div className="flex items-center space-x-3 space-x-reverse">
                 <Checkbox 
                   id="home"
                   checked={categories.home}
                   onCheckedChange={(checked) => handleCategoryChange('home', checked as boolean)}
+                  className="h-5 w-5"
                 />
-                <label htmlFor="home" className="text-sm font-medium text-gray-700">
+                <label htmlFor="home" className="text-base font-medium text-foreground cursor-pointer">
                   בית
                 </label>
               </div>
@@ -174,18 +176,18 @@ const FilterPopup = ({ isOpen, onClose }: FilterPopupProps) => {
           </div>
 
           {/* Apply Button */}
-          <div className="pt-4">
+          <div className="pt-content-normal">
             <Button 
               onClick={handleSave}
-              className="w-full h-12 text-white rounded-2xl text-lg font-medium"
-              style={{ backgroundColor: '#BB31E9' }}
+              size="lg"
+              className="w-full btn-3d"
             >
               החל
             </Button>
           </div>
-        </div>
-      </div>
-    </div>
+        </SimplifiedModalBody>
+      </SimplifiedModalContent>
+    </SimplifiedModal>
   );
 };
 

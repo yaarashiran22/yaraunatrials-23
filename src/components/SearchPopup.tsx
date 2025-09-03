@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { 
+  SimplifiedModal, 
+  SimplifiedModalContent, 
+  SimplifiedModalHeader, 
+  SimplifiedModalTitle, 
+  SimplifiedModalBody 
+} from '@/components/ui/simplified-modal';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -95,138 +101,140 @@ const SearchPopup = () => {
   };
 
   return (
-    <Dialog open={isSearchOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col z-[9999]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5" />
+    <SimplifiedModal open={isSearchOpen} onOpenChange={handleClose}>
+      <SimplifiedModalContent className="max-w-2xl max-h-[80vh]">
+        <SimplifiedModalHeader>
+          <SimplifiedModalTitle className="flex items-center gap-2 justify-center">
+            <Search className="h-6 w-6" />
             {t('common.search')}
-          </DialogTitle>
-        </DialogHeader>
+          </SimplifiedModalTitle>
+        </SimplifiedModalHeader>
         
-        <div className="relative">
-          <Input
-            placeholder="Search for users, items, events..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pr-10"
-            autoFocus
-          />
-          {searchQuery && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
-              onClick={() => setSearchQuery('')}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
+        <SimplifiedModalBody>
+          <div className="relative mb-content-normal">
+            <Input
+              placeholder="Search for users, items, events..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pr-12 h-12 text-base"
+              autoFocus
+            />
+            {searchQuery && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                onClick={() => setSearchQuery('')}
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            )}
+          </div>
 
-        <div className="flex-1 overflow-y-auto space-y-4">
-          {loading && (
-            <div className="flex items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-          )}
+          <div className="flex-1 overflow-y-auto space-y-content-normal max-h-[50vh]">
+            {loading && (
+              <div className="flex items-center justify-center py-content-spacious">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            )}
 
-          {!loading && searchQuery && (profiles.length === 0 && items.length === 0) && (
-            <div className="text-center py-8 text-muted-foreground">
-              {t('search.noResults') || 'No results found'}
-            </div>
-          )}
+            {!loading && searchQuery && (profiles.length === 0 && items.length === 0) && (
+              <div className="text-center py-content-spacious text-muted-foreground">
+                <div className="text-lg">{t('search.noResults') || 'No results found'}</div>
+              </div>
+            )}
 
-          {profiles.length > 0 && (
-            <div>
-              <h3 className="flex items-center gap-2 font-semibold text-sm text-muted-foreground mb-3">
-                <User className="h-4 w-4" />
-                {t('search.users') || 'Users'}
-              </h3>
-              <div className="space-y-2">
-                {profiles.map((profile) => (
-                  <div
-                    key={profile.id}
-                    onClick={() => handleUserClick(profile.id)}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors"
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={profile.profile_image_url || ''} />
-                      <AvatarFallback>
-                        {profile.name?.charAt(0) || profile.username?.charAt(0) || 'U'}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm">
-                        {profile.name || profile.username || 'Unknown User'}
+            {profiles.length > 0 && (
+              <div>
+                <h3 className="flex items-center gap-2 font-semibold text-base text-muted-foreground mb-4">
+                  <User className="h-5 w-5" />
+                  {t('search.users') || 'Users'}
+                </h3>
+                <div className="space-y-3">
+                  {profiles.map((profile) => (
+                    <div
+                      key={profile.id}
+                      onClick={() => handleUserClick(profile.id)}
+                      className="flex items-center gap-4 p-4 rounded-xl hover:bg-muted cursor-pointer transition-colors card-3d"
+                    >
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={profile.profile_image_url || ''} />
+                        <AvatarFallback className="text-base">
+                          {profile.name?.charAt(0) || profile.username?.charAt(0) || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-base">
+                          {profile.name || profile.username || 'Unknown User'}
+                        </div>
+                        {profile.specialties && profile.specialties.length > 0 && (
+                          <div className="text-sm text-primary font-medium">
+                            {profile.specialties.join(', ')}
+                          </div>
+                        )}
+                        {profile.bio && (
+                          <div className="text-sm text-muted-foreground truncate mt-1">
+                            {profile.bio}
+                          </div>
+                        )}
                       </div>
-                      {profile.specialties && profile.specialties.length > 0 && (
-                        <div className="text-xs text-primary font-medium">
-                          {profile.specialties.join(', ')}
-                        </div>
-                      )}
-                      {profile.bio && (
-                        <div className="text-xs text-muted-foreground truncate">
-                          {profile.bio}
-                        </div>
-                      )}
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {items.length > 0 && (
-            <div>
-              <h3 className="flex items-center gap-2 font-semibold text-sm text-muted-foreground mb-3">
-                <Package className="h-4 w-4" />
-                {t('search.items') || 'Items'}
-              </h3>
-              <div className="space-y-2">
-                {items.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => handleItemClick(item.id)}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted cursor-pointer transition-colors"
-                  >
-                    <div className="w-12 h-12 rounded-lg bg-muted overflow-hidden flex items-center justify-center">
-                      {item.image_url ? (
-                        <img 
-                          src={item.image_url} 
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <Package className="h-6 w-6 text-muted-foreground" />
-                      )}
+            {items.length > 0 && (
+              <div>
+                <h3 className="flex items-center gap-2 font-semibold text-base text-muted-foreground mb-4">
+                  <Package className="h-5 w-5" />
+                  {t('search.items') || 'Items'}
+                </h3>
+                <div className="space-y-3">
+                  {items.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => handleItemClick(item.id)}
+                      className="flex items-center gap-4 p-4 rounded-xl hover:bg-muted cursor-pointer transition-colors card-3d"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-muted overflow-hidden flex items-center justify-center">
+                        {item.image_url ? (
+                          <img 
+                            src={item.image_url} 
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <Package className="h-6 w-6 text-muted-foreground" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-base">{item.title}</div>
+                        {item.category && (
+                          <div className="text-sm text-primary font-medium">
+                            {item.category}
+                          </div>
+                        )}
+                        {item.price && (
+                          <div className="text-sm text-muted-foreground">
+                            ₪{item.price}
+                          </div>
+                        )}
+                        {item.description && (
+                          <div className="text-sm text-muted-foreground truncate mt-1">
+                            {item.description}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm">{item.title}</div>
-                      {item.category && (
-                        <div className="text-xs text-primary font-medium">
-                          {item.category}
-                        </div>
-                      )}
-                      {item.price && (
-                        <div className="text-xs text-muted-foreground">
-                          ₪{item.price}
-                        </div>
-                      )}
-                      {item.description && (
-                        <div className="text-xs text-muted-foreground truncate">
-                          {item.description}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+            )}
+          </div>
+        </SimplifiedModalBody>
+      </SimplifiedModalContent>
+    </SimplifiedModal>
   );
 };
 
