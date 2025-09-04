@@ -199,14 +199,10 @@ const Index = () => {
       profilesList.push(currentUserDisplayProfile);
     }
 
-    // Filter and add other profiles based on selected mood
+    // Always show other profiles regardless of mood filter
     if (profiles.length > 0) {
-      let filteredProfiles = profiles.filter(p => p.id !== user?.id);
-
-      // Apply mood filter if not "all"
-      if (selectedMoodFilter !== "all") {
-        filteredProfiles = filteredProfiles.filter(p => p.interests && p.interests.includes(selectedMoodFilter));
-      }
+      const filteredProfiles = profiles.filter(p => p.id !== user?.id);
+      
       const otherProfiles = filteredProfiles.slice(0, 6) // Reduced to 6 for faster loading
       .map(p => ({
         id: p.id,
