@@ -436,20 +436,8 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(55 95% 32%); /* Hot Toddy */
+    color: hsl(349 100% 45%); /* Same as title-section - Darker Radical Red */
     font-size: 1.1em;
-  }
-
-  .title-alt::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, hsl(55 95% 32%), hsl(349 100% 45%));
-    border-radius: 2px;
-    opacity: 0.8;
   }
 
   .title-modern {
