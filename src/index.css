@@ -12,13 +12,13 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Snow Flurry, Champagne, Kournikova & Burning Orange Color Palette */
-    --background: 110 100% 89%;          /* Snow Flurry background */
+    --background: 110 100% 91%;          /* Snow Flurry background - slightly brighter */
     --foreground: 17 98% 30%;            /* Dark Burning Orange for text */
 
-    --card: 110 100% 92%;                /* Lighter Snow Flurry for cards */
+    --card: 110 100% 94%;                /* Lighter Snow Flurry for cards */
     --card-foreground: 17 98% 30%;       /* Dark Burning Orange for card text */
 
-    --popover: 110 100% 94%;             /* Even lighter Snow Flurry */
+    --popover: 110 100% 96%;             /* Even lighter Snow Flurry */
     --popover-foreground: 17 98% 30%;    /* Dark Burning Orange for popover text */
 
     /* Primary: Burning Orange - Full Scale */
@@ -48,11 +48,11 @@ All colors MUST be HSL.
     --secondary-100: 51 100% 94%;        /* Subtle Kournikova background */
 
     /* Accent: Snow Flurry Accent */
-    --accent: 110 100% 89%;              /* #D9FFC7 - Snow Flurry accent */
+    --accent: 110 100% 91%;              /* #D9FFC7 - Snow Flurry accent - slightly brighter */
     --accent-foreground: 17 98% 30%;     /* Dark Burning Orange text */
     --accent-700: 110 100% 65%;          /* Darker Snow Flurry */
     --accent-600: 110 100% 75%;          /* Between 700 and 500 */
-    --accent-500: 110 100% 89%;          /* #D9FFC7 - Main accent */
+    --accent-500: 110 100% 91%;          /* #D9FFC7 - Main accent - slightly brighter */
     --accent-400: 110 100% 92%;          /* Lighter Snow Flurry */
     --accent-300: 110 100% 95%;          /* Light Snow Flurry */
 
@@ -94,7 +94,7 @@ All colors MUST be HSL.
     --ring: 17 98% 60%;                  /* Focus ring - Burning Orange */
 
     /* Semantic aliases for current usage */
-    --muted: 110 100% 89%;               /* Light Snow Flurry */
+    --muted: 110 100% 91%;               /* Light Snow Flurry - slightly brighter */
     --muted-foreground: 17 60% 35%;      /* Medium Burning Orange */
 
     /* Four Color Gradients */
