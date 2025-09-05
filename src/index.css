@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800;900&display=swap');
 @import 'leaflet/dist/leaflet.css';
 
 @tailwind base;
@@ -407,10 +407,10 @@ All colors MUST be HSL.
     letter-spacing: -0.025em;
   }
 
-  /* All titles use different colors from the palette */
+  /* All titles use different colors from the palette with Poppins font */
   .title-cool {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-    font-weight: var(--font-bold);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
@@ -431,8 +431,8 @@ All colors MUST be HSL.
   }
 
   .title-alt {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-    font-weight: var(--font-bold);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
@@ -453,8 +453,8 @@ All colors MUST be HSL.
   }
 
   .title-modern {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-    font-weight: var(--font-bold);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
@@ -475,8 +475,8 @@ All colors MUST be HSL.
   }
 
   .title-trendy {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-    font-weight: var(--font-bold);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
@@ -497,8 +497,8 @@ All colors MUST be HSL.
   }
 
   .title-section {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-    font-weight: var(--font-bold);
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
