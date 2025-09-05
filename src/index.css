@@ -448,7 +448,7 @@ All colors MUST be HSL.
   }
   
   .card-3d:hover {
-    box-shadow: var(--shadow-large), var(--shadow-electric);
+    box-shadow: var(--shadow-large);
     transform: translateY(-3px) scale(1.02);
   }
   
