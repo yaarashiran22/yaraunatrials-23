@@ -31,7 +31,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg border border-red-500 hover:bg-red-600 transition-colors">
+        <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-full border border-red-500 hover:bg-red-600 transition-colors">
           <MapPin className="h-4 w-4" />
           <span className="text-sm font-medium">{selectedNeighborhood}</span>
           <ChevronDown className="h-4 w-4" />
