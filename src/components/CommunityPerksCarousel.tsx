@@ -26,6 +26,13 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
   const [currentQRData, setCurrentQRData] = useState<string>('');
 
   const loading = perksLoading || couponsLoading;
+
+  // Debug logging
+  console.log('CommunityPerksCarousel - Filter:', filter);
+  console.log('CommunityPerksCarousel - Perks:', perks.length);
+  console.log('CommunityPerksCarousel - Coupons:', coupons.length);
+  console.log('CommunityPerksCarousel - Following:', following.length);
+  console.log('CommunityPerksCarousel - Loading:', loading);
   
   // Combine and sort both community perks and user coupons
   let allItems = [
@@ -45,6 +52,9 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
       return !(item as any).user_id || following.includes((item as any).user_id);
     });
   }
+
+  console.log('CommunityPerksCarousel - Final allItems after filtering:', allItems.length);
+  console.log('CommunityPerksCarousel - Items:', allItems);
 
   const handleClaimCoupon = (perkId: string) => {
     if (!user) {
