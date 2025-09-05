@@ -31,7 +31,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg border border-accent hover:bg-accent/80 transition-colors">
+        <button className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-lg border border-secondary hover:bg-secondary/80 transition-colors">
           <MapPin className="h-4 w-4" />
           <span className="text-sm font-medium">{selectedNeighborhood}</span>
           <ChevronDown className="h-4 w-4" />
@@ -43,7 +43,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
             key={neighborhood}
             onClick={() => handleNeighborhoodSelect(neighborhood)}
             className={`cursor-pointer ${
-              selectedNeighborhood === neighborhood ? 'bg-accent text-accent-foreground' : ''
+              selectedNeighborhood === neighborhood ? 'bg-secondary text-secondary-foreground' : ''
             }`}
           >
             {neighborhood}
