@@ -64,8 +64,10 @@ const DesktopNavItem = ({ href, icon: Icon, label }: { href: string; icon: any; 
 };
 
 const AppContent = () => {
+  console.log('🏠 AppContent component rendering...');
   const { isOpen, closeNewItem, refreshItems } = useNewItem();
   const { t } = useLanguage();
+  console.log('🔧 AppContent hooks initialized successfully');
   return (
     <BrowserRouter>
       {/* Desktop and mobile responsive layout */}
@@ -163,24 +165,27 @@ const AppContent = () => {
   );
 };
 
-const App = () => (
-  <ErrorBoundary>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <LanguageProvider>
-        <AuthProvider>
-          <NewItemProvider>
-            <FavoritesProvider>
-              <SearchProvider>
-                <AppContent />
-              </SearchProvider>
-            </FavoritesProvider>
-          </NewItemProvider>
-        </AuthProvider>
-      </LanguageProvider>
-    </TooltipProvider>
-  </ErrorBoundary>
-);
+const App = () => {
+  console.log('📱 App component rendering...');
+  return (
+    <ErrorBoundary>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <LanguageProvider>
+          <AuthProvider>
+            <NewItemProvider>
+              <FavoritesProvider>
+                <SearchProvider>
+                  <AppContent />
+                </SearchProvider>
+              </FavoritesProvider>
+            </NewItemProvider>
+          </AuthProvider>
+        </LanguageProvider>
+      </TooltipProvider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;

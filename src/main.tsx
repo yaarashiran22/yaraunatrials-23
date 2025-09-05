@@ -3,6 +3,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App.tsx'
 import './index.css'
 
+console.log('🚀 Main.tsx loaded successfully');
+
+console.log('🔧 Creating QueryClient...');
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -17,9 +20,20 @@ const queryClient = new QueryClient({
     },
   },
 })
+console.log('✅ QueryClient created successfully');
 
-createRoot(document.getElementById("root")!).render(
+console.log('🎯 Getting root element...');
+const rootElement = document.getElementById("root");
+if (!rootElement) {
+  console.error('❌ Root element not found!');
+} else {
+  console.log('✅ Root element found, creating root...');
+}
+
+console.log('🎨 Rendering App...');
+createRoot(rootElement!).render(
   <QueryClientProvider client={queryClient}>
     <App />
   </QueryClientProvider>
 );
+console.log('🎉 App rendered successfully!');
