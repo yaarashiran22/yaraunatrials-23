@@ -22,17 +22,17 @@ All colors MUST be HSL.
     --popover-foreground: 276 99% 15%;   /* Dark Purple for popover text */
 
     /* Primary: Purple - Full Scale */
-    --primary: 276 99% 30%;              /* #5F019A - Purple */
+    --primary: 276 99% 35%;              /* #7A1CB8 - Lighter Purple */
     --primary-foreground: 49 85% 95%;    /* Light Banana Mania text on Purple */
-    --primary-900: 276 99% 15%;          /* Darker Purple */
-    --primary-800: 276 99% 20%;          /* Between 900 and 700 */
-    --primary-700: 276 99% 25%;          /* Darker than main */
-    --primary-600: 276 99% 30%;          /* #5F019A - Main primary */
-    --primary-500: 276 99% 40%;          /* Light variant */
-    --primary-400: 276 99% 50%;          /* Very light */
-    --primary-300: 276 99% 65%;          /* Ultra light */
-    --primary-200: 276 99% 80%;          /* Subtle */
-    --primary-100: 276 99% 90%;          /* Subtle background */
+    --primary-900: 276 99% 20%;          /* Darker Purple */
+    --primary-800: 276 99% 25%;          /* Between 900 and 700 */
+    --primary-700: 276 99% 30%;          /* Darker than main */
+    --primary-600: 276 99% 35%;          /* #7A1CB8 - Main primary (lighter) */
+    --primary-500: 276 99% 45%;          /* Light variant */
+    --primary-400: 276 99% 55%;          /* Very light */
+    --primary-300: 276 99% 70%;          /* Ultra light */
+    --primary-200: 276 99% 85%;          /* Subtle */
+    --primary-100: 276 99% 92%;          /* Subtle background */
 
     /* Secondary: Banana Mania - Full Scale */
     --secondary: 49 85% 81%;             /* #FAEBA5 - Banana Mania */

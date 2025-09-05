@@ -159,7 +159,7 @@ const MoodFilterStrip = ({ onFilterChange, showTitle = true }: MoodFilterStripPr
 
   return (
     <>
-      <div className="sticky top-[var(--header-height,64px)] z-20 bg-accent/5 backdrop-blur-sm border-b border-border/20 shadow-sm">
+      <div className="sticky top-[var(--header-height,64px)] z-50 bg-accent/5 backdrop-blur-sm border-b border-border/20 shadow-sm">
         <div className="px-4 lg:px-8 py-3">
           {showTitle && (
             <h3 className="text-lg font-semibold text-foreground mb-4 text-center">

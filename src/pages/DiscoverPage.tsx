@@ -718,7 +718,7 @@ const DiscoverPage = () => {
           </div>
           
           {/* Map Container */}
-          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[400px]">
+          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[400px] z-10">
             {/* Filtered Users Display */}
             {filteredUsers.length > 0 && (
               <div className="absolute bottom-4 left-4 right-4 z-20">
@@ -774,7 +774,7 @@ const DiscoverPage = () => {
                     </div>
                   </div>
                 )}
-                <div ref={mapContainer} className="w-full h-full" />
+                <div ref={mapContainer} className="w-full h-full z-0" />
               </>
             )}
           </div>
