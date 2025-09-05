@@ -14,9 +14,9 @@ const moodFilters = [
   { id: "chill", label: "Chill", icon: Coffee, color: "text-blue-500", activeBg: "bg-blue-50 dark:bg-blue-950/30" },
   { id: "go-out", label: "Go Out", icon: Zap, color: "text-orange-500", activeBg: "bg-orange-50 dark:bg-orange-950/30" },
   { id: "romantic", label: "Romantic", icon: Heart, color: "text-pink-500", activeBg: "bg-pink-50 dark:bg-pink-950/30" },
-  { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500", activeBg: "bg-green-50 dark:bg-green-950/30" },
+  { id: "active", label: "Active", icon: Dumbbell, color: "text-green-400", activeBg: "bg-green-50/70 dark:bg-green-950/20" },
   { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
-  { id: "social", label: "Wellness", icon: Leaf, color: "text-green-600", activeBg: "bg-green-50 dark:bg-green-950/30" },
+  { id: "social", label: "Wellness", icon: Leaf, color: "text-green-500", activeBg: "bg-green-50/70 dark:bg-green-950/20" },
   { id: "sightseeing", label: "Sightseeing", icon: Camera, color: "text-cyan-500", activeBg: "bg-cyan-50 dark:bg-cyan-950/30" }
 ];
 
@@ -159,7 +159,7 @@ const MoodFilterStrip = ({ onFilterChange, showTitle = true }: MoodFilterStripPr
 
   return (
     <>
-      <div className="sticky top-[var(--header-height,64px)] z-20 bg-background/95 backdrop-blur-sm border-b border-border/20">
+      <div className="sticky top-[var(--header-height,64px)] z-20 bg-accent/5 backdrop-blur-sm border-b border-border/20 shadow-sm">
         <div className="px-4 lg:px-8 py-3">
           {showTitle && (
             <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
