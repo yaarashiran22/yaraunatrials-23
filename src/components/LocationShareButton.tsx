@@ -131,9 +131,7 @@ const OpenToHangButton = ({
           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2" />
         ) : permissionState === 'denied' ? (
           <AlertCircle className="w-4 h-4 ml-2" />
-        ) : (
-          <Heart className="w-4 h-4 ml-2" />
-        )}
+        ) : null}
         {permissionState === 'denied' ? 'Access Denied' : shareText}
       </Button>
       
