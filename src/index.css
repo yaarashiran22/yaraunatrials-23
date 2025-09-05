@@ -12,13 +12,13 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Snow Flurry, Champagne, Kournikova & Burning Orange Color Palette */
-    --background: 35 61% 89%;            /* Champagne background */
+    --background: 110 100% 89%;          /* Snow Flurry background */
     --foreground: 17 98% 30%;            /* Dark Burning Orange for text */
 
-    --card: 35 61% 92%;                  /* Lighter Champagne for cards */
+    --card: 110 100% 92%;                /* Lighter Snow Flurry for cards */
     --card-foreground: 17 98% 30%;       /* Dark Burning Orange for card text */
 
-    --popover: 35 61% 94%;               /* Even lighter Champagne */
+    --popover: 110 100% 94%;             /* Even lighter Snow Flurry */
     --popover-foreground: 17 98% 30%;    /* Dark Burning Orange for popover text */
 
     /* Primary: Burning Orange - Full Scale */
@@ -89,12 +89,12 @@ All colors MUST be HSL.
     --neutral-100: 35 61% 90%;           /* Very light Champagne */
 
     /* Modern borders and inputs */
-    --border: 35 40% 78%;                /* Muted Champagne border */
-    --input: 35 61% 94%;                 /* Light Champagne input */
+    --border: 110 80% 75%;               /* Muted Snow Flurry border */
+    --input: 110 100% 94%;               /* Light Snow Flurry input */
     --ring: 17 98% 60%;                  /* Focus ring - Burning Orange */
 
     /* Semantic aliases for current usage */
-    --muted: 35 61% 89%;                 /* Light Champagne */
+    --muted: 110 100% 89%;               /* Light Snow Flurry */
     --muted-foreground: 17 60% 35%;      /* Medium Burning Orange */
 
     /* Four Color Gradients */
