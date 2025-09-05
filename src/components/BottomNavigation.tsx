@@ -35,14 +35,13 @@ const BottomNavigation = () => {
             variant="ghost"
             size="sm"
             onClick={() => navigate('/')}
-            className={`flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
               isActive('/') 
                 ? 'text-primary bg-primary/10' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
           >
             <Home className="h-6 w-6" />
-            <span className="text-xs font-medium">{t('navigation.home')}</span>
           </Button>
 
           {/* Discover - גלה */}
@@ -50,14 +49,13 @@ const BottomNavigation = () => {
             variant="ghost"
             size="sm"
             onClick={() => navigate('/discover')}
-            className={`flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
               isActive('/discover') 
                 ? 'text-primary bg-primary/10' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
           >
             <Map className="h-6 w-6" />
-            <span className="text-xs font-medium">Hangout</span>
           </Button>
 
           {/* Messages */}
@@ -65,14 +63,13 @@ const BottomNavigation = () => {
             variant="ghost"
             size="sm"
             onClick={() => navigate('/messages')}
-            className={`flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
               isActive('/messages') 
                 ? 'text-primary bg-primary/10' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
           >
             <MessageCircle className="h-6 w-6" />
-            <span className="text-xs font-medium">Messages</span>
           </Button>
 
           {/* Profile/Login */}
@@ -81,24 +78,22 @@ const BottomNavigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate('/profile/1')}
-              className={`flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+              className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
                 location.pathname.startsWith('/profile') 
                   ? 'text-primary bg-primary/10' 
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
               }`}
             >
               <User className="h-6 w-6" />
-              <span className="text-xs font-medium">{t('common.profile')}</span>
             </Button>
           ) : (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => navigate('/login')}
-              className="flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              className="flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] text-muted-foreground hover:text-foreground hover:bg-muted/50"
             >
               <LogIn className="h-6 w-6" />
-              <span className="text-xs font-medium">{t('common.login')}</span>
             </Button>
           )}
         </div>
