@@ -276,34 +276,45 @@ const DiscoverPage = () => {
         onNeighborhoodChange={handleNeighborhoodChange}
       />
       
-      <main className="px-4 py-4 space-y-6 max-w-md mx-auto lg:max-w-none">
+      <main className={`${user ? 'px-4 py-4 space-y-4' : 'px-4 py-2 space-y-4'} max-w-md mx-auto lg:max-w-none`}>
         
         {/* Share Location Section */}
         <section className="text-center">
-          <div className="mb-4">
-            <h2 className="title-section mb-2">share your location</h2>
-            <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-              Let nearby people know when you're open to hang out
-            </p>
-          </div>
+          {!user && (
+            <div className="mb-6">
+              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                Find people in the same mood as you to hang out with
+              </p>
+            </div>
+          )}
           
-          <div className="bg-white rounded-2xl p-4 border border-border shadow-sm">
-            <OpenToHangButton 
-              size="default" 
-              shareText="I'm Open to Hang" 
-              removeText="Stop Sharing" 
-              className="w-full rounded-full" 
-            />
-          </div>
+          {user && (
+            <>
+              <div className="mb-3">
+                <h2 className="title-section mb-1">share your location</h2>
+                <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+                  Let nearby people know when you're open to hang out
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-2 border border-border shadow-sm max-w-xs mx-auto">
+                <OpenToHangButton 
+                  size="sm" 
+                  shareText="I'm Open to Hang" 
+                  removeText="Stop Sharing" 
+                  className="w-full rounded-full text-sm" 
+                />
+              </div>
+            </>
+          )}
         </section>
 
 
 
-        {/* Map Section */}
-        <section>
-          
+        {/* Map Section - Full Screen */}
+        <section className="flex-1">
           {/* Map Container */}
-          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[400px] z-10">
+          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[calc(100vh-200px)] min-h-[500px] z-10">
 
             {error ? (
               <div className="flex items-center justify-center h-full">
