@@ -300,7 +300,7 @@ const DiscoverPage = () => {
               <div className="bg-white rounded-xl p-2 border border-border shadow-sm max-w-xs mx-auto">
                 <OpenToHangButton 
                   size="sm" 
-                  shareText="open to hang out" 
+                  shareText="I'm Open to Hang" 
                   removeText="Stop Sharing" 
                   className="w-full rounded-full text-sm" 
                 />
