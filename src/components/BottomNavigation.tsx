@@ -72,7 +72,7 @@ const BottomNavigation = () => {
             }`}
           >
             <MessageCircle className="h-6 w-6" />
-            <span className="text-xs font-medium">{t('navigation.messages')}</span>
+            <span className="text-xs font-medium">Messages</span>
           </Button>
 
           {/* Profile/Login */}
