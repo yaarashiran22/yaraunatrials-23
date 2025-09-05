@@ -76,6 +76,7 @@ const DiscoverPage = () => {
     setFilteredUsers(moodFilteredUsers);
     addUserLocationMarkers(moodFilteredUsers);
   };
+
   const handleDiscovery = async (selectedInterests: string[], connectionType: string) => {
     console.log('Discovery filters:', { selectedInterests, connectionType });
     
@@ -206,8 +207,8 @@ const DiscoverPage = () => {
         if (selectedInterests.length === 0) return true;
         
         const userInterests = profile.interests || [];
-        const userSpecialties = profile.specialties || [];
-        const allUserInterests = [...userInterests, ...userSpecialties];
+        const userSpecialities = profile.specialties || [];
+        const allUserInterests = [...userInterests, ...userSpecialities];
         
         return selectedInterests.some(interest => 
           allUserInterests.some((userInterest: string) => 
@@ -390,7 +391,6 @@ const DiscoverPage = () => {
     });
   };
 
-  // Function to offset overlapping markers
   const offsetOverlappingMarkers = (items: any[]) => {
     const locationGroups: { [key: string]: any[] } = {};
     
@@ -433,8 +433,7 @@ const DiscoverPage = () => {
     return offsetItems;
   };
 
-  // Function to add text pin markers - removed event and meetup markers
-  const addTextPinMarkers = async () => {
+  const addTextPinMarkers = () => {
     if (!mapInstanceRef.current) return;
 
     // Clear existing recommendation markers
@@ -445,57 +444,125 @@ const DiscoverPage = () => {
       recommendationMarkersRef.current = [];
     }
 
-    // No longer adding event and meetup markers per user request
-    setUserRecommendations([]);
+    // Combine events and meetups
+    let itemsToShow: any[] = [];
+    
+    if (mapFilter === 'all' || mapFilter === 'events') {
+      itemsToShow = [...itemsToShow, ...allEvents];
+    }
+    
+    if (mapFilter === 'all' || mapFilter === 'meetups') {
+      itemsToShow = [...itemsToShow, ...allMeetups];
+    }
+
+    // Only show items with valid location data
+    const itemsWithLocation = itemsToShow.filter(item => {
+      try {
+        if (item.location && typeof item.location === 'string') {
+          const parsed = JSON.parse(item.location);
+          return parsed.lat && parsed.lng;
+        }
+      } catch (error) {
+        console.error('Error parsing location for item:', item.id, error);
+      }
+      return false;
+    });
+
+    // Offset overlapping markers
+    const offsetItems = offsetOverlappingMarkers(itemsWithLocation);
+
+    offsetItems.forEach((item) => {
+      if (!mapInstanceRef.current) return;
+
+      try {
+        const locationData = JSON.parse(item.offsetLocation || item.location);
+        const { lat, lng } = locationData;
+
+        if (!lat || !lng) return;
+
+        const isEvent = !item.event_type || item.event_type === 'event';
+        const iconColor = isEvent ? 'bg-primary' : 'bg-orange-500';
+        const iconText = isEvent ? '📅' : '🤝';
+        
+        const textIcon = L.divIcon({
+          html: `
+            <div class="flex flex-col items-center">
+              <div class="w-6 h-6 ${iconColor} rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg border-2 border-white">
+                ${iconText}
+              </div>
+              <div class="bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium text-foreground shadow-lg border border-border mt-1 max-w-[120px] truncate">
+                ${item.title}
+              </div>
+            </div>
+          `,
+          className: 'text-pin-marker',
+          iconSize: [120, 50],
+          iconAnchor: [60, 25],
+          popupAnchor: [0, -25]
+        });
+
+        const marker = L.marker([lat, lng], {
+          icon: textIcon,
+          riseOnHover: true
+        })
+          .addTo(mapInstanceRef.current)
+          .bindPopup(`
+            <div dir="ltr" class="text-left text-sm max-w-[200px]">
+              <h3 class="font-semibold text-foreground mb-2">${item.title}</h3>
+              ${item.description ? `<p class="text-muted-foreground text-xs mb-2">${item.description}</p>` : ''}
+              <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <Calendar className="w-3 h-3" />
+                <span>${item.date || 'Date TBD'}</span>
+              </div>
+              ${item.price ? `
+                <div class="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                  <span class="font-medium">Price: ${item.price}</span>
+                </div>
+              ` : ''}
+            </div>
+          `);
+
+        recommendationMarkersRef.current.push(marker);
+      } catch (error) {
+        console.error('Error creating marker for item:', item.id, error);
+      }
+    });
   };
 
+  // Initialize map
   useEffect(() => {
     const initializeMap = async () => {
       if (!mapContainer.current) return;
 
       try {
-        setIsLoading(true);
-        
-        // Buenos Aires coordinates - center of the city
-        const buenosAiresCenter: [number, number] = [-34.6118, -58.3960];
-
-        // Create map with Leaflet
         const map = L.map(mapContainer.current, {
+          center: [-34.6118, -58.3960], // Buenos Aires center
+          zoom: 13,
           zoomControl: true,
-          attributionControl: true,
-          fadeAnimation: true,
-          zoomAnimation: true,
-        }).setView(buenosAiresCenter, 12);
-        
-        mapInstanceRef.current = map;
+          scrollWheelZoom: true,
+          doubleClickZoom: true,
+          touchZoom: true,
+          boxZoom: false,
+          keyboard: true,
+        });
 
-        // Add OpenStreetMap tiles
+        // Add base tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors',
           maxZoom: 19,
-          minZoom: 10,
+          detectRetina: true,
         }).addTo(map);
 
-        // Popular neighborhoods in Buenos Aires
-        const neighborhoods = [
-          { name: "Palermo", lat: -34.5870, lng: -58.4263, color: '#BB31E9' },
-          { name: "Palermo Soho", lat: -34.5906, lng: -58.4203, color: '#9B59B6' },
-          { name: "Palermo Hollywood", lat: -34.5834, lng: -58.4323, color: '#8E44AD' },
-          { name: "San Telmo", lat: -34.6202, lng: -58.3731, color: '#FF6B6B' },
-          { name: "Recoleta", lat: -34.5885, lng: -58.3967, color: '#45B7D1' },
-          { name: "Villa Crespo", lat: -34.5998, lng: -58.4386, color: '#FFA726' },
-        ];
-
-        // Add Buenos Aires center marker
-        L.marker(buenosAiresCenter)
-          .addTo(map)
-          .bindPopup('Buenos Aires');
-
-        // Add user location and text pin markers
-        addUserLocationMarkers();
-        addTextPinMarkers();
-
+        mapInstanceRef.current = map;
         setIsLoading(false);
+
+        // Wait for map to be fully loaded before adding markers
+        map.whenReady(() => {
+          console.log('Map is ready, adding initial markers');
+          addUserLocationMarkers();
+          addTextPinMarkers();
+        });
+
       } catch (error) {
         console.error('Error initializing map:', error);
         setError('Error loading map');
@@ -529,6 +596,7 @@ const DiscoverPage = () => {
       addUserLocationMarkers();
     }
   }, [userLocations, isOpenToHang, selectedMood]);
+
   useEffect(() => {
     if (mapInstanceRef.current && !isLoading) {
       addUserLocationMarkers();
@@ -542,147 +610,198 @@ const DiscoverPage = () => {
   }, [isLoading, allEvents, allMeetups, mapFilter]); // Add mapFilter dependency
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 pb-20">
+    <div className="min-h-screen bg-background pb-20">
       <Header 
-        title="Map"
+        title="Discover"
         onNeighborhoodChange={handleNeighborhoodChange}
       />
       
-      
-      <main className="container mx-auto px-4 py-6 space-y-8">
+      <main className="px-4 py-4 space-y-6 max-w-md mx-auto lg:max-w-none">
         
-        {/* Open to Hang Button */}
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur opacity-60"></div>
-            <div className="relative bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
-              <OpenToHangButton 
-                size="default" 
-                shareText="Open to Hang" 
-                removeText="Stop Hanging" 
-                className="w-40 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]" 
-              />
+        {/* Share Location Section */}
+        <section className="text-center">
+          <div className="mb-4">
+            <h2 className="title-section mb-2">share your location</h2>
+            <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+              Let nearby people know when you're open to hang out
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-2xl p-4 border border-border shadow-sm">
+            <OpenToHangButton 
+              size="default" 
+              shareText="I'm Open to Hang" 
+              removeText="Stop Sharing" 
+              className="w-full rounded-full" 
+            />
+          </div>
+        </section>
+
+        {/* Mood Filter - Only show when open to hang */}
+        {isOpenToHang && (
+          <section>
+            <h3 className="text-sm font-semibold mb-3 px-1">What's your mood?</h3>
+            <MoodFilterStrip 
+              onFilterChange={handleMoodFilterChange}
+              showTitle={false}
+            />
+          </section>
+        )}
+
+        {/* People You Should Meet - Only show if there are suggested users */}
+        {!suggestedUsersLoading && suggestedUsers.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="title-section">people you should meet</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={findSuggestedUsers}
+                className="rounded-full border-black text-xs px-3 py-1 h-7"
+              >
+                Refresh
+              </Button>
+            </div>
+            
+            <div className="flex gap-4 overflow-x-auto pb-3 scrollbar-thin">
+              {suggestedUsers.slice(0, 8).map((user) => (
+                <div key={user.id} className="flex-shrink-0 text-center">
+                  <div className="relative mb-2">
+                    <div className="w-16 h-16 rounded-full border-2 border-primary overflow-hidden bg-white shadow-sm">
+                      <img
+                        src={user.profile_image_url || '/placeholder-avatar.png'}
+                        alt={user.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = '/placeholder-avatar.png';
+                        }}
+                      />
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center shadow-sm">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  </div>
+                  <p className="text-xs font-medium max-w-[60px] truncate text-center">{user.name}</p>
+                  <p className="text-xs text-muted-foreground">{user.sharedEventCount} events</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Map Controls */}
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="title-section">nearby map</h3>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowDiscovery(true)}
+                className="rounded-full border-black text-xs px-3 py-1 h-7"
+              >
+                <Search className="h-3 w-3 mr-1" />
+                Discover
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setMapFilter(mapFilter === 'all' ? 'events' : mapFilter === 'events' ? 'meetups' : 'all');
+                }}
+                className="rounded-full border-black text-xs px-3 py-1 h-7"
+              >
+                <Filter className="h-3 w-3 mr-1" />
+                {mapFilter === 'all' ? 'All' : mapFilter === 'events' ? 'Events' : 'Meetups'}
+              </Button>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground text-center max-w-md leading-relaxed">
-            Share your live location to discover nearby people ready to hang out right now
-          </p>
-        </div>
-        
-        {/* Map Section */}
-        <div className="relative">
-
-          {/* People You Should Meet Row - Only show if there are suggested users */}
-          {!suggestedUsersLoading && suggestedUsers.length > 0 && (
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-foreground flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
-                  People You Should Meet
-                </h3>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={findSuggestedUsers}
-                  className="bg-white/90 backdrop-blur-sm border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  Refresh
-                </Button>
-              </div>
-              
-              <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
-                {suggestedUsers.slice(0, 10).map((user) => (
-                  <div key={user.id} className="flex-shrink-0 text-center group">
-                    <div className="relative">
-                      <div className="w-24 h-24 p-1 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.05] active:scale-[0.98]">
-                        <img
-                          src={user.profile_image_url || '/placeholder-avatar.png'}
-                          alt={user.name}
-                          className="w-full h-full rounded-[1.25rem] object-cover border-2 border-white cursor-pointer"
-                          onError={(e) => {
-                            e.currentTarget.src = '/placeholder-avatar.png';
-                          }}
-                        />
-                      </div>
-                      <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center shadow-lg animate-pulse">
-                        <span className="text-white text-sm font-bold">✓</span>
-                      </div>
-                    </div>
-                    <p className="text-sm font-semibold mt-3 max-w-[90px] truncate text-center">{user.name}</p>
-                    <div className="flex items-center justify-center gap-2 mt-2">
-                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
-                      <p className="text-xs font-medium text-muted-foreground">{user.sharedEventCount}</p>
-                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
           
-          <div className="relative bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden shadow-2xl border border-white/30 h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+          {/* Map Container */}
+          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[400px]">
             {/* Filtered Users Display */}
             {filteredUsers.length > 0 && (
-              <div className="absolute bottom-6 left-6 right-6 z-20">
-                <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-white/30 shadow-xl">
-                  <h3 className="text-base font-bold mb-3 text-foreground">Matching Users ({filteredUsers.length})</h3>
-                  <div className="flex gap-3 overflow-x-auto scrollbar-hide">
-                    {filteredUsers.slice(0, 6).map((userLocation) => (
-                      <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-muted/50 to-muted/30 rounded-2xl px-4 py-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+              <div className="absolute bottom-4 left-4 right-4 z-20">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-3 border border-border shadow-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-sm font-semibold">Found {filteredUsers.length} matches</h4>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => {
+                        setFilteredUsers([]);
+                        addUserLocationMarkers();
+                      }}
+                      className="text-xs h-6 px-2"
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                    {filteredUsers.slice(0, 5).map((userLocation) => (
+                      <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1">
                         <img 
                           src={userLocation.profile.profile_image_url || '/placeholder.svg'} 
                           alt={userLocation.profile.name}
-                          className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm"
+                          className="w-5 h-5 rounded-full object-cover"
                         />
-                        <span className="text-sm font-semibold text-foreground">{userLocation.profile.name}</span>
+                        <span className="text-xs font-medium">{userLocation.profile.name}</span>
                       </div>
                     ))}
-                    {filteredUsers.length > 6 && (
-                      <div className="flex-shrink-0 flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl w-12 h-12 shadow-lg">
-                        <span className="text-sm font-bold text-primary">+{filteredUsers.length - 6}</span>
+                    {filteredUsers.length > 5 && (
+                      <div className="flex-shrink-0 flex items-center justify-center bg-primary/10 rounded-full w-8 h-8">
+                        <span className="text-xs font-semibold text-primary">+{filteredUsers.length - 5}</span>
                       </div>
                     )}
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => {
-                      setFilteredUsers([]);
-                      addUserLocationMarkers();
-                    }}
-                    className="mt-4 text-sm bg-white/90 border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    Show All Users
-                  </Button>
                 </div>
               </div>
             )}
 
             {error ? (
-              <div className="flex items-center justify-center h-full bg-gradient-to-br from-muted/20 to-muted/10 backdrop-blur-sm">
-                <div className="text-center p-6 bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-white/30">
-                  <p className="text-base font-medium text-destructive">{error}</p>
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center p-4">
+                  <p className="text-sm text-destructive">{error}</p>
                 </div>
               </div>
             ) : (
               <>
                 {isLoading && (
-                  <div className="absolute inset-0 bg-background/90 backdrop-blur-lg flex items-center justify-center z-10">
-                    <div className="text-center bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20">
-                      <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
-                      <p className="text-base font-medium text-foreground/80">Loading map...</p>
+                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10">
+                    <div className="text-center">
+                      <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-2"></div>
+                      <p className="text-sm text-muted-foreground">Loading map...</p>
                     </div>
                   </div>
                 )}
-                <div ref={mapContainer} className="w-full h-full relative z-0" style={{
-                  filter: 'contrast(1.05) saturate(1.1)',
-                }} />
+                <div ref={mapContainer} className="w-full h-full" />
               </>
             )}
           </div>
-        </div>
+        </section>
+
+        {/* Quick Actions */}
+        <section>
+          <h3 className="title-section mb-4">quick actions</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowDiscovery(true)}
+              className="h-16 flex-col gap-2 rounded-2xl border-border"
+            >
+              <Search className="h-5 w-5 text-primary" />
+              <span className="text-sm font-medium">Find People</span>
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => suggestedUsers.length > 0 ? setShowPeopleYouShouldMeet(true) : findSuggestedUsers()}
+              className="h-16 flex-col gap-2 rounded-2xl border-border"
+            >
+              <Users className="h-5 w-5 text-primary" />
+              <span className="text-sm font-medium">Suggestions</span>
+            </Button>
+          </div>
+        </section>
 
         {/* Discovery Popup */}
         <DiscoveryPopup 
