@@ -69,6 +69,11 @@ All colors MUST be HSL.
     --tertiary-200: 349 100% 75%;        /* Very light Radical Red */
     --tertiary-100: 349 100% 85%;        /* Subtle Radical Red background */
 
+    /* Coral Orange - Light coral orange for special elements */
+    --coral: 17 98% 60%;                 /* Light coral orange */
+    --coral-foreground: 0 0% 100%;       /* White text on coral */
+    --coral-hover: 17 98% 55%;           /* Darker coral for hover */
+
     /* System Colors - ALL Four Color Palette */
     --success: 55 95% 45%;               /* Use Hot Toddy for success */
     --success-foreground: 49 85% 95%;
@@ -253,6 +258,11 @@ All colors MUST be HSL.
     --tertiary-300: 35 61% 89%;        
     --tertiary-200: 35 61% 92%;        
     --tertiary-100: 35 61% 95%;
+
+    /* Coral Orange - Dark Mode Adjustments */
+    --coral: 17 98% 65%;                 /* Slightly brighter coral for dark mode */
+    --coral-foreground: 0 0% 100%;       /* White text on coral */
+    --coral-hover: 17 98% 60%;           /* Darker coral for hover */
 
     /* System Colors - Dark Mode Adjustments */
     --success: 110 100% 65%;             /* Darker Snow Flurry for dark mode */
