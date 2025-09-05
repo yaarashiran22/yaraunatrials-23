@@ -77,7 +77,7 @@ const Header = ({
             <Button 
               variant="outline" 
               size="sm" 
-              className="p-2.5 h-10 w-10 bg-white text-foreground hover:bg-gray-50 border-black shadow-sm"
+              className="p-2.5 h-10 w-10 bg-white text-foreground hover:bg-gray-50 border-black shadow-sm rounded-full"
               onClick={() => navigate('/messages')}
             >
               <MessageCircle className="h-5 w-5" />
@@ -87,7 +87,7 @@ const Header = ({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="relative p-2.5 h-10 w-10 bg-black text-white hover:bg-gray-800 border-black"
+                className="relative p-2.5 h-10 w-10 bg-black text-white hover:bg-gray-800 border-black rounded-full"
                 onClick={() => setShowNotifications(true)}
               >
                 <Bell className="h-5 w-5" />

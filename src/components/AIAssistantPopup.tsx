@@ -171,7 +171,7 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <Card className="w-full max-w-md max-h-[80vh] min-h-[400px] flex flex-col bg-background">
+      <Card className="w-full max-w-2xl lg:max-w-3xl max-h-[85vh] lg:max-h-[80vh] min-h-[500px] lg:min-h-[600px] flex flex-col bg-background">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 flex-shrink-0">
           <CardTitle className="text-lg font-semibold flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />
@@ -187,13 +187,13 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
           </Button>
         </CardHeader>
         
-        <CardContent className="flex-1 flex flex-col p-4 space-y-4 min-h-0">
+        <CardContent className="flex-1 flex flex-col p-4 lg:p-6 space-y-4 min-h-0">
           <ScrollArea className="flex-1 pr-4 overflow-y-auto">
             <div className="space-y-4">
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex gap-2 ${
+                  className={`flex gap-3 ${
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}
                 >
@@ -203,13 +203,13 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
                     </div>
                   )}
                   <div
-                    className={`max-w-[75%] rounded-lg p-3 break-words ${
+                    className={`max-w-[75%] rounded-lg p-3 lg:p-4 break-words ${
                       message.role === 'user'
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted text-muted-foreground'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                    <p className="text-sm lg:text-base whitespace-pre-wrap leading-relaxed">{message.content}</p>
                   </div>
                   {message.role === 'user' && (
                     <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-1">
