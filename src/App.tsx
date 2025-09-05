@@ -110,7 +110,7 @@ const AppContent = () => {
             <div className="p-6">
               <div 
               className="title-section text-3xl cursor-pointer hover:opacity-80 transition-opacity mb-8 text-primary"
-                style={{ textTransform: 'none', color: 'hsl(var(--primary))' }}
+                style={{ color: 'hsl(var(--primary))' }}
                 onClick={() => window.location.href = '/'}
                 role="button"
                 aria-label="Navigate to homepage"

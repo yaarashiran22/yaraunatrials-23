@@ -62,7 +62,7 @@ const Header = ({
             onClick={handleLogoClick}
             role="button"
             aria-label="Navigate to homepage"
-            style={{ textTransform: 'none', color: 'hsl(var(--primary))' }}
+            style={{ color: 'hsl(var(--primary))' }}
           >
             una
           </div>
