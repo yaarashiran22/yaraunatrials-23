@@ -58,7 +58,7 @@ const Header = ({
         <div className="flex items-center gap-4">
           {/* Logo */}
           <div 
-            className="text-2xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0 text-primary" 
+            className="title-cool cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0" 
             onClick={handleLogoClick}
             role="button"
             aria-label="Navigate to homepage"

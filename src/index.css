@@ -369,6 +369,73 @@ All colors MUST be HSL.
     letter-spacing: -0.025em;
   }
 
+  /* Trendy title styles for alternative app aesthetic */
+  .title-cool {
+    font-weight: var(--font-extrabold);
+    letter-spacing: -0.03em;
+    text-shadow: 0 1px 2px hsl(284 100% 31% / 0.1);
+    background: linear-gradient(135deg, hsl(284 100% 31%), hsl(284 100% 45%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease-in-out infinite;
+  }
+
+  .title-alt {
+    font-weight: var(--font-bold);
+    letter-spacing: -0.025em;
+    text-transform: lowercase;
+    position: relative;
+  }
+
+  .title-alt::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, hsl(284 100% 31%), hsl(70 100% 82%));
+    border-radius: 1px;
+    opacity: 0.7;
+  }
+
+  .title-modern {
+    font-weight: var(--font-semibold);
+    letter-spacing: -0.02em;
+    color: hsl(var(--foreground));
+    position: relative;
+    text-shadow: 0 0 20px hsl(284 100% 31% / 0.3);
+  }
+
+  .title-trendy {
+    font-weight: var(--font-bold);
+    letter-spacing: -0.015em;
+    background: linear-gradient(135deg, hsl(284 100% 31%) 0%, hsl(284 100% 50%) 50%, hsl(70 100% 70%) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.1em;
+    position: relative;
+  }
+
+  .title-section {
+    font-weight: var(--font-extrabold);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    color: hsl(284 100% 31%);
+    margin-bottom: 0.5rem;
+    position: relative;
+    opacity: 0.9;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
   /* Vibrant Social 3D Components */
   .card-3d {
     background: var(--gradient-card);

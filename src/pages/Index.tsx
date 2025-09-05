@@ -300,7 +300,7 @@ const Index = () => {
         {/* Community Members Section - Horizontal Carousel */}
         <section className="-mb-1 lg:-mb-1">
           <div className="px-1 lg:px-5 mb-3">
-            <h3 className="text-app-subheading font-app text-primary-700 bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">People Nearby</h3>
+            <h3 className="title-section">people nearby</h3>
           </div>
           <div className="relative">
             <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
@@ -317,11 +317,8 @@ const Index = () => {
         {/* Join me Section - Horizontal Carousel */}
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-app-heading font-app text-foreground relative">
-              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
-                {t('sections.joinMe')}
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
+            <h2 className="title-trendy">
+              join me
             </h2>
             <div className="flex items-center gap-2">
               <Button 
@@ -385,10 +382,8 @@ const Index = () => {
         {/* Events Section - Horizontal Carousel */}
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-app-heading font-app text-foreground relative">
-            <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">Events Around You
-            </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
+            <h2 className="title-cool">
+            events around you
             </h2>
             <div className="flex items-center gap-2">
               <Button 
@@ -451,11 +446,8 @@ const Index = () => {
         {/* Coupons Section - Horizontal Carousel */}
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-foreground relative">
-              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
-                {t('sections.communityCoupons')}
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
+            <h2 className="title-alt">
+              community coupons
             </h2>
             {currentUserProfile?.account_type === 'business' && <Button size="sm" variant="outline" className="h-8 w-8 p-0 border-primary/30 hover:bg-primary/10 hover:border-primary/50" onClick={() => setIsAddCouponModalOpen(true)}>
                 <Plus className="w-4 h-4 text-primary" />
