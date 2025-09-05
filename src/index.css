@@ -11,52 +11,52 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Purple & Jonquil Color Palette */
-    --background: 70 100% 90%;           /* Light Jonquil background */
-    --foreground: 284 100% 25%;          /* Dark Purple for text */
+    /* Bright Turquoise & Bizarre Color Palette */
+    --background: 23 43% 89%;            /* Bizarre background */
+    --foreground: 17 78% 25%;            /* Dark Burnt Sienna for text */
 
-    --card: 70 100% 93%;                 /* Lighter Jonquil for cards */
-    --card-foreground: 284 100% 25%;     /* Dark Purple for card text */
+    --card: 23 43% 92%;                  /* Lighter Bizarre for cards */
+    --card-foreground: 17 78% 25%;       /* Dark Burnt Sienna for card text */
 
-    --popover: 70 100% 95%;              /* Even lighter Jonquil */
-    --popover-foreground: 284 100% 25%;  /* Dark Purple for popover text */
+    --popover: 23 43% 94%;               /* Even lighter Bizarre */
+    --popover-foreground: 17 78% 25%;    /* Dark Burnt Sienna for popover text */
 
-    /* Primary: Purple - Full Scale */
-    --primary: 284 100% 31%;             /* #7600A0 - Purple */
-    --primary-foreground: 70 100% 95%;   /* Light Jonquil text on Purple */
-    --primary-900: 284 100% 18%;         /* Darker Purple */
-    --primary-800: 284 100% 22%;         /* Between 900 and 700 */
-    --primary-700: 284 100% 26%;         /* Darker than main */
-    --primary-600: 284 100% 31%;         /* #7600A0 - Main primary */
-    --primary-500: 284 100% 36%;         /* Light variant */
-    --primary-400: 284 100% 45%;         /* Very light */
-    --primary-300: 284 100% 55%;         /* Ultra light */
-    --primary-200: 284 100% 70%;         /* Subtle */
-    --primary-100: 284 100% 85%;         /* Subtle background */
+    /* Primary: Bright Turquoise - Full Scale */
+    --primary: 175 83% 50%;              /* #15E9D7 - Bright Turquoise */
+    --primary-foreground: 23 43% 95%;    /* Light Bizarre text on Turquoise */
+    --primary-900: 175 83% 25%;          /* Darker Turquoise */
+    --primary-800: 175 83% 30%;          /* Between 900 and 700 */
+    --primary-700: 175 83% 35%;          /* Darker than main */
+    --primary-600: 175 83% 50%;          /* #15E9D7 - Main primary */
+    --primary-500: 175 83% 60%;          /* Light variant */
+    --primary-400: 175 83% 70%;          /* Very light */
+    --primary-300: 175 83% 80%;          /* Ultra light */
+    --primary-200: 175 83% 88%;          /* Subtle */
+    --primary-100: 175 83% 94%;          /* Subtle background */
 
-    /* Secondary: Jonquil - Full Scale */
-    --secondary: 70 80% 75%;             /* Muted Jonquil */
-    --secondary-foreground: 284 100% 25%; /* Dark Purple text */
-    --secondary-900: 70 100% 50%;        /* Dark Jonquil */
-    --secondary-800: 70 100% 60%;        /* Between 900 and 700 */
-    --secondary-700: 70 100% 70%;        /* Darker Jonquil */
-    --secondary-600: 70 100% 80%;        /* Medium Jonquil */
-    --secondary-500: 70 100% 82%;        /* #EFFFA1 - Main secondary */
-    --secondary-400: 70 100% 85%;        /* Light Jonquil */
-    --secondary-300: 70 100% 88%;        /* Lighter Jonquil */
-    --secondary-200: 70 100% 91%;        /* Very light Jonquil */
-    --secondary-100: 70 100% 94%;        /* Subtle Jonquil background */
+    /* Secondary: Laser Lemon - Full Scale */
+    --secondary: 69 80% 70%;             /* Muted Laser Lemon */
+    --secondary-foreground: 17 78% 25%;  /* Dark Burnt Sienna text */
+    --secondary-900: 69 100% 40%;        /* Dark Laser Lemon */
+    --secondary-800: 69 100% 50%;        /* Between 900 and 700 */
+    --secondary-700: 69 100% 60%;        /* Darker Laser Lemon */
+    --secondary-600: 69 100% 70%;        /* Medium Laser Lemon */
+    --secondary-500: 69 100% 72%;        /* #E9FF6F - Main secondary */
+    --secondary-400: 69 100% 78%;        /* Light Laser Lemon */
+    --secondary-300: 69 100% 82%;        /* Lighter Laser Lemon */
+    --secondary-200: 69 100% 86%;        /* Very light Laser Lemon */
+    --secondary-100: 69 100% 90%;        /* Subtle Laser Lemon background */
 
-    /* Accent: Purple Accent */
-    --accent: 284 100% 31%;              /* #7600A0 - Purple accent */
-    --accent-foreground: 70 100% 95%;    /* Light Jonquil text */
-    --accent-700: 284 100% 18%;          /* Darker Purple */
-    --accent-600: 284 100% 22%;          /* Between 700 and 500 */
-    --accent-500: 284 100% 31%;          /* #7600A0 - Main accent */
-    --accent-400: 284 100% 40%;          /* Lighter Purple */
-    --accent-300: 284 100% 50%;          /* Light Purple */
+    /* Accent: Burnt Sienna Accent */
+    --accent: 17 78% 58%;                /* #E77243 - Burnt Sienna accent */
+    --accent-foreground: 23 43% 95%;     /* Light Bizarre text */
+    --accent-700: 17 78% 35%;            /* Darker Burnt Sienna */
+    --accent-600: 17 78% 45%;            /* Between 700 and 500 */
+    --accent-500: 17 78% 58%;            /* #E77243 - Main accent */
+    --accent-400: 17 78% 68%;            /* Lighter Burnt Sienna */
+    --accent-300: 17 78% 78%;            /* Light Burnt Sienna */
 
-    /* System Colors - Purple & Jonquil Palette */
+    /* System Colors - Bright Turquoise & Multi-Color Palette */
     --success: 152 66% 46%;              /* Keep success green */
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;               /* Keep warning orange */
@@ -64,53 +64,53 @@ All colors MUST be HSL.
     --destructive: 0 84% 60%;            /* Keep destructive red */
     --destructive-foreground: 0 0% 100%;
 
-    /* Neutrals - Purple based Scale */
-    --neutral-900: 284 100% 20%;         /* Dark Purple */
-    --neutral-800: 284 80% 25%;          /* Between 900 and 700 */
-    --neutral-700: 284 60% 30%;          /* Medium dark */
-    --neutral-600: 284 40% 40%;          /* Between 700 and 500 */
-    --neutral-500: 284 20% 50%;          /* Medium neutral */
-    --neutral-400: 70 40% 60%;           /* Muted Jonquil */
-    --neutral-300: 70 60% 70%;           /* Light Jonquil */
-    --neutral-200: 70 80% 80%;           /* Between 300 and 100 */
-    --neutral-100: 70 100% 90%;          /* Very light Jonquil */
+    /* Neutrals - Bizarre based Scale */
+    --neutral-900: 17 78% 25%;           /* Dark Burnt Sienna */
+    --neutral-800: 17 60% 30%;           /* Between 900 and 700 */
+    --neutral-700: 17 50% 35%;           /* Medium dark */
+    --neutral-600: 17 40% 45%;           /* Between 700 and 500 */
+    --neutral-500: 17 30% 55%;           /* Medium neutral */
+    --neutral-400: 23 30% 70%;           /* Muted Bizarre */
+    --neutral-300: 23 40% 80%;           /* Light Bizarre */
+    --neutral-200: 23 43% 85%;           /* Between 300 and 100 */
+    --neutral-100: 23 43% 90%;           /* Very light Bizarre */
 
     /* Modern borders and inputs */
-    --border: 70 40% 70%;                /* Muted Jonquil border */
-    --input: 70 100% 95%;                /* Light Jonquil input */
-    --ring: 284 100% 31%;                /* Focus ring - Purple */
+    --border: 23 30% 80%;                /* Muted Bizarre border */
+    --input: 23 43% 95%;                 /* Light Bizarre input */
+    --ring: 175 83% 50%;                 /* Focus ring - Bright Turquoise */
 
     /* Semantic aliases for current usage */
-    --muted: 70 100% 90%;                /* Light Jonquil */
-    --muted-foreground: 284 60% 30%;     /* Medium Purple */
+    --muted: 23 43% 90%;                 /* Light Bizarre */
+    --muted-foreground: 17 50% 35%;      /* Medium Burnt Sienna */
 
-    /* Purple & Jonquil Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(284 100% 31%) 0%, hsl(70 100% 82%) 100%);
-    --gradient-plaza-dusk: linear-gradient(135deg, hsl(284 100% 31%) 0%, hsl(284 100% 40%) 50%, hsl(70 100% 82%) 100%);
-    --gradient-mint: linear-gradient(135deg, hsl(70 100% 82%) 0%, hsl(70 100% 88%) 100%);
-    --gradient-coupon: linear-gradient(135deg, hsl(284 100% 31%) 0%, hsl(284 80% 40%) 100%);
-    --gradient-soft: linear-gradient(145deg, hsl(70 100% 94%) 0%, hsl(70 100% 90%) 50%, hsl(70 100% 85%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(70 100% 95%) 100%);
-    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(70 100% 93%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(70 100% 88%) 0%, hsl(70 100% 91%) 100%);
+    /* Bright Turquoise & Multi-Color Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(175 83% 50%) 0%, hsl(69 100% 72%) 100%);
+    --gradient-plaza-dusk: linear-gradient(135deg, hsl(175 83% 50%) 0%, hsl(17 78% 58%) 50%, hsl(23 43% 89%) 100%);
+    --gradient-mint: linear-gradient(135deg, hsl(69 100% 72%) 0%, hsl(69 100% 82%) 100%);
+    --gradient-coupon: linear-gradient(135deg, hsl(175 83% 50%) 0%, hsl(175 70% 60%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(23 43% 94%) 0%, hsl(23 43% 90%) 50%, hsl(23 43% 86%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(23 43% 94%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(23 43% 92%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(23 43% 89%) 0%, hsl(23 43% 92%) 100%);
     
-    /* Purple & Jonquil Shadows */
-    --shadow-subtle: 0 1px 3px 0 hsl(284 100% 31% / 0.08), 0 1px 2px 0 hsl(284 100% 20% / 0.06);
-    --shadow-card: 0 4px 12px -2px hsl(284 100% 31% / 0.12), 0 2px 8px -1px hsl(284 100% 20% / 0.08);
-    --shadow-medium: 0 8px 20px -4px hsl(284 100% 31% / 0.15), 0 4px 12px -2px hsl(284 100% 20% / 0.10);
-    --shadow-large: 0 16px 32px -8px hsl(284 100% 31% / 0.18), 0 8px 16px -4px hsl(284 100% 20% / 0.12);
-    --shadow-floating: 0 20px 40px -12px hsl(284 100% 31% / 0.20);
-    --shadow-glow: 0 0 25px hsl(284 100% 31% / 0.4);
-    --shadow-inner: inset 0 2px 4px 0 hsl(284 100% 20% / 0.08);
-    --shadow-jacaranda: 0 6px 20px hsl(284 100% 31% / 0.25);
-    --shadow-mint: 0 6px 20px hsl(70 100% 82% / 0.25);
+    /* Bright Turquoise & Multi-Color Shadows */
+    --shadow-subtle: 0 1px 3px 0 hsl(175 83% 50% / 0.08), 0 1px 2px 0 hsl(17 78% 25% / 0.06);
+    --shadow-card: 0 4px 12px -2px hsl(175 83% 50% / 0.12), 0 2px 8px -1px hsl(17 78% 25% / 0.08);
+    --shadow-medium: 0 8px 20px -4px hsl(175 83% 50% / 0.15), 0 4px 12px -2px hsl(17 78% 25% / 0.10);
+    --shadow-large: 0 16px 32px -8px hsl(175 83% 50% / 0.18), 0 8px 16px -4px hsl(17 78% 25% / 0.12);
+    --shadow-floating: 0 20px 40px -12px hsl(175 83% 50% / 0.20);
+    --shadow-glow: 0 0 25px hsl(175 83% 50% / 0.4);
+    --shadow-inner: inset 0 2px 4px 0 hsl(17 78% 25% / 0.08);
+    --shadow-jacaranda: 0 6px 20px hsl(175 83% 50% / 0.25);
+    --shadow-mint: 0 6px 20px hsl(69 100% 72% / 0.25);
     
     /* Social Button Effects */
-    --shadow-button: 0 2px 4px hsl(284 100% 31% / 0.08);
-    --shadow-button-hover: 0 4px 12px -2px hsl(284 100% 31% / 0.15), 0 2px 8px -1px hsl(220 36% 9% / 0.10);
+    --shadow-button: 0 2px 4px hsl(175 83% 50% / 0.08);
+    --shadow-button-hover: 0 4px 12px -2px hsl(175 83% 50% / 0.15), 0 2px 8px -1px hsl(220 36% 9% / 0.10);
     --shadow-button-active: inset 0 2px 6px hsl(220 36% 9% / 0.12);
-    --shadow-button-jacaranda: 0 6px 18px hsl(284 100% 31% / 0.3);
-    --shadow-button-mint: 0 6px 18px hsl(70 100% 82% / 0.3);
+    --shadow-button-jacaranda: 0 6px 18px hsl(175 83% 50% / 0.3);
+    --shadow-button-mint: 0 6px 18px hsl(69 100% 72% / 0.3);
 
     --radius: 0.75rem;
 
@@ -172,49 +172,49 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 284 100% 12%;          /* Dark Purple background */
-    --foreground: 70 100% 90%;           /* Light Jonquil text on dark */
+    --background: 17 78% 15%;            /* Dark Burnt Sienna background */
+    --foreground: 23 43% 90%;            /* Light Bizarre text on dark */
 
-    --card: 284 80% 18%;                 /* Dark Purple card */
-    --card-foreground: 70 100% 90%;      /* Light Jonquil text on dark card */
+    --card: 17 60% 20%;                  /* Dark Burnt Sienna card */
+    --card-foreground: 23 43% 90%;       /* Light Bizarre text on dark card */
 
-    --popover: 284 80% 18%;
-    --popover-foreground: 70 100% 90%;
+    --popover: 17 60% 20%;
+    --popover-foreground: 23 43% 90%;
 
-    /* Primary: Purple - Dark Mode Adjustments */
-    --primary: 284 100% 45%;             /* Lighter Purple for dark mode */
+    /* Primary: Bright Turquoise - Dark Mode Adjustments */
+    --primary: 175 83% 60%;              /* Brighter Turquoise for dark mode */
     --primary-foreground: 0 0% 100%;
-    --primary-900: 284 100% 10%;         /* Very dark Purple */
-    --primary-800: 284 100% 15%;          
-    --primary-700: 284 100% 20%;          
-    --primary-600: 284 100% 25%;         /* Main Purple */
-    --primary-500: 284 100% 45%;         /* Lighter main primary */
-    --primary-400: 284 100% 55%;         
-    --primary-300: 284 100% 65%;         
-    --primary-200: 284 100% 75%;         
-    --primary-100: 284 100% 85%;         
+    --primary-900: 175 83% 15%;          /* Very dark Turquoise */
+    --primary-800: 175 83% 25%;          
+    --primary-700: 175 83% 35%;          
+    --primary-600: 175 83% 45%;          /* Main Turquoise */
+    --primary-500: 175 83% 60%;          /* Brighter main primary */
+    --primary-400: 175 83% 70%;         
+    --primary-300: 175 83% 80%;         
+    --primary-200: 175 83% 88%;         
+    --primary-100: 175 83% 94%;         
 
-    /* Secondary: Jonquil - Dark Mode Adjustments */
-    --secondary: 70 80% 60%;             /* Darker Jonquil for dark mode */
-    --secondary-foreground: 70 100% 95%;
-    --secondary-900: 70 100% 30%;        
-    --secondary-800: 70 100% 40%;        
-    --secondary-700: 70 100% 50%;        
-    --secondary-600: 70 100% 60%;        
-    --secondary-500: 70 100% 70%;        /* Darker main secondary */
-    --secondary-400: 70 100% 78%;        
-    --secondary-300: 70 100% 82%;        
-    --secondary-200: 70 100% 85%;        
-    --secondary-100: 70 100% 90%;
+    /* Secondary: Laser Lemon - Dark Mode Adjustments */
+    --secondary: 69 80% 65%;             /* Darker Laser Lemon for dark mode */
+    --secondary-foreground: 69 100% 95%;
+    --secondary-900: 69 100% 30%;        
+    --secondary-800: 69 100% 40%;        
+    --secondary-700: 69 100% 50%;        
+    --secondary-600: 69 100% 60%;        
+    --secondary-500: 69 100% 65%;        /* Darker main secondary */
+    --secondary-400: 69 100% 72%;        
+    --secondary-300: 69 100% 78%;        
+    --secondary-200: 69 100% 82%;        
+    --secondary-100: 69 100% 86%;
 
-    /* Accent: Purple - Dark Mode Adjustments */
-    --accent: 284 100% 45%;              /* Lighter Purple for dark mode */
+    /* Accent: Burnt Sienna - Dark Mode Adjustments */
+    --accent: 17 78% 70%;                /* Brighter Burnt Sienna for dark mode */
     --accent-foreground: 0 0% 100%;
-    --accent-700: 284 100% 15%;           
-    --accent-600: 284 100% 20%;           
-    --accent-500: 284 100% 45%;          /* Lighter main accent */
-    --accent-400: 284 100% 55%;           
-    --accent-300: 284 100% 65%;           
+    --accent-700: 17 78% 25%;           
+    --accent-600: 17 78% 35%;           
+    --accent-500: 17 78% 70%;            /* Brighter main accent */
+    --accent-400: 17 78% 78%;           
+    --accent-300: 17 78% 85%;           
 
     /* System Colors - Dark Mode Adjustments */
     --success: 152 66% 56%;              /* Lighter success for dark mode */
@@ -224,20 +224,20 @@ All colors MUST be HSL.
     --destructive: 0 84% 70%;            /* Lighter destructive for dark mode */
     --destructive-foreground: 0 0% 100%;
 
-    --muted: 284 80% 20%;                /* Dark muted */
-    --muted-foreground: 70 80% 70%;      /* Light Jonquil muted text */
+    --muted: 17 60% 22%;                 /* Dark muted */
+    --muted-foreground: 23 43% 75%;      /* Light Bizarre muted text */
 
-    --border: 284 60% 25%;               /* Dark Purple border */
-    --input: 284 80% 22%;                /* Dark Purple input */
-    --ring: 284 100% 45%;                /* Focus ring - lighter Purple */
-    --sidebar-background: 284 80% 18%;
-    --sidebar-foreground: 70 100% 90%;
-    --sidebar-primary: 70 100% 90%;
-    --sidebar-primary-foreground: 284 80% 18%;
-    --sidebar-accent: 70 80% 70%;
-    --sidebar-accent-foreground: 284 80% 18%;
-    --sidebar-border: 284 60% 25%;
-    --sidebar-ring: 70 80% 70%;
+    --border: 17 50% 30%;                /* Dark Burnt Sienna border */
+    --input: 17 60% 25%;                 /* Dark Burnt Sienna input */
+    --ring: 175 83% 60%;                 /* Focus ring - brighter Turquoise */
+    --sidebar-background: 17 60% 20%;
+    --sidebar-foreground: 23 43% 90%;
+    --sidebar-primary: 23 43% 90%;
+    --sidebar-primary-foreground: 17 60% 20%;
+    --sidebar-accent: 23 43% 75%;
+    --sidebar-accent-foreground: 17 60% 20%;
+    --sidebar-border: 17 50% 30%;
+    --sidebar-ring: 23 43% 75%;
   }
 }
 
@@ -373,8 +373,8 @@ All colors MUST be HSL.
   .title-cool {
     font-weight: var(--font-extrabold);
     letter-spacing: -0.03em;
-    text-shadow: 0 1px 2px hsl(284 100% 31% / 0.1);
-    background: linear-gradient(135deg, hsl(284 100% 31%), hsl(284 100% 45%));
+    text-shadow: 0 1px 2px hsl(175 83% 50% / 0.1);
+    background: linear-gradient(135deg, hsl(175 83% 50%), hsl(17 78% 58%));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -396,7 +396,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, hsl(284 100% 31%), hsl(70 100% 82%));
+    background: linear-gradient(90deg, hsl(175 83% 50%), hsl(69 100% 72%));
     border-radius: 1px;
     opacity: 0.7;
   }
@@ -406,13 +406,13 @@ All colors MUST be HSL.
     letter-spacing: -0.02em;
     color: hsl(var(--foreground));
     position: relative;
-    text-shadow: 0 0 20px hsl(284 100% 31% / 0.3);
+    text-shadow: 0 0 20px hsl(175 83% 50% / 0.3);
   }
 
   .title-trendy {
     font-weight: var(--font-bold);
     letter-spacing: -0.015em;
-    background: linear-gradient(135deg, hsl(284 100% 31%) 0%, hsl(284 100% 50%) 50%, hsl(70 100% 70%) 100%);
+    background: linear-gradient(135deg, hsl(175 83% 50%) 0%, hsl(69 100% 72%) 50%, hsl(17 78% 58%) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -425,7 +425,7 @@ All colors MUST be HSL.
     letter-spacing: -0.02em;
     text-transform: uppercase;
     font-size: 0.85em;
-    color: hsl(284 100% 31%);
+    color: hsl(175 83% 50%);
     margin-bottom: 0.5rem;
     position: relative;
     opacity: 0.9;
