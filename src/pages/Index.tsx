@@ -315,13 +315,12 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="bg-gradient-to-br from-secondary-100 via-card/95 to-primary-100 backdrop-blur-sm rounded-3xl p-5 lg:p-6 border-2 border-secondary-200 shadow-card social-glow">
+        <section className="bg-gradient-to-br from-secondary-100/50 via-card/95 to-primary-100/50 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-secondary-200/60 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-foreground relative">
+            <h2 className="text-lg font-bold text-foreground relative">
               <span className="relative z-10 bg-gradient-to-r from-secondary-600 via-primary-500 to-accent bg-clip-text text-transparent drop-shadow-sm">
                 {t('sections.joinMe')}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-secondary-200 via-primary-200 to-accent-300 blur-md -z-10 transform translate-x-1 translate-y-1 rounded-lg"></div>
             </h2>
             <div className="flex items-center gap-2">
               <Button 
