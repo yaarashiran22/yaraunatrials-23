@@ -87,7 +87,7 @@ const Header = ({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="relative p-2.5 h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/80"
+                className="relative p-2.5 h-10 w-10 bg-black text-white hover:bg-gray-800 border-black"
                 onClick={() => setShowNotifications(true)}
               >
                 <Bell className="h-5 w-5" />
