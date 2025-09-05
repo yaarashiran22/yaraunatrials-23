@@ -62,7 +62,13 @@ const Header = ({
             onClick={handleLogoClick}
             role="button"
             aria-label="Navigate to homepage"
-            style={{ color: 'hsl(var(--primary))' }}
+            style={{ 
+              color: 'hsl(var(--primary))', 
+              fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
+              fontWeight: 700,
+              textTransform: 'lowercase',
+              letterSpacing: '-0.03em'
+            }}
           >
             una
           </div>
