@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Sparkles, MapPin, MessageCircle } from "lucide-react";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Sparkles, MapPin } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useOptimizedNotifications } from "@/hooks/useOptimizedQueries";
@@ -78,17 +78,8 @@ const Header = ({
             <NeighborhoodSelector onNeighborhoodChange={onNeighborhoodChange} />
           </div>
           
-          {/* Messages and Notifications */}
+          {/* Notifications */}
           <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="p-2.5 h-10 w-10 bg-white text-foreground hover:bg-gray-50 border border-black shadow-sm rounded-full"
-              onClick={() => navigate('/messages')}
-            >
-              <MessageCircle className="h-5 w-5" />
-            </Button>
-            
             {user && (
               <Button 
                 variant="outline" 

@@ -1,5 +1,5 @@
 
-import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Map } from "lucide-react";
+import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Map, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -58,6 +58,21 @@ const BottomNavigation = () => {
           >
             <Map className="h-6 w-6" />
             <span className="text-xs font-medium">Hangout</span>
+          </Button>
+
+          {/* Messages */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/messages')}
+            className={`flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+              isActive('/messages') 
+                ? 'text-primary bg-primary/10' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
+          >
+            <MessageCircle className="h-6 w-6" />
+            <span className="text-xs font-medium">{t('navigation.messages')}</span>
           </Button>
 
           {/* Profile/Login */}
