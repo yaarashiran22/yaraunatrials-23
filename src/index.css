@@ -114,19 +114,21 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* Enhanced Typography Scale - App-like */
+    /* Enhanced Typography Scale - Modern App Style */
     --text-caption: 0.75rem;     /* 12px - Small labels, captions */
-    --text-body: 1rem;           /* 16px - Main body text */
+    --text-body: 0.9375rem;      /* 15px - Main body text (slightly smaller for mobile) */
     --text-subheading: 0.875rem; /* 14px - Section subheadings */
-    --text-heading: 1.125rem;    /* 18px - Card titles, headings */
-    --text-title: 1.25rem;       /* 20px - Page titles */
-    --text-large-title: 1.75rem; /* 28px - Hero titles */
+    --text-heading: 1rem;        /* 16px - Card titles, headings */
+    --text-title: 1.125rem;      /* 18px - Page titles */
+    --text-large-title: 1.5rem;  /* 24px - Hero titles (more conservative) */
     
-    /* App-like font weights */
+    /* Modern App font weights */
+    --font-light: 300;
     --font-regular: 400;
     --font-medium: 500;
     --font-semibold: 600;
     --font-bold: 700;
+    --font-extrabold: 800;
     
     /* Enhanced Spacing Scale */
     --space-1: 0.25rem;
@@ -247,7 +249,7 @@ All colors MUST be HSL.
   body {
     background: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Roboto, "Segoe UI", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     direction: ltr;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -257,8 +259,9 @@ All colors MUST be HSL.
     -webkit-touch-callout: none; /* Disable callout on iOS */
     user-select: none; /* Prevent text selection for app-like feel */
     font-size: 16px; /* Base font size for mobile */
-    line-height: 1.5;
+    line-height: 1.4;
     font-weight: 400;
+    letter-spacing: -0.01em; /* Tighter letter spacing for modern look */
   }
   
   /* Add safe area support for mobile */
@@ -323,41 +326,47 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* App-like typography utilities */
+  /* Modern app typography utilities */
   .text-app-caption {
     font-size: var(--text-caption);
-    line-height: 1.2;
-    font-weight: var(--font-regular);
+    line-height: 1.3;
+    font-weight: var(--font-medium);
+    letter-spacing: -0.005em;
   }
   
   .text-app-body {
     font-size: var(--text-body);
-    line-height: 1.4;
+    line-height: 1.5;
     font-weight: var(--font-regular);
+    letter-spacing: -0.01em;
   }
   
   .text-app-subheading {
     font-size: var(--text-subheading);
-    line-height: 1.3;
+    line-height: 1.4;
     font-weight: var(--font-semibold);
+    letter-spacing: -0.01em;
   }
   
   .text-app-heading {
     font-size: var(--text-heading);
     line-height: 1.4;
     font-weight: var(--font-semibold);
+    letter-spacing: -0.015em;
   }
   
   .text-app-title {
     font-size: var(--text-title);
     line-height: 1.3;
     font-weight: var(--font-bold);
+    letter-spacing: -0.02em;
   }
   
   .text-app-large-title {
     font-size: var(--text-large-title);
-    line-height: 1.2;
-    font-weight: var(--font-bold);
+    line-height: 1.25;
+    font-weight: var(--font-extrabold);
+    letter-spacing: -0.025em;
   }
 
   /* Vibrant Social 3D Components */
