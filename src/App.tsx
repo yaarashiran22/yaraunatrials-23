@@ -109,7 +109,8 @@ const AppContent = () => {
           <div className="w-64 bg-card border-r shadow-sm fixed left-0 top-0 h-full overflow-y-auto">
             <div className="p-6">
               <div 
-              className="text-3xl font-black cursor-pointer hover:opacity-80 transition-opacity mb-8 text-primary"
+              className="text-3xl font-bold cursor-pointer hover:opacity-80 transition-opacity mb-8 text-primary"
+                style={{ fontFamily: "'Poppins', -apple-system, BlinkMacSystemFont, sans-serif" }}
                 onClick={() => window.location.href = '/'}
                 role="button"
                 aria-label="Navigate to homepage"
