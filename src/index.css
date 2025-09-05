@@ -11,90 +11,92 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Bohemian Artsy Color System */
-    --background: 35 25% 97%;
-    --foreground: 25 35% 15%;
+    /* Vibrant Social Network Color System */
+    --background: 0 0% 99%;
+    --foreground: 220 15% 15%;
 
-    --card: 40 30% 98%;
-    --card-foreground: 25 35% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 15%;
 
-    --popover: 40 30% 98%;
-    --popover-foreground: 25 35% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 15%;
 
-    /* Primary: Earthy terracotta */
-    --primary: 15 85% 45%;
+    /* Primary: Electric Green */
+    --primary: 142 85% 45%;
     --primary-foreground: 0 0% 100%;
-    --primary-soft: 15 45% 95%;
-    --primary-glow: 15 75% 55%;
+    --primary-soft: 142 55% 95%;
+    --primary-glow: 142 90% 55%;
 
-    /* Bohemian palette */
-    --bohemian-terracotta: 15 85% 45%;
-    --bohemian-sage: 75 35% 55%;
-    --bohemian-ochre: 45 75% 55%;
-    --bohemian-clay: 20 65% 40%;
-    --bohemian-cream: 35 40% 92%;
-    --bohemian-dust: 25 25% 75%;
+    /* Social vibrant palette */
+    --electric-green: 142 85% 45%;
+    --electric-lime: 120 100% 50%;
+    --coral-orange: 15 100% 60%;
+    --electric-purple: 270 85% 60%;
+    --neon-pink: 320 85% 65%;
+    --social-blue: 200 85% 55%;
 
-    /* Enhanced accent system - Sage green */
-    --accent: 75 35% 55%;
+    /* Enhanced accent system - Coral Orange */
+    --accent: 15 100% 60%;
     --accent-foreground: 0 0% 100%;
-    --accent-soft: 75 25% 90%;
-    --accent-muted: 75 20% 85%;
+    --accent-soft: 15 75% 90%;
+    --accent-muted: 15 50% 85%;
 
-    /* Secondary: Warm clay */
-    --secondary: 35 35% 90%;
-    --secondary-foreground: 25 35% 20%;
+    /* Secondary: Electric Purple */
+    --secondary: 270 85% 95%;
+    --secondary-foreground: 270 85% 25%;
 
     /* Refined muted colors */
-    --muted: 35 25% 95%;
-    --muted-foreground: 25 25% 50%;
+    --muted: 220 10% 96%;
+    --muted-foreground: 220 15% 45%;
 
-    /* Artistic coral/rust */
-    --coral: 10 75% 55%;
+    /* Vibrant coral */
+    --coral: 15 100% 60%;
     --coral-foreground: 0 0% 100%;
-    --coral-muted: 10 45% 92%;
+    --coral-muted: 15 75% 95%;
     
-    /* Warm artistic colors */
-    --warm-orange: 35 85% 60%;
-    --warm-peach: 25 65% 75%;
-    --warm-muted: 35 45% 92%;
+    /* Electric colors */
+    --electric-green-bright: 120 100% 50%;
+    --electric-purple-bright: 270 85% 60%;
+    --neon-accent: 320 85% 65%;
 
-    /* Artistic destructive */
-    --destructive: 5 70% 50%;
+    /* Clean destructive */
+    --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Subtle artistic borders */
-    --border: 30 20% 85%;
-    --input: 35 25% 90%;
-    --ring: 75 35% 55%;
+    /* Modern borders */
+    --border: 220 10% 88%;
+    --input: 220 10% 92%;
+    --ring: 142 85% 45%;
 
-    /* Bohemian Artistic Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(15 85% 45%) 0%, hsl(20 65% 40%) 50%, hsl(15 85% 45%) 100%);
-    --gradient-bohemian: linear-gradient(135deg, hsl(15 85% 45%) 0%, hsl(45 75% 55%) 25%, hsl(75 35% 55%) 75%, hsl(35 40% 92%) 100%);
-    --gradient-soft: linear-gradient(145deg, hsl(35 25% 97%) 0%, hsl(35 30% 95%) 50%, hsl(35 35% 93%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(75 35% 55%) 0%, hsl(45 75% 55%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(40 30% 98%) 0%, hsl(35 25% 96%) 100%);
-    --gradient-elevated: linear-gradient(145deg, hsl(40 35% 96%) 0%, hsl(35 30% 94%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(35 85% 60%) 0%, hsl(25 65% 75%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(35 25% 97%) 0%, hsl(30 30% 95%) 100%);
-    --gradient-artistic: linear-gradient(145deg, hsl(15 85% 45%) 0%, hsl(75 35% 55%) 50%, hsl(45 75% 55%) 100%);
-    --gradient-earth: linear-gradient(135deg, hsl(20 65% 40%) 0%, hsl(35 85% 60%) 100%);
+    /* Vibrant Social Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(142 85% 45%) 0%, hsl(120 100% 50%) 50%, hsl(142 85% 45%) 100%);
+    --gradient-social: linear-gradient(135deg, hsl(142 85% 45%) 0%, hsl(15 100% 60%) 25%, hsl(270 85% 60%) 75%, hsl(320 85% 65%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 10% 98%) 50%, hsl(220 15% 96%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(15 100% 60%) 0%, hsl(320 85% 65%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 5% 99%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 10% 97%) 100%);
+    --gradient-electric: linear-gradient(135deg, hsl(142 85% 45%) 0%, hsl(270 85% 60%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(142 30% 98%) 100%);
+    --gradient-coral: linear-gradient(135deg, hsl(15 100% 60%) 0%, hsl(320 85% 65%) 100%);
+    --gradient-neon: linear-gradient(145deg, hsl(142 85% 45%) 0%, hsl(15 100% 60%) 50%, hsl(270 85% 60%) 100%);
     
-    /* Artistic Bohemian Shadows */
-    --shadow-subtle: 0 1px 3px 0 hsl(20 35% 25% / 0.08), 0 1px 2px 0 hsl(25 35% 30% / 0.06);
-    --shadow-card: 0 4px 12px -2px hsl(15 45% 35% / 0.12), 0 2px 8px -1px hsl(20 40% 40% / 0.08);
-    --shadow-medium: 0 8px 20px -4px hsl(15 45% 35% / 0.15), 0 4px 12px -2px hsl(20 40% 40% / 0.10);
-    --shadow-large: 0 16px 32px -8px hsl(15 45% 35% / 0.18), 0 8px 16px -4px hsl(20 40% 40% / 0.12);
-    --shadow-floating: 0 20px 40px -12px hsl(15 45% 35% / 0.20);
-    --shadow-glow: 0 0 25px hsl(15 85% 45% / 0.4);
-    --shadow-inner: inset 0 2px 4px 0 hsl(25 35% 30% / 0.08);
-    --shadow-artistic: 0 6px 20px hsl(15 85% 45% / 0.15);
+    /* Vibrant Social Shadows */
+    --shadow-subtle: 0 1px 3px 0 hsl(142 40% 20% / 0.08), 0 1px 2px 0 hsl(142 35% 25% / 0.06);
+    --shadow-card: 0 4px 12px -2px hsl(142 45% 30% / 0.12), 0 2px 8px -1px hsl(220 15% 40% / 0.08);
+    --shadow-medium: 0 8px 20px -4px hsl(142 45% 30% / 0.15), 0 4px 12px -2px hsl(220 15% 40% / 0.10);
+    --shadow-large: 0 16px 32px -8px hsl(142 45% 30% / 0.18), 0 8px 16px -4px hsl(220 15% 40% / 0.12);
+    --shadow-floating: 0 20px 40px -12px hsl(142 45% 30% / 0.20);
+    --shadow-glow: 0 0 25px hsl(142 85% 45% / 0.4);
+    --shadow-inner: inset 0 2px 4px 0 hsl(220 15% 30% / 0.08);
+    --shadow-electric: 0 6px 20px hsl(142 85% 45% / 0.25);
+    --shadow-coral: 0 6px 20px hsl(15 100% 60% / 0.25);
     
-    /* Artistic Button Effects */
-    --shadow-button: 0 2px 4px hsl(20 35% 25% / 0.08);
-    --shadow-button-hover: 0 4px 12px -2px hsl(15 45% 35% / 0.15), 0 2px 8px -1px hsl(20 40% 40% / 0.10);
-    --shadow-button-active: inset 0 2px 6px hsl(25 35% 30% / 0.12);
-    --shadow-button-artistic: 0 6px 18px hsl(15 85% 45% / 0.25);
+    /* Social Button Effects */
+    --shadow-button: 0 2px 4px hsl(142 40% 20% / 0.08);
+    --shadow-button-hover: 0 4px 12px -2px hsl(142 45% 30% / 0.15), 0 2px 8px -1px hsl(220 15% 40% / 0.10);
+    --shadow-button-active: inset 0 2px 6px hsl(220 15% 30% / 0.12);
+    --shadow-button-electric: 0 6px 18px hsl(142 85% 45% / 0.3);
+    --shadow-button-coral: 0 6px 18px hsl(15 100% 60% / 0.3);
 
     --radius: 0.75rem;
 
@@ -149,33 +151,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 20 35% 8%;
-    --foreground: 35 25% 95%;
+    --background: 220 20% 8%;
+    --foreground: 142 15% 95%;
 
-    --card: 25 30% 12%;
-    --card-foreground: 35 25% 95%;
+    --card: 220 25% 10%;
+    --card-foreground: 142 15% 95%;
 
-    --popover: 25 30% 12%;
-    --popover-foreground: 35 25% 95%;
+    --popover: 220 25% 10%;
+    --popover-foreground: 142 15% 95%;
 
-    --primary: 15 85% 55%;
+    --primary: 142 85% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 25 25% 18%;
-    --secondary-foreground: 35 25% 90%;
+    --secondary: 270 35% 15%;
+    --secondary-foreground: 142 15% 90%;
 
-    --muted: 25 25% 15%;
-    --muted-foreground: 30 20% 65%;
+    --muted: 220 20% 12%;
+    --muted-foreground: 220 15% 65%;
 
-    --accent: 75 35% 60%;
+    --accent: 15 100% 65%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 5 70% 55%;
+    --destructive: 0 75% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 25 20% 25%;
-    --input: 25 25% 18%;
-    --ring: 75 35% 55%;
+    --border: 220 15% 20%;
+    --input: 220 20% 15%;
+    --ring: 142 85% 55%;
     --sidebar-background: 15 23 42;
     --sidebar-foreground: 248 250 252;
     --sidebar-primary: 248 250 252;
@@ -268,7 +270,7 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Artistic Bohemian 3D Components */
+  /* Vibrant Social 3D Components */
   .card-3d {
     background: var(--gradient-card);
     box-shadow: var(--shadow-card);
@@ -280,12 +282,12 @@ All colors MUST be HSL.
   }
   
   .card-3d:hover {
-    box-shadow: var(--shadow-large), var(--shadow-artistic);
-    transform: translateY(-3px) scale(1.02) rotate(0.5deg);
+    box-shadow: var(--shadow-large), var(--shadow-electric);
+    transform: translateY(-3px) scale(1.02);
   }
   
   .card-3d:active {
-    transform: translateY(0px) scale(0.98) rotate(-0.2deg);
+    transform: translateY(0px) scale(0.98);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
@@ -300,7 +302,7 @@ All colors MUST be HSL.
   }
   
   .card-elevated:hover {
-    transform: translateY(-4px) scale(1.03) rotate(0.8deg);
+    transform: translateY(-4px) scale(1.02);
     box-shadow: var(--shadow-floating), var(--shadow-glow);
   }
   
@@ -311,7 +313,7 @@ All colors MUST be HSL.
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, hsl(var(--primary) / 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%);
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
@@ -323,8 +325,8 @@ All colors MUST be HSL.
   
   .btn-3d {
     @apply relative overflow-hidden;
-    background: var(--gradient-artistic);
-    box-shadow: var(--shadow-button-artistic);
+    background: var(--gradient-neon);
+    box-shadow: var(--shadow-button-electric);
     transform: translateZ(0);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 1.25rem;
@@ -332,36 +334,35 @@ All colors MUST be HSL.
   
   .btn-3d:hover {
     box-shadow: var(--shadow-button-hover), var(--shadow-glow);
-    transform: translateY(-2px) rotate(0.3deg);
+    transform: translateY(-2px);
   }
   
   .btn-3d:active {
     box-shadow: var(--shadow-button-active);
-    transform: translateY(0) scale(0.95) rotate(-0.1deg);
+    transform: translateY(0) scale(0.95);
   }
   
   .btn-3d::before {
     content: '';
     @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(135deg, hsl(var(--bohemian-cream) / 0.3) 0%, transparent 50%);
+    background: linear-gradient(135deg, hsl(0 0% 100% / 0.3) 0%, transparent 50%);
   }
   
   .btn-3d:hover::before {
     @apply opacity-100;
   }
   
-  /* Artistic texture overlay */
-  .artistic-texture {
+  /* Social network glow effects */
+  .social-glow {
     position: relative;
   }
   
-  .artistic-texture::after {
+  .social-glow::after {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: 
-      radial-gradient(circle at 20% 20%, hsl(var(--bohemian-ochre) / 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, hsl(var(--bohemian-sage) / 0.05) 0%, transparent 50%);
+    background: radial-gradient(circle at 30% 30%, hsl(var(--electric-green) / 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, hsl(var(--coral-orange) / 0.06) 0%, transparent 50%);
     border-radius: inherit;
     pointer-events: none;
   }

@@ -315,13 +315,13 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="bg-gradient-to-br from-card via-card/95 to-card/90 backdrop-blur-sm rounded-3xl p-5 lg:p-6 border-2 border-border/40 shadow-card artistic-texture">
+        <section className="bg-gradient-to-br from-card via-card/95 to-card/90 backdrop-blur-sm rounded-3xl p-5 lg:p-6 border-2 border-primary/20 shadow-card social-glow">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-foreground relative">
-              <span className="relative z-10 bg-gradient-to-r from-primary via-bohemian-ochre to-accent bg-clip-text text-transparent drop-shadow-sm">
+              <span className="relative z-10 bg-gradient-to-r from-primary via-accent to-electric-purple bg-clip-text text-transparent drop-shadow-sm">
                 {t('sections.joinMe')}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-bohemian-ochre/10 to-accent/15 blur-md -z-10 transform translate-x-1 translate-y-1 rounded-lg"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/15 to-electric-purple/20 blur-md -z-10 transform translate-x-1 translate-y-1 rounded-lg"></div>
             </h2>
             <div className="flex items-center gap-2">
               <Button 
@@ -332,10 +332,10 @@ const Index = () => {
               >
                 All
               </Button>
-              <Button variant="artistic" size="xs" onClick={() => {
+              <Button variant="electric" size="xs" onClick={() => {
               setCreateEventType('meetup');
               setShowCreateEvent(true);
-            }} className="text-xs px-3 py-2 h-8 rounded-2xl gap-1 hover:scale-105 transition-all duration-200">
+            }} className="text-xs px-3 py-2 h-8 rounded-2xl gap-1 transition-all duration-200">
                 <Plus className="h-3 w-3" />
               </Button>
             </div>

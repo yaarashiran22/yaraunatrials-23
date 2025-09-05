@@ -9,19 +9,20 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-button-artistic hover:shadow-button-hover active:shadow-button-active transition-all duration-200",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-button-electric hover:shadow-button-hover active:shadow-button-active transition-all duration-200",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-button hover:shadow-button-hover active:shadow-button-active",
         outline:
           "border-2 border-primary/40 bg-background/80 backdrop-blur-sm text-primary hover:bg-primary/10 hover:border-primary/60 shadow-button",
         secondary:
           "bg-gradient-to-br from-secondary via-secondary/90 to-secondary/80 text-secondary-foreground hover:from-secondary/90 shadow-button hover:shadow-button-hover active:shadow-button-active",
-        ghost: "hover:bg-accent/20 hover:text-accent-foreground rounded-xl transition-all duration-200",
+        ghost: "hover:bg-primary/10 hover:text-primary rounded-xl transition-all duration-200",
         link: "text-primary underline-offset-4 hover:underline decoration-primary/50",
         app: "bg-gradient-to-br from-card via-card/95 to-card/90 border-2 border-border/50 text-card-foreground hover:border-border/70 hover:shadow-card shadow-button",
-        primary: "bg-gradient-to-br from-primary via-primary to-primary-glow text-primary-foreground shadow-button-artistic hover:shadow-glow active:shadow-button-active",
-        artistic: "bg-gradient-to-br from-bohemian-terracotta via-bohemian-ochre to-bohemian-clay text-white shadow-button-artistic hover:shadow-glow hover:-rotate-1 active:rotate-0",
-        sage: "bg-gradient-to-br from-bohemian-sage via-accent to-bohemian-sage/80 text-white shadow-button hover:shadow-button-hover hover:rotate-1",
+        primary: "bg-gradient-to-br from-primary via-primary to-primary-glow text-primary-foreground shadow-button-electric hover:shadow-glow active:shadow-button-active",
+        electric: "bg-gradient-to-br from-electric-green via-primary to-electric-lime text-white shadow-button-electric hover:shadow-glow hover:scale-105 active:scale-95",
+        coral: "bg-gradient-to-br from-coral-orange via-accent to-neon-pink text-white shadow-button-coral hover:shadow-coral hover:scale-105 active:scale-95",
+        social: "bg-gradient-to-r from-primary via-accent to-electric-purple text-white shadow-electric hover:shadow-glow hover:scale-105",
       },
       size: {
         xs: "h-8 px-3 py-1 text-xs min-w-[2rem]",
