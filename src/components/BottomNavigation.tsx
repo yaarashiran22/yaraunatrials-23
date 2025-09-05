@@ -27,59 +27,63 @@ const BottomNavigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t shadow-lg lg:hidden">
-      <div className="container mx-auto px-2 py-2 max-w-full">
-        <div className="flex items-center justify-around w-full">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-xl border-t border-border/50 lg:hidden shadow-large safe-area-inset-bottom">
+      <div className="px-4 py-3">
+        <div className="flex items-center justify-around w-full max-w-sm mx-auto">
           {/* Home - בית */}
           <Button
             variant="ghost"
-            size="lg"
+            size="sm"
             onClick={() => navigate('/')}
-            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
-              isActive('/') ? 'text-primary' : 'text-muted-foreground'
+            className={`flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+              isActive('/') 
+                ? 'text-primary bg-primary/10' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
           >
-            <Home className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">{t('navigation.home')}</span>
+            <Home className="h-6 w-6" />
+            <span className="text-xs font-medium">{t('navigation.home')}</span>
           </Button>
 
           {/* Discover - גלה */}
           <Button
             variant="ghost"
-            size="lg"
+            size="sm"
             onClick={() => navigate('/discover')}
-            className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
-              isActive('/discover') ? 'text-primary' : 'text-muted-foreground'
+            className={`flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+              isActive('/discover') 
+                ? 'text-primary bg-primary/10' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
           >
-            <Map className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-xs font-medium truncate">Hangout</span>
+            <Map className="h-6 w-6" />
+            <span className="text-xs font-medium">Hangout</span>
           </Button>
 
           {/* Profile/Login */}
           {user ? (
             <Button
               variant="ghost"
-              size="lg"
+              size="sm"
               onClick={() => navigate('/profile/1')}
-              className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
-                location.pathname.startsWith('/profile') ? 'text-primary' : 'text-muted-foreground'
+              className={`flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+                location.pathname.startsWith('/profile') 
+                  ? 'text-primary bg-primary/10' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
               }`}
             >
-              <User className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-xs font-medium truncate">{t('common.profile')}</span>
+              <User className="h-6 w-6" />
+              <span className="text-xs font-medium">{t('common.profile')}</span>
             </Button>
           ) : (
             <Button
               variant="ghost"
-              size="lg"
+              size="sm"
               onClick={() => navigate('/login')}
-              className={`flex flex-col items-center gap-1 h-auto py-3 px-1 transition-all duration-200 hover-scale min-w-0 flex-1 ${
-                isActive('/login') ? 'text-primary' : 'text-muted-foreground'
-              }`}
+              className="flex flex-col items-center gap-1.5 h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] text-muted-foreground hover:text-foreground hover:bg-muted/50"
             >
-              <LogIn className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-xs font-medium truncate">{t('common.login')}</span>
+              <LogIn className="h-6 w-6" />
+              <span className="text-xs font-medium">{t('common.login')}</span>
             </Button>
           )}
         </div>

@@ -296,11 +296,11 @@ const Index = () => {
       {/* Mood Filter Strip */}
       <MoodFilterStrip onFilterChange={setSelectedMoodFilter} showTitle={false} />
       
-      <main className="px-4 lg:px-6 py-4 lg:py-6 space-y-6 lg:space-y-8 pb-20 lg:pb-8 w-full">
+      <main className="px-3 lg:px-6 py-3 lg:py-6 space-y-4 lg:space-y-8 pb-24 lg:pb-8 w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
         {/* Community Members Section - Horizontal Carousel */}
-        <section className="-mb-2 lg:-mb-1">
-          <div className="px-3 lg:px-5">
-            <h3 className="text-sm font-medium mb-3 text-muted-foreground">People Nearby</h3>
+        <section className="-mb-1 lg:-mb-1">
+          <div className="px-1 lg:px-5 mb-3">
+            <h3 className="text-sm font-semibold text-foreground">People Nearby</h3>
           </div>
           <div className="relative">
             <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
@@ -315,7 +315,7 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
+        <section className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-border/30 shadow-card">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-foreground relative">
               <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
@@ -326,16 +326,16 @@ const Index = () => {
             <div className="flex items-center gap-2">
               <Button 
                 variant="ghost" 
-                size="sm" 
+                size="xs" 
                 onClick={() => navigate('/all-meetups')}
-                className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground"
+                className="text-xs px-3 py-2 h-8 text-muted-foreground hover:text-foreground rounded-xl"
               >
                 All
               </Button>
-              <Button variant="outline" size="sm" onClick={() => {
+              <Button variant="app" size="xs" onClick={() => {
               setCreateEventType('meetup');
               setShowCreateEvent(true);
-            }} className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1">
+            }} className="text-xs px-3 py-2 h-8 rounded-xl gap-1">
                 <Plus className="h-3 w-3" />
               </Button>
             </div>

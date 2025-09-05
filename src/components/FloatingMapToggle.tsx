@@ -9,35 +9,17 @@ interface FloatingMapToggleProps {
 
 const FloatingMapToggle = ({ isMapOpen, onToggle }: FloatingMapToggleProps) => {
   return (
-    <div className="fixed bottom-20 lg:bottom-8 right-4 z-40">
+    <div className="fixed bottom-44 lg:bottom-8 right-4 z-40">
       <Button
         onClick={onToggle}
-        size="default"
-        className={`
-          w-12 h-12 rounded-full shadow-lg transition-all duration-300 ease-in-out
-          ${isMapOpen 
-            ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground' 
-            : 'text-white hover:scale-105 active:scale-95'
-          }
-        `}
-        style={!isMapOpen ? {
-          backgroundColor: '#FF6F50'
-        } : undefined}
-        onMouseEnter={(e) => {
-          if (!isMapOpen) {
-            e.currentTarget.style.backgroundColor = '#FF5A3D';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isMapOpen) {
-            e.currentTarget.style.backgroundColor = '#FF6F50';
-          }
-        }}
+        size="icon-lg"
+        variant={isMapOpen ? "destructive" : "primary"}
+        className="rounded-full shadow-floating transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 backdrop-blur-sm"
       >
         {isMapOpen ? (
-          <X className="h-5 w-5" />
+          <X className="h-6 w-6" />
         ) : (
-          <Map className="h-5 w-5" />
+          <Map className="h-6 w-6" />
         )}
       </Button>
     </div>
