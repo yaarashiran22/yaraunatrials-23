@@ -11,52 +11,52 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Medium Purple & Aero Blue Color Palette */
-    --background: 139 87% 87%;           /* #C0FDD2 - Aero Blue background */
-    --foreground: 257 57% 25%;           /* Dark purple for text */
+    /* Beige & True V Color Palette */
+    --background: 67 45% 90%;            /* #F2F4D7 - Beige background */
+    --foreground: 256 58% 25%;           /* Dark True V for text */
 
-    --card: 139 87% 92%;                 /* Lighter aero blue for cards */
-    --card-foreground: 257 57% 25%;      /* Dark purple for card text */
+    --card: 67 45% 93%;                  /* Lighter beige for cards */
+    --card-foreground: 256 58% 25%;      /* Dark True V for card text */
 
-    --popover: 139 87% 95%;              /* Even lighter aero blue */
-    --popover-foreground: 257 57% 25%;   /* Dark purple for popover text */
+    --popover: 67 45% 95%;               /* Even lighter beige */
+    --popover-foreground: 256 58% 25%;   /* Dark True V for popover text */
 
-    /* Primary: Medium Purple - Full Scale */
-    --primary: 257 57% 65%;              /* #9963EA - Medium Purple */
-    --primary-foreground: 139 87% 95%;   /* Light aero blue text on purple */
-    --primary-900: 257 57% 35%;          /* Darker purple */
-    --primary-800: 257 57% 45%;          /* Between 900 and 700 */
-    --primary-700: 257 57% 55%;          /* Darker than main */
-    --primary-600: 257 57% 65%;          /* #9963EA - Main primary */
-    --primary-500: 257 57% 75%;          /* Light variant */
-    --primary-400: 257 57% 80%;          /* Very light */
-    --primary-300: 257 57% 85%;          /* Ultra light */
-    --primary-200: 257 57% 90%;          /* Subtle */
-    --primary-100: 257 57% 95%;          /* Subtle background */
+    /* Primary: True V - Full Scale */
+    --primary: 256 58% 58%;              /* #7858D3 - True V */
+    --primary-foreground: 67 45% 95%;    /* Light beige text on True V */
+    --primary-900: 256 58% 28%;          /* Darker True V */
+    --primary-800: 256 58% 38%;          /* Between 900 and 700 */
+    --primary-700: 256 58% 48%;          /* Darker than main */
+    --primary-600: 256 58% 58%;          /* #7858D3 - Main primary */
+    --primary-500: 256 58% 68%;          /* Light variant */
+    --primary-400: 256 58% 75%;          /* Very light */
+    --primary-300: 256 58% 82%;          /* Ultra light */
+    --primary-200: 256 58% 88%;          /* Subtle */
+    --primary-100: 256 58% 94%;          /* Subtle background */
 
-    /* Secondary: Aero Blue - Full Scale */
-    --secondary: 139 40% 75%;            /* Muted aero blue */
-    --secondary-foreground: 257 57% 25%; /* Dark purple text */
-    --secondary-900: 139 87% 45%;        /* Dark aero blue */
-    --secondary-800: 139 87% 55%;        /* Between 900 and 700 */
-    --secondary-700: 139 87% 65%;        /* Darker aero blue */
-    --secondary-600: 139 87% 75%;        /* Medium aero blue */
-    --secondary-500: 139 87% 82%;        /* #C0FDD2 - Main secondary */
-    --secondary-400: 139 87% 87%;        /* Light aero blue */
-    --secondary-300: 139 87% 90%;        /* Lighter aero blue */
-    --secondary-200: 139 87% 93%;        /* Very light aero blue */
-    --secondary-100: 139 87% 96%;        /* Subtle aero blue background */
+    /* Secondary: Beige - Full Scale */
+    --secondary: 67 30% 75%;             /* Muted beige */
+    --secondary-foreground: 256 58% 25%; /* Dark True V text */
+    --secondary-900: 67 45% 50%;         /* Dark beige */
+    --secondary-800: 67 45% 60%;         /* Between 900 and 700 */
+    --secondary-700: 67 45% 70%;         /* Darker beige */
+    --secondary-600: 67 45% 80%;         /* Medium beige */
+    --secondary-500: 67 45% 87%;         /* #F2F4D7 - Main secondary */
+    --secondary-400: 67 45% 90%;         /* Light beige */
+    --secondary-300: 67 45% 92%;         /* Lighter beige */
+    --secondary-200: 67 45% 94%;         /* Very light beige */
+    --secondary-100: 67 45% 96%;         /* Subtle beige background */
 
-    /* Accent: Medium Purple Accent */
-    --accent: 257 57% 65%;               /* #9963EA - Purple accent */
-    --accent-foreground: 139 87% 95%;    /* Light aero blue text */
-    --accent-700: 257 57% 35%;           /* Darker purple */
-    --accent-600: 257 57% 45%;           /* Between 700 and 500 */
-    --accent-500: 257 57% 65%;           /* #9963EA - Main accent */
-    --accent-400: 257 57% 75%;           /* Lighter purple */
-    --accent-300: 257 57% 85%;           /* Light purple */
+    /* Accent: True V Accent */
+    --accent: 256 58% 58%;               /* #7858D3 - True V accent */
+    --accent-foreground: 67 45% 95%;     /* Light beige text */
+    --accent-700: 256 58% 28%;           /* Darker True V */
+    --accent-600: 256 58% 38%;           /* Between 700 and 500 */
+    --accent-500: 256 58% 58%;           /* #7858D3 - Main accent */
+    --accent-400: 256 58% 68%;           /* Lighter True V */
+    --accent-300: 256 58% 78%;           /* Light True V */
 
-    /* System Colors - Purple & Aero Blue Palette */
+    /* System Colors - Beige & True V Palette */
     --success: 152 66% 46%;              /* Keep success green */
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;               /* Keep warning orange */
@@ -64,46 +64,46 @@ All colors MUST be HSL.
     --destructive: 0 84% 60%;            /* Keep destructive red */
     --destructive-foreground: 0 0% 100%;
 
-    /* Neutrals - Aero Blue based Scale */
-    --neutral-900: 257 57% 25%;          /* Dark purple */
-    --neutral-800: 257 50% 30%;          /* Between 900 and 700 */
-    --neutral-700: 257 40% 35%;          /* Medium dark */
-    --neutral-600: 257 30% 45%;          /* Between 700 and 500 */
-    --neutral-500: 257 20% 55%;          /* Medium neutral */
-    --neutral-400: 139 30% 65%;          /* Muted aero blue */
-    --neutral-300: 139 50% 75%;          /* Light aero blue */
-    --neutral-200: 139 70% 85%;          /* Between 300 and 100 */
-    --neutral-100: 139 87% 92%;          /* Very light aero blue */
+    /* Neutrals - Beige based Scale */
+    --neutral-900: 256 58% 25%;          /* Dark True V */
+    --neutral-800: 256 50% 30%;          /* Between 900 and 700 */
+    --neutral-700: 256 40% 35%;          /* Medium dark */
+    --neutral-600: 256 30% 45%;          /* Between 700 and 500 */
+    --neutral-500: 256 20% 55%;          /* Medium neutral */
+    --neutral-400: 67 25% 65%;           /* Muted beige */
+    --neutral-300: 67 35% 75%;           /* Light beige */
+    --neutral-200: 67 40% 85%;           /* Between 300 and 100 */
+    --neutral-100: 67 45% 92%;           /* Very light beige */
 
     /* Modern borders and inputs */
-    --border: 139 40% 70%;               /* Muted aero blue border */
-    --input: 139 87% 95%;                /* Light aero blue input */
-    --ring: 257 57% 65%;                 /* Focus ring - medium purple */
+    --border: 67 30% 75%;                /* Muted beige border */
+    --input: 67 45% 95%;                 /* Light beige input */
+    --ring: 256 58% 58%;                 /* Focus ring - True V */
 
     /* Semantic aliases for current usage */
-    --muted: 139 87% 90%;                /* Light aero blue */
-    --muted-foreground: 257 40% 35%;     /* Medium purple */
+    --muted: 67 45% 92%;                 /* Light beige */
+    --muted-foreground: 256 40% 35%;     /* Medium True V */
 
-    /* Purple & Aero Blue Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(257 57% 65%) 0%, hsl(139 87% 82%) 100%);
-    --gradient-plaza-dusk: linear-gradient(135deg, hsl(257 57% 65%) 0%, hsl(257 57% 75%) 50%, hsl(139 87% 82%) 100%);
-    --gradient-mint: linear-gradient(135deg, hsl(139 87% 82%) 0%, hsl(139 87% 90%) 100%);
-    --gradient-coupon: linear-gradient(135deg, hsl(257 57% 65%) 0%, hsl(257 50% 70%) 100%);
-    --gradient-soft: linear-gradient(145deg, hsl(139 87% 96%) 0%, hsl(139 87% 90%) 50%, hsl(139 87% 87%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(139 87% 95%) 100%);
-    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(139 87% 92%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(139 87% 87%) 0%, hsl(139 87% 92%) 100%);
+    /* Beige & True V Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(256 58% 58%) 0%, hsl(67 45% 87%) 100%);
+    --gradient-plaza-dusk: linear-gradient(135deg, hsl(256 58% 58%) 0%, hsl(256 58% 68%) 50%, hsl(67 45% 87%) 100%);
+    --gradient-mint: linear-gradient(135deg, hsl(67 45% 87%) 0%, hsl(67 45% 92%) 100%);
+    --gradient-coupon: linear-gradient(135deg, hsl(256 58% 58%) 0%, hsl(256 50% 65%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(67 45% 96%) 0%, hsl(67 45% 92%) 50%, hsl(67 45% 90%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(67 45% 95%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(67 45% 93%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(67 45% 90%) 0%, hsl(67 45% 93%) 100%);
     
-    /* Purple & Aero Blue Shadows */
-    --shadow-subtle: 0 1px 3px 0 hsl(257 57% 65% / 0.08), 0 1px 2px 0 hsl(257 57% 25% / 0.06);
-    --shadow-card: 0 4px 12px -2px hsl(257 57% 65% / 0.12), 0 2px 8px -1px hsl(257 57% 25% / 0.08);
-    --shadow-medium: 0 8px 20px -4px hsl(257 57% 65% / 0.15), 0 4px 12px -2px hsl(257 57% 25% / 0.10);
-    --shadow-large: 0 16px 32px -8px hsl(257 57% 65% / 0.18), 0 8px 16px -4px hsl(257 57% 25% / 0.12);
-    --shadow-floating: 0 20px 40px -12px hsl(257 57% 65% / 0.20);
-    --shadow-glow: 0 0 25px hsl(257 57% 65% / 0.4);
-    --shadow-inner: inset 0 2px 4px 0 hsl(257 57% 25% / 0.08);
-    --shadow-jacaranda: 0 6px 20px hsl(257 57% 65% / 0.25);
-    --shadow-mint: 0 6px 20px hsl(139 87% 82% / 0.25);
+    /* Beige & True V Shadows */
+    --shadow-subtle: 0 1px 3px 0 hsl(256 58% 58% / 0.08), 0 1px 2px 0 hsl(256 58% 25% / 0.06);
+    --shadow-card: 0 4px 12px -2px hsl(256 58% 58% / 0.12), 0 2px 8px -1px hsl(256 58% 25% / 0.08);
+    --shadow-medium: 0 8px 20px -4px hsl(256 58% 58% / 0.15), 0 4px 12px -2px hsl(256 58% 25% / 0.10);
+    --shadow-large: 0 16px 32px -8px hsl(256 58% 58% / 0.18), 0 8px 16px -4px hsl(256 58% 25% / 0.12);
+    --shadow-floating: 0 20px 40px -12px hsl(256 58% 58% / 0.20);
+    --shadow-glow: 0 0 25px hsl(256 58% 58% / 0.4);
+    --shadow-inner: inset 0 2px 4px 0 hsl(256 58% 25% / 0.08);
+    --shadow-jacaranda: 0 6px 20px hsl(256 58% 58% / 0.25);
+    --shadow-mint: 0 6px 20px hsl(67 45% 87% / 0.25);
     
     /* Social Button Effects */
     --shadow-button: 0 2px 4px hsl(267 92% 64% / 0.08);
@@ -170,49 +170,49 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 257 57% 12%;           /* Dark purple background */
-    --foreground: 139 87% 90%;           /* Light aero blue text on dark */
+    --background: 256 58% 15%;           /* Dark True V background */
+    --foreground: 67 45% 92%;            /* Light beige text on dark */
 
-    --card: 257 50% 18%;                 /* Dark purple card */
-    --card-foreground: 139 87% 90%;      /* Light aero blue text on dark card */
+    --card: 256 50% 20%;                 /* Dark True V card */
+    --card-foreground: 67 45% 92%;       /* Light beige text on dark card */
 
-    --popover: 257 50% 18%;
-    --popover-foreground: 139 87% 90%;
+    --popover: 256 50% 20%;
+    --popover-foreground: 67 45% 92%;
 
-    /* Primary: Medium Purple - Dark Mode Adjustments */
-    --primary: 257 57% 75%;             /* Lighter purple for dark mode */
+    /* Primary: True V - Dark Mode Adjustments */
+    --primary: 256 58% 68%;             /* Lighter True V for dark mode */
     --primary-foreground: 0 0% 100%;
-    --primary-900: 257 57% 25%;          /* Very dark purple */
-    --primary-800: 257 57% 35%;          
-    --primary-700: 257 57% 45%;          
-    --primary-600: 257 57% 55%;          /* Main purple */
-    --primary-500: 257 57% 75%;         /* Lighter main primary */
-    --primary-400: 257 57% 80%;         
-    --primary-300: 257 57% 85%;         
-    --primary-200: 257 57% 90%;         
-    --primary-100: 257 57% 95%;         
+    --primary-900: 256 58% 18%;          /* Very dark True V */
+    --primary-800: 256 58% 28%;          
+    --primary-700: 256 58% 38%;          
+    --primary-600: 256 58% 48%;          /* Main True V */
+    --primary-500: 256 58% 68%;         /* Lighter main primary */
+    --primary-400: 256 58% 75%;         
+    --primary-300: 256 58% 82%;         
+    --primary-200: 256 58% 88%;         
+    --primary-100: 256 58% 94%;         
 
-    /* Secondary: Aero Blue - Dark Mode Adjustments */
-    --secondary: 139 87% 55%;            /* Darker aero blue for dark mode */
-    --secondary-foreground: 139 87% 95%;
-    --secondary-900: 139 87% 25%;        
-    --secondary-800: 139 87% 35%;        
-    --secondary-700: 139 87% 45%;        
-    --secondary-600: 139 87% 55%;        
-    --secondary-500: 139 87% 65%;        /* Darker main secondary */
-    --secondary-400: 139 87% 75%;        
-    --secondary-300: 139 87% 82%;        
-    --secondary-200: 139 87% 87%;        
-    --secondary-100: 139 87% 92%;
+    /* Secondary: Beige - Dark Mode Adjustments */
+    --secondary: 67 45% 55%;             /* Darker beige for dark mode */
+    --secondary-foreground: 67 45% 95%;
+    --secondary-900: 67 45% 25%;        
+    --secondary-800: 67 45% 35%;        
+    --secondary-700: 67 45% 45%;        
+    --secondary-600: 67 45% 55%;        
+    --secondary-500: 67 45% 65%;        /* Darker main secondary */
+    --secondary-400: 67 45% 75%;        
+    --secondary-300: 67 45% 85%;        
+    --secondary-200: 67 45% 90%;        
+    --secondary-100: 67 45% 95%;
 
-    /* Accent: Medium Purple - Dark Mode Adjustments */
-    --accent: 257 57% 75%;               /* Lighter purple for dark mode */
+    /* Accent: True V - Dark Mode Adjustments */
+    --accent: 256 58% 68%;               /* Lighter True V for dark mode */
     --accent-foreground: 0 0% 100%;
-    --accent-700: 257 57% 35%;           
-    --accent-600: 257 57% 45%;           
-    --accent-500: 257 57% 75%;           /* Lighter main accent */
-    --accent-400: 257 57% 80%;           
-    --accent-300: 257 57% 85%;           
+    --accent-700: 256 58% 28%;           
+    --accent-600: 256 58% 38%;           
+    --accent-500: 256 58% 68%;           /* Lighter main accent */
+    --accent-400: 256 58% 75%;           
+    --accent-300: 256 58% 82%;           
 
     /* System Colors - Dark Mode Adjustments */
     --success: 152 66% 56%;              /* Lighter success for dark mode */
@@ -222,20 +222,20 @@ All colors MUST be HSL.
     --destructive: 0 84% 70%;            /* Lighter destructive for dark mode */
     --destructive-foreground: 0 0% 100%;
 
-    --muted: 257 50% 20%;                /* Dark muted */
-    --muted-foreground: 139 87% 70%;     /* Light aero blue muted text */
+    --muted: 256 50% 22%;                /* Dark muted */
+    --muted-foreground: 67 45% 75%;      /* Light beige muted text */
 
-    --border: 257 40% 30%;               /* Dark purple border */
-    --input: 257 50% 22%;                /* Dark purple input */
-    --ring: 257 57% 75%;                /* Focus ring - lighter purple */
-    --sidebar-background: 257 50% 18%;
-    --sidebar-foreground: 139 87% 90%;
-    --sidebar-primary: 139 87% 90%;
-    --sidebar-primary-foreground: 257 50% 18%;
-    --sidebar-accent: 139 87% 65%;
-    --sidebar-accent-foreground: 257 50% 18%;
-    --sidebar-border: 257 40% 30%;
-    --sidebar-ring: 139 87% 65%;
+    --border: 256 40% 30%;               /* Dark True V border */
+    --input: 256 50% 25%;                /* Dark True V input */
+    --ring: 256 58% 68%;                /* Focus ring - lighter True V */
+    --sidebar-background: 256 50% 20%;
+    --sidebar-foreground: 67 45% 92%;
+    --sidebar-primary: 67 45% 92%;
+    --sidebar-primary-foreground: 256 50% 20%;
+    --sidebar-accent: 67 45% 70%;
+    --sidebar-accent-foreground: 256 50% 20%;
+    --sidebar-border: 256 40% 30%;
+    --sidebar-ring: 67 45% 70%;
   }
 }
 
