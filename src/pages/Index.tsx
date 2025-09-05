@@ -300,7 +300,7 @@ const Index = () => {
         {/* Community Members Section - Horizontal Carousel */}
         <section className="-mb-1 lg:-mb-1">
           <div className="px-1 lg:px-5 mb-3">
-            <h3 className="text-sm font-semibold text-foreground">People Nearby</h3>
+            <h3 className="text-sm font-semibold text-primary-700 bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">People Nearby</h3>
           </div>
           <div className="relative">
             <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
@@ -315,24 +315,24 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="bg-gradient-to-br from-card via-card/95 to-card/90 backdrop-blur-sm rounded-3xl p-5 lg:p-6 border-2 border-primary/20 shadow-card social-glow">
+        <section className="bg-gradient-to-br from-secondary-100 via-card/95 to-primary-100 backdrop-blur-sm rounded-3xl p-5 lg:p-6 border-2 border-secondary-200 shadow-card social-glow">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-foreground relative">
-              <span className="relative z-10 bg-gradient-to-r from-primary via-accent to-electric-purple bg-clip-text text-transparent drop-shadow-sm">
+              <span className="relative z-10 bg-gradient-to-r from-secondary-600 via-primary-500 to-accent bg-clip-text text-transparent drop-shadow-sm">
                 {t('sections.joinMe')}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/15 to-electric-purple/20 blur-md -z-10 transform translate-x-1 translate-y-1 rounded-lg"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-secondary-200 via-primary-200 to-accent-300 blur-md -z-10 transform translate-x-1 translate-y-1 rounded-lg"></div>
             </h2>
             <div className="flex items-center gap-2">
               <Button 
-                variant="ghost" 
+                variant="neutral-light" 
                 size="xs" 
                 onClick={() => navigate('/all-meetups')}
-                className="text-xs px-3 py-2 h-8 text-muted-foreground hover:text-primary rounded-2xl hover:bg-primary/10 transition-all duration-200"
+                className="text-xs px-3 py-2 h-8 rounded-2xl transition-all duration-200"
               >
                 All
               </Button>
-              <Button variant="plaza" size="xs" onClick={() => {
+              <Button variant="mint" size="xs" onClick={() => {
               setCreateEventType('meetup');
               setShowCreateEvent(true);
             }} className="text-xs px-3 py-2 h-8 rounded-2xl gap-1 transition-all duration-200">
@@ -342,24 +342,10 @@ const Index = () => {
           </div>
           
           <div className="flex gap-2 mb-4">
-            <Button variant={meetupFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setMeetupFilter('all')} className={`text-xs px-2 py-1 rounded-full h-6 ${meetupFilter === 'all' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'}`} style={meetupFilter === 'all' ? {
-            backgroundColor: 'hsl(var(--accent-subtle))',
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'white'
-          } : {
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'hsl(var(--accent-subtle))'
-          }}>
+            <Button variant={meetupFilter === 'all' ? 'mint' : 'mint-subtle'} size="sm" onClick={() => setMeetupFilter('all')} className="text-xs px-2 py-1 rounded-full h-6">
               All
             </Button>
-            <Button variant={meetupFilter === 'friends' ? 'default' : 'outline'} size="sm" onClick={() => setMeetupFilter('friends')} className={`text-xs px-2 py-1 rounded-full h-6 ${meetupFilter === 'friends' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'}`} style={meetupFilter === 'friends' ? {
-            backgroundColor: 'hsl(var(--accent-subtle))',
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'white'
-          } : {
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'hsl(var(--accent-subtle))'
-          }} disabled={!user}>
+            <Button variant={meetupFilter === 'friends' ? 'mint' : 'mint-subtle'} size="sm" onClick={() => setMeetupFilter('friends')} className="text-xs px-2 py-1 rounded-full h-6" disabled={!user}>
               <Users className="h-2.5 w-2.5 mr-1" />
               Friends
             </Button>
@@ -397,50 +383,36 @@ const Index = () => {
         </section>
 
         {/* Events Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
+        <section className="bg-gradient-to-br from-accent-100 via-card/95 to-warning-100 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-accent-200 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-foreground relative">
-            <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">Events Around You
+            <span className="relative z-10 bg-gradient-to-r from-warning via-accent to-primary-500 bg-clip-text text-transparent drop-shadow-sm">Events Around You
             </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-warning/20 via-accent/15 to-primary-200 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
             </h2>
             <div className="flex items-center gap-2">
               <Button 
-                variant="ghost" 
+                variant="neutral-light" 
                 size="sm" 
                 onClick={() => navigate('/all-events')}
-                className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground"
+                className="text-xs px-2 py-1 h-6 transition-all duration-200"
               >
                 All
               </Button>
-              <Button variant="outline" size="sm" onClick={() => {
+              <Button variant="warning" size="sm" onClick={() => {
               setCreateEventType('event');
               setShowCreateEvent(true);
-            }} className="text-xs px-2 py-1 rounded-full border border-black/20 bg-transparent text-foreground hover:border-black/30 gap-1">
+            }} className="text-xs px-2 py-1 rounded-full gap-1">
                 <Plus className="h-3 w-3" />
               </Button>
             </div>
           </div>
           
           <div className="flex gap-2 mb-4">
-            <Button variant={eventFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('all')} className={`text-xs px-2 py-1 rounded-full h-6 ${eventFilter === 'all' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'}`} style={eventFilter === 'all' ? {
-            backgroundColor: 'hsl(var(--accent-subtle))',
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'white'
-          } : {
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'hsl(var(--accent-subtle))'
-          }}>
+            <Button variant={eventFilter === 'all' ? 'coupon' : 'coupon-light'} size="sm" onClick={() => setEventFilter('all')} className="text-xs px-2 py-1 rounded-full h-6">
               All
             </Button>
-            <Button variant={eventFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('following')} className={`text-xs px-2 py-1 rounded-full h-6 ${eventFilter === 'following' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'}`} style={eventFilter === 'following' ? {
-            backgroundColor: 'hsl(var(--accent-subtle))',
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'white'
-          } : {
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'hsl(var(--accent-subtle))'
-          }} disabled={!user}>
+            <Button variant={eventFilter === 'following' ? 'coupon' : 'coupon-light'} size="sm" onClick={() => setEventFilter('following')} className="text-xs px-2 py-1 rounded-full h-6" disabled={!user}>
               <Users className="h-2.5 w-2.5 mr-1" />
               Following
             </Button>

@@ -9,21 +9,33 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-button-jacaranda hover:shadow-button-hover active:shadow-button-active transition-all duration-200",
+        default: "bg-primary text-primary-foreground hover:bg-primary-600 shadow-button-jacaranda hover:shadow-button-hover active:shadow-button-active transition-all duration-200",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-button hover:shadow-button-hover active:shadow-button-active",
         outline:
-          "border-2 border-primary/40 bg-background/80 backdrop-blur-sm text-primary hover:bg-primary/10 hover:border-primary/60 shadow-button",
+          "border-2 border-primary-300 bg-background/80 backdrop-blur-sm text-primary hover:bg-primary-100 hover:border-primary-400 shadow-button",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-button-mint hover:shadow-button-hover active:shadow-button-active",
-        ghost: "hover:bg-primary/10 hover:text-primary rounded-xl transition-all duration-200",
-        link: "text-primary underline-offset-4 hover:underline decoration-primary/50",
-        app: "bg-gradient-to-br from-card via-card/95 to-card/90 border-2 border-border/50 text-card-foreground hover:border-border/70 hover:shadow-card shadow-button",
-        // Una Brand Variants
-        jacaranda: "bg-primary text-primary-foreground shadow-button-jacaranda hover:shadow-glow hover:bg-primary/90 transition-all duration-300 active:scale-95",
-        mint: "bg-secondary text-secondary-foreground shadow-button-mint hover:shadow-mint hover:bg-secondary/80 transition-all duration-300 active:scale-95",
-        coupon: "bg-accent text-accent-foreground shadow-button hover:shadow-button-hover hover:bg-accent/90 transition-all duration-300 active:scale-95",
+          "bg-secondary text-secondary-foreground hover:bg-secondary-600 shadow-button-mint hover:shadow-button-hover active:shadow-button-active",
+        ghost: "hover:bg-primary-100 hover:text-primary-700 rounded-xl transition-all duration-200",
+        link: "text-primary-500 underline-offset-4 hover:underline decoration-primary-300",
+        app: "bg-gradient-to-br from-card via-card/95 to-card/90 border-2 border-neutral-200 text-card-foreground hover:border-neutral-300 hover:shadow-card shadow-button",
+        // Una Brand Variants - Full Color Diversity
+        jacaranda: "bg-primary-700 text-white shadow-button-jacaranda hover:shadow-glow hover:bg-primary-600 transition-all duration-300 active:scale-95",
+        'jacaranda-light': "bg-primary-500 text-white shadow-button-jacaranda hover:shadow-glow hover:bg-primary-400 transition-all duration-300 active:scale-95",
+        'jacaranda-subtle': "bg-primary-100 text-primary-700 hover:bg-primary-200 border border-primary-200 transition-all duration-300 active:scale-95",
+        mint: "bg-secondary-500 text-white shadow-button-mint hover:shadow-mint hover:bg-secondary-600 transition-all duration-300 active:scale-95",
+        'mint-dark': "bg-secondary-700 text-white shadow-button-mint hover:shadow-mint hover:bg-secondary-600 transition-all duration-300 active:scale-95",
+        'mint-light': "bg-secondary-400 text-white shadow-button-mint hover:shadow-mint hover:bg-secondary-500 transition-all duration-300 active:scale-95",
+        'mint-subtle': "bg-secondary-100 text-secondary-700 hover:bg-secondary-200 border border-secondary-200 transition-all duration-300 active:scale-95",
+        coupon: "bg-accent text-accent-foreground shadow-button hover:shadow-button-hover hover:bg-accent-600 transition-all duration-300 active:scale-95",
+        'coupon-light': "bg-accent-400 text-accent-foreground shadow-button hover:shadow-button-hover hover:bg-accent-500 transition-all duration-300 active:scale-95",
+        success: "bg-success text-success-foreground shadow-button hover:shadow-button-hover hover:bg-success/90 transition-all duration-300 active:scale-95",
+        warning: "bg-warning text-warning-foreground shadow-button hover:shadow-button-hover hover:bg-warning/90 transition-all duration-300 active:scale-95",
         plaza: "bg-gradient-plaza-dusk text-white shadow-glow hover:shadow-floating hover:scale-105 transition-all duration-300 active:scale-95",
+        // Neutral variants for diversity
+        'neutral-light': "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200 transition-all duration-300 active:scale-95",
+        'neutral-medium': "bg-neutral-300 text-neutral-700 hover:bg-neutral-400 transition-all duration-300 active:scale-95",
+        'neutral-dark': "bg-neutral-700 text-white hover:bg-neutral-600 transition-all duration-300 active:scale-95",
       },
       size: {
         xs: "h-8 px-3 py-1 text-xs min-w-[2rem]",

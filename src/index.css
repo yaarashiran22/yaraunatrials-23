@@ -11,7 +11,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Una Brand Palette - App Background System */
+    /* Una Brand Palette - Complete Color System */
     --background: 259 27% 98%;           /* #F7F5FC - App background */
     --foreground: 220 36% 9%;            /* #0F1221 - Text */
 
@@ -21,44 +21,68 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 220 36% 9%;
 
-    /* Primary: Jacarandá Purple */
-    --primary: 258 91% 46%;              /* #7E22CE - Action buttons (accessible) */
+    /* Primary: Jacarandá Purple - Full Scale */
+    --primary: 258 91% 46%;              /* #7E22CE - Primary 700 (accessible) */
     --primary-foreground: 0 0% 100%;     /* White text on primary */
-    --primary-light: 267 100% 61%;       /* #CD37FF - Brand accent */
-    --primary-dark: 258 90% 36%;         /* Darker shade */
-    --primary-glow: 267 100% 61%;        /* #CD37FF for glow effects */
+    --primary-900: 258 91% 36%;          /* Darker than 700 */
+    --primary-800: 258 91% 41%;          /* Between 900 and 700 */
+    --primary-700: 258 91% 46%;          /* #7E22CE - Main primary */
+    --primary-600: 264 78% 64%;          /* #9333EA */
+    --primary-500: 267 100% 61%;         /* #CD37FF - Brand accent */
+    --primary-400: 267 100% 71%;         /* Lighter than 500 */
+    --primary-300: 267 100% 81%;         /* #C59EFF - Light variant */
+    --primary-200: 267 100% 91%;         /* Very light */
+    --primary-100: 267 100% 96%;         /* Subtle background */
 
-    /* Secondary: Mint Green */
-    --secondary: 173 85% 51%;            /* #2ED7C3 - Community/coupons */
+    /* Secondary: Mint Green - Full Scale */
+    --secondary: 173 85% 51%;            /* #2ED7C3 - Secondary 500 */
     --secondary-foreground: 180 100% 8%; /* Dark text on mint */
-    --secondary-light: 173 85% 67%;      /* #6FE5D7 - Light mint */
-    --secondary-dark: 173 85% 40%;       /* #10BFAE - Dark mint */
+    --secondary-900: 173 85% 31%;        /* Dark mint */
+    --secondary-800: 173 85% 36%;        /* Between 900 and 700 */
+    --secondary-700: 173 85% 41%;        /* #0A998C - Dark mint */
+    --secondary-600: 173 85% 46%;        /* #10BFAE */
+    --secondary-500: 173 85% 51%;        /* #2ED7C3 - Main secondary */
+    --secondary-400: 173 85% 67%;        /* #6FE5D7 - Light mint */
+    --secondary-300: 173 85% 77%;        /* Lighter mint */
+    --secondary-200: 173 85% 87%;        /* Very light mint */
+    --secondary-100: 173 85% 95%;        /* Subtle mint background */
 
     /* Accent: Coupon Yellow */
     --accent: 40 100% 64%;               /* #FFC84A - Coupon/promo */
     --accent-foreground: 40 100% 10%;    /* Dark text on yellow */
+    --accent-700: 40 100% 54%;           /* Darker yellow */
+    --accent-600: 40 100% 59%;           /* Between 700 and 500 */
+    --accent-500: 40 100% 64%;           /* #FFC84A - Main accent */
+    --accent-400: 40 100% 74%;           /* Lighter yellow */
+    --accent-300: 40 100% 84%;           /* Light yellow */
 
-    /* Social vibrant palette - Una Brand Colors */
-    --jacaranda: 258 91% 46%;            /* Primary Jacarandá */
-    --jacaranda-light: 267 100% 61%;     /* Light Jacarandá */
-    --mint: 173 85% 51%;                 /* Mint secondary */
-    --mint-light: 173 85% 67%;           /* Light mint */
-    --coupon: 40 100% 64%;               /* Coupon accent */
-
-    /* Neutrals from Una palette */
-    --muted: 220 44% 96%;                /* #EEF0FA - Light neutral */
-    --muted-foreground: 220 20% 39%;     /* #51597A - Medium neutral */
-
-    /* System colors */
-    --success: 152 66% 46%;              /* #10B981 */
-    --warning: 38 92% 50%;               /* #F59E0B */
-    --destructive: 0 84% 60%;            /* #EF4444 */
+    /* System Colors - Una Palette */
+    --success: 152 66% 46%;              /* #10B981 - Success green */
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;               /* #F59E0B - Warning orange */
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;            /* #EF4444 - Danger red */
     --destructive-foreground: 0 0% 100%;
 
-    /* Modern borders */
+    /* Neutrals - Una Complete Scale */
+    --neutral-900: 220 36% 9%;           /* #0F1221 - Darkest */
+    --neutral-800: 220 36% 14%;          /* Between 900 and 700 */
+    --neutral-700: 220 30% 20%;          /* #2A2F45 - Dark */
+    --neutral-600: 220 25% 30%;          /* Between 700 and 500 */
+    --neutral-500: 220 20% 39%;          /* #51597A - Medium */
+    --neutral-400: 220 20% 55%;          /* Between 500 and 300 */
+    --neutral-300: 220 20% 70%;          /* #A2A9C2 - Light */
+    --neutral-200: 220 20% 85%;          /* Between 300 and 100 */
+    --neutral-100: 220 44% 96%;          /* #EEF0FA - Lightest */
+
+    /* Modern borders and inputs */
     --border: 220 20% 88%;               /* Light border */
     --input: 220 44% 96%;                /* Input backgrounds */
     --ring: 258 91% 46%;                 /* Focus ring - primary */
+
+    /* Semantic aliases for current usage */
+    --muted: 220 44% 96%;                /* #EEF0FA - Light neutral */
+    --muted-foreground: 220 20% 39%;     /* #51597A - Medium neutral */
 
     /* Una Brand Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(258 91% 46%) 0%, hsl(267 100% 61%) 100%);
@@ -150,24 +174,55 @@ All colors MUST be HSL.
     --popover: 220 27% 10%;
     --popover-foreground: 220 44% 96%;
 
-    --primary: 267 100% 61%;             /* Lighter jacarandá for dark mode */
+    /* Primary: Jacarandá Purple - Dark Mode Adjustments */
+    --primary: 267 100% 71%;             /* Lighter jacarandá for dark mode */
     --primary-foreground: 0 0% 100%;
+    --primary-900: 258 91% 26%;          /* Darker for dark mode */
+    --primary-800: 258 91% 31%;          
+    --primary-700: 258 91% 36%;          
+    --primary-600: 264 78% 54%;          /* Adjusted for dark mode */
+    --primary-500: 267 100% 71%;         /* Lighter main primary */
+    --primary-400: 267 100% 81%;         
+    --primary-300: 267 100% 91%;         
+    --primary-200: 267 100% 96%;         
+    --primary-100: 267 100% 98%;         
 
-    --secondary: 173 85% 55%;            /* Slightly lighter mint for dark mode */
+    /* Secondary: Mint Green - Dark Mode Adjustments */
+    --secondary: 173 85% 61%;            /* Lighter mint for dark mode */
     --secondary-foreground: 180 100% 8%;
+    --secondary-900: 173 85% 21%;        
+    --secondary-800: 173 85% 26%;        
+    --secondary-700: 173 85% 31%;        
+    --secondary-600: 173 85% 36%;        
+    --secondary-500: 173 85% 61%;        /* Lighter main secondary */
+    --secondary-400: 173 85% 77%;        
+    --secondary-300: 173 85% 87%;        
+    --secondary-200: 173 85% 95%;        
+    --secondary-100: 173 85% 98%;        
+
+    /* Accent: Coupon Yellow - Dark Mode Adjustments */
+    --accent: 40 100% 74%;               /* Lighter yellow for dark mode */
+    --accent-foreground: 40 100% 10%;
+    --accent-700: 40 100% 44%;           
+    --accent-600: 40 100% 49%;           
+    --accent-500: 40 100% 74%;           /* Lighter main accent */
+    --accent-400: 40 100% 84%;           
+    --accent-300: 40 100% 94%;           
+
+    /* System Colors - Dark Mode Adjustments */
+    --success: 152 66% 56%;              /* Lighter success for dark mode */
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 60%;               /* Lighter warning for dark mode */
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 84% 70%;            /* Lighter destructive for dark mode */
+    --destructive-foreground: 0 0% 100%;
 
     --muted: 220 27% 12%;                /* Dark muted */
     --muted-foreground: 220 20% 69%;     /* Light muted text */
 
-    --accent: 40 100% 70%;               /* Slightly lighter coupon for dark mode */
-    --accent-foreground: 40 100% 10%;
-
-    --destructive: 0 84% 65%;            /* Slightly lighter destructive for dark mode */
-    --destructive-foreground: 0 0% 100%;
-
     --border: 220 20% 20%;               /* Dark border */
     --input: 220 27% 15%;                /* Dark input */
-    --ring: 267 100% 61%;                /* Focus ring - lighter primary */
+    --ring: 267 100% 71%;                /* Focus ring - lighter primary */
     --sidebar-background: 220 27% 12%;
     --sidebar-foreground: 220 44% 96%;
     --sidebar-primary: 220 44% 96%;
