@@ -317,7 +317,7 @@ const Index = () => {
         {/* Join me Section - Horizontal Carousel */}
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="title-trendy">
+            <h2 className="title-section">
               join me
             </h2>
             <div className="flex items-center gap-2">
@@ -382,7 +382,7 @@ const Index = () => {
         {/* Events Section - Horizontal Carousel */}
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="title-cool">
+            <h2 className="title-section">
             events around you
             </h2>
             <div className="flex items-center gap-2">
