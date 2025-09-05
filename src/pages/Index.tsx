@@ -315,7 +315,7 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
+        <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-app-heading font-app text-foreground relative">
               <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
@@ -383,7 +383,7 @@ const Index = () => {
         </section>
 
         {/* Events Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
+        <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-app-heading font-app text-foreground relative">
             <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">Events Around You
@@ -449,7 +449,7 @@ const Index = () => {
         </section>
 
         {/* Coupons Section - Horizontal Carousel */}
-        <section className="bg-card/30 backdrop-blur-sm rounded-xl p-3 lg:p-5 border border-border/20 shadow-sm">
+        <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-foreground relative">
               <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">

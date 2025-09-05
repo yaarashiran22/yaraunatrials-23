@@ -53,7 +53,7 @@ const Header = ({
   };
 
   return (
-    <header className="bg-card border-b border-border shadow-sm">
+    <header className="header-bar border-b border-border shadow-sm">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center gap-4">
           {/* Logo */}

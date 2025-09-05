@@ -27,7 +27,7 @@ const BottomNavigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-card/95 via-card/98 to-card/95 backdrop-blur-xl border-t-2 border-primary/20 lg:hidden shadow-large safe-area-inset-bottom social-glow">
+    <nav className="bottom-nav fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl border-t-2 border-primary/20 lg:hidden shadow-large safe-area-inset-bottom social-glow">
       <div className="px-4 py-3">
         <div className="flex items-center justify-around w-full max-w-sm mx-auto">
           {/* Home - בית */}
