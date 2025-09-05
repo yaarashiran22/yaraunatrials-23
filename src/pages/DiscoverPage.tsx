@@ -301,7 +301,6 @@ const DiscoverPage = () => {
 
         {/* Map Section */}
         <section>
-          <h3 className="title-section mb-4">nearby map</h3>
           
           {/* Map Container */}
           <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[400px] z-10">
