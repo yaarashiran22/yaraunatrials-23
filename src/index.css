@@ -407,14 +407,14 @@ All colors MUST be HSL.
     letter-spacing: -0.025em;
   }
 
-  /* All titles use the community coupons font styling */
+  /* All titles use different colors from the palette */
   .title-cool {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
     font-weight: var(--font-bold);
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(276 99% 30%);
+    color: hsl(349 100% 59%); /* Radical Red */
     font-size: 1.1em;
   }
 
@@ -436,7 +436,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(276 99% 30%);
+    color: hsl(55 95% 32%); /* Hot Toddy */
     font-size: 1.1em;
   }
 
@@ -447,7 +447,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, hsl(276 99% 30%), hsl(349 100% 59%));
+    background: linear-gradient(90deg, hsl(55 95% 32%), hsl(349 100% 59%));
     border-radius: 2px;
     opacity: 0.8;
   }
@@ -458,7 +458,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(276 99% 30%);
+    color: hsl(349 100% 59%); /* Radical Red */
     font-size: 1.1em;
   }
 
@@ -469,7 +469,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, hsl(276 99% 30%), hsl(349 100% 59%));
+    background: linear-gradient(90deg, hsl(349 100% 59%), hsl(276 99% 30%));
     border-radius: 2px;
     opacity: 0.8;
   }
@@ -480,7 +480,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(276 99% 30%);
+    color: hsl(55 95% 32%); /* Hot Toddy */
     font-size: 1.1em;
   }
 
@@ -502,7 +502,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(276 99% 30%);
+    color: hsl(349 100% 59%); /* Radical Red */
     font-size: 1.1em;
     margin-bottom: 0.5rem;
   }
