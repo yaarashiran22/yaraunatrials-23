@@ -507,18 +507,6 @@ All colors MUST be HSL.
     margin-bottom: 0.5rem;
   }
 
-  .title-section::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 60%;
-    height: 3px;
-    background: linear-gradient(90deg, hsl(17 98% 60%), hsl(51 100% 70%));
-    border-radius: 2px;
-    opacity: 0.8;
-  }
-
   @keyframes gradient-shift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
