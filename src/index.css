@@ -11,74 +11,86 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222 84% 15%;
+    /* Instagram-inspired App Color System */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 84% 15%;
+    --card-foreground: 0 0% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 84% 15%;
+    --popover-foreground: 0 0% 8%;
 
-    --primary: 222 84% 15%;
+    /* Primary: Instagram-like dark */
+    --primary: 0 0% 8%;
     --primary-foreground: 0 0% 100%;
-    
-    --primary-soft: 210 20% 95%;
-    --primary-glow: 222 84% 25%;
+    --primary-soft: 0 0% 96%;
+    --primary-glow: 0 0% 20%;
 
-    --pink: 333 100% 66%;
-    --pink-foreground: 0 0% 100%;
+    /* Instagram gradient colors */
+    --instagram-purple: 264 91% 58%;
+    --instagram-pink: 330 81% 60%;
+    --instagram-orange: 25 100% 58%;
+    --instagram-yellow: 52 100% 68%;
 
-    --una-purple: 157 100% 50%;
-    --una-purple-foreground: 0 0% 8%;
+    /* Enhanced accent system */
+    --accent: 264 91% 58%;
+    --accent-foreground: 0 0% 100%;
+    --accent-soft: 264 91% 95%;
+    --accent-muted: 264 50% 90%;
 
-    --coral: 16 100% 65%;
+    /* Secondary: Soft grays */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 8%;
+
+    /* Refined muted colors */
+    --muted: 0 0% 98%;
+    --muted-foreground: 0 0% 45%;
+
+    /* Modern coral/salmon */
+    --coral: 14 100% 57%;
     --coral-foreground: 0 0% 100%;
-    --coral-muted: 16 100% 95%;
+    --coral-muted: 14 100% 96%;
     
-    /* Warm button colors */
-    --warm-orange: 25 100% 70%;
-    --warm-peach: 35 100% 75%;
-    --warm-muted: 30 100% 92%;
+    /* Warm gradient colors */
+    --warm-orange: 25 100% 58%;
+    --warm-peach: 35 85% 65%;
+    --warm-muted: 30 100% 95%;
 
-    --secondary: 210 20% 94%;
-    --secondary-foreground: 222 84% 15%;
-
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
-
-    --accent: 157 100% 60%;
-    --accent-foreground: 222 84% 15%;
-    --accent-muted: 270 60% 90%;
-    --accent-subtle: 270 70% 55%;
-
-    --destructive: 0 84% 60%;
+    /* Clean destructive */
+    --destructive: 0 65% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 88%;
-    --input: 210 20% 88%;
-    --ring: 157 100% 50%;
+    /* Subtle borders */
+    --border: 0 0% 91%;
+    --input: 0 0% 94%;
+    --ring: 264 91% 58%;
 
-    /* Enhanced 3D Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(222 84% 15%) 0%, hsl(222 84% 25%) 50%, hsl(222 84% 15%) 100%);
-    --gradient-soft: linear-gradient(145deg, hsl(210 20% 99%) 0%, hsl(210 20% 96%) 50%, hsl(210 20% 94%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(157 100% 45%) 0%, hsl(157 100% 50%) 50%, hsl(157 100% 55%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
-    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 20% 96%) 100%);
+    /* Instagram-inspired App Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(0 0% 15%) 50%, hsl(0 0% 8%) 100%);
+    --gradient-instagram: linear-gradient(135deg, hsl(264 91% 58%) 0%, hsl(330 81% 60%) 25%, hsl(25 100% 58%) 75%, hsl(52 100% 68%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 50%, hsl(0 0% 96%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(264 91% 58%) 0%, hsl(330 81% 60%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 99%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 97%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(25 100% 58%) 0%, hsl(35 85% 65%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
     
-    /* Enhanced App-like 3D Shadows */
-    --shadow-subtle: 0 2px 4px 0 hsl(0 0% 8% / 0.08);
-    --shadow-card: 0 4px 8px -2px hsl(0 0% 8% / 0.12), 0 2px 4px 0 hsl(0 0% 8% / 0.06);
-    --shadow-medium: 0 6px 12px -4px hsl(0 0% 8% / 0.15), 0 4px 8px -2px hsl(0 0% 8% / 0.08);
-    --shadow-large: 0 12px 24px -6px hsl(0 0% 8% / 0.18), 0 6px 12px -4px hsl(0 0% 8% / 0.1);
-    --shadow-floating: 0 24px 32px -8px hsl(0 0% 8% / 0.2), 0 8px 16px 0 hsl(0 0% 8% / 0.08);
-    --shadow-glow: 0 0 32px hsl(157 100% 50% / 0.25);
-    --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 8% / 0.08);
+    /* Instagram-style App Shadows */
+    --shadow-subtle: 0 1px 3px 0 hsl(0 0% 0% / 0.08), 0 1px 2px 0 hsl(0 0% 0% / 0.06);
+    --shadow-card: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.06);
+    --shadow-medium: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -2px hsl(0 0% 0% / 0.05);
+    --shadow-large: 0 20px 25px -5px hsl(0 0% 0% / 0.1), 0 10px 10px -5px hsl(0 0% 0% / 0.04);
+    --shadow-floating: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
+    --shadow-glow: 0 0 30px hsl(264 91% 58% / 0.3);
+    --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 0% / 0.06);
+    --shadow-instagram: 0 8px 30px hsl(264 91% 58% / 0.12);
     
-    /* 3D Button Effects */
-    --shadow-button: 0 1px 3px hsl(0 0% 8% / 0.09), 0 1px 2px hsl(0 0% 8% / 0.06);
-    --shadow-button-hover: 0 3px 6px hsl(0 0% 8% / 0.12), 0 2px 4px hsl(0 0% 8% / 0.08);
-    --shadow-button-active: inset 0 2px 4px hsl(0 0% 8% / 0.08);
+    /* Instagram-style Button Effects */
+    --shadow-button: 0 1px 2px hsl(0 0% 0% / 0.05);
+    --shadow-button-hover: 0 4px 8px -2px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.06);
+    --shadow-button-active: inset 0 2px 4px hsl(0 0% 0% / 0.08);
+    --shadow-button-instagram: 0 4px 14px hsl(264 91% 58% / 0.25);
 
     --radius: 0.75rem;
 
@@ -133,33 +145,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 15 23 42;
-    --foreground: 248 250 252;
+    --background: 0 0% 8%;
+    --foreground: 0 0% 98%;
 
-    --card: 30 41 59;
-    --card-foreground: 248 250 252;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 30 41 59;
-    --popover-foreground: 248 250 252;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 248 250 252;
-    --primary-foreground: 15 23 42;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 8%;
 
-    --secondary: 51 65 85;
-    --secondary-foreground: 248 250 252;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 51 65 85;
-    --muted-foreground: 148 163 184;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 157 100% 60%;
-    --accent-foreground: 15 23 42;
+    --accent: 264 91% 58%;
+    --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62% 31%;
-    --destructive-foreground: 248 250 252;
+    --destructive: 0 63% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 71 85 105;
-    --input: 71 85 105;
-    --ring: 157 100% 50%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 264 91% 58%;
     --sidebar-background: 15 23 42;
     --sidebar-foreground: 248 250 252;
     --sidebar-primary: 248 250 252;
