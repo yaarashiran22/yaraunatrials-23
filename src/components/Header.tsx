@@ -58,7 +58,7 @@ const Header = ({
         <div className="flex items-center gap-4">
           {/* Logo */}
           <div 
-            className="title-cool cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0" 
+            className="text-3xl font-black cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0 text-primary" 
             onClick={handleLogoClick}
             role="button"
             aria-label="Navigate to homepage"
@@ -76,7 +76,7 @@ const Header = ({
             <Button 
               variant="outline" 
               size="sm" 
-              className="p-2.5 h-10 w-10 bg-background text-foreground hover:bg-accent border-border"
+              className="p-2.5 h-10 w-10 bg-white text-foreground hover:bg-gray-50 border-border shadow-sm"
               onClick={() => navigate('/messages')}
             >
               <MessageCircle className="h-5 w-5" />

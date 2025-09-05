@@ -407,24 +407,29 @@ All colors MUST be HSL.
     letter-spacing: -0.025em;
   }
 
-  /* Trendy title styles for alternative app aesthetic */
+  /* Trendy title styles for social media aesthetic */
   .title-cool {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
     font-weight: var(--font-extrabold);
-    letter-spacing: -0.03em;
-    text-shadow: 0 1px 2px hsl(17 98% 60% / 0.1);
+    letter-spacing: -0.04em;
+    text-shadow: 0 2px 4px hsl(17 98% 60% / 0.15);
     background: linear-gradient(135deg, hsl(17 98% 60%), hsl(110 100% 89%));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     background-size: 200% 200%;
     animation: gradient-shift 3s ease-in-out infinite;
+    font-size: 1.2em;
   }
 
   .title-alt {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
     font-weight: var(--font-bold);
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
+    color: hsl(17 98% 55%);
+    font-size: 1.1em;
   }
 
   .title-alt::after {
@@ -433,40 +438,45 @@ All colors MUST be HSL.
     bottom: -2px;
     left: 0;
     right: 0;
-    height: 2px;
+    height: 3px;
     background: linear-gradient(90deg, hsl(17 98% 60%), hsl(51 100% 70%));
-    border-radius: 1px;
-    opacity: 0.7;
+    border-radius: 2px;
+    opacity: 0.8;
   }
 
   .title-modern {
-    font-weight: var(--font-semibold);
-    letter-spacing: -0.02em;
-    color: hsl(var(--foreground));
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    font-weight: var(--font-bold);
+    letter-spacing: -0.025em;
+    color: hsl(17 98% 50%);
     position: relative;
-    text-shadow: 0 0 20px hsl(17 98% 60% / 0.3);
+    text-shadow: 0 1px 3px hsl(17 98% 60% / 0.2);
+    font-size: 1.1em;
   }
 
   .title-trendy {
-    font-weight: var(--font-bold);
-    letter-spacing: -0.015em;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    font-weight: var(--font-extrabold);
+    letter-spacing: -0.02em;
     background: var(--gradient-rainbow);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 1.1em;
+    font-size: 1.2em;
     position: relative;
   }
 
   .title-section {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
     font-weight: var(--font-extrabold);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
     text-transform: uppercase;
-    font-size: 0.85em;
-    color: hsl(17 98% 60%);
+    font-size: 0.9em;
+    color: hsl(17 98% 55%);
     margin-bottom: 0.5rem;
     position: relative;
-    opacity: 0.9;
+    opacity: 1;
+    text-shadow: 0 1px 2px hsl(17 98% 60% / 0.2);
   }
 
   @keyframes gradient-shift {

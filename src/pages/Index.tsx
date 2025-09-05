@@ -318,7 +318,7 @@ const Index = () => {
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="title-section">
-              join me
+              wanna meet up?
             </h2>
             <div className="flex items-center gap-2">
               <Button 
