@@ -13,7 +13,7 @@ const FloatingMapToggle = ({ isMapOpen, onToggle }: FloatingMapToggleProps) => {
       <Button
         onClick={onToggle}
         size="icon-lg"
-        variant={isMapOpen ? "destructive" : "primary"}
+        variant={isMapOpen ? "destructive" : "jacaranda"}
         className="rounded-full shadow-floating transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 backdrop-blur-sm"
       >
         {isMapOpen ? (

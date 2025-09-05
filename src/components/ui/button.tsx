@@ -9,20 +9,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-button-electric hover:shadow-button-hover active:shadow-button-active transition-all duration-200",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-button-jacaranda hover:shadow-button-hover active:shadow-button-active transition-all duration-200",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-button hover:shadow-button-hover active:shadow-button-active",
         outline:
           "border-2 border-primary/40 bg-background/80 backdrop-blur-sm text-primary hover:bg-primary/10 hover:border-primary/60 shadow-button",
         secondary:
-          "bg-gradient-to-br from-secondary via-secondary/90 to-secondary/80 text-secondary-foreground hover:from-secondary/90 shadow-button hover:shadow-button-hover active:shadow-button-active",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-button-mint hover:shadow-button-hover active:shadow-button-active",
         ghost: "hover:bg-primary/10 hover:text-primary rounded-xl transition-all duration-200",
         link: "text-primary underline-offset-4 hover:underline decoration-primary/50",
         app: "bg-gradient-to-br from-card via-card/95 to-card/90 border-2 border-border/50 text-card-foreground hover:border-border/70 hover:shadow-card shadow-button",
-        primary: "bg-gradient-to-br from-primary via-primary to-primary-glow text-primary-foreground shadow-button-electric hover:shadow-glow active:shadow-button-active",
-        electric: "bg-gradient-to-br from-electric-green via-primary to-electric-lime text-white shadow-button-electric hover:shadow-glow hover:scale-105 active:scale-95",
-        coral: "bg-gradient-to-br from-coral-orange via-accent to-neon-pink text-white shadow-button-coral hover:shadow-coral hover:scale-105 active:scale-95",
-        social: "bg-gradient-to-r from-primary via-accent to-electric-purple text-white shadow-electric hover:shadow-glow hover:scale-105",
+        // Una Brand Variants
+        jacaranda: "bg-primary text-primary-foreground shadow-button-jacaranda hover:shadow-glow hover:bg-primary/90 transition-all duration-300 active:scale-95",
+        mint: "bg-secondary text-secondary-foreground shadow-button-mint hover:shadow-mint hover:bg-secondary/80 transition-all duration-300 active:scale-95",
+        coupon: "bg-accent text-accent-foreground shadow-button hover:shadow-button-hover hover:bg-accent/90 transition-all duration-300 active:scale-95",
+        plaza: "bg-gradient-plaza-dusk text-white shadow-glow hover:shadow-floating hover:scale-105 transition-all duration-300 active:scale-95",
       },
       size: {
         xs: "h-8 px-3 py-1 text-xs min-w-[2rem]",

@@ -12,7 +12,7 @@ const FloatingMessagesToggle = () => {
       <Button
         onClick={() => navigate('/messages')}
         size="icon-lg"
-        variant="coral"
+        variant="mint"
         className="rounded-full shadow-floating transition-all duration-300 ease-in-out hover:scale-110 active:scale-95 backdrop-blur-sm social-glow"
       >
         <MessageCircle className="h-7 w-7" />

@@ -11,92 +11,82 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Vibrant Social Network Color System */
-    --background: 0 0% 99%;
-    --foreground: 220 15% 15%;
+    /* Una Brand Palette - App Background System */
+    --background: 259 27% 98%;           /* #F7F5FC - App background */
+    --foreground: 220 36% 9%;            /* #0F1221 - Text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 15%;
+    --card: 0 0% 100%;                   /* #FFFFFF - Surface */
+    --card-foreground: 220 36% 9%;       /* #0F1221 - Card text */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 15%;
+    --popover-foreground: 220 36% 9%;
 
-    /* Primary: Electric Green */
-    --primary: 142 85% 45%;
-    --primary-foreground: 0 0% 100%;
-    --primary-soft: 142 55% 95%;
-    --primary-glow: 142 90% 55%;
+    /* Primary: Jacarandá Purple */
+    --primary: 258 91% 46%;              /* #7E22CE - Action buttons (accessible) */
+    --primary-foreground: 0 0% 100%;     /* White text on primary */
+    --primary-light: 267 100% 61%;       /* #CD37FF - Brand accent */
+    --primary-dark: 258 90% 36%;         /* Darker shade */
+    --primary-glow: 267 100% 61%;        /* #CD37FF for glow effects */
 
-    /* Social vibrant palette */
-    --electric-green: 142 85% 45%;
-    --electric-lime: 120 100% 50%;
-    --coral-orange: 15 100% 60%;
-    --electric-purple: 270 85% 60%;
-    --neon-pink: 320 85% 65%;
-    --social-blue: 200 85% 55%;
+    /* Secondary: Mint Green */
+    --secondary: 173 85% 51%;            /* #2ED7C3 - Community/coupons */
+    --secondary-foreground: 180 100% 8%; /* Dark text on mint */
+    --secondary-light: 173 85% 67%;      /* #6FE5D7 - Light mint */
+    --secondary-dark: 173 85% 40%;       /* #10BFAE - Dark mint */
 
-    /* Enhanced accent system - Coral Orange */
-    --accent: 15 100% 60%;
-    --accent-foreground: 0 0% 100%;
-    --accent-soft: 15 75% 90%;
-    --accent-muted: 15 50% 85%;
+    /* Accent: Coupon Yellow */
+    --accent: 40 100% 64%;               /* #FFC84A - Coupon/promo */
+    --accent-foreground: 40 100% 10%;    /* Dark text on yellow */
 
-    /* Secondary: Electric Purple */
-    --secondary: 270 85% 95%;
-    --secondary-foreground: 270 85% 25%;
+    /* Social vibrant palette - Una Brand Colors */
+    --jacaranda: 258 91% 46%;            /* Primary Jacarandá */
+    --jacaranda-light: 267 100% 61%;     /* Light Jacarandá */
+    --mint: 173 85% 51%;                 /* Mint secondary */
+    --mint-light: 173 85% 67%;           /* Light mint */
+    --coupon: 40 100% 64%;               /* Coupon accent */
 
-    /* Refined muted colors */
-    --muted: 220 10% 96%;
-    --muted-foreground: 220 15% 45%;
+    /* Neutrals from Una palette */
+    --muted: 220 44% 96%;                /* #EEF0FA - Light neutral */
+    --muted-foreground: 220 20% 39%;     /* #51597A - Medium neutral */
 
-    /* Vibrant coral */
-    --coral: 15 100% 60%;
-    --coral-foreground: 0 0% 100%;
-    --coral-muted: 15 75% 95%;
-    
-    /* Electric colors */
-    --electric-green-bright: 120 100% 50%;
-    --electric-purple-bright: 270 85% 60%;
-    --neon-accent: 320 85% 65%;
-
-    /* Clean destructive */
-    --destructive: 0 75% 55%;
+    /* System colors */
+    --success: 152 66% 46%;              /* #10B981 */
+    --warning: 38 92% 50%;               /* #F59E0B */
+    --destructive: 0 84% 60%;            /* #EF4444 */
     --destructive-foreground: 0 0% 100%;
 
     /* Modern borders */
-    --border: 220 10% 88%;
-    --input: 220 10% 92%;
-    --ring: 142 85% 45%;
+    --border: 220 20% 88%;               /* Light border */
+    --input: 220 44% 96%;                /* Input backgrounds */
+    --ring: 258 91% 46%;                 /* Focus ring - primary */
 
-    /* Vibrant Social Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(142 85% 45%) 0%, hsl(120 100% 50%) 50%, hsl(142 85% 45%) 100%);
-    --gradient-social: linear-gradient(135deg, hsl(142 85% 45%) 0%, hsl(15 100% 60%) 25%, hsl(270 85% 60%) 75%, hsl(320 85% 65%) 100%);
-    --gradient-soft: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 10% 98%) 50%, hsl(220 15% 96%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(15 100% 60%) 0%, hsl(320 85% 65%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 5% 99%) 100%);
-    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 10% 97%) 100%);
-    --gradient-electric: linear-gradient(135deg, hsl(142 85% 45%) 0%, hsl(270 85% 60%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(142 30% 98%) 100%);
-    --gradient-coral: linear-gradient(135deg, hsl(15 100% 60%) 0%, hsl(320 85% 65%) 100%);
-    --gradient-neon: linear-gradient(145deg, hsl(142 85% 45%) 0%, hsl(15 100% 60%) 50%, hsl(270 85% 60%) 100%);
+    /* Una Brand Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(258 91% 46%) 0%, hsl(267 100% 61%) 100%);
+    --gradient-plaza-dusk: linear-gradient(135deg, hsl(267 100% 61%) 0%, hsl(258 91% 46%) 50%, hsl(173 85% 51%) 100%);
+    --gradient-mint: linear-gradient(135deg, hsl(173 85% 51%) 0%, hsl(173 85% 67%) 100%);
+    --gradient-coupon: linear-gradient(135deg, hsl(40 100% 64%) 0%, hsl(38 92% 50%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(259 27% 98%) 50%, hsl(220 44% 96%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(259 27% 99%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(259 27% 97%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(259 27% 98%) 0%, hsl(0 0% 100%) 100%);
     
-    /* Vibrant Social Shadows */
-    --shadow-subtle: 0 1px 3px 0 hsl(142 40% 20% / 0.08), 0 1px 2px 0 hsl(142 35% 25% / 0.06);
-    --shadow-card: 0 4px 12px -2px hsl(142 45% 30% / 0.12), 0 2px 8px -1px hsl(220 15% 40% / 0.08);
-    --shadow-medium: 0 8px 20px -4px hsl(142 45% 30% / 0.15), 0 4px 12px -2px hsl(220 15% 40% / 0.10);
-    --shadow-large: 0 16px 32px -8px hsl(142 45% 30% / 0.18), 0 8px 16px -4px hsl(220 15% 40% / 0.12);
-    --shadow-floating: 0 20px 40px -12px hsl(142 45% 30% / 0.20);
-    --shadow-glow: 0 0 25px hsl(142 85% 45% / 0.4);
-    --shadow-inner: inset 0 2px 4px 0 hsl(220 15% 30% / 0.08);
-    --shadow-electric: 0 6px 20px hsl(142 85% 45% / 0.25);
-    --shadow-coral: 0 6px 20px hsl(15 100% 60% / 0.25);
+    /* Una Brand Shadows */
+    --shadow-subtle: 0 1px 3px 0 hsl(258 91% 46% / 0.08), 0 1px 2px 0 hsl(220 36% 9% / 0.06);
+    --shadow-card: 0 4px 12px -2px hsl(258 91% 46% / 0.12), 0 2px 8px -1px hsl(220 36% 9% / 0.08);
+    --shadow-medium: 0 8px 20px -4px hsl(258 91% 46% / 0.15), 0 4px 12px -2px hsl(220 36% 9% / 0.10);
+    --shadow-large: 0 16px 32px -8px hsl(258 91% 46% / 0.18), 0 8px 16px -4px hsl(220 36% 9% / 0.12);
+    --shadow-floating: 0 20px 40px -12px hsl(258 91% 46% / 0.20);
+    --shadow-glow: 0 0 25px hsl(267 100% 61% / 0.4);
+    --shadow-inner: inset 0 2px 4px 0 hsl(220 36% 9% / 0.08);
+    --shadow-jacaranda: 0 6px 20px hsl(258 91% 46% / 0.25);
+    --shadow-mint: 0 6px 20px hsl(173 85% 51% / 0.25);
     
     /* Social Button Effects */
-    --shadow-button: 0 2px 4px hsl(142 40% 20% / 0.08);
-    --shadow-button-hover: 0 4px 12px -2px hsl(142 45% 30% / 0.15), 0 2px 8px -1px hsl(220 15% 40% / 0.10);
-    --shadow-button-active: inset 0 2px 6px hsl(220 15% 30% / 0.12);
-    --shadow-button-electric: 0 6px 18px hsl(142 85% 45% / 0.3);
-    --shadow-button-coral: 0 6px 18px hsl(15 100% 60% / 0.3);
+    --shadow-button: 0 2px 4px hsl(258 91% 46% / 0.08);
+    --shadow-button-hover: 0 4px 12px -2px hsl(258 91% 46% / 0.15), 0 2px 8px -1px hsl(220 36% 9% / 0.10);
+    --shadow-button-active: inset 0 2px 6px hsl(220 36% 9% / 0.12);
+    --shadow-button-jacaranda: 0 6px 18px hsl(258 91% 46% / 0.3);
+    --shadow-button-mint: 0 6px 18px hsl(173 85% 51% / 0.3);
 
     --radius: 0.75rem;
 
@@ -151,41 +141,41 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 220 20% 8%;
-    --foreground: 142 15% 95%;
+    --background: 220 36% 8%;            /* Dark background */
+    --foreground: 220 44% 96%;           /* Light text on dark */
 
-    --card: 220 25% 10%;
-    --card-foreground: 142 15% 95%;
+    --card: 220 27% 10%;                 /* Dark card */
+    --card-foreground: 220 44% 96%;      /* Light text on dark card */
 
-    --popover: 220 25% 10%;
-    --popover-foreground: 142 15% 95%;
+    --popover: 220 27% 10%;
+    --popover-foreground: 220 44% 96%;
 
-    --primary: 142 85% 55%;
+    --primary: 267 100% 61%;             /* Lighter jacarandá for dark mode */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 35% 15%;
-    --secondary-foreground: 142 15% 90%;
+    --secondary: 173 85% 55%;            /* Slightly lighter mint for dark mode */
+    --secondary-foreground: 180 100% 8%;
 
-    --muted: 220 20% 12%;
-    --muted-foreground: 220 15% 65%;
+    --muted: 220 27% 12%;                /* Dark muted */
+    --muted-foreground: 220 20% 69%;     /* Light muted text */
 
-    --accent: 15 100% 65%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 40 100% 70%;               /* Slightly lighter coupon for dark mode */
+    --accent-foreground: 40 100% 10%;
 
-    --destructive: 0 75% 60%;
+    --destructive: 0 84% 65%;            /* Slightly lighter destructive for dark mode */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 20%;
-    --input: 220 20% 15%;
-    --ring: 142 85% 55%;
-    --sidebar-background: 15 23 42;
-    --sidebar-foreground: 248 250 252;
-    --sidebar-primary: 248 250 252;
-    --sidebar-primary-foreground: 15 23 42;
-    --sidebar-accent: 157 100% 60%;
-    --sidebar-accent-foreground: 15 23 42;
-    --sidebar-border: 71 85 105;
-    --sidebar-ring: 157 100% 50%;
+    --border: 220 20% 20%;               /* Dark border */
+    --input: 220 27% 15%;                /* Dark input */
+    --ring: 267 100% 61%;                /* Focus ring - lighter primary */
+    --sidebar-background: 220 27% 12%;
+    --sidebar-foreground: 220 44% 96%;
+    --sidebar-primary: 220 44% 96%;
+    --sidebar-primary-foreground: 220 27% 12%;
+    --sidebar-accent: 173 85% 55%;
+    --sidebar-accent-foreground: 220 27% 12%;
+    --sidebar-border: 220 20% 20%;
+    --sidebar-ring: 173 85% 55%;
   }
 }
 

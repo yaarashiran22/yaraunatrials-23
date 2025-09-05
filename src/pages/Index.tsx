@@ -332,7 +332,7 @@ const Index = () => {
               >
                 All
               </Button>
-              <Button variant="electric" size="xs" onClick={() => {
+              <Button variant="plaza" size="xs" onClick={() => {
               setCreateEventType('meetup');
               setShowCreateEvent(true);
             }} className="text-xs px-3 py-2 h-8 rounded-2xl gap-1 transition-all duration-200">
