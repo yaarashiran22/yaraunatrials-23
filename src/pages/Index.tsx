@@ -315,27 +315,27 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="bg-card/50 backdrop-blur-sm rounded-2xl p-4 lg:p-5 border border-border/30 shadow-card">
+        <section className="bg-gradient-to-br from-card via-card/95 to-card/90 backdrop-blur-sm rounded-3xl p-5 lg:p-6 border-2 border-border/40 shadow-card artistic-texture">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-foreground relative">
-              <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent drop-shadow-sm">
+            <h2 className="text-xl font-bold text-foreground relative">
+              <span className="relative z-10 bg-gradient-to-r from-primary via-bohemian-ochre to-accent bg-clip-text text-transparent drop-shadow-sm">
                 {t('sections.joinMe')}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/5 blur-sm -z-10 transform translate-x-0.5 translate-y-0.5 rounded-md"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/15 via-bohemian-ochre/10 to-accent/15 blur-md -z-10 transform translate-x-1 translate-y-1 rounded-lg"></div>
             </h2>
             <div className="flex items-center gap-2">
               <Button 
                 variant="ghost" 
                 size="xs" 
                 onClick={() => navigate('/all-meetups')}
-                className="text-xs px-3 py-2 h-8 text-muted-foreground hover:text-foreground rounded-xl"
+                className="text-xs px-3 py-2 h-8 text-muted-foreground hover:text-primary rounded-2xl hover:bg-primary/10 transition-all duration-200"
               >
                 All
               </Button>
-              <Button variant="app" size="xs" onClick={() => {
+              <Button variant="artistic" size="xs" onClick={() => {
               setCreateEventType('meetup');
               setShowCreateEvent(true);
-            }} className="text-xs px-3 py-2 h-8 rounded-xl gap-1">
+            }} className="text-xs px-3 py-2 h-8 rounded-2xl gap-1 hover:scale-105 transition-all duration-200">
                 <Plus className="h-3 w-3" />
               </Button>
             </div>

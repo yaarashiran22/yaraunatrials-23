@@ -11,86 +11,90 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Instagram-inspired App Color System */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 8%;
+    /* Bohemian Artsy Color System */
+    --background: 35 25% 97%;
+    --foreground: 25 35% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 8%;
+    --card: 40 30% 98%;
+    --card-foreground: 25 35% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 8%;
+    --popover: 40 30% 98%;
+    --popover-foreground: 25 35% 15%;
 
-    /* Primary: Instagram-like dark */
-    --primary: 0 0% 8%;
+    /* Primary: Earthy terracotta */
+    --primary: 15 85% 45%;
     --primary-foreground: 0 0% 100%;
-    --primary-soft: 0 0% 96%;
-    --primary-glow: 0 0% 20%;
+    --primary-soft: 15 45% 95%;
+    --primary-glow: 15 75% 55%;
 
-    /* Instagram gradient colors */
-    --instagram-purple: 264 91% 58%;
-    --instagram-pink: 330 81% 60%;
-    --instagram-orange: 25 100% 58%;
-    --instagram-yellow: 52 100% 68%;
+    /* Bohemian palette */
+    --bohemian-terracotta: 15 85% 45%;
+    --bohemian-sage: 75 35% 55%;
+    --bohemian-ochre: 45 75% 55%;
+    --bohemian-clay: 20 65% 40%;
+    --bohemian-cream: 35 40% 92%;
+    --bohemian-dust: 25 25% 75%;
 
-    /* Enhanced accent system */
-    --accent: 264 91% 58%;
+    /* Enhanced accent system - Sage green */
+    --accent: 75 35% 55%;
     --accent-foreground: 0 0% 100%;
-    --accent-soft: 264 91% 95%;
-    --accent-muted: 264 50% 90%;
+    --accent-soft: 75 25% 90%;
+    --accent-muted: 75 20% 85%;
 
-    /* Secondary: Soft grays */
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 8%;
+    /* Secondary: Warm clay */
+    --secondary: 35 35% 90%;
+    --secondary-foreground: 25 35% 20%;
 
     /* Refined muted colors */
-    --muted: 0 0% 98%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 35 25% 95%;
+    --muted-foreground: 25 25% 50%;
 
-    /* Modern coral/salmon */
-    --coral: 14 100% 57%;
+    /* Artistic coral/rust */
+    --coral: 10 75% 55%;
     --coral-foreground: 0 0% 100%;
-    --coral-muted: 14 100% 96%;
+    --coral-muted: 10 45% 92%;
     
-    /* Warm gradient colors */
-    --warm-orange: 25 100% 58%;
-    --warm-peach: 35 85% 65%;
-    --warm-muted: 30 100% 95%;
+    /* Warm artistic colors */
+    --warm-orange: 35 85% 60%;
+    --warm-peach: 25 65% 75%;
+    --warm-muted: 35 45% 92%;
 
-    /* Clean destructive */
-    --destructive: 0 65% 51%;
+    /* Artistic destructive */
+    --destructive: 5 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Subtle borders */
-    --border: 0 0% 91%;
-    --input: 0 0% 94%;
-    --ring: 264 91% 58%;
+    /* Subtle artistic borders */
+    --border: 30 20% 85%;
+    --input: 35 25% 90%;
+    --ring: 75 35% 55%;
 
-    /* Instagram-inspired App Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(0 0% 15%) 50%, hsl(0 0% 8%) 100%);
-    --gradient-instagram: linear-gradient(135deg, hsl(264 91% 58%) 0%, hsl(330 81% 60%) 25%, hsl(25 100% 58%) 75%, hsl(52 100% 68%) 100%);
-    --gradient-soft: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 50%, hsl(0 0% 96%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(264 91% 58%) 0%, hsl(330 81% 60%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 99%) 100%);
-    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 97%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(25 100% 58%) 0%, hsl(35 85% 65%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
+    /* Bohemian Artistic Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(15 85% 45%) 0%, hsl(20 65% 40%) 50%, hsl(15 85% 45%) 100%);
+    --gradient-bohemian: linear-gradient(135deg, hsl(15 85% 45%) 0%, hsl(45 75% 55%) 25%, hsl(75 35% 55%) 75%, hsl(35 40% 92%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(35 25% 97%) 0%, hsl(35 30% 95%) 50%, hsl(35 35% 93%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(75 35% 55%) 0%, hsl(45 75% 55%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(40 30% 98%) 0%, hsl(35 25% 96%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(40 35% 96%) 0%, hsl(35 30% 94%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(35 85% 60%) 0%, hsl(25 65% 75%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(35 25% 97%) 0%, hsl(30 30% 95%) 100%);
+    --gradient-artistic: linear-gradient(145deg, hsl(15 85% 45%) 0%, hsl(75 35% 55%) 50%, hsl(45 75% 55%) 100%);
+    --gradient-earth: linear-gradient(135deg, hsl(20 65% 40%) 0%, hsl(35 85% 60%) 100%);
     
-    /* Instagram-style App Shadows */
-    --shadow-subtle: 0 1px 3px 0 hsl(0 0% 0% / 0.08), 0 1px 2px 0 hsl(0 0% 0% / 0.06);
-    --shadow-card: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.06);
-    --shadow-medium: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -2px hsl(0 0% 0% / 0.05);
-    --shadow-large: 0 20px 25px -5px hsl(0 0% 0% / 0.1), 0 10px 10px -5px hsl(0 0% 0% / 0.04);
-    --shadow-floating: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
-    --shadow-glow: 0 0 30px hsl(264 91% 58% / 0.3);
-    --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 0% / 0.06);
-    --shadow-instagram: 0 8px 30px hsl(264 91% 58% / 0.12);
+    /* Artistic Bohemian Shadows */
+    --shadow-subtle: 0 1px 3px 0 hsl(20 35% 25% / 0.08), 0 1px 2px 0 hsl(25 35% 30% / 0.06);
+    --shadow-card: 0 4px 12px -2px hsl(15 45% 35% / 0.12), 0 2px 8px -1px hsl(20 40% 40% / 0.08);
+    --shadow-medium: 0 8px 20px -4px hsl(15 45% 35% / 0.15), 0 4px 12px -2px hsl(20 40% 40% / 0.10);
+    --shadow-large: 0 16px 32px -8px hsl(15 45% 35% / 0.18), 0 8px 16px -4px hsl(20 40% 40% / 0.12);
+    --shadow-floating: 0 20px 40px -12px hsl(15 45% 35% / 0.20);
+    --shadow-glow: 0 0 25px hsl(15 85% 45% / 0.4);
+    --shadow-inner: inset 0 2px 4px 0 hsl(25 35% 30% / 0.08);
+    --shadow-artistic: 0 6px 20px hsl(15 85% 45% / 0.15);
     
-    /* Instagram-style Button Effects */
-    --shadow-button: 0 1px 2px hsl(0 0% 0% / 0.05);
-    --shadow-button-hover: 0 4px 8px -2px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.06);
-    --shadow-button-active: inset 0 2px 4px hsl(0 0% 0% / 0.08);
-    --shadow-button-instagram: 0 4px 14px hsl(264 91% 58% / 0.25);
+    /* Artistic Button Effects */
+    --shadow-button: 0 2px 4px hsl(20 35% 25% / 0.08);
+    --shadow-button-hover: 0 4px 12px -2px hsl(15 45% 35% / 0.15), 0 2px 8px -1px hsl(20 40% 40% / 0.10);
+    --shadow-button-active: inset 0 2px 6px hsl(25 35% 30% / 0.12);
+    --shadow-button-artistic: 0 6px 18px hsl(15 85% 45% / 0.25);
 
     --radius: 0.75rem;
 
@@ -145,33 +149,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 0 0% 8%;
-    --foreground: 0 0% 98%;
+    --background: 20 35% 8%;
+    --foreground: 35 25% 95%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 98%;
+    --card: 25 30% 12%;
+    --card-foreground: 35 25% 95%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 25 30% 12%;
+    --popover-foreground: 35 25% 95%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 8%;
+    --primary: 15 85% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 25 25% 18%;
+    --secondary-foreground: 35 25% 90%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 25 25% 15%;
+    --muted-foreground: 30 20% 65%;
 
-    --accent: 264 91% 58%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 75 35% 60%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 63% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 5 70% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 15%;
-    --ring: 264 91% 58%;
+    --border: 25 20% 25%;
+    --input: 25 25% 18%;
+    --ring: 75 35% 55%;
     --sidebar-background: 15 23 42;
     --sidebar-foreground: 248 250 252;
     --sidebar-primary: 248 250 252;
@@ -264,24 +268,25 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* App-like 3D Interactive Components */
+  /* Artistic Bohemian 3D Components */
   .card-3d {
     background: var(--gradient-card);
     box-shadow: var(--shadow-card);
     transform: translateZ(0);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 1.25rem;
-    border: 1px solid hsl(var(--border) / 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1.5rem;
+    border: 1px solid hsl(var(--border) / 0.6);
+    position: relative;
   }
   
   .card-3d:hover {
-    box-shadow: var(--shadow-large);
-    transform: translateY(-2px) scale(1.01);
+    box-shadow: var(--shadow-large), var(--shadow-artistic);
+    transform: translateY(-3px) scale(1.02) rotate(0.5deg);
   }
   
   .card-3d:active {
-    transform: translateY(0px) scale(0.98);
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0px) scale(0.98) rotate(-0.2deg);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .card-elevated {
@@ -289,40 +294,76 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-floating);
     transform: translateZ(0);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 1.5rem;
+    border-radius: 2rem;
+    position: relative;
+    overflow: hidden;
   }
   
   .card-elevated:hover {
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-4px) scale(1.03) rotate(0.8deg);
     box-shadow: var(--shadow-floating), var(--shadow-glow);
+  }
+  
+  .card-elevated::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .card-elevated:hover::before {
+    opacity: 1;
   }
   
   .btn-3d {
     @apply relative overflow-hidden;
-    background: var(--gradient-accent);
-    box-shadow: var(--shadow-button);
+    background: var(--gradient-artistic);
+    box-shadow: var(--shadow-button-artistic);
     transform: translateZ(0);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 1rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1.25rem;
   }
   
   .btn-3d:hover {
-    box-shadow: var(--shadow-button-hover);
-    transform: translateY(-1px);
+    box-shadow: var(--shadow-button-hover), var(--shadow-glow);
+    transform: translateY(-2px) rotate(0.3deg);
   }
   
   .btn-3d:active {
     box-shadow: var(--shadow-button-active);
-    transform: translateY(0) scale(0.95);
+    transform: translateY(0) scale(0.95) rotate(-0.1deg);
   }
   
   .btn-3d::before {
     content: '';
-    @apply absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300;
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, hsl(var(--bohemian-cream) / 0.3) 0%, transparent 50%);
   }
   
   .btn-3d:hover::before {
     @apply opacity-100;
+  }
+  
+  /* Artistic texture overlay */
+  .artistic-texture {
+    position: relative;
+  }
+  
+  .artistic-texture::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 20% 20%, hsl(var(--bohemian-ochre) / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsl(var(--bohemian-sage) / 0.05) 0%, transparent 50%);
+    border-radius: inherit;
+    pointer-events: none;
   }
   
   .surface-elevated {
