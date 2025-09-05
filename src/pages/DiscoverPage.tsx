@@ -542,20 +542,30 @@ const DiscoverPage = () => {
   }, [isLoading, allEvents, allMeetups, mapFilter]); // Add mapFilter dependency
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10 pb-20">
       <Header 
         title="Map"
         onNeighborhoodChange={handleNeighborhoodChange}
       />
       
       
-      <main className="container mx-auto px-4 py-3 space-y-6">
+      <main className="container mx-auto px-4 py-6 space-y-8">
         
         {/* Open to Hang Button */}
-        <div className="flex flex-col items-center gap-2">
-          <OpenToHangButton size="sm" shareText="Open to Hang" removeText="Stop Hanging" className="w-32 text-xs" />
-          <p className="text-xs text-muted-foreground text-center max-w-xs">
-            Share your live location to find nearby people ready to hang out
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur opacity-60"></div>
+            <div className="relative bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
+              <OpenToHangButton 
+                size="default" 
+                shareText="Open to Hang" 
+                removeText="Stop Hanging" 
+                className="w-40 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]" 
+              />
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground text-center max-w-md leading-relaxed">
+            Share your live location to discover nearby people ready to hang out right now
           </p>
         </div>
         
@@ -564,45 +574,47 @@ const DiscoverPage = () => {
 
           {/* People You Should Meet Row - Only show if there are suggested users */}
           {!suggestedUsersLoading && suggestedUsers.length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <Users className="w-4 h-4" />
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-foreground flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    <Users className="w-5 h-5 text-white" />
+                  </div>
                   People You Should Meet
                 </h3>
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
                   onClick={findSuggestedUsers}
-                  className="text-xs"
+                  className="bg-white/90 backdrop-blur-sm border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Refresh
                 </Button>
               </div>
               
-              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+              <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
                 {suggestedUsers.slice(0, 10).map((user) => (
                   <div key={user.id} className="flex-shrink-0 text-center group">
                     <div className="relative">
-                      <div className="w-20 h-20 p-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full hover-scale">
+                      <div className="w-24 h-24 p-1 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.05] active:scale-[0.98]">
                         <img
                           src={user.profile_image_url || '/placeholder-avatar.png'}
                           alt={user.name}
-                          className="w-full h-full rounded-full object-cover border-2 border-white cursor-pointer transition-transform duration-200 group-hover:scale-105"
+                          className="w-full h-full rounded-[1.25rem] object-cover border-2 border-white cursor-pointer"
                           onError={(e) => {
                             e.currentTarget.src = '/placeholder-avatar.png';
                           }}
                         />
                       </div>
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white flex items-center justify-center animate-pulse">
-                        <span className="text-white text-xs font-bold">✓</span>
+                      <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center shadow-lg animate-pulse">
+                        <span className="text-white text-sm font-bold">✓</span>
                       </div>
                     </div>
-                    <p className="text-xs font-medium mt-2 max-w-[80px] truncate text-center">{user.name}</p>
-                    <div className="flex items-center justify-center gap-1 mt-1">
-                      <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
-                      <p className="text-xs text-muted-foreground">{user.sharedEventCount}</p>
-                      <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
+                    <p className="text-sm font-semibold mt-3 max-w-[90px] truncate text-center">{user.name}</p>
+                    <div className="flex items-center justify-center gap-2 mt-2">
+                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                      <p className="text-xs font-medium text-muted-foreground">{user.sharedEventCount}</p>
+                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
                     </div>
                   </div>
                 ))}
@@ -610,37 +622,37 @@ const DiscoverPage = () => {
             </div>
           )}
           
-          <div className="relative bg-card rounded-xl overflow-hidden shadow-card border h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
+          <div className="relative bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden shadow-2xl border border-white/30 h-[500px] z-0 max-w-none -mx-2 [&>.leaflet-container]:z-0">
             {/* Filtered Users Display */}
             {filteredUsers.length > 0 && (
-              <div className="absolute bottom-4 left-4 right-4 z-20">
-                <div className="bg-card/95 backdrop-blur-sm rounded-lg p-3 border border-border/20 shadow-lg">
-                  <h3 className="text-sm font-semibold mb-2">Matching Users ({filteredUsers.length})</h3>
-                  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+              <div className="absolute bottom-6 left-6 right-6 z-20">
+                <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-white/30 shadow-xl">
+                  <h3 className="text-base font-bold mb-3 text-foreground">Matching Users ({filteredUsers.length})</h3>
+                  <div className="flex gap-3 overflow-x-auto scrollbar-hide">
                     {filteredUsers.slice(0, 6).map((userLocation) => (
-                      <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-2 bg-muted/50 rounded-full px-3 py-1">
+                      <div key={userLocation.profile.id} className="flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-muted/50 to-muted/30 rounded-2xl px-4 py-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
                         <img 
                           src={userLocation.profile.profile_image_url || '/placeholder.svg'} 
                           alt={userLocation.profile.name}
-                          className="w-6 h-6 rounded-full object-cover"
+                          className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm"
                         />
-                        <span className="text-xs font-medium">{userLocation.profile.name}</span>
+                        <span className="text-sm font-semibold text-foreground">{userLocation.profile.name}</span>
                       </div>
                     ))}
                     {filteredUsers.length > 6 && (
-                      <div className="flex-shrink-0 flex items-center justify-center bg-muted/50 rounded-full w-8 h-8">
-                        <span className="text-xs font-medium">+{filteredUsers.length - 6}</span>
+                      <div className="flex-shrink-0 flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl w-12 h-12 shadow-lg">
+                        <span className="text-sm font-bold text-primary">+{filteredUsers.length - 6}</span>
                       </div>
                     )}
                   </div>
                   <Button 
-                    variant="ghost" 
+                    variant="outline" 
                     size="sm" 
                     onClick={() => {
                       setFilteredUsers([]);
                       addUserLocationMarkers();
                     }}
-                    className="mt-2 text-xs"
+                    className="mt-4 text-sm bg-white/90 border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                   >
                     Show All Users
                   </Button>
@@ -649,22 +661,24 @@ const DiscoverPage = () => {
             )}
 
             {error ? (
-              <div className="flex items-center justify-center h-full bg-muted/30">
-                <div className="text-center p-4">
-                  <p className="text-muted-foreground">{error}</p>
+              <div className="flex items-center justify-center h-full bg-gradient-to-br from-muted/20 to-muted/10 backdrop-blur-sm">
+                <div className="text-center p-6 bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border border-white/30">
+                  <p className="text-base font-medium text-destructive">{error}</p>
                 </div>
               </div>
             ) : (
               <>
                 {isLoading && (
-                  <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-10 backdrop-blur-sm">
-                    <div className="text-center">
-                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                      <p className="text-muted-foreground text-sm">Loading map...</p>
+                  <div className="absolute inset-0 bg-background/90 backdrop-blur-lg flex items-center justify-center z-10">
+                    <div className="text-center bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20">
+                      <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+                      <p className="text-base font-medium text-foreground/80">Loading map...</p>
                     </div>
                   </div>
                 )}
-                <div ref={mapContainer} className="w-full h-full relative z-0" />
+                <div ref={mapContainer} className="w-full h-full relative z-0" style={{
+                  filter: 'contrast(1.05) saturate(1.1)',
+                }} />
               </>
             )}
           </div>
