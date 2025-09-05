@@ -12,13 +12,13 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Purple, Banana Mania, Radical Red & Hot Toddy Color Palette */
-    --background: 49 85% 85%;            /* Darker Banana Mania background */
+    --background: 220 60% 85%;           /* Blue-tinted background */
     --foreground: 276 99% 15%;           /* Dark Purple for text */
 
-    --card: 49 85% 88%;                  /* Slightly lighter than background for cards */
+    --card: 220 60% 88%;                 /* Slightly lighter blue-tinted cards */
     --card-foreground: 276 99% 15%;      /* Dark Purple for card text */
 
-    --popover: 49 85% 94%;               /* Light Banana Mania */
+    --popover: 220 60% 90%;              /* Light blue-tinted popover */
     --popover-foreground: 276 99% 15%;   /* Dark Purple for popover text */
 
     /* Primary: Purple - Full Scale */
@@ -89,12 +89,12 @@ All colors MUST be HSL.
     --neutral-100: 49 85% 90%;           /* Very light Banana Mania */
 
     /* Modern borders and inputs */
-    --border: 49 85% 75%;                /* Muted Banana Mania border */
-    --input: 49 85% 94%;                 /* Light Banana Mania input */
+    --border: 220 50% 75%;               /* Blue-tinted border */
+    --input: 220 60% 90%;                /* Blue-tinted input background */
     --ring: 276 99% 30%;                 /* Focus ring - Purple */
 
     /* Semantic aliases for current usage */
-    --muted: 49 85% 82%;                 /* Darker muted background */
+    --muted: 220 60% 82%;                /* Blue-tinted muted background */
     --muted-foreground: 276 60% 25%;     /* Medium Purple */
 
     /* Four Color Gradients */
