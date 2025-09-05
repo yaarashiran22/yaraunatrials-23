@@ -64,11 +64,10 @@ const Header = ({
             aria-label="Navigate to homepage"
             style={{ 
               color: 'hsl(var(--primary))', 
-              fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              fontSize: '1.8rem'
+              fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
+              fontWeight: 700,
+              textTransform: 'lowercase',
+              letterSpacing: '-0.03em'
             }}
           >
             una
