@@ -21,31 +21,31 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 220 36% 9%;
 
-    /* Primary: Jacarandá Purple - Full Scale */
-    --primary: 258 91% 46%;              /* #7E22CE - Primary 700 (accessible) */
+    /* Primary: Heliotrope Purple - Full Scale */
+    --primary: 267 92% 64%;              /* #AA4BF9 - Heliotrope */
     --primary-foreground: 0 0% 100%;     /* White text on primary */
-    --primary-900: 258 91% 36%;          /* Darker than 700 */
-    --primary-800: 258 91% 41%;          /* Between 900 and 700 */
-    --primary-700: 258 91% 46%;          /* #7E22CE - Main primary */
-    --primary-600: 264 78% 64%;          /* #9333EA */
-    --primary-500: 267 100% 61%;         /* #CD37FF - Brand accent */
-    --primary-400: 267 100% 71%;         /* Lighter than 500 */
-    --primary-300: 267 100% 81%;         /* #C59EFF - Light variant */
-    --primary-200: 267 100% 91%;         /* Very light */
-    --primary-100: 267 100% 96%;         /* Subtle background */
+    --primary-900: 267 92% 44%;          /* Darker than main */
+    --primary-800: 267 92% 54%;          /* Between 900 and 700 */
+    --primary-700: 267 92% 64%;          /* #AA4BF9 - Main primary */
+    --primary-600: 267 92% 74%;          /* Lighter than main */
+    --primary-500: 267 92% 84%;          /* Light variant */
+    --primary-400: 267 92% 89%;          /* Very light */
+    --primary-300: 267 92% 94%;          /* Ultra light */
+    --primary-200: 267 92% 97%;          /* Subtle */
+    --primary-100: 267 92% 99%;          /* Subtle background */
 
-    /* Secondary: Mint Green - Full Scale */
-    --secondary: 173 85% 51%;            /* #2ED7C3 - Secondary 500 */
-    --secondary-foreground: 180 100% 8%; /* Dark text on mint */
-    --secondary-900: 173 85% 31%;        /* Dark mint */
-    --secondary-800: 173 85% 36%;        /* Between 900 and 700 */
-    --secondary-700: 173 85% 41%;        /* #0A998C - Dark mint */
-    --secondary-600: 173 85% 46%;        /* #10BFAE */
-    --secondary-500: 173 85% 51%;        /* #2ED7C3 - Main secondary */
-    --secondary-400: 173 85% 67%;        /* #6FE5D7 - Light mint */
-    --secondary-300: 173 85% 77%;        /* Lighter mint */
-    --secondary-200: 173 85% 87%;        /* Very light mint */
-    --secondary-100: 173 85% 95%;        /* Subtle mint background */
+    /* Secondary: Sulu Green - Full Scale */
+    --secondary: 77 80% 76%;             /* #D7F392 - Sulu */
+    --secondary-foreground: 77 80% 20%;  /* Dark text on sulu */
+    --secondary-900: 77 80% 36%;         /* Dark sulu */
+    --secondary-800: 77 80% 46%;         /* Between 900 and 700 */
+    --secondary-700: 77 80% 56%;         /* Darker sulu */
+    --secondary-600: 77 80% 66%;         /* Medium sulu */
+    --secondary-500: 77 80% 76%;         /* #D7F392 - Main secondary */
+    --secondary-400: 77 80% 86%;         /* Light sulu */
+    --secondary-300: 77 80% 91%;         /* Lighter sulu */
+    --secondary-200: 77 80% 96%;         /* Very light sulu */
+    --secondary-100: 77 80% 98%;         /* Subtle sulu background */
 
     /* Accent: Coupon Yellow */
     --accent: 40 100% 64%;               /* #FFC84A - Coupon/promo */
@@ -78,39 +78,39 @@ All colors MUST be HSL.
     /* Modern borders and inputs */
     --border: 220 20% 88%;               /* Light border */
     --input: 220 44% 96%;                /* Input backgrounds */
-    --ring: 258 91% 46%;                 /* Focus ring - primary */
+    --ring: 267 92% 64%;                 /* Focus ring - heliotrope */
 
     /* Semantic aliases for current usage */
     --muted: 220 44% 96%;                /* #EEF0FA - Light neutral */
     --muted-foreground: 220 20% 39%;     /* #51597A - Medium neutral */
 
-    /* Una Brand Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(258 91% 46%) 0%, hsl(267 100% 61%) 100%);
-    --gradient-plaza-dusk: linear-gradient(135deg, hsl(267 100% 61%) 0%, hsl(258 91% 46%) 50%, hsl(173 85% 51%) 100%);
-    --gradient-mint: linear-gradient(135deg, hsl(173 85% 51%) 0%, hsl(173 85% 67%) 100%);
+    /* Heliotrope & Sulu Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(267 92% 64%) 0%, hsl(77 80% 76%) 100%);
+    --gradient-plaza-dusk: linear-gradient(135deg, hsl(267 92% 64%) 0%, hsl(267 92% 74%) 50%, hsl(77 80% 76%) 100%);
+    --gradient-mint: linear-gradient(135deg, hsl(77 80% 76%) 0%, hsl(77 80% 86%) 100%);
     --gradient-coupon: linear-gradient(135deg, hsl(40 100% 64%) 0%, hsl(38 92% 50%) 100%);
     --gradient-soft: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(259 27% 98%) 50%, hsl(220 44% 96%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(259 27% 99%) 100%);
     --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(259 27% 97%) 100%);
     --gradient-hero: linear-gradient(135deg, hsl(259 27% 98%) 0%, hsl(0 0% 100%) 100%);
     
-    /* Una Brand Shadows */
-    --shadow-subtle: 0 1px 3px 0 hsl(258 91% 46% / 0.08), 0 1px 2px 0 hsl(220 36% 9% / 0.06);
-    --shadow-card: 0 4px 12px -2px hsl(258 91% 46% / 0.12), 0 2px 8px -1px hsl(220 36% 9% / 0.08);
-    --shadow-medium: 0 8px 20px -4px hsl(258 91% 46% / 0.15), 0 4px 12px -2px hsl(220 36% 9% / 0.10);
-    --shadow-large: 0 16px 32px -8px hsl(258 91% 46% / 0.18), 0 8px 16px -4px hsl(220 36% 9% / 0.12);
-    --shadow-floating: 0 20px 40px -12px hsl(258 91% 46% / 0.20);
-    --shadow-glow: 0 0 25px hsl(267 100% 61% / 0.4);
+    /* Heliotrope & Sulu Shadows */
+    --shadow-subtle: 0 1px 3px 0 hsl(267 92% 64% / 0.08), 0 1px 2px 0 hsl(220 36% 9% / 0.06);
+    --shadow-card: 0 4px 12px -2px hsl(267 92% 64% / 0.12), 0 2px 8px -1px hsl(220 36% 9% / 0.08);
+    --shadow-medium: 0 8px 20px -4px hsl(267 92% 64% / 0.15), 0 4px 12px -2px hsl(220 36% 9% / 0.10);
+    --shadow-large: 0 16px 32px -8px hsl(267 92% 64% / 0.18), 0 8px 16px -4px hsl(220 36% 9% / 0.12);
+    --shadow-floating: 0 20px 40px -12px hsl(267 92% 64% / 0.20);
+    --shadow-glow: 0 0 25px hsl(267 92% 64% / 0.4);
     --shadow-inner: inset 0 2px 4px 0 hsl(220 36% 9% / 0.08);
-    --shadow-jacaranda: 0 6px 20px hsl(258 91% 46% / 0.25);
-    --shadow-mint: 0 6px 20px hsl(173 85% 51% / 0.25);
+    --shadow-jacaranda: 0 6px 20px hsl(267 92% 64% / 0.25);
+    --shadow-mint: 0 6px 20px hsl(77 80% 76% / 0.25);
     
     /* Social Button Effects */
-    --shadow-button: 0 2px 4px hsl(258 91% 46% / 0.08);
-    --shadow-button-hover: 0 4px 12px -2px hsl(258 91% 46% / 0.15), 0 2px 8px -1px hsl(220 36% 9% / 0.10);
+    --shadow-button: 0 2px 4px hsl(267 92% 64% / 0.08);
+    --shadow-button-hover: 0 4px 12px -2px hsl(267 92% 64% / 0.15), 0 2px 8px -1px hsl(220 36% 9% / 0.10);
     --shadow-button-active: inset 0 2px 6px hsl(220 36% 9% / 0.12);
-    --shadow-button-jacaranda: 0 6px 18px hsl(258 91% 46% / 0.3);
-    --shadow-button-mint: 0 6px 18px hsl(173 85% 51% / 0.3);
+    --shadow-button-jacaranda: 0 6px 18px hsl(267 92% 64% / 0.3);
+    --shadow-button-mint: 0 6px 18px hsl(77 80% 76% / 0.3);
 
     --radius: 0.75rem;
 
@@ -179,31 +179,31 @@ All colors MUST be HSL.
     --popover: 220 27% 10%;
     --popover-foreground: 220 44% 96%;
 
-    /* Primary: Jacarandá Purple - Dark Mode Adjustments */
-    --primary: 267 100% 71%;             /* Lighter jacarandá for dark mode */
+    /* Primary: Heliotrope Purple - Dark Mode Adjustments */
+    --primary: 267 92% 74%;             /* Lighter heliotrope for dark mode */
     --primary-foreground: 0 0% 100%;
-    --primary-900: 258 91% 26%;          /* Darker for dark mode */
-    --primary-800: 258 91% 31%;          
-    --primary-700: 258 91% 36%;          
-    --primary-600: 264 78% 54%;          /* Adjusted for dark mode */
-    --primary-500: 267 100% 71%;         /* Lighter main primary */
-    --primary-400: 267 100% 81%;         
-    --primary-300: 267 100% 91%;         
-    --primary-200: 267 100% 96%;         
-    --primary-100: 267 100% 98%;         
+    --primary-900: 267 92% 34%;          /* Darker for dark mode */
+    --primary-800: 267 92% 44%;          
+    --primary-700: 267 92% 54%;          
+    --primary-600: 267 92% 64%;          /* Main heliotrope */
+    --primary-500: 267 92% 74%;         /* Lighter main primary */
+    --primary-400: 267 92% 84%;         
+    --primary-300: 267 92% 94%;         
+    --primary-200: 267 92% 97%;         
+    --primary-100: 267 92% 99%;         
 
-    /* Secondary: Mint Green - Dark Mode Adjustments */
-    --secondary: 173 85% 61%;            /* Lighter mint for dark mode */
-    --secondary-foreground: 180 100% 8%;
-    --secondary-900: 173 85% 21%;        
-    --secondary-800: 173 85% 26%;        
-    --secondary-700: 173 85% 31%;        
-    --secondary-600: 173 85% 36%;        
-    --secondary-500: 173 85% 61%;        /* Lighter main secondary */
-    --secondary-400: 173 85% 77%;        
-    --secondary-300: 173 85% 87%;        
-    --secondary-200: 173 85% 95%;        
-    --secondary-100: 173 85% 98%;        
+    /* Secondary: Sulu Green - Dark Mode Adjustments */
+    --secondary: 77 80% 66%;            /* Darker sulu for dark mode */
+    --secondary-foreground: 77 80% 20%;
+    --secondary-900: 77 80% 26%;        
+    --secondary-800: 77 80% 36%;        
+    --secondary-700: 77 80% 46%;        
+    --secondary-600: 77 80% 56%;        
+    --secondary-500: 77 80% 66%;        /* Darker main secondary */
+    --secondary-400: 77 80% 76%;        
+    --secondary-300: 77 80% 86%;        
+    --secondary-200: 77 80% 96%;        
+    --secondary-100: 77 80% 98%;
 
     /* Accent: Coupon Yellow - Dark Mode Adjustments */
     --accent: 40 100% 74%;               /* Lighter yellow for dark mode */
@@ -227,7 +227,7 @@ All colors MUST be HSL.
 
     --border: 220 20% 20%;               /* Dark border */
     --input: 220 27% 15%;                /* Dark input */
-    --ring: 267 100% 71%;                /* Focus ring - lighter primary */
+    --ring: 267 92% 74%;                /* Focus ring - lighter heliotrope */
     --sidebar-background: 220 27% 12%;
     --sidebar-foreground: 220 44% 96%;
     --sidebar-primary: 220 44% 96%;
