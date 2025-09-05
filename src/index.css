@@ -96,7 +96,7 @@ All colors MUST be HSL.
     /* Modern borders and inputs */
     --border: 85 40% 78%;                /* Lime green border */
     --input: 85 45% 93%;                 /* Light lime green input background */
-    --ring: 276 99% 30%;                 /* Focus ring - Purple */
+    --ring: 276 99% 35%;                 /* Focus ring - lighter Purple */
 
     /* Semantic aliases for current usage */
     --muted: 85 45% 89%;                 /* Lighter lime green muted background */
@@ -212,17 +212,17 @@ All colors MUST be HSL.
     --popover-foreground: 35 61% 89%;
 
     /* Primary: Burning Orange - Dark Mode Adjustments */
-    --primary: 17 98% 70%;               /* Brighter Burning Orange for dark mode */
+    --primary: 276 99% 40%;               /* Lighter Purple for dark mode */
     --primary-foreground: 0 0% 100%;
-    --primary-900: 17 98% 15%;           /* Very dark Burning Orange */
-    --primary-800: 17 98% 25%;          
-    --primary-700: 17 98% 35%;          
-    --primary-600: 17 98% 50%;           /* Main Burning Orange */
-    --primary-500: 17 98% 70%;           /* Brighter main primary */
-    --primary-400: 17 98% 78%;         
-    --primary-300: 17 98% 85%;         
-    --primary-200: 17 98% 90%;         
-    --primary-100: 17 98% 95%;         
+    --primary-900: 276 99% 20%;           /* Very dark Purple */
+    --primary-800: 276 99% 25%;          
+    --primary-700: 276 99% 30%;          
+    --primary-600: 276 99% 35%;           /* Main Purple */
+    --primary-500: 276 99% 40%;           /* Lighter main primary */
+    --primary-400: 276 99% 50%;         
+    --primary-300: 276 99% 60%;         
+    --primary-200: 276 99% 70%;         
+    --primary-100: 276 99% 80%;
 
     /* Secondary: Kournikova - Dark Mode Adjustments */
     --secondary: 51 90% 65%;             /* Darker Kournikova for dark mode */
@@ -277,7 +277,7 @@ All colors MUST be HSL.
 
     --border: 17 60% 32%;                /* Dark Burning Orange border */
     --input: 17 80% 28%;                 /* Dark Burning Orange input */
-    --ring: 17 98% 70%;                  /* Focus ring - brighter Burning Orange */
+    --ring: 276 99% 40%;                 /* Focus ring - lighter Purple */
     --sidebar-background: 17 80% 22%;
     --sidebar-foreground: 35 61% 89%;
     --sidebar-primary: 35 61% 89%;
