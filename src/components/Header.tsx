@@ -58,10 +58,11 @@ const Header = ({
         <div className="flex items-center gap-4">
           {/* Logo */}
           <div 
-            className="text-3xl cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0 text-primary title-section" 
+            className="title-section text-3xl cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0 text-primary" 
             onClick={handleLogoClick}
             role="button"
             aria-label="Navigate to homepage"
+            style={{ textTransform: 'none', color: 'hsl(var(--primary))' }}
           >
             una
           </div>
