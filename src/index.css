@@ -56,25 +56,25 @@ All colors MUST be HSL.
     --accent-400: 55 95% 40%;            /* Lighter Hot Toddy */
     --accent-300: 55 95% 50%;            /* Light Hot Toddy */
 
-    /* Tertiary: Radical Red - Full Scale */
-    --tertiary: 349 100% 59%;            /* #FF2F55 - Radical Red */
+    /* Tertiary: Radical Red - Full Scale (darker) */
+    --tertiary: 349 100% 45%;            /* Darker #FF2F55 - Radical Red */
     --tertiary-foreground: 49 85% 95%;   /* Light Banana Mania text */
-    --tertiary-900: 349 100% 35%;        /* Darker Radical Red */
-    --tertiary-800: 349 100% 42%;        /* Between 900 and 700 */
-    --tertiary-700: 349 100% 50%;        /* Darker than main */
-    --tertiary-600: 349 100% 55%;        /* Medium Radical Red */
-    --tertiary-500: 349 100% 59%;        /* #FF2F55 - Main tertiary */
-    --tertiary-400: 349 100% 68%;        /* Light Radical Red */
-    --tertiary-300: 349 100% 75%;        /* Lighter Radical Red */
-    --tertiary-200: 349 100% 82%;        /* Very light Radical Red */
-    --tertiary-100: 349 100% 92%;        /* Subtle Radical Red background */
+    --tertiary-900: 349 100% 25%;        /* Darker Radical Red */
+    --tertiary-800: 349 100% 30%;        /* Between 900 and 700 */
+    --tertiary-700: 349 100% 35%;        /* Darker than main */
+    --tertiary-600: 349 100% 40%;        /* Medium Radical Red */
+    --tertiary-500: 349 100% 45%;        /* Darker main tertiary */
+    --tertiary-400: 349 100% 55%;        /* Light Radical Red */
+    --tertiary-300: 349 100% 65%;        /* Lighter Radical Red */
+    --tertiary-200: 349 100% 75%;        /* Very light Radical Red */
+    --tertiary-100: 349 100% 85%;        /* Subtle Radical Red background */
 
     /* System Colors - ALL Four Color Palette */
     --success: 55 95% 45%;               /* Use Hot Toddy for success */
     --success-foreground: 49 85% 95%;
     --warning: 49 85% 70%;               /* Use Banana Mania for warning */
     --warning-foreground: 276 99% 15%;
-    --destructive: 349 100% 59%;         /* Use Radical Red for destructive */
+    --destructive: 349 100% 45%;         /* Use darker Radical Red for destructive */
     --destructive-foreground: 49 85% 95%;
 
     /* Neutrals - Purple based Scale */
@@ -414,7 +414,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(349 100% 59%); /* Radical Red */
+    color: hsl(349 100% 45%); /* Darker Radical Red */
     font-size: 1.1em;
   }
 
@@ -425,7 +425,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, hsl(276 99% 30%), hsl(349 100% 59%));
+    background: linear-gradient(90deg, hsl(276 99% 30%), hsl(349 100% 45%));
     border-radius: 2px;
     opacity: 0.8;
   }
@@ -447,7 +447,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, hsl(55 95% 32%), hsl(349 100% 59%));
+    background: linear-gradient(90deg, hsl(55 95% 32%), hsl(349 100% 45%));
     border-radius: 2px;
     opacity: 0.8;
   }
@@ -458,7 +458,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(349 100% 59%); /* Radical Red */
+    color: hsl(349 100% 45%); /* Darker Radical Red */
     font-size: 1.1em;
   }
 
@@ -469,7 +469,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, hsl(349 100% 59%), hsl(276 99% 30%));
+    background: linear-gradient(90deg, hsl(349 100% 45%), hsl(276 99% 30%));
     border-radius: 2px;
     opacity: 0.8;
   }
@@ -491,7 +491,7 @@ All colors MUST be HSL.
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, hsl(276 99% 30%), hsl(349 100% 59%));
+    background: linear-gradient(90deg, hsl(276 99% 30%), hsl(349 100% 45%));
     border-radius: 2px;
     opacity: 0.8;
   }
@@ -502,7 +502,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(349 100% 59%); /* Radical Red */
+    color: hsl(349 100% 45%); /* Darker Radical Red */
     font-size: 1.1em;
     margin-bottom: 0.5rem;
   }

@@ -76,7 +76,7 @@ const Header = ({
             <Button 
               variant="outline" 
               size="sm" 
-              className="p-2.5 h-10 w-10 bg-yellow-600 text-white hover:bg-yellow-700 border-yellow-600 shadow-sm"
+              className="p-2.5 h-10 w-10 bg-white text-foreground hover:bg-gray-50 border-border shadow-sm"
               onClick={() => navigate('/messages')}
             >
               <MessageCircle className="h-5 w-5" />
