@@ -19,17 +19,28 @@ export default {
 		},
 		extend: {
 			fontFamily: {
+				'system': ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Helvetica Neue"', 'Roboto', '"Segoe UI"', 'Arial', 'sans-serif'],
+				'app': ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', 'Roboto', 'sans-serif'],
+				'display': ['"SF Pro Display"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
 				'lxgw': ['LXGW WenKai TC', 'sans-serif'],
 				'nunito': ['Nunito', 'sans-serif'],
 			},
 			fontSize: {
-				'xs': ['0.75rem', { lineHeight: '1rem' }],
-				'sm': ['0.875rem', { lineHeight: '1.25rem' }],
-				'base': ['1rem', { lineHeight: '1.5rem' }],
-				'lg': ['1.125rem', { lineHeight: '1.75rem' }],
-				'xl': ['1.25rem', { lineHeight: '1.75rem' }],
-				'2xl': ['1.5rem', { lineHeight: '2rem' }],
-				'3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+				// Mobile-first app-like font sizes
+				'xs': ['0.75rem', { lineHeight: '1.2', fontWeight: '400' }],
+				'sm': ['0.875rem', { lineHeight: '1.3', fontWeight: '400' }],
+				'base': ['1rem', { lineHeight: '1.4', fontWeight: '400' }],
+				'lg': ['1.125rem', { lineHeight: '1.4', fontWeight: '500' }],
+				'xl': ['1.25rem', { lineHeight: '1.4', fontWeight: '600' }],
+				'2xl': ['1.5rem', { lineHeight: '1.3', fontWeight: '600' }],
+				'3xl': ['1.75rem', { lineHeight: '1.2', fontWeight: '700' }],
+				// App-specific sizes
+				'app-caption': ['0.75rem', { lineHeight: '1.2', fontWeight: '400' }],
+				'app-body': ['1rem', { lineHeight: '1.4', fontWeight: '400' }],
+				'app-subheading': ['0.875rem', { lineHeight: '1.3', fontWeight: '600' }],
+				'app-heading': ['1.125rem', { lineHeight: '1.4', fontWeight: '600' }],
+				'app-title': ['1.25rem', { lineHeight: '1.3', fontWeight: '700' }],
+				'app-large-title': ['1.75rem', { lineHeight: '1.2', fontWeight: '700' }],
 			},
 			spacing: {
 				'content-tight': 'var(--content-tight)',
