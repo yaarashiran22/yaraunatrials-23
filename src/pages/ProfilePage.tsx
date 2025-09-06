@@ -1328,7 +1328,7 @@ const ProfilePage = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {myCoupons.slice(0, 4).map((coupon) => (
                     <div key={coupon.id} className="relative group">
-                      <div className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="bg-white rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
                         {coupon.image_url && (
                           <div className="aspect-video bg-muted">
                             <img 
