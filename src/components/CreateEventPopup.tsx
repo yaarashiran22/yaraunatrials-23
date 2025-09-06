@@ -251,7 +251,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
               placeholder={eventType === 'meetup' ? 'Enter meetup name' : 'Enter event name'}
-              className="w-full h-12 text-left bg-card border-2 border-border rounded-full"
+              className="w-full h-12 text-left bg-white border-2 border-border rounded-full"
             />
           </div>
 
@@ -297,7 +297,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full h-12 pl-12 text-left bg-card border-2 border-border rounded-full"
+                  className="w-full h-12 pl-12 text-left bg-white border-2 border-border rounded-full"
                 />
               </div>
             )}
@@ -313,7 +313,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
                   type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="w-full h-12 pl-12 text-left bg-card border-2 border-border rounded-full"
+                  className="w-full h-12 pl-12 text-left bg-white border-2 border-border rounded-full"
                 />
               </div>
             </div>
@@ -350,7 +350,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="Free / ₪50"
-              className="w-full h-12 text-left bg-card border-2 border-border rounded-full"
+              className="w-full h-12 text-left bg-white border-2 border-border rounded-full"
             />
           </div>
 
@@ -361,7 +361,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               value={externalLink}
               onChange={(e) => setExternalLink(e.target.value)}
               placeholder="https://example.com"
-              className="w-full h-12 text-left bg-card border-2 border-border rounded-full"
+              className="w-full h-12 text-left bg-white border-2 border-border rounded-full"
             />
           </div>
 
@@ -407,7 +407,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               />
               <label 
                 htmlFor="media-upload"
-                className="w-full h-12 bg-card border-2 border-border rounded-full flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                className="w-full h-12 bg-white border-2 border-border rounded-full flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Camera className="h-5 w-5" />
