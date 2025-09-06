@@ -127,7 +127,7 @@ const MessagesPage = () => {
           </div>
         </div>
       ) : (
-        <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-lg border-b border-border/10 shadow-lg">
+        <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-lg border-b border-border/10 shadow-lg">
           <div className="px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
