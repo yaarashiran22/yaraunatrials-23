@@ -48,7 +48,7 @@ All colors MUST be HSL.
     --secondary-100: 49 85% 95%;         /* Subtle Banana Mania background */
 
     /* Accent: Hot Toddy */
-    --accent: 55 95% 32%;                /* #9E9104 - Hot Toddy */
+    --accent: 0 0% 75%;                  /* Neutral gray accent */
     --accent-foreground: 49 85% 95%;     /* Light Banana Mania text */
     --accent-700: 55 95% 25%;            /* Darker Hot Toddy */
     --accent-600: 55 95% 28%;            /* Between 700 and 500 */
@@ -94,12 +94,12 @@ All colors MUST be HSL.
     --neutral-100: 49 85% 90%;           /* Very light Banana Mania */
 
     /* Modern borders and inputs */
-    --border: 85 40% 78%;                /* Lime green border */
-    --input: 85 45% 93%;                 /* Light lime green input background */
+    --border: 0 0% 85%;                 /* Neutral gray border */
+    --input: 0 0% 97%;                  /* Light neutral input background */
     --ring: 276 99% 35%;                 /* Focus ring - lighter Purple */
 
     /* Semantic aliases for current usage */
-    --muted: 85 45% 89%;                 /* Lighter lime green muted background */
+    --muted: 0 0% 94%;                  /* Light neutral muted background */
     --muted-foreground: 276 60% 25%;     /* Medium Purple */
 
     /* Four Color Gradients */
