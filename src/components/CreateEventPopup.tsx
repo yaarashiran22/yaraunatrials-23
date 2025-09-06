@@ -262,7 +262,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder={eventType === 'meetup' ? 'Describe your meetup' : 'Describe your event'}
-              className="w-full min-h-24 text-left bg-card border-2 border-border rounded-2xl resize-none"
+              className="w-full min-h-24 text-left bg-white border-2 border-border rounded-2xl resize-none"
             />
           </div>
 
