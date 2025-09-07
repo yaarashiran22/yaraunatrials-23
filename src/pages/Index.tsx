@@ -201,7 +201,7 @@ const Index = () => {
 
     // Always show other profiles regardless of mood filter
     if (profiles.length > 0) {
-      const filteredProfiles = profiles.filter(p => p.id !== user?.id);
+      const filteredProfiles = profiles.filter(p => p.id !== user?.id && p.name?.toLowerCase() !== 'juani');
       
       const otherProfiles = filteredProfiles.slice(0, 6) // Reduced to 6 for faster loading
       .map(p => ({
