@@ -184,6 +184,16 @@ const LoginPage = () => {
                 una
               </div>
             </div>
+            
+            {/* Welcome Description */}
+            <div className="mt-6 px-4">
+              <p className="text-base text-foreground/80 leading-relaxed mb-3">
+                Welcome to una- our local social platform for finding cool and original new experiences happening around.
+              </p>
+              <p className="text-sm font-medium text-primary">
+                Diversity, Creativity and Oppenness
+              </p>
+            </div>
           </div>
 
           {/* Form */}
