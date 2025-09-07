@@ -1210,10 +1210,23 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20 font-app" dir="ltr">
-      <Header 
-        title="Profile"
-        onNotificationsClick={() => setShowNotifications(true)}
-      />
+      <div className="relative">
+        <Header 
+          title="Profile"
+          onNotificationsClick={() => setShowNotifications(true)}
+        />
+        {/* Settings Button - Top Right */}
+        {isOwnProfile && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="absolute top-4 right-4 rounded-full p-2 h-8 w-8 bg-coral/10 border-coral/30 text-coral hover:bg-coral hover:text-white transition-all hover:shadow-lg z-10"
+            onClick={() => navigate('/settings')}
+          >
+            <Settings className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
 
       <main className="px-4 py-6 pb-20">
         {/* Profile Header */}
@@ -1298,14 +1311,6 @@ const ProfilePage = () => {
                       >
                         <Pencil className="h-3 w-3 mr-1" />
                         Edit
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="rounded-full p-1.5 h-7 w-7 border-primary/30 hover:bg-primary hover:text-primary-foreground transition-all hover:shadow-lg"
-                        onClick={() => navigate('/settings')}
-                      >
-                        <Settings className="h-3 w-3" />
                       </Button>
                     </>
                   )}
