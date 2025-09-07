@@ -11,8 +11,8 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Modern Harmonious Color Palette - Blue, Indigo, Purple with Coral Accents */
-    --background: 287 23% 25%;                 /* Pure white background */
+    /* Enhanced Vibrant Color Palette - Richer Blues and Purples */
+    --background: 0 0% 100%;                 /* Pure white background */
     --foreground: 224 71% 4%;                /* Dark navy text */
 
     --card: 0 0% 100%;                       /* Pure white cards */
@@ -21,8 +21,8 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;                    /* Pure white popover */
     --popover-foreground: 224 71% 4%;        /* Dark navy for popover text */
 
-    /* Primary: Modern Indigo - Full Scale */
-    --primary: 239 84% 67%;                  /* Modern indigo */
+    /* Primary: Vibrant Indigo - Enhanced */
+    --primary: 239 90% 65%;                  /* More vibrant indigo */
     --primary-foreground: 0 0% 100%;         /* White text on primary */
     --primary-900: 239 84% 27%;              /* Darkest indigo */
     --primary-800: 239 84% 37%;              /* Darker indigo */
@@ -34,8 +34,8 @@ All colors MUST be HSL.
     --primary-200: 239 84% 93%;              /* Subtle indigo */
     --primary-100: 239 84% 97%;              /* Subtle background */
 
-    /* Secondary: Soft Blue - Full Scale */
-    --secondary: 217 91% 60%;                /* Soft blue */
+    /* Secondary: Enhanced Blue - More Vibrant */
+    --secondary: 217 95% 58%;                /* More vibrant blue */
     --secondary-foreground: 0 0% 100%;       /* White text */
     --secondary-900: 217 91% 20%;            /* Dark blue */
     --secondary-800: 217 91% 30%;            /* Darker blue */
@@ -56,8 +56,8 @@ All colors MUST be HSL.
     --accent-400: 220 13% 69%;               /* Light gray */
     --accent-300: 220 14% 83%;               /* Lighter gray */
 
-    /* Tertiary: Warm Purple - Full Scale */
-    --tertiary: 262 83% 58%;                 /* Warm purple */
+    /* Tertiary: Enhanced Purple - More Vibrant */
+    --tertiary: 262 90% 62%;                 /* More vibrant purple */
     --tertiary-foreground: 0 0% 100%;        /* White text */
     --tertiary-900: 262 83% 18%;             /* Dark purple */
     --tertiary-800: 262 83% 28%;             /* Darker purple */
