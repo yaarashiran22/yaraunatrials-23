@@ -171,7 +171,18 @@ const LoginPage = () => {
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center cursor-pointer" onClick={() => navigate('/')}>
-              <div className="text-5xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
+              <div 
+                className="text-5xl font-black cursor-pointer hover:opacity-80 transition-opacity"
+                style={{ 
+                  color: 'hsl(var(--primary))', 
+                  fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
+                  fontWeight: 700,
+                  textTransform: 'lowercase',
+                  letterSpacing: '-0.03em'
+                }}
+              >
+                una
+              </div>
             </div>
           </div>
 
@@ -247,7 +258,18 @@ const LoginPage = () => {
       {/* Logo */}
       <div className="text-center pt-4 pb-6">
         <div className="flex items-center justify-center cursor-pointer" onClick={() => navigate('/')}>
-          <div className="text-5xl font-black font-nunito" style={{ color: '#BB31E9', textShadow: '0 0 2px rgba(187, 49, 233, 0.5)' }}>una</div>
+          <div 
+            className="text-5xl font-black cursor-pointer hover:opacity-80 transition-opacity"
+            style={{ 
+              color: 'hsl(var(--primary))', 
+              fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
+              fontWeight: 700,
+              textTransform: 'lowercase',
+              letterSpacing: '-0.03em'
+            }}
+          >
+            una
+          </div>
         </div>
       </div>
 
