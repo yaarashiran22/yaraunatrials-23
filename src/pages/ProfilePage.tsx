@@ -1229,14 +1229,14 @@ const ProfilePage = () => {
           </div>
           
           <div className="flex-1">
-            <h1 className="text-xl font-bold mb-1">{profileData?.name || "User"}</h1>
+            <h1 className="text-xl font-display font-bold mb-1">{profileData?.name || "User"}</h1>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
               <div className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
                 <span>{profileData?.location || "Not specified"}</span>
               </div>
             </div>
-            <p className="text-sm text-foreground mb-4">{profileData?.bio || "No description"}</p>
+            <p className="text-sm text-foreground mb-4 font-system">{profileData?.bio || "No description"}</p>
             {profileData?.specialties && profileData.specialties.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {profileData.specialties.map((specialty, index) => (
