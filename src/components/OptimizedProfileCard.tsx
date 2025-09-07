@@ -82,43 +82,57 @@ const OptimizedProfileCard = memo(({
   return (
     <>
       <div
-        className={`flex flex-col items-center gap-2 transition-all duration-200 hover:scale-105 active:scale-95 ${className}`}
+        className={`flex flex-col items-center gap-3 transition-all duration-300 hover:scale-110 active:scale-95 group ${className}`}
         style={style}
       >
         <div className="relative">
-          <div className={`relative ${hasStories ? 'p-1 rounded-full bg-gradient-to-r from-orange-300 to-orange-500' : ''}`}>
+          {/* Enhanced gradient ring for stories */}
+          <div className={`relative transition-all duration-500 ${hasStories ? 'p-[3px] rounded-full bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 animate-pulse' : ''}`}>
             <Avatar 
-              className={`w-[66px] h-[66px] cursor-pointer transition-all duration-200 shadow-lg ${hasStories ? 'border-2 border-white shadow-orange-500/20' : 'border-4 border-purple-400/40 hover:border-purple-500/60 shadow-purple-500/10'}`}
+              className={`w-[66px] h-[66px] cursor-pointer transition-all duration-500 shadow-xl transform hover:rotate-3 ${
+                hasStories 
+                  ? 'border-3 border-white shadow-orange-500/30 hover:shadow-orange-500/50' 
+                  : 'border-4 border-primary/30 hover:border-primary/60 shadow-primary/20 hover:shadow-primary/40'
+              }`}
               onClick={handleAvatarClick}
             >
             <AvatarImage 
               src={image} 
               alt={name} 
-              className="object-cover"
+              className="object-cover transition-all duration-300 group-hover:brightness-110"
               loading="lazy"
             />
-            <AvatarFallback className="bg-muted text-muted-foreground font-semibold">
+            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-primary font-bold text-lg border border-primary/30">
               {name.charAt(0).toUpperCase()}
             </AvatarFallback>
             </Avatar>
           </div>
           
+          {/* Enhanced add story button */}
           {isCurrentUser && (
             <div 
-            className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-background flex items-center justify-center cursor-pointer hover:scale-110 transition-transform bg-primary"
+            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-3 border-background flex items-center justify-center cursor-pointer hover:scale-125 transition-all duration-300 bg-gradient-to-r from-primary to-primary-600 shadow-lg hover:shadow-primary/50 active:scale-110"
               onClick={handleAddStoryClick}
             >
-              <span className="text-primary-foreground text-xs">+</span>
+              <span className="text-white text-sm font-bold">+</span>
             </div>
+          )}
+          
+          {/* Online indicator for current user */}
+          {isCurrentUser && (
+            <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-400 border-2 border-background shadow-lg animate-pulse"></div>
           )}
         </div>
         
         <span 
-          className="text-xs font-medium text-center max-w-[70px] truncate text-white cursor-pointer hover:text-primary transition-colors"
+          className="text-xs font-semibold text-center max-w-[70px] truncate text-white cursor-pointer hover:text-primary transition-all duration-300 hover:scale-105 group-hover:drop-shadow-lg"
           onClick={handleNavigateToProfile}
         >
           {name}
         </span>
+        
+        {/* Subtle glow effect */}
+        <div className="absolute inset-0 rounded-full bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10"></div>
       </div>
 
       <ProfilePictureViewer

@@ -27,35 +27,40 @@ const BottomNavigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bottom-nav fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl border-t-2 border-primary/20 lg:hidden shadow-large safe-area-inset-bottom social-glow">
-      <div className="px-4 py-3">
+    <nav className="bottom-nav fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl border-t-2 border-primary/30 lg:hidden shadow-2xl safe-area-inset-bottom">
+      {/* Subtle top glow effect */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+      
+      <div className="px-4 py-3 relative">
         <div className="flex items-center justify-around w-full max-w-sm mx-auto">
-          {/* Home - בית */}
+          {/* Home */}
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate('/')}
-            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
               isActive('/') 
-                ? 'text-primary bg-primary/10' 
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                ? 'text-primary bg-primary/15 shadow-lg shadow-primary/20 scale-110' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
             }`}
           >
-            <Home className="h-6 w-6" />
+            <Home className={`h-6 w-6 transition-all duration-300 ${isActive('/') ? 'drop-shadow-lg' : 'group-hover:scale-110'}`} />
+            {isActive('/') && <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse"></div>}
           </Button>
 
-          {/* Discover - גלה */}
+          {/* Discover */}
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate('/discover')}
-            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
               isActive('/discover') 
-                ? 'text-primary bg-primary/10' 
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                ? 'text-primary bg-primary/15 shadow-lg shadow-primary/20 scale-110' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
             }`}
           >
-            <Map className="h-6 w-6" />
+            <Map className={`h-6 w-6 transition-all duration-300 ${isActive('/discover') ? 'drop-shadow-lg' : 'group-hover:scale-110 group-hover:rotate-12'}`} />
+            {isActive('/discover') && <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse"></div>}
           </Button>
 
           {/* Messages */}
@@ -63,13 +68,16 @@ const BottomNavigation = () => {
             variant="ghost"
             size="sm"
             onClick={() => navigate('/messages')}
-            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
               isActive('/messages') 
-                ? 'text-primary bg-primary/10' 
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                ? 'text-primary bg-primary/15 shadow-lg shadow-primary/20 scale-110' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
             }`}
           >
-            <MessageCircle className="h-6 w-6" />
+            <MessageCircle className={`h-6 w-6 transition-all duration-300 ${isActive('/messages') ? 'drop-shadow-lg' : 'group-hover:scale-110'}`} />
+            {isActive('/messages') && <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse"></div>}
+            {/* Message notification dot */}
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-bounce"></div>
           </Button>
 
           {/* Profile/Login */}
@@ -78,22 +86,23 @@ const BottomNavigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate('/profile/1')}
-              className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] ${
+              className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
                 location.pathname.startsWith('/profile') 
-                  ? 'text-primary bg-primary/10' 
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  ? 'text-primary bg-primary/15 shadow-lg shadow-primary/20 scale-110' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
               }`}
             >
-              <User className="h-6 w-6" />
+              <User className={`h-6 w-6 transition-all duration-300 ${location.pathname.startsWith('/profile') ? 'drop-shadow-lg' : 'group-hover:scale-110'}`} />
+              {location.pathname.startsWith('/profile') && <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse"></div>}
             </Button>
           ) : (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => navigate('/login')}
-              className="flex items-center justify-center h-auto py-3 px-4 transition-all duration-200 rounded-2xl min-h-[3rem] text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              className="flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95 group"
             >
-              <LogIn className="h-6 w-6" />
+              <LogIn className="h-6 w-6 group-hover:scale-110 transition-all duration-300" />
             </Button>
           )}
         </div>

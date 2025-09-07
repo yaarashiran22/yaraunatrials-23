@@ -527,6 +527,50 @@ All colors MUST be HSL.
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
   }
+  
+  /* Enhanced shimmer animation for UI elements */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  /* Floating animation for buttons and cards */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+  
+  /* Pulse glow animation */
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+      border-color: hsl(var(--primary) / 0.5);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(var(--primary) / 0.6), 0 0 60px hsl(var(--primary) / 0.3);
+      border-color: hsl(var(--primary) / 0.8);
+    }
+  }
+  
+  /* Bounce in animation */
+  @keyframes bounce-in {
+    0% { 
+      transform: scale(0.3) rotate(-10deg);
+      opacity: 0;
+    }
+    50% { 
+      transform: scale(1.05) rotate(2deg);
+      opacity: 0.8;
+    }
+    70% { 
+      transform: scale(0.95) rotate(-1deg);
+      opacity: 0.9;
+    }
+    100% { 
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
 
   /* Vibrant Social 3D Components */
   .card-3d {
@@ -809,5 +853,41 @@ All colors MUST be HSL.
   
   .card-white:hover {
     box-shadow: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.06);
+  }
+  
+  /* Enhanced interactive hover effects for better UX */
+  .hover-lift {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-2 hover:shadow-primary/20;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-500 hover:shadow-2xl hover:shadow-primary/40;
+  }
+
+  .hover-scale {
+    @apply transition-all duration-300 hover:scale-110 active:scale-95 hover:rotate-1;
+  }
+  
+  .hover-bounce {
+    @apply transition-all duration-300 hover:animate-bounce;
+  }
+  
+  .interactive-card {
+    @apply transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 hover:rotate-1;
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl;
+  }
+  
+  .shimmer-border {
+    @apply relative overflow-hidden;
+  }
+  
+  .shimmer-border::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent;
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
   }
 }

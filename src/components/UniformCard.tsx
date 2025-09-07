@@ -77,14 +77,18 @@ const UniformCard = ({
 
   return (
     <div 
-      className="relative card-elevated rounded-3xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
+      className="relative card-elevated rounded-3xl overflow-hidden group w-full cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20"
       onClick={onClick}
+      style={{
+        transform: 'perspective(1000px)',
+        transformStyle: 'preserve-3d'
+      }}
     >
-      <div className="aspect-[3.5/3.5] overflow-hidden relative">
+      <div className="aspect-[3.5/3.5] overflow-hidden relative rounded-3xl">
         {video ? (
           <video 
             src={video} 
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
             muted
             autoPlay
             loop
@@ -92,14 +96,11 @@ const UniformCard = ({
             preload="metadata"
             poster={image}
             onLoadedData={(e) => {
-              // Ensure video plays when loaded
               e.currentTarget.play().catch(() => {
-                // Fallback if autoplay is blocked
                 console.log('Autoplay blocked, video will play on user interaction');
               });
             }}
             onError={(e) => {
-              // If video fails to load, hide the video element and show fallback image
               e.currentTarget.style.display = 'none';
               console.log('Video failed to load:', video);
             }}
@@ -108,41 +109,47 @@ const UniformCard = ({
           <img 
             src={image || '/placeholder.svg'} 
             alt={getAltText()}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
           />
         )}
-        {/* Shimmer overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-300"></div>
         
-        {/* Text overlay at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3">
-          <div className="space-y-1">
-            <h3 className="font-semibold text-white line-clamp-2 text-sm leading-tight drop-shadow-lg">{title}</h3>
+        {/* Enhanced shimmer overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-out"></div>
+        
+        {/* Subtle glow border on hover */}
+        <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-primary/30 transition-all duration-500"></div>
+        
+        {/* Enhanced text overlay */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
+          <div className="space-y-2">
+            <h3 className="font-semibold text-white line-clamp-2 text-sm leading-tight drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300">{title}</h3>
             {subtitle && (
-              <p className="text-xs text-white/90 line-clamp-1 drop-shadow-md">{subtitle}</p>
+              <p className="text-xs text-white/90 line-clamp-1 drop-shadow-md transform translate-y-0 group-hover:translate-y-[-1px] transition-transform duration-300">{subtitle}</p>
             )}
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-2 mt-2">
               {date && (
-                <span className="text-xs font-semibold px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-white border border-white/30">{date}</span>
+                <span className="text-xs font-semibold px-3 py-1 bg-white/25 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-white/30 group-hover:scale-105">{date}</span>
               )}
               {price && (
-                <span className="text-xs font-semibold px-2 py-0.5 bg-primary/80 backdrop-blur-sm rounded-full text-white border border-white/30">${price}</span>
+                <span className="text-xs font-semibold px-3 py-1 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">${price}</span>
               )}
             </div>
           </div>
         </div>
         
-        {/* Heart icon positioned over image */}
+        {/* Enhanced heart icon with animation */}
         {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
           <Button
             variant="ghost"
             size="sm"
-            className={`absolute top-2 right-2 p-1.5 rounded-full backdrop-blur-sm bg-white/20 hover:bg-white/30 border border-white/30 ${
-              isCurrentlyFavorited ? 'text-red-500' : 'text-white hover:text-red-400'
+            className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all duration-300 border shadow-lg hover:scale-110 active:scale-95 ${
+              isCurrentlyFavorited 
+                ? 'text-red-500 bg-white/90 border-red-200 hover:bg-white shadow-red-200/50' 
+                : 'text-white bg-white/20 border-white/30 hover:bg-white/30 hover:text-red-400'
             }`}
             onClick={handleFavoriteClick}
           >
-            <Heart className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
+            <Heart className={`h-4 w-4 transition-all duration-300 ${isCurrentlyFavorited ? 'fill-current animate-pulse' : ''}`} />
           </Button>
         )}
       </div>
