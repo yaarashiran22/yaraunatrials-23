@@ -198,7 +198,14 @@ const LoginPage = () => {
 
           {/* Form */}
           <div className="bg-card rounded-2xl shadow-lg p-6">
-            <h1 className="text-2xl font-bold text-foreground text-center mb-6">
+            <h1 
+              className="text-xl text-foreground text-center mb-6"
+              style={{ 
+                fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
+                fontWeight: 700,
+                letterSpacing: '-0.03em'
+              }}
+            >
               Login
             </h1>
 
