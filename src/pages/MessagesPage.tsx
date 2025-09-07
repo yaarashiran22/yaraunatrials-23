@@ -4,6 +4,7 @@ import { useDirectMessages } from '@/hooks/useDirectMessages';
 import { useUserPresence } from '@/hooks/useUserPresence';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ArrowLeft, Send, Trash2, Users, MessageCircle, Search, MoreHorizontal, Phone, Video } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +38,29 @@ const MessagesPage = () => {
   const [showUserSelect, setShowUserSelect] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [avatarLoadErrors, setAvatarLoadErrors] = useState<Set<string>>(new Set());
+
+  // Handle avatar loading errors
+  const handleAvatarError = (userId: string) => {
+    setAvatarLoadErrors(prev => new Set([...prev, userId]));
+  };
+
+  // Auto-resize textarea
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewMessage(e.target.value);
+    
+    // Simulate typing indicator
+    if (!isTyping) {
+      setIsTyping(true);
+      setTimeout(() => setIsTyping(false), 2000);
+    }
+    
+    // Auto-resize
+    const textarea = e.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +69,12 @@ const MessagesPage = () => {
     const success = await sendMessage(selectedUserId, newMessage);
     if (success) {
       setNewMessage('');
+      setIsTyping(false);
+      // Reset textarea height
+      const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.style.height = 'auto';
+      }
     }
   };
 
@@ -100,14 +130,15 @@ const MessagesPage = () => {
                   <Avatar className="h-12 w-12 ring-2 ring-primary/20">
                     <AvatarImage 
                       src={selectedUser.profile_image_url} 
-                      className="object-cover w-full h-full"
+                      className="object-cover w-full h-full transition-opacity duration-200"
+                      onError={() => handleAvatarError(selectedUser.id)}
                     />
                     <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-sm font-semibold">
                       {(selectedUser.name || 'User').slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   {isUserOnline(selectedUser.id) && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full animate-pulse" />
                   )}
                 </div>
                 
@@ -271,9 +302,18 @@ const MessagesPage = () => {
             <ScrollArea className="h-full">
               <div className="space-y-4">
                 {loading ? (
-                  <div className="text-center py-16">
-                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto mb-4" />
-                    <p className="text-muted-foreground">Loading your chats...</p>
+                  <div className="space-y-4">
+                    {[...Array(3)].map((_, i) => (
+                      <div key={i} className="animate-pulse p-4 rounded-2xl bg-card/50 border-2 border-border/10">
+                        <div className="flex items-center gap-4">
+                          <div className="h-14 w-14 rounded-full bg-muted animate-pulse" />
+                          <div className="flex-1 space-y-2">
+                            <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
+                            <div className="h-3 bg-muted rounded animate-pulse w-1/2" />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ) : conversations.length === 0 ? (
                   <div className="text-center py-16 px-6">
@@ -312,14 +352,15 @@ const MessagesPage = () => {
                           <Avatar className="h-14 w-14 mr-4 ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all">
                             <AvatarImage 
                               src={conversation.user.profile_image_url} 
-                              className="object-cover w-full h-full"
+                              className="object-cover w-full h-full transition-opacity duration-200"
+                              onError={() => handleAvatarError(conversation.user.id)}
                             />
                             <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 font-semibold text-base">
                               {(conversation.user.name || conversation.user.email)?.slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           {isUserOnline(conversation.user.id) && (
-                            <div className="absolute -bottom-1 -right-2 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+                            <div className="absolute -bottom-1 -right-2 w-4 h-4 bg-green-500 border-2 border-white rounded-full animate-pulse" />
                           )}
                           {conversation.unreadCount > 0 && (
                             <div className="absolute -top-1 -right-2 min-w-5 h-5 bg-gradient-to-r from-primary to-primary/80 text-white text-xs font-bold rounded-full flex items-center justify-center px-1.5 shadow-lg animate-pulse">
@@ -404,11 +445,11 @@ const MessagesPage = () => {
                           )}
                           
                           <div
-                            className={`group relative max-w-[75%] ${
+                            className={`group relative max-w-[75%] transition-all duration-200 hover:scale-[1.02] ${
                               isFromCurrentUser
-                                ? 'bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-2xl rounded-br-md'
-                                : 'bg-card border border-border/20 text-foreground rounded-2xl rounded-bl-md'
-                            } p-3 shadow-sm hover:shadow-md transition-all duration-200`}
+                                ? 'bg-gradient-to-br from-primary to-primary/90 text-primary-foreground rounded-2xl rounded-br-md shadow-lg'
+                                : 'bg-card border border-border/20 text-foreground rounded-2xl rounded-bl-md shadow-sm hover:shadow-md'
+                            } p-3`}
                           >
                             <p className="text-sm leading-relaxed break-words">{message.message}</p>
                             
@@ -423,18 +464,19 @@ const MessagesPage = () => {
                                   size="icon"
                                   variant="ghost"
                                   onClick={() => deleteMessage(message.id)}
-                                  className="h-5 w-5 opacity-0 group-hover:opacity-70 hover:opacity-100 transition-opacity rounded-full"
+                                  className="h-5 w-5 opacity-0 group-hover:opacity-70 hover:opacity-100 transition-all duration-200 rounded-full hover:bg-primary-foreground/20"
+                                  aria-label="Delete message"
                                 >
                                   <Trash2 className="h-3 w-3" />
                                 </Button>
                               )}
                             </div>
                             
-                            {/* Message tail */}
+                            {/* Enhanced Message tail with better styling */}
                             <div
                               className={`absolute bottom-0 w-3 h-3 ${
                                 isFromCurrentUser
-                                  ? '-right-1 bg-primary transform rotate-45'
+                                  ? '-right-1 bg-gradient-to-br from-primary to-primary/90 transform rotate-45'
                                   : '-left-1 bg-card border-l border-b border-border/20 transform rotate-45'
                               }`}
                             />
@@ -459,22 +501,44 @@ const MessagesPage = () => {
               </ScrollArea>
             </div>
 
-            {/* Modern Message Input */}
+            {/* Modern Message Input with Auto-resize */}
             <div className="border-t border-border/10 bg-card/95 backdrop-blur-lg p-4">
+              {isTyping && (
+                <div className="mb-2 text-xs text-muted-foreground animate-fade-in">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                    </div>
+                    <span>You're typing...</span>
+                  </div>
+                </div>
+              )}
               <form onSubmit={handleSendMessage} className="flex gap-3 items-end">
                 <div className="flex-1 relative">
-                  <Input
+                  <Textarea
                     value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
+                    onChange={handleTextareaChange}
                     placeholder={`Message ${selectedUser?.name || 'user'}...`}
-                    className="pr-12 rounded-2xl border-border/20 bg-muted/50 focus:bg-background transition-colors min-h-[44px] resize-none"
+                    className="min-h-[44px] max-h-[120px] resize-none rounded-2xl border-border/20 bg-muted/50 focus:bg-background transition-all duration-200 focus:ring-2 focus:ring-primary/20"
                     disabled={sending}
+                    rows={1}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage(e);
+                      }
+                    }}
                   />
+                  <div className="absolute bottom-2 right-3 text-xs text-muted-foreground">
+                    {newMessage.length > 0 && `${newMessage.length}/500`}
+                  </div>
                 </div>
                 <Button 
                   type="submit" 
                   disabled={sending || !newMessage.trim()}
-                  className="h-11 w-11 rounded-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  className="h-11 w-11 rounded-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95"
                 >
                   {sending ? (
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
