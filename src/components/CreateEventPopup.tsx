@@ -225,17 +225,17 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-4" dir="ltr">
-      <div className="bg-gradient-to-br from-background via-background to-tertiary-100/30 rounded-t-3xl md:rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-xl border border-tertiary-200/40">
+      <div className="bg-background rounded-t-3xl md:rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-tertiary-200/30 bg-gradient-to-r from-transparent to-tertiary-100/20">
-          <h2 className="text-lg font-bold bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text">
+        <div className="flex items-center justify-between p-6 border-b">
+          <h2 className="text-lg font-bold text-foreground">
             {eventType === 'meetup' ? 'New Meetup' : 'New Event'}
           </h2>
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={onClose}
-            className="rounded-full hover:bg-tertiary-100/50 text-tertiary-600"
+            className="rounded-full"
           >
             <X className="h-5 w-5" />
           </Button>
@@ -244,31 +244,31 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
         <div className="p-6 space-y-6">
           {/* Event Name Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text block text-left">
+            <label className="text-sm font-medium text-foreground block text-left">
               Title*
             </label>
             <Input 
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
               placeholder={eventType === 'meetup' ? 'Enter meetup name' : 'Enter event name'}
-              className="w-full h-12 text-left bg-white/80 border-2 border-tertiary-200/60 rounded-full focus:border-tertiary-400 transition-colors"
+              className="w-full h-12 text-left bg-white border-2 border-gray-200 rounded-full"
             />
           </div>
 
           {/* Description Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text block text-left">Description</label>
+            <label className="text-sm font-medium text-foreground block text-left">Description</label>
             <Textarea 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder={eventType === 'meetup' ? 'Describe your meetup' : 'Describe your event'}
-              className="w-full min-h-24 text-left bg-white/80 border-2 border-tertiary-200/60 rounded-2xl resize-none focus:border-tertiary-400 transition-colors"
+              className="w-full min-h-24 text-left bg-white border-2 border-gray-200 rounded-2xl resize-none"
             />
           </div>
 
           {/* Date Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text block text-left">What Day*</label>
+            <label className="text-sm font-medium text-foreground block text-left">What Day*</label>
             
             {/* Open Date Option */}
             <div className="flex items-center gap-2 mb-3">
@@ -297,7 +297,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full h-12 pl-12 text-left bg-white/80 border-2 border-tertiary-200/60 rounded-full focus:border-tertiary-400 transition-colors"
+                  className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
                 />
               </div>
             )}
@@ -306,14 +306,14 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           {/* Time Field */}
           {!isOpenDate && (
             <div className="space-y-2">
-              <label className="text-sm font-medium bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text block text-left">Time</label>
+              <label className="text-sm font-medium text-foreground block text-left">Time</label>
               <div className="relative">
                 <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input 
                   type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="w-full h-12 pl-12 text-left bg-white/80 border-2 border-tertiary-200/60 rounded-full focus:border-tertiary-400 transition-colors"
+                  className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
                 />
               </div>
             </div>
@@ -321,7 +321,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
 
           {/* Location Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text block text-left">Location*</label>
+            <label className="text-sm font-medium text-foreground block text-left">Location*</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
               <Select value={location} onValueChange={setLocation}>
@@ -440,7 +440,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
             <Button 
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="w-full h-12 bg-gradient-to-r from-tertiary-500 to-primary hover:from-tertiary-600 hover:to-primary/90 text-white rounded-full text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full text-lg font-medium"
             >
               {isSubmitting ? 
                 (eventType === 'meetup' ? "Creating meetup..." : "Creating event...") : 
