@@ -315,7 +315,7 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="home-section" style={{ marginTop: '1.75rem' }}>
+        <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="title-section">
               wanna meet up
@@ -342,7 +342,7 @@ const Index = () => {
             <Button variant={meetupFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setMeetupFilter('all')} className="text-xs px-2 py-1 rounded-full h-6">
               All
             </Button>
-            <Button variant={meetupFilter === 'friends' ? 'default' : 'outline'} size="sm" onClick={() => setMeetupFilter('friends')} className="text-xs px-2 py-1 rounded-full h-6 bg-white border-2 border-secondary text-secondary hover:bg-secondary/5" disabled={!user}>
+            <Button variant={meetupFilter === 'friends' ? 'default' : 'outline'} size="sm" onClick={() => setMeetupFilter('friends')} className="text-xs px-2 py-1 rounded-full h-6" disabled={!user}>
               <Users className="h-2.5 w-2.5 mr-1" />
               Friends
             </Button>
@@ -380,7 +380,7 @@ const Index = () => {
         </section>
 
         {/* Events Section - Horizontal Carousel */}
-        <section className="home-section" style={{ marginTop: '1.75rem' }}>
+        <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="title-section">
             trending events
@@ -407,7 +407,7 @@ const Index = () => {
             <Button variant={eventFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('all')} className="text-xs px-2 py-1 rounded-full h-6">
               All
             </Button>
-            <Button variant={eventFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('following')} className="text-xs px-2 py-1 rounded-full h-6 bg-white border-2 border-secondary text-secondary hover:bg-secondary/5" disabled={!user}>
+            <Button variant={eventFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('following')} className="text-xs px-2 py-1 rounded-full h-6" disabled={!user}>
               <Users className="h-2.5 w-2.5 mr-1" />
               Following
             </Button>
