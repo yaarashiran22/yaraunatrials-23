@@ -1217,30 +1217,38 @@ const ProfilePage = () => {
 
       <main className="px-4 py-6 pb-20">
         {/* Profile Header */}
-        <div className="flex items-start gap-4 mb-6">
-          <div className="relative">
-            <img 
-              src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
-              alt={profileData?.name || "User"}
-              className="rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
-              style={{ width: '70px', height: '70px', minWidth: '70px', minHeight: '70px' }}
-              onClick={() => setShowProfilePicture(true)}
-            />
-          </div>
+        <div className="relative mb-8 p-6 rounded-2xl bg-gradient-to-br from-white to-primary-100 border border-primary-200/30 shadow-card overflow-hidden">
+          {/* Subtle background pattern */}
+          <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_25%_25%,hsl(var(--primary))_0%,transparent_50%),radial-gradient(circle_at_75%_75%,hsl(var(--coral))_0%,transparent_50%)]"></div>
+          
+          <div className="relative flex items-start gap-4">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-coral to-primary p-0.5">
+                <div className="w-full h-full rounded-full bg-white p-1">
+                  <img 
+                    src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
+                    alt={profileData?.name || "User"}
+                    className="rounded-full object-cover cursor-pointer hover:opacity-80 transition-all hover:scale-105"
+                    style={{ width: '70px', height: '70px', minWidth: '70px', minHeight: '70px' }}
+                    onClick={() => setShowProfilePicture(true)}
+                  />
+                </div>
+              </div>
+            </div>
           
           <div className="flex-1">
-            <h1 className="text-xl font-display font-bold mb-1">{profileData?.name || "User"}</h1>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <div className="flex items-center gap-1">
+            <h1 className="text-xl font-display font-bold mb-1 bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent">{profileData?.name || "User"}</h1>
+            <div className="flex items-center gap-2 text-sm mb-2">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-secondary-100 text-secondary-700">
                 <MapPin className="h-3 w-3" />
                 <span>{profileData?.location || "Not specified"}</span>
               </div>
             </div>
-            <p className="text-sm text-foreground mb-4 font-system">{profileData?.bio || "No description"}</p>
+            <p className="text-sm text-neutral-700 mb-4 font-system">{profileData?.bio || "No description"}</p>
             {profileData?.specialties && profileData.specialties.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {profileData.specialties.map((specialty, index) => (
-                  <div key={index} className="rounded-full px-2 py-1 inline-block" style={{ backgroundColor: 'hsl(var(--coral-muted))', color: 'hsl(var(--coral))', borderColor: 'hsl(var(--coral))' }}>
+                  <div key={index} className="rounded-full px-3 py-1 bg-gradient-to-r from-coral to-coral-hover text-coral-foreground shadow-sm border border-coral/20 hover:shadow-md transition-all hover:scale-105">
                     <span className="text-xs font-medium">{specialty}</span>
                   </div>
                 ))}
@@ -1265,7 +1273,7 @@ const ProfilePage = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="rounded-full p-2 h-8 w-8"
+                  className="rounded-full p-2 h-8 w-8 border-primary/30 hover:bg-primary hover:text-primary-foreground transition-all hover:shadow-lg"
                   onClick={() => navigate('/settings')}
                 >
                   <Settings className="h-4 w-4" />
@@ -1273,62 +1281,66 @@ const ProfilePage = () => {
               )}
                {!isOwnProfile && (
                  <div className="flex gap-2">
-                   <Button 
-                     variant="outline" 
-                     size="sm" 
-                     className={`rounded-full px-3 py-1 h-7 text-xs ${isFriend(actualProfileId || '') ? 'bg-green-500 text-white border-green-500 hover:bg-green-600' : ''}`}
-                     onClick={handleAddFriend}
-                   >
-                     {isFriend(actualProfileId || '') ? 'Added to friends' : 'Add'}
-                   </Button>
-                   <Button 
-                     variant="outline" 
-                     size="sm" 
-                     className={`rounded-full px-3 py-1 h-7 text-xs ${isFollowing(actualProfileId || '') ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : ''}`}
-                     onClick={() => actualProfileId && toggleFollow(actualProfileId)}
-                     disabled={isToggling}
-                   >
-                     {isFollowing(actualProfileId || '') ? 'Following' : 'Follow'}
-                   </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className={`rounded-full px-3 py-1 h-7 text-xs transition-all shadow-sm hover:shadow-md ${isFriend(actualProfileId || '') ? 'bg-gradient-to-r from-success to-success-foreground text-white border-success hover:from-success-foreground hover:to-success' : 'border-success/30 text-success hover:bg-success hover:text-white'}`}
+                      onClick={handleAddFriend}
+                    >
+                      {isFriend(actualProfileId || '') ? 'Added to friends' : 'Add'}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className={`rounded-full px-3 py-1 h-7 text-xs transition-all shadow-sm hover:shadow-md ${isFollowing(actualProfileId || '') ? 'bg-gradient-to-r from-primary to-secondary text-white border-primary hover:from-secondary hover:to-primary' : 'border-primary/30 text-primary hover:bg-primary hover:text-white'}`}
+                      onClick={() => actualProfileId && toggleFollow(actualProfileId)}
+                      disabled={isToggling}
+                    >
+                      {isFollowing(actualProfileId || '') ? 'Following' : 'Follow'}
+                    </Button>
                  </div>
                )}
-               {isOwnProfile && (
-                <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs" onClick={() => navigate('/profile/edit')}>
-                   Edit
-                 </Button>
-               )}
+                {isOwnProfile && (
+                 <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs bg-gradient-to-r from-tertiary/10 to-coral/10 border-tertiary/30 text-tertiary hover:bg-gradient-to-r hover:from-tertiary hover:to-coral hover:text-white transition-all shadow-sm hover:shadow-md" onClick={() => navigate('/profile/edit')}>
+                    Edit
+                  </Button>
+                )}
             </div>
           </div>
+        </div>
         </div>
 
 
         {/* Account Type Badge and Business Features */}
         {profileData?.account_type && (
-          <section className="mb-6">
+          <section className="mb-8">
             <div className="flex items-center justify-between">
               <div className="inline-flex items-center">
                 <span 
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium shadow-sm border transition-all hover:shadow-md ${
                     profileData.account_type === 'business' 
-                      ? 'bg-purple-100 text-purple-800' 
-                      : 'bg-blue-100 text-blue-800'
+                      ? 'bg-gradient-to-r from-tertiary-100 to-tertiary-200 text-tertiary-800 border-tertiary-300' 
+                      : 'bg-gradient-to-r from-primary-100 to-primary-200 text-primary-800 border-primary-300'
                   }`}
                 >
-                  {profileData.account_type === 'business' ? 'Business' : 'Personal'}
+                  {profileData.account_type === 'business' ? '🏢 Business Account' : '👤 Personal Account'}
                 </span>
               </div>
             </div>
             {/* Business Coupons Display */}
             {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
-              <div className="mt-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-semibold text-purple-700">Business Coupons</h4>
+              <div className="mt-6 p-4 rounded-xl bg-gradient-to-br from-tertiary-50 to-coral-50 border border-tertiary-200/30 shadow-sm">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-lg font-semibold bg-gradient-to-r from-tertiary to-coral bg-clip-text text-transparent flex items-center gap-2">
+                    <Gift className="h-4 w-4 text-tertiary" />
+                    Business Coupons
+                  </h4>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {myCoupons.slice(0, 4).map((coupon) => (
                     <div key={coupon.id} className="relative group">
-                      <div className="bg-white rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="bg-white rounded-xl border border-coral/20 overflow-hidden hover:shadow-lg hover:border-coral/40 transition-all hover:-translate-y-1 shadow-sm">
                         {coupon.image_url && (
                           <div className="aspect-video bg-muted">
                             <img 
@@ -1437,16 +1449,19 @@ const ProfilePage = () => {
 
         {/* My Events Section - Only shown for own profile */}
         {isOwnProfile && userEvents && userEvents.length > 0 && (
-          <section className="mb-8">
+          <section className="mb-8 p-5 rounded-xl bg-gradient-to-br from-secondary-50 to-primary-50 border border-secondary-200/30 shadow-sm">
             <div className="mb-4">
-              <h3 className="text-lg font-semibold">My Events & Meetups</h3>
+              <h3 className="text-lg font-semibold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-secondary" />
+                My Events & Meetups
+              </h3>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {userEvents.map((event) => (
                 <div key={event.id} className="relative group">
                   <div 
-                    className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow"
+                    className="bg-white rounded-xl border border-primary/20 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all hover:-translate-y-1 shadow-sm"
                   >
                     <div className="aspect-video bg-muted">
                       {(event as any).video_url ? (
@@ -1481,10 +1496,10 @@ const ProfilePage = () => {
                     </div>
                     <div className="p-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                        <span className={`text-xs px-3 py-1 rounded-full font-medium shadow-sm border transition-all ${
                           event.event_type === 'meetup' 
-                            ? 'bg-blue-100 text-blue-800' 
-                            : 'bg-green-100 text-green-800'
+                            ? 'bg-gradient-to-r from-secondary-100 to-secondary-200 text-secondary-800 border-secondary-300' 
+                            : 'bg-gradient-to-r from-success-100 to-success-200 text-success-800 border-success-300'
                         }`}>
                           {event.event_type === 'meetup' ? 'Meetup' : 'Event'}
                         </span>
@@ -1511,39 +1526,39 @@ const ProfilePage = () => {
                    {/* Edit/Delete/Instagram buttons - show on hover */}
                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                      <Button
-                       variant="secondary"
-                       size="sm"
-                       className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
-                       onClick={(e) => {
-                         e.stopPropagation();
-                         generateInstagramStory(event);
-                       }}
-                       title="Generate Instagram Story"
-                     >
-                       <Instagram className="h-3 w-3 text-pink-500" />
-                     </Button>
-                     <Button
-                       variant="secondary"
-                       size="sm"
-                       className="h-8 w-8 p-0 bg-white/90 hover:bg-white"
-                       onClick={(e) => {
-                         e.stopPropagation();
-                         handleEditEvent(event.id);
-                       }}
-                     >
-                       <Pencil className="h-3 w-3" />
-                     </Button>
-                     <Button
-                       variant="destructive"
-                       size="sm"
-                       className="h-8 w-8 p-0 bg-white/90 hover:bg-red-50 text-red-600 border-red-200"
-                       onClick={(e) => {
-                         e.stopPropagation();
-                         handleDeleteEvent(event.id);
-                       }}
-                     >
-                       <Trash2 className="h-3 w-3" />
-                     </Button>
+                        variant="secondary"
+                        size="sm"
+                        className="h-8 w-8 p-0 bg-pink-50 hover:bg-pink-100 border border-pink-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          generateInstagramStory(event);
+                        }}
+                        title="Generate Instagram Story"
+                      >
+                        <Instagram className="h-3 w-3 text-pink-600" />
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="h-8 w-8 p-0 bg-primary-50 hover:bg-primary-100 border border-primary-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditEvent(event.id);
+                        }}
+                      >
+                        <Pencil className="h-3 w-3 text-primary-600" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="h-8 w-8 p-0 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 hover:border-red-300"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteEvent(event.id);
+                        }}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
                    </div>
                 </div>
               ))}
@@ -1553,15 +1568,18 @@ const ProfilePage = () => {
 
         {/* Empty state for events */}
         {isOwnProfile && userEvents && userEvents.length === 0 && !eventsLoading && (
-          <section className="mb-8">
+          <section className="mb-8 p-6 rounded-xl bg-gradient-to-br from-neutral-50 to-primary-50 border border-neutral-200/50 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">My Events & Meetups</h3>
+              <h3 className="text-lg font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">My Events & Meetups</h3>
             </div>
-            <div className="text-center py-8 bg-muted/30 rounded-lg">
-              <p className="text-muted-foreground mb-4">You haven't created any events or meetups yet</p>
+            <div className="text-center py-8 bg-white/50 rounded-xl border border-white/80 backdrop-blur-sm">
+              <div className="mb-4 p-3 rounded-full bg-primary-100 w-fit mx-auto">
+                <Calendar className="h-8 w-8 text-primary" />
+              </div>
+              <p className="text-neutral-600 mb-4">You haven't created any events or meetups yet</p>
               <Button 
                 onClick={() => navigate('/events/create')}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-gradient-to-r from-primary to-secondary hover:from-primary-600 hover:to-secondary-600 text-white shadow-md hover:shadow-lg transition-all"
               >
                 <Plus className="h-4 w-4" />
                 Create Your First Event
@@ -1572,11 +1590,11 @@ const ProfilePage = () => {
 
         {/* Logout Button */}
         {isOwnProfile && (
-          <div className="mt-8 pt-6 border-t border-border">
+          <div className="mt-8 pt-6 border-t border-primary-200/50">
             <Button 
               variant="outline" 
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+              className="w-full flex items-center justify-center gap-2 text-destructive border-destructive/30 hover:bg-gradient-to-r hover:from-destructive hover:to-destructive-foreground hover:text-white transition-all shadow-sm hover:shadow-md rounded-xl py-3"
             >
               <LogOut className="h-4 w-4" />
               Logout
