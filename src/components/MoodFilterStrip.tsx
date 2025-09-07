@@ -17,7 +17,7 @@ const moodFilters = [
   { id: "active", label: "Active", icon: Dumbbell, color: "text-green-400", activeBg: "bg-green-50/70 dark:bg-green-950/20" },
   { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
   { id: "social", label: "Wellness", icon: Leaf, color: "text-green-500", activeBg: "bg-green-50/70 dark:bg-green-950/20" },
-  { id: "sightseeing", label: "Sightseeing", icon: Camera, color: "text-cyan-500", activeBg: "bg-cyan-50 dark:bg-cyan-950/30" }
+  { id: "music", label: "Music", icon: Camera, color: "text-cyan-500", activeBg: "bg-cyan-50 dark:bg-cyan-950/30" }
 ];
 
 interface MoodFilterStripProps {

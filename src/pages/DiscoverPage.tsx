@@ -122,7 +122,7 @@ const DiscoverPage = () => {
           case 'active': return 'border-green-500';
           case 'creative': return 'border-purple-500';
           case 'wellness': return 'border-green-600';
-          case 'sightseeing': return 'border-cyan-500';
+          case 'music': return 'border-cyan-500';
           default: return 'border-white';
         }
       };
@@ -135,7 +135,7 @@ const DiscoverPage = () => {
           case 'active': return '💪';
           case 'creative': return '🎨';
           case 'wellness': return '🧘';
-          case 'sightseeing': return '📸';
+          case 'music': return '🎵';
           default: return '😊';
         }
       };

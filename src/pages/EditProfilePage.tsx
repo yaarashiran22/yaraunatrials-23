@@ -19,7 +19,7 @@ const moodFilters = [
   { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500" },
   { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500" },
   { id: "social", label: "Social", icon: Users, color: "text-indigo-500" },
-  { id: "sightseeing", label: "Sightseeing", icon: Camera, color: "text-cyan-500" }
+  { id: "music", label: "Music", icon: Camera, color: "text-cyan-500" }
 ];
 
 const EditProfilePage = () => {

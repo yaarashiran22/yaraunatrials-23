@@ -126,7 +126,7 @@ const AllEventsPage = () => {
           'Active': ['sport', 'fitness', 'gym', 'run', 'bike', 'hike', 'workout', 'active', 'exercise'],
           'Creative': ['art', 'creative', 'workshop', 'paint', 'music', 'craft', 'design', 'artistic'],
           'Wellness': ['wellness', 'yoga', 'meditation', 'spa', 'health', 'mindfulness', 'therapy'],
-          'Sightseeing': ['tour', 'museum', 'landmark', 'sightseeing', 'explore', 'history', 'culture', 'visit']
+          'Music': ['music', 'concert', 'live', 'band', 'song', 'artist', 'performance', 'sound', 'audio']
         };
         
         const keywords = moodKeywords[moodFilter as keyof typeof moodKeywords] || [];
