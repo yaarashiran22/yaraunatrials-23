@@ -41,7 +41,7 @@ const MoodSelectionDialog = ({ isOpen, onClose, onMoodSelect }: MoodSelectionDia
         </DialogHeader>
         
         <div className="space-y-4 py-4">
-          <p className="text-center text-muted-foreground text-sm">
+          <p className="text-center text-white text-sm">
             Select your current mood to help others find the perfect hangout buddy
           </p>
           
