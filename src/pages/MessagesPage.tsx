@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDirectMessages } from '@/hooks/useDirectMessages';
+import { useUserPresence } from '@/hooks/useUserPresence';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -17,6 +18,7 @@ const MessagesPage = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { isUserOnline } = useUserPresence();
   const { 
     conversations, 
     currentMessages, 
@@ -95,20 +97,27 @@ const MessagesPage = () => {
               
               <div className="flex items-center gap-3 flex-1">
                 <div className="relative">
-                  <Avatar className="h-10 w-10 ring-2 ring-primary/20">
-                    <AvatarImage src={selectedUser.profile_image_url} />
-                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40">
+                  <Avatar className="h-12 w-12 ring-2 ring-primary/20">
+                    <AvatarImage 
+                      src={selectedUser.profile_image_url} 
+                      className="object-cover w-full h-full"
+                    />
+                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-sm font-semibold">
                       {(selectedUser.name || 'User').slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-card rounded-full animate-pulse" />
+                  {isUserOnline(selectedUser.id) && (
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
+                  )}
                 </div>
                 
                 <div className="flex-1">
                   <h3 className="font-semibold text-foreground">
                     {selectedUser.name || 'User'}
                   </h3>
-                  <p className="text-xs text-muted-foreground">Online now</p>
+                  <p className="text-xs text-muted-foreground">
+                    {isUserOnline(selectedUser.id) ? 'Online now' : 'Offline'}
+                  </p>
                 </div>
               </div>
               
@@ -221,12 +230,17 @@ const MessagesPage = () => {
                     >
                       <div className="relative">
                         <Avatar className="h-12 w-12 mr-4 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
-                          <AvatarImage src={profile.profile_image_url} />
-                          <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40">
+                          <AvatarImage 
+                            src={profile.profile_image_url} 
+                            className="object-cover w-full h-full"
+                          />
+                          <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-sm font-semibold">
                             {(profile.name || profile.email)?.slice(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <div className="absolute -bottom-0.5 -right-2 w-3 h-3 bg-green-500 border-2 border-card rounded-full" />
+                        {isUserOnline(profile.id) && (
+                          <div className="absolute -bottom-0.5 -right-2 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
+                        )}
                       </div>
                       <div className="text-left flex-1">
                         <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -289,12 +303,17 @@ const MessagesPage = () => {
                       >
                         <div className="relative">
                           <Avatar className="h-14 w-14 mr-4 ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all">
-                            <AvatarImage src={conversation.user.profile_image_url} />
-                            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 font-semibold">
+                            <AvatarImage 
+                              src={conversation.user.profile_image_url} 
+                              className="object-cover w-full h-full"
+                            />
+                            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 font-semibold text-base">
                               {(conversation.user.name || conversation.user.email)?.slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="absolute -bottom-1 -right-2 w-4 h-4 bg-green-500 border-2 border-card rounded-full" />
+                          {isUserOnline(conversation.user.id) && (
+                            <div className="absolute -bottom-1 -right-2 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+                          )}
                           {conversation.unreadCount > 0 && (
                             <div className="absolute -top-1 -right-2 min-w-5 h-5 bg-gradient-to-r from-primary to-primary/80 text-white text-xs font-bold rounded-full flex items-center justify-center px-1.5 shadow-lg animate-pulse">
                               {conversation.unreadCount}
@@ -366,9 +385,12 @@ const MessagesPage = () => {
                           style={{ animationDelay: `${index * 0.05}s` }}
                         >
                           {!isFromCurrentUser && (
-                            <Avatar className="h-7 w-7 mb-1">
-                              <AvatarImage src={selectedUser?.profile_image_url} />
-                              <AvatarFallback className="text-xs bg-gradient-to-br from-muted to-muted/80">
+                            <Avatar className="h-8 w-8 mb-1">
+                              <AvatarImage 
+                                src={selectedUser?.profile_image_url} 
+                                className="object-cover w-full h-full"
+                              />
+                              <AvatarFallback className="text-xs bg-gradient-to-br from-muted to-muted/80 font-medium">
                                 {(selectedUser?.name || 'U').slice(0, 2).toUpperCase()}
                               </AvatarFallback>
                             </Avatar>
@@ -412,9 +434,12 @@ const MessagesPage = () => {
                           </div>
                           
                           {isFromCurrentUser && (
-                            <Avatar className="h-7 w-7 mb-1">
-                              <AvatarImage src={user?.user_metadata?.avatar_url} />
-                              <AvatarFallback className="text-xs bg-gradient-to-br from-primary/20 to-primary/40">
+                            <Avatar className="h-8 w-8 mb-1">
+                              <AvatarImage 
+                                src={user?.user_metadata?.avatar_url} 
+                                className="object-cover w-full h-full"
+                              />
+                              <AvatarFallback className="text-xs bg-gradient-to-br from-primary/20 to-primary/40 font-medium">
                                 {(user?.email || 'Y').slice(0, 2).toUpperCase()}
                               </AvatarFallback>
                             </Avatar>
