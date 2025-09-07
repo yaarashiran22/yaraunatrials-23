@@ -12,7 +12,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Purple, Banana Mania, Radical Red & Hot Toddy Color Palette */
-    --background: 276 75% 28%;            /* Lively dark purple background */
+    --background: 205 80% 25%;            /* Darkish electric blue background */
     --foreground: 276 99% 15%;           /* White for text */
 
     --card: 85 45% 94%;                  /* Slightly lighter lime green cards */
