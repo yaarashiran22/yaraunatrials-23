@@ -296,20 +296,47 @@ const Index = () => {
       {/* Mood Filter Strip */}
       <MoodFilterStrip onFilterChange={setSelectedMoodFilter} showTitle={false} />
       
-      <main className="px-3 lg:px-6 py-3 lg:py-6 space-y-4 lg:space-y-8 pb-24 lg:pb-8 w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
-        {/* Community Members Section - Horizontal Carousel */}
-        <section className="-mb-1 lg:-mb-1">
-          <div className="px-1 lg:px-5 mb-3">
-            <h3 className="title-section-white">people nearby</h3>
+       <main className="px-3 lg:px-6 py-3 lg:py-6 space-y-6 lg:space-y-10 pb-24 lg:pb-8 w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
+        {/* Community Members Section - Enhanced Horizontal Carousel */}
+        <section className="-mb-1 lg:-mb-1 transform transition-all duration-500">
+          <div className="px-1 lg:px-5 mb-4">
+            <h3 className="title-section-white text-lg font-bold tracking-tight">people nearby</h3>
           </div>
           <div className="relative">
-            <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
-            scrollBehavior: 'smooth'
-          }}>
-              {loading ? <FastLoadingSkeleton type="profiles" /> : displayProfiles.length > 0 ? displayProfiles.map((profile, index) => <OptimizedProfileCard key={profile.id} id={profile.id} image={profile.image} name={profile.name} className={`flex-shrink-0 min-w-[90px] animate-fade-in ${index === 0 && user?.id === profile.id ? '' : ''}`} style={{
-              animationDelay: `${Math.min(index * 0.03, 0.3)}s`
-            } as React.CSSProperties} isCurrentUser={user?.id === profile.id} />) : <div className="text-center py-8 text-muted-foreground w-full">No registered users yet</div>}
+            {/* Enhanced scrollable container */}
+            <div 
+              className="flex overflow-x-auto gap-3 pb-6 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/30 hover:scrollbar-thumb-muted-foreground/50 relative" 
+              dir="ltr" 
+              style={{ scrollBehavior: 'smooth' }}
+            >
+              {loading ? (
+                <FastLoadingSkeleton type="profiles" />
+              ) : displayProfiles.length > 0 ? (
+                displayProfiles.map((profile, index) => (
+                  <div
+                    key={profile.id}
+                    className="flex-shrink-0 min-w-[90px] animate-fade-in transform transition-all duration-300"
+                    style={{
+                      animationDelay: `${Math.min(index * 0.05, 0.5)}s`,
+                      transform: `translateY(${Math.sin(index * 0.5) * 2}px)` // Subtle wave effect
+                    } as React.CSSProperties}
+                  >
+                    <OptimizedProfileCard 
+                      id={profile.id} 
+                      image={profile.image} 
+                      name={profile.name} 
+                      isCurrentUser={user?.id === profile.id} 
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground w-full">No registered users yet</div>
+              )}
             </div>
+            
+            {/* Gradient fade effect on edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background to-transparent pointer-events-none z-10"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none z-10"></div>
           </div>
         </section>
 

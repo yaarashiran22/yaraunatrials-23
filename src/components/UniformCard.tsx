@@ -77,75 +77,90 @@ const UniformCard = ({
 
   return (
     <div 
-      className="relative card-elevated rounded-3xl overflow-hidden group w-full cursor-pointer hover:glow-accent transition-all duration-500"
+      className="relative group w-full cursor-pointer transform transition-all duration-300 hover:scale-[1.03] hover:z-10"
       onClick={onClick}
     >
-      <div className="aspect-[3.5/3.5] overflow-hidden relative">
-        {video ? (
-          <video 
-            src={video} 
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            muted
-            autoPlay
-            loop
-            playsInline
-            preload="metadata"
-            poster={image}
-            onLoadedData={(e) => {
-              // Ensure video plays when loaded
-              e.currentTarget.play().catch(() => {
-                // Fallback if autoplay is blocked
-                console.log('Autoplay blocked, video will play on user interaction');
-              });
-            }}
-            onError={(e) => {
-              // If video fails to load, hide the video element and show fallback image
-              e.currentTarget.style.display = 'none';
-              console.log('Video failed to load:', video);
-            }}
-          />
-        ) : (
-          <img 
-            src={image || '/placeholder.svg'} 
-            alt={getAltText()}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-          />
-        )}
-        {/* Shimmer overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-300"></div>
+      {/* Card container with enhanced visual effects */}
+      <div className="relative bg-white/10 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/20 shadow-lg hover:shadow-2xl hover:border-white/30 transition-all duration-500">
         
-        {/* Text overlay at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3">
-          <div className="space-y-1">
-            <h3 className="font-semibold text-white line-clamp-2 text-sm leading-tight drop-shadow-lg">{title}</h3>
-            {subtitle && (
-              <p className="text-xs text-white/90 line-clamp-1 drop-shadow-md">{subtitle}</p>
-            )}
-            <div className="flex items-center gap-2 mt-1">
-              {date && (
-                <span className="text-xs font-semibold px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-white border border-white/30">{date}</span>
+        {/* Image/Video container */}
+        <div className="aspect-[3.5/3.5] overflow-hidden relative">
+          {video ? (
+            <video 
+              src={video} 
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+              muted
+              autoPlay
+              loop
+              playsInline
+              preload="metadata"
+              poster={image}
+              onLoadedData={(e) => {
+                e.currentTarget.play().catch(() => {
+                  console.log('Autoplay blocked, video will play on user interaction');
+                });
+              }}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                console.log('Video failed to load:', video);
+              }}
+            />
+          ) : (
+            <img 
+              src={image || '/placeholder.svg'} 
+              alt={getAltText()}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+            />
+          )}
+          
+          {/* Enhanced shimmer overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+          
+          {/* Gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+          
+          {/* Enhanced text overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
+            <div className="space-y-2">
+              <h3 className="font-bold text-white line-clamp-2 text-base leading-tight drop-shadow-xl">{title}</h3>
+              {subtitle && (
+                <p className="text-sm text-white/95 line-clamp-1 drop-shadow-lg font-medium">{subtitle}</p>
               )}
-              {price && (
-                <span className="text-xs font-semibold px-2 py-0.5 bg-primary/80 backdrop-blur-sm rounded-full text-white border border-white/30">${price}</span>
-              )}
+              <div className="flex items-center gap-2 mt-2">
+                {date && (
+                  <span className="text-xs font-bold px-3 py-1.5 bg-white/25 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg">{date}</span>
+                )}
+                {price && (
+                  <span className="text-xs font-bold px-3 py-1.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg">${price}</span>
+                )}
+              </div>
             </div>
           </div>
+          
+          {/* Enhanced heart button with better positioning and effects */}
+          {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`absolute top-3 right-3 p-2.5 rounded-full backdrop-blur-md bg-white/25 hover:bg-white/35 border border-white/40 hover:border-white/60 shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-200 ${
+                isCurrentlyFavorited ? 'text-red-500 bg-white/35' : 'text-white hover:text-red-400'
+              }`}
+              onClick={handleFavoriteClick}
+            >
+              <Heart className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''} transition-all duration-200`} />
+            </Button>
+          )}
+          
+          {/* Hover glow effect */}
+          <div className="absolute inset-0 rounded-3xl ring-1 ring-white/20 group-hover:ring-2 group-hover:ring-white/40 transition-all duration-300 pointer-events-none"></div>
         </div>
         
-        {/* Heart icon positioned over image */}
-        {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className={`absolute top-2 right-2 p-1.5 rounded-full backdrop-blur-sm bg-white/20 hover:bg-white/30 border border-white/30 ${
-              isCurrentlyFavorited ? 'text-red-500' : 'text-white hover:text-red-400'
-            }`}
-            onClick={handleFavoriteClick}
-          >
-            <Heart className={`h-4 w-4 ${isCurrentlyFavorited ? 'fill-current' : ''}`} />
-          </Button>
-        )}
+        {/* Bottom reflection effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
+      
+      {/* Subtle drop shadow enhancement */}
+      <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none transform translate-y-1"></div>
     </div>
   );
 };
