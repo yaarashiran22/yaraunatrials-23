@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Coffee, Zap, Heart, Dumbbell, Palette, Users, Leaf, Search, X, MapPin, Calendar, User, Building, ShoppingBag, Camera } from "lucide-react";
+import { Coffee, Zap, Heart, Dumbbell, Palette, Users, Leaf, Search, X, MapPin, Calendar, User, Building, ShoppingBag, Music } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useGlobalSearch, SearchResult } from "@/hooks/useGlobalSearch";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,7 +17,7 @@ const moodFilters = [
   { id: "active", label: "Active", icon: Dumbbell, color: "text-green-400", activeBg: "bg-green-50/70 dark:bg-green-950/20" },
   { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500", activeBg: "bg-purple-50 dark:bg-purple-950/30" },
   { id: "social", label: "Wellness", icon: Leaf, color: "text-green-500", activeBg: "bg-green-50/70 dark:bg-green-950/20" },
-  { id: "music", label: "Music", icon: Camera, color: "text-cyan-500", activeBg: "bg-cyan-50 dark:bg-cyan-950/30" }
+  { id: "music", label: "Music", icon: Music, color: "text-cyan-500", activeBg: "bg-cyan-50 dark:bg-cyan-950/30" }
 ];
 
 interface MoodFilterStripProps {

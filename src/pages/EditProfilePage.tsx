@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Bell, Camera, Plus, Coffee, Zap, Heart, Dumbbell, Palette, Users } from "lucide-react";
+import { ArrowLeft, Bell, Camera, Plus, Coffee, Zap, Heart, Dumbbell, Palette, Users, Music } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,7 +19,7 @@ const moodFilters = [
   { id: "active", label: "Active", icon: Dumbbell, color: "text-green-500" },
   { id: "creative", label: "Creative", icon: Palette, color: "text-purple-500" },
   { id: "social", label: "Social", icon: Users, color: "text-indigo-500" },
-  { id: "music", label: "Music", icon: Camera, color: "text-cyan-500" }
+  { id: "music", label: "Music", icon: Music, color: "text-cyan-500" }
 ];
 
 const EditProfilePage = () => {
