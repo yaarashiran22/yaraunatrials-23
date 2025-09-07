@@ -190,7 +190,7 @@ const LoginPage = () => {
               <p className="text-base text-foreground/80 leading-relaxed mb-3">
                 Welcome to una- our local social platform for finding cool and original new experiences happening around.
               </p>
-              <p className="text-sm font-medium text-red-500">
+              <p className="text-sm font-medium" style={{ color: 'hsl(var(--coral))' }}>
                 Diversity, Creativity, Oppenness
               </p>
             </div>
