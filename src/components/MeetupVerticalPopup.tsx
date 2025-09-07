@@ -253,7 +253,7 @@ const MeetupVerticalPopup = ({
           <ChevronDown className="h-6 w-6" />
         </Button>}
 
-      <div ref={contentRef} className={`bg-background rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} meetup-vertical-popup`} style={{
+      <div ref={contentRef} className={`bg-purple-100/80 dark:bg-purple-900/40 rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} meetup-vertical-popup`} style={{
       transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
       scrollBehavior: 'smooth'
     }} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
