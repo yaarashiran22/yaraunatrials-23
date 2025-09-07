@@ -11,8 +11,8 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Modern Harmonious Color Palette - Blue, Indigo, Purple with Coral Accents */
-    --background: 287 23% 25%;                 /* Pure white background */
+    /* Enhanced Modern Color Palette - More Vibrant */
+    --background: 287 25% 22%;                 /* Deeper purple background */
     --foreground: 224 71% 4%;                /* Dark navy text */
 
     --card: 0 0% 100%;                       /* Pure white cards */
@@ -21,58 +21,58 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;                    /* Pure white popover */
     --popover-foreground: 224 71% 4%;        /* Dark navy for popover text */
 
-    /* Primary: Modern Indigo - Full Scale */
-    --primary: 239 84% 67%;                  /* Modern indigo */
+    /* Primary: Enhanced Vibrant Indigo */
+    --primary: 242 89% 72%;                  /* More vibrant indigo */
     --primary-foreground: 0 0% 100%;         /* White text on primary */
-    --primary-900: 239 84% 27%;              /* Darkest indigo */
-    --primary-800: 239 84% 37%;              /* Darker indigo */
-    --primary-700: 239 84% 47%;              /* Dark indigo */
-    --primary-600: 239 84% 57%;              /* Medium indigo */
-    --primary-500: 239 84% 67%;              /* Main primary */
-    --primary-400: 239 84% 77%;              /* Light indigo */
-    --primary-300: 239 84% 87%;              /* Very light indigo */
-    --primary-200: 239 84% 93%;              /* Subtle indigo */
-    --primary-100: 239 84% 97%;              /* Subtle background */
+    --primary-900: 242 89% 25%;              /* Darkest indigo */
+    --primary-800: 242 89% 35%;              /* Darker indigo */
+    --primary-700: 242 89% 45%;              /* Dark indigo */
+    --primary-600: 242 89% 55%;              /* Medium indigo */
+    --primary-500: 242 89% 72%;              /* Main primary */
+    --primary-400: 242 89% 80%;              /* Light indigo */
+    --primary-300: 242 89% 88%;              /* Very light indigo */
+    --primary-200: 242 89% 94%;              /* Subtle indigo */
+    --primary-100: 242 89% 97%;              /* Subtle background */
 
-    /* Secondary: Soft Blue - Full Scale */
-    --secondary: 217 91% 60%;                /* Soft blue */
+    /* Secondary: Enhanced Electric Blue */
+    --secondary: 205 95% 65%;                /* Electric blue */
     --secondary-foreground: 0 0% 100%;       /* White text */
-    --secondary-900: 217 91% 20%;            /* Dark blue */
-    --secondary-800: 217 91% 30%;            /* Darker blue */
-    --secondary-700: 217 91% 40%;            /* Medium dark blue */
-    --secondary-600: 217 91% 50%;            /* Medium blue */
-    --secondary-500: 217 91% 60%;            /* Main secondary */
-    --secondary-400: 217 91% 70%;            /* Light blue */
-    --secondary-300: 217 91% 80%;            /* Lighter blue */
-    --secondary-200: 217 91% 90%;            /* Very light blue */
-    --secondary-100: 217 91% 95%;            /* Subtle blue background */
+    --secondary-900: 205 95% 22%;            /* Dark blue */
+    --secondary-800: 205 95% 30%;            /* Darker blue */
+    --secondary-700: 205 95% 40%;            /* Medium dark blue */
+    --secondary-600: 205 95% 50%;            /* Medium blue */
+    --secondary-500: 205 95% 65%;            /* Main secondary */
+    --secondary-400: 205 95% 75%;            /* Light blue */
+    --secondary-300: 205 95% 82%;            /* Lighter blue */
+    --secondary-200: 205 95% 90%;            /* Very light blue */
+    --secondary-100: 205 95% 95%;            /* Subtle blue background */
 
-    /* Accent: Light Gray */
-    --accent: 220 14% 96%;                   /* Light gray accent */
+    /* Accent: Enhanced Light Gray */
+    --accent: 220 15% 94%;                   /* Light gray accent */
     --accent-foreground: 224 71% 4%;         /* Dark text */
-    --accent-700: 215 28% 17%;               /* Dark gray */
-    --accent-600: 217 19% 27%;               /* Medium dark gray */
-    --accent-500: 220 9% 46%;                /* Medium gray */
-    --accent-400: 220 13% 69%;               /* Light gray */
-    --accent-300: 220 14% 83%;               /* Lighter gray */
+    --accent-700: 215 30% 15%;               /* Dark gray */
+    --accent-600: 217 22% 25%;               /* Medium dark gray */
+    --accent-500: 220 12% 44%;               /* Medium gray */
+    --accent-400: 220 15% 67%;               /* Light gray */
+    --accent-300: 220 15% 81%;               /* Lighter gray */
 
-    /* Tertiary: Warm Purple - Full Scale */
-    --tertiary: 262 83% 58%;                 /* Warm purple */
+    /* Tertiary: Enhanced Vibrant Purple */
+    --tertiary: 270 88% 62%;                 /* More vibrant purple */
     --tertiary-foreground: 0 0% 100%;        /* White text */
-    --tertiary-900: 262 83% 18%;             /* Dark purple */
-    --tertiary-800: 262 83% 28%;             /* Darker purple */
-    --tertiary-700: 262 83% 38%;             /* Medium dark purple */
-    --tertiary-600: 262 83% 48%;             /* Medium purple */
-    --tertiary-500: 262 83% 58%;             /* Main tertiary */
-    --tertiary-400: 262 83% 68%;             /* Light purple */
-    --tertiary-300: 262 83% 78%;             /* Lighter purple */
-    --tertiary-200: 262 83% 88%;             /* Very light purple */
-    --tertiary-100: 262 83% 94%;             /* Subtle purple background */
+    --tertiary-900: 270 88% 18%;             /* Dark purple */
+    --tertiary-800: 270 88% 28%;             /* Darker purple */
+    --tertiary-700: 270 88% 38%;             /* Medium dark purple */
+    --tertiary-600: 270 88% 48%;             /* Medium purple */
+    --tertiary-500: 270 88% 62%;             /* Main tertiary */
+    --tertiary-400: 270 88% 72%;             /* Light purple */
+    --tertiary-300: 270 88% 80%;             /* Lighter purple */
+    --tertiary-200: 270 88% 88%;             /* Very light purple */
+    --tertiary-100: 270 88% 94%;             /* Subtle purple background */
 
-    /* Coral Orange - Vibrant accent for special elements */
-    --coral: 14 100% 65%;                    /* Vibrant coral */
+    /* Enhanced Coral Orange - More vibrant */
+    --coral: 12 100% 68%;                    /* More vibrant coral */
     --coral-foreground: 0 0% 100%;           /* White text on coral */
-    --coral-hover: 14 100% 60%;              /* Darker coral for hover */
+    --coral-hover: 12 100% 62%;              /* Darker coral for hover */
 
     /* System Colors - Harmonious palette */
     --success: 142 76% 36%;                  /* Green success */
@@ -102,25 +102,25 @@ All colors MUST be HSL.
     --muted: 0 0% 94%;                  /* Light neutral muted background */
     --muted-foreground: 276 60% 25%;     /* Medium Purple */
 
-    /* Four Color Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(17 98% 60%) 0%, hsl(51 100% 70%) 100%);
-    --gradient-plaza-dusk: linear-gradient(135deg, hsl(17 98% 60%) 0%, hsl(110 100% 89%) 50%, hsl(35 61% 89%) 100%);
-    --gradient-mint: linear-gradient(135deg, hsl(110 100% 89%) 0%, hsl(110 100% 95%) 100%);
-    --gradient-coupon: linear-gradient(135deg, hsl(51 100% 70%) 0%, hsl(51 80% 75%) 100%);
-    --gradient-soft: linear-gradient(145deg, hsl(110 100% 94%) 0%, hsl(110 100% 89%) 50%, hsl(110 100% 83%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(110 100% 94%) 100%);
-    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(110 100% 92%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(110 100% 89%) 0%, hsl(110 100% 92%) 100%);
-    --gradient-rainbow: linear-gradient(135deg, hsl(17 98% 60%) 0%, hsl(51 100% 70%) 25%, hsl(110 100% 89%) 75%, hsl(35 61% 89%) 100%);
+    /* Enhanced Four Color Gradients - More Vibrant */
+    --gradient-primary: linear-gradient(135deg, hsl(12 100% 68%) 0%, hsl(48 100% 72%) 100%);
+    --gradient-plaza-dusk: linear-gradient(135deg, hsl(12 100% 68%) 0%, hsl(140 95% 85%) 50%, hsl(32 65% 85%) 100%);
+    --gradient-mint: linear-gradient(135deg, hsl(140 95% 85%) 0%, hsl(140 95% 92%) 100%);
+    --gradient-coupon: linear-gradient(135deg, hsl(48 100% 72%) 0%, hsl(48 85% 75%) 100%);
+    --gradient-soft: linear-gradient(145deg, hsl(140 95% 90%) 0%, hsl(140 95% 85%) 50%, hsl(140 95% 78%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(140 95% 90%) 100%);
+    --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(140 95% 88%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(140 95% 85%) 0%, hsl(140 95% 88%) 100%);
+    --gradient-rainbow: linear-gradient(135deg, hsl(12 100% 68%) 0%, hsl(48 100% 72%) 25%, hsl(140 95% 85%) 75%, hsl(32 65% 85%) 100%);
     
-    /* Four Color Shadows */
-    --shadow-subtle: 0 1px 3px 0 hsl(17 98% 60% / 0.08), 0 1px 2px 0 hsl(17 98% 25% / 0.06);
-    --shadow-card: 0 4px 12px -2px hsl(17 98% 60% / 0.12), 0 2px 8px -1px hsl(17 98% 25% / 0.08);
-    --shadow-medium: 0 8px 20px -4px hsl(17 98% 60% / 0.15), 0 4px 12px -2px hsl(17 98% 25% / 0.10);
-    --shadow-large: 0 16px 32px -8px hsl(17 98% 60% / 0.18), 0 8px 16px -4px hsl(17 98% 25% / 0.12);
-    --shadow-floating: 0 20px 40px -12px hsl(17 98% 60% / 0.20);
-    --shadow-glow: 0 0 25px hsl(17 98% 60% / 0.4);
-    --shadow-inner: inset 0 2px 4px 0 hsl(17 98% 25% / 0.08);
+    /* Enhanced Four Color Shadows - More Vibrant */
+    --shadow-subtle: 0 1px 3px 0 hsl(12 100% 68% / 0.10), 0 1px 2px 0 hsl(12 100% 28% / 0.08);
+    --shadow-card: 0 4px 12px -2px hsl(12 100% 68% / 0.15), 0 2px 8px -1px hsl(12 100% 28% / 0.10);
+    --shadow-medium: 0 8px 20px -4px hsl(12 100% 68% / 0.18), 0 4px 12px -2px hsl(12 100% 28% / 0.12);
+    --shadow-large: 0 16px 32px -8px hsl(12 100% 68% / 0.22), 0 8px 16px -4px hsl(12 100% 28% / 0.15);
+    --shadow-floating: 0 20px 40px -12px hsl(12 100% 68% / 0.25);
+    --shadow-glow: 0 0 30px hsl(12 100% 68% / 0.5);
+    --shadow-inner: inset 0 2px 4px 0 hsl(12 100% 28% / 0.10);
     --shadow-burning: 0 6px 20px hsl(17 98% 60% / 0.25);
     --shadow-kournikova: 0 6px 20px hsl(51 100% 70% / 0.25);
     --shadow-snow: 0 6px 20px hsl(110 100% 89% / 0.25);
