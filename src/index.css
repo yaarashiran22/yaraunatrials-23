@@ -424,7 +424,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(349 100% 45%); /* Darker Radical Red */
+    color: hsl(195 85% 75%); /* Electric blue to complement purple */
     font-size: 1.1em;
   }
 
@@ -446,7 +446,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(349 100% 45%); /* Same as title-section - Darker Radical Red */
+    color: hsl(195 85% 75%); /* Electric blue to complement purple */
     font-size: 1.1em;
   }
 
