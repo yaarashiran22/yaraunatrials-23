@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Coffee, Zap, Heart, Dumbbell, Palette, Leaf, Music } from 'lucide-react';
 
@@ -38,12 +38,12 @@ const MoodSelectionDialog = ({ isOpen, onClose, onMoodSelect }: MoodSelectionDia
           <DialogTitle className="text-center text-xl font-semibold">
             What's your mood?
           </DialogTitle>
+          <DialogDescription className="text-center text-sm text-muted-foreground">
+            Select your current mood to help others find the perfect hangout buddy
+          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4 py-4">
-          <p className="text-center text-white text-sm">
-            Select your current mood to help others find the perfect hangout buddy
-          </p>
           
           <div className="grid grid-cols-2 gap-3">
             {moodOptions.map((mood) => {
