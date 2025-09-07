@@ -202,14 +202,14 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Dark Mode - Harmonious Dark Theme */
-    --background: 224 71% 4%;                /* Dark navy background */
+    /* Dark Mode - Electric Purple Theme */
+    --background: 270 40% 8%;                   /* Electric purple dark background */
     --foreground: 0 0% 98%;                  /* Near white text */
 
-    --card: 224 71% 8%;                      /* Dark card background */
+    --card: 270 35% 12%;                     /* Electric purple card background */
     --card-foreground: 0 0% 98%;             /* White card text */
 
-    --popover: 224 71% 8%;                   /* Dark popover */
+    --popover: 270 35% 12%;                  /* Electric purple popover */
     --popover-foreground: 0 0% 98%;          /* White popover text */
 
     /* Primary: Brighter Indigo for Dark Mode */
@@ -273,13 +273,13 @@ All colors MUST be HSL.
     --destructive: 0 84% 70%;                /* Brighter red */
     --destructive-foreground: 224 71% 4%;
 
-    --muted: 215 28% 17%;                    /* Dark muted */
+    --muted: 270 30% 15%;                    /* Electric purple muted */
     --muted-foreground: 220 13% 69%;         /* Light gray muted text */
 
     /* Modern borders and inputs - Dark Mode */
-    --border: 215 28% 17%;                   /* Dark border */
-    --input: 224 71% 8%;                     /* Dark input background */
-    --ring: 239 84% 77%;                     /* Bright focus ring */
+    --border: 270 25% 20%;                   /* Electric purple border */
+    --input: 270 35% 12%;                    /* Electric purple input background */
+    --ring: 270 95% 75%;                     /* Electric purple focus ring */
     --sidebar-background: 224 71% 8%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 0 0% 98%;
