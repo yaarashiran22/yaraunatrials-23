@@ -11,68 +11,68 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Vibrant Energetic Color Palette - Enhanced for Liveliness */
-    --background: 330 25% 96%;                 /* Soft warm background */
-    --foreground: 220 90% 15%;               /* Rich deep navy text */
+    /* Modern Harmonious Color Palette - Blue, Indigo, Purple with Coral Accents */
+    --background: 287 23% 25%;                 /* Pure white background */
+    --foreground: 224 71% 4%;                /* Dark navy text */
 
     --card: 0 0% 100%;                       /* Pure white cards */
-    --card-foreground: 220 90% 15%;          /* Rich navy for card text */
+    --card-foreground: 224 71% 4%;           /* Dark navy for card text */
 
     --popover: 0 0% 100%;                    /* Pure white popover */
-    --popover-foreground: 220 90% 15%;       /* Rich navy for popover text */
+    --popover-foreground: 224 71% 4%;        /* Dark navy for popover text */
 
-    /* Primary: Electric Indigo - Enhanced Vibrancy */
-    --primary: 245 100% 72%;                 /* Electric indigo */
+    /* Primary: Modern Indigo - Full Scale */
+    --primary: 239 84% 67%;                  /* Modern indigo */
     --primary-foreground: 0 0% 100%;         /* White text on primary */
-    --primary-900: 245 100% 25%;             /* Darkest indigo */
-    --primary-800: 245 100% 35%;             /* Darker indigo */
-    --primary-700: 245 100% 45%;             /* Dark indigo */
-    --primary-600: 245 100% 55%;             /* Medium indigo */
-    --primary-500: 245 100% 72%;             /* Main primary */
-    --primary-400: 245 100% 80%;             /* Light indigo */
-    --primary-300: 245 100% 88%;             /* Very light indigo */
-    --primary-200: 245 100% 94%;             /* Subtle indigo */
-    --primary-100: 245 100% 97%;             /* Subtle background */
+    --primary-900: 239 84% 27%;              /* Darkest indigo */
+    --primary-800: 239 84% 37%;              /* Darker indigo */
+    --primary-700: 239 84% 47%;              /* Dark indigo */
+    --primary-600: 239 84% 57%;              /* Medium indigo */
+    --primary-500: 239 84% 67%;              /* Main primary */
+    --primary-400: 239 84% 77%;              /* Light indigo */
+    --primary-300: 239 84% 87%;              /* Very light indigo */
+    --primary-200: 239 84% 93%;              /* Subtle indigo */
+    --primary-100: 239 84% 97%;              /* Subtle background */
 
-    /* Secondary: Vibrant Cyan - Enhanced Energy */
-    --secondary: 185 100% 65%;               /* Vibrant cyan */
+    /* Secondary: Soft Blue - Full Scale */
+    --secondary: 217 91% 60%;                /* Soft blue */
     --secondary-foreground: 0 0% 100%;       /* White text */
-    --secondary-900: 185 100% 20%;           /* Dark cyan */
-    --secondary-800: 185 100% 30%;           /* Darker cyan */
-    --secondary-700: 185 100% 40%;           /* Medium dark cyan */
-    --secondary-600: 185 100% 50%;           /* Medium cyan */
-    --secondary-500: 185 100% 65%;           /* Main secondary */
-    --secondary-400: 185 100% 75%;           /* Light cyan */
-    --secondary-300: 185 100% 85%;           /* Lighter cyan */
-    --secondary-200: 185 100% 92%;           /* Very light cyan */
-    --secondary-100: 185 100% 96%;           /* Subtle cyan background */
+    --secondary-900: 217 91% 20%;            /* Dark blue */
+    --secondary-800: 217 91% 30%;            /* Darker blue */
+    --secondary-700: 217 91% 40%;            /* Medium dark blue */
+    --secondary-600: 217 91% 50%;            /* Medium blue */
+    --secondary-500: 217 91% 60%;            /* Main secondary */
+    --secondary-400: 217 91% 70%;            /* Light blue */
+    --secondary-300: 217 91% 80%;            /* Lighter blue */
+    --secondary-200: 217 91% 90%;            /* Very light blue */
+    --secondary-100: 217 91% 95%;            /* Subtle blue background */
 
-    /* Accent: Energetic Pink */
-    --accent: 320 85% 88%;                   /* Energetic pink accent */
-    --accent-foreground: 220 90% 15%;        /* Rich navy text */
-    --accent-700: 320 85% 25%;               /* Dark pink */
-    --accent-600: 320 85% 35%;               /* Medium dark pink */
-    --accent-500: 320 85% 55%;               /* Medium pink */
-    --accent-400: 320 85% 70%;               /* Light pink */
-    --accent-300: 320 85% 80%;               /* Lighter pink */
+    /* Accent: Light Gray */
+    --accent: 220 14% 96%;                   /* Light gray accent */
+    --accent-foreground: 224 71% 4%;         /* Dark text */
+    --accent-700: 215 28% 17%;               /* Dark gray */
+    --accent-600: 217 19% 27%;               /* Medium dark gray */
+    --accent-500: 220 9% 46%;                /* Medium gray */
+    --accent-400: 220 13% 69%;               /* Light gray */
+    --accent-300: 220 14% 83%;               /* Lighter gray */
 
-    /* Tertiary: Electric Purple - Maximum Vibrancy */
-    --tertiary: 280 100% 70%;                /* Electric purple */
+    /* Tertiary: Warm Purple - Full Scale */
+    --tertiary: 262 83% 58%;                 /* Warm purple */
     --tertiary-foreground: 0 0% 100%;        /* White text */
-    --tertiary-900: 280 100% 20%;            /* Dark purple */
-    --tertiary-800: 280 100% 30%;            /* Darker purple */
-    --tertiary-700: 280 100% 40%;            /* Medium dark purple */
-    --tertiary-600: 280 100% 50%;            /* Medium purple */
-    --tertiary-500: 280 100% 70%;            /* Main tertiary */
-    --tertiary-400: 280 100% 78%;            /* Light purple */
-    --tertiary-300: 280 100% 85%;            /* Lighter purple */
-    --tertiary-200: 280 100% 92%;            /* Very light purple */
-    --tertiary-100: 280 100% 96%;            /* Subtle purple background */
+    --tertiary-900: 262 83% 18%;             /* Dark purple */
+    --tertiary-800: 262 83% 28%;             /* Darker purple */
+    --tertiary-700: 262 83% 38%;             /* Medium dark purple */
+    --tertiary-600: 262 83% 48%;             /* Medium purple */
+    --tertiary-500: 262 83% 58%;             /* Main tertiary */
+    --tertiary-400: 262 83% 68%;             /* Light purple */
+    --tertiary-300: 262 83% 78%;             /* Lighter purple */
+    --tertiary-200: 262 83% 88%;             /* Very light purple */
+    --tertiary-100: 262 83% 94%;             /* Subtle purple background */
 
-    /* Coral Orange - Maximum Vibrancy */
-    --coral: 15 100% 68%;                    /* Ultra vibrant coral */
+    /* Coral Orange - Vibrant accent for special elements */
+    --coral: 14 100% 65%;                    /* Vibrant coral */
     --coral-foreground: 0 0% 100%;           /* White text on coral */
-    --coral-hover: 15 100% 62%;              /* Darker coral for hover */
+    --coral-hover: 14 100% 60%;              /* Darker coral for hover */
 
     /* System Colors - Harmonious palette */
     --success: 142 76% 36%;                  /* Green success */
