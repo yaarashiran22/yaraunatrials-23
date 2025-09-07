@@ -175,7 +175,7 @@ const MessagesPage = () => {
       {/* Modern User Selection Modal */}
       {showUserSelect && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card/95 backdrop-blur-xl rounded-2xl max-w-md w-full h-[80vh] shadow-2xl border border-border/20 animate-scale-in flex flex-col">
+          <div className="bg-card/95 backdrop-blur-xl rounded-2xl max-w-md w-full h-[600px] max-h-[85vh] shadow-2xl border border-border/20 animate-scale-in flex flex-col">
             {/* Fixed Header */}
             <div className="p-6 border-b border-border/10 flex-shrink-0">
               <div className="flex items-center justify-between mb-4">
@@ -205,9 +205,14 @@ const MessagesPage = () => {
               </div>
             </div>
             
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto p-3">
-              <div className="space-y-2">
+            {/* Scrollable Content - FIXED FOR SCROLLING */}
+            <div 
+              className="flex-1 min-h-0 overflow-y-scroll p-3 bg-background/50" 
+              style={{ height: '400px', maxHeight: '400px' }}
+            >
+              <div className="space-y-2"
+                style={{ paddingBottom: '20px' }}
+              >
                 {usersLoading ? (
                   <div className="text-center py-12 text-muted-foreground">
                     <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto mb-3" />
