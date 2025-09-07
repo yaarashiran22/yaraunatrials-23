@@ -296,7 +296,7 @@ const DiscoverPage = () => {
             <>
               <div className="mb-3">
                 <h2 className="title-section mb-1 text-coral">share your location</h2>
-                <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+                <p className="text-xs text-white max-w-xs mx-auto">
                   Let nearby people know when you're open to hang out
                 </p>
               </div>
