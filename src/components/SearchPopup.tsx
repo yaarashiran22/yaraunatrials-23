@@ -116,7 +116,7 @@ const SearchPopup = () => {
               placeholder="Search for users, items, events..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pr-12 h-12 text-base bg-white"
+              className="pr-12 h-12 text-base bg-white border border-black"
               autoFocus
             />
             {searchQuery && (
