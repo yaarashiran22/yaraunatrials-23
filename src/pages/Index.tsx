@@ -407,7 +407,7 @@ const Index = () => {
             <Button variant={eventFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('all')} className="text-xs px-2 py-1 rounded-full h-6">
               All
             </Button>
-            <Button variant={eventFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('following')} className="text-xs px-2 py-1 rounded-full h-6" disabled={!user}>
+            <Button variant={eventFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('following')} className={`text-xs px-2 py-1 rounded-full h-6 ${eventFilter === 'following' ? '' : 'bg-white border-primary text-primary hover:bg-white/90'}`} disabled={!user}>
               <Users className="h-2.5 w-2.5 mr-1" />
               Following
             </Button>
@@ -465,11 +465,12 @@ const Index = () => {
           }}>
               All
             </Button>
-            <Button variant={couponFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setCouponFilter('following')} className={`text-xs px-2 py-1 rounded-full h-6 ${couponFilter === 'following' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'}`} style={couponFilter === 'following' ? {
+            <Button variant={couponFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setCouponFilter('following')} className={`text-xs px-2 py-1 rounded-full h-6 ${couponFilter === 'following' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'bg-white border-accent-subtle text-accent-subtle hover:bg-white/90'}`} style={couponFilter === 'following' ? {
             backgroundColor: 'hsl(var(--accent-subtle))',
             borderColor: 'hsl(var(--accent-subtle))',
             color: 'white'
           } : {
+            backgroundColor: 'white',
             borderColor: 'hsl(var(--accent-subtle))',
             color: 'hsl(var(--accent-subtle))'
           }} disabled={!user}>
