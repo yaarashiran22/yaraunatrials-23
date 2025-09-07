@@ -174,7 +174,7 @@ const LoginPage = () => {
               <div 
                 className="text-5xl font-black cursor-pointer hover:opacity-80 transition-opacity"
                 style={{ 
-                  color: 'hsl(var(--primary))', 
+                  color: 'hsl(var(--coral))', 
                   fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
                   fontWeight: 700,
                   textTransform: 'lowercase',
@@ -278,7 +278,7 @@ const LoginPage = () => {
           <div 
             className="text-5xl font-black cursor-pointer hover:opacity-80 transition-opacity"
             style={{ 
-              color: 'hsl(var(--primary))', 
+              color: 'hsl(var(--coral))', 
               fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
               fontWeight: 700,
               textTransform: 'lowercase',
