@@ -1209,7 +1209,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20" dir="ltr">
+    <div className="min-h-screen bg-background pb-20 font-app" dir="ltr">
       <Header 
         title="Profile"
         onNotificationsClick={() => setShowNotifications(true)}
