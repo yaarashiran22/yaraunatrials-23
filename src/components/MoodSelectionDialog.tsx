@@ -35,7 +35,7 @@ const MoodSelectionDialog = ({ isOpen, onClose, onMoodSelect }: MoodSelectionDia
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full max-w-md mx-auto bg-violet-500/20 border-violet-500/30">
         <DialogHeader>
-          <DialogTitle className="text-center text-xl font-semibold">
+          <DialogTitle className="text-center text-xl font-semibold text-white">
             What's your mood?
           </DialogTitle>
         </DialogHeader>
