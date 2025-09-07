@@ -446,7 +446,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(195 85% 75%); /* Electric blue to complement purple */
+    color: hsl(0 0% 0%); /* Black font for row titles */
     font-size: 1.1em;
   }
 
@@ -500,7 +500,18 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(0 0% 100%); /* White font */
+    color: hsl(0 0% 0%); /* Black font for row titles */
+    font-size: 1.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .title-section-white {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: lowercase;
+    position: relative;
+    color: hsl(0 0% 100%); /* White font for neighbors section */
     font-size: 1.1em;
     margin-bottom: 0.5rem;
   }
