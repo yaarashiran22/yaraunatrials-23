@@ -32,6 +32,10 @@ const buttonVariants = cva(
         success: "bg-success text-success-foreground shadow-button hover:shadow-button-hover hover:bg-success/90 transition-all duration-300 active:scale-95",
         warning: "bg-warning text-warning-foreground shadow-button hover:shadow-button-hover hover:bg-warning/90 transition-all duration-300 active:scale-95",
         plaza: "bg-gradient-plaza-dusk text-white shadow-glow hover:shadow-floating hover:scale-105 transition-all duration-300 active:scale-95",
+        // White variants for clean UI
+        white: "bg-white text-foreground border-2 border-border hover:bg-neutral-100 hover:border-neutral-300 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95",
+        'white-outline': "bg-transparent text-foreground border-2 border-white hover:bg-white hover:text-foreground shadow-sm hover:shadow-md transition-all duration-300 active:scale-95",
+        'white-subtle': "bg-white/90 backdrop-blur-sm text-foreground border border-white/50 hover:bg-white hover:border-white shadow-sm hover:shadow-md transition-all duration-300 active:scale-95",
         // Neutral variants for diversity
         'neutral-light': "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200 transition-all duration-300 active:scale-95",
         'neutral-medium': "bg-neutral-300 text-neutral-700 hover:bg-neutral-400 transition-all duration-300 active:scale-95",

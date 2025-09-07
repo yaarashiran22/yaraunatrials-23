@@ -11,92 +11,92 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Purple, Banana Mania, Radical Red & Hot Toddy Color Palette */
-    --background: 285 85% 30%;            /* Electric purple background */
-    --foreground: 276 99% 15%;           /* White for text */
+    /* Modern Harmonious Color Palette - Blue, Indigo, Purple with Coral Accents */
+    --background: 0 0% 100%;                 /* Pure white background */
+    --foreground: 224 71% 4%;                /* Dark navy text */
 
-    --card: 85 45% 94%;                  /* Slightly lighter lime green cards */
-    --card-foreground: 276 99% 15%;      /* White for card text */
+    --card: 0 0% 100%;                       /* Pure white cards */
+    --card-foreground: 224 71% 4%;           /* Dark navy for card text */
 
-    --popover: 85 45% 93%;               /* Light lime green popover */
-    --popover-foreground: 276 99% 15%;   /* White for popover text */
+    --popover: 0 0% 100%;                    /* Pure white popover */
+    --popover-foreground: 224 71% 4%;        /* Dark navy for popover text */
 
-    /* Primary: Purple - Full Scale */
-    --primary: 276 99% 35%;              /* Lighter Purple for logo */
-    --primary-foreground: 49 85% 95%;    /* Light Banana Mania text on Purple */
-    --primary-900: 276 99% 20%;          /* Darker Purple */
-    --primary-800: 276 99% 25%;          /* Between 900 and 700 */
-    --primary-700: 276 99% 30%;          /* Darker than main */
-    --primary-600: 276 99% 35%;          /* #7A1CB8 - Main primary (lighter) */
-    --primary-500: 276 99% 45%;          /* Light variant */
-    --primary-400: 276 99% 55%;          /* Very light */
-    --primary-300: 276 99% 70%;          /* Ultra light */
-    --primary-200: 276 99% 85%;          /* Subtle */
-    --primary-100: 276 99% 92%;          /* Subtle background */
+    /* Primary: Modern Indigo - Full Scale */
+    --primary: 239 84% 67%;                  /* Modern indigo */
+    --primary-foreground: 0 0% 100%;         /* White text on primary */
+    --primary-900: 239 84% 27%;              /* Darkest indigo */
+    --primary-800: 239 84% 37%;              /* Darker indigo */
+    --primary-700: 239 84% 47%;              /* Dark indigo */
+    --primary-600: 239 84% 57%;              /* Medium indigo */
+    --primary-500: 239 84% 67%;              /* Main primary */
+    --primary-400: 239 84% 77%;              /* Light indigo */
+    --primary-300: 239 84% 87%;              /* Very light indigo */
+    --primary-200: 239 84% 93%;              /* Subtle indigo */
+    --primary-100: 239 84% 97%;              /* Subtle background */
 
-    /* Secondary: Banana Mania - Full Scale */
-    --secondary: 49 85% 81%;             /* #FAEBA5 - Banana Mania */
-    --secondary-foreground: 276 99% 15%; /* White text */
-    --secondary-900: 49 85% 50%;         /* Dark Banana Mania */
-    --secondary-800: 49 85% 60%;         /* Between 900 and 700 */
-    --secondary-700: 49 85% 70%;         /* Darker Banana Mania */
-    --secondary-600: 49 85% 75%;         /* Medium Banana Mania */
-    --secondary-500: 49 85% 81%;         /* #FAEBA5 - Main secondary */
-    --secondary-400: 49 85% 85%;         /* Light Banana Mania */
-    --secondary-300: 49 85% 88%;         /* Lighter Banana Mania */
-    --secondary-200: 49 85% 91%;         /* Very light Banana Mania */
-    --secondary-100: 49 85% 95%;         /* Subtle Banana Mania background */
+    /* Secondary: Soft Blue - Full Scale */
+    --secondary: 217 91% 60%;                /* Soft blue */
+    --secondary-foreground: 0 0% 100%;       /* White text */
+    --secondary-900: 217 91% 20%;            /* Dark blue */
+    --secondary-800: 217 91% 30%;            /* Darker blue */
+    --secondary-700: 217 91% 40%;            /* Medium dark blue */
+    --secondary-600: 217 91% 50%;            /* Medium blue */
+    --secondary-500: 217 91% 60%;            /* Main secondary */
+    --secondary-400: 217 91% 70%;            /* Light blue */
+    --secondary-300: 217 91% 80%;            /* Lighter blue */
+    --secondary-200: 217 91% 90%;            /* Very light blue */
+    --secondary-100: 217 91% 95%;            /* Subtle blue background */
 
-    /* Accent: Hot Toddy */
-    --accent: 0 0% 75%;                  /* Neutral gray accent */
-    --accent-foreground: 49 85% 95%;     /* Light Banana Mania text */
-    --accent-700: 55 95% 25%;            /* Darker Hot Toddy */
-    --accent-600: 55 95% 28%;            /* Between 700 and 500 */
-    --accent-500: 55 95% 32%;            /* #9E9104 - Main accent */
-    --accent-400: 55 95% 40%;            /* Lighter Hot Toddy */
-    --accent-300: 55 95% 50%;            /* Light Hot Toddy */
+    /* Accent: Light Gray */
+    --accent: 220 14% 96%;                   /* Light gray accent */
+    --accent-foreground: 224 71% 4%;         /* Dark text */
+    --accent-700: 215 28% 17%;               /* Dark gray */
+    --accent-600: 217 19% 27%;               /* Medium dark gray */
+    --accent-500: 220 9% 46%;                /* Medium gray */
+    --accent-400: 220 13% 69%;               /* Light gray */
+    --accent-300: 220 14% 83%;               /* Lighter gray */
 
-    /* Tertiary: Radical Red - Full Scale (darker) */
-    --tertiary: 349 100% 45%;            /* Darker #FF2F55 - Radical Red */
-    --tertiary-foreground: 49 85% 95%;   /* Light Banana Mania text */
-    --tertiary-900: 349 100% 25%;        /* Darker Radical Red */
-    --tertiary-800: 349 100% 30%;        /* Between 900 and 700 */
-    --tertiary-700: 349 100% 35%;        /* Darker than main */
-    --tertiary-600: 349 100% 40%;        /* Medium Radical Red */
-    --tertiary-500: 349 100% 45%;        /* Darker main tertiary */
-    --tertiary-400: 349 100% 55%;        /* Light Radical Red */
-    --tertiary-300: 349 100% 65%;        /* Lighter Radical Red */
-    --tertiary-200: 349 100% 75%;        /* Very light Radical Red */
-    --tertiary-100: 349 100% 85%;        /* Subtle Radical Red background */
+    /* Tertiary: Warm Purple - Full Scale */
+    --tertiary: 262 83% 58%;                 /* Warm purple */
+    --tertiary-foreground: 0 0% 100%;        /* White text */
+    --tertiary-900: 262 83% 18%;             /* Dark purple */
+    --tertiary-800: 262 83% 28%;             /* Darker purple */
+    --tertiary-700: 262 83% 38%;             /* Medium dark purple */
+    --tertiary-600: 262 83% 48%;             /* Medium purple */
+    --tertiary-500: 262 83% 58%;             /* Main tertiary */
+    --tertiary-400: 262 83% 68%;             /* Light purple */
+    --tertiary-300: 262 83% 78%;             /* Lighter purple */
+    --tertiary-200: 262 83% 88%;             /* Very light purple */
+    --tertiary-100: 262 83% 94%;             /* Subtle purple background */
 
-    /* Coral Orange - Light coral orange for special elements */
-    --coral: 14 100% 65%;                 /* More vibrant coral orange */
-    --coral-foreground: 0 0% 100%;       /* White text on coral */
-    --coral-hover: 14 100% 60%;           /* Darker coral for hover */
+    /* Coral Orange - Vibrant accent for special elements */
+    --coral: 14 100% 65%;                    /* Vibrant coral */
+    --coral-foreground: 0 0% 100%;           /* White text on coral */
+    --coral-hover: 14 100% 60%;              /* Darker coral for hover */
 
-    /* System Colors - ALL Four Color Palette */
-    --success: 55 95% 45%;               /* Use Hot Toddy for success */
-    --success-foreground: 49 85% 95%;
-    --warning: 49 85% 70%;               /* Use Banana Mania for warning */
-    --warning-foreground: 276 99% 15%;
-    --destructive: 349 100% 45%;         /* Use darker Radical Red for destructive */
-    --destructive-foreground: 49 85% 95%;
+    /* System Colors - Harmonious palette */
+    --success: 142 76% 36%;                  /* Green success */
+    --success-foreground: 0 0% 100%;
+    --warning: 32 95% 44%;                   /* Orange warning */
+    --warning-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;                /* Red destructive */
+    --destructive-foreground: 0 0% 100%;
 
-    /* Neutrals - Purple based Scale */
-    --neutral-900: 276 99% 15%;          /* Dark Purple */
-    --neutral-800: 276 80% 20%;          /* Between 900 and 700 */
-    --neutral-700: 276 60% 25%;          /* Medium dark */
-    --neutral-600: 276 40% 35%;          /* Between 700 and 500 */
-    --neutral-500: 276 30% 45%;          /* Medium neutral */
-    --neutral-400: 49 50% 70%;           /* Muted Banana Mania */
-    --neutral-300: 49 60% 80%;           /* Light Banana Mania */
-    --neutral-200: 49 70% 85%;           /* Between 300 and 100 */
-    --neutral-100: 49 85% 90%;           /* Very light Banana Mania */
+    /* Neutrals - Clean Gray Scale */
+    --neutral-900: 224 71% 4%;               /* Darkest text */
+    --neutral-800: 215 25% 27%;              /* Dark gray */
+    --neutral-700: 217 19% 35%;              /* Medium dark */
+    --neutral-600: 215 14% 48%;              /* Medium gray */
+    --neutral-500: 220 9% 46%;               /* Medium neutral */
+    --neutral-400: 220 13% 69%;              /* Light gray */
+    --neutral-300: 220 14% 83%;              /* Lighter gray */
+    --neutral-200: 220 14% 90%;              /* Very light gray */
+    --neutral-100: 220 14% 96%;              /* Subtle gray background */
 
     /* Modern borders and inputs */
-    --border: 0 0% 85%;                 /* Neutral gray border */
-    --input: 0 0% 97%;                  /* Light neutral input background */
-    --ring: 276 99% 35%;                 /* Focus ring - lighter Purple */
+    --border: 220 13% 91%;                   /* Light border */
+    --input: 0 0% 100%;                      /* White input background */
+    --ring: 239 84% 67%;                     /* Focus ring - primary color */
 
     /* Semantic aliases for current usage */
     --muted: 0 0% 94%;                  /* Light neutral muted background */
@@ -202,90 +202,92 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 17 98% 18%;            /* Dark Burning Orange background */
-    --foreground: 35 61% 89%;            /* Light Champagne text on dark */
+    /* Dark Mode - Harmonious Dark Theme */
+    --background: 224 71% 4%;                /* Dark navy background */
+    --foreground: 0 0% 98%;                  /* Near white text */
 
-    --card: 17 80% 22%;                  /* Dark Burning Orange card */
-    --card-foreground: 35 61% 89%;       /* Light Champagne text on dark card */
+    --card: 224 71% 8%;                      /* Dark card background */
+    --card-foreground: 0 0% 98%;             /* White card text */
 
-    --popover: 17 80% 22%;
-    --popover-foreground: 35 61% 89%;
+    --popover: 224 71% 8%;                   /* Dark popover */
+    --popover-foreground: 0 0% 98%;          /* White popover text */
 
-    /* Primary: Burning Orange - Dark Mode Adjustments */
-    --primary: 276 99% 40%;               /* Lighter Purple for dark mode */
-    --primary-foreground: 0 0% 100%;
-    --primary-900: 276 99% 20%;           /* Very dark Purple */
-    --primary-800: 276 99% 25%;          
-    --primary-700: 276 99% 30%;          
-    --primary-600: 276 99% 35%;           /* Main Purple */
-    --primary-500: 276 99% 40%;           /* Lighter main primary */
-    --primary-400: 276 99% 50%;         
-    --primary-300: 276 99% 60%;         
-    --primary-200: 276 99% 70%;         
-    --primary-100: 276 99% 80%;
+    /* Primary: Brighter Indigo for Dark Mode */
+    --primary: 239 84% 77%;                  /* Brighter indigo */
+    --primary-foreground: 224 71% 4%;        /* Dark text on primary */
+    --primary-900: 239 84% 37%;              
+    --primary-800: 239 84% 47%;              
+    --primary-700: 239 84% 57%;              
+    --primary-600: 239 84% 67%;              
+    --primary-500: 239 84% 77%;              
+    --primary-400: 239 84% 82%;              
+    --primary-300: 239 84% 87%;              
+    --primary-200: 239 84% 92%;              
+    --primary-100: 239 84% 96%;              
 
-    /* Secondary: Kournikova - Dark Mode Adjustments */
-    --secondary: 51 90% 65%;             /* Darker Kournikova for dark mode */
-    --secondary-foreground: 17 98% 30%;
-    --secondary-900: 51 100% 35%;        
-    --secondary-800: 51 100% 45%;        
-    --secondary-700: 51 100% 55%;        
-    --secondary-600: 51 100% 62%;        
-    --secondary-500: 51 100% 65%;        /* Darker main secondary */
-    --secondary-400: 51 100% 70%;        
-    --secondary-300: 51 100% 76%;        
-    --secondary-200: 51 100% 82%;        
-    --secondary-100: 51 100% 88%;
+    /* Secondary: Brighter Blue for Dark Mode */
+    --secondary: 217 91% 70%;                /* Brighter blue */
+    --secondary-foreground: 224 71% 4%;      /* Dark text */
+    --secondary-900: 217 91% 30%;            
+    --secondary-800: 217 91% 40%;            
+    --secondary-700: 217 91% 50%;            
+    --secondary-600: 217 91% 60%;            
+    --secondary-500: 217 91% 70%;            
+    --secondary-400: 217 91% 75%;            
+    --secondary-300: 217 91% 80%;            
+    --secondary-200: 217 91% 85%;            
+    --secondary-100: 217 91% 90%;            
 
-    /* Accent: Snow Flurry - Dark Mode Adjustments */
-    --accent: 110 100% 75%;              /* Darker Snow Flurry for dark mode */
-    --accent-foreground: 17 98% 30%;
-    --accent-700: 110 100% 55%;           
-    --accent-600: 110 100% 65%;           
-    --accent-500: 110 100% 75%;          /* Darker main accent */
-    --accent-400: 110 100% 85%;           
-    --accent-300: 110 100% 92%;           
+    /* Accent: Dark Gray */
+    --accent: 215 28% 17%;                   /* Dark gray accent */
+    --accent-foreground: 0 0% 98%;           /* White text */
+    --accent-700: 220 14% 96%;               
+    --accent-600: 220 14% 83%;               
+    --accent-500: 220 13% 69%;               
+    --accent-400: 220 9% 46%;                
+    --accent-300: 217 19% 27%;               
 
-    /* Tertiary: Champagne - Dark Mode Adjustments */
-    --tertiary: 35 50% 75%;              /* Darker Champagne for dark mode */
-    --tertiary-foreground: 17 98% 30%;
-    --tertiary-900: 35 61% 50%;        
-    --tertiary-800: 35 61% 60%;        
-    --tertiary-700: 35 61% 70%;        
-    --tertiary-600: 35 61% 75%;        
-    --tertiary-500: 35 61% 80%;          /* Darker main tertiary */
-    --tertiary-400: 35 61% 85%;        
-    --tertiary-300: 35 61% 89%;        
-    --tertiary-200: 35 61% 92%;        
-    --tertiary-100: 35 61% 95%;
+    /* Tertiary: Brighter Purple for Dark Mode */
+    --tertiary: 262 83% 68%;                 /* Brighter purple */
+    --tertiary-foreground: 224 71% 4%;       /* Dark text */
+    --tertiary-900: 262 83% 28%;             
+    --tertiary-800: 262 83% 38%;             
+    --tertiary-700: 262 83% 48%;             
+    --tertiary-600: 262 83% 58%;             
+    --tertiary-500: 262 83% 68%;             
+    --tertiary-400: 262 83% 73%;             
+    --tertiary-300: 262 83% 78%;             
+    --tertiary-200: 262 83% 83%;             
+    --tertiary-100: 262 83% 88%;             
 
-    /* Coral Orange - Dark Mode Adjustments */
-    --coral: 14 100% 70%;                 /* More vibrant coral for dark mode */
-    --coral-foreground: 0 0% 100%;       /* White text on coral */
-    --coral-hover: 14 100% 65%;           /* Darker coral for hover */
+    /* Coral Orange - Slightly brighter for dark mode */
+    --coral: 14 100% 70%;                    /* Brighter coral for dark mode */
+    --coral-foreground: 224 71% 4%;          /* Dark text on coral */
+    --coral-hover: 14 100% 65%;              /* Darker coral for hover */
 
     /* System Colors - Dark Mode Adjustments */
-    --success: 110 100% 65%;             /* Darker Snow Flurry for dark mode */
-    --success-foreground: 17 98% 30%;
-    --warning: 51 100% 65%;              /* Darker Kournikova for dark mode */
-    --warning-foreground: 17 98% 30%;
-    --destructive: 0 84% 70%;            /* Lighter destructive for dark mode */
-    --destructive-foreground: 0 0% 100%;
+    --success: 142 76% 46%;                  /* Brighter green */
+    --success-foreground: 224 71% 4%;
+    --warning: 32 95% 54%;                   /* Brighter orange */
+    --warning-foreground: 224 71% 4%;
+    --destructive: 0 84% 70%;                /* Brighter red */
+    --destructive-foreground: 224 71% 4%;
 
-    --muted: 17 80% 25%;                 /* Dark muted */
-    --muted-foreground: 35 50% 75%;      /* Light Champagne muted text */
+    --muted: 215 28% 17%;                    /* Dark muted */
+    --muted-foreground: 220 13% 69%;         /* Light gray muted text */
 
-    --border: 17 60% 32%;                /* Dark Burning Orange border */
-    --input: 17 80% 28%;                 /* Dark Burning Orange input */
-    --ring: 276 99% 40%;                 /* Focus ring - lighter Purple */
-    --sidebar-background: 17 80% 22%;
-    --sidebar-foreground: 35 61% 89%;
-    --sidebar-primary: 35 61% 89%;
-    --sidebar-primary-foreground: 17 80% 22%;
-    --sidebar-accent: 35 50% 75%;
-    --sidebar-accent-foreground: 17 80% 22%;
-    --sidebar-border: 17 60% 32%;
-    --sidebar-ring: 35 50% 75%;
+    /* Modern borders and inputs - Dark Mode */
+    --border: 215 28% 17%;                   /* Dark border */
+    --input: 224 71% 8%;                     /* Dark input background */
+    --ring: 239 84% 77%;                     /* Bright focus ring */
+    --sidebar-background: 224 71% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 224 71% 8%;
+    --sidebar-accent: 220 13% 69%;
+    --sidebar-accent-foreground: 224 71% 8%;
+    --sidebar-border: 215 28% 17%;
+    --sidebar-ring: 220 13% 69%;
   }
 }
 
@@ -765,7 +767,42 @@ All colors MUST be HSL.
   }
   
   .dark .header-bar {
-    background: hsl(257 50% 18%);
+    background: hsl(224 71% 8%);
     border-bottom: 1px solid hsl(var(--border) / 0.1);
+  }
+  
+  /* White surface utilities for better UI */
+  .surface-white {
+    background-color: hsl(0 0% 100%);
+    color: hsl(224 71% 4%);
+  }
+  
+  .surface-light {
+    background-color: hsl(220 14% 98%);
+    color: hsl(224 71% 4%);
+  }
+  
+  .bg-white-soft {
+    background-color: hsl(0 0% 100% / 0.95);
+    backdrop-filter: blur(8px);
+  }
+  
+  .text-on-light {
+    color: hsl(224 71% 4%);
+  }
+  
+  .text-muted-light {
+    color: hsl(215 28% 17%);
+  }
+  
+  .card-white {
+    background-color: hsl(0 0% 100%);
+    border: 1px solid hsl(220 13% 91%);
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px 0 hsl(0 0% 0% / 0.1), 0 1px 2px 0 hsl(0 0% 0% / 0.06);
+  }
+  
+  .card-white:hover {
+    box-shadow: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.06);
   }
 }
