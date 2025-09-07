@@ -114,7 +114,7 @@ const OptimizedProfileCard = memo(({
         </div>
         
         <span 
-          className="text-xs font-medium text-center max-w-[70px] truncate text-foreground cursor-pointer hover:text-primary transition-colors"
+          className="text-xs font-medium text-center max-w-[70px] truncate text-white cursor-pointer hover:text-primary transition-colors"
           onClick={handleNavigateToProfile}
         >
           {name}
