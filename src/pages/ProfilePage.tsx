@@ -1215,19 +1215,6 @@ const ProfilePage = () => {
         onNotificationsClick={() => setShowNotifications(true)}
       />
 
-      {/* Settings Button - Below Header */}
-      {isOwnProfile && (
-        <div className="flex justify-end px-4 pt-4">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="rounded-full p-2 h-8 w-8 bg-coral/10 border-coral/30 text-coral hover:bg-coral hover:text-white transition-all hover:shadow-lg"
-            onClick={() => navigate('/settings')}
-          >
-            <Settings className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
 
       <main className="px-4 py-6 pb-20">
         {/* Profile Header */}
@@ -1361,6 +1348,17 @@ const ProfilePage = () => {
                   {profileData.account_type === 'business' ? '🏢 Business Account' : '👤 Personal Account'}
                 </span>
               </div>
+              {/* Settings Button - Same row as account type */}
+              {isOwnProfile && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="rounded-full p-2 h-8 w-8 bg-coral/10 border-coral/30 text-coral hover:bg-coral hover:text-white transition-all hover:shadow-lg"
+                  onClick={() => navigate('/settings')}
+                >
+                  <Settings className="h-4 w-4" />
+                </Button>
+              )}
             </div>
             {/* Business Coupons Display */}
             {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
