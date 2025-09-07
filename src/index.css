@@ -500,7 +500,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(195 85% 75%); /* Electric blue to complement purple */
+    color: hsl(0 0% 100%); /* White font */
     font-size: 1.1em;
     margin-bottom: 0.5rem;
   }
