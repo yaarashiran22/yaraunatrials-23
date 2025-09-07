@@ -144,13 +144,18 @@ const EditProfilePage = () => {
   }, [profile]);
 
   return (
-    <div className="min-h-screen bg-background" dir="ltr">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/30 to-coral-50/30" dir="ltr">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-background">
-        <Button variant="ghost" size="sm" onClick={() => navigate(user ? `/profile/${user.id}` : '/')}>
-          <ArrowLeft className="h-5 w-5" />
+      <div className="flex items-center justify-between p-4 border-b bg-background/80 backdrop-blur-sm border-primary-200/30">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => navigate(user ? `/profile/${user.id}` : '/')}
+          className="hover:bg-primary-100/50 transition-all"
+        >
+          <ArrowLeft className="h-5 w-5 text-primary" />
         </Button>
-        <h2 className="text-lg font-semibold">Edit Profile</h2>
+        <h2 className="text-lg font-semibold bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent">Edit Profile</h2>
         <div></div> {/* Empty div for spacing */}
       </div>
 
@@ -160,16 +165,17 @@ const EditProfilePage = () => {
         {/* Profile Picture Section */}
         <div className="flex justify-center mb-8 mt-6">
           <div className="relative">
-            <img 
-              src={profileImage}
-              alt="Profile picture"
-              className="rounded-full object-cover"
-              style={{ width: '100px', height: '100px' }}
-            />
+            <div className="w-[108px] h-[108px] rounded-full bg-gradient-to-br from-coral to-primary p-1">
+              <img 
+                src={profileImage}
+                alt="Profile picture"
+                className="w-full h-full rounded-full object-cover bg-white p-1"
+              />
+            </div>
             <Button 
               variant="outline" 
               size="sm" 
-              className="absolute -bottom-2 -right-2 rounded-full w-8 h-8 p-0 bg-background border-2 hover:bg-muted transition-colors"
+              className="absolute -bottom-2 -right-2 rounded-full w-10 h-10 p-0 bg-white border-2 border-coral/30 hover:bg-coral hover:text-white hover:border-coral transition-all shadow-lg hover:shadow-coral/25"
               onClick={handleImageClick}
             >
               <Camera className="h-4 w-4" />
@@ -185,13 +191,13 @@ const EditProfilePage = () => {
         </div>
 
         {/* Form Fields */}
-        <div className="space-y-6 max-w-md mx-auto">
+        <div className="space-y-6 max-w-md mx-auto bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-primary-200/30 shadow-xl">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Name</label>
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-2">Name</label>
             <Input 
               placeholder="John Doe"
-              className="text-left"
+              className="text-left border-primary-200/40 focus:border-primary focus:ring-primary/20 bg-white/80"
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
             />
@@ -199,10 +205,10 @@ const EditProfilePage = () => {
 
           {/* Social Page */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Social Page</label>
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-2">Social Page</label>
             <Input 
               placeholder="https://instagram.com/johndoe"
-              className="text-left"
+              className="text-left border-primary-200/40 focus:border-primary focus:ring-primary/20 bg-white/80"
               value={formData.username}
               onChange={(e) => handleInputChange('username', e.target.value)}
             />
@@ -210,10 +216,10 @@ const EditProfilePage = () => {
 
           {/* Bio */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Bio</label>
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-2">Bio</label>
             <Textarea 
               placeholder="Tell us a little about yourself..."
-              className="text-left min-h-[80px] resize-none"
+              className="text-left min-h-[80px] resize-none border-primary-200/40 focus:border-primary focus:ring-primary/20 bg-white/80"
               value={formData.bio}
               onChange={(e) => handleInputChange('bio', e.target.value)}
             />
@@ -221,10 +227,10 @@ const EditProfilePage = () => {
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Neighborhood</label>
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-2">Neighborhood</label>
             <Input 
               placeholder="New York City"
-              className="text-left"
+              className="text-left border-primary-200/40 focus:border-primary focus:ring-primary/20 bg-white/80"
               value={formData.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
             />
@@ -232,15 +238,15 @@ const EditProfilePage = () => {
 
           {/* Specialties */}
           <div>
-            <label className="block text-sm font-medium text-foreground mb-3">Specialties</label>
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-3">Specialties</label>
             <div className="flex flex-wrap gap-2">
               {formData.specialties.map((specialty, index) => (
-                <div key={index} className="flex items-center gap-2 bg-muted rounded-full px-3 py-1">
-                  <span className="text-sm">{specialty}</span>
+                <div key={index} className="flex items-center gap-2 bg-gradient-to-r from-coral-100 to-primary-100 rounded-full px-3 py-1 border border-coral-200/50">
+                  <span className="text-sm text-coral-700 font-medium">{specialty}</span>
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="p-0 h-4 w-4"
+                    className="p-0 h-4 w-4 hover:bg-coral-200/50 text-coral-600 hover:text-coral-700 rounded-full"
                     onClick={() => {
                       const newSpecialties = formData.specialties.filter((_, i) => i !== index);
                       handleInputChange('specialties', newSpecialties);
@@ -253,7 +259,7 @@ const EditProfilePage = () => {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="rounded-full px-3 py-1 h-7"
+                className="rounded-full px-3 py-1 h-7 border-primary/30 text-primary hover:bg-primary hover:text-white transition-all shadow-sm hover:shadow-md"
                 onClick={() => {
                   const newSpecialty = prompt('Add specialty:');
                   if (newSpecialty?.trim()) {
@@ -269,33 +275,33 @@ const EditProfilePage = () => {
           </div>
 
           {/* Privacy Settings */}
-          <div className="space-y-4 pt-4 border-t">
-            <h3 className="text-lg font-semibold">Privacy Settings</h3>
+          <div className="space-y-4 pt-4 border-t border-primary-200/30">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">Privacy Settings</h3>
             
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Private Profile</span>
+            <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary-50 to-coral-50 border border-primary-200/30">
+              <span className="text-sm font-medium text-primary-700">Private Profile</span>
               <button 
                 onClick={() => handleInputChange('isPrivate', !formData.isPrivate)}
-                className={`w-10 h-5 rounded-full relative transition-colors ${formData.isPrivate ? 'bg-primary' : 'bg-muted'}`}
+                className={`w-12 h-6 rounded-full relative transition-all shadow-inner ${formData.isPrivate ? 'bg-gradient-to-r from-coral to-primary' : 'bg-neutral-200'}`}
               >
-                <div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 shadow transition-transform ${formData.isPrivate ? 'translate-x-5' : 'translate-x-0.5'}`}></div>
+                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 shadow-lg transition-transform ${formData.isPrivate ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
               </button>
             </div>
 
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Show in Search</span>
+            <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary-50 to-coral-50 border border-primary-200/30">
+              <span className="text-sm font-medium text-primary-700">Show in Search</span>
               <button 
                 onClick={() => handleInputChange('showInSearch', !formData.showInSearch)}
-                className={`w-10 h-5 rounded-full relative transition-colors ${formData.showInSearch ? 'bg-primary' : 'bg-muted'}`}
+                className={`w-12 h-6 rounded-full relative transition-all shadow-inner ${formData.showInSearch ? 'bg-gradient-to-r from-coral to-primary' : 'bg-neutral-200'}`}
               >
-                <div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 shadow transition-transform ${formData.showInSearch ? 'translate-x-5' : 'translate-x-0.5'}`}></div>
+                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 shadow-lg transition-transform ${formData.showInSearch ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
               </button>
             </div>
           </div>
 
           {/* Save Button */}
           <Button 
-            className="w-full mt-8 h-12 text-base font-medium"
+            className="w-full mt-8 h-12 text-base font-medium bg-gradient-to-r from-primary to-coral hover:from-primary-600 hover:to-coral-600 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
             onClick={handleSaveChanges}
             disabled={isLoading}
           >

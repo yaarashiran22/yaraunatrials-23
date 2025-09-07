@@ -154,7 +154,7 @@ const LoginPage = () => {
 
   if (isLogin) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/30 to-coral-50/30 flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           {/* Header with X button */}
           <div className="flex justify-end mb-4">
@@ -162,7 +162,7 @@ const LoginPage = () => {
               variant="ghost" 
               size="sm"
               onClick={() => navigate('/')}
-              className="p-2"
+              className="p-2 hover:bg-primary-100/50 text-primary transition-all"
             >
               <X className="h-5 w-5" />
             </Button>
@@ -197,9 +197,9 @@ const LoginPage = () => {
           </div>
 
           {/* Form */}
-          <div className="bg-card rounded-2xl shadow-lg p-6">
+          <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-primary-200/30">
             <h1 
-              className="text-xl text-foreground text-center mb-6"
+              className="text-xl text-center mb-6 bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent"
               style={{ 
                 fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 700,
@@ -216,7 +216,7 @@ const LoginPage = () => {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-white/80 border-primary-200/40 focus:border-primary focus:ring-primary/20 rounded-lg"
                   required
                 />
               </div>
@@ -227,14 +227,14 @@ const LoginPage = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-white/80 border-primary-200/40 focus:border-primary focus:ring-primary/20 rounded-lg"
                   required
                 />
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg"
+                className="w-full h-12 bg-gradient-to-r from-primary to-coral hover:from-primary-600 hover:to-coral-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
                 disabled={isLoading}
               >
                 {isLoading ? 'Logging in...' : 'Login'}
@@ -245,7 +245,7 @@ const LoginPage = () => {
               <button
                 type="button"
                 onClick={() => setIsLogin(false)}
-                className="text-primary hover:text-primary/80 font-medium"
+                className="text-primary hover:text-coral font-medium transition-colors"
               >
                 Don't have an account? Sign up
               </button>
@@ -258,14 +258,14 @@ const LoginPage = () => {
 
   // Sign up form
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-coral-50/30 to-primary-50/30 pb-20">
       {/* Header with X button */}
       <div className="flex justify-between items-center pt-4 px-4">
         <Button 
           variant="ghost" 
           size="sm"
           onClick={() => setIsLogin(true)}
-          className="p-2"
+          className="p-2 hover:bg-coral-100/50 text-coral transition-all"
         >
           <X className="h-5 w-5" />
         </Button>
@@ -298,14 +298,14 @@ const LoginPage = () => {
 
         <div className="max-w-md mx-auto">
           {/* Form Container */}
-          <div className="bg-card rounded-2xl shadow-lg p-6 mb-6">
+          <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl p-6 mb-6 border border-coral-200/30">
             <div className="space-y-4">
               <div>
                 <Input 
                   placeholder="Name"
                   value={formData.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-white/80 border-coral-200/40 focus:border-coral focus:ring-coral/20 rounded-lg"
                 />
               </div>
               
@@ -315,7 +315,7 @@ const LoginPage = () => {
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-white/80 border-coral-200/40 focus:border-coral focus:ring-coral/20 rounded-lg"
                 />
               </div>
               
@@ -325,7 +325,7 @@ const LoginPage = () => {
                   type="password"
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-white/80 border-coral-200/40 focus:border-coral focus:ring-coral/20 rounded-lg"
                 />
               </div>
               
@@ -334,7 +334,7 @@ const LoginPage = () => {
                   placeholder="Neighborhood"
                   value={formData.neighborhood}
                   onChange={(e) => handleInputChange('neighborhood', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-white/80 border-coral-200/40 focus:border-coral focus:ring-coral/20 rounded-lg"
                 />
               </div>
               
@@ -343,7 +343,7 @@ const LoginPage = () => {
                   placeholder="Short Bio"
                   value={formData.bio}
                   onChange={(e) => handleInputChange('bio', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-white/80 border-coral-200/40 focus:border-coral focus:ring-coral/20 rounded-lg"
                 />
               </div>
               
@@ -352,7 +352,7 @@ const LoginPage = () => {
                   placeholder="Instagram (link to profile)"
                   value={formData.instagram}
                   onChange={(e) => handleInputChange('instagram', e.target.value)}
-                  className="w-full h-12 text-left bg-background border border-border rounded-lg"
+                  className="w-full h-12 text-left bg-white/80 border-coral-200/40 focus:border-coral focus:ring-coral/20 rounded-lg"
                 />
               </div>
             </div>
@@ -368,19 +368,19 @@ const LoginPage = () => {
                     onChange={handleImageUpload}
                     className="hidden"
                   />
-                  <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center overflow-hidden border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 transition-colors">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-coral-100 to-primary-100 flex items-center justify-center overflow-hidden border-2 border-dashed border-coral/40 hover:border-coral transition-all shadow-sm hover:shadow-md">
                     {profileImage ? (
                       <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
                       <div className="text-center">
-                        <Paperclip className="h-6 w-6 text-muted-foreground mx-auto" />
-                        <span className="text-xs text-muted-foreground mt-1 block">Upload</span>
+                        <Paperclip className="h-6 w-6 text-coral mx-auto" />
+                        <span className="text-xs text-coral mt-1 block">Upload</span>
                       </div>
                     )}
                   </div>
                 </label>
                 <div>
-                  <span className="text-foreground font-medium">Profile Picture</span>
+                  <span className="text-foreground font-medium bg-gradient-to-r from-coral to-primary bg-clip-text text-transparent">Profile Picture</span>
                   <p className="text-sm text-muted-foreground">Click to upload your profile photo</p>
                 </div>
               </div>
@@ -390,8 +390,7 @@ const LoginPage = () => {
               <Button 
                 onClick={handleSignUpSubmit}
                 disabled={isLoading}
-                className="w-full h-12 text-white text-lg font-medium rounded-lg"
-                style={{ backgroundColor: '#BB31E9' }}
+                className="w-full h-12 text-white text-lg font-medium rounded-lg bg-gradient-to-r from-coral to-primary hover:from-coral-600 hover:to-primary-600 shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
               >
                 {isLoading ? 'Registering...' : 'Sign Up'}
               </Button>
@@ -402,7 +401,7 @@ const LoginPage = () => {
               <button
                 type="button"
                 onClick={() => setIsLogin(true)}
-                className="text-primary hover:text-primary/80 font-medium"
+                className="text-coral hover:text-primary font-medium transition-colors"
               >
                 Already have an account? Login
               </button>
