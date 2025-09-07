@@ -128,7 +128,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
         
         return (
           <Card key={`${item.type}-${item.id}`} className="min-w-[280px] bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:shadow-lg transition-all duration-300 group">
-            <CardContent className="p-4 space-y-3 bg-white/40 rounded-lg">
+            <CardContent className="p-4 space-y-3 bg-card/80 border border-border/20 rounded-lg backdrop-blur-sm">
               {/* Header */}
               <div className="flex items-start justify-between">
                 <div className="flex-1">
