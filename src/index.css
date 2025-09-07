@@ -22,7 +22,7 @@ All colors MUST be HSL.
     --popover-foreground: 276 99% 15%;   /* White for popover text */
 
     /* Primary: Purple - Full Scale */
-    --primary: 276 99% 35%;              /* #7A1CB8 - Lighter Purple */
+    --primary: 276 99% 55%;              /* Lighter Purple for logo */
     --primary-foreground: 49 85% 95%;    /* Light Banana Mania text on Purple */
     --primary-900: 276 99% 20%;          /* Darker Purple */
     --primary-800: 276 99% 25%;          /* Between 900 and 700 */
