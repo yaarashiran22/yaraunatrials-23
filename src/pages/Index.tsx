@@ -449,7 +449,7 @@ const Index = () => {
             <h2 className="title-alt">
               the deals
             </h2>
-            {currentUserProfile?.account_type === 'business' && <Button size="sm" variant="outline" className="h-8 w-8 p-0 border-2 border-primary hover:bg-primary/10 hover:border-primary/80" onClick={() => setIsAddCouponModalOpen(true)}>
+            {currentUserProfile?.account_type === 'business' && <Button size="sm" variant="outline" className="h-8 w-8 p-0 border-2 border-primary bg-white hover:bg-primary/10 hover:border-primary/80" onClick={() => setIsAddCouponModalOpen(true)}>
                 <Plus className="w-4 h-4 text-primary" />
               </Button>}
           </div>
