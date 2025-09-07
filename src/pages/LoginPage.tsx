@@ -185,13 +185,14 @@ const LoginPage = () => {
               </div>
             </div>
             
+            <p className="text-sm font-medium mt-2 mb-6" style={{ color: 'hsl(var(--coral))' }}>
+              Everything Worth Knowing
+            </p>
+            
             {/* Welcome Description */}
-            <div className="mt-6 px-4">
+            <div className="px-4">
               <p className="text-base text-white leading-relaxed mb-3">
                 Welcome to una- our local social platform for finding cool and original new experiences happening around.
-              </p>
-              <p className="text-sm font-medium" style={{ color: 'hsl(var(--coral))' }}>
-                Everything Worth Knowing
               </p>
             </div>
           </div>
