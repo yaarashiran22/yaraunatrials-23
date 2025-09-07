@@ -248,7 +248,7 @@ const MessagesPage = () => {
           /* Modern Conversations List */
           <div className="flex-1 px-4 py-2">
             <ScrollArea className="h-full">
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {loading ? (
                   <div className="text-center py-16">
                     <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto mb-4" />
@@ -279,12 +279,12 @@ const MessagesPage = () => {
                   conversations.map((conversation, index) => (
                     <div
                       key={conversation.user.id}
-                      className="animate-fade-in"
+                      className="animate-fade-in relative"
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
                       <Button
                         variant="ghost"
-                        className="w-full justify-start p-4 h-auto rounded-2xl hover:bg-accent/50 transition-all duration-200 group border border-transparent hover:border-border/20 hover:shadow-lg"
+                        className="w-full justify-start p-4 h-auto rounded-2xl hover:bg-accent/50 transition-all duration-200 group border-2 border-border/10 hover:border-primary/20 hover:shadow-lg bg-card/50"
                         onClick={() => handleUserSelect(conversation.user.id)}
                       >
                         <div className="relative">
@@ -320,6 +320,11 @@ const MessagesPage = () => {
                           )}
                         </div>
                       </Button>
+                      
+                      {/* Subtle separator line */}
+                      {index < conversations.length - 1 && (
+                        <div className="h-px bg-gradient-to-r from-transparent via-border/30 to-transparent mt-4" />
+                      )}
                     </div>
                   ))
                 )}
