@@ -56,18 +56,18 @@ All colors MUST be HSL.
     --accent-400: 220 13% 69%;               /* Light gray */
     --accent-300: 220 14% 83%;               /* Lighter gray */
 
-    /* Tertiary: Warm Purple - Full Scale */
-    --tertiary: 262 83% 58%;                 /* Warm purple */
+    /* Tertiary: Electric Purple - Full Scale */
+    --tertiary: 270 95% 65%;                 /* Electric purple */
     --tertiary-foreground: 0 0% 100%;        /* White text */
-    --tertiary-900: 262 83% 18%;             /* Dark purple */
-    --tertiary-800: 262 83% 28%;             /* Darker purple */
-    --tertiary-700: 262 83% 38%;             /* Medium dark purple */
-    --tertiary-600: 262 83% 48%;             /* Medium purple */
-    --tertiary-500: 262 83% 58%;             /* Main tertiary */
-    --tertiary-400: 262 83% 68%;             /* Light purple */
-    --tertiary-300: 262 83% 78%;             /* Lighter purple */
-    --tertiary-200: 262 83% 88%;             /* Very light purple */
-    --tertiary-100: 262 83% 94%;             /* Subtle purple background */
+    --tertiary-900: 270 95% 25%;             /* Dark electric purple */
+    --tertiary-800: 270 95% 35%;             /* Darker electric purple */
+    --tertiary-700: 270 95% 45%;             /* Medium dark electric purple */
+    --tertiary-600: 270 95% 55%;             /* Medium electric purple */
+    --tertiary-500: 270 95% 65%;             /* Main tertiary */
+    --tertiary-400: 270 95% 75%;             /* Light electric purple */
+    --tertiary-300: 270 95% 85%;             /* Lighter electric purple */
+    --tertiary-200: 270 95% 92%;             /* Very light electric purple */
+    --tertiary-100: 270 95% 96%;             /* Subtle electric purple background */
 
     /* Coral Orange - Vibrant accent for special elements */
     --coral: 14 100% 65%;                    /* Vibrant coral */
@@ -247,18 +247,18 @@ All colors MUST be HSL.
     --accent-400: 220 9% 46%;                
     --accent-300: 217 19% 27%;               
 
-    /* Tertiary: Brighter Purple for Dark Mode */
-    --tertiary: 262 83% 68%;                 /* Brighter purple */
+    /* Tertiary: Brighter Electric Purple for Dark Mode */
+    --tertiary: 270 95% 75%;                 /* Brighter electric purple */
     --tertiary-foreground: 224 71% 4%;       /* Dark text */
-    --tertiary-900: 262 83% 28%;             
-    --tertiary-800: 262 83% 38%;             
-    --tertiary-700: 262 83% 48%;             
-    --tertiary-600: 262 83% 58%;             
-    --tertiary-500: 262 83% 68%;             
-    --tertiary-400: 262 83% 73%;             
-    --tertiary-300: 262 83% 78%;             
-    --tertiary-200: 262 83% 83%;             
-    --tertiary-100: 262 83% 88%;             
+    --tertiary-900: 270 95% 35%;             
+    --tertiary-800: 270 95% 45%;             
+    --tertiary-700: 270 95% 55%;             
+    --tertiary-600: 270 95% 65%;             
+    --tertiary-500: 270 95% 75%;             
+    --tertiary-400: 270 95% 80%;             
+    --tertiary-300: 270 95% 85%;             
+    --tertiary-200: 270 95% 90%;             
+    --tertiary-100: 270 95% 94%;
 
     /* Coral Orange - Slightly brighter for dark mode */
     --coral: 14 100% 70%;                    /* Brighter coral for dark mode */

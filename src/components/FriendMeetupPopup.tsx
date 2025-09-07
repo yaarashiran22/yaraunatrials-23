@@ -157,17 +157,17 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-yellow-800">
-            <Users className="h-5 w-5" />
+      <DialogContent className="max-w-md bg-gradient-to-br from-background via-background to-tertiary-100/30 border border-tertiary-200/40">
+        <DialogHeader className="bg-gradient-to-r from-transparent to-tertiary-100/20 -mx-6 -mt-6 px-6 pt-6 pb-4 rounded-t-lg">
+          <DialogTitle className="flex items-center gap-2 bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text">
+            <Users className="h-5 w-5 text-tertiary-500" />
             מפגש חברים ספונטני
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="title" className="text-sm font-medium">
+            <Label htmlFor="title" className="text-sm font-medium bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text">
               כותרת המפגש *
             </Label>
             <Input
@@ -176,14 +176,14 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="למה נפגשים?"
-              className="mt-1"
+              className="mt-1 bg-white/80 border-tertiary-200/60 focus:border-tertiary-400 transition-colors"
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="place" className="text-sm font-medium flex items-center gap-1">
-              <MapPin className="h-4 w-4" />
+            <Label htmlFor="place" className="text-sm font-medium flex items-center gap-1 bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text">
+              <MapPin className="h-4 w-4 text-tertiary-500" />
               מקום *
             </Label>
             <Input
@@ -192,14 +192,14 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
               value={place}
               onChange={(e) => setPlace(e.target.value)}
               placeholder="איפה נפגשים?"
-              className="mt-1"
+              className="mt-1 bg-white/80 border-tertiary-200/60 focus:border-tertiary-400 transition-colors"
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="time" className="text-sm font-medium flex items-center gap-1">
-              <Clock className="h-4 w-4" />
+            <Label htmlFor="time" className="text-sm font-medium flex items-center gap-1 bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text">
+              <Clock className="h-4 w-4 text-tertiary-500" />
               זמן *
             </Label>
             <Input
@@ -208,13 +208,13 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
               value={time}
               onChange={(e) => setTime(e.target.value)}
               placeholder="מתי? (למשל: היום ב-19:00)"
-              className="mt-1"
+              className="mt-1 bg-white/80 border-tertiary-200/60 focus:border-tertiary-400 transition-colors"
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="description" className="text-sm font-medium">
+            <Label htmlFor="description" className="text-sm font-medium bg-gradient-to-r from-tertiary-600 to-primary text-transparent bg-clip-text">
               פרטים נוספים
             </Label>
             <Textarea
@@ -222,7 +222,7 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="מה עוד חשוב לדעת?"
-              className="mt-1 h-20"
+              className="mt-1 h-20 bg-white/80 border-tertiary-200/60 focus:border-tertiary-400 transition-colors"
             />
           </div>
 
@@ -303,7 +303,7 @@ const FriendMeetupPopup = ({ isOpen, onClose }: FriendMeetupPopupProps) => {
             <Button
               type="submit"
               disabled={isCreating || !title.trim() || !place.trim() || !time.trim()}
-              className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white"
+              className="flex-1 bg-gradient-to-r from-tertiary-500 to-primary hover:from-tertiary-600 hover:to-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-200"
             >
               {isCreating ? 'יוצר מפגש...' : 'צור מפגש'}
             </Button>
