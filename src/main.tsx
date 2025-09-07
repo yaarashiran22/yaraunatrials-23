@@ -4,6 +4,8 @@ import App from './App.tsx'
 import './index.css'
 
 console.log('🚀 Main.tsx loaded successfully - Site is working!');
+console.log('🌍 Window object:', typeof window);
+console.log('📄 Document object:', typeof document);
 
 console.log('🔧 Creating QueryClient...');
 const queryClient = new QueryClient({
