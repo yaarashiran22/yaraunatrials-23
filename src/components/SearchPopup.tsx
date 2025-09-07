@@ -102,7 +102,7 @@ const SearchPopup = () => {
 
   return (
     <SimplifiedModal open={isSearchOpen} onOpenChange={handleClose}>
-      <SimplifiedModalContent className="max-w-2xl max-h-[80vh]">
+      <SimplifiedModalContent className="max-w-2xl max-h-[80vh] bg-violet-50 dark:bg-violet-950/40">
         <SimplifiedModalHeader>
           <SimplifiedModalTitle className="flex items-center gap-2 justify-center">
             <Search className="h-6 w-6" />
