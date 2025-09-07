@@ -296,9 +296,9 @@ const Index = () => {
       {/* Mood Filter Strip */}
       <MoodFilterStrip onFilterChange={setSelectedMoodFilter} showTitle={false} />
       
-      <main className="px-3 lg:px-6 py-3 lg:py-6 space-y-8 lg:space-y-12 pb-24 lg:pb-8 w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
+      <main className="px-3 lg:px-6 py-3 lg:py-6 space-y-4 lg:space-y-8 pb-24 lg:pb-8 w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
         {/* Community Members Section - Horizontal Carousel */}
-        <section className="-mb-1 lg:-mb-1 pb-4">
+        <section className="-mb-1 lg:-mb-1">
           <div className="px-1 lg:px-5 mb-3">
             <h3 className="title-section-white">people nearby</h3>
           </div>
@@ -315,7 +315,7 @@ const Index = () => {
 
 
         {/* Join me Section - Horizontal Carousel */}
-        <section className="home-section mt-8">
+        <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="title-section">
               wanna meet up
@@ -380,7 +380,7 @@ const Index = () => {
         </section>
 
         {/* Events Section - Horizontal Carousel */}
-        <section className="home-section mt-8">
+        <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="title-section">
             trending events
