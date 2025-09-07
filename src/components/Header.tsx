@@ -58,12 +58,12 @@ const Header = ({
         <div className="flex items-center gap-4">
           {/* Logo */}
           <div 
-            className="title-section text-3xl cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0 text-primary" 
+            className="title-section text-3xl cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0" 
             onClick={handleLogoClick}
             role="button"
             aria-label="Navigate to homepage"
             style={{ 
-              color: 'hsl(var(--primary))', 
+              color: 'hsl(var(--coral))', 
               fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
               fontWeight: 700,
               textTransform: 'lowercase',

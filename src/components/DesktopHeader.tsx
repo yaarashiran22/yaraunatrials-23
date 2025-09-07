@@ -46,10 +46,11 @@ const DesktopHeader = ({
           {/* Left section - Logo */}
           <div className="flex-shrink-0">
             <div 
-              className="text-3xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity text-primary" 
+              className="text-3xl font-black font-nunito cursor-pointer hover:opacity-80 transition-opacity" 
               onClick={() => navigate('/')}
               role="button"
               aria-label="Navigate to homepage"
+              style={{ color: 'hsl(var(--coral))' }}
             >
               una
             </div>
