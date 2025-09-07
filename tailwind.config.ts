@@ -111,6 +111,12 @@ export default {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
 				},
+				// Coral Orange
+				coral: {
+					DEFAULT: 'hsl(var(--coral))',
+					foreground: 'hsl(var(--coral-foreground))',
+					hover: 'hsl(var(--coral-hover))'
+				},
 				// Neutrals - Una Complete Scale
 				neutral: {
 					900: 'hsl(var(--neutral-900))',
