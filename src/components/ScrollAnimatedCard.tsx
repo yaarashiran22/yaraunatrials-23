@@ -18,30 +18,15 @@ const ScrollAnimatedCard: React.FC<ScrollAnimatedCardProps> = ({
     <div
       ref={elementRef}
       className={`
-        flex-shrink-0 w-48 transition-all duration-500 ease-out hover:z-20
-        ${isVisible ? 'animate-fade-in' : 'opacity-0 translate-y-8'}
+        flex-shrink-0 w-48 animate-fade-in hover-scale transition-all duration-300 ease-out
+        ${isVisible ? 'scale-105 shadow-lg' : 'scale-100'}
         ${className}
       `}
       style={{ 
-        animationDelay: `${index * 0.08}s`,
-        transform: isVisible 
-          ? 'scale(1) translateY(0px) rotateY(0deg)' 
-          : 'scale(0.9) translateY(20px) rotateY(-5deg)',
-        transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        transformOrigin: 'center bottom'
+        animationDelay: `${index * 0.1}s`,
+        transform: isVisible ? 'scale(1.05) translateY(-4px)' : 'scale(1) translateY(0px)',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
       } as React.CSSProperties}
-      onMouseEnter={(e) => {
-        if (isVisible) {
-          e.currentTarget.style.transform = 'scale(1.05) translateY(-8px) rotateY(2deg)';
-          e.currentTarget.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (isVisible) {
-          e.currentTarget.style.transform = 'scale(1) translateY(0px) rotateY(0deg)';
-          e.currentTarget.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        }
-      }}
     >
       {children}
     </div>
