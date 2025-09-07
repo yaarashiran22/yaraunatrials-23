@@ -148,9 +148,6 @@ const MessagesPage = () => {
               </div>
               
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" className="h-9 w-9 rounded-full hover:bg-accent/50">
-                  <Search className="h-4 w-4" />
-                </Button>
                 <Button
                   variant="default"
                   size="sm"
