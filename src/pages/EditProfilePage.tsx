@@ -144,9 +144,14 @@ const EditProfilePage = () => {
   }, [profile]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/30 to-coral-50/30" dir="ltr">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/30 to-coral-50/30 relative overflow-hidden" dir="ltr">
+      {/* Accent decorative elements */}
+      <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-coral/20 to-tertiary/20 rounded-full -translate-x-16 -translate-y-16 animate-pulse"></div>
+      <div className="absolute top-20 right-0 w-24 h-24 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full translate-x-12 animate-pulse delay-1000"></div>
+      <div className="absolute bottom-40 left-4 w-20 h-20 bg-gradient-to-br from-tertiary/20 to-coral/20 rounded-full animate-pulse delay-2000"></div>
+      
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-background/80 backdrop-blur-sm border-primary-200/30">
+      <div className="flex items-center justify-between p-4 border-b bg-white/70 backdrop-blur-sm border-primary-200/30 relative z-10">
         <Button 
           variant="ghost" 
           size="sm" 
@@ -155,17 +160,17 @@ const EditProfilePage = () => {
         >
           <ArrowLeft className="h-5 w-5 text-primary" />
         </Button>
-        <h2 className="text-lg font-semibold bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent">Edit Profile</h2>
+        <h2 className="text-lg font-semibold bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent">Edit Profile</h2>
         <div></div> {/* Empty div for spacing */}
       </div>
 
-      <main className="px-4 py-6 pb-20">
+      <main className="px-4 py-6 pb-20 relative z-10">
         {/* Page content starts here - title removed since it's now in header */}
 
         {/* Profile Picture Section */}
         <div className="flex justify-center mb-8 mt-6">
           <div className="relative">
-            <div className="w-[108px] h-[108px] rounded-full bg-gradient-to-br from-coral to-primary p-1">
+            <div className="w-[108px] h-[108px] rounded-full bg-gradient-to-br from-coral via-tertiary to-primary p-1 shadow-xl">
               <img 
                 src={profileImage}
                 alt="Profile picture"
@@ -175,7 +180,7 @@ const EditProfilePage = () => {
             <Button 
               variant="outline" 
               size="sm" 
-              className="absolute -bottom-2 -right-2 rounded-full w-10 h-10 p-0 bg-white border-2 border-coral/30 hover:bg-coral hover:text-white hover:border-coral transition-all shadow-lg hover:shadow-coral/25"
+              className="absolute -bottom-2 -right-2 rounded-full w-10 h-10 p-0 bg-white border-2 border-tertiary/40 hover:bg-tertiary hover:text-white hover:border-tertiary transition-all shadow-lg hover:shadow-tertiary/25"
               onClick={handleImageClick}
             >
               <Camera className="h-4 w-4" />
@@ -191,62 +196,66 @@ const EditProfilePage = () => {
         </div>
 
         {/* Form Fields */}
-        <div className="space-y-6 max-w-md mx-auto bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-primary-200/30 shadow-xl">
+        <div className="space-y-6 max-w-md mx-auto bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-primary-200/40 shadow-2xl relative overflow-hidden">
+          {/* Form accent decorations */}
+          <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-tertiary/10 to-coral/10 rounded-full translate-x-8 -translate-y-8"></div>
+          <div className="absolute bottom-4 left-0 w-12 h-12 bg-gradient-to-br from-secondary/10 to-primary/10 rounded-full -translate-x-6"></div>
+          
           {/* Name */}
-          <div>
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-2">Name</label>
+          <div className="relative z-10">
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-2">Name</label>
             <Input 
               placeholder="John Doe"
-              className="text-left border-primary-200/40 focus:border-primary focus:ring-primary/20 bg-white/80"
+              className="text-left border-primary-200/50 focus:border-tertiary focus:ring-tertiary/20 bg-white/90 shadow-sm"
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
             />
           </div>
 
           {/* Social Page */}
-          <div>
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-2">Social Page</label>
+          <div className="relative z-10">
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-2">Social Page</label>
             <Input 
               placeholder="https://instagram.com/johndoe"
-              className="text-left border-primary-200/40 focus:border-primary focus:ring-primary/20 bg-white/80"
+              className="text-left border-primary-200/50 focus:border-tertiary focus:ring-tertiary/20 bg-white/90 shadow-sm"
               value={formData.username}
               onChange={(e) => handleInputChange('username', e.target.value)}
             />
           </div>
 
           {/* Bio */}
-          <div>
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-2">Bio</label>
+          <div className="relative z-10">
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-2">Bio</label>
             <Textarea 
               placeholder="Tell us a little about yourself..."
-              className="text-left min-h-[80px] resize-none border-primary-200/40 focus:border-primary focus:ring-primary/20 bg-white/80"
+              className="text-left min-h-[80px] resize-none border-primary-200/50 focus:border-tertiary focus:ring-tertiary/20 bg-white/90 shadow-sm"
               value={formData.bio}
               onChange={(e) => handleInputChange('bio', e.target.value)}
             />
           </div>
 
           {/* Location */}
-          <div>
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-2">Neighborhood</label>
+          <div className="relative z-10">
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-2">Neighborhood</label>
             <Input 
               placeholder="New York City"
-              className="text-left border-primary-200/40 focus:border-primary focus:ring-primary/20 bg-white/80"
+              className="text-left border-primary-200/50 focus:border-tertiary focus:ring-tertiary/20 bg-white/90 shadow-sm"
               value={formData.location}
               onChange={(e) => handleInputChange('location', e.target.value)}
             />
           </div>
 
           {/* Specialties */}
-          <div>
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent mb-3">Specialties</label>
+          <div className="relative z-10">
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-3">Specialties</label>
             <div className="flex flex-wrap gap-2">
               {formData.specialties.map((specialty, index) => (
-                <div key={index} className="flex items-center gap-2 bg-gradient-to-r from-coral-100 to-primary-100 rounded-full px-3 py-1 border border-coral-200/50">
-                  <span className="text-sm text-coral-700 font-medium">{specialty}</span>
+                <div key={index} className="flex items-center gap-2 bg-gradient-to-r from-tertiary-100 via-coral-100 to-primary-100 rounded-full px-3 py-1 border border-tertiary-200/50 shadow-sm hover:shadow-md transition-all">
+                  <span className="text-sm text-tertiary-700 font-medium">{specialty}</span>
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="p-0 h-4 w-4 hover:bg-coral-200/50 text-coral-600 hover:text-coral-700 rounded-full"
+                    className="p-0 h-4 w-4 hover:bg-tertiary-200/50 text-tertiary-600 hover:text-tertiary-700 rounded-full"
                     onClick={() => {
                       const newSpecialties = formData.specialties.filter((_, i) => i !== index);
                       handleInputChange('specialties', newSpecialties);
@@ -259,7 +268,7 @@ const EditProfilePage = () => {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="rounded-full px-3 py-1 h-7 border-primary/30 text-primary hover:bg-primary hover:text-white transition-all shadow-sm hover:shadow-md"
+                className="rounded-full px-3 py-1 h-7 border-tertiary/40 text-tertiary hover:bg-gradient-to-r hover:from-tertiary hover:to-coral hover:text-white hover:border-tertiary transition-all shadow-sm hover:shadow-md"
                 onClick={() => {
                   const newSpecialty = prompt('Add specialty:');
                   if (newSpecialty?.trim()) {
@@ -275,24 +284,24 @@ const EditProfilePage = () => {
           </div>
 
           {/* Privacy Settings */}
-          <div className="space-y-4 pt-4 border-t border-primary-200/30">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">Privacy Settings</h3>
+          <div className="space-y-4 pt-4 border-t border-tertiary-200/40 relative z-10">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-secondary via-tertiary to-primary bg-clip-text text-transparent">Privacy Settings</h3>
             
-            <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary-50 to-coral-50 border border-primary-200/30">
-              <span className="text-sm font-medium text-primary-700">Private Profile</span>
+            <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-tertiary-50 via-primary-50 to-coral-50 border border-tertiary-200/40 shadow-sm hover:shadow-md transition-all">
+              <span className="text-sm font-medium text-tertiary-700">Private Profile</span>
               <button 
                 onClick={() => handleInputChange('isPrivate', !formData.isPrivate)}
-                className={`w-12 h-6 rounded-full relative transition-all shadow-inner ${formData.isPrivate ? 'bg-gradient-to-r from-coral to-primary' : 'bg-neutral-200'}`}
+                className={`w-12 h-6 rounded-full relative transition-all shadow-inner ${formData.isPrivate ? 'bg-gradient-to-r from-tertiary via-coral to-primary' : 'bg-neutral-200'}`}
               >
                 <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 shadow-lg transition-transform ${formData.isPrivate ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary-50 to-coral-50 border border-primary-200/30">
-              <span className="text-sm font-medium text-primary-700">Show in Search</span>
+            <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-tertiary-50 via-primary-50 to-coral-50 border border-tertiary-200/40 shadow-sm hover:shadow-md transition-all">
+              <span className="text-sm font-medium text-tertiary-700">Show in Search</span>
               <button 
                 onClick={() => handleInputChange('showInSearch', !formData.showInSearch)}
-                className={`w-12 h-6 rounded-full relative transition-all shadow-inner ${formData.showInSearch ? 'bg-gradient-to-r from-coral to-primary' : 'bg-neutral-200'}`}
+                className={`w-12 h-6 rounded-full relative transition-all shadow-inner ${formData.showInSearch ? 'bg-gradient-to-r from-tertiary via-coral to-primary' : 'bg-neutral-200'}`}
               >
                 <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 shadow-lg transition-transform ${formData.showInSearch ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
               </button>
@@ -301,7 +310,7 @@ const EditProfilePage = () => {
 
           {/* Save Button */}
           <Button 
-            className="w-full mt-8 h-12 text-base font-medium bg-gradient-to-r from-primary to-coral hover:from-primary-600 hover:to-coral-600 text-white shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+            className="w-full mt-8 h-12 text-base font-medium bg-gradient-to-r from-tertiary via-coral to-primary hover:from-tertiary-600 hover:via-coral-600 hover:to-primary-600 text-white shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 relative z-10"
             onClick={handleSaveChanges}
             disabled={isLoading}
           >
