@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App.tsx'
 import './index.css'
 
-console.log('🚀 Main.tsx loaded successfully');
+console.log('🚀 Main.tsx loaded successfully - Site is working!');
 
 console.log('🔧 Creating QueryClient...');
 const queryClient = new QueryClient({
