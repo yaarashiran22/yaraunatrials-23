@@ -187,7 +187,7 @@ const LoginPage = () => {
             
             {/* Welcome Description */}
             <div className="mt-6 px-4">
-              <p className="text-base text-foreground/80 leading-relaxed mb-3">
+              <p className="text-base text-white leading-relaxed mb-3">
                 Welcome to una- our local social platform for finding cool and original new experiences happening around.
               </p>
               <p className="text-sm font-medium" style={{ color: 'hsl(var(--coral))' }}>
