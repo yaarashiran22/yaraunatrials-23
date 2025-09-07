@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Sparkles, MapPin } from "lucide-react";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Sparkles, MapPin, Search } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useOptimizedNotifications } from "@/hooks/useOptimizedQueries";
@@ -81,19 +81,29 @@ const Header = ({
           {/* Notifications */}
           <div className="flex items-center gap-2">
             {user && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="relative p-2.5 h-10 w-10 bg-black text-white hover:bg-gray-800 border-black rounded-full"
-                onClick={() => setShowNotifications(true)}
-              >
-                <Bell className="h-5 w-5" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0 shadow-lg border-2 border-background">
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </span>
-                )}
-              </Button>
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="p-2.5 h-10 w-10 bg-black text-white hover:bg-gray-800 border-black rounded-full"
+                  onClick={() => navigate('/discover')}
+                >
+                  <Search className="h-5 w-5" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="relative p-2.5 h-10 w-10 bg-black text-white hover:bg-gray-800 border-black rounded-full"
+                  onClick={() => setShowNotifications(true)}
+                >
+                  <Bell className="h-5 w-5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0 shadow-lg border-2 border-background">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </Button>
+              </>
             )}
           </div>
           
