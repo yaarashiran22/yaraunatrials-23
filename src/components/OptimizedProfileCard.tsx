@@ -105,8 +105,7 @@ const OptimizedProfileCard = memo(({
           
           {isCurrentUser && (
             <div 
-            className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-background flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"
-            style={{ backgroundColor: 'hsl(var(--coral))' }}
+            className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-background flex items-center justify-center cursor-pointer hover:scale-110 transition-transform bg-primary"
               onClick={handleAddStoryClick}
             >
               <span className="text-primary-foreground text-xs">+</span>
