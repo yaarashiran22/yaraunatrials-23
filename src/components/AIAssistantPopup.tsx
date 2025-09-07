@@ -242,7 +242,7 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder="Ask me anything about events, meetups, or neighbors..."
-              className="flex-1"
+              className="flex-1 bg-white"
               disabled={isLoading}
               autoComplete="off"
               autoFocus
