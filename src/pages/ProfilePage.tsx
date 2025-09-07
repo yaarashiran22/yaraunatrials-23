@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Users, Trash2, Pencil, Edit, X, Star, Heart, MessageCircle, Share2, Bell, ChevronLeft, ChevronRight, Play, Pause, Instagram, Settings, Gift, Plus, LogOut } from "lucide-react";
+import { Calendar, MapPin, Users, Trash2, Pencil, Edit, X, Star, Heart, MessageCircle, Share2, Bell, ChevronLeft, ChevronRight, Play, Pause, Instagram, Settings, Gift, Plus, LogOut, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
@@ -1222,7 +1222,7 @@ const ProfilePage = () => {
           <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_25%_25%,hsl(var(--primary))_0%,transparent_50%),radial-gradient(circle_at_75%_75%,hsl(var(--coral))_0%,transparent_50%)]"></div>
           
           <div className="relative flex items-start gap-4">
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-coral to-primary p-0.5">
                 <div className="w-full h-full rounded-full bg-white p-1">
                   <img 
@@ -1236,78 +1236,108 @@ const ProfilePage = () => {
               </div>
             </div>
           
-          <div className="flex-1">
-            <h1 className="text-xl font-display font-bold mb-1 bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent">{profileData?.name || "User"}</h1>
-            <div className="flex items-center gap-2 text-sm mb-2">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-secondary-100 text-secondary-700">
-                <MapPin className="h-3 w-3" />
-                <span>{profileData?.location || "Not specified"}</span>
-              </div>
-            </div>
-            <p className="text-sm text-neutral-700 mb-4 font-system">{profileData?.bio || "No description"}</p>
-            {profileData?.specialties && profileData.specialties.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {profileData.specialties.map((specialty, index) => (
-                  <div key={index} className="rounded-full px-3 py-1 bg-gradient-to-r from-coral to-coral-hover text-coral-foreground shadow-sm border border-coral/20 hover:shadow-md transition-all hover:scale-105">
-                    <span className="text-xs font-medium">{specialty}</span>
+            <div className="flex-1 min-w-0 space-y-3">
+              {/* Name and Location */}
+              <div className="space-y-2">
+                <h1 className="text-xl font-display font-bold bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent">
+                  {profileData?.name || "User"}
+                </h1>
+                <div className="flex items-center gap-2">
+                  <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-100 text-secondary-700">
+                    <MapPin className="h-3 w-3 flex-shrink-0" />
+                    <span className="text-sm">{profileData?.location || "Not specified"}</span>
                   </div>
-                ))}
+                </div>
               </div>
-            )}
-            
-            <div className="flex items-center gap-3 text-sm">
-              {profileData?.username ? (
-                <a 
-                  href={profileData.username} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:opacity-80 underline cursor-pointer"
-                  style={{ color: 'hsl(280 60% 55%)' }}
-                >
-                  Instagram
-                </a>
-              ) : (
-                <span className="text-muted-foreground">No Instagram</span>
-              )}
-              {isOwnProfile && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="rounded-full p-2 h-8 w-8 border-primary/30 hover:bg-primary hover:text-primary-foreground transition-all hover:shadow-lg"
-                  onClick={() => navigate('/settings')}
-                >
-                  <Settings className="h-4 w-4" />
-                </Button>
-              )}
-               {!isOwnProfile && (
-                 <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className={`rounded-full px-3 py-1 h-7 text-xs transition-all shadow-sm hover:shadow-md ${isFriend(actualProfileId || '') ? 'bg-gradient-to-r from-success to-success-foreground text-white border-success hover:from-success-foreground hover:to-success' : 'border-success/30 text-success hover:bg-success hover:text-white'}`}
-                      onClick={handleAddFriend}
-                    >
-                      {isFriend(actualProfileId || '') ? 'Added to friends' : 'Add'}
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className={`rounded-full px-3 py-1 h-7 text-xs transition-all shadow-sm hover:shadow-md ${isFollowing(actualProfileId || '') ? 'bg-gradient-to-r from-primary to-secondary text-white border-primary hover:from-secondary hover:to-primary' : 'border-primary/30 text-primary hover:bg-primary hover:text-white'}`}
-                      onClick={() => actualProfileId && toggleFollow(actualProfileId)}
-                      disabled={isToggling}
-                    >
-                      {isFollowing(actualProfileId || '') ? 'Following' : 'Follow'}
-                    </Button>
-                 </div>
-               )}
-                {isOwnProfile && (
-                 <Button variant="outline" size="sm" className="rounded-full px-3 py-1 h-7 text-xs bg-gradient-to-r from-tertiary/10 to-coral/10 border-tertiary/30 text-tertiary hover:bg-gradient-to-r hover:from-tertiary hover:to-coral hover:text-white transition-all shadow-sm hover:shadow-md" onClick={() => navigate('/profile/edit')}>
-                    Edit
-                  </Button>
+
+              {/* Bio */}
+              <div className="space-y-3">
+                <p className="text-sm text-neutral-700 font-system leading-relaxed">
+                  {profileData?.bio || "No description"}
+                </p>
+                
+                {/* Specialties */}
+                {profileData?.specialties && profileData.specialties.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {profileData.specialties.map((specialty, index) => (
+                      <div key={index} className="rounded-full px-3 py-1 bg-gradient-to-r from-coral to-coral-hover text-coral-foreground shadow-sm border border-coral/20 hover:shadow-md transition-all hover:scale-105">
+                        <span className="text-xs font-medium">{specialty}</span>
+                      </div>
+                    ))}
+                  </div>
                 )}
+              </div>
+              
+              {/* Actions and Links */}
+              <div className="flex flex-col gap-3 pt-2">
+                {/* Instagram Link */}
+                <div className="flex items-center">
+                  {profileData?.username ? (
+                    <a 
+                      href={profileData.username} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 hover:from-purple-200 hover:to-pink-200 transition-all text-sm font-medium"
+                    >
+                      <Instagram className="h-3 w-3" />
+                      Instagram
+                    </a>
+                  ) : (
+                    <span className="text-muted-foreground text-sm">No Instagram</span>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center gap-2">
+                  {isOwnProfile && (
+                    <>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="rounded-full px-3 py-1 h-7 text-xs bg-gradient-to-r from-tertiary/10 to-coral/10 border-tertiary/30 text-tertiary hover:bg-gradient-to-r hover:from-tertiary hover:to-coral hover:text-white transition-all shadow-sm hover:shadow-md" 
+                        onClick={() => navigate('/profile/edit')}
+                      >
+                        <Pencil className="h-3 w-3 mr-1" />
+                        Edit
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="rounded-full p-1.5 h-7 w-7 border-primary/30 hover:bg-primary hover:text-primary-foreground transition-all hover:shadow-lg"
+                        onClick={() => navigate('/settings')}
+                      >
+                        <Settings className="h-3 w-3" />
+                      </Button>
+                    </>
+                  )}
+                  
+                  {!isOwnProfile && (
+                    <>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className={`rounded-full px-3 py-1 h-7 text-xs transition-all shadow-sm hover:shadow-md ${isFriend(actualProfileId || '') ? 'bg-gradient-to-r from-success to-success-foreground text-white border-success hover:from-success-foreground hover:to-success' : 'border-success/30 text-success hover:bg-success hover:text-white'}`}
+                        onClick={handleAddFriend}
+                      >
+                        <UserPlus className="h-3 w-3 mr-1" />
+                        {isFriend(actualProfileId || '') ? 'Friends' : 'Add'}
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className={`rounded-full px-3 py-1 h-7 text-xs transition-all shadow-sm hover:shadow-md ${isFollowing(actualProfileId || '') ? 'bg-gradient-to-r from-primary to-secondary text-white border-primary hover:from-secondary hover:to-primary' : 'border-primary/30 text-primary hover:bg-primary hover:text-white'}`}
+                        onClick={() => actualProfileId && toggleFollow(actualProfileId)}
+                        disabled={isToggling}
+                      >
+                        <Heart className="h-3 w-3 mr-1" />
+                        {isFollowing(actualProfileId || '') ? 'Following' : 'Follow'}
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
         </div>
 
 
