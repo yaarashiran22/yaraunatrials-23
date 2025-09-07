@@ -1222,14 +1222,13 @@ const ProfilePage = () => {
           <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_25%_25%,hsl(var(--primary))_0%,transparent_50%),radial-gradient(circle_at_75%_75%,hsl(var(--coral))_0%,transparent_50%)]"></div>
           
           <div className="relative flex items-start gap-4">
-            <div className="relative flex-shrink-0">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-coral to-primary p-0.5">
+            <div className="relative flex-shrink-0 z-10">
+              <div className="rounded-full bg-gradient-to-br from-coral to-primary p-0.5 w-[76px] h-[76px]">
                 <div className="w-full h-full rounded-full bg-white p-1">
                   <img 
                     src={profileData?.profile_image_url || "/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png"}
                     alt={profileData?.name || "User"}
-                    className="rounded-full object-cover cursor-pointer hover:opacity-80 transition-all hover:scale-105"
-                    style={{ width: '70px', height: '70px', minWidth: '70px', minHeight: '70px' }}
+                    className="w-[64px] h-[64px] rounded-full object-cover cursor-pointer hover:opacity-80 transition-all hover:scale-105"
                     onClick={() => setShowProfilePicture(true)}
                   />
                 </div>
