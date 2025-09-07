@@ -46,7 +46,7 @@ const moodOptions = [
   "Active",
   "Creative",
   "Wellness",
-  "Sightseeing"
+  "Music"
 ] as const;
 
 // Date filter options
