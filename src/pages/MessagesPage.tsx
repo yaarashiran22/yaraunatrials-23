@@ -175,8 +175,8 @@ const MessagesPage = () => {
       {/* Modern User Selection Modal */}
       {showUserSelect && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card/95 backdrop-blur-xl rounded-2xl max-w-md w-full max-h-[80vh] overflow-hidden shadow-2xl border border-border/20 animate-scale-in">
-            <div className="p-6 border-b border-border/10">
+          <div className="bg-card/95 backdrop-blur-xl rounded-2xl max-w-md w-full max-h-[85vh] overflow-hidden shadow-2xl border border-border/20 animate-scale-in flex flex-col">
+            <div className="p-6 border-b border-border/10 flex-shrink-0">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                   Start a Chat
@@ -203,7 +203,8 @@ const MessagesPage = () => {
                 />
               </div>
             </div>
-            <ScrollArea className="max-h-96">
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-full max-h-[50vh]">
               <div className="p-3 space-y-2">
                 {usersLoading ? (
                   <div className="text-center py-12 text-muted-foreground">
@@ -246,13 +247,13 @@ const MessagesPage = () => {
                         <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
                           {profile.name || 'User'}
                         </p>
-                        <p className="text-sm text-muted-foreground">{profile.email}</p>
                       </div>
                     </Button>
                   ))
                 )}
               </div>
             </ScrollArea>
+            </div>
           </div>
         </div>
       )}
