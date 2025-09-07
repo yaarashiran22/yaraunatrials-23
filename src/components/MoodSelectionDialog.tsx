@@ -33,7 +33,7 @@ const MoodSelectionDialog = ({ isOpen, onClose, onMoodSelect }: MoodSelectionDia
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-md mx-auto !bg-violet-600 border-violet-400">
+      <DialogContent className="w-full max-w-md mx-auto !bg-violet-50 dark:!bg-violet-950/40 border-violet-200 dark:border-violet-800/50">
         <DialogHeader>
           <DialogTitle className="text-center text-xl font-semibold">
             What's your mood?
