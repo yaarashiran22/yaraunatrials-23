@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDirectMessages } from '@/hooks/useDirectMessages';
 import { useUserPresence } from '@/hooks/useUserPresence';
@@ -108,19 +108,9 @@ const MessagesPage = () => {
   }
 
   const selectedUser = getSelectedUser();
-  
-  // Debug log to check if we're in conversation mode
-  console.log('🎯 MessagesPage render - selectedUserId:', selectedUserId, 'selectedUser:', selectedUser?.name);
-
-  // Debug effect to log when message input should be visible
-  useEffect(() => {
-    if (selectedUserId && selectedUser) {
-      console.log('📝 Message input should be visible for:', selectedUser.name, 'ID:', selectedUserId);
-    }
-  }, [selectedUserId, selectedUser]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pb-20">{/* Added pb-20 for bottom navigation space */}
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Custom Header for Chat */}
       {selectedUser ? (
         <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm">
@@ -487,20 +477,14 @@ const MessagesPage = () => {
             </div>
 
             {/* Message Input - Always visible at bottom */}
-            <div className="border-t-2 border-primary/20 bg-card backdrop-blur-sm p-4 flex-shrink-0 shadow-2xl" style={{
-              borderTop: '2px solid hsl(var(--primary) / 0.3)',
-              background: 'hsl(var(--card) / 0.95)',
-              position: 'sticky',
-              bottom: 0,
-              zIndex: 30
-            }}>
+            <div className="border-t border-border/10 bg-card p-4 flex-shrink-0">
               {isTyping && (
-                <div className="mb-3 text-xs text-muted-foreground animate-fade-in">
+                <div className="mb-2 text-xs text-muted-foreground animate-fade-in">
                   <div className="flex items-center gap-2">
                     <div className="flex gap-1">
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
-                      <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
                     </div>
                     <span>You're typing...</span>
                   </div>
@@ -511,8 +495,8 @@ const MessagesPage = () => {
                   <Textarea
                     value={newMessage}
                     onChange={handleTextareaChange}
-                    placeholder={`Type your message to ${selectedUser?.name || 'user'}...`}
-                    className="min-h-[48px] max-h-[120px] resize-none rounded-xl border-2 border-border/30 bg-background focus:bg-background transition-all duration-200 focus:ring-2 focus:ring-primary/30 focus:border-primary/50 pr-16 text-foreground placeholder:text-muted-foreground/60 shadow-sm"
+                    placeholder={`Message ${selectedUser?.name || 'user'}...`}
+                    className="min-h-[44px] max-h-[120px] resize-none rounded-2xl border-border/20 bg-muted/50 focus:bg-background transition-all duration-200 focus:ring-2 focus:ring-primary/20 pr-12"
                     disabled={sending}
                     rows={1}
                     onKeyDown={(e) => {
@@ -523,23 +507,20 @@ const MessagesPage = () => {
                     }}
                   />
                   {newMessage.length > 0 && (
-                    <div className="absolute bottom-2 right-14 text-xs text-muted-foreground bg-muted/80 px-2 py-1 rounded-full">
+                    <div className="absolute bottom-2 right-12 text-xs text-muted-foreground">
                       {newMessage.length}/500
                     </div>
                   )}
-                  <div className="absolute bottom-2 right-3 text-xs text-muted-foreground/50">
-                    Press Enter to send
-                  </div>
                 </div>
                 <Button 
                   type="submit" 
                   disabled={sending || !newMessage.trim()}
-                  className="h-12 w-12 rounded-xl bg-primary hover:bg-primary/90 shadow-md disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0 hover:scale-105"
+                  className="h-11 w-11 rounded-full bg-primary hover:bg-primary/90 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0"
                 >
                   {sending ? (
-                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                   ) : (
-                    <Send className="h-5 w-5" />
+                    <Send className="h-4 w-4" />
                   )}
                 </Button>
               </form>
