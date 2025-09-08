@@ -528,18 +528,6 @@ All colors MUST be HSL.
     background-clip: text;
   }
 
-  .title-section-white::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, hsl(0 0% 100% / 0.8), hsl(220 14% 90% / 0.6), hsl(0 0% 100% / 0.8));
-    border-radius: 2px;
-    box-shadow: 0 2px 8px hsl(0 0% 100% / 0.3);
-  }
-
   @keyframes gradient-shift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
