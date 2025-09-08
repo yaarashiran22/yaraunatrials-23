@@ -297,12 +297,6 @@ const MeetupVerticalPopup = ({
               </Button>
             </div>
             
-            {/* Meetup Badge */}
-            <div className="absolute top-3 left-3">
-              <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                Meetup
-              </div>
-            </div>
           </div>
 
           {/* Meetup Details */}
