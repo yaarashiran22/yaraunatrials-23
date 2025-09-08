@@ -323,12 +323,12 @@ const EventVerticalPopup = ({
                 variant={isLookingForCompanion ? "default" : "outline"}
                 className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
                   isLookingForCompanion 
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0' 
-                    : 'border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300'
+                    ? 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0' 
+                    : 'border-green-300 text-green-700 hover:bg-green-50 dark:border-green-700 dark:text-green-300'
                 }`}
               >
                 <Users className="h-3 w-3 mr-1" />
-                {isLookingForCompanion ? 'Stop looking' : 'Find companion'}
+                {isLookingForCompanion ? 'Stop looking' : 'Find someone to go with'}
               </Button>
               
               {companionUsers.length > 0 && (
@@ -340,7 +340,7 @@ const EventVerticalPopup = ({
                     {companionUsers.slice(0, 3).map((companionUser) => (
                       <div
                         key={companionUser.id}
-                        className="flex items-center gap-2 px-3 py-1 bg-purple-50/80 dark:bg-purple-950/30 rounded-full cursor-pointer hover:bg-purple-100/80 dark:hover:bg-purple-950/50 transition-all duration-200 hover:scale-105 shadow-sm border border-purple-200/50 dark:border-purple-800/50"
+                        className="flex items-center gap-2 px-3 py-1 bg-green-50/80 dark:bg-green-950/30 rounded-full cursor-pointer hover:bg-green-100/80 dark:hover:bg-green-950/50 transition-all duration-200 hover:scale-105 shadow-sm border border-green-200/50 dark:border-green-800/50"
                         onClick={() => handleMessageUser(companionUser.id)}
                       >
                         <img
@@ -348,17 +348,17 @@ const EventVerticalPopup = ({
                           alt={companionUser.name}
                           className="w-5 h-5 rounded-full object-cover"
                         />
-                        <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
+                        <span className="text-xs font-medium text-green-700 dark:text-green-300">
                           {companionUser.name.split(' ')[0]}
                         </span>
-                        <MessageCircle className="h-3 w-3 text-purple-600" />
+                        <MessageCircle className="h-3 w-3 text-green-600" />
                       </div>
                     ))}
-                    {companionUsers.length > 3 && (
-                      <div className="flex items-center justify-center w-8 h-6 bg-purple-100 dark:bg-purple-900 rounded-full">
-                        <span className="text-xs font-bold text-purple-700 dark:text-purple-300">
-                          +{companionUsers.length - 3}
-                        </span>
+                      {companionUsers.length > 3 && (
+                        <div className="flex items-center justify-center w-8 h-6 bg-green-100 dark:bg-green-900 rounded-full">
+                          <span className="text-xs font-bold text-green-700 dark:text-green-300">
+                            +{companionUsers.length - 3}
+                          </span>
                       </div>
                     )}
                   </div>
