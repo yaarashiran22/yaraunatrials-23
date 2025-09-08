@@ -314,6 +314,57 @@ const EventVerticalPopup = ({
                 RSVP
               </Button>
             </div>
+
+            {/* Quick Companion Request - moved to top for quick access */}
+            <div className="text-center space-y-3">
+              <Button
+                onClick={toggleCompanionRequest}
+                disabled={companionLoading}
+                variant={isLookingForCompanion ? "default" : "outline"}
+                className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
+                  isLookingForCompanion 
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0' 
+                    : 'border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300'
+                }`}
+              >
+                <Users className="h-3 w-3 mr-1" />
+                {isLookingForCompanion ? 'Stop looking' : 'Find companion'}
+              </Button>
+              
+              {companionUsers.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-xs text-muted-foreground">
+                    {companionUsers.length} looking for companions:
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {companionUsers.slice(0, 3).map((companionUser) => (
+                      <div
+                        key={companionUser.id}
+                        className="flex items-center gap-2 px-3 py-1 bg-purple-50/80 dark:bg-purple-950/30 rounded-full cursor-pointer hover:bg-purple-100/80 dark:hover:bg-purple-950/50 transition-all duration-200 hover:scale-105 shadow-sm border border-purple-200/50 dark:border-purple-800/50"
+                        onClick={() => handleMessageUser(companionUser.id)}
+                      >
+                        <img
+                          src={companionUser.profile_image_url || profile1}
+                          alt={companionUser.name}
+                          className="w-5 h-5 rounded-full object-cover"
+                        />
+                        <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
+                          {companionUser.name.split(' ')[0]}
+                        </span>
+                        <MessageCircle className="h-3 w-3 text-purple-600" />
+                      </div>
+                    ))}
+                    {companionUsers.length > 3 && (
+                      <div className="flex items-center justify-center w-8 h-6 bg-purple-100 dark:bg-purple-900 rounded-full">
+                        <span className="text-xs font-bold text-purple-700 dark:text-purple-300">
+                          +{companionUsers.length - 3}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
             
             {displayEvent.description && 
               <div className="bg-gradient-to-r from-muted/40 to-muted/20 backdrop-blur-sm rounded-2xl p-5 border border-muted/50">
@@ -367,63 +418,7 @@ const EventVerticalPopup = ({
 
           {/* RSVP Section - REMOVED FROM HERE - moved to top */}
 
-          {/* Companion Request Section */}
-          <div className={`${isMobile ? 'mt-6' : 'mt-8'} ${isMobile ? 'p-4' : 'p-6'} bg-gradient-to-r from-purple-50/80 to-pink-50/80 dark:from-purple-950/40 dark:to-pink-950/40 backdrop-blur-sm rounded-2xl border border-purple-200/50 dark:border-purple-800/50`}>
-            <div className={`text-center ${isMobile ? 'mb-4' : 'mb-6'}`}>
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <Users className="h-5 w-5 text-purple-600" />
-                <h4 className={`${isMobile ? 'text-base' : 'text-lg'} font-bold text-foreground`}>
-                  Looking for someone to join?
-                </h4>
-              </div>
-              <Button
-                onClick={toggleCompanionRequest}
-                disabled={companionLoading}
-                variant={isLookingForCompanion ? "default" : "outline"}
-                className={`w-full ${isMobile ? 'h-12' : 'h-14'} rounded-xl font-semibold text-base mb-4 transition-all duration-200 hover:scale-105 shadow-lg ${
-                  isLookingForCompanion 
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white' 
-                    : 'border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-950/30'
-                }`}
-              >
-                <Users className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} mr-3`} />
-                {isLookingForCompanion ? 'Stop looking for companion' : 'Looking for someone to join me'}
-              </Button>
-              
-              {companionUsers.length > 0 && (
-                <div>
-                  <p className={`${isMobile ? 'text-sm' : 'text-base'} text-muted-foreground mb-4 font-medium`}>
-                    {companionUsers.length} {companionUsers.length === 1 ? 'person is' : 'people are'} looking for companions:
-                  </p>
-                  <div className="space-y-3">
-                    {companionUsers.map((companionUser) => (
-                      <div
-                        key={companionUser.id}
-                        className={`flex items-center gap-4 ${isMobile ? 'p-3' : 'p-4'} bg-white/70 dark:bg-black/30 backdrop-blur-sm rounded-xl cursor-pointer hover:bg-white/90 dark:hover:bg-black/40 transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg border border-white/50`}
-                        onClick={() => handleMessageUser(companionUser.id)}
-                      >
-                        <div className="relative">
-                          <img
-                            src={companionUser.profile_image_url || profile1}
-                            alt={companionUser.name}
-                            className={`${isMobile ? 'w-10 h-10' : 'w-12 h-12'} rounded-full object-cover ring-2 ring-purple-200`}
-                          />
-                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                        </div>
-                        <div className="flex-1">
-                          <span className={`${isMobile ? 'text-sm' : 'text-base'} font-bold text-foreground`}>
-                            {companionUser.name}
-                          </span>
-                          <p className="text-sm text-muted-foreground">Tap to message</p>
-                        </div>
-                        <MessageCircle className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} text-primary`} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          {/* Companion Request Section - REMOVED FROM HERE - moved to top */}
         </div>
       </div>
     </div>;
