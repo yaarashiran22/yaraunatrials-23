@@ -1,9 +1,10 @@
-import { X, MessageCircle, Share, Heart, MapPin, Calendar, ChevronUp, ChevronDown, CheckCircle, Clock } from "lucide-react";
+import { X, MessageCircle, Share, Heart, MapPin, Calendar, ChevronUp, ChevronDown, CheckCircle, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useItemDetails } from "@/hooks/useItemDetails";
 import { useMeetupJoinRequests } from "@/hooks/useMeetupJoinRequests";
+import { useEventCompanionRequests } from '@/hooks/useEventCompanionRequests';
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
@@ -222,6 +223,19 @@ const MeetupVerticalPopup = ({
     },
     condition: item?.condition || defaultItem.condition
   } : item || defaultItem;
+
+  // Companion requests functionality  
+  const { 
+    isLookingForCompanion, 
+    companionUsers, 
+    loading: companionLoading, 
+    toggleCompanionRequest 
+  } = useEventCompanionRequests(displayItem?.id || '');
+
+  const handleMessageUser = (userId: string) => {
+    navigate(`/messages?userId=${userId}`);
+    onClose();
+  };
   const handleContact = async () => {
     if (!item?.id) return;
     const success = await submitJoinRequest(item.id);
@@ -342,6 +356,57 @@ const MeetupVerticalPopup = ({
                   </div>
                 </div>
               </div>}
+          </div>
+
+          {/* Companion Request Section */}
+          <div className="text-center space-y-3">
+            <Button
+              onClick={toggleCompanionRequest}
+              disabled={companionLoading}
+              variant={isLookingForCompanion ? "default" : "outline"}
+              className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
+                isLookingForCompanion 
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0' 
+                  : 'border-blue-300 text-white hover:bg-blue-50 dark:border-blue-700 dark:text-white bg-white/90'
+              }`}
+            >
+              <Users className="h-3 w-3 mr-1" />
+              {isLookingForCompanion ? 'Stop looking' : 'Find someone to go with'}
+            </Button>
+            
+            {companionUsers.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">
+                  {companionUsers.length} looking for companions:
+                </p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {companionUsers.slice(0, 3).map((companionUser) => (
+                    <div
+                      key={companionUser.id}
+                      className="flex items-center gap-2 px-3 py-1 bg-blue-50/80 dark:bg-blue-950/30 rounded-full cursor-pointer hover:bg-blue-100/80 dark:hover:bg-blue-950/50 transition-all duration-200 hover:scale-105 shadow-sm border border-blue-200/50 dark:border-blue-800/50"
+                      onClick={() => handleMessageUser(companionUser.id)}
+                    >
+                      <img
+                        src={companionUser.profile_image_url || '/placeholder.svg'}
+                        alt={companionUser.name}
+                        className="w-5 h-5 rounded-full object-cover"
+                      />
+                      <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
+                        {companionUser.name.split(' ')[0]}
+                      </span>
+                      <MessageCircle className="h-3 w-3 text-blue-600" />
+                    </div>
+                  ))}
+                  {companionUsers.length > 3 && (
+                    <div className="flex items-center justify-center w-8 h-6 bg-blue-100 dark:bg-blue-900 rounded-full">
+                      <span className="text-xs font-bold text-blue-700 dark:text-blue-300">
+                        +{companionUsers.length - 3}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Join Request Section */}
