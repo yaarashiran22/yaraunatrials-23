@@ -361,7 +361,6 @@ const SearchPopup = () => {
                   <Search className="h-8 w-8 text-muted-foreground" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2">Start searching</h3>
-                <p className="text-muted-foreground">Enter keywords to find users, events, and deals</p>
               </div>
             )}
           </div>
