@@ -364,10 +364,10 @@ const MeetupVerticalPopup = ({
               onClick={toggleCompanionRequest}
               disabled={companionLoading}
               variant={isLookingForCompanion ? "default" : "outline"}
-              className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
+              className={`${isMobile ? 'h-10 px-6' : 'h-11 px-8'} rounded-full font-semibold text-sm transition-all duration-200 hover:scale-105 shadow-lg border-2 ${
                 isLookingForCompanion 
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0' 
-                  : 'border-blue-300 text-white hover:bg-blue-50 dark:border-blue-700 dark:text-white bg-white/90'
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0 shadow-blue-200 dark:shadow-blue-900/30' 
+                  : 'bg-white hover:bg-blue-50 text-blue-700 border-blue-300 hover:border-blue-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-300 dark:border-blue-600 dark:hover:border-blue-500'
               }`}
             >
               <Users className="h-3 w-3 mr-1" />
