@@ -236,15 +236,15 @@ const EventVerticalPopup = ({
         <div className="relative overflow-hidden rounded-t-3xl bg-gradient-to-br from-green-100/80 to-blue-100/80 dark:from-green-950/40 dark:to-blue-950/40 border-b border-green-200/50 dark:border-blue-800/50">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
           <div className="relative flex items-center justify-between p-6">
-            <Button variant="ghost" size="sm" onClick={onClose} className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all duration-200 shadow-lg">
-              <X className="h-5 w-5" />
-            </Button>
-            
             <div className="flex items-center gap-3">
               {allEvents.length > 1 && <div className="text-sm font-semibold text-muted-foreground bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
                   {currentIndex + 1} / {allEvents.length}
                 </div>}
             </div>
+            
+            <Button variant="ghost" size="sm" onClick={onClose} className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all duration-200 shadow-lg">
+              <X className="h-5 w-5" />
+            </Button>
           </div>
         </div>
 
