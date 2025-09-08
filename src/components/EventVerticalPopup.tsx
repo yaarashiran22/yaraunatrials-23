@@ -228,13 +228,13 @@ const EventVerticalPopup = ({
           <ChevronDown className="h-8 w-8" />
         </Button>}
 
-      <div ref={contentRef} className={`bg-background/95 backdrop-blur-md rounded-3xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} event-vertical-popup shadow-2xl border border-white/10 animate-scale-in`} style={{
+      <div ref={contentRef} className={`bg-card/95 backdrop-blur-xl rounded-3xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} event-vertical-popup shadow-2xl border border-border/20 animate-scale-in`} style={{
       transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
       scrollBehavior: 'smooth'
     }} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/* Header */}
-        <div className="relative overflow-hidden rounded-t-3xl bg-gradient-to-br from-green-100/80 to-blue-100/80 dark:from-green-950/40 dark:to-blue-950/40 border-b border-green-200/50 dark:border-blue-800/50">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+        <div className="relative overflow-hidden rounded-t-3xl bg-gradient-to-br from-primary/10 to-accent/10 backdrop-blur-sm border-b border-primary/20">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent"></div>
           <div className="relative flex items-center justify-between p-6">
             <div className="flex items-center gap-3">
               {allEvents.length > 1 && <div className="text-sm font-semibold text-muted-foreground bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
@@ -297,7 +297,7 @@ const EventVerticalPopup = ({
 
             {/* Quick RSVP Section - moved to top for quick access */}
             <div className="flex gap-2 justify-center">
-              <Button onClick={handleRSVP} className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 shadow-sm`}>
+              <Button onClick={handleRSVP} className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 shadow-lg border-0`}>
                 <MessageCircle className="h-3 w-3 mr-1" />
                 RSVP
               </Button>
@@ -309,10 +309,10 @@ const EventVerticalPopup = ({
                 onClick={toggleCompanionRequest}
                 disabled={companionLoading}
                 variant={isLookingForCompanion ? "default" : "outline"}
-                className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
+                className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-lg ${
                   isLookingForCompanion 
-                    ? 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0' 
-                    : 'border-green-300 text-white hover:bg-green-50 dark:border-green-700 dark:text-white'
+                    ? 'bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-accent-foreground border-0' 
+                    : 'border-accent/30 text-foreground hover:bg-accent/10 dark:border-accent/30 dark:text-foreground'
                 }`}
               >
                 <Users className="h-3 w-3 mr-1" />
@@ -328,7 +328,7 @@ const EventVerticalPopup = ({
                     {companionUsers.slice(0, 3).map((companionUser) => (
                       <div
                         key={companionUser.id}
-                        className="flex items-center gap-2 px-3 py-1 bg-green-50/80 dark:bg-green-950/30 rounded-full cursor-pointer hover:bg-green-100/80 dark:hover:bg-green-950/50 transition-all duration-200 hover:scale-105 shadow-sm border border-green-200/50 dark:border-green-800/50"
+                        className="flex items-center gap-2 px-3 py-1 bg-accent/10 dark:bg-accent/20 rounded-full cursor-pointer hover:bg-accent/20 dark:hover:bg-accent/30 transition-all duration-200 hover:scale-105 shadow-lg border border-accent/20 dark:border-accent/30"
                         onClick={() => handleMessageUser(companionUser.id)}
                       >
                         <img
@@ -336,15 +336,15 @@ const EventVerticalPopup = ({
                           alt={companionUser.name}
                           className="w-5 h-5 rounded-full object-cover"
                         />
-                        <span className="text-xs font-medium text-green-700 dark:text-green-300">
+                        <span className="text-xs font-medium text-accent-foreground">
                           {companionUser.name.split(' ')[0]}
                         </span>
-                        <MessageCircle className="h-3 w-3 text-green-600" />
+                        <MessageCircle className="h-3 w-3 text-accent" />
                       </div>
                     ))}
                       {companionUsers.length > 3 && (
-                        <div className="flex items-center justify-center w-8 h-6 bg-green-100 dark:bg-green-900 rounded-full">
-                          <span className="text-xs font-bold text-green-700 dark:text-green-300">
+                        <div className="flex items-center justify-center w-8 h-6 bg-accent/20 dark:bg-accent/30 rounded-full">
+                          <span className="text-xs font-bold text-accent-foreground">
                             +{companionUsers.length - 3}
                           </span>
                       </div>
@@ -355,7 +355,7 @@ const EventVerticalPopup = ({
             </div>
             
             {displayEvent.description && 
-              <div className="bg-gradient-to-r from-muted/40 to-muted/20 backdrop-blur-sm rounded-2xl p-5 border border-muted/50">
+              <div className="bg-gradient-to-r from-muted/30 to-muted/20 backdrop-blur-sm rounded-2xl p-5 border border-muted/30 shadow-sm">
                 <p className={`text-foreground/90 leading-relaxed text-center ${isMobile ? 'text-sm' : 'text-base'}`}>
                   {displayEvent.description}
                 </p>
@@ -363,14 +363,14 @@ const EventVerticalPopup = ({
             }
             
             {/* Event Details Section */}
-            <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-green-50/80 to-blue-50/80 dark:from-green-950/40 dark:to-blue-950/40 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-blue-800/50`}>
+            <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-sm rounded-2xl border border-primary/20 shadow-sm`}>
               {displayEvent.location && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
-                  <MapPin className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-green-600 dark:text-green-400`} />
+                  <MapPin className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-primary`} />
                   <span>{locationMapping[displayEvent.location] || displayEvent.location}</span>
                 </div>}
               
               {displayEvent.date && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
-                  <Calendar className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-green-600 dark:text-green-400`} />
+                  <Calendar className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-primary`} />
                   <span>
                     {new Date(displayEvent.date).toLocaleDateString('en-US', {
                   weekday: isMobile ? 'short' : 'long',
@@ -382,13 +382,13 @@ const EventVerticalPopup = ({
                 </div>}
               
               {displayEvent.time && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
-                  <Clock className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-green-600 dark:text-green-400`} />
+                  <Clock className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-primary`} />
                   <span>{displayEvent.time ? displayEvent.time.slice(0, 5) : ''}</span>
                 </div>}
             </div>
 
             {/* Organizer Info */}
-            {displayEvent.organizer && <div className={`flex items-center gap-4 ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-r from-background/60 to-background/40 backdrop-blur-sm rounded-2xl cursor-pointer hover:from-background/80 hover:to-background/60 transition-all duration-300 border border-muted/30 hover:border-muted/50 hover:shadow-lg group`} onClick={handleViewProfile}>
+            {displayEvent.organizer && <div className={`flex items-center gap-4 ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-r from-card/60 to-card/40 backdrop-blur-sm rounded-2xl cursor-pointer hover:from-card/80 hover:to-card/60 transition-all duration-300 border border-border/30 hover:border-border/50 hover:shadow-lg group`} onClick={handleViewProfile}>
                 <div className="relative">
                   <img src={displayEvent.organizer.image} alt={displayEvent.organizer.name} className={`${isMobile ? 'w-12 h-12' : 'w-16 h-16'} rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300`} />
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
