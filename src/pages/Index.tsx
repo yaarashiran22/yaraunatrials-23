@@ -447,7 +447,7 @@ const Index = () => {
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="title-alt">
-              deals for right now
+              deals right now
             </h2>
             {currentUserProfile?.account_type === 'business' && (
               <Button 
