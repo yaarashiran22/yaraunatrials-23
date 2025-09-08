@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useCallback, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import ProfilePictureViewer from "./ProfilePictureViewer";
@@ -27,36 +27,44 @@ const OptimizedProfileCard = memo(({
   const [showAddStory, setShowAddStory] = useState(false);
   const [showStoriesPopup, setShowStoriesPopup] = useState(false);
   const [hasStories, setHasStories] = useState(false);
+  const [isCheckingStories, setIsCheckingStories] = useState(false);
+  const storiesCheckedRef = useRef<Set<string>>(new Set());
   const navigate = useNavigate();
 
-  // Check for active stories
-  useEffect(() => {
-    if (!id) return;
+  // Memoized function to check for active stories
+  const checkStories = useCallback(async () => {
+    if (!id || isCheckingStories || storiesCheckedRef.current.has(id)) return;
     
-    const checkStories = async () => {
-      try {
-        console.log('Fetching stories for user:', id);
-        const { data: stories, error } = await supabase
-          .from('stories')
-          .select('id')
-          .eq('user_id', id)
-          .gt('expires_at', new Date().toISOString())
-          .limit(1);
-          
-        if (error) {
-          console.error('Error fetching stories:', error);
-          return;
-        }
+    setIsCheckingStories(true);
+    
+    try {
+      const { data: stories, error } = await supabase
+        .from('stories')
+        .select('id')
+        .eq('user_id', id)
+        .gt('expires_at', new Date().toISOString())
+        .limit(1);
         
-        console.log('Fetched stories:', stories?.length || 0, 'stories for user:', id);
-        setHasStories(stories && stories.length > 0);
-      } catch (error) {
-        console.error('Error in checkStories:', error);
+      if (error) {
+        console.error('Error fetching stories:', error);
+        return;
       }
-    };
+      
+      const userHasStories = stories && stories.length > 0;
+      setHasStories(userHasStories);
+      storiesCheckedRef.current.add(id);
+      
+    } catch (error) {
+      console.error('Error in checkStories:', error);
+    } finally {
+      setIsCheckingStories(false);
+    }
+  }, [id, isCheckingStories]);
 
+  // Check for active stories only once per user
+  useEffect(() => {
     checkStories();
-  }, [id]);
+  }, [checkStories]);
 
   const handleAvatarClick = () => {
     if (hasStories) {
@@ -86,10 +94,10 @@ const OptimizedProfileCard = memo(({
         style={style}
       >
         <div className="relative">
-          {/* Enhanced gradient ring for stories */}
-          <div className={`relative transition-all duration-500 ${hasStories ? 'p-[3px] rounded-full bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 animate-pulse' : ''}`}>
+          {/* Enhanced gradient ring for stories - stable animation */}
+          <div className={`relative transition-all duration-300 ${hasStories ? 'p-[3px] rounded-full bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400' : ''}`}>
             <Avatar 
-              className={`w-[66px] h-[66px] cursor-pointer transition-all duration-500 shadow-xl transform hover:rotate-3 ${
+              className={`w-[66px] h-[66px] cursor-pointer transition-all duration-300 shadow-xl transform hover:rotate-3 ${
                 hasStories 
                   ? 'border-3 border-white shadow-orange-500/30 hover:shadow-orange-500/50' 
                   : 'border-4 border-primary/30 hover:border-primary/60 shadow-primary/20 hover:shadow-primary/40'
