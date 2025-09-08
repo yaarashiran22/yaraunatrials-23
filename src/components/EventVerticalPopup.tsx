@@ -248,12 +248,6 @@ const EventVerticalPopup = ({
           </div>
         </div>
 
-        {/* Vertical Navigation Instructions */}
-        {allEvents.length > 1 && <div className="flex justify-center py-3 border-b bg-gradient-to-r from-green-50/50 to-blue-50/50 dark:from-green-950/20 dark:to-blue-950/20">
-            <div className="text-xs text-muted-foreground flex items-center gap-1 bg-background/60 backdrop-blur-sm px-3 py-1 rounded-full">
-              Swipe to navigate
-            </div>
-          </div>}
 
         {/* Vertical Progress Indicators */}
         {allEvents.length > 1 && <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
