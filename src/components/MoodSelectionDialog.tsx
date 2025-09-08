@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Coffee, Zap, Heart, Dumbbell, Palette, Leaf, Music } from 'lucide-react';
+import { Coffee, Zap, Heart, Dumbbell, Palette, Leaf, Music, Globe } from 'lucide-react';
 
 const moodOptions = [
+  { id: "any", label: "Any", icon: Globe, color: "text-gray-500", activeBg: "bg-gray-50 dark:bg-gray-950/30" },
   { id: "chill", label: "Chill", icon: Coffee, color: "text-blue-500", activeBg: "bg-blue-50 dark:bg-blue-950/30" },
   { id: "go-out", label: "Go Out", icon: Zap, color: "text-orange-500", activeBg: "bg-orange-50 dark:bg-orange-950/30" },
   { id: "romantic", label: "Romantic", icon: Heart, color: "text-pink-500", activeBg: "bg-pink-50 dark:bg-pink-950/30" },
