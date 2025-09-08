@@ -126,7 +126,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto bg-white">
         <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle className="text-xl font-bold">
             {formData.event_type === 'meetup' ? 'Edit Meetup' : 'Edit Event'}
