@@ -1002,14 +1002,22 @@ const ProfilePage = () => {
   };
 
   const handleDeleteEvent = async (eventId: string) => {
+    console.log('Delete event clicked for ID:', eventId);
+    
     // Require authentication
     if (!requireAuth()) {
+      console.log('Authentication required failed');
       return;
     }
 
     // Verify user can delete this event
     const event = userEvents.find(event => event.id === eventId);
+    console.log('Found event:', event);
+    console.log('User ID:', user?.id);
+    console.log('Event user_id:', event?.user_id);
+    
     if (!event || !canUserModifyItem(user!.id, event.user_id)) {
+      console.log('Permission check failed');
       toast({
         title: "Authorization Error",
         description: "You don't have permission to delete this event",
@@ -1019,7 +1027,9 @@ const ProfilePage = () => {
     }
 
     if (window.confirm('Are you sure you want to delete this event?')) {
-      await deleteEvent(eventId);
+      console.log('User confirmed deletion, calling deleteEvent...');
+      const result = await deleteEvent(eventId);
+      console.log('Delete result:', result);
     }
   };
 
