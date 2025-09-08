@@ -255,9 +255,9 @@ const EventVerticalPopup = ({
           </div>}
 
         {/* Content */}
-        <div className={`${isMobile ? 'p-4' : 'p-6'}`}>
+        <div className={`${isMobile ? 'p-3' : 'p-4'}`}>
           {/* Event Image */}
-          <div className={`relative ${isMobile ? 'mb-6' : 'mb-8'} group`}>
+          <div className={`relative ${isMobile ? 'mb-4' : 'mb-6'} group`}>
             <div className="relative rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/5">
               <img src={displayEvent.image} alt={displayEvent.title} className={`w-full ${isMobile ? 'h-56' : 'h-72'} object-cover transition-transform duration-300 group-hover:scale-105`} />
               
@@ -274,8 +274,8 @@ const EventVerticalPopup = ({
           </div>
 
           {/* Event Details */}
-          <div className={`${isMobile ? 'space-y-4' : 'space-y-6'}`}>
-            <div className="text-center space-y-3">
+          <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
+            <div className="text-center space-y-2">
               <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-white leading-tight`}>
                 {displayEvent.title}
               </h3>
@@ -304,7 +304,7 @@ const EventVerticalPopup = ({
             </div>
 
             {/* Quick Companion Request - moved to top for quick access */}
-            <div className="text-center space-y-3">
+            <div className="text-center space-y-2">
               <Button
                 onClick={toggleCompanionRequest}
                 disabled={companionLoading}
@@ -320,7 +320,7 @@ const EventVerticalPopup = ({
               </Button>
               
               {companionUsers.length > 0 && (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <p className="text-xs text-muted-foreground">
                     {companionUsers.length} looking for companions:
                   </p>
@@ -363,7 +363,7 @@ const EventVerticalPopup = ({
             }
             
             {/* Event Details Section */}
-            <div className={`${isMobile ? 'space-y-3' : 'space-y-4'} ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-r from-green-50/80 to-blue-50/80 dark:from-green-950/40 dark:to-blue-950/40 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-blue-800/50`}>
+            <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-green-50/80 to-blue-50/80 dark:from-green-950/40 dark:to-blue-950/40 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-blue-800/50`}>
               {displayEvent.location && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
                   <MapPin className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-green-600 dark:text-green-400`} />
                   <span>{locationMapping[displayEvent.location] || displayEvent.location}</span>
