@@ -110,7 +110,7 @@ const MessagesPage = () => {
   const selectedUser = getSelectedUser();
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-20 lg:pb-0">
       {/* Custom Header for Chat */}
       {selectedUser ? (
         <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm">
