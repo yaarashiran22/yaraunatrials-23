@@ -40,12 +40,11 @@ const BottomNavigation = () => {
             onClick={() => navigate('/')}
             className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
               isActive('/') 
-                ? 'text-primary bg-primary/15 shadow-lg shadow-primary/20 scale-110' 
+                ? 'text-foreground' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
             }`}
           >
-            <Home className={`h-6 w-6 transition-all duration-300 ${isActive('/') ? 'drop-shadow-lg' : 'group-hover:scale-110'}`} />
-            {isActive('/') && <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse"></div>}
+            <Home className={`h-6 w-6 transition-all duration-300 ${isActive('/') ? 'stroke-[2.5]' : 'group-hover:scale-110'}`} />
           </Button>
 
           {/* Discover */}
@@ -55,12 +54,11 @@ const BottomNavigation = () => {
             onClick={() => navigate('/discover')}
             className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
               isActive('/discover') 
-                ? 'text-primary bg-primary/15 shadow-lg shadow-primary/20 scale-110' 
+                ? 'text-foreground' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
             }`}
           >
-            <Map className={`h-6 w-6 transition-all duration-300 ${isActive('/discover') ? 'drop-shadow-lg' : 'group-hover:scale-110 group-hover:rotate-12'}`} />
-            {isActive('/discover') && <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse"></div>}
+            <Map className={`h-6 w-6 transition-all duration-300 ${isActive('/discover') ? 'stroke-[2.5]' : 'group-hover:scale-110 group-hover:rotate-12'}`} />
           </Button>
 
           {/* Messages */}
@@ -70,12 +68,11 @@ const BottomNavigation = () => {
             onClick={() => navigate('/messages')}
             className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
               isActive('/messages') 
-                ? 'text-primary bg-primary/15 shadow-lg shadow-primary/20 scale-110' 
+                ? 'text-foreground' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
             }`}
           >
-            <MessageCircle className={`h-6 w-6 transition-all duration-300 ${isActive('/messages') ? 'drop-shadow-lg' : 'group-hover:scale-110'}`} />
-            {isActive('/messages') && <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse"></div>}
+            <MessageCircle className={`h-6 w-6 transition-all duration-300 ${isActive('/messages') ? 'stroke-[2.5]' : 'group-hover:scale-110'}`} />
             {/* Message notification dot */}
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-bounce"></div>
           </Button>
@@ -88,12 +85,11 @@ const BottomNavigation = () => {
               onClick={() => navigate('/profile/1')}
               className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
                 location.pathname.startsWith('/profile') 
-                  ? 'text-primary bg-primary/15 shadow-lg shadow-primary/20 scale-110' 
+                  ? 'text-foreground' 
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
               }`}
             >
-              <User className={`h-6 w-6 transition-all duration-300 ${location.pathname.startsWith('/profile') ? 'drop-shadow-lg' : 'group-hover:scale-110'}`} />
-              {location.pathname.startsWith('/profile') && <div className="absolute inset-0 bg-primary/10 rounded-2xl animate-pulse"></div>}
+              <User className={`h-6 w-6 transition-all duration-300 ${location.pathname.startsWith('/profile') ? 'stroke-[2.5]' : 'group-hover:scale-110'}`} />
             </Button>
           ) : (
             <Button
