@@ -446,12 +446,14 @@ const Index = () => {
         {/* Coupons Section - Horizontal Carousel */}
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="title-alt">
-              deals for right now
+            <h2 className="title-section">
+              deals right now
             </h2>
-            {currentUserProfile?.account_type === 'business' && <Button size="sm" variant="outline" className="h-8 w-8 p-0 border-2 border-primary bg-white hover:bg-primary/10 hover:border-primary/80" onClick={() => setIsAddCouponModalOpen(true)}>
-                <Plus className="w-4 h-4 text-primary" />
-              </Button>}
+            <div className="flex items-center gap-2">
+              {currentUserProfile?.account_type === 'business' && <Button variant="outline" size="sm" onClick={() => setIsAddCouponModalOpen(true)} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
+                  <Plus className="h-3 w-3" />
+                </Button>}
+            </div>
           </div>
           
           <div className="flex gap-2 mb-4">
