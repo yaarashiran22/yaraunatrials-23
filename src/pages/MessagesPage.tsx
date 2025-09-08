@@ -288,8 +288,8 @@ const MessagesPage = () => {
         </div>
       )}
 
-      {/* Main Content Area - Fixed height calculation */}
-      <div className="flex-1 flex flex-col min-h-0" style={{ height: 'calc(100vh - 140px)' }}>
+      {/* Main Content Area - Proper flex layout */}
+      <div className="flex-1 flex flex-col min-h-0">
         {!selectedUserId ? (
           /* Modern Conversations List */
           <div className="flex-1 overflow-hidden">
@@ -388,7 +388,7 @@ const MessagesPage = () => {
           </div>
         ) : (
           /* Modern Chat Messages */
-          <>
+          <div className="flex-1 flex flex-col min-h-0">
             {/* Chat Messages Area */}
             <div className="flex-1 overflow-hidden relative">
               <div className="absolute inset-0 bg-gradient-to-b from-muted/5 to-muted/10" />
@@ -525,7 +525,7 @@ const MessagesPage = () => {
                 </Button>
               </form>
             </div>
-          </>
+          </div>
         )}
       </div>
 
