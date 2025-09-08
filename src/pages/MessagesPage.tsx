@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDirectMessages } from '@/hooks/useDirectMessages';
 import { useUserPresence } from '@/hooks/useUserPresence';
@@ -108,9 +108,19 @@ const MessagesPage = () => {
   }
 
   const selectedUser = getSelectedUser();
+  
+  // Debug log to check if we're in conversation mode
+  console.log('🎯 MessagesPage render - selectedUserId:', selectedUserId, 'selectedUser:', selectedUser?.name);
+
+  // Debug effect to log when message input should be visible
+  useEffect(() => {
+    if (selectedUserId && selectedUser) {
+      console.log('📝 Message input should be visible for:', selectedUser.name, 'ID:', selectedUserId);
+    }
+  }, [selectedUserId, selectedUser]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-20">{/* Added pb-20 for bottom navigation space */}
       {/* Custom Header for Chat */}
       {selectedUser ? (
         <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm">
@@ -477,7 +487,13 @@ const MessagesPage = () => {
             </div>
 
             {/* Message Input - Always visible at bottom */}
-            <div className="border-t border-border/20 bg-card/80 backdrop-blur-sm p-4 flex-shrink-0 shadow-lg">
+            <div className="border-t-2 border-primary/20 bg-card backdrop-blur-sm p-4 flex-shrink-0 shadow-2xl" style={{
+              borderTop: '2px solid hsl(var(--primary) / 0.3)',
+              background: 'hsl(var(--card) / 0.95)',
+              position: 'sticky',
+              bottom: 0,
+              zIndex: 30
+            }}>
               {isTyping && (
                 <div className="mb-3 text-xs text-muted-foreground animate-fade-in">
                   <div className="flex items-center gap-2">
