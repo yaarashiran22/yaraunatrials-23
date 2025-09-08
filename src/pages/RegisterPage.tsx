@@ -162,6 +162,13 @@ const RegisterPage = () => {
         {/* Page Title */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-foreground">Sign Up</h1>
+          
+          {/* Welcome Description */}
+          <div className="px-4 mt-4">
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Welcome to una- our local social platform for finding cool and original new experiences happening around.
+            </p>
+          </div>
         </div>
 
         <div className="max-w-md mx-auto">

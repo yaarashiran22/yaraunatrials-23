@@ -189,12 +189,6 @@ const LoginPage = () => {
               Everything Worth Knowing
             </p>
             
-            {/* Welcome Description */}
-            <div className="px-4">
-              <p className="text-base text-white leading-relaxed mb-3">
-                Welcome to una- our local social platform for finding cool and original new experiences happening around.
-              </p>
-            </div>
           </div>
 
           {/* Form */}
