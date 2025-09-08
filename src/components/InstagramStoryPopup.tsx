@@ -10,6 +10,8 @@ interface InstagramStoryPopupProps {
   storyUrl: string | null;
   isGenerating: boolean;
   title: string;
+  textContent?: string; // For text-based stories
+  sourceType?: 'ai' | 'text'; // Type of story being generated
 }
 
 export const InstagramStoryPopup = ({ 
@@ -17,7 +19,9 @@ export const InstagramStoryPopup = ({
   onClose, 
   storyUrl, 
   isGenerating, 
-  title 
+  title,
+  textContent,
+  sourceType = 'ai'
 }: InstagramStoryPopupProps) => {
   const [downloading, setDownloading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -120,7 +124,10 @@ export const InstagramStoryPopup = ({
             </DialogTitle>
             
             <p className="text-xs text-muted-foreground mt-1 font-medium leading-relaxed">
-              ✨ AI-powered artistic stories in stunning HD quality
+              {sourceType === 'text' 
+                ? "📝 Transform your story into viral Instagram content" 
+                : "✨ AI-powered artistic stories in stunning HD quality"
+              }
             </p>
           </DialogHeader>
           
@@ -158,13 +165,24 @@ export const InstagramStoryPopup = ({
                   {/* Enhanced text content with typewriter effect */}
                   <div className="text-center space-y-3 max-w-sm">
                     <h3 className="text-xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 bg-clip-text text-transparent animate-pulse tracking-tight">
-                      ✨ AI Creating Magic ✨
+                      {sourceType === 'text' ? '📝 Converting Story ✨' : '✨ AI Creating Magic ✨'}
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-                      Crafting your ultra-viral Instagram story with 
-                      <span className="text-pink-500 font-semibold"> holographic effects</span>,
-                      <span className="text-purple-500 font-semibold"> 3D elements</span>, and
-                      <span className="text-orange-500 font-semibold"> cinematic flair</span>...
+                      {sourceType === 'text' ? (
+                        <>
+                          Transforming your story
+                          <span className="text-pink-500 font-semibold"> "{textContent?.slice(0, 20)}..."</span> into a 
+                          <span className="text-purple-500 font-semibold"> viral Instagram story</span> with
+                          <span className="text-orange-500 font-semibold"> stunning visuals</span>...
+                        </>
+                      ) : (
+                        <>
+                          Crafting your ultra-viral Instagram story with 
+                          <span className="text-pink-500 font-semibold"> holographic effects</span>,
+                          <span className="text-purple-500 font-semibold"> 3D elements</span>, and
+                          <span className="text-orange-500 font-semibold"> cinematic flair</span>...
+                        </>
+                      )}
                     </p>
                     
                     {/* Animated progress indicator */}

@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Instagram } from "lucide-react";
 import { useStories, Story } from "@/hooks/useStories";
 import { useProfile } from "@/hooks/useProfile";
 import { useNavigate } from "react-router-dom";
+import { InstagramStoryPopup } from "./InstagramStoryPopup";
+import { Button } from "./ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 interface StoriesPopupProps {
   isOpen: boolean;
@@ -17,11 +21,51 @@ const StoriesPopup = ({ isOpen, onClose, userId }: StoriesPopupProps) => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [isGeneratingInstagram, setIsGeneratingInstagram] = useState(false);
+  const [generatedStoryUrl, setGeneratedStoryUrl] = useState<string | null>(null);
+  const [showInstagramPopup, setShowInstagramPopup] = useState(false);
 
   const handleNameClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClose();
     navigate(`/profile/${userId}`);
+  };
+
+  const handleGenerateInstagramStory = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!currentStory.text_content) return;
+    
+    setIsGeneratingInstagram(true);
+    setShowInstagramPopup(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-instagram-story', {
+        body: { 
+          content: currentStory.text_content,
+          type: 'text'
+        }
+      });
+
+      if (error) throw error;
+      
+      setGeneratedStoryUrl(data.storyUrl);
+      
+      toast({
+        title: "🎨 Instagram Story Generated!",
+        description: "Your text story has been transformed into a viral Instagram story.",
+      });
+    } catch (error) {
+      console.error('Error generating Instagram story:', error);
+      toast({
+        title: "Generation Failed",
+        description: "Failed to generate Instagram story. Please try again.",
+        variant: "destructive",
+      });
+      setShowInstagramPopup(false);
+    } finally {
+      setIsGeneratingInstagram(false);
+    }
   };
 
   // Reset to first story when popup opens
@@ -209,6 +253,20 @@ const StoriesPopup = ({ isOpen, onClose, userId }: StoriesPopupProps) => {
           )}
         </div>
 
+        {/* Instagram Story Generation Button for Text Stories */}
+        {currentStory.story_type === 'announcement' && currentStory.text_content && (
+          <div className="absolute bottom-16 right-4">
+            <Button
+              onClick={handleGenerateInstagramStory}
+              size="sm"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0 rounded-full h-10 px-4 shadow-lg"
+            >
+              <Instagram className="w-4 h-4 mr-2" />
+              Make Viral
+            </Button>
+          </div>
+        )}
+
         {/* Story timestamp */}
         <div className="absolute bottom-4 left-4 text-white/80 text-sm">
           {new Date(currentStory.created_at).toLocaleTimeString([], {
@@ -217,6 +275,21 @@ const StoriesPopup = ({ isOpen, onClose, userId }: StoriesPopupProps) => {
           })}
         </div>
       </DialogContent>
+      
+      {/* Instagram Story Generation Popup */}
+      <InstagramStoryPopup
+        isOpen={showInstagramPopup}
+        onClose={() => {
+          setShowInstagramPopup(false);
+          setGeneratedStoryUrl(null);
+          setIsGeneratingInstagram(false);
+        }}
+        storyUrl={generatedStoryUrl}
+        isGenerating={isGeneratingInstagram}
+        title={currentStory.text_content || "Story"}
+        textContent={currentStory.text_content}
+        sourceType="text"
+      />
     </Dialog>
   );
 };
