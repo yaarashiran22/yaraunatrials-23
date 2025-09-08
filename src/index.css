@@ -552,6 +552,68 @@ All colors MUST be HSL.
     }
   }
   
+  /* Enhanced Instagram Story Animations */
+  @keyframes float-sparkle {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.7;
+    }
+    33% { 
+      transform: translateY(-8px) rotate(120deg);
+      opacity: 1;
+    }
+    66% { 
+      transform: translateY(-4px) rotate(240deg);
+      opacity: 0.8;
+    }
+  }
+  
+  @keyframes float-sparkle-delayed {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg) scale(1);
+      opacity: 0.6;
+    }
+    25% { 
+      transform: translateY(-6px) rotate(90deg) scale(1.1);
+      opacity: 0.9;
+    }
+    75% { 
+      transform: translateY(-3px) rotate(270deg) scale(0.9);
+      opacity: 0.7;
+    }
+  }
+  
+  @keyframes float-delayed {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.8;
+    }
+    50% { 
+      transform: translateY(-10px) rotate(2deg);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes bounce-subtle {
+    0%, 100% { 
+      transform: translateY(0px) scale(1);
+    }
+    50% { 
+      transform: translateY(-3px) scale(1.05);
+    }
+  }
+  
+  @keyframes slide-up {
+    0% { 
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% { 
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
+  
   /* Bounce in animation */
   @keyframes bounce-in {
     0% { 
@@ -878,6 +940,31 @@ All colors MUST be HSL.
   
   .glass-effect {
     @apply backdrop-blur-xl bg-white/10 border border-white/20 shadow-xl;
+  }
+  
+  /* Instagram Story Animation Classes */
+  .animate-float-sparkle {
+    animation: float-sparkle 3s ease-in-out infinite;
+  }
+  
+  .animate-float-sparkle-delayed {
+    animation: float-sparkle-delayed 3.5s ease-in-out infinite;
+  }
+  
+  .animate-float-delayed {
+    animation: float-delayed 4s ease-in-out infinite;
+  }
+  
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
   }
   
   .shimmer-border {
