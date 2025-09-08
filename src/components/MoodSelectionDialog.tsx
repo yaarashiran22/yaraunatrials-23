@@ -41,9 +41,6 @@ const MoodSelectionDialog = ({ isOpen, onClose, onMoodSelect }: MoodSelectionDia
         </DialogHeader>
         
         <div className="space-y-4 py-4">
-          <p className="text-center text-white text-sm">
-            Select your current mood to help others find the perfect hangout buddy
-          </p>
           
           <div className="grid grid-cols-2 gap-3">
             {moodOptions.map((mood) => {
