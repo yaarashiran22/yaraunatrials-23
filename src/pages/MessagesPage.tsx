@@ -204,7 +204,7 @@ const MessagesPage = () => {
       {/* Modern User Selection Modal */}
       {showUserSelect && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card rounded-2xl max-w-md w-full max-h-[85vh] shadow-2xl border border-border/20 animate-scale-in flex flex-col">
+          <div className="bg-card rounded-2xl max-w-md w-full h-[600px] shadow-2xl border border-border/20 animate-scale-in flex flex-col">
             {/* Fixed Header */}
             <div className="p-4 border-b border-border/10 flex-shrink-0">
               <div className="flex items-center justify-between mb-3">
@@ -234,8 +234,8 @@ const MessagesPage = () => {
               </div>
             </div>
             
-            {/* Scrollable Content */}
-            <ScrollArea className="flex-1 p-3">
+            {/* Scrollable Content - Fixed height with proper scrolling */}
+            <div className="flex-1 overflow-y-auto p-3">
               <div className="space-y-2">
                 {usersLoading ? (
                   <div className="text-center py-12 text-muted-foreground">
@@ -283,13 +283,13 @@ const MessagesPage = () => {
                   ))
                 )}
               </div>
-            </ScrollArea>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-0">
+      {/* Main Content Area - Fixed height calculation */}
+      <div className="flex-1 flex flex-col min-h-0" style={{ height: 'calc(100vh - 140px)' }}>
         {!selectedUserId ? (
           /* Modern Conversations List */
           <div className="flex-1 overflow-hidden">
@@ -476,7 +476,7 @@ const MessagesPage = () => {
               </ScrollArea>
             </div>
 
-            {/* Message Input */}
+            {/* Message Input - Always visible at bottom */}
             <div className="border-t border-border/10 bg-card p-4 flex-shrink-0">
               {isTyping && (
                 <div className="mb-2 text-xs text-muted-foreground animate-fade-in">

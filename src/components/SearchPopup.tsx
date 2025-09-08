@@ -9,7 +9,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Search, X, User, Package } from 'lucide-react';
+import { Search, X, User, Package, Calendar } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useSearch } from '@/contexts/SearchContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -24,13 +24,25 @@ interface Profile {
   profile_image_url: string | null;
 }
 
-interface Item {
+interface Event {
   id: string;
   title: string;
   description: string | null;
-  category: string | null;
-  price: number | null;
+  location: string | null;
+  price: string | null;
   image_url: string | null;
+  event_type: string;
+  date: string | null;
+}
+
+interface UserCoupon {
+  id: string;
+  title: string;
+  description: string | null;
+  business_name: string | null;
+  discount_amount: string | null;
+  image_url: string | null;
+  neighborhood: string | null;
 }
 
 const SearchPopup = () => {
@@ -39,13 +51,15 @@ const SearchPopup = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [coupons, setCoupons] = useState<UserCoupon[]>([]);
   const [loading, setLoading] = useState(false);
 
   const performSearch = async (query: string) => {
     if (!query.trim()) {
       setProfiles([]);
-      setItems([]);
+      setEvents([]);
+      setCoupons([]);
       return;
     }
 
@@ -58,16 +72,24 @@ const SearchPopup = () => {
         .or(`name.ilike.%${query}%,username.ilike.%${query}%,bio.ilike.%${query}%,array_to_string(specialties,',').ilike.%${query}%`)
         .limit(10);
 
-      // Search items
-      const { data: itemsData } = await supabase
-        .from('items')
-        .select('id, title, description, category, price, image_url')
-        .eq('status', 'active')
-        .or(`title.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%`)
+      // Search events and meetups
+      const { data: eventsData } = await supabase
+        .from('events')
+        .select('id, title, description, location, price, image_url, event_type, date')
+        .or(`title.ilike.%${query}%,description.ilike.%${query}%,location.ilike.%${query}%`)
+        .limit(10);
+
+      // Search user coupons
+      const { data: couponsData } = await supabase
+        .from('user_coupons')
+        .select('id, title, description, business_name, discount_amount, image_url, neighborhood')
+        .eq('is_active', true)
+        .or(`title.ilike.%${query}%,description.ilike.%${query}%,business_name.ilike.%${query}%,neighborhood.ilike.%${query}%`)
         .limit(10);
 
       setProfiles(profilesData || []);
-      setItems(itemsData || []);
+      setEvents(eventsData || []);
+      setCoupons(couponsData || []);
     } catch (error) {
       console.error('Search error:', error);
     } finally {
@@ -88,15 +110,22 @@ const SearchPopup = () => {
     closeSearch();
   };
 
-  const handleItemClick = (itemId: string) => {
-    navigate(`/item/${itemId}`);
+  const handleEventClick = (eventId: string) => {
+    navigate(`/event/${eventId}`);
+    closeSearch();
+  };
+
+  const handleCouponClick = (couponId: string) => {
+    // You may want to create a coupon details page or show a popup
+    console.log('Coupon clicked:', couponId);
     closeSearch();
   };
 
   const handleClose = () => {
     setSearchQuery('');
     setProfiles([]);
-    setItems([]);
+    setEvents([]);
+    setCoupons([]);
     closeSearch();
   };
 
@@ -151,7 +180,7 @@ const SearchPopup = () => {
               </div>
             )}
 
-            {!loading && searchQuery && (profiles.length === 0 && items.length === 0) && (
+            {!loading && searchQuery && (profiles.length === 0 && events.length === 0 && coupons.length === 0) && (
               <div className="text-center py-12">
                 <div className="p-4 bg-muted/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                   <Search className="h-8 w-8 text-muted-foreground" />
@@ -205,27 +234,87 @@ const SearchPopup = () => {
               </div>
             )}
 
-            {/* Items Section */}
-            {items.length > 0 && (
+            {/* Events Section */}
+            {events.length > 0 && (
               <div className="space-y-3">
                 <h3 className="flex items-center gap-2 font-semibold text-foreground px-1">
                   <div className="p-1 bg-secondary/10 rounded-md">
-                    <Package className="h-4 w-4 text-secondary" />
+                    <Calendar className="h-4 w-4 text-secondary" />
                   </div>
-                  Items ({items.length})
+                  Events & Meetups ({events.length})
                 </h3>
                 <div className="space-y-2">
-                  {items.map((item) => (
+                  {events.map((event) => (
                     <div
-                      key={item.id}
-                      onClick={() => handleItemClick(item.id)}
+                      key={event.id}
+                      onClick={() => handleEventClick(event.id)}
                       className="flex items-center gap-4 p-4 rounded-xl hover:bg-muted/50 cursor-pointer transition-all duration-200 border border-border/20 hover:border-secondary/30 hover:shadow-sm group"
                     >
                       <div className="w-12 h-12 rounded-xl bg-muted/50 overflow-hidden flex items-center justify-center border border-border/20 group-hover:border-secondary/30 transition-colors">
-                        {item.image_url ? (
+                        {event.image_url ? (
                           <img 
-                            src={item.image_url} 
-                            alt={item.title}
+                            src={event.image_url} 
+                            alt={event.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <Calendar className="h-6 w-6 text-muted-foreground" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-foreground group-hover:text-secondary transition-colors">
+                          {event.title}
+                        </div>
+                        <div className="flex items-center gap-3 mt-0.5">
+                          {event.event_type && (
+                            <span className="text-sm text-secondary font-medium capitalize">
+                              {event.event_type}
+                            </span>
+                          )}
+                          {event.location && (
+                            <span className="text-sm text-muted-foreground">
+                              {event.location}
+                            </span>
+                          )}
+                          {event.price && (
+                            <span className="text-sm text-muted-foreground font-medium">
+                              {event.price}
+                            </span>
+                          )}
+                        </div>
+                        {event.description && (
+                          <div className="text-sm text-muted-foreground truncate mt-1">
+                            {event.description}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Coupons Section */}
+            {coupons.length > 0 && (
+              <div className="space-y-3">
+                <h3 className="flex items-center gap-2 font-semibold text-foreground px-1">
+                  <div className="p-1 bg-orange-500/10 rounded-md">
+                    <Package className="h-4 w-4 text-orange-500" />
+                  </div>
+                  Deals & Coupons ({coupons.length})
+                </h3>
+                <div className="space-y-2">
+                  {coupons.map((coupon) => (
+                    <div
+                      key={coupon.id}
+                      onClick={() => handleCouponClick(coupon.id)}
+                      className="flex items-center gap-4 p-4 rounded-xl hover:bg-muted/50 cursor-pointer transition-all duration-200 border border-border/20 hover:border-orange-500/30 hover:shadow-sm group"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-muted/50 overflow-hidden flex items-center justify-center border border-border/20 group-hover:border-orange-500/30 transition-colors">
+                        {coupon.image_url ? (
+                          <img 
+                            src={coupon.image_url} 
+                            alt={coupon.title}
                             className="w-full h-full object-cover"
                           />
                         ) : (
@@ -233,24 +322,29 @@ const SearchPopup = () => {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-foreground group-hover:text-secondary transition-colors">
-                          {item.title}
+                        <div className="font-semibold text-foreground group-hover:text-orange-500 transition-colors">
+                          {coupon.title}
                         </div>
                         <div className="flex items-center gap-3 mt-0.5">
-                          {item.category && (
-                            <span className="text-sm text-secondary font-medium">
-                              {item.category}
+                          {coupon.business_name && (
+                            <span className="text-sm text-orange-500 font-medium">
+                              {coupon.business_name}
                             </span>
                           )}
-                          {item.price && (
+                          {coupon.discount_amount && (
                             <span className="text-sm text-muted-foreground font-medium">
-                              ₪{item.price}
+                              {coupon.discount_amount}
+                            </span>
+                          )}
+                          {coupon.neighborhood && (
+                            <span className="text-sm text-muted-foreground">
+                              {coupon.neighborhood}
                             </span>
                           )}
                         </div>
-                        {item.description && (
+                        {coupon.description && (
                           <div className="text-sm text-muted-foreground truncate mt-1">
-                            {item.description}
+                            {coupon.description}
                           </div>
                         )}
                       </div>
@@ -267,7 +361,7 @@ const SearchPopup = () => {
                   <Search className="h-8 w-8 text-muted-foreground" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2">Start searching</h3>
-                <p className="text-muted-foreground">Enter keywords to find users, items, and more</p>
+                <p className="text-muted-foreground">Enter keywords to find users, events, and deals</p>
               </div>
             )}
           </div>
