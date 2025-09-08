@@ -119,7 +119,7 @@ const NotificationsPopup = ({ isOpen, onClose }: NotificationsPopupProps) => {
 
   return (
     <SimplifiedModal open={isOpen} onOpenChange={onClose}>
-      <SimplifiedModalContent className="max-w-lg max-h-[85vh]">
+      <SimplifiedModalContent className="max-w-lg max-h-[85vh] bg-white">
         <SimplifiedModalHeader>
           <SimplifiedModalTitle>Notifications</SimplifiedModalTitle>
           {notifications.length > 0 && (
