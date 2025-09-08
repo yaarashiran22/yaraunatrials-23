@@ -282,7 +282,7 @@ const EventVerticalPopup = ({
           {/* Event Details */}
           <div className={`${isMobile ? 'space-y-4' : 'space-y-6'}`}>
             <div className="text-center space-y-3">
-              <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-foreground leading-tight`}>
+              <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-white leading-tight`}>
                 {displayEvent.title}
               </h3>
               {displayEvent.price && displayEvent.price !== 'Free' && 
