@@ -514,18 +514,13 @@ All colors MUST be HSL.
 
   .title-section-white {
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(0 0% 100%);
-    font-size: 1.3em;
+    color: hsl(0 0% 100%); /* White font for neighbors section */
+    font-size: 1.1em;
     margin-bottom: 0.5rem;
-    text-shadow: 0 2px 8px hsl(0 0% 0% / 0.3), 0 1px 4px hsl(0 0% 0% / 0.5);
-    background: linear-gradient(135deg, hsl(0 0% 100%), hsl(220 14% 90%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   @keyframes gradient-shift {
