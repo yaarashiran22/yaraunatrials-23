@@ -1,9 +1,11 @@
-import { X, MessageCircle, Share, Heart, MapPin, Calendar, ChevronUp, ChevronDown, Clock } from "lucide-react";
+import { X, MessageCircle, Share, Heart, MapPin, Calendar, ChevronUp, ChevronDown, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useEventCompanionRequests } from "@/hooks/useEventCompanionRequests";
+import profile1 from "@/assets/profile-1.jpg";
 
 // Location mapping from English to Spanish (Buenos Aires neighborhoods)
 const locationMapping: Record<string, string> = {
@@ -182,6 +184,15 @@ const EventVerticalPopup = ({
     }
   };
   const displayEvent = event || defaultEvent;
+  
+  // Companion requests functionality
+  const { 
+    isLookingForCompanion, 
+    companionUsers, 
+    loading: companionLoading, 
+    toggleCompanionRequest 
+  } = useEventCompanionRequests(displayEvent.id || '');
+  
   const handleRSVP = () => {
     toast({
       title: "RSVP Confirmed",
@@ -199,6 +210,11 @@ const EventVerticalPopup = ({
       navigate(`/profile/${displayEvent.organizer.id}`);
       onClose();
     }
+  };
+
+  const handleMessageUser = (userId: string) => {
+    navigate(`/messages?userId=${userId}`);
+    onClose();
   };
   if (!isOpen) return null;
   return <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4" ref={containerRef}>
@@ -315,12 +331,55 @@ const EventVerticalPopup = ({
 
           {/* RSVP Section */}
           <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-lg border border-green-200 dark:border-blue-800`}>
-            
-            
             <Button onClick={handleRSVP} className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}>
               <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
               RSVP for Event
             </Button>
+          </div>
+
+          {/* Companion Request Section */}
+          <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 rounded-lg border border-purple-200 dark:border-purple-800`}>
+            <div className={`text-center ${isMobile ? 'mb-3' : 'mb-4'}`}>
+              <h4 className={`${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground mb-2`}>
+                Looking for someone to join?
+              </h4>
+              <Button
+                onClick={toggleCompanionRequest}
+                disabled={companionLoading}
+                variant={isLookingForCompanion ? "default" : "outline"}
+                className={`w-full ${isMobile ? 'h-10' : 'h-11'} rounded-lg ${isMobile ? 'text-sm' : ''} mb-3`}
+              >
+                <Users className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} mr-2`} />
+                {isLookingForCompanion ? 'Stop looking for companion' : 'Looking for someone to join me'}
+              </Button>
+              
+              {companionUsers.length > 0 && (
+                <div>
+                  <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground mb-2`}>
+                    {companionUsers.length} {companionUsers.length === 1 ? 'person is' : 'people are'} looking for companions:
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {companionUsers.map((companionUser) => (
+                      <div
+                        key={companionUser.id}
+                        className={`flex items-center gap-2 ${isMobile ? 'p-2' : 'p-3'} bg-white/60 dark:bg-black/20 rounded-lg cursor-pointer hover:bg-white/80 dark:hover:bg-black/30 transition-colors`}
+                        onClick={() => handleMessageUser(companionUser.id)}
+                      >
+                        <img
+                          src={companionUser.profile_image_url || profile1}
+                          alt={companionUser.name}
+                          className={`${isMobile ? 'w-6 h-6' : 'w-8 h-8'} rounded-full object-cover`}
+                        />
+                        <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
+                          {companionUser.name}
+                        </span>
+                        <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-primary`} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
