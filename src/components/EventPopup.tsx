@@ -278,6 +278,47 @@ const EventPopup = ({
                 </div>
               )}
             </div>
+
+            {/* Quick RSVP Section - moved to top for quick access */}
+            {validEventId && (
+              <div className="flex gap-2 justify-center">
+                <Button
+                  onClick={() => handleRSVP('going')}
+                  disabled={isUpdating}
+                  variant={userRSVP?.status === 'going' ? "default" : "outline"}
+                  className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
+                    userRSVP?.status === 'going' 
+                      ? 'bg-green-600 hover:bg-green-700 text-white border-0' 
+                      : 'border-green-300 text-green-700 hover:bg-green-50 dark:border-green-700 dark:text-green-300'
+                  }`}
+                >
+                  <Check className="h-3 w-3 mr-1" />
+                  Going
+                </Button>
+                <Button
+                  onClick={() => handleRSVP('maybe')}
+                  disabled={isUpdating}
+                  variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
+                  className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
+                    userRSVP?.status === 'maybe' 
+                      ? 'bg-yellow-500 hover:bg-yellow-600 text-white border-0' 
+                      : 'border-yellow-300 text-yellow-700 hover:bg-yellow-50 dark:border-yellow-700 dark:text-yellow-300'
+                  }`}
+                >
+                  <UserCheck className="h-3 w-3 mr-1" />
+                  Maybe
+                </Button>
+              </div>
+            )}
+
+            {/* Attendee count - small and subtle */}
+            {validEventId && rsvpCount > 0 && (
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">
+                  {rsvpCount} {rsvpCount === 1 ? 'person' : 'people'} attending
+                </p>
+              </div>
+            )}
             
             <div className="bg-gradient-to-r from-muted/40 to-muted/20 backdrop-blur-sm rounded-2xl p-5 border border-muted/50">
               <p className={`text-foreground/90 leading-relaxed text-center ${isMobile ? 'text-sm' : 'text-base'}`}>
@@ -317,47 +358,7 @@ const EventPopup = ({
             )}
           </div>
 
-          {/* RSVP Section - only show if we have a valid event ID */}
-          {validEventId && (
-            <div className={`${isMobile ? 'mt-6' : 'mt-8'} ${isMobile ? 'p-4' : 'p-6'} bg-gradient-to-r from-green-50/80 to-blue-50/80 dark:from-green-950/40 dark:to-blue-950/40 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-blue-800/50`}>
-              <div className={`text-center ${isMobile ? 'mb-4' : 'mb-6'}`}>
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <Users className="h-5 w-5 text-primary" />
-                  <p className={`${isMobile ? 'text-sm' : 'text-base'} font-semibold text-primary`}>
-                    {rsvpCount} people attending
-                  </p>
-                </div>
-                <div className="flex gap-3 justify-center">
-                  <Button
-                    onClick={() => handleRSVP('going')}
-                    disabled={isUpdating}
-                    variant={userRSVP?.status === 'going' ? "default" : "outline"}
-                    className={`flex-1 ${isMobile ? 'h-11' : 'h-12'} rounded-xl font-semibold transition-all duration-200 hover:scale-105 shadow-lg ${
-                      userRSVP?.status === 'going' 
-                        ? 'bg-green-600 hover:bg-green-700 text-white' 
-                        : 'border-green-300 text-green-700 hover:bg-green-50'
-                    }`}
-                  >
-                    <Check className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} mr-2`} />
-                    Going
-                  </Button>
-                  <Button
-                    onClick={() => handleRSVP('maybe')}
-                    disabled={isUpdating}
-                    variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
-                    className={`flex-1 ${isMobile ? 'h-11' : 'h-12'} rounded-xl font-semibold transition-all duration-200 hover:scale-105 shadow-lg ${
-                      userRSVP?.status === 'maybe' 
-                        ? 'bg-yellow-500 hover:bg-yellow-600 text-white' 
-                        : 'border-yellow-300 text-yellow-700 hover:bg-yellow-50'
-                    }`}
-                  >
-                    <UserCheck className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} mr-2`} />
-                    Maybe
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* RSVP Section - REMOVED FROM HERE - moved to top */}
 
           {/* Companion Request Section */}
           {validEventId && (

@@ -306,6 +306,14 @@ const EventVerticalPopup = ({
                 </div>
               }
             </div>
+
+            {/* Quick RSVP Section - moved to top for quick access */}
+            <div className="flex gap-2 justify-center">
+              <Button onClick={handleRSVP} className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 shadow-sm`}>
+                <MessageCircle className="h-3 w-3 mr-1" />
+                RSVP
+              </Button>
+            </div>
             
             {displayEvent.description && 
               <div className="bg-gradient-to-r from-muted/40 to-muted/20 backdrop-blur-sm rounded-2xl p-5 border border-muted/50">
@@ -357,13 +365,7 @@ const EventVerticalPopup = ({
               </div>}
           </div>
 
-          {/* RSVP Section */}
-          <div className={`${isMobile ? 'mt-6' : 'mt-8'} ${isMobile ? 'p-4' : 'p-6'} bg-gradient-to-r from-green-50/80 to-blue-50/80 dark:from-green-950/40 dark:to-blue-950/40 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-blue-800/50`}>
-            <Button onClick={handleRSVP} className={`w-full ${isMobile ? 'h-12' : 'h-14'} bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold transition-all duration-200 hover:scale-105 shadow-lg`}>
-              <MessageCircle className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} mr-3`} />
-              RSVP for Event
-            </Button>
-          </div>
+          {/* RSVP Section - REMOVED FROM HERE - moved to top */}
 
           {/* Companion Request Section */}
           <div className={`${isMobile ? 'mt-6' : 'mt-8'} ${isMobile ? 'p-4' : 'p-6'} bg-gradient-to-r from-purple-50/80 to-pink-50/80 dark:from-purple-950/40 dark:to-pink-950/40 backdrop-blur-sm rounded-2xl border border-purple-200/50 dark:border-purple-800/50`}>
