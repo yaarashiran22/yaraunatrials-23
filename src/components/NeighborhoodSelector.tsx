@@ -37,7 +37,7 @@ const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProp
           <ChevronDown className="h-4 w-4" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-48 bg-background border border-border">
+      <DropdownMenuContent align="start" className="w-48 bg-white border border-border z-50">
         {neighborhoods.map((neighborhood) => (
           <DropdownMenuItem
             key={neighborhood}
