@@ -277,12 +277,6 @@ const EventVerticalPopup = ({
               </Button>
             </div>
             
-            {/* Event Badge */}
-            <div className="absolute top-4 left-4">
-              <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                Event
-              </div>
-            </div>
           </div>
 
           {/* Event Details */}
