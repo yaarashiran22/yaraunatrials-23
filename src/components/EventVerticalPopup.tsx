@@ -324,7 +324,7 @@ const EventVerticalPopup = ({
                 className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
                   isLookingForCompanion 
                     ? 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0' 
-                    : 'bg-white/90 border-green-300 text-green-700 hover:bg-white dark:bg-white/80 dark:hover:bg-white/90 dark:text-green-600'
+                    : 'border-green-300 text-green-700 hover:bg-green-50 dark:border-green-700 dark:text-green-300'
                 }`}
               >
                 <Users className="h-3 w-3 mr-1" />
