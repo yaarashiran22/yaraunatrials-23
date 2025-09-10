@@ -1373,11 +1373,11 @@ const ProfilePage = () => {
             {/* Business Coupons Display */}
             {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
               <div className="mt-6 p-4 rounded-xl bg-gradient-to-br from-tertiary-50 to-coral-50 border border-tertiary-200/30 shadow-sm">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold bg-gradient-to-r from-tertiary to-coral bg-clip-text text-transparent flex items-center gap-2">
-                    <Gift className="h-4 w-4 text-tertiary" />
-                    Business Coupons
-                  </h4>
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent flex items-center gap-2">
+                    <Gift className="h-5 w-5 text-secondary" />
+                    My Coupons
+                  </h3>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
