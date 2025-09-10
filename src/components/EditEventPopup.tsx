@@ -234,7 +234,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                 value={formData.title}
                 onChange={(e) => handleInputChange('title', e.target.value)}
                 placeholder="Enter event title..."
-                className={`h-11 transition-all ${errors.title ? 'border-red-500 focus:border-red-500' : 'border-primary/20 focus:border-primary/50'}`}
+                className={`h-11 bg-white transition-all ${errors.title ? 'border-red-500 focus:border-red-500' : 'border-primary/20 focus:border-primary/50'}`}
               />
               {errors.title && (
                 <div className="flex items-center gap-2 text-red-600 text-sm">
@@ -254,7 +254,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 placeholder="Tell people about your event..."
-                className="min-h-[100px] border-primary/20 focus:border-primary/50 transition-all resize-none"
+                className="min-h-[100px] bg-white border-primary/20 focus:border-primary/50 transition-all resize-none"
               />
             </div>
           </div>
@@ -274,7 +274,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                 value={formData.location}
                 onChange={(e) => handleInputChange('location', e.target.value)}
                 placeholder="Where will this take place?"
-                className="h-11 border-primary/20 focus:border-primary/50 transition-all"
+                className="h-11 bg-white border-primary/20 focus:border-primary/50 transition-all"
               />
             </div>
 
@@ -290,7 +290,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                   type="date"
                   value={formData.date}
                   onChange={(e) => handleInputChange('date', e.target.value)}
-                  className="h-11 border-primary/20 focus:border-primary/50 transition-all"
+                  className="h-11 bg-white border-primary/20 focus:border-primary/50 transition-all"
                 />
               </div>
               <div className="space-y-2">
@@ -303,7 +303,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                   type="time"
                   value={formData.time}
                   onChange={(e) => handleInputChange('time', e.target.value)}
-                  className="h-11 border-primary/20 focus:border-primary/50 transition-all"
+                  className="h-11 bg-white border-primary/20 focus:border-primary/50 transition-all"
                 />
               </div>
             </div>
@@ -319,7 +319,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                 value={formData.price}
                 onChange={(e) => handleInputChange('price', e.target.value)}
                 placeholder="Free, $50, €25, etc..."
-                className="h-11 border-primary/20 focus:border-primary/50 transition-all"
+                className="h-11 bg-white border-primary/20 focus:border-primary/50 transition-all"
               />
             </div>
           </div>
@@ -353,7 +353,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                     value={formData.image_url}
                     onChange={(e) => handleInputChange('image_url', e.target.value)}
                     placeholder="https://example.com/image.jpg"
-                    className={`h-11 transition-all ${errors.image_url ? 'border-red-500 focus:border-red-500' : 'border-primary/20 focus:border-primary/50'}`}
+                    className={`h-11 bg-white transition-all ${errors.image_url ? 'border-red-500 focus:border-red-500' : 'border-primary/20 focus:border-primary/50'}`}
                   />
                   {errors.image_url && (
                     <div className="flex items-center gap-2 text-red-600 text-sm">
@@ -384,7 +384,7 @@ const EditEventPopup = ({ isOpen, onClose, eventData, onSuccess }: EditEventPopu
                     value={formData.external_link}
                     onChange={(e) => handleInputChange('external_link', e.target.value)}
                     placeholder="https://example.com"
-                    className={`h-11 transition-all ${errors.external_link ? 'border-red-500 focus:border-red-500' : 'border-primary/20 focus:border-primary/50'}`}
+                    className={`h-11 bg-white transition-all ${errors.external_link ? 'border-red-500 focus:border-red-500' : 'border-primary/20 focus:border-primary/50'}`}
                   />
                   {errors.external_link && (
                     <div className="flex items-center gap-2 text-red-600 text-sm">
