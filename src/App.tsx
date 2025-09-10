@@ -1,6 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Home, User, Users, Settings, Heart } from "lucide-react";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -176,21 +175,19 @@ const App = () => {
   console.log('📱 App component rendering - Application starting...');
   return (
     <ErrorBoundary>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <LanguageProvider>
-          <AuthProvider>
-            <NewItemProvider>
-              <FavoritesProvider>
-                <SearchProvider>
-                  <AppContent />
-                </SearchProvider>
-              </FavoritesProvider>
-            </NewItemProvider>
-          </AuthProvider>
-        </LanguageProvider>
-      </TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <LanguageProvider>
+        <AuthProvider>
+          <NewItemProvider>
+            <FavoritesProvider>
+              <SearchProvider>
+                <AppContent />
+              </SearchProvider>
+            </FavoritesProvider>
+          </NewItemProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </ErrorBoundary>
   );
 };
