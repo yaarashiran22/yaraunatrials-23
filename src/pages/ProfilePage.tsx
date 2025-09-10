@@ -1310,6 +1310,24 @@ const ProfilePage = () => {
                         <Pencil className="h-3 w-3 mr-1" />
                         Edit
                       </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="rounded-full px-3 py-1 h-7 text-xs bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/30 text-primary hover:bg-gradient-to-r hover:from-primary hover:to-secondary hover:text-white transition-all shadow-sm hover:shadow-md" 
+                        onClick={() => navigate('/favorites')}
+                      >
+                        <Heart className="h-3 w-3 mr-1" />
+                        Favorites
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="rounded-full px-3 py-1 h-7 text-xs bg-gradient-to-r from-coral/10 to-coral/20 border-coral/30 text-coral hover:bg-gradient-to-r hover:from-coral hover:to-coral-hover hover:text-white transition-all shadow-sm hover:shadow-md" 
+                        onClick={() => navigate('/settings')}
+                      >
+                        <Settings className="h-3 w-3 mr-1" />
+                        Settings
+                      </Button>
                     </>
                   )}
                   
@@ -1358,17 +1376,6 @@ const ProfilePage = () => {
                   {profileData.account_type === 'business' ? '🏢 Business Account' : '👤 Personal Account'}
                 </span>
               </div>
-              {/* Settings Button - Same row as account type */}
-              {isOwnProfile && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="rounded-full p-2 h-8 w-8 bg-coral/10 border-coral/30 text-coral hover:bg-coral hover:text-white transition-all hover:shadow-lg"
-                  onClick={() => navigate('/settings')}
-                >
-                  <Settings className="h-4 w-4" />
-                </Button>
-              )}
             </div>
             {/* Business Coupons Display */}
             {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (

@@ -37,6 +37,7 @@ import CreatePostPage from "./pages/CreatePostPage";
 import CreateEventPage from "./pages/CreateEventPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import EditItemPage from "./pages/EditItemPage";
+import FavoritesPage from "./pages/FavoritesPage";
 import NotFound from "./pages/NotFound";
 
 
@@ -96,6 +97,7 @@ const AppContent = () => {
               <Route path="/neighbors" element={<NeighborsPage />} />
               <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/new-item" element={<NewItemPage />} />
               <Route path="/create-post" element={<CreatePostPage />} />
               <Route path="/create-event" element={<CreateEventPage />} />
@@ -156,6 +158,7 @@ const AppContent = () => {
             <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
             
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/new-item" element={<NewItemPage />} />
             <Route path="/create-post" element={<CreatePostPage />} />
             <Route path="/create-event" element={<CreateEventPage />} />
