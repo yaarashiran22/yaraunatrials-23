@@ -132,8 +132,10 @@ const UniformCard = ({
               {date && (
                 <span className="text-xs font-medium px-2 py-0.5 bg-red-500 backdrop-blur-md rounded-full text-white border border-red-500 shadow-lg transition-all duration-300 group-hover:bg-red-600 group-hover:scale-105">{date}</span>
               )}
-              {price && (
-                <span className="text-xs font-medium px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">${price}</span>
+              {(price || (type === 'event')) && (
+                <span className="text-xs font-medium px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">
+                  {price ? `$${price}` : 'free'}
+                </span>
               )}
             </div>
           </div>
