@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import BottomNavigation from '@/components/BottomNavigation';
 import Header from '@/components/Header';
 import NotificationsPopup from '@/components/NotificationsPopup';
+import DesktopHeader from '@/components/DesktopHeader';
 
 const MessagesPage = () => {
   const { user } = useAuth();
@@ -111,6 +112,11 @@ const MessagesPage = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col pb-20 lg:pb-0">
+      {/* Desktop Header */}
+      <DesktopHeader 
+        title={selectedUser ? selectedUser.name || "User" : "Messages"}
+        showSearch={false}
+      />
       {/* Custom Header for Chat */}
       {selectedUser ? (
         <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm">
