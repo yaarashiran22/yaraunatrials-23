@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
@@ -180,9 +180,9 @@ export const useMeetupJoinRequests = (eventId?: string) => {
   };
 
   // Check user's join status for a meetup
-  const checkJoinStatus = async (meetupId: string) => {
+  const checkJoinStatus = useCallback(async (meetupId: string) => {
     if (!user) return null;
-
+    
     try {
       const { data, error } = await supabase
         .from('event_rsvps')
@@ -197,7 +197,7 @@ export const useMeetupJoinRequests = (eventId?: string) => {
       console.error('Error checking join status:', error);
       return null;
     }
-  };
+  }, [user]);
 
   // Fetch join requests when eventId changes
   useEffect(() => {

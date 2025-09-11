@@ -29,12 +29,8 @@ interface EventPopupProps {
     date?: string;
   };
 }
-const EventPopup = ({
-  isOpen,
-  onClose,
-  eventId,
-  event
-}: EventPopupProps) => {
+
+const EventPopup = ({ isOpen, onClose, eventId, event }: EventPopupProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const isMobile = useIsMobile();
@@ -48,46 +44,40 @@ const EventPopup = ({
     id: undefined,
     title: "Event Party",
     image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=600&fit=crop",
-    video: undefined,
-    price: "₪100",
-    description: "Join us for an amazing party celebration with great music and good vibes",
+    price: "₪50",
+    description: "Join us for an amazing event with great music, food, and friends!",
     organizer: {
-      id: undefined,
-      name: "Sarah Cohen",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b66dfd8d?w=100&h=100&fit=crop",
+      id: "default",
+      name: "Event Organizer",
+      image: profile1,
       location: "Tel Aviv"
     },
-    date: "December 15"
+    date: new Date(Date.now() + 86400000).toISOString() // Tomorrow
   };
 
-  // Use real data if available, otherwise fallback to passed event or default
-  const displayEvent = eventData ? {
+  // Use passed event data first, then fetched data, then defaults
+  const displayEvent = event || (eventData ? {
     id: eventData.id,
     title: eventData.title,
     image: eventData.image_url || defaultEvent.image,
-    video: (eventData as any).video_url, // Type assertion for video_url
-    price: eventData.price ? `₪${eventData.price}` : defaultEvent.price,
+    price: eventData.price ? "₪" + eventData.price : undefined,
     description: eventData.description || defaultEvent.description,
     organizer: {
-      id: eventData.uploader?.id,
-      name: eventData.uploader?.name || "User",
-      image: eventData.uploader?.profile_image_url || 
-             eventData.uploader?.small_profile_photo || 
-             profile1,
-      location: eventData.uploader?.location || "Not specified"
+      id: eventData.uploader?.id || defaultEvent.organizer.id,
+      name: eventData.uploader?.name || defaultEvent.organizer.name,
+      image: eventData.uploader?.profile_image_url || defaultEvent.organizer.image,
+      location: eventData.uploader?.location || defaultEvent.organizer.location
     },
-    date: eventData.created_at ? new Date(eventData.created_at).toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    }) : null
-  } : (event || defaultEvent);
+    date: eventData.created_at || defaultEvent.date
+  } : defaultEvent);
+
+  // Only use event ID for RSVP/companion features if it's not the default
+  const validEventId = eventId && eventId !== "1" ? eventId : displayEvent.id;
   
-  // RSVP functionality - only enable if we have a valid event ID
-  const validEventId = eventId || (displayEvent.id && displayEvent.id !== "1" ? displayEvent.id : undefined);
+  // RSVP functionality - only if we have a valid event ID
   const { userRSVP, rsvpCount, handleRSVP, isUpdating } = useEventRSVP(validEventId || '');
   
-  // Companion requests functionality
+  // Companion request functionality - only if we have a valid event ID  
   const { 
     isLookingForCompanion, 
     companionUsers, 
@@ -95,88 +85,61 @@ const EventPopup = ({
     toggleCompanionRequest 
   } = useEventCompanionRequests(validEventId || '');
 
-  console.log('EventPopup - eventData:', eventData);
-  console.log('EventPopup - mobile_number:', eventData?.mobile_number);
-
-  const handleViewProfile = () => {
-    if (displayEvent.organizer?.id) {
-      navigate(`/profile/${displayEvent.organizer.id}`);
-      onClose();
-    }
-  };
-
-  const handleContact = () => {
-    const mobileNumber = eventData?.mobile_number;
-    if (mobileNumber) {
-      // Create WhatsApp link
-      const whatsappUrl = `https://wa.me/${mobileNumber.replace(/[^0-9]/g, '')}?text=Hi, I'm interested in your event: ${encodeURIComponent(displayEvent.title)}`;
-      window.open(whatsappUrl, '_blank');
-    } else {
-      toast({
-        title: "Contact Unavailable",
-        description: "No contact information available for this event",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: displayEvent.title,
-        text: displayEvent.description,
-        url: window.location.href
-      }).catch(console.error);
-    } else {
-      toast({
-        title: "Shared Successfully!",
-        description: "Event has been shared"
-      });
-    }
-  };
-
-  const handleViewDetails = () => {
-    navigate(`/event/${displayEvent.id}`);
-    onClose();
-  };
-
   const handleMessageUser = (userId: string) => {
     navigate(`/messages?userId=${userId}`);
     onClose();
   };
 
+  const handleContact = () => {
+    if (eventData?.mobile_number) {
+      window.open(`tel:${eventData.mobile_number}`, '_self');
+    } else {
+      toast({
+        title: "No contact information",
+        description: "This organizer hasn't provided contact details",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleShare = () => {
+    toast({
+      title: "Event Shared!",
+      description: "Event shared on social networks",
+    });
+  };
+
+  const handleViewDetails = () => {
+    if (validEventId) {
+      navigate(`/events/${validEventId}`);
+      onClose();
+    }
+  };
+
+  const handleViewProfile = () => {
+    if (displayEvent.organizer?.id && displayEvent.organizer.id !== "default") {
+      navigate(`/profile/${displayEvent.organizer.id}`);
+      onClose();
+    } else {
+      // Fallback for when organizer ID is not available
+      const profileId = eventData?.uploader?.id || eventId || 'default';
+      if (profileId !== 'default') {
+        navigate(`/profile/${profileId}`);
+        onClose();
+      }
+    }
+  };
+
   if (!isOpen) return null;
 
-  // Show immediate UI with passed data, no loading screen needed unless we're fetching additional data
-  const showLoadingState = needsAdditionalData && loading && !event;
-
-  if (showLoadingState) {
+  // Show loading state only when we need additional data
+  if (loading && needsAdditionalData) {
     return (
-      <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
-        <div className="bg-background rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto mx-4">
-          {/* Header Skeleton */}
-          <div className="flex items-center justify-between p-4 border-b">
-            <div className="w-6 h-6 bg-muted rounded animate-pulse"></div>
-            <div className="w-32 h-6 bg-muted rounded animate-pulse"></div>
-            <div className="w-6 h-6 bg-muted rounded animate-pulse"></div>
-          </div>
-          
-          {/* Content Skeleton */}
-          <div className="p-4">
-            <div className="w-full h-64 bg-muted rounded-2xl animate-pulse mb-6"></div>
-            <div className="space-y-4">
-              <div className="text-center space-y-2">
-                <div className="w-24 h-8 bg-muted rounded mx-auto animate-pulse"></div>
-                <div className="w-48 h-6 bg-muted rounded mx-auto animate-pulse"></div>
-                <div className="w-32 h-4 bg-muted rounded mx-auto animate-pulse"></div>
-              </div>
-              <div className="w-full h-16 bg-muted rounded animate-pulse"></div>
-              <div className="w-full h-16 bg-muted rounded animate-pulse"></div>
-              <div className="space-y-3">
-                <div className="w-full h-12 bg-muted rounded-2xl animate-pulse"></div>
-                <div className="w-full h-12 bg-muted rounded-2xl animate-pulse"></div>
-              </div>
-            </div>
+      <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="bg-background rounded-3xl w-full max-w-sm p-8 mx-4">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <p className="text-foreground">Loading event details...</p>
           </div>
         </div>
       </div>
@@ -184,259 +147,217 @@ const EventPopup = ({
   }
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-      <div className={`bg-white rounded-3xl w-full max-w-md ${isMobile ? 'max-h-[95vh]' : 'max-h-[90vh]'} overflow-y-auto mx-4 shadow-2xl border border-gray-100 animate-scale-in`}>
-        {/* Header */}
-        <div className="relative overflow-hidden rounded-t-3xl bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 border-b border-purple-100">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-          <div className="relative flex items-center justify-between p-6">
+    <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className={`bg-background rounded-3xl w-full max-w-sm ${isMobile ? 'max-h-[90vh]' : 'max-h-[80vh]'} overflow-hidden mx-4 relative shadow-2xl border-0`}>
+        {/* Large Hero Image */}
+        <div className="relative h-80 w-full overflow-hidden">
+          <img 
+            src={displayEvent.image}
+            alt={displayEvent.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+          
+          {/* Header Controls */}
+          <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
             <Button 
               variant="ghost" 
-              size="sm"
+              size="sm" 
               onClick={onClose}
-              className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-200 shadow-lg text-gray-600 hover:text-gray-800"
+              className="bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white h-9 w-9 rounded-full p-0"
             >
               <X className="h-5 w-5" />
             </Button>
-            
-            <div className="flex-1 text-center px-4">
-              <h2 className="text-xl font-bold text-gray-800 bg-white/70 backdrop-blur-sm rounded-full px-6 py-2 inline-block shadow-sm">
-                {displayEvent.title}
-              </h2>
-            </div>
-            
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
-              onClick={handleShare}
-              className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-200 shadow-lg text-gray-600 hover:text-gray-800"
+              className="bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white h-9 w-9 rounded-full p-0"
             >
-              <Share className="h-4 w-4" />
+              <Bookmark className="h-4 w-4" />
             </Button>
           </div>
+
+          {/* Price Badge */}
+          {displayEvent.price && (
+            <div className="absolute bottom-4 left-4">
+              {displayEvent.price === 'Free' || displayEvent.price === '₪0' ? (
+                <div className="bg-emerald-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full font-bold">
+                  Free Event
+                </div>
+              ) : (
+                <div className="bg-white/90 backdrop-blur-sm text-foreground px-4 py-2 rounded-full font-bold">
+                  {displayEvent.price}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Content */}
-        <div className={`${isMobile ? 'p-4' : 'p-6'}`}>
-          {/* Event Media */}
-          <div className={`relative ${isMobile ? 'mb-6' : 'mb-8'} group`}>
-            <div className="relative rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/5">
-              {displayEvent.video ? (
-                <video 
-                  src={displayEvent.video}
-                  className={`w-full ${isMobile ? 'h-56' : 'h-72'} object-cover transition-transform duration-300 group-hover:scale-105`}
-                  controls
-                  poster={displayEvent.image}
-                  preload="metadata"
-                  onError={(e) => {
-                    console.log('Video failed to load, showing fallback image');
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              ) : (
-                <img 
-                  src={displayEvent.image}
-                  alt={displayEvent.title}
-                  className={`w-full ${isMobile ? 'h-56' : 'h-72'} object-cover transition-transform duration-300 group-hover:scale-105`}
-                />
-              )}
-              
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
-            </div>
-            
-            <div className="absolute top-4 right-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-md text-red-500 hover:bg-white hover:text-red-600 hover:scale-110 transition-all duration-200 shadow-lg"
-              >
-                <Bookmark className="h-4 w-4" />
-              </Button>
-            </div>
+        <div className="p-6 space-y-6 overflow-y-auto max-h-96">
+          {/* Title and Description */}
+          <div className="text-center space-y-3">
+            <h3 className="text-2xl font-bold text-foreground leading-tight">
+              {displayEvent.title}
+            </h3>
+            <p className="text-foreground leading-relaxed">
+              {displayEvent.description}
+            </p>
           </div>
 
-          {/* Event Details */}
-          <div className={`${isMobile ? 'space-y-4' : 'space-y-6'}`}>
-            <div className="text-center space-y-3">
-              {eventData?.price && (
-                <div className="inline-flex items-center justify-center">
-                  <span className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent`}>
-                    {displayEvent.price}
-                  </span>
-                </div>
-              )}
-              <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-gray-800 leading-tight`}>
-                {displayEvent.title}
-              </h3>
-              {displayEvent.date && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full">
-                  <MapPin className="h-4 w-4 text-purple-600" />
-                  <span className={`${isMobile ? 'text-sm' : 'text-base'} text-purple-700 font-medium`}>
-                    {getRelativeDay(displayEvent.date)}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Quick RSVP Section - moved to top for quick access */}
-            {validEventId && (
-              <div className="flex gap-2 justify-center">
-                <Button
-                  onClick={() => handleRSVP('going')}
-                  disabled={isUpdating}
-                  variant={userRSVP?.status === 'going' ? "default" : "outline"}
-                  className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
-                    userRSVP?.status === 'going' 
-                      ? 'bg-green-600 hover:bg-green-700 text-white border-0' 
-                      : 'border-green-300 text-green-700 hover:bg-green-50 dark:border-green-700 dark:text-green-300'
-                  }`}
-                >
-                  <Check className="h-3 w-3 mr-1" />
-                  Going
-                </Button>
-                <Button
-                  onClick={() => handleRSVP('maybe')}
-                  disabled={isUpdating}
-                  variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
-                  className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
-                    userRSVP?.status === 'maybe' 
-                      ? 'bg-yellow-500 hover:bg-yellow-600 text-white border-0' 
-                      : 'border-yellow-300 text-yellow-700 hover:bg-yellow-50 dark:border-yellow-700 dark:text-yellow-300'
-                  }`}
-                >
-                  <UserCheck className="h-3 w-3 mr-1" />
-                  Maybe
-                </Button>
-              </div>
-            )}
-
-            {/* Attendee count - small and subtle */}
-            {validEventId && rsvpCount > 0 && (
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground">
-                  {rsvpCount} {rsvpCount === 1 ? 'person' : 'people'} attending
-                </p>
-              </div>
-            )}
-
-            {/* Quick Companion Request - moved to top for quick access */}
-            {validEventId && (
-              <div className="text-center space-y-3">
-                <Button
-                  onClick={toggleCompanionRequest}
-                  disabled={companionLoading}
-                  variant={isLookingForCompanion ? "default" : "outline"}
-                  className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
-                    isLookingForCompanion 
-                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0' 
-                      : 'border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300'
-                  }`}
-                >
-                  <Users className="h-3 w-3 mr-1" />
-                  {isLookingForCompanion ? 'Stop looking' : 'Find companion'}
-                </Button>
-                
-                {companionUsers.length > 0 && (
-                  <div className="space-y-2">
-                    <p className="text-xs text-muted-foreground">
-                      {companionUsers.length} looking for companions:
-                    </p>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {companionUsers.slice(0, 3).map((companionUser) => (
-                        <div
-                          key={companionUser.id}
-                          className="flex items-center gap-2 px-3 py-1 bg-purple-50/80 dark:bg-purple-950/30 rounded-full cursor-pointer hover:bg-purple-100/80 dark:hover:bg-purple-950/50 transition-all duration-200 hover:scale-105 shadow-sm border border-purple-200/50 dark:border-purple-800/50"
-                          onClick={() => handleMessageUser(companionUser.id)}
-                        >
-                          <img
-                            src={companionUser.profile_image_url || profile1}
-                            alt={companionUser.name}
-                            className="w-5 h-5 rounded-full object-cover"
-                          />
-                          <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
-                            {companionUser.name.split(' ')[0]}
-                          </span>
-                          <MessageCircle className="h-3 w-3 text-purple-600" />
-                        </div>
-                      ))}
-                      {companionUsers.length > 3 && (
-                        <div className="flex items-center justify-center w-8 h-6 bg-purple-100 dark:bg-purple-900 rounded-full">
-                          <span className="text-xs font-bold text-purple-700 dark:text-purple-300">
-                            +{companionUsers.length - 3}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-            
-            <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-5 border border-gray-200">
-              <p className={`text-gray-700 leading-relaxed text-center ${isMobile ? 'text-sm' : 'text-base'}`}>
-                {displayEvent.description}
+          {/* Date Info */}
+          {displayEvent.date && (
+            <div className="text-center p-3 bg-muted/30 rounded-2xl">
+              <p className="text-sm font-medium text-foreground">
+                {getRelativeDay(displayEvent.date)}
               </p>
             </div>
-            
-            {/* Organizer Info */}
-            {displayEvent.organizer && (
-              <div 
-                className={`flex items-center gap-4 ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-r from-white to-gray-50 rounded-2xl cursor-pointer hover:from-gray-50 hover:to-gray-100 transition-all duration-300 border border-gray-200 hover:border-purple-300 hover:shadow-lg group`}
-                onClick={handleViewProfile}
+          )}
+
+          {/* RSVP Section */}
+          {validEventId && (
+            <div className="flex justify-center gap-2">
+              <Button
+                onClick={() => handleRSVP('going')}
+                disabled={isUpdating}
+                variant={userRSVP?.status === 'going' ? "default" : "outline"}
+                className={`h-10 px-6 rounded-2xl font-semibold transition-all duration-200 ${
+                  userRSVP?.status === 'going' 
+                    ? 'bg-gradient-to-r from-primary to-secondary text-primary-foreground' 
+                    : 'border-2 border-primary/30 hover:bg-primary/10 text-primary'
+                }`}
               >
-                <div className="relative">
-                  <img 
-                    src={displayEvent.organizer.image || profile1}
-                    alt={displayEvent.organizer.name}
-                    className={`${isMobile ? 'w-12 h-12' : 'w-16 h-16'} rounded-full object-cover ring-2 ring-purple-200 group-hover:ring-purple-400 transition-all duration-300`}
-                    onError={(e) => {
-                      console.log('Profile image failed to load, using fallback. Original src:', e.currentTarget.src);
-                      e.currentTarget.src = profile1;
-                    }}
-                  />
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                </div>
-                <div className="flex-1">
-                  <p className={`font-bold text-gray-800 ${isMobile ? 'text-base' : 'text-lg'}`}>
-                    {displayEvent.organizer.name}
-                  </p>
-                  <div className={`flex items-center gap-2 ${isMobile ? 'text-sm' : 'text-base'} text-gray-600`}>
-                    <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
-                    <span>{displayEvent.organizer.location}</span>
+                <Check className="h-4 w-4 mr-2" />
+                Going
+              </Button>
+              <Button
+                onClick={() => handleRSVP('maybe')}
+                disabled={isUpdating}
+                variant={userRSVP?.status === 'maybe' ? "secondary" : "outline"}
+                className={`h-10 px-6 rounded-2xl font-semibold transition-all duration-200 ${
+                  userRSVP?.status === 'maybe' 
+                    ? 'bg-amber-500 hover:bg-amber-600 text-white' 
+                    : 'border-2 border-amber-300 text-amber-700 hover:bg-amber-50'
+                }`}
+              >
+                <UserCheck className="h-4 w-4 mr-2" />
+                Maybe
+              </Button>
+            </div>
+          )}
+
+          {/* Attendee Count */}
+          {validEventId && rsvpCount > 0 && (
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">
+                {rsvpCount} {rsvpCount === 1 ? 'person' : 'people'} attending
+              </p>
+            </div>
+          )}
+
+          {/* Find Companion */}
+          {validEventId && (
+            <Button
+              onClick={toggleCompanionRequest}
+              disabled={companionLoading}
+              variant={isLookingForCompanion ? "default" : "outline"}
+              className={`w-full h-12 rounded-2xl font-semibold transition-all duration-200 ${
+                isLookingForCompanion 
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white' 
+                  : 'border-2 border-purple-300 hover:bg-purple-50 text-purple-700'
+              }`}
+            >
+              <Users className="h-4 w-4 mr-2" />
+              {isLookingForCompanion ? 'Stop looking' : 'Find companion'}
+            </Button>
+          )}
+
+          {/* Companions List */}
+          {companionUsers.length > 0 && (
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground text-center">
+                {companionUsers.length} looking for companions
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {companionUsers.slice(0, 3).map((companionUser) => (
+                  <div
+                    key={companionUser.id}
+                    className="flex items-center gap-2 px-3 py-2 bg-card/60 rounded-2xl cursor-pointer hover:bg-card transition-all duration-200 border"
+                    onClick={() => handleMessageUser(companionUser.id)}
+                  >
+                    <img
+                      src={companionUser.profile_image_url || profile1}
+                      alt={companionUser.name}
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
+                    <span className="text-sm font-medium">
+                      {companionUser.name.split(' ')[0]}
+                    </span>
+                    <MessageCircle className="h-4 w-4 text-primary" />
                   </div>
-                </div>
-                <Eye className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                ))}
               </div>
-            )}
-          </div>
-
-          {/* RSVP Section - REMOVED FROM HERE - moved to top */}
-
-          {/* Companion Request Section - REMOVED FROM HERE - moved to top */}
+            </div>
+          )}
+          
+          {/* Compact Organizer Info */}
+          {displayEvent.organizer && (
+            <div 
+              className="flex items-center gap-3 p-3 bg-muted/20 rounded-xl cursor-pointer hover:bg-muted/30 transition-all duration-200 group border border-border/30 hover:border-primary/40" 
+              onClick={handleViewProfile}
+            >
+              <img 
+                src={displayEvent.organizer.image}
+                alt={displayEvent.organizer.name}
+                className="w-8 h-8 rounded-full object-cover border border-primary/20 group-hover:border-primary/40 transition-colors"
+                onError={(e) => {
+                  e.currentTarget.src = profile1;
+                }}
+              />
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-foreground text-sm group-hover:text-primary transition-colors truncate">
+                  {displayEvent.organizer.name}
+                </p>
+                <p className="text-xs text-muted-foreground">Organizer</p>
+              </div>
+              <div className="p-1 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <Eye className="h-3 w-3 text-primary" />
+              </div>
+            </div>
+          )}
 
           {/* Action Buttons */}
-          <div className={`${isMobile ? 'mt-6' : 'mt-8'} flex flex-col ${isMobile ? 'gap-3' : 'gap-4'}`}>
+          <div className="space-y-3">
             <Button 
               onClick={handleContact}
               variant={eventData?.mobile_number ? "default" : "outline"}
               disabled={!eventData?.mobile_number}
-              className={`flex-1 ${isMobile ? 'h-12' : 'h-14'} rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold transition-all duration-200 hover:scale-105 shadow-lg ${
+              className={`w-full h-12 rounded-2xl font-semibold transition-all duration-200 ${
                 eventData?.mobile_number 
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white' 
+                  ? 'bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-lg hover:shadow-xl hover:scale-105' 
                   : 'opacity-50 cursor-not-allowed'
               }`}
             >
-              <MessageCircle className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} mr-3`} />
+              <MessageCircle className="h-4 w-4 mr-2" />
               {eventData?.mobile_number ? 'Contact Organizer' : 'No contact info'}
             </Button>
-            <Button 
-              onClick={handleViewDetails}
-              className={`flex-1 ${isMobile ? 'h-12' : 'h-14'} bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold transition-all duration-200 hover:scale-105 shadow-lg`}
-            >
-              <Eye className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} mr-3`} />
-              View Details
-            </Button>
+            
+            <div className="flex gap-3">
+              <Button 
+                onClick={handleViewDetails}
+                className="flex-1 h-12 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                View Details
+              </Button>
+              <Button 
+                onClick={handleShare}
+                variant="outline"
+                className="h-12 w-12 border-2 border-primary/30 hover:bg-primary/10 rounded-2xl transition-all duration-200"
+              >
+                <Share className="h-4 w-4 text-primary" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

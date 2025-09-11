@@ -253,6 +253,11 @@ const MeetupVerticalPopup = ({
     if (displayItem.seller?.id) {
       navigate(`/profile/${displayItem.seller.id}`);
       onClose();
+    } else {
+      // Fallback: try to extract ID from the item or use a default profile navigation
+      const profileId = item?.id || displayItem.id || 'default';
+      navigate(`/profile/${profileId}`);
+      onClose();
     }
   };
   if (!isOpen) return null;
