@@ -349,7 +349,7 @@ const Index = () => {
           </div>
           {loading ? <FastLoadingSkeleton type="cards" count={3} /> : meetupEvents.length === 0 ? <div className="text-center py-6 text-muted-foreground">
               <p>No meetups available at the moment</p>
-            </div> : <div className="flex overflow-x-auto gap-8 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
+            </div> : <div className="flex overflow-x-auto gap-6 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
           scrollBehavior: 'smooth'
         }}>
               {meetupEvents.map((event, index) => <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
@@ -414,7 +414,7 @@ const Index = () => {
           </div>
           {loading ? <FastLoadingSkeleton type="cards" count={3} /> : realEvents.length === 0 ? <div className="text-center py-6 text-muted-foreground">
               <p>No events available at the moment</p>
-            </div> : <div className="flex overflow-x-auto gap-8 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
+            </div> : <div className="flex overflow-x-auto gap-6 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
           scrollBehavior: 'smooth'
         }}>
               {realEvents.map((event, index) => <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
