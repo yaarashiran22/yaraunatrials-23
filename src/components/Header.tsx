@@ -61,7 +61,7 @@ const Header = ({
           {/* Left side - Logo */}
           <div className="flex items-center w-32">
             <div 
-              className="title-section text-3xl cursor-pointer hover:opacity-80 transition-opacity" 
+              className="title-section text-4xl cursor-pointer hover:opacity-80 transition-opacity" 
               onClick={handleLogoClick}
               role="button"
               aria-label="Navigate to homepage"
