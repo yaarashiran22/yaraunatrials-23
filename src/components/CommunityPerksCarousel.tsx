@@ -99,7 +99,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
     return (
       <div className="flex gap-5 animate-pulse min-w-fit">
         {[1, 2, 3].map((i) => (
-          <Card key={i} className="min-w-[320px] flex-shrink-0 h-[280px] bg-muted/50" />
+          <Card key={i} className="min-w-[280px] flex-shrink-0 h-[280px] bg-muted/50" />
         ))}
       </div>
     );
@@ -123,7 +123,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
           const claim = !isUserCoupon ? getClaim(item.id) : null;
           
           return (
-            <Card key={`${item.type}-${item.id}`} className="min-w-[320px] w-[320px] flex-shrink-0 bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:shadow-lg transition-all duration-300 group">
+            <Card key={`${item.type}-${item.id}`} className="min-w-[280px] w-[280px] flex-shrink-0 bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:shadow-lg transition-all duration-300 group">
               <CardContent className="p-0 space-y-0 bg-card/80 border border-border/20 rounded-lg backdrop-blur-sm overflow-hidden">
                 {/* Large Header Image */}
                 {item.image_url && (
