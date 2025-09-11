@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,34 +27,29 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
 
   const loading = perksLoading || couponsLoading;
 
-  // Debug logging
-  console.log('CommunityPerksCarousel - Filter:', filter);
-  console.log('CommunityPerksCarousel - Perks:', perks.length);
-  console.log('CommunityPerksCarousel - Coupons:', coupons.length);
-  console.log('CommunityPerksCarousel - Following:', following.length);
-  console.log('CommunityPerksCarousel - Loading:', loading);
-  
-  // Combine and sort both community perks and user coupons
-  let allItems = [
-    ...perks.map(perk => ({ ...perk, type: 'community_perk' })),
-    ...coupons.map(coupon => ({ ...coupon, type: 'user_coupon', business_name: coupon.business_name || coupon.title }))
-  ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  // Memoize the combined and filtered items to prevent infinite re-renders
+  const allItems = useMemo(() => {
+    // Combine and sort both community perks and user coupons
+    let items = [
+      ...perks.map(perk => ({ ...perk, type: 'community_perk' })),
+      ...coupons.map(coupon => ({ ...coupon, type: 'user_coupon', business_name: coupon.business_name || coupon.title }))
+    ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-  // Filter based on following users if filter is 'following'
-  if (filter === 'following' && user) {
-    allItems = allItems.filter(item => {
-      // For user coupons, check if the creator is being followed
-      if (item.type === 'user_coupon') {
-        return (item as any).user_id && following.includes((item as any).user_id);
-      }
-      // For community perks, keep them all since they don't have specific user creators
-      // or check if they have a user_id and if that user is being followed
-      return !(item as any).user_id || following.includes((item as any).user_id);
-    });
-  }
+    // Filter based on following users if filter is 'following'
+    if (filter === 'following' && user) {
+      items = items.filter(item => {
+        // For user coupons, check if the creator is being followed
+        if (item.type === 'user_coupon') {
+          return (item as any).user_id && following.includes((item as any).user_id);
+        }
+        // For community perks, keep them all since they don't have specific user creators
+        // or check if they have a user_id and if that user is being followed
+        return !(item as any).user_id || following.includes((item as any).user_id);
+      });
+    }
 
-  console.log('CommunityPerksCarousel - Final allItems after filtering:', allItems.length);
-  console.log('CommunityPerksCarousel - Items:', allItems);
+    return items;
+  }, [perks, coupons, filter, user, following]);
 
   const handleClaimCoupon = (perkId: string) => {
     if (!user) {
