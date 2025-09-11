@@ -1314,12 +1314,12 @@ const ProfilePage = () => {
                 <div className="flex flex-wrap items-center gap-2">
                   {isOwnProfile && (
                     <>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="rounded-full px-3 py-1 h-7 text-xs bg-gradient-to-r from-tertiary/10 to-coral/10 border-tertiary/30 text-tertiary hover:bg-gradient-to-r hover:from-tertiary hover:to-coral hover:text-white transition-all shadow-sm hover:shadow-md" 
-                        onClick={() => navigate('/profile/edit')}
-                      >
+                       <Button 
+                         variant="outline" 
+                         size="sm" 
+                         className="rounded-full px-3 py-1 h-7 text-xs bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all shadow-md hover:shadow-lg font-medium" 
+                         onClick={() => navigate('/profile/edit')}
+                       >
                         <Pencil className="h-3 w-3 mr-1" />
                         Edit
                       </Button>
