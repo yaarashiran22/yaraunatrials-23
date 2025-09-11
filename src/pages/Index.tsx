@@ -447,7 +447,7 @@ const Index = () => {
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="title-section">
-              deals right now
+              hot deals
             </h2>
             <div className="flex items-center gap-2">
               {currentUserProfile?.account_type === 'business' && <Button variant="outline" size="sm" onClick={() => setIsAddCouponModalOpen(true)} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
