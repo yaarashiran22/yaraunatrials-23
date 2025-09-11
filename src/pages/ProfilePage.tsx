@@ -1228,7 +1228,7 @@ const ProfilePage = () => {
 
       <main className="px-4 py-6 pb-20">
         {/* Profile Header */}
-        <div className="relative mb-8 p-6 rounded-2xl bg-gradient-to-br from-white to-primary-100 border border-primary-200/30 shadow-card overflow-hidden">
+        <div className="relative mb-8 p-4 rounded-2xl bg-gradient-to-br from-white to-primary-100 border border-primary-200/30 shadow-card overflow-hidden">
           {/* Subtle background pattern */}
           <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_25%_25%,hsl(var(--primary))_0%,transparent_50%),radial-gradient(circle_at_75%_75%,hsl(var(--coral))_0%,transparent_50%)]"></div>
           
