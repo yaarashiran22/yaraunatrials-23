@@ -64,10 +64,8 @@ const DesktopNavItem = ({ href, icon: Icon, label }: { href: string; icon: any; 
 };
 
 const AppContent = () => {
-  console.log('🏠 AppContent component rendering - App is loading...');
   const { isOpen, closeNewItem, refreshItems } = useNewItem();
   const { t } = useLanguage();
-  console.log('🔧 AppContent hooks initialized successfully');
   return (
     <BrowserRouter>
       {/* Desktop and mobile responsive layout */}
@@ -175,7 +173,6 @@ const AppContent = () => {
 };
 
 const App = () => {
-  console.log('📱 App component rendering - Application starting...');
   return (
     <ErrorBoundary>
       <Toaster />

@@ -9,11 +9,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useEvents } from "@/hooks/useEvents";
 
 const EventsPage = () => {
-  console.log("🎉 EventsPage component rendering - Page loading successfully");
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { events, loading } = useEvents();
-  console.log("Events data:", events, "Loading:", loading);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);

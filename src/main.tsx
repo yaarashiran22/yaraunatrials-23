@@ -4,8 +4,6 @@ import App from './App.tsx'
 import './index.css'
 
 console.log('🚀 Main.tsx loaded successfully - Site is working!');
-console.log('🌍 Window object:', typeof window);
-console.log('📄 Document object:', typeof document);
 
 console.log('🔧 Creating QueryClient...');
 const queryClient = new QueryClient({
@@ -21,21 +19,15 @@ const queryClient = new QueryClient({
       placeholderData: (previousData) => previousData,
     },
   },
-})
-console.log('✅ QueryClient created successfully');
+});
 
-console.log('🎯 Getting root element...');
 const rootElement = document.getElementById("root");
 if (!rootElement) {
   console.error('❌ Root element not found!');
-} else {
-  console.log('✅ Root element found, creating root...');
 }
 
-console.log('🎨 Rendering App...');
 createRoot(rootElement!).render(
   <QueryClientProvider client={queryClient}>
     <App />
   </QueryClientProvider>
 );
-console.log('🎉 App rendered successfully!');
