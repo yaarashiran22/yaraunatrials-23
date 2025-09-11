@@ -292,38 +292,40 @@ const DiscoverPage = () => {
       
       <main className={`${user ? 'px-4 py-4 space-y-4' : 'px-4 py-2 space-y-4'} max-w-md mx-auto lg:max-w-none`}>
         
-        {/* Share Location Section - Only shown on first visit */}
-        {isFirstVisit && (
-          <section className="text-center">
-            {!user && (
-              <div className="mb-6">
-                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                  Find people in the same mood as you to hang out with
-                </p>
-              </div>
-            )}
-            
-            {user && (
-              <>
+        {/* Share Location Section */}
+        <section className="text-center">
+          {!user && (
+            <div className="mb-6">
+              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                Find people in the same mood as you to hang out with
+              </p>
+            </div>
+          )}
+          
+          {user && (
+            <>
+              {/* Title and description - Only shown on first visit */}
+              {isFirstVisit && (
                 <div className="mb-3">
                   <h2 className="title-section mb-1 text-coral">share your location</h2>
                   <p className="text-xs text-white max-w-xs mx-auto">
                     Find people in the same mood as you to hangout with
                   </p>
                 </div>
-                
-                <div className="bg-white rounded-xl p-2 border border-border shadow-sm max-w-xs mx-auto">
-                  <OpenToHangButton 
-                    size="sm" 
-                    shareText="I'm Open to Hang" 
-                    removeText="Stop Sharing" 
-                    className="w-full rounded-full text-sm" 
-                  />
-                </div>
-              </>
-            )}
-          </section>
-        )}
+              )}
+              
+              {/* Button - Always shown */}
+              <div className="bg-white rounded-xl p-2 border border-border shadow-sm max-w-xs mx-auto">
+                <OpenToHangButton 
+                  size="sm" 
+                  shareText="I'm Open to Hang" 
+                  removeText="Stop Sharing" 
+                  className="w-full rounded-full text-sm" 
+                />
+              </div>
+            </>
+          )}
+        </section>
 
 
 
