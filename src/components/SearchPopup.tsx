@@ -138,7 +138,7 @@ const SearchPopup = () => {
               <Search className="h-5 w-5 text-primary" />
             </div>
             <div className="text-center">
-              <h2 className="text-xl font-bold text-foreground">Search</h2>
+              <h2 className="text-xl font-bold text-red-500">Search</h2>
               <p className="text-sm text-muted-foreground font-normal">Find users, items, and more</p>
             </div>
           </SimplifiedModalTitle>
