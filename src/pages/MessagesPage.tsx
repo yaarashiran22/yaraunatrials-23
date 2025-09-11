@@ -117,9 +117,9 @@ const MessagesPage = () => {
         title={selectedUser ? selectedUser.name || "User" : "Messages"}
         showSearch={false}
       />
-      {/* Custom Header for Chat */}
+      {/* Custom Header for Chat - Hidden on desktop since DesktopHeader handles it */}
       {selectedUser ? (
-        <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm">
+        <div className="sticky top-0 lg:top-[84px] z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
           <div className="px-4 py-3 lg:px-6">
             <div className="flex items-center gap-3">
               <Button
@@ -173,7 +173,7 @@ const MessagesPage = () => {
           </div>
         </div>
       ) : (
-        <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm">
+        <div className="sticky top-0 lg:top-[84px] z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
           <div className="px-4 py-3 lg:px-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
