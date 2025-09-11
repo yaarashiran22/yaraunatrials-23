@@ -1364,15 +1364,6 @@ const ProfilePage = () => {
         {/* Account Type Badge and Business Features */}
         {profileData?.account_type && (
           <section className="mb-8">
-            <div className="flex items-center justify-between">
-              <div className="inline-flex items-center">
-                <span 
-                  className="px-4 py-2 rounded-full text-sm font-medium shadow-sm border transition-all hover:shadow-md bg-white text-gray-700 border-gray-200"
-                >
-                  {profileData.account_type === 'business' ? '🏢 Business Account' : '👤 Personal Account'}
-                </span>
-              </div>
-            </div>
             {/* Business Coupons Display */}
             {profileData.account_type === 'business' && isOwnProfile && myCoupons && myCoupons.length > 0 && (
               <div className="mt-6 p-4 rounded-xl bg-gradient-to-br from-tertiary-50 to-coral-50 border border-tertiary-200/30 shadow-sm">
