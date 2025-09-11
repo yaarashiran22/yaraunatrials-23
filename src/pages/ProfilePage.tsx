@@ -1313,7 +1313,7 @@ const ProfilePage = () => {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        className="rounded-full px-3 py-1 h-7 text-xs bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/30 text-primary hover:bg-gradient-to-r hover:from-primary hover:to-secondary hover:text-white transition-all shadow-md hover:shadow-lg font-medium" 
+                        className="rounded-full px-3 py-1 h-7 text-xs bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all shadow-md hover:shadow-lg font-medium" 
                         onClick={() => navigate('/favorites')}
                       >
                         <Heart className="h-3 w-3 mr-1" />
