@@ -18,7 +18,7 @@ const ScrollAnimatedCard: React.FC<ScrollAnimatedCardProps> = ({
     <div
       ref={elementRef}
       className={`
-        flex-shrink-0 w-48 animate-fade-in hover-scale transition-all duration-300 ease-out
+        flex-shrink-0 animate-fade-in hover-scale transition-all duration-300 ease-out
         ${isVisible ? 'scale-105 shadow-lg' : 'scale-100'}
         ${className}
       `}
