@@ -57,31 +57,33 @@ const Header = ({
   return (
     <header className="header-bar border-b border-border shadow-sm">
       <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center gap-4">
-          {/* Logo */}
-          <div 
-            className="title-section text-3xl cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0" 
-            onClick={handleLogoClick}
-            role="button"
-            aria-label="Navigate to homepage"
-            style={{ 
-              color: 'hsl(var(--coral))', 
-              fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
-              fontWeight: 700,
-              textTransform: 'lowercase',
-              letterSpacing: '-0.03em'
-            }}
-          >
-            una
+        <div className="flex items-center justify-between">
+          {/* Left side - Logo */}
+          <div className="flex items-center w-32">
+            <div 
+              className="title-section text-3xl cursor-pointer hover:opacity-80 transition-opacity" 
+              onClick={handleLogoClick}
+              role="button"
+              aria-label="Navigate to homepage"
+              style={{ 
+                color: 'hsl(var(--coral))', 
+                fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
+                fontWeight: 700,
+                textTransform: 'lowercase',
+                letterSpacing: '-0.03em'
+              }}
+            >
+              una
+            </div>
           </div>
           
-          {/* Neighborhood Selector */}
-          <div className="flex-1 flex justify-center">
+          {/* Center - Neighborhood Selector */}
+          <div className="flex justify-center flex-1">
             <NeighborhoodSelector onNeighborhoodChange={onNeighborhoodChange} />
           </div>
           
-          {/* Notifications */}
-          <div className="flex items-center gap-2">
+          {/* Right side - Notifications */}
+          <div className="flex items-center gap-2 w-32 justify-end">
             {user && (
               <>
                 <Button 
