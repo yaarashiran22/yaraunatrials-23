@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Sparkles, MapPin, Search } from "lucide-react";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Bell, Plus, Sparkles, MapPin, Search, Zap } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useSearch } from "@/contexts/SearchContext";
@@ -61,7 +61,7 @@ const Header = ({
           {/* Left side - Logo */}
           <div className="flex items-center w-32">
             <div 
-              className="title-section text-3xl cursor-pointer hover:opacity-80 transition-opacity" 
+              className="title-section flex items-center gap-1 text-3xl cursor-pointer hover:opacity-80 transition-opacity" 
               onClick={handleLogoClick}
               role="button"
               aria-label="Navigate to homepage"
@@ -74,6 +74,7 @@ const Header = ({
               }}
             >
               una
+              <Zap className="h-6 w-6" style={{ color: 'hsl(var(--coral))' }} />
             </div>
           </div>
           
