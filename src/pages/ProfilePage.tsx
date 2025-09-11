@@ -1367,11 +1367,7 @@ const ProfilePage = () => {
             <div className="flex items-center justify-between">
               <div className="inline-flex items-center">
                 <span 
-                  className={`px-4 py-2 rounded-full text-sm font-medium shadow-sm border transition-all hover:shadow-md ${
-                    profileData.account_type === 'business' 
-                      ? 'bg-gradient-to-r from-tertiary-100 to-tertiary-200 text-tertiary-800 border-tertiary-300' 
-                      : 'bg-gradient-to-r from-primary-100 to-primary-200 text-primary-800 border-primary-300'
-                  }`}
+                  className="px-4 py-2 rounded-full text-sm font-medium shadow-sm border transition-all hover:shadow-md bg-white text-gray-700 border-gray-200"
                 >
                   {profileData.account_type === 'business' ? '🏢 Business Account' : '👤 Personal Account'}
                 </span>
