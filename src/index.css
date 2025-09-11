@@ -12,7 +12,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Modern Harmonious Color Palette - Blue, Indigo, Purple with Coral Accents */
-    --background: 270 50% 18%;                 /* Deep harmonious purple background */
+    --background: 260 85% 15%;                 /* Electric purple background */
     --foreground: 210 40% 95%;                /* Light text for dark background */
 
     --card: 0 0% 100%;                       /* Pure white cards */
