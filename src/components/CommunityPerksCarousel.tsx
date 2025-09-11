@@ -104,7 +104,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
     return (
       <div className="flex gap-5 animate-pulse min-w-fit">
         {[1, 2, 3].map((i) => (
-          <Card key={i} className="min-w-[280px] flex-shrink-0 h-[200px] bg-muted/50" />
+          <Card key={i} className="min-w-[320px] flex-shrink-0 h-[280px] bg-muted/50" />
         ))}
       </div>
     );
@@ -128,98 +128,111 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
           const claim = !isUserCoupon ? getClaim(item.id) : null;
           
           return (
-            <Card key={`${item.type}-${item.id}`} className="min-w-[280px] flex-shrink-0 bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:shadow-lg transition-all duration-300 group">
-              <CardContent className="p-4 space-y-3 bg-card/80 border border-border/20 rounded-lg backdrop-blur-sm">
-                {/* Header */}
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-foreground text-sm leading-tight">
-                        {item.business_name}
-                      </h3>
-                    </div>
-                    <p className="text-xs text-primary font-medium mt-1">
-                      {item.title}
-                    </p>
-                  </div>
-                  {item.image_url && (
+            <Card key={`${item.type}-${item.id}`} className="min-w-[320px] w-[320px] flex-shrink-0 bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:shadow-lg transition-all duration-300 group">
+              <CardContent className="p-0 space-y-0 bg-card/80 border border-border/20 rounded-lg backdrop-blur-sm overflow-hidden">
+                {/* Large Header Image */}
+                {item.image_url && (
+                  <div className="relative overflow-hidden">
                     <img 
                       src={item.image_url} 
                       alt={item.business_name || item.title}
-                      className="w-20 h-20 rounded-lg object-cover border border-border/20"
+                      className="w-full h-36 object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                  )}
-                </div>
-
-                {/* Discount */}
-                {item.discount_amount && (
-                  <Badge variant="secondary" className="bg-primary/10 text-primary font-bold">
-                    {item.discount_amount}
-                  </Badge>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <h3 className="font-semibold text-white text-base leading-tight drop-shadow-lg">
+                        {item.business_name}
+                      </h3>
+                      <p className="text-sm text-white/90 font-medium mt-1 drop-shadow-md">
+                        {item.title}
+                      </p>
+                    </div>
+                  </div>
                 )}
-
-                {/* Description */}
-                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                  {item.description}
-                </p>
-
-                {/* Location and Valid Until */}
-                <div className="space-y-1">
-                  {(item as any).neighborhood && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <MapPin className="w-3 h-3" />
-                      <span>{(item as any).neighborhood}</span>
-                    </div>
+                
+                {/* Content without image header */}
+                {!item.image_url && (
+                  <div className="p-4 pb-2">
+                    <h3 className="font-semibold text-foreground text-base leading-tight">
+                      {item.business_name}
+                    </h3>
+                    <p className="text-sm text-primary font-medium mt-1">
+                      {item.title}
+                    </p>
+                  </div>
+                )}
+                
+                 <div className="p-4 pt-3 space-y-3">
+                  {/* Discount */}
+                  {item.discount_amount && (
+                    <Badge variant="secondary" className="bg-primary/10 text-primary font-bold">
+                      {item.discount_amount}
+                    </Badge>
                   )}
-                  {item.valid_until && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="w-3 h-3" />
-                      <span>Valid until {new Date(item.valid_until).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                </div>
 
-                {/* Action Button */}
-                <div className="pt-2">
-                  {isUserCoupon ? (
-                    <Button
-                      onClick={() => handleShowUserCouponQR(item)}
-                      disabled={generatingQR}
-                      className="w-full gap-2"
-                      size="sm"
-                    >
-                      <QrCode className="w-4 h-4" />
-                      {generatingQR ? 'Generating...' : 'Show QR Code'}
-                    </Button>
-                  ) : isClaimed ? (
-                    <Button
-                      onClick={() => handleShowQR(item)}
-                      className="w-full gap-2 bg-green-600 hover:bg-green-700"
-                      size="sm"
-                    >
-                      {claim?.is_used ? (
-                        <>
-                          <CheckCircle className="w-4 h-4" />
-                          Used
-                        </>
-                      ) : (
-                        <>
-                          <QrCode className="w-4 h-4" />
-                          Show QR Code
-                        </>
-                      )}
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => handleClaimCoupon(item.id)}
-                      disabled={claiming}
-                      className="w-full gap-2"
-                      size="sm"
-                    >
-                      <Gift className="w-4 h-4" />
-                      {claiming ? 'Claiming...' : 'Claim Coupon'}
-                    </Button>
-                  )}
+                  {/* Description */}
+                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                    {item.description}
+                  </p>
+
+                  {/* Location and Valid Until */}
+                  <div className="space-y-1">
+                    {(item as any).neighborhood && (
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <MapPin className="w-3 h-3" />
+                        <span>{(item as any).neighborhood}</span>
+                      </div>
+                    )}
+                    {item.valid_until && (
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="w-3 h-3" />
+                        <span>Valid until {new Date(item.valid_until).toLocaleDateString()}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="pt-2">
+                    {isUserCoupon ? (
+                      <Button
+                        onClick={() => handleShowUserCouponQR(item)}
+                        disabled={generatingQR}
+                        className="w-full gap-2"
+                        size="sm"
+                      >
+                        <QrCode className="w-4 h-4" />
+                        {generatingQR ? 'Generating...' : 'Show QR Code'}
+                      </Button>
+                    ) : isClaimed ? (
+                      <Button
+                        onClick={() => handleShowQR(item)}
+                        className="w-full gap-2 bg-green-600 hover:bg-green-700"
+                        size="sm"
+                      >
+                        {claim?.is_used ? (
+                          <>
+                            <CheckCircle className="w-4 h-4" />
+                            Used
+                          </>
+                        ) : (
+                          <>
+                            <QrCode className="w-4 h-4" />
+                            Show QR Code
+                          </>
+                        )}
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => handleClaimCoupon(item.id)}
+                        disabled={claiming}
+                        className="w-full gap-2"
+                        size="sm"
+                      >
+                        <Gift className="w-4 h-4" />
+                        {claiming ? 'Claiming...' : 'Claim Coupon'}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>

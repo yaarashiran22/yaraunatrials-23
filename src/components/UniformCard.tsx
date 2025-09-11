@@ -81,10 +81,12 @@ const UniformCard = ({
       onClick={onClick}
       style={{
         transform: 'perspective(1000px)',
-        transformStyle: 'preserve-3d'
+        transformStyle: 'preserve-3d',
+        minWidth: '220px',
+        width: '220px'
       }}
     >
-      <div className="aspect-[3.5/3.5] overflow-hidden relative rounded-3xl">
+      <div className="aspect-[4/5] overflow-hidden relative rounded-3xl">
         {video ? (
           <video 
             src={video} 
@@ -119,19 +121,19 @@ const UniformCard = ({
         {/* Subtle glow border on hover */}
         <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-primary/30 transition-all duration-500"></div>
         
-        {/* Enhanced text overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
-          <div className="space-y-2">
-            <h3 className="font-semibold text-white line-clamp-2 text-sm leading-tight drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300">{title}</h3>
+        {/* Enhanced text overlay - smaller to show more image */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
+          <div className="space-y-1">
+            <h3 className="font-semibold text-white line-clamp-1 text-sm leading-tight drop-shadow-lg group-hover:drop-shadow-xl transition-all duration-300">{title}</h3>
             {subtitle && (
-              <p className="text-xs text-white/90 line-clamp-1 drop-shadow-md transform translate-y-0 group-hover:translate-y-[-1px] transition-transform duration-300">{subtitle}</p>
+              <p className="text-xs text-white/80 line-clamp-1 drop-shadow-md transform translate-y-0 group-hover:translate-y-[-1px] transition-transform duration-300">{subtitle}</p>
             )}
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-1.5 mt-1">
               {date && (
-                <span className="text-xs font-semibold px-3 py-1 bg-white/25 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-white/30 group-hover:scale-105">{date}</span>
+                <span className="text-xs font-medium px-2 py-0.5 bg-white/25 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-white/30 group-hover:scale-105">{date}</span>
               )}
               {price && (
-                <span className="text-xs font-semibold px-3 py-1 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">${price}</span>
+                <span className="text-xs font-medium px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">${price}</span>
               )}
             </div>
           </div>
