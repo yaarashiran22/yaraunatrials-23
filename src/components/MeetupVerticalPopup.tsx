@@ -267,72 +267,88 @@ const MeetupVerticalPopup = ({
           <ChevronDown className="h-6 w-6" />
         </Button>}
 
-      <div ref={contentRef} className={`bg-purple-50/90 dark:bg-purple-900/20 rounded-2xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} meetup-vertical-popup`} style={{
+      <div ref={contentRef} className={`bg-gradient-to-br from-background via-background/95 to-primary/5 backdrop-blur-xl border-2 border-primary/20 rounded-3xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-all duration-300 shadow-2xl ${isDragging ? 'cursor-grabbing scale-[0.98]' : 'cursor-grab'} meetup-vertical-popup`} style={{
       transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
       scrollBehavior: 'smooth'
     }} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30">
+        {/* Enhanced Header */}
+        <div className="flex items-center justify-between p-4 border-b border-primary/20 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 backdrop-blur-sm">
           <div className="flex items-center gap-2">
-            {allItems.length > 1 && <div className="text-sm text-muted-foreground bg-white/80 dark:bg-black/20 px-3 py-1 rounded-full">
+            {allItems.length > 1 && <div className="text-sm font-semibold text-primary bg-card/80 backdrop-blur-sm px-4 py-1.5 rounded-full border border-primary/20 shadow-sm">
                 {currentIndex + 1} / {allItems.length}
               </div>}
           </div>
           
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            <X className="h-5 w-5" />
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onClose}
+            className="h-9 w-9 rounded-full hover:bg-primary/10 transition-all duration-200"
+          >
+            <X className="h-5 w-5 text-muted-foreground" />
           </Button>
           
         </div>
 
-        {/* Vertical Navigation Instructions */}
-        {allItems.length > 1 && <div className="flex justify-center py-2 border-b bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20">
-            <div className="text-xs text-muted-foreground flex items-center gap-1">
-              
-            </div>
+        {/* Enhanced Vertical Progress Indicators */}
+        {allItems.length > 1 && <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-10 p-2 bg-card/60 backdrop-blur-sm rounded-full border border-primary/20 shadow-lg">
+            {allItems.map((_, index) => <div key={index} className={`w-2 h-6 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-gradient-to-b from-primary to-secondary shadow-md shadow-primary/30 scale-125' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'}`} />)}
           </div>}
 
-        {/* Vertical Progress Indicators */}
-        {allItems.length > 1 && <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
-            {allItems.map((_, index) => <div key={index} className={`w-2 h-8 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-primary shadow-sm scale-110' : 'bg-muted-foreground/20'}`} />)}
-          </div>}
-
-        {/* Content */}
-        <div className={`${isMobile ? 'p-3' : 'p-4'}`}>
-          {/* Meetup Image */}
-          <div className={`relative ${isMobile ? 'mb-4' : 'mb-6'}`}>
-            <div className="border-4 border-gradient-to-r from-blue-400 to-purple-400 rounded-2xl overflow-hidden">
-              <img src={displayItem.image} alt={displayItem.title} className={`w-full ${isMobile ? 'h-48' : 'h-64'} object-cover`} />
+        {/* Enhanced Content */}
+        <div className={`${isMobile ? 'p-4' : 'p-6'}`}>
+          {/* Enhanced Meetup Image */}
+          <div className={`relative ${isMobile ? 'mb-5' : 'mb-7'} group`}>
+            <div className="relative rounded-3xl overflow-hidden border-4 border-gradient-to-r from-primary/30 to-secondary/30 shadow-xl">
+              <img src={displayItem.image} alt={displayItem.title} className={`w-full ${isMobile ? 'h-52' : 'h-72'} object-cover transition-transform duration-300 group-hover:scale-105`} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
             
-            <div className="absolute top-3 right-3">
-              <Button variant="ghost" size="sm" className="p-2 rounded-full bg-card/80 backdrop-blur-sm text-red-500">
-                <Heart className="h-4 w-4" />
+            <div className="absolute top-4 right-4 flex gap-2">
+              <Button variant="ghost" size="sm" className="p-2.5 rounded-full bg-card/90 backdrop-blur-md border border-white/20 text-destructive hover:bg-destructive/10 hover:border-destructive/30 transition-all duration-200 shadow-lg">
+                <Heart className="h-4 w-4 hover:fill-current transition-all" />
               </Button>
             </div>
             
           </div>
 
-          {/* Meetup Details */}
-          <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
-            <div className="text-center">
-              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-foreground ${isMobile ? 'mb-1' : 'mb-2'}`}>{displayItem.title}</h3>
-              {displayItem.price && displayItem.price !== 'Free' && <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-primary`}>{displayItem.price}</p>}
-              {displayItem.price === 'Free' && <p className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold text-green-600 dark:text-green-400`}>Free Event</p>}
+          {/* Enhanced Meetup Details */}
+          <div className={`${isMobile ? 'space-y-4' : 'space-y-5'}`}>
+            <div className="text-center space-y-2">
+              <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-foreground ${isMobile ? 'mb-2' : 'mb-3'} leading-tight`}>{displayItem.title}</h3>
+              {displayItem.price && displayItem.price !== 'Free' && 
+                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30">
+                  <p className={`${isMobile ? 'text-base' : 'text-lg'} font-bold text-primary`}>{displayItem.price}</p>
+                </div>
+              }
+              {displayItem.price === 'Free' && 
+                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 border border-emerald-300 dark:border-emerald-700">
+                  <p className={`${isMobile ? 'text-base' : 'text-lg'} font-bold text-emerald-700 dark:text-emerald-400`}>Free Event</p>
+                </div>
+              }
             </div>
             
-            {displayItem.description && <p className={`text-foreground leading-relaxed text-center ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                {displayItem.description}
-              </p>}
+            {displayItem.description && 
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-4">
+                <p className={`text-foreground leading-relaxed text-center ${isMobile ? 'text-sm' : 'text-base'}`}>
+                  {displayItem.description}
+                </p>
+              </div>
+            }
             
-            {/* Meetup Location and Date */}
-            {itemDetails && <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
-                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
-                  <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-600 dark:text-blue-400`} />
+            {/* Enhanced Meetup Location and Date */}
+            {itemDetails && 
+              <div className={`${isMobile ? 'space-y-3' : 'space-y-4'} ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 border-2 border-primary/20 rounded-2xl shadow-lg backdrop-blur-sm`}>
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
+                  <div className="p-2 rounded-full bg-primary/20 border border-primary/30">
+                    <MapPin className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-primary`} />
+                  </div>
                   <span>{locationMapping[itemDetails.location] || itemDetails.location || 'Location TBD'}</span>
                 </div>
-                <div className={`flex items-center gap-3 ${isMobile ? 'text-xs' : 'text-sm'} font-medium text-foreground`}>
-                  <Calendar className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-blue-600 dark:text-blue-400`} />
+                <div className={`flex items-center gap-3 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
+                  <div className="p-2 rounded-full bg-secondary/20 border border-secondary/30">
+                    <Calendar className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-secondary-foreground`} />
+                  </div>
                   <span>
                     {new Date(itemDetails.created_at).toLocaleDateString('en-US', {
                   weekday: 'short',
@@ -343,34 +359,47 @@ const MeetupVerticalPopup = ({
                 })}
                   </span>
                 </div>
-              </div>}
+              </div>
+            }
 
-            {/* Organizer Info */}
-            {displayItem.seller && <div className={`flex items-center gap-3 ${isMobile ? 'p-2' : 'p-3'} bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors`} onClick={handleViewProfile}>
-                <img src={displayItem.seller.image} alt={displayItem.seller.name} className={`${isMobile ? 'w-8 h-8' : 'w-10 h-10'} rounded-full object-cover`} />
+            {/* Enhanced Organizer Info */}
+            {displayItem.seller && 
+              <div className={`flex items-center gap-4 ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-card/60 to-muted/30 border border-border/50 rounded-2xl cursor-pointer hover:shadow-lg hover:border-primary/30 transition-all duration-200 group`} onClick={handleViewProfile}>
+                <div className="relative">
+                  <img src={displayItem.seller.image} alt={displayItem.seller.name} className={`${isMobile ? 'w-10 h-10' : 'w-12 h-12'} rounded-full object-cover border-2 border-primary/20 group-hover:border-primary/40 transition-colors`} />
+                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-background"></div>
+                </div>
                 <div className="flex-1">
-                  <p className={`font-semibold text-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>{displayItem.seller.name}</p>
-                  <div className={`flex items-center gap-1 ${isMobile ? 'text-xs' : 'text-xs'} text-muted-foreground`}>
-                    <MapPin className={`${isMobile ? 'h-2.5 w-2.5' : 'h-3 w-3'}`} />
+                  <p className={`font-bold text-foreground ${isMobile ? 'text-sm' : 'text-base'} group-hover:text-primary transition-colors`}>{displayItem.seller.name}</p>
+                  <div className={`flex items-center gap-2 ${isMobile ? 'text-xs' : 'text-sm'} text-muted-foreground`}>
+                    <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-3.5 w-3.5'} text-primary/60`} />
                     <span>{(displayItem as any).neighborhood || displayItem.seller.location}</span>
                   </div>
                 </div>
-              </div>}
+                <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                  <ChevronUp className="h-4 w-4 text-primary rotate-90" />
+                </div>
+              </div>
+            }
           </div>
 
-          {/* Companion Request Section */}
-          <div className="text-center space-y-3">
+          {/* Enhanced Companion Request Section */}
+          <div className="text-center space-y-4">
             <Button
               onClick={toggleCompanionRequest}
               disabled={companionLoading}
               variant={isLookingForCompanion ? "default" : "outline"}
-              className={`${isMobile ? 'h-10 px-6' : 'h-11 px-8'} rounded-full font-semibold text-sm transition-all duration-200 hover:scale-105 shadow-lg border-2 ${
+              className={`${isMobile ? 'h-12 px-8' : 'h-14 px-10'} rounded-2xl font-bold text-base transition-all duration-300 hover:scale-105 shadow-xl border-2 ${
                 isLookingForCompanion 
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white border-0 shadow-blue-200 dark:shadow-blue-900/30' 
-                  : 'bg-white hover:bg-blue-50 text-blue-700 border-blue-300 hover:border-blue-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-300 dark:border-blue-600 dark:hover:border-blue-500'
+                  ? 'bg-gradient-to-r from-primary via-secondary to-accent hover:from-primary/90 hover:via-secondary/90 hover:to-accent/90 text-primary-foreground border-0 shadow-primary/30' 
+                  : 'bg-gradient-to-r from-card to-background hover:from-primary/10 hover:to-secondary/10 text-primary border-primary/30 hover:border-primary/60 shadow-lg hover:shadow-xl'
               }`}
             >
-              <Users className="h-3 w-3 mr-1" />
+              {companionLoading ? (
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent mr-2"></div>
+              ) : (
+                <Users className="h-4 w-4 mr-2" />
+              )}
               {isLookingForCompanion ? 'Stop looking' : 'Find someone to go with'}
             </Button>
             
@@ -409,32 +438,41 @@ const MeetupVerticalPopup = ({
             )}
           </div>
 
-          {/* Join Request Section */}
-          <div className={`${isMobile ? 'mt-4' : 'mt-6'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-purple-800`}>
-            
-            {joinStatus === 'approved' ? <div className="text-center">
-                <div className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400 mb-2">
-                  <CheckCircle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
-                  <span className={`font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}>Join Meetup</span>
+          {/* Enhanced Join Request Section */}
+          <div className={`${isMobile ? 'mt-6' : 'mt-8'} ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 border-2 border-primary/20 rounded-2xl shadow-lg backdrop-blur-sm`}>
+            {joinStatus === 'approved' ? 
+              <div className="text-center space-y-3">
+                <div className="flex items-center justify-center gap-3 text-emerald-600 dark:text-emerald-400">
+                  <div className="p-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30">
+                    <CheckCircle className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'}`} />
+                  </div>
+                  <span className={`font-bold ${isMobile ? 'text-base' : 'text-lg'}`}>You're Joined!</span>
                 </div>
-                <p className={`text-muted-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                  You're part of this meetup
+                <p className={`text-muted-foreground ${isMobile ? 'text-sm' : 'text-base'} font-medium`}>
+                  You're part of this meetup. Looking forward to seeing you there!
                 </p>
-              </div> : joinStatus === 'pending' ? <div className="text-center">
-                <div className="flex items-center justify-center gap-2 text-orange-600 dark:text-orange-400 mb-2">
-                  <Clock className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
-                  <span className={`font-semibold ${isMobile ? 'text-sm' : 'text-base'}`}>Request Pending</span>
+              </div> 
+            : joinStatus === 'pending' ? 
+              <div className="text-center space-y-3">
+                <div className="flex items-center justify-center gap-3 text-amber-600 dark:text-amber-400">
+                  <div className="p-2 rounded-full bg-amber-100 dark:bg-amber-900/30">
+                    <Clock className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} animate-pulse`} />
+                  </div>
+                  <span className={`font-bold ${isMobile ? 'text-base' : 'text-lg'}`}>Request Pending</span>
                 </div>
-                <p className={`text-muted-foreground ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                  Waiting for organizer approval
+                <p className={`text-muted-foreground ${isMobile ? 'text-sm' : 'text-base'} font-medium`}>
+                  Waiting for organizer approval...
                 </p>
-              </div> : <>
-                
-                <Button onClick={handleContact} className={`w-full ${isMobile ? 'h-10' : 'h-11'} bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-2xl ${isMobile ? 'text-sm' : 'text-base'} font-medium`}>
-                  <MessageCircle className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2`} />
-                  Request to Join
-                </Button>
-              </>}
+              </div> 
+            : 
+              <Button 
+                onClick={handleContact} 
+                className={`w-full ${isMobile ? 'h-12' : 'h-14'} bg-gradient-to-r from-primary via-secondary to-accent hover:from-primary/90 hover:via-secondary/90 hover:to-accent/90 text-primary-foreground rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold shadow-xl transition-all duration-300 hover:scale-105`}
+              >
+                <MessageCircle className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} mr-2`} />
+                Request to Join
+              </Button>
+            }
           </div>
         </div>
       </div>
