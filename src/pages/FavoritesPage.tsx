@@ -12,7 +12,7 @@ import MarketplacePopup from "@/components/MarketplacePopup";
 const FavoritesPage = () => {
   const navigate = useNavigate();
   const { favorites, removeFromFavorites } = useFavorites();
-  const [filter, setFilter] = useState<'all' | 'event' | 'item' | 'business'>('all');
+  const [filter, setFilter] = useState<'all' | 'event'>('all');
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [selectedBusiness, setSelectedBusiness] = useState<any>(null);
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -123,24 +123,6 @@ const FavoritesPage = () => {
           >
             <Calendar className="h-4 w-4 mr-2" />
             Events ({getItemCount('event')})
-          </Button>
-          <Button
-            variant={filter === 'business' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilter('business')}
-            className="rounded-full"
-          >
-            <Store className="h-4 w-4 mr-2" />
-            Businesses ({getItemCount('business')})
-          </Button>
-          <Button
-            variant={filter === 'item' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setFilter('item')}
-            className="rounded-full"
-          >
-            <Gift className="h-4 w-4 mr-2" />
-            Items ({getItemCount('item')})
           </Button>
         </div>
 
