@@ -333,7 +333,7 @@ const Index = () => {
               setCreateEventType('meetup');
               setShowCreateEvent(true);
             }} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
-                <Plus className="h-3 w-3 text-black" />
+                <Plus className="h-3 w-3" />
               </Button>
             </div>
           </div>
@@ -398,7 +398,7 @@ const Index = () => {
               setCreateEventType('event');
               setShowCreateEvent(true);
             }} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
-                <Plus className="h-3 w-3 text-black" />
+                <Plus className="h-3 w-3" />
               </Button>
             </div>
           </div>
@@ -450,8 +450,8 @@ const Index = () => {
               deals right now
             </h2>
             <div className="flex items-center gap-2">
-               {currentUserProfile?.account_type === 'business' && <Button variant="outline" size="sm" onClick={() => setIsAddCouponModalOpen(true)} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
-                  <Plus className="h-3 w-3 text-black" />
+              {currentUserProfile?.account_type === 'business' && <Button variant="outline" size="sm" onClick={() => setIsAddCouponModalOpen(true)} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
+                  <Plus className="h-3 w-3" />
                 </Button>}
             </div>
           </div>

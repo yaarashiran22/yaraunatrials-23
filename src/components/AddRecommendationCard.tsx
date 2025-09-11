@@ -27,7 +27,7 @@ const AddRecommendationCard = ({ className = "", onRecommendationAdded }: AddRec
         <div className="h-7 flex items-center justify-center px-1">
           <div className="flex items-center gap-1">
             <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center">
-              <Plus className="w-3 h-3 text-black" />
+              <Plus className="w-3 h-3 text-foreground" />
             </div>
             <div className="text-left">
               <h3 className="font-semibold text-foreground text-xs">Note</h3>

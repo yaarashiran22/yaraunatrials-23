@@ -127,7 +127,7 @@ export const NeighborQuestionCard = () => {
       className="flex-shrink-0 w-40 bg-background border border-dashed border-border rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow flex flex-col items-center justify-center min-h-[100px] text-center"
       onClick={() => setIsCreating(true)}
     >
-      <Plus className="h-6 w-6 text-black mb-2" />
+      <Plus className="h-6 w-6 text-muted-foreground mb-2" />
       <p className="text-xs text-muted-foreground">
         Add note
       </p>

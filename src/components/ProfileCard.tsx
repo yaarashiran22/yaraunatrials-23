@@ -275,7 +275,7 @@ const ProfileCard = ({ image, name, className = "", id = "1", isCurrentUser = fa
                 className="absolute -bottom-0.5 -right-0.5 w-7 h-7 bg-primary rounded-full border-[3px] border-background flex items-center justify-center cursor-pointer shadow-lg hover:scale-110 transition-all duration-200 z-10"
                 onClick={handleAddStoryClick}
               >
-                <Plus className="w-3.5 h-3.5 text-black" />
+                <Plus className="w-3.5 h-3.5 text-primary-foreground" />
               </div>
             )}
 

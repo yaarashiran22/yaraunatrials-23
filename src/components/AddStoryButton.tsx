@@ -193,7 +193,7 @@ const AddStoryButton = ({ className = "" }: AddStoryButtonProps) => {
         onClick={handleClick}
       >
         <div className="w-[66px] h-[66px] rounded-full border-2 border-dashed border-primary/50 flex items-center justify-center bg-transparent">
-          <Plus className="w-6 h-6 text-black" />
+          <Plus className="w-6 h-6 text-white" />
         </div>
       </div>
       
