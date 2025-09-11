@@ -112,14 +112,21 @@ const MessagesPage = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col pb-20 lg:pb-0">
+      {/* Mobile Header */}
+      <div className="lg:hidden">
+        <Header 
+          title={selectedUser ? selectedUser.name || "User" : "Messages"}
+        />
+      </div>
+      
       {/* Desktop Header */}
       <DesktopHeader 
         title={selectedUser ? selectedUser.name || "User" : "Messages"}
         showSearch={false}
       />
-      {/* Custom Header for Chat - Hidden on desktop since DesktopHeader handles it */}
+      {/* Custom Chat Headers - Only for mobile conversation view */}
       {selectedUser ? (
-        <div className="sticky top-0 lg:top-[84px] z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
+        <div className="sticky top-0 z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
           <div className="px-4 py-3 lg:px-6">
             <div className="flex items-center gap-3">
               <Button
@@ -173,7 +180,7 @@ const MessagesPage = () => {
           </div>
         </div>
       ) : (
-        <div className="sticky top-0 lg:top-[84px] z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
+        <div className="sticky top-0 z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
           <div className="px-4 py-3 lg:px-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
