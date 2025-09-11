@@ -353,16 +353,6 @@ const SearchPopup = () => {
                 </div>
               </div>
             )}
-
-            {/* Empty State for No Search Query */}
-            {!searchQuery && !loading && (
-              <div className="text-center py-12">
-                <div className="p-4 bg-muted/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Search className="h-8 w-8 text-muted-foreground" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-2">Start searching</h3>
-              </div>
-            )}
           </div>
         </SimplifiedModalBody>
       </SimplifiedModalContent>
