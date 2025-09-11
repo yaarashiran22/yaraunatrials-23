@@ -121,7 +121,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
 
   return (
     <>
-      <div className="flex gap-5 min-w-fit">
+      <div className="flex gap-6 min-w-fit">
         {allItems.map((item) => {
           const isUserCoupon = item.type === 'user_coupon';
           const isClaimed = !isUserCoupon && checkIfClaimed(item.id);
