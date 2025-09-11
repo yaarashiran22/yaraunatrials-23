@@ -366,7 +366,7 @@ const MeetupVerticalPopup = ({
               {displayItem.title}
             </h3>
             {displayItem.description && (
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-foreground leading-relaxed">
                 {displayItem.description}
               </p>
             )}
