@@ -74,7 +74,7 @@ const Header = ({
               }}
             >
               una
-              <Heart className="h-6 w-6" style={{ color: 'hsl(var(--coral))' }} />
+              <Sparkles className="h-6 w-6" style={{ color: 'hsl(var(--coral))' }} />
             </div>
           </div>
           
