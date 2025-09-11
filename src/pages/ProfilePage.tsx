@@ -1322,7 +1322,7 @@ const ProfilePage = () => {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        className="rounded-full px-3 py-1 h-7 text-xs bg-gradient-to-r from-coral/10 to-coral/15 border-coral/30 text-coral hover:bg-gradient-to-r hover:from-coral hover:to-coral-hover hover:text-white transition-all shadow-md hover:shadow-lg font-medium" 
+                        className="rounded-full px-3 py-1 h-7 text-xs bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all shadow-md hover:shadow-lg font-medium" 
                         onClick={() => navigate('/settings')}
                       >
                         <Settings className="h-3 w-3 mr-1" />
