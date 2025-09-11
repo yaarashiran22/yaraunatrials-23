@@ -130,7 +130,7 @@ const UniformCard = ({
             )}
             <div className="flex items-center gap-1.5 mt-1">
               {date && (
-                <span className="text-xs font-medium px-2 py-0.5 bg-white/25 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-white/30 group-hover:scale-105">{date}</span>
+                <span className="text-xs font-medium px-2 py-0.5 bg-primary/20 backdrop-blur-md rounded-full text-primary border border-primary/30 shadow-lg transition-all duration-300 group-hover:bg-primary/30 group-hover:scale-105">{date}</span>
               )}
               {price && (
                 <span className="text-xs font-medium px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">${price}</span>
