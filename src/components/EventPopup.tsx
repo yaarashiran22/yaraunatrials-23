@@ -184,23 +184,23 @@ const EventPopup = ({
   }
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-      <div className={`bg-background/95 backdrop-blur-md rounded-3xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[90vh]'} overflow-y-auto mx-4 shadow-2xl border border-white/10 animate-scale-in`}>
+    <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+      <div className={`bg-white rounded-3xl w-full max-w-md ${isMobile ? 'max-h-[95vh]' : 'max-h-[90vh]'} overflow-y-auto mx-4 shadow-2xl border border-gray-100 animate-scale-in`}>
         {/* Header */}
-        <div className="relative overflow-hidden rounded-t-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border-b border-primary/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+        <div className="relative overflow-hidden rounded-t-3xl bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 border-b border-purple-100">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
           <div className="relative flex items-center justify-between p-6">
             <Button 
               variant="ghost" 
               size="sm"
               onClick={onClose}
-              className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all duration-200 shadow-lg"
+              className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-200 shadow-lg text-gray-600 hover:text-gray-800"
             >
               <X className="h-5 w-5" />
             </Button>
             
             <div className="flex-1 text-center px-4">
-              <h2 className="text-xl font-bold text-foreground bg-background/40 backdrop-blur-sm rounded-full px-4 py-2 inline-block">
+              <h2 className="text-xl font-bold text-gray-800 bg-white/70 backdrop-blur-sm rounded-full px-6 py-2 inline-block shadow-sm">
                 {displayEvent.title}
               </h2>
             </div>
@@ -209,7 +209,7 @@ const EventPopup = ({
               variant="ghost" 
               size="sm"
               onClick={handleShare}
-              className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all duration-200 shadow-lg"
+              className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-200 shadow-lg text-gray-600 hover:text-gray-800"
             >
               <Share className="h-4 w-4" />
             </Button>
@@ -249,7 +249,7 @@ const EventPopup = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-md text-red-500 hover:bg-background/90 hover:scale-110 transition-all duration-200 shadow-lg"
+                className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-md text-red-500 hover:bg-white hover:text-red-600 hover:scale-110 transition-all duration-200 shadow-lg"
               >
                 <Bookmark className="h-4 w-4" />
               </Button>
@@ -261,18 +261,18 @@ const EventPopup = ({
             <div className="text-center space-y-3">
               {eventData?.price && (
                 <div className="inline-flex items-center justify-center">
-                  <span className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent`}>
+                  <span className={`${isMobile ? 'text-2xl' : 'text-3xl'} font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent`}>
                     {displayEvent.price}
                   </span>
                 </div>
               )}
-              <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-foreground leading-tight`}>
+              <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-gray-800 leading-tight`}>
                 {displayEvent.title}
               </h3>
               {displayEvent.date && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  <span className={`${isMobile ? 'text-sm' : 'text-base'} text-primary font-medium`}>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full">
+                  <MapPin className="h-4 w-4 text-purple-600" />
+                  <span className={`${isMobile ? 'text-sm' : 'text-base'} text-purple-700 font-medium`}>
                     {getRelativeDay(displayEvent.date)}
                   </span>
                 </div>
@@ -373,8 +373,8 @@ const EventPopup = ({
               </div>
             )}
             
-            <div className="bg-gradient-to-r from-muted/40 to-muted/20 backdrop-blur-sm rounded-2xl p-5 border border-muted/50">
-              <p className={`text-foreground/90 leading-relaxed text-center ${isMobile ? 'text-sm' : 'text-base'}`}>
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-5 border border-gray-200">
+              <p className={`text-gray-700 leading-relaxed text-center ${isMobile ? 'text-sm' : 'text-base'}`}>
                 {displayEvent.description}
               </p>
             </div>
@@ -382,31 +382,31 @@ const EventPopup = ({
             {/* Organizer Info */}
             {displayEvent.organizer && (
               <div 
-                className={`flex items-center gap-4 ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-r from-background/60 to-background/40 backdrop-blur-sm rounded-2xl cursor-pointer hover:from-background/80 hover:to-background/60 transition-all duration-300 border border-muted/30 hover:border-muted/50 hover:shadow-lg group`}
+                className={`flex items-center gap-4 ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-r from-white to-gray-50 rounded-2xl cursor-pointer hover:from-gray-50 hover:to-gray-100 transition-all duration-300 border border-gray-200 hover:border-purple-300 hover:shadow-lg group`}
                 onClick={handleViewProfile}
               >
                 <div className="relative">
                   <img 
                     src={displayEvent.organizer.image || profile1}
                     alt={displayEvent.organizer.name}
-                    className={`${isMobile ? 'w-12 h-12' : 'w-16 h-16'} rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300`}
+                    className={`${isMobile ? 'w-12 h-12' : 'w-16 h-16'} rounded-full object-cover ring-2 ring-purple-200 group-hover:ring-purple-400 transition-all duration-300`}
                     onError={(e) => {
                       console.log('Profile image failed to load, using fallback. Original src:', e.currentTarget.src);
                       e.currentTarget.src = profile1;
                     }}
                   />
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
+                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
                 </div>
                 <div className="flex-1">
-                  <p className={`font-bold text-foreground ${isMobile ? 'text-base' : 'text-lg'}`}>
+                  <p className={`font-bold text-gray-800 ${isMobile ? 'text-base' : 'text-lg'}`}>
                     {displayEvent.organizer.name}
                   </p>
-                  <div className={`flex items-center gap-2 ${isMobile ? 'text-sm' : 'text-base'} text-muted-foreground`}>
+                  <div className={`flex items-center gap-2 ${isMobile ? 'text-sm' : 'text-base'} text-gray-600`}>
                     <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
                     <span>{displayEvent.organizer.location}</span>
                   </div>
                 </div>
-                <Eye className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                <Eye className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
               </div>
             )}
           </div>
@@ -432,7 +432,7 @@ const EventPopup = ({
             </Button>
             <Button 
               onClick={handleViewDetails}
-              className={`flex-1 ${isMobile ? 'h-12' : 'h-14'} bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold transition-all duration-200 hover:scale-105 shadow-lg`}
+              className={`flex-1 ${isMobile ? 'h-12' : 'h-14'} bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-2xl ${isMobile ? 'text-base' : 'text-lg'} font-bold transition-all duration-200 hover:scale-105 shadow-lg`}
             >
               <Eye className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} mr-3`} />
               View Details
