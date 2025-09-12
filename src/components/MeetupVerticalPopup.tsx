@@ -485,7 +485,7 @@ const MeetupVerticalPopup = ({
             ) : (
               <Button 
                 onClick={handleContact} 
-                className="w-full h-12 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="w-full h-12 bg-coral hover:bg-coral-hover text-coral-foreground rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 Request to Join
