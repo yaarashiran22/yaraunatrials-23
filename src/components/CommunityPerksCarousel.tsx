@@ -136,9 +136,9 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
           return (
             <Card key={`${item.type}-${item.id}`} className="min-w-[240px] w-[240px] flex-shrink-0 bg-gradient-to-br from-card to-card/95 border-0 shadow-sm hover:shadow-xl hover:shadow-primary/10 transition-all duration-500 group overflow-hidden rounded-2xl">
               <CardContent className="p-0 space-y-0 relative">
-                {/* Header Image Section - Larger */}
+                {/* Header Image Section - Much Larger */}
                 {item.image_url ? (
-                  <div className="relative overflow-hidden h-44">
+                  <div className="relative overflow-hidden h-64">
                     <img 
                       src={item.image_url} 
                       alt={item.business_name || item.title}
@@ -167,8 +167,8 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                     </div>
                   </div>
                 ) : (
-                  /* No Image Header - Minimized */
-                  <div className="p-4 pb-3 bg-gradient-to-br from-primary/5 to-secondary/5 h-44 flex flex-col justify-center relative">
+                  /* No Image Header - Much Larger */
+                  <div className="p-4 pb-3 bg-gradient-to-br from-primary/5 to-secondary/5 h-64 flex flex-col justify-center relative">
                     {/* Discount Badge - Top Right */}
                     {item.discount_amount && (
                       <div className="absolute top-3 right-3">

@@ -292,47 +292,33 @@ const DiscoverPage = () => {
       
       <main className={`${user ? 'px-4 py-4 space-y-4' : 'px-4 py-2 space-y-4'} max-w-md mx-auto lg:max-w-none`}>
         
-        {/* Share Location Section */}
-        <section className="text-center">
-          {!user && (
-            <div className="mb-6">
-              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                Find people in the same mood as you to hang out with
-              </p>
-            </div>
-          )}
-          
-          {user && (
-            <>
-              {/* Title and description - Only shown on first visit */}
-              {isFirstVisit && (
-                <div className="mb-3">
-                  <h2 className="title-section mb-1 text-coral">share your location</h2>
-                  <p className="text-xs text-white max-w-xs mx-auto">
-                    Find people in the same mood as you to hangout with
-                  </p>
-                </div>
-              )}
-              
-              {/* Button - Always shown */}
-              <div className="flex justify-center">
-                <OpenToHangButton 
-                  size="sm" 
-                  shareText="I'm Open to Hang" 
-                  removeText="Stop Sharing" 
-                  className="rounded-full px-6 py-2.5 text-sm font-medium shadow-md" 
-                />
-              </div>
-            </>
-          )}
-        </section>
-
-
-
         {/* Map Section - Full Screen */}
         <section className="flex-1">
           {/* Map Container */}
           <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[calc(100vh-200px)] min-h-[500px] z-10">
+            
+            {/* Floating Open to Hang Button - On Top of Map */}
+            {user && (
+              <div className="absolute top-4 left-4 z-20">
+                <OpenToHangButton 
+                  size="icon" 
+                  shareText="Open" 
+                  removeText="Stop" 
+                  className="w-14 h-14 rounded-full shadow-lg border-2 border-white/20 backdrop-blur-sm text-xs font-bold" 
+                />
+              </div>
+            )}
+            
+            {/* Non-user message overlay */}
+            {!user && (
+              <div className="absolute top-4 left-4 right-4 z-20">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/20">
+                  <p className="text-sm text-muted-foreground text-center">
+                    Find people in the same mood as you to hang out with
+                  </p>
+                </div>
+              </div>
+            )}
 
             {error ? (
               <div className="flex items-center justify-center h-full">
