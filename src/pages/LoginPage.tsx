@@ -387,7 +387,7 @@ const LoginPage = () => {
                   </div>
                 </label>
                 <div>
-                  <span className="text-foreground font-medium bg-gradient-to-r from-coral to-primary bg-clip-text text-transparent">Profile Picture</span>
+                  <span className="text-foreground font-medium">Profile Picture</span>
                   <p className="text-sm text-muted-foreground">Click to upload your profile photo</p>
                 </div>
               </div>

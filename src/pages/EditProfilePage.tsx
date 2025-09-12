@@ -207,7 +207,7 @@ const EditProfilePage = () => {
           
           {/* Name */}
           <div className="relative z-10">
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-2">Name</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Name</label>
             <Input 
               placeholder="John Doe"
               className="text-left border-primary-200/50 focus:border-tertiary focus:ring-tertiary/20 bg-white/90 shadow-sm"
@@ -218,7 +218,7 @@ const EditProfilePage = () => {
 
           {/* Social Page */}
           <div className="relative z-10">
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-2">Social Page</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Social Page</label>
             <Input 
               placeholder="https://instagram.com/johndoe"
               className="text-left border-primary-200/50 focus:border-tertiary focus:ring-tertiary/20 bg-white/90 shadow-sm"
@@ -229,7 +229,7 @@ const EditProfilePage = () => {
 
           {/* Bio */}
           <div className="relative z-10">
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-2">Bio</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Bio</label>
             <Textarea 
               placeholder="Tell us a little about yourself..."
               className="text-left min-h-[80px] resize-none border-primary-200/50 focus:border-tertiary focus:ring-tertiary/20 bg-white/90 shadow-sm"
@@ -240,7 +240,7 @@ const EditProfilePage = () => {
 
           {/* Location */}
           <div className="relative z-10">
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-2">Neighborhood</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Neighborhood</label>
             <Input 
               placeholder="New York City"
               className="text-left border-primary-200/50 focus:border-tertiary focus:ring-tertiary/20 bg-white/90 shadow-sm"
@@ -251,7 +251,7 @@ const EditProfilePage = () => {
 
           {/* Specialties */}
           <div className="relative z-10">
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-3">Specialties</label>
+            <label className="block text-sm font-medium text-foreground mb-3">Specialties</label>
             <div className="flex flex-wrap gap-2">
               {formData.specialties.map((specialty, index) => (
                 <div key={index} className="flex items-center gap-2 bg-gradient-to-r from-tertiary-100 via-coral-100 to-primary-100 rounded-full px-3 py-1 border border-tertiary-200/50 shadow-sm hover:shadow-md transition-all">
@@ -289,7 +289,7 @@ const EditProfilePage = () => {
 
           {/* Interests */}
           <div className="relative z-10">
-            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-3">Interests</label>
+            <label className="block text-sm font-medium text-foreground mb-3">Interests</label>
             <InterestsSelector
               selectedInterests={formData.interests}
               onChange={(interests) => handleInputChange('interests', interests)}
