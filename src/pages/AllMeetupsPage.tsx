@@ -335,7 +335,7 @@ const MeetupCard = memo(({
     
     {/* Enhanced Content Section */}
     <div className="p-4 space-y-2">
-      <h3 className="font-bold text-sm leading-tight text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
+      <h3 className="font-bold text-sm leading-tight text-card-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
         {meetup.title}
       </h3>
       
