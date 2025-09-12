@@ -157,7 +157,7 @@ const AllMeetupsPage = () => {
   }, []);
   return <div className="min-h-screen bg-background pb-20">
       {/* Custom Header with Back Button */}
-      <div className="flex items-center justify-between p-4 bg-background border-b">
+      <div className="flex items-center p-4 bg-background border-b">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -169,14 +169,6 @@ const AllMeetupsPage = () => {
           </Button>
           <h1 className="text-xl font-semibold">All Meetups</h1>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowNotifications(true)}
-          className="p-2"
-        >
-          <Bell className="h-5 w-5" />
-        </Button>
       </div>
       
       
