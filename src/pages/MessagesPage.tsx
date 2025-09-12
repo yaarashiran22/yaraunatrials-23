@@ -115,13 +115,13 @@ const MessagesPage = () => {
       {/* Mobile Header */}
       <div className="lg:hidden">
         <Header 
-          title={selectedUser ? selectedUser.name || "User" : "Messages"}
+        title={selectedUser ? selectedUser.name || "User" : "Inbox"}
         />
       </div>
       
       {/* Desktop Header */}
       <DesktopHeader 
-        title={selectedUser ? selectedUser.name || "User" : "Messages"}
+        title={selectedUser ? selectedUser.name || "User" : "Inbox"}
         showSearch={false}
       />
       {/* Custom Chat Headers - Only for mobile conversation view */}
@@ -196,9 +196,8 @@ const MessagesPage = () => {
               
               <div className="flex-1 text-center">
                 <h1 className="text-xl font-bold bg-gradient-to-r from-primary via-primary-600 to-secondary text-transparent bg-clip-text">
-                  Messages
+                  Inbox
                 </h1>
-                <p className="text-xs text-muted-foreground">Stay connected</p>
               </div>
               
               <Button

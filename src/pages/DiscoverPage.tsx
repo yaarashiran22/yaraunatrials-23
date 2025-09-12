@@ -225,7 +225,12 @@ const DiscoverPage = () => {
       if (!mapContainer.current) return;
 
       try {
-        const map = L.map(mapContainer.current, {
+        // Ensure container has proper dimensions
+        const container = mapContainer.current;
+        container.style.height = '100%';
+        container.style.width = '100%';
+        
+        const map = L.map(container, {
           center: [-34.6118, -58.3960], // Buenos Aires center
           zoom: 13,
           zoomControl: true,
@@ -234,14 +239,21 @@ const DiscoverPage = () => {
           touchZoom: true,
           boxZoom: false,
           keyboard: true,
+          attributionControl: false, // Remove attribution for cleaner look
         });
 
-        // Add base tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Add base tile layer with error handling
+        const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors',
           maxZoom: 19,
           detectRetina: true,
-        }).addTo(map);
+        });
+        
+        tileLayer.on('tileerror', (e) => {
+          console.warn('Tile loading error:', e);
+        });
+        
+        tileLayer.addTo(map);
 
         mapInstanceRef.current = map;
         setIsLoading(false);
@@ -249,7 +261,11 @@ const DiscoverPage = () => {
         // Wait for map to be fully loaded before adding markers
         map.whenReady(() => {
           console.log('Map is ready, adding initial markers');
-          addUserLocationMarkers();
+          // Force a resize to ensure proper rendering
+          setTimeout(() => {
+            map.invalidateSize();
+            addUserLocationMarkers();
+          }, 100);
         });
 
       } catch (error) {
@@ -259,10 +275,10 @@ const DiscoverPage = () => {
       }
     };
 
-    // Initialize map with small delay
+    // Initialize map with small delay to ensure DOM is ready
     const timer = setTimeout(() => {
       initializeMap();
-    }, 100);
+    }, 200);
 
     return () => {
       clearTimeout(timer);
@@ -300,7 +316,7 @@ const DiscoverPage = () => {
         {/* Map Section - Full Screen */}
         <section className="flex-1 h-full">
           {/* Map Container */}
-          <div className="relative bg-white overflow-hidden h-[calc(100vh-140px)] min-h-[500px] z-10">
+          <div className="relative bg-white overflow-hidden h-[calc(100vh-140px)] min-h-[500px] z-10" style={{ height: 'calc(100vh - 140px)' }}>
             
             {/* I'm Open to Hang Button - Floating on top right */}
             {user && (
@@ -320,6 +336,13 @@ const DiscoverPage = () => {
               <div className="flex items-center justify-center h-full">
                 <div className="text-center p-4">
                   <p className="text-sm text-destructive">{error}</p>
+                  <Button 
+                    onClick={() => window.location.reload()} 
+                    className="mt-2"
+                    size="sm"
+                  >
+                    Reload Page
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -332,7 +355,11 @@ const DiscoverPage = () => {
                     </div>
                   </div>
                 )}
-                <div ref={mapContainer} className="w-full h-full z-0" />
+                <div 
+                  ref={mapContainer} 
+                  className="w-full h-full z-0" 
+                  style={{ minHeight: '500px', height: '100%' }}
+                />
               </>
             )}
           </div>
