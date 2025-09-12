@@ -336,7 +336,7 @@ const MeetupVerticalPopup = ({
           {/* Organizer Info at Bottom of Image */}
           {displayItem.seller && (
             <div className="absolute bottom-4 left-4 right-4">
-              <div className="flex items-center gap-3 bg-black/40 backdrop-blur-sm rounded-full px-4 py-2">
+              <div className="flex items-center gap-3 rounded-full px-4 py-2">
                 <img 
                   src={displayItem.seller.image} 
                   alt={displayItem.seller.name} 
