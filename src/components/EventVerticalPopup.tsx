@@ -1,11 +1,12 @@
-import { X, MessageCircle, Share, Heart, MapPin, Calendar, ChevronUp, ChevronDown, Clock, Users, Eye } from "lucide-react";
+import { X, MessageCircle, Share, Heart, MapPin, Calendar, ChevronUp, ChevronDown, CheckCircle, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useEventRSVP } from "@/hooks/useEventRSVP";
+import { useEventCompanionRequests } from '@/hooks/useEventCompanionRequests';
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useEventCompanionRequests } from "@/hooks/useEventCompanionRequests";
-import profile1 from "@/assets/profile-1.jpg";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Location mapping from English to Spanish (Buenos Aires neighborhoods)
 const locationMapping: Record<string, string> = {
@@ -16,6 +17,7 @@ const locationMapping: Record<string, string> = {
   'belgrano': 'Belgrano',
   'villa-crespo': 'Villa Crespo'
 };
+
 interface EventVerticalPopupProps {
   isOpen: boolean;
   onClose: () => void;
@@ -38,6 +40,7 @@ interface EventVerticalPopupProps {
     currentIndex?: number;
   };
 }
+
 const EventVerticalPopup = ({
   isOpen,
   onClose,
@@ -47,8 +50,10 @@ const EventVerticalPopup = ({
   const {
     toast
   } = useToast();
+  const {
+    user
+  } = useAuth();
   const isMobile = useIsMobile();
-
   // Navigation state
   const allEvents = event?.allEvents || [];
   const currentIndex = event?.currentIndex || 0;
@@ -91,6 +96,7 @@ const EventVerticalPopup = ({
       }
     }
   }, [currentIndex, allEvents, event, onClose]);
+
   const handleNext = useCallback(() => {
     if (currentIndex < allEvents.length - 1 && allEvents.length > 0) {
       const nextEvent = allEvents[currentIndex + 1];
@@ -125,6 +131,7 @@ const EventVerticalPopup = ({
     setIsDragging(false);
     setScrollOffset(0);
   }, []);
+
   const onTouchMove = useCallback((e: React.TouchEvent) => {
     const currentTouch = e.targetTouches[0].clientY;
     const diff = touchStartY - currentTouch;
@@ -135,6 +142,7 @@ const EventVerticalPopup = ({
       setScrollOffset(limitedOffset);
     }
   }, [touchStartY]);
+
   const onTouchEnd = useCallback((e: React.TouchEvent) => {
     if (!touchStartY || touchEndY) return;
     setTouchEndY(e.changedTouches[0].clientY);
@@ -167,6 +175,7 @@ const EventVerticalPopup = ({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, currentIndex, allEvents.length, handlePrevious, handleNext]);
+
   const defaultEvent = {
     id: "1",
     title: "Community Event",
@@ -183,232 +192,287 @@ const EventVerticalPopup = ({
       location: "Tel Aviv"
     }
   };
+
   const displayEvent = event || defaultEvent;
-  
-  // Companion requests functionality
+
+  // Companion requests functionality  
   const { 
     isLookingForCompanion, 
     companionUsers, 
     loading: companionLoading, 
     toggleCompanionRequest 
-  } = useEventCompanionRequests(displayEvent.id || '');
-  
-  const handleRSVP = () => {
-    toast({
-      title: "RSVP Confirmed",
-      description: "You've successfully registered for this event"
-    });
+  } = useEventCompanionRequests(displayEvent?.id || '');
+
+  const {
+    userRSVP,
+    rsvpCount,
+    isLoading: rsvpLoading,
+    handleRSVP: handleRSVPToggle,
+    isUpdating: rsvpUpdating
+  } = useEventRSVP(displayEvent?.id || '');
+
+  const handleMessageUser = (userId: string) => {
+    navigate(`/messages?userId=${userId}`);
+    onClose();
   };
+
+  const handleRSVP = () => {
+    handleRSVPToggle('going');
+  };
+
   const handleShare = () => {
     toast({
       title: "Shared Successfully!",
       description: "Event shared on social networks"
     });
   };
+
   const handleViewProfile = () => {
     if (displayEvent.organizer?.id) {
       navigate(`/profile/${displayEvent.organizer.id}`);
       onClose();
+    } else {
+      // Fallback: try to extract ID from the event or use a default profile navigation
+      const profileId = event?.id || displayEvent.id || 'default';
+      navigate(`/profile/${profileId}`);
+      onClose();
     }
   };
 
-  const handleMessageUser = (userId: string) => {
-    navigate(`/messages?userId=${userId}`);
-    onClose();
-  };
   if (!isOpen) return null;
-  return <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in" ref={containerRef}>
-      {/* Up Navigation Button */}
-      {allEvents.length > 1 && currentIndex > 0 && <Button variant="ghost" size="lg" onClick={handlePrevious} className="absolute top-8 left-1/2 -translate-x-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-xl rounded-full p-4 h-14 w-14 transition-all duration-200 hover:scale-110">
-          <ChevronUp className="h-8 w-8" />
-        </Button>}
-      
-      {/* Down Navigation Button */}
-      {allEvents.length > 1 && currentIndex < allEvents.length - 1 && <Button variant="ghost" size="lg" onClick={handleNext} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-xl rounded-full p-4 h-14 w-14 transition-all duration-200 hover:scale-110">
-          <ChevronDown className="h-8 w-8" />
-        </Button>}
 
-      <div ref={contentRef} className={`bg-background/95 backdrop-blur-md rounded-3xl w-full max-w-sm ${isMobile ? 'max-h-[95vh]' : 'max-h-[85vh]'} overflow-y-auto mx-4 relative transition-transform duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} event-vertical-popup shadow-2xl border border-white/10 animate-scale-in`} style={{
-      transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
-      scrollBehavior: 'smooth'
-    }} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-        {/* Header */}
-        <div className="relative overflow-hidden rounded-t-3xl bg-gradient-to-br from-green-100/80 to-blue-100/80 dark:from-green-950/40 dark:to-blue-950/40 border-b border-green-200/50 dark:border-blue-800/50">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-          <div className="relative flex items-center justify-between p-6">
-            <div className="flex items-center gap-3">
-              {allEvents.length > 1 && <div className="text-sm font-semibold text-muted-foreground bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
-                  {currentIndex + 1} / {allEvents.length}
-                </div>}
-            </div>
-            
-            <Button variant="ghost" size="sm" onClick={onClose} className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all duration-200 shadow-lg">
+  return (
+    <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" ref={containerRef}>
+      {/* Navigation Buttons */}
+      {allEvents.length > 1 && currentIndex > 0 && 
+        <Button 
+          variant="ghost" 
+          size="lg" 
+          onClick={handlePrevious} 
+          className="absolute top-8 left-1/2 -translate-x-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-lg rounded-full p-3 h-12 w-12"
+        >
+          <ChevronUp className="h-6 w-6" />
+        </Button>
+      }
+      
+      {allEvents.length > 1 && currentIndex < allEvents.length - 1 && 
+        <Button 
+          variant="ghost" 
+          size="lg" 
+          onClick={handleNext} 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 bg-white/90 hover:bg-white text-foreground shadow-lg rounded-full p-3 h-12 w-12"
+        >
+          <ChevronDown className="h-6 w-6" />
+        </Button>
+      }
+
+      <div 
+        ref={contentRef} 
+        className={`bg-background rounded-3xl w-full max-w-sm ${isMobile ? 'max-h-[90vh]' : 'max-h-[80vh]'} overflow-hidden mx-4 relative shadow-2xl border-0 ${isDragging ? 'cursor-grabbing scale-[0.98]' : 'cursor-grab'} event-vertical-popup`} 
+        style={{
+          transform: isDragging ? `translateY(${-scrollOffset}px)` : 'translateY(0px)',
+          scrollBehavior: 'smooth'
+        }} 
+        onTouchStart={onTouchStart} 
+        onTouchMove={onTouchMove} 
+        onTouchEnd={onTouchEnd}
+      >
+        {/* Large Hero Image */}
+        <div className="relative h-80 w-full overflow-hidden">
+          <img 
+            src={displayEvent.image} 
+            alt={displayEvent.title} 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+          
+          {/* Header Controls */}
+          <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+            {allEvents.length > 1 && (
+              <div className="bg-black/30 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                {currentIndex + 1} / {allEvents.length}
+              </div>
+            )}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={onClose}
+              className="bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white h-9 w-9 rounded-full p-0"
+            >
               <X className="h-5 w-5" />
             </Button>
           </div>
+
+          {/* Heart and Share Buttons */}
+          <div className="absolute top-4 right-16 flex gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleShare}
+              className="bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white h-8 w-8 rounded-full p-0"
+            >
+              <Share className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white h-8 w-8 rounded-full p-0"
+            >
+              <Heart className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+
+          {/* Organizer Info at Bottom of Image */}
+          {displayEvent.organizer && (
+            <div className="absolute bottom-4 left-4 right-4">
+              <div className="flex items-center gap-3 rounded-full px-4 py-2">
+                <img 
+                  src={displayEvent.organizer.image} 
+                  alt={displayEvent.organizer.name} 
+                  className="w-8 h-8 rounded-full object-cover border-2 border-white/30"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-white text-sm truncate">
+                    {displayEvent.organizer.name}
+                  </p>
+                  <p className="text-xs text-white/80">Organizer</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-
-        {/* Vertical Progress Indicators */}
-        {allEvents.length > 1 && <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
-            {allEvents.map((_, index) => <div key={index} className={`w-2 h-10 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-primary shadow-lg scale-110' : 'bg-muted-foreground/20'}`} />)}
-          </div>}
+        {/* Progress Indicators */}
+        {allEvents.length > 1 && (
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-10">
+            {allEvents.map((_, index) => (
+              <div 
+                key={index} 
+                className={`w-1.5 h-6 rounded-full transition-all duration-300 ${
+                  index === currentIndex ? 'bg-white shadow-lg scale-125' : 'bg-white/40'
+                }`} 
+              />
+            ))}
+          </div>
+        )}
 
         {/* Content */}
-        <div className={`${isMobile ? 'p-3' : 'p-4'}`}>
-          {/* Event Image */}
-          <div className={`relative ${isMobile ? 'mb-4' : 'mb-6'} group`}>
-            <div className="relative rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/5">
-              <img src={displayEvent.image} alt={displayEvent.title} className={`w-full ${isMobile ? 'h-56' : 'h-72'} object-cover transition-transform duration-300 group-hover:scale-105`} />
-              
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
-            </div>
-            
-            <div className="absolute top-4 right-4">
-              <Button variant="ghost" size="sm" className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-md text-red-500 hover:bg-background/90 hover:scale-110 transition-all duration-200 shadow-lg">
-                <Heart className="h-4 w-4" />
-              </Button>
-            </div>
-            
+        <div className="p-6 space-y-6">
+          {/* Title and Description */}
+          <div className="text-center space-y-3">
+            <h3 className="text-2xl font-bold text-foreground leading-tight">
+              {displayEvent.title}
+            </h3>
+            {displayEvent.description && (
+              <p className="text-foreground leading-relaxed">
+                {displayEvent.description}
+              </p>
+            )}
           </div>
 
           {/* Event Details */}
-          <div className={`${isMobile ? 'space-y-3' : 'space-y-4'}`}>
-            <div className="text-center space-y-2">
-              <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-white leading-tight`}>
-                {displayEvent.title}
-              </h3>
-              {displayEvent.price && displayEvent.price !== 'Free' && 
-                <div className="inline-flex items-center justify-center">
-                  <span className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent`}>
-                    {displayEvent.price}
-                  </span>
-                </div>
-              }
-              {(!displayEvent.price || displayEvent.price === 'Free') && 
-                <div className="inline-flex items-center justify-center">
-                  <span className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-green-600 dark:text-green-400`}>
-                    Free Event
-                  </span>
-                </div>
-              }
+          <div className="space-y-3 p-4 bg-muted/30 rounded-2xl">
+            <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+              <MapPin className="h-4 w-4 text-primary" />
+              <span>{locationMapping[displayEvent.location] || displayEvent.location || 'Location TBD'}</span>
             </div>
-
-            {/* Quick RSVP Section - moved to top for quick access */}
-            <div className="flex gap-2 justify-center">
-              <Button onClick={handleRSVP} className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 shadow-sm`}>
-                <MessageCircle className="h-3 w-3 mr-1" />
-                RSVP
-              </Button>
+            <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+              <Calendar className="h-4 w-4 text-primary" />
+              <span>
+                {displayEvent.date ? new Date(displayEvent.date).toLocaleDateString('en-US', {
+                  weekday: 'short',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                }) : 'Date TBD'}
+              </span>
             </div>
-
-            {/* Quick Companion Request - moved to top for quick access */}
-            <div className="text-center space-y-2">
-              <Button
-                onClick={toggleCompanionRequest}
-                disabled={companionLoading}
-                variant={isLookingForCompanion ? "default" : "outline"}
-                className={`${isMobile ? 'h-8 px-4' : 'h-9 px-5'} rounded-full font-medium text-sm transition-all duration-200 hover:scale-105 shadow-sm ${
-                  isLookingForCompanion 
-                    ? 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0' 
-                    : 'border-green-300 text-white hover:bg-green-50 dark:border-green-700 dark:text-white'
-                }`}
-              >
-                <Users className="h-3 w-3 mr-1" />
-                {isLookingForCompanion ? 'Stop looking' : 'Find someone to go with'}
-              </Button>
-              
-              {companionUsers.length > 0 && (
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">
-                    {companionUsers.length} looking for companions:
-                  </p>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {companionUsers.slice(0, 3).map((companionUser) => (
-                      <div
-                        key={companionUser.id}
-                        className="flex items-center gap-2 px-3 py-1 bg-green-50/80 dark:bg-green-950/30 rounded-full cursor-pointer hover:bg-green-100/80 dark:hover:bg-green-950/50 transition-all duration-200 hover:scale-105 shadow-sm border border-green-200/50 dark:border-green-800/50"
-                        onClick={() => handleMessageUser(companionUser.id)}
-                      >
-                        <img
-                          src={companionUser.profile_image_url || profile1}
-                          alt={companionUser.name}
-                          className="w-5 h-5 rounded-full object-cover"
-                        />
-                        <span className="text-xs font-medium text-green-700 dark:text-green-300">
-                          {companionUser.name.split(' ')[0]}
-                        </span>
-                        <MessageCircle className="h-3 w-3 text-green-600" />
-                      </div>
-                    ))}
-                      {companionUsers.length > 3 && (
-                        <div className="flex items-center justify-center w-8 h-6 bg-green-100 dark:bg-green-900 rounded-full">
-                          <span className="text-xs font-bold text-green-700 dark:text-green-300">
-                            +{companionUsers.length - 3}
-                          </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            {displayEvent.description && 
-              <div className="bg-gradient-to-r from-muted/40 to-muted/20 backdrop-blur-sm rounded-2xl p-5 border border-muted/50">
-                <p className={`text-foreground/90 leading-relaxed text-center ${isMobile ? 'text-sm' : 'text-base'}`}>
-                  {displayEvent.description}
-                </p>
+            {displayEvent.time && (
+              <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+                <Clock className="h-4 w-4 text-primary" />
+                <span>{displayEvent.time}</span>
               </div>
-            }
-            
-            {/* Event Details Section */}
-            <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} ${isMobile ? 'p-3' : 'p-4'} bg-gradient-to-r from-green-50/80 to-blue-50/80 dark:from-green-950/40 dark:to-blue-950/40 backdrop-blur-sm rounded-2xl border border-green-200/50 dark:border-blue-800/50`}>
-              {displayEvent.location && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
-                  <MapPin className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-green-600 dark:text-green-400`} />
-                  <span>{locationMapping[displayEvent.location] || displayEvent.location}</span>
-                </div>}
-              
-              {displayEvent.date && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
-                  <Calendar className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-green-600 dark:text-green-400`} />
-                  <span>
-                    {new Date(displayEvent.date).toLocaleDateString('en-US', {
-                  weekday: isMobile ? 'short' : 'long',
-                  year: 'numeric',
-                  month: isMobile ? 'short' : 'long',
-                  day: 'numeric'
-                })}
-                  </span>
-                </div>}
-              
-              {displayEvent.time && <div className={`flex items-center gap-4 ${isMobile ? 'text-sm' : 'text-base'} font-semibold text-foreground`}>
-                  <Clock className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-green-600 dark:text-green-400`} />
-                  <span>{displayEvent.time ? displayEvent.time.slice(0, 5) : ''}</span>
-                </div>}
-            </div>
-
-            {/* Organizer Info */}
-            {displayEvent.organizer && <div className={`flex items-center gap-4 ${isMobile ? 'p-4' : 'p-5'} bg-gradient-to-r from-background/60 to-background/40 backdrop-blur-sm rounded-2xl cursor-pointer hover:from-background/80 hover:to-background/60 transition-all duration-300 border border-muted/30 hover:border-muted/50 hover:shadow-lg group`} onClick={handleViewProfile}>
-                <div className="relative">
-                  <img src={displayEvent.organizer.image} alt={displayEvent.organizer.name} className={`${isMobile ? 'w-12 h-12' : 'w-16 h-16'} rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300`} />
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
-                </div>
-                <div className="flex-1">
-                  <p className={`font-bold text-foreground ${isMobile ? 'text-base' : 'text-lg'}`}>{displayEvent.organizer.name}</p>
-                  {displayEvent.organizer.location && <div className={`flex items-center gap-2 ${isMobile ? 'text-sm' : 'text-base'} text-muted-foreground`}>
-                      <MapPin className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
-                      <span>{displayEvent.organizer.location}</span>
-                    </div>}
-                </div>
-                <Eye className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'} text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-              </div>}
+            )}
           </div>
 
-          {/* RSVP Section - REMOVED FROM HERE - moved to top */}
+          {/* Find Companion */}
+          <Button
+            onClick={toggleCompanionRequest}
+            disabled={companionLoading}
+            variant={isLookingForCompanion ? "default" : "outline"}
+            className={`w-full h-12 rounded-2xl font-semibold transition-all duration-200 ${
+              isLookingForCompanion 
+                ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                : 'border-2 border-primary/20 hover:bg-primary/5 text-foreground hover:border-primary/30'
+            }`}
+          >
+            <Users className="h-4 w-4 mr-2" />
+            {isLookingForCompanion ? 'Stop looking' : 'Find someone to go with'}
+          </Button>
 
-          {/* Companion Request Section - REMOVED FROM HERE - moved to top */}
+          {/* Companions List */}
+          {companionUsers.length > 0 && (
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground text-center">
+                {companionUsers.length} looking for companions
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {companionUsers.slice(0, 3).map((companionUser) => (
+                  <div
+                    key={companionUser.id}
+                    className="flex items-center gap-2 px-3 py-2 bg-card/60 rounded-2xl cursor-pointer hover:bg-card transition-all duration-200 border"
+                    onClick={() => handleMessageUser(companionUser.id)}
+                  >
+                    <img
+                      src={companionUser.profile_image_url || '/placeholder.svg'}
+                      alt={companionUser.name}
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
+                    <span className="text-sm font-medium">
+                      {companionUser.name.split(' ')[0]}
+                    </span>
+                    <MessageCircle className="h-4 w-4 text-primary" />
+                  </div>
+                ))}
+                {companionUsers.length > 3 && (
+                  <div className="flex items-center justify-center w-10 h-8 bg-card rounded-2xl border">
+                    <span className="text-xs font-bold">
+                      +{companionUsers.length - 3}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* RSVP */}
+          <div className="space-y-4">
+            {userRSVP?.status === 'going' ? (
+              <div className="text-center p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+                <div className="flex items-center justify-center gap-2 text-emerald-600 dark:text-emerald-400 mb-2">
+                  <CheckCircle className="h-5 w-5" />
+                  <span className="font-semibold">You're Attending!</span>
+                </div>
+                <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                  Looking forward to seeing you there!
+                </p>
+              </div>
+            ) : (
+              <Button 
+                onClick={handleRSVP} 
+                disabled={rsvpUpdating}
+                className="w-full h-12 bg-coral hover:bg-coral-hover text-coral-foreground rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
+                RSVP to Event
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default EventVerticalPopup;
