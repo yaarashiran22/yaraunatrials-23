@@ -181,25 +181,25 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
 
   return (
     <SimplifiedModal open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SimplifiedModalContent className="max-w-lg bg-card border-border/20 shadow-2xl">
-        <SimplifiedModalHeader className="pb-4 border-b border-border/10">
-          <SimplifiedModalTitle className="flex items-center gap-3 text-xl">
-            <div className="p-2 bg-gradient-to-br from-primary/10 to-primary/20 rounded-full">
-              <Upload className="w-5 h-5 text-primary" />
+      <SimplifiedModalContent className="max-w-2xl bg-background border border-border/20 shadow-2xl">
+        <SimplifiedModalHeader className="pb-6 border-b border-border/10">
+          <SimplifiedModalTitle className="flex items-center gap-4 text-2xl">
+            <div className="p-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl">
+              <Upload className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h2 className="font-bold text-foreground">Add Community Coupon</h2>
-              <p className="text-sm text-muted-foreground font-normal">Create an exclusive deal for your community</p>
+              <h2 className="font-bold text-foreground text-xl">Add Community Coupon</h2>
+              <p className="text-base text-muted-foreground font-normal mt-1">Create an exclusive deal for your community</p>
             </div>
           </SimplifiedModalTitle>
         </SimplifiedModalHeader>
         
-        <SimplifiedModalBody className="p-6 max-h-[70vh] overflow-y-auto">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <SimplifiedModalBody className="p-8 max-h-[75vh] overflow-y-auto">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Image Upload Section */}
-            <div className="space-y-3">
-              <Label htmlFor="image" className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <Camera className="w-4 h-4" />
+            <div className="space-y-4">
+              <Label htmlFor="image" className="text-base font-semibold text-foreground flex items-center gap-3">
+                <Camera className="w-5 h-5 text-primary" />
                 Coupon Image
               </Label>
               {imagePreview ? (
@@ -207,26 +207,25 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                   <img 
                     src={imagePreview} 
                     alt="Coupon preview" 
-                    className="w-full h-40 object-cover rounded-xl border border-border/20 shadow-sm"
+                    className="w-full h-48 object-cover rounded-2xl border-2 border-border/20 shadow-md"
                   />
                   <Button
                     type="button"
                     onClick={removeImage}
-                    className="absolute top-2 right-2 bg-destructive/90 hover:bg-destructive text-destructive-foreground shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200"
-                    size="sm"
+                    className="absolute top-3 right-3 bg-destructive hover:bg-destructive/90 text-destructive-foreground shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 h-9 w-9 p-0"
                   >
                     <X className="w-4 h-4" />
                   </Button>
                 </div>
               ) : (
-                <div className="border-2 border-dashed border-border/40 rounded-xl p-8 text-center bg-muted/20 hover:bg-muted/30 transition-colors">
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="p-3 bg-primary/10 rounded-full">
-                      <Camera className="w-8 h-8 text-primary" />
+                <div className="border-2 border-dashed border-border/50 rounded-2xl p-10 text-center bg-muted/30 hover:bg-muted/40 transition-colors">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="p-4 bg-primary/10 rounded-2xl">
+                      <Camera className="w-10 h-10 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium text-foreground mb-1">Upload coupon image</p>
-                      <p className="text-sm text-muted-foreground">JPG, PNG up to 10MB</p>
+                      <p className="font-semibold text-foreground text-lg mb-2">Upload coupon image</p>
+                      <p className="text-base text-muted-foreground">JPG, PNG up to 10MB</p>
                     </div>
                     <Input
                       id="image"
@@ -238,21 +237,28 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     />
                     <Label 
                       htmlFor="image"
-                      className="cursor-pointer inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors font-medium shadow-sm"
+                      className="cursor-pointer inline-flex items-center gap-3 bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors font-semibold shadow-md text-base"
                     >
-                      {uploading ? "Uploading..." : "Choose Image"}
+                      {uploading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        "Choose Image"
+                      )}
                     </Label>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Form Fields Grid */}
-            <div className="grid grid-cols-1 gap-4">
+            {/* Form Fields */}
+            <div className="space-y-6">
               {/* Title - Full Width */}
-              <div className="space-y-2">
-                <Label htmlFor="title" className="text-sm font-semibold text-foreground">
-                  Coupon Title *
+              <div className="space-y-3">
+                <Label htmlFor="title" className="text-base font-semibold text-foreground">
+                  Coupon Title <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="title"
@@ -260,14 +266,14 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="e.g., 20% off all pizzas"
                   required
-                  className="h-11 text-base border-border/40 focus:border-primary transition-colors"
+                  className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                 />
               </div>
 
               {/* Business Name & Discount Amount - Two Columns */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label htmlFor="business_name" className="text-sm font-semibold text-foreground">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <Label htmlFor="business_name" className="text-base font-semibold text-foreground">
                     Business Name
                   </Label>
                   <Input
@@ -275,28 +281,28 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     value={formData.business_name}
                     onChange={(e) => setFormData(prev => ({ ...prev, business_name: e.target.value }))}
                     placeholder="Tony's Pizza"
-                    className="h-10 text-sm border-border/40 focus:border-primary transition-colors"
+                    className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="discount_amount" className="text-sm font-semibold text-foreground flex items-center gap-1">
-                    <DollarSign className="w-3 h-3" />
-                    Discount
+                <div className="space-y-3">
+                  <Label htmlFor="discount_amount" className="text-base font-semibold text-foreground flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-primary" />
+                    Discount Amount
                   </Label>
                   <Input
                     id="discount_amount"
                     value={formData.discount_amount}
                     onChange={(e) => setFormData(prev => ({ ...prev, discount_amount: e.target.value }))}
                     placeholder="20% off"
-                    className="h-10 text-sm border-border/40 focus:border-primary transition-colors"
+                    className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
               </div>
 
               {/* Description - Full Width */}
-              <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-semibold text-foreground">
+              <div className="space-y-3">
+                <Label htmlFor="description" className="text-base font-semibold text-foreground">
                   Description
                 </Label>
                 <Textarea
@@ -304,16 +310,16 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Add details about the coupon terms and conditions..."
-                  rows={3}
-                  className="text-sm border-border/40 focus:border-primary transition-colors resize-none"
+                  rows={4}
+                  className="text-base border-2 border-border/40 focus:border-primary transition-colors resize-none rounded-xl px-4 py-3"
                 />
               </div>
 
               {/* Valid Until & Neighborhood - Two Columns */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label htmlFor="valid_until" className="text-sm font-semibold text-foreground flex items-center gap-1">
-                    <CalendarDays className="w-3 h-3" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <Label htmlFor="valid_until" className="text-base font-semibold text-foreground flex items-center gap-2">
+                    <CalendarDays className="w-4 h-4 text-primary" />
                     Valid Until
                   </Label>
                   <Input
@@ -321,13 +327,13 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     type="date"
                     value={formData.valid_until}
                     onChange={(e) => setFormData(prev => ({ ...prev, valid_until: e.target.value }))}
-                    className="h-10 text-sm border-border/40 focus:border-primary transition-colors"
+                    className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="neighborhood" className="text-sm font-semibold text-foreground flex items-center gap-1">
-                    <MapPin className="w-3 h-3" />
+                <div className="space-y-3">
+                  <Label htmlFor="neighborhood" className="text-base font-semibold text-foreground flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-primary" />
                     Neighborhood
                   </Label>
                   <Input
@@ -335,35 +341,35 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     value={formData.neighborhood}
                     onChange={(e) => setFormData(prev => ({ ...prev, neighborhood: e.target.value }))}
                     placeholder="Downtown"
-                    className="h-10 text-sm border-border/40 focus:border-primary transition-colors"
+                    className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col gap-3 pt-4 border-t border-border/10">
+            <div className="flex flex-col-reverse md:flex-row gap-4 pt-6 border-t border-border/10">
+              <Button 
+                type="button"
+                variant="outline" 
+                onClick={onClose}
+                className="flex-1 h-12 border-2 border-border/40 hover:bg-muted/50 transition-colors text-base font-medium rounded-xl"
+              >
+                Cancel
+              </Button>
               <Button 
                 type="submit"
                 disabled={creating || uploading || !formData.title.trim()}
-                className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-sm disabled:opacity-50"
+                className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md disabled:opacity-50 text-base rounded-xl"
               >
                 {creating ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                     Creating coupon...
                   </div>
                 ) : (
                   "Create Coupon"
                 )}
-              </Button>
-              <Button 
-                type="button"
-                variant="outline" 
-                onClick={onClose}
-                className="w-full h-10 border-border/40 hover:bg-muted/50 transition-colors"
-              >
-                Cancel
               </Button>
             </div>
           </form>
