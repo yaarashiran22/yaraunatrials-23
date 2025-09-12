@@ -411,7 +411,7 @@ const MeetupCard = memo(({ meetup, onClick }: { meetup: any; onClick: () => void
           ₪{meetup.price}
         </div>
       ) : (
-        <div className="absolute top-3 right-3 bg-green-500/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-bold border border-green-400/20">
+        <div className="absolute top-3 right-3 bg-green-500/90 backdrop-blur-sm text-black px-3 py-1 rounded-full text-xs font-bold border border-green-400/20">
           Free
         </div>
       )}
