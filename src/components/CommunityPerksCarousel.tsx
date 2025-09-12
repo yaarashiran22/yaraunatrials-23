@@ -128,7 +128,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
           const claim = !isUserCoupon ? getClaim(item.id) : null;
           
           return (
-            <Card key={`${item.type}-${item.id}`} className="min-w-[240px] w-[240px] flex-shrink-0 bg-white dark:bg-gray-900 border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group overflow-hidden rounded-3xl">
+            <Card key={`${item.type}-${item.id}`} className="min-w-[240px] w-[240px] flex-shrink-0 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group overflow-hidden rounded-3xl hover:scale-[1.02] hover:shadow-primary/20">
               <CardContent className="p-0 space-y-0 relative aspect-[4/5] overflow-hidden rounded-3xl">
                 {item.image_url ? (
                   <>
@@ -151,26 +151,26 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                     )}
                     
                     {/* Content overlay at bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-white line-clamp-1 text-base leading-tight drop-shadow-lg">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-4 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
+                      <div className="space-y-2">
+                        <h3 className="font-bold text-white line-clamp-1 text-lg leading-tight drop-shadow-xl">
                           {item.business_name}
                         </h3>
-                        <p className="text-xs text-white/80 line-clamp-1 drop-shadow-md">
+                        <p className="text-sm text-white/90 line-clamp-1 drop-shadow-lg font-medium">
                           {item.title}
                         </p>
                         
                         {/* Compact info row */}
-                        <div className="flex items-center gap-1.5 mt-2">
+                        <div className="flex items-center gap-2 mt-3 flex-wrap">
                           {((item as any).address || (item as any).neighborhood) && (
-                            <span className="text-xs font-medium px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg">
-                              <MapPin className="w-3 h-3 inline mr-1" />
+                            <span className="text-xs font-semibold px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 backdrop-blur-md rounded-full text-white border border-blue-400/30 shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
                               {(item as any).address || (item as any).neighborhood}
                             </span>
                           )}
                           {item.valid_until && (
-                            <span className="text-xs font-medium px-2 py-0.5 bg-red-500/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg">
-                              <Clock className="w-3 h-3 inline mr-1" />
+                            <span className="text-xs font-semibold px-3 py-1.5 bg-gradient-to-r from-red-500 to-pink-500 backdrop-blur-md rounded-full text-white border border-red-400/30 shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
                               {new Date(item.valid_until).toLocaleDateString('en-US', {
                                 month: 'short',
                                 day: 'numeric'
@@ -180,34 +180,34 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                         </div>
                         
                         {/* Action Button - Compact */}
-                        <div className="pt-2">
+                        <div className="pt-3">
                           {isUserCoupon ? (
                             <Button
                               onClick={() => handleShowUserCouponQR(item)}
                               disabled={generatingQR}
-                              className="w-full h-8 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-medium text-xs rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+                              className="w-full h-9 bg-gradient-to-r from-primary via-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold text-sm rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20"
                             >
-                              <QrCode className="w-3 h-3 mr-1" />
+                              <QrCode className="w-3.5 h-3.5 mr-2" />
                               {generatingQR ? 'Generating...' : 'Show QR'}
                             </Button>
                           ) : isClaimed ? (
                             <Button
                               onClick={() => handleShowQR(item)}
-                              className={`w-full h-8 font-medium text-xs rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ${
+                              className={`w-full h-9 font-semibold text-sm rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/20 ${
                                 claim?.is_used 
-                                  ? 'bg-gray-500 hover:bg-gray-600 text-white cursor-default transform-none' 
-                                  : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white'
+                                  ? 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white cursor-default transform-none' 
+                                  : 'bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 text-white hover:scale-105'
                               }`}
                               disabled={claim?.is_used}
                             >
                               {claim?.is_used ? (
                                 <>
-                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  <CheckCircle className="w-3.5 h-3.5 mr-2" />
                                   Used
                                 </>
                               ) : (
                                 <>
-                                  <QrCode className="w-3 h-3 mr-1" />
+                                  <QrCode className="w-3.5 h-3.5 mr-2" />
                                   Show QR
                                 </>
                               )}
@@ -216,10 +216,10 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                             <Button
                               onClick={() => handleClaimCoupon(item.id)}
                               disabled={claiming}
-                              className="w-full h-8 bg-gradient-to-r from-coral to-coral-hover hover:from-coral-hover hover:to-coral text-white font-medium text-xs rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+                              className="w-full h-9 bg-gradient-to-r from-coral via-orange-500 to-orange-600 hover:from-orange-600 hover:to-red-500 text-white font-semibold text-sm rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20"
                             >
-                              <Gift className="w-3 h-3 mr-1" />
-                              {claiming ? 'Claiming...' : 'Claim'}
+                              <Gift className="w-3.5 h-3.5 mr-2" />
+                              {claiming ? 'Claiming...' : 'Claim Now'}
                             </Button>
                           )}
                         </div>
@@ -227,24 +227,24 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                     </div>
                   </>
                 ) : (
-                  /* No Image - Fallback design */
-                  <div className="w-full h-full bg-gradient-to-br from-primary/5 to-secondary/5 flex flex-col justify-center items-center p-4 relative">
+                  /* No Image - Fallback design with enhanced colors */
+                  <div className="w-full h-full bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 flex flex-col justify-center items-center p-4 relative border border-primary/10">
                     {/* Discount Badge */}
                     {item.discount_amount && (
                       <div className="absolute top-3 right-3">
-                        <Badge className="bg-warning hover:bg-warning/90 text-warning-foreground font-bold text-xs px-3 py-1 rounded-2xl shadow-md border-0">
+                        <Badge className="bg-gradient-to-r from-warning to-orange-500 hover:from-orange-500 hover:to-red-500 text-white font-bold text-xs px-3 py-1 rounded-2xl shadow-lg border border-white/20">
                           {item.discount_amount}
                         </Badge>
                       </div>
                     )}
                     
-                    <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mb-3">
-                      <Gift className="w-8 h-8 text-primary" />
+                    <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-4 shadow-lg border border-primary/20">
+                      <Gift className="w-10 h-10 text-primary drop-shadow-sm" />
                     </div>
-                    <h3 className="font-bold text-foreground text-sm leading-tight mb-1 text-center line-clamp-2">
+                    <h3 className="font-bold text-foreground text-base leading-tight mb-2 text-center line-clamp-2 drop-shadow-sm">
                       {item.business_name}
                     </h3>
-                    <p className="text-xs text-primary font-semibold text-center line-clamp-2 mb-3">
+                    <p className="text-sm text-primary/80 font-semibold text-center line-clamp-2 mb-4">
                       {item.title}
                     </p>
                     
@@ -253,29 +253,29 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                       <Button
                         onClick={() => handleShowUserCouponQR(item)}
                         disabled={generatingQR}
-                        className="w-full h-8 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-medium text-xs rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+                        className="w-full h-9 bg-gradient-to-r from-primary via-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold text-sm rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20"
                       >
-                        <QrCode className="w-3 h-3 mr-1" />
+                        <QrCode className="w-3.5 h-3.5 mr-2" />
                         {generatingQR ? 'Generating...' : 'Show QR'}
                       </Button>
                     ) : isClaimed ? (
                       <Button
                         onClick={() => handleShowQR(item)}
-                        className={`w-full h-8 font-medium text-xs rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ${
+                        className={`w-full h-9 font-semibold text-sm rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/20 ${
                           claim?.is_used 
-                            ? 'bg-gray-500 hover:bg-gray-600 text-white cursor-default transform-none' 
-                            : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white'
+                            ? 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white cursor-default transform-none' 
+                            : 'bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 text-white hover:scale-105'
                         }`}
                         disabled={claim?.is_used}
                       >
                         {claim?.is_used ? (
                           <>
-                            <CheckCircle className="w-3 h-3 mr-1" />
+                            <CheckCircle className="w-3.5 h-3.5 mr-2" />
                             Used
                           </>
                         ) : (
                           <>
-                            <QrCode className="w-3 h-3 mr-1" />
+                            <QrCode className="w-3.5 h-3.5 mr-2" />
                             Show QR
                           </>
                         )}
@@ -284,10 +284,10 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                       <Button
                         onClick={() => handleClaimCoupon(item.id)}
                         disabled={claiming}
-                        className="w-full h-8 bg-gradient-to-r from-coral to-coral-hover hover:from-coral-hover hover:to-coral text-white font-medium text-xs rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+                        className="w-full h-9 bg-gradient-to-r from-coral via-orange-500 to-orange-600 hover:from-orange-600 hover:to-red-500 text-white font-semibold text-sm rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-white/20"
                       >
-                        <Gift className="w-3 h-3 mr-1" />
-                        {claiming ? 'Claiming...' : 'Claim'}
+                        <Gift className="w-3.5 h-3.5 mr-2" />
+                        {claiming ? 'Claiming...' : 'Claim Now'}
                       </Button>
                     )}
                   </div>
