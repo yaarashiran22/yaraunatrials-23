@@ -1,5 +1,5 @@
 import { MapPin, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,10 +23,10 @@ const neighborhoods = [
 const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProps) => {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("Palermo");
 
-  const handleNeighborhoodSelect = (neighborhood: string) => {
+  const handleNeighborhoodSelect = useCallback((neighborhood: string) => {
     setSelectedNeighborhood(neighborhood);
     onNeighborhoodChange?.(neighborhood);
-  };
+  }, [onNeighborhoodChange]);
 
   return (
     <DropdownMenu>
