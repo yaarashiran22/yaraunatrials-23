@@ -452,6 +452,8 @@ export type Database = {
           instagram_url: string | null
           location: string | null
           market: string | null
+          meetup_date: string | null
+          meetup_time: string | null
           mobile_number: string | null
           price: number | null
           status: string | null
@@ -469,6 +471,8 @@ export type Database = {
           instagram_url?: string | null
           location?: string | null
           market?: string | null
+          meetup_date?: string | null
+          meetup_time?: string | null
           mobile_number?: string | null
           price?: number | null
           status?: string | null
@@ -486,6 +490,8 @@ export type Database = {
           instagram_url?: string | null
           location?: string | null
           market?: string | null
+          meetup_date?: string | null
+          meetup_time?: string | null
           mobile_number?: string | null
           price?: number | null
           status?: string | null

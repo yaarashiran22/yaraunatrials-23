@@ -413,11 +413,27 @@ const MeetupVerticalPopup = ({
               <div className="flex items-center gap-3 text-sm font-medium text-foreground">
                 <Calendar className="h-4 w-4 text-primary" />
                 <span>
-                  Created {new Date(itemDetails.created_at).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
+                  {itemDetails.meetup_date ? (
+                    // Show actual meetup date if available
+                    <>
+                      {new Date(itemDetails.meetup_date).toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                      {itemDetails.meetup_time && (
+                        <> at {itemDetails.meetup_time.slice(0, 5)}</>
+                      )}
+                    </>
+                  ) : (
+                    // Fallback to creation date
+                    <>Created {new Date(itemDetails.created_at).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    })}</>
+                  )}
                 </span>
               </div>
             )}
