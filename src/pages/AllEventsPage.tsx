@@ -197,53 +197,61 @@ const AllEventsPage = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Custom Header with Back Button */}
-      <div className="bg-card border-b px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button 
-            variant="ghost" 
+      <div className="bg-gradient-to-r from-card via-card/95 to-card border-b border-primary/10 px-6 py-4 shadow-sm backdrop-blur-sm">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => navigate('/')}
+              className="p-3 rounded-full hover:bg-primary/10 transition-all duration-200 border border-primary/20 hover:border-primary/40"
+            >
+              <ArrowLeft className="h-5 w-5 text-primary" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">All Events</h1>
+              <p className="text-sm text-muted-foreground">Discover amazing events near you</p>
+            </div>
+          </div>
+          <Button
+            variant="ghost"
             size="sm"
-            onClick={() => navigate('/')}
-            className="p-2"
+            onClick={() => setShowNotifications(true)}
+            className="p-3 rounded-full hover:bg-primary/10 transition-all duration-200 border border-primary/20 hover:border-primary/40 relative"
           >
-            <ArrowLeft className="h-5 w-5" />
+            <Bell className="h-5 w-5 text-primary" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-coral rounded-full"></div>
           </Button>
-          <h1 className="text-lg font-semibold">All Events</h1>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowNotifications(true)}
-          className="p-2"
-        >
-          <Bell className="h-5 w-5" />
-        </Button>
       </div>
       
       {/* Search and Filter Section */}
-      <div className="px-4 py-4 space-y-4 bg-card/30 backdrop-blur-sm border-b">
+      <div className="px-6 py-6 space-y-6 bg-gradient-to-br from-muted/30 via-muted/20 to-transparent backdrop-blur-sm border-b border-primary/10">
         {/* Search Bar */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary/60 h-5 w-5" />
           <Input
-            placeholder="Search events..."
+            placeholder="Search events by name, location, or type..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4"
+            className="pl-12 pr-4 py-3 rounded-2xl border-primary/20 bg-gradient-to-r from-background/80 to-muted/50 focus:bg-background focus:border-primary/40 transition-all duration-200 placeholder:text-muted-foreground/60 text-base"
           />
         </div>
 
-        {/* Filter Options - Always Visible */}
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Neighborhood</label>
+        {/* Filter Options - Enhanced Design */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground flex items-center gap-2">
+                📍 Neighborhood
+              </label>
               <Select value={selectedNeighborhood} onValueChange={setSelectedNeighborhood}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl border-primary/20 bg-background/80 hover:border-primary/40 transition-colors">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl border-primary/20">
                   {neighborhoods.map((neighborhood) => (
-                    <SelectItem key={neighborhood} value={neighborhood}>
+                    <SelectItem key={neighborhood} value={neighborhood} className="rounded-lg">
                       {neighborhood}
                     </SelectItem>
                   ))}
@@ -251,15 +259,17 @@ const AllEventsPage = () => {
               </Select>
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-2 block">Price</label>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground flex items-center gap-2">
+                💰 Price Range
+              </label>
               <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl border-primary/20 bg-background/80 hover:border-primary/40 transition-colors">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl border-primary/20">
                   {priceOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem key={option} value={option} className="rounded-lg">
                       {option}
                     </SelectItem>
                   ))}
@@ -268,16 +278,18 @@ const AllEventsPage = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Mood</label>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground flex items-center gap-2">
+                🎭 Vibe
+              </label>
               <Select value={moodFilter} onValueChange={setMoodFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl border-primary/20 bg-background/80 hover:border-primary/40 transition-colors">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl border-primary/20">
                   {moodOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem key={option} value={option} className="rounded-lg">
                       {option}
                     </SelectItem>
                   ))}
@@ -285,15 +297,17 @@ const AllEventsPage = () => {
               </Select>
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-2 block">Date</label>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground flex items-center gap-2">
+                📅 When
+              </label>
               <Select value={dateFilter} onValueChange={setDateFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-xl border-primary/20 bg-background/80 hover:border-primary/40 transition-colors">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl border-primary/20">
                   {dateOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem key={option} value={option} className="rounded-lg">
                       {option}
                     </SelectItem>
                   ))}
@@ -303,14 +317,14 @@ const AllEventsPage = () => {
           </div>
           
           {(selectedNeighborhood !== "All Neighborhoods" || priceFilter !== "All Prices" || moodFilter !== "All" || dateFilter !== "All") && (
-            <div className="flex justify-center">
+            <div className="flex justify-center pt-2">
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 size="sm"
                 onClick={clearFilters}
-                className="text-xs"
+                className="rounded-full border-primary/30 hover:bg-primary/10 hover:border-primary/60 transition-all duration-200"
               >
-                Clear Filters
+                ✨ Clear All Filters
               </Button>
             </div>
           )}
@@ -318,34 +332,44 @@ const AllEventsPage = () => {
       </div>
 
       {/* Results Section */}
-      <main className="px-4 py-4">
-        <div className="mb-4 text-sm text-muted-foreground">
-          Found {filteredEvents.length} events
+      <main className="px-6 py-6">
+        <div className="mb-6 flex items-center justify-between">
+          <div className="text-base font-medium text-foreground flex items-center gap-2">
+            🎉 <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-bold">{filteredEvents.length}</span> events found
+          </div>
+          {filteredEvents.length > 0 && (
+            <Button variant="ghost" size="sm" className="text-sm text-muted-foreground hover:text-primary">
+              Sort by date
+            </Button>
+          )}
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {[...Array(6)].map((_, index) => (
-              <div key={index} className="w-full aspect-[3/4] bg-muted rounded-lg animate-pulse"></div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, index) => (
+              <div key={index} className="w-full aspect-[3/4] bg-gradient-to-br from-muted/30 to-muted/50 rounded-2xl animate-pulse"></div>
             ))}
           </div>
         ) : filteredEvents.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-lg font-semibold mb-2">No events found</h3>
-            <p className="text-muted-foreground mb-4">Try changing your filters or search</p>
-            <Button variant="outline" onClick={clearFilters}>
-              Clear Filters
+          <div className="text-center py-20">
+            <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <span className="text-4xl">🎉</span>
+            </div>
+            <h3 className="text-xl font-bold mb-3 text-foreground">No events found</h3>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">Try adjusting your filters or search terms to discover more amazing events</p>
+            <Button variant="outline" onClick={clearFilters} className="rounded-full border-primary/30 hover:bg-primary/10">
+              ✨ Clear All Filters
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {filteredEvents.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onClick={() => handleEventClick(event)}
-              />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 animate-fade-in">
+            {filteredEvents.map((event, index) => (
+              <div key={event.id} className="animate-fade-in" style={{animationDelay: `${index * 0.05}s`}}>
+                <EventCard
+                  event={event}
+                  onClick={() => handleEventClick(event)}
+                />
+              </div>
             ))}
           </div>
         )}
@@ -371,38 +395,49 @@ const AllEventsPage = () => {
 const EventCard = memo(({ event, onClick }: { event: any; onClick: () => void }) => (
   <div 
     onClick={onClick}
-    className="cursor-pointer bg-card rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow"
+    className="cursor-pointer bg-gradient-to-br from-card to-card/95 rounded-2xl overflow-hidden shadow-sm border border-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 group hover:scale-[1.02] hover:border-primary/30"
   >
-    <div className="aspect-[3/4] w-full">
+    <div className="aspect-[3/4] w-full relative overflow-hidden">
       {event.image_url ? (
         <img 
           src={event.image_url} 
           alt={event.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
       ) : (
-        <div className="w-full h-full bg-muted flex items-center justify-center">
-          <span className="text-lg">🎉</span>
+        <div className="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+          <span className="text-4xl">🎉</span>
+        </div>
+      )}
+      
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      {/* Price badge */}
+      {event.price && event.price > 0 ? (
+        <div className="absolute top-3 right-3 bg-warning/90 backdrop-blur-sm text-warning-foreground px-3 py-1 rounded-full text-xs font-bold border border-warning/20">
+          ₪{event.price}
+        </div>
+      ) : (
+        <div className="absolute top-3 right-3 bg-green-500/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-bold border border-green-400/20">
+          Free
         </div>
       )}
     </div>
-    <div className="p-2">
-      <h3 className="font-semibold text-xs mb-1 truncate leading-tight">
+    
+    <div className="p-4">
+      <h3 className="font-bold text-sm mb-2 truncate leading-tight text-foreground group-hover:text-primary transition-colors">
         {event.title}
       </h3>
       {event.location && (
-        <p className="text-[10px] text-muted-foreground truncate">
-          📍 {event.location}
+        <p className="text-xs text-muted-foreground truncate flex items-center gap-1 mb-1">
+          <span>📍</span> {event.location}
         </p>
       )}
-      {event.price && event.price > 0 ? (
-        <p className="text-[10px] font-medium text-primary mt-1">
-          ₪{event.price}
-        </p>
-      ) : (
-        <p className="text-[10px] font-medium text-green-600 mt-1">
-          Free
+      {event.date && (
+        <p className="text-xs text-muted-foreground flex items-center gap-1">
+          <span>📅</span> {new Date(event.date).toLocaleDateString()}
         </p>
       )}
     </div>
