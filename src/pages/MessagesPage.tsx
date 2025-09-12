@@ -370,11 +370,11 @@ const MessagesPage = () => {
                     >
                       <Button
                         variant="ghost"
-                        className="w-full justify-start p-3 h-auto rounded-xl hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 transition-all duration-300 group border border-border/10 hover:border-primary/30 bg-gradient-to-r from-card/80 to-card hover:shadow-lg"
+                        className="w-full justify-start p-4 h-auto rounded-xl hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 transition-all duration-300 group border border-border/10 hover:border-primary/30 bg-gradient-to-r from-card/80 to-card hover:shadow-lg"
                         onClick={() => handleUserSelect(conversation.user.id)}
                       >
                         <div className="relative flex-shrink-0">
-                          <Avatar className="h-10 w-10 mr-3 ring-1 ring-primary/10 group-hover:ring-primary/30 transition-all duration-200 shadow-sm">
+                          <Avatar className="h-12 w-12 mr-3 ring-1 ring-primary/10 group-hover:ring-primary/30 transition-all duration-200 shadow-sm">
                             <AvatarImage 
                               src={conversation.user.profile_image_url} 
                               className="object-cover w-full h-full transition-opacity duration-200"
@@ -385,7 +385,7 @@ const MessagesPage = () => {
                             </AvatarFallback>
                           </Avatar>
                           {isUserOnline(conversation.user.id) && (
-                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm animate-pulse" />
+                            <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full shadow-sm animate-pulse" />
                           )}
                           {conversation.unreadCount > 0 && (
                             <div className="absolute -top-0.5 -right-0.5 min-w-5 h-5 bg-gradient-to-r from-coral to-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center px-1.5 shadow-md animate-bounce">
@@ -395,8 +395,8 @@ const MessagesPage = () => {
                         </div>
                         
                         <div className="flex-1 text-left min-w-0">
-                          <div className="flex items-center justify-between mb-1">
-                            <h4 className="font-bold text-foreground group-hover:text-primary transition-colors truncate text-sm">
+                          <div className="flex items-center justify-between mb-1.5">
+                            <h4 className="font-bold text-foreground group-hover:text-primary transition-colors truncate text-base">
                               {conversation.user.name || 'User'}
                             </h4>
                             {conversation.lastMessage && (
@@ -406,7 +406,7 @@ const MessagesPage = () => {
                             )}
                           </div>
                           {conversation.lastMessage && (
-                            <p className="text-xs text-muted-foreground truncate leading-relaxed">
+                            <p className="text-sm text-muted-foreground truncate leading-relaxed">
                               {conversation.lastMessage.message}
                             </p>
                           )}
