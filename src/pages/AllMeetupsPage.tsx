@@ -225,7 +225,7 @@ const AllMeetupsPage = () => {
             placeholder="Search meetups by topic, location, or interests..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 pr-4 py-3 rounded-2xl border-primary/20 bg-gradient-to-r from-background/80 to-muted/50 focus:bg-background focus:border-primary/40 transition-all duration-200 placeholder:text-muted-foreground/60 text-base"
+            className="pl-12 pr-4 py-3 rounded-2xl border-primary/20 bg-white focus:bg-white focus:border-primary/40 transition-all duration-200 placeholder:text-muted-foreground/60 text-base"
           />
         </div>
 
@@ -234,10 +234,10 @@ const AllMeetupsPage = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                📍 Neighborhood
+                Neighborhood
               </label>
               <Select value={selectedNeighborhood} onValueChange={setSelectedNeighborhood}>
-                <SelectTrigger className="rounded-xl border-primary/20 bg-background/80 hover:border-primary/40 transition-colors">
+                <SelectTrigger className="rounded-xl border-primary/20 bg-white hover:border-primary/40 transition-colors">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-primary/20">
@@ -252,10 +252,10 @@ const AllMeetupsPage = () => {
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                💰 Price Range
+                Price Range
               </label>
               <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger className="rounded-xl border-primary/20 bg-background/80 hover:border-primary/40 transition-colors">
+                <SelectTrigger className="rounded-xl border-primary/20 bg-white hover:border-primary/40 transition-colors">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-primary/20">
@@ -272,10 +272,10 @@ const AllMeetupsPage = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                🎭 Vibe
+                Vibe
               </label>
               <Select value={moodFilter} onValueChange={setMoodFilter}>
-                <SelectTrigger className="rounded-xl border-primary/20 bg-background/80 hover:border-primary/40 transition-colors">
+                <SelectTrigger className="rounded-xl border-primary/20 bg-white hover:border-primary/40 transition-colors">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-primary/20">
@@ -290,10 +290,10 @@ const AllMeetupsPage = () => {
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-                📅 When
+                When
               </label>
               <Select value={dateFilter} onValueChange={setDateFilter}>
-                <SelectTrigger className="rounded-xl border-primary/20 bg-background/80 hover:border-primary/40 transition-colors">
+                <SelectTrigger className="rounded-xl border-primary/20 bg-white hover:border-primary/40 transition-colors">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-primary/20">
@@ -315,7 +315,7 @@ const AllMeetupsPage = () => {
                 onClick={clearFilters}
                 className="rounded-full border-primary/30 hover:bg-primary/10 hover:border-primary/60 transition-all duration-200"
               >
-                ✨ Clear All Filters
+                Clear All Filters
               </Button>
             </div>
           )}
@@ -326,7 +326,7 @@ const AllMeetupsPage = () => {
       <main className="px-6 py-6">
         <div className="mb-6 flex items-center justify-between">
           <div className="text-base font-medium text-foreground flex items-center gap-2">
-            👥 <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-bold">{filteredMeetups.length}</span> meetups found
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-bold">{filteredMeetups.length}</span> meetups found
           </div>
           {filteredMeetups.length > 0 && (
             <Button variant="ghost" size="sm" className="text-sm text-muted-foreground hover:text-primary">
@@ -344,12 +344,12 @@ const AllMeetupsPage = () => {
         ) : filteredMeetups.length === 0 ? (
           <div className="text-center py-20">
             <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-4xl">👥</span>
+              <span className="text-4xl text-primary">No meetups</span>
             </div>
             <h3 className="text-xl font-bold mb-3 text-foreground">No meetups found</h3>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">Try adjusting your filters or search terms to discover meetups with like-minded people</p>
             <Button variant="outline" onClick={clearFilters} className="rounded-full border-primary/30 hover:bg-primary/10">
-              ✨ Clear All Filters
+              Clear All Filters
             </Button>
           </div>
         ) : (
@@ -398,7 +398,7 @@ const MeetupCard = memo(({ meetup, onClick }: { meetup: any; onClick: () => void
         />
       ) : (
         <div className="w-full h-full bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center">
-          <span className="text-4xl">👥</span>
+          <span className="text-4xl text-primary">Meetup</span>
         </div>
       )}
       
@@ -423,12 +423,12 @@ const MeetupCard = memo(({ meetup, onClick }: { meetup: any; onClick: () => void
       </h3>
       {meetup.location && (
         <p className="text-xs text-muted-foreground truncate flex items-center gap-1 mb-1">
-          <span>📍</span> {meetup.location}
+          {meetup.location}
         </p>
       )}
       {meetup.date && (
         <p className="text-xs text-muted-foreground flex items-center gap-1">
-          <span>📅</span> {new Date(meetup.date).toLocaleDateString()}
+          {new Date(meetup.date).toLocaleDateString()}
         </p>
       )}
     </div>
