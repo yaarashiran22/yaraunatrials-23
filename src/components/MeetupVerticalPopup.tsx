@@ -402,22 +402,22 @@ const MeetupVerticalPopup = ({
           {/* Compact Organizer Info */}
           {displayItem.seller && (
             <div 
-              className="flex items-center gap-3 p-3 bg-muted/20 rounded-xl cursor-pointer hover:bg-muted/30 transition-all duration-200 group border border-border/30 hover:border-primary/40" 
+              className="flex items-center gap-2 p-2 bg-muted/20 rounded-lg cursor-pointer hover:bg-muted/30 transition-all duration-200 group border border-border/30 hover:border-primary/40" 
               onClick={handleViewProfile}
             >
               <img 
                 src={displayItem.seller.image} 
                 alt={displayItem.seller.name} 
-                className="w-8 h-8 rounded-full object-cover border border-primary/20 group-hover:border-primary/40 transition-colors"
+                className="w-6 h-6 rounded-full object-cover border border-primary/20 group-hover:border-primary/40 transition-colors"
               />
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground text-sm group-hover:text-primary transition-colors truncate">
+                <p className="font-medium text-foreground text-xs group-hover:text-primary transition-colors truncate">
                   {displayItem.seller.name}
                 </p>
                 <p className="text-xs text-muted-foreground">Organizer</p>
               </div>
-              <div className="p-1 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                <ChevronUp className="h-3 w-3 text-primary rotate-90" />
+              <div className="p-0.5 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <ChevronUp className="h-2.5 w-2.5 text-primary rotate-90" />
               </div>
             </div>
           )}
