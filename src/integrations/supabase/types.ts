@@ -966,6 +966,7 @@ export type Database = {
       }
       user_coupons: {
         Row: {
+          address: string | null
           business_name: string | null
           created_at: string
           description: string | null
@@ -980,6 +981,7 @@ export type Database = {
           valid_until: string | null
         }
         Insert: {
+          address?: string | null
           business_name?: string | null
           created_at?: string
           description?: string | null
@@ -994,6 +996,7 @@ export type Database = {
           valid_until?: string | null
         }
         Update: {
+          address?: string | null
           business_name?: string | null
           created_at?: string
           description?: string | null

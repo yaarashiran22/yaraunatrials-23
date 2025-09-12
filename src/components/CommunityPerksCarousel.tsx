@@ -203,7 +203,15 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
 
                   {/* Location and Valid Until Info */}
                   <div className="space-y-2">
-                    {(item as any).neighborhood && (
+                    {(item as any).address && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center">
+                          <MapPin className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium">{(item as any).address}</span>
+                      </div>
+                    )}
+                    {(item as any).neighborhood && !(item as any).address && (
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <div className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center">
                           <MapPin className="w-4 h-4" />

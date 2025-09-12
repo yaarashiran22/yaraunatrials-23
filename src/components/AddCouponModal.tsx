@@ -39,6 +39,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
     discount_amount: "",
     valid_until: "",
     neighborhood: "",
+    address: "",
     image_url: "",
   });
 
@@ -168,6 +169,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
       discount_amount: "",
       valid_until: "",
       neighborhood: "",
+      address: "",
       image_url: "",
     });
     setImagePreview(null);
@@ -344,6 +346,21 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     className="h-12 text-base bg-white text-gray-900 placeholder:text-gray-500 border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
+              </div>
+
+              {/* Address - Full Width */}
+              <div className="space-y-3">
+                <Label htmlFor="address" className="text-base font-semibold text-foreground flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-primary" />
+                  Specific Address
+                </Label>
+                <Input
+                  id="address"
+                  value={formData.address}
+                  onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                  placeholder="123 Main Street, Downtown"
+                  className="h-12 text-base bg-white text-gray-900 placeholder:text-gray-500 border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
+                />
               </div>
             </div>
 
