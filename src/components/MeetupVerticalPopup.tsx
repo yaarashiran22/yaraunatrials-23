@@ -410,8 +410,8 @@ const MeetupVerticalPopup = ({
             variant={isLookingForCompanion ? "default" : "outline"}
             className={`w-full h-12 rounded-2xl font-semibold transition-all duration-200 ${
               isLookingForCompanion 
-                ? 'bg-gradient-to-r from-primary to-secondary text-primary-foreground' 
-                : 'border-2 border-amber-500 hover:bg-amber-50 text-amber-600'
+                ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                : 'border-2 border-primary/20 hover:bg-primary/5 text-foreground hover:border-primary/30'
             }`}
           >
             <Users className="h-4 w-4 mr-2" />
