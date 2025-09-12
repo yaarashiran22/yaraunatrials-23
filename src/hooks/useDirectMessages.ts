@@ -40,8 +40,11 @@ export const useDirectMessages = () => {
 
   useEffect(() => {
     if (user) {
+      console.log('Current user:', { id: user.id, email: user.email });
       fetchAllUsers();
       fetchConversations();
+    } else {
+      console.log('No user authenticated');
     }
   }, [user]);
 
@@ -50,6 +53,7 @@ export const useDirectMessages = () => {
     
     setUsersLoading(true);
     try {
+      console.log('Fetching all users...');
       const { data, error } = await supabase
         .from('profiles')
         .select('id, name, email, profile_image_url')
@@ -58,18 +62,31 @@ export const useDirectMessages = () => {
 
       if (error) {
         console.error('Error fetching users:', error);
+        // Log more detailed error information
+        console.error('Error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         toast({
           title: "Error",
-          description: "Failed to load users",
+          description: `Failed to load users: ${error.message}`,
           variant: "destructive",
         });
         return;
       }
 
-      console.log('Fetched users:', data?.length, 'users');
+      console.log('Fetched users successfully:', data?.length, 'users found');
+      console.log('Sample users:', data?.slice(0, 3));
       setAllUsers(data || []);
     } catch (err) {
       console.error('Unexpected error fetching users:', err);
+      toast({
+        title: "Error",
+        description: "Unexpected error occurred while loading users",
+        variant: "destructive",
+      });
     } finally {
       setUsersLoading(false);
     }

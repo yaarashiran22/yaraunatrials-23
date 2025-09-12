@@ -87,7 +87,14 @@ const MessagesPage = () => {
   };
 
   // Filter users based on search query
-  const filteredUsers = allUsers.filter(user => user.name?.toLowerCase().includes(searchQuery.toLowerCase()) || user.email?.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredUsers = allUsers.filter(user => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    const nameMatch = user.name?.toLowerCase().includes(query);
+    const emailMatch = user.email?.toLowerCase().includes(query);
+    console.log(`Filtering user ${user.name}:`, { nameMatch, emailMatch, query });
+    return nameMatch || emailMatch;
+  });
   const getSelectedUser = () => {
     if (!selectedUserId) return null;
     return allUsers.find(u => u.id === selectedUserId) || conversations.find(c => c.user.id === selectedUserId)?.user;
@@ -200,16 +207,32 @@ const MessagesPage = () => {
                 {usersLoading ? <div className="text-center py-16 text-muted-foreground">
                     <div className="h-10 w-10 animate-spin rounded-full border-3 border-primary/30 border-t-primary mx-auto mb-4" />
                     <p className="text-base font-medium">Finding people...</p>
+                  </div> : allUsers.length === 0 ? <div className="text-center py-16 text-muted-foreground">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                      <Users className="h-8 w-8 text-primary/60" />
+                    </div>
+                    <p className="font-semibold text-foreground mb-2 text-lg">No users found</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {`Total users available: ${allUsers.length}`}
+                    </p>
+                    <Button onClick={() => window.location.reload()} variant="outline" size="sm">
+                      Refresh
+                    </Button>
                   </div> : filteredUsers.length === 0 ? <div className="text-center py-16 text-muted-foreground">
                     <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
                       <Users className="h-8 w-8 text-primary/60" />
                     </div>
                     <p className="font-semibold text-foreground mb-2 text-lg">
-                      {searchQuery ? 'No matches found' : 'No users available'}
+                      {searchQuery ? `No matches for "${searchQuery}"` : 'No users available'}
                     </p>
-                    <p className="text-sm text-muted-foreground">
-                      {searchQuery ? 'Try a different search term' : 'Check back later'}
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {searchQuery ? `Found ${allUsers.length} total users but none match your search` : `We have ${allUsers.length} users total`}
                     </p>
+                    {searchQuery && (
+                      <Button onClick={() => setSearchQuery('')} variant="outline" size="sm">
+                        Clear Search
+                      </Button>
+                    )}
                   </div> : filteredUsers.map(profile => <Button key={profile.id} variant="ghost" className="w-full justify-start p-4 h-auto rounded-2xl hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 transition-all duration-300 group border border-transparent hover:border-primary/20 hover:shadow-lg hover:shadow-primary/10" onClick={() => handleUserSelect(profile.id)}>
                       <div className="relative">
                         <Avatar className="h-12 w-12 mr-4 ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all duration-300 group-hover:scale-105">
