@@ -138,7 +138,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
               <CardContent className="p-0 space-y-0 relative">
                 {/* Header Image Section */}
                 {item.image_url ? (
-                  <div className="relative overflow-hidden h-44">
+                  <div className="relative overflow-hidden h-56">
                     <img 
                       src={item.image_url} 
                       alt={item.business_name || item.title}
@@ -168,7 +168,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                   </div>
                 ) : (
                   /* No Image Header */
-                  <div className="p-6 pb-4 bg-gradient-to-br from-primary/5 to-secondary/5 h-44 flex flex-col justify-center relative">
+                  <div className="p-6 pb-4 bg-gradient-to-br from-primary/5 to-secondary/5 h-56 flex flex-col justify-center relative">
                     {/* Discount Badge - Top Right */}
                     {item.discount_amount && (
                       <div className="absolute top-4 right-4">
