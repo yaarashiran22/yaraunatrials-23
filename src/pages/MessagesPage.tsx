@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ArrowLeft, Send, Trash2, Users, MessageCircle, Search, MoreHorizontal, Phone, Video, X } from 'lucide-react';
+import { ArrowLeft, Send, Trash2, Users, MessageCircle, Search, MoreHorizontal, Phone, Video, X, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { format } from 'date-fns';
@@ -192,22 +192,22 @@ const MessagesPage = () => {
                 >
                   <ArrowLeft className="h-6 w-6" />
                 </Button>
-                <div className="py-2">
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-primary-600 to-secondary text-transparent bg-clip-text mb-1">
-                    Messages
-                  </h1>
-                  <p className="text-sm text-muted-foreground">Stay connected</p>
-                </div>
+              </div>
+              
+              <div className="flex-1 text-center">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-primary-600 to-secondary text-transparent bg-clip-text mb-1">
+                  Messages
+                </h1>
+                <p className="text-sm text-muted-foreground">Stay connected</p>
               </div>
               
               <Button
                 variant="default"
                 size="sm"
                 onClick={() => setShowUserSelect(true)}
-                className="gap-2 bg-primary hover:bg-primary/90 shadow-sm rounded-full px-6 h-11"
+                className="bg-primary hover:bg-primary/90 shadow-sm rounded-full h-11 w-11 p-0"
               >
-                <Users className="h-5 w-5" />
-                New Chat
+                <Plus className="h-5 w-5" />
               </Button>
             </div>
           </div>
@@ -291,9 +291,9 @@ const MessagesPage = () => {
                             src={profile.profile_image_url} 
                             className="object-cover w-full h-full"
                           />
-                          <AvatarFallback className="bg-gradient-to-br from-primary/30 to-secondary/30 text-sm font-bold text-white">
-                            {(profile.name || profile.email)?.slice(0, 2).toUpperCase()}
-                          </AvatarFallback>
+                              <AvatarFallback className="bg-gradient-to-br from-primary/30 to-secondary/30 text-sm font-bold text-foreground">
+                                {(profile.name || profile.email)?.slice(0, 2).toUpperCase()}
+                              </AvatarFallback>
                         </Avatar>
                         {isUserOnline(profile.id) && (
                           <div className="absolute -bottom-1 -right-2 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full shadow-sm animate-pulse" />
@@ -380,7 +380,7 @@ const MessagesPage = () => {
                               className="object-cover w-full h-full transition-opacity duration-200"
                               onError={() => handleAvatarError(conversation.user.id)}
                             />
-                            <AvatarFallback className="bg-gradient-to-br from-primary/30 to-secondary/30 font-bold text-white">
+                            <AvatarFallback className="bg-gradient-to-br from-primary/30 to-secondary/30 font-bold text-foreground">
                               {(conversation.user.name || conversation.user.email)?.slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
