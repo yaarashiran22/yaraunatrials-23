@@ -295,7 +295,7 @@ const DiscoverPage = () => {
         {/* Map Section - Full Screen */}
         <section className="flex-1">
           {/* Map Container */}
-          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[calc(100vh-200px)] min-h-[500px] z-10">
+          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[calc(100vh-140px)] min-h-[600px] z-10">
             
             {/* Floating Open to Hang Button - Bottom Right of Map */}
             {user && (
