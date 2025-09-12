@@ -322,10 +322,10 @@ const Index = () => {
             </h2>
             <div className="flex items-center gap-2">
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 size="sm" 
                 onClick={() => navigate('/all-meetups')}
-                className="text-sm px-3 py-1.5 h-7 text-foreground/80 hover:text-foreground hover:bg-accent/50"
+                className="text-sm font-medium px-4 py-2 h-8 text-foreground border-border hover:bg-accent"
               >
                 All
               </Button>
