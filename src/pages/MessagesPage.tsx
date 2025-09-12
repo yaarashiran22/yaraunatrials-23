@@ -196,7 +196,7 @@ const MessagesPage = () => {
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-primary-600 to-secondary text-transparent bg-clip-text mb-1">
                     Messages
                   </h1>
-                  <p className="text-sm text-muted-foreground">Stay connected with your community</p>
+                  <p className="text-sm text-muted-foreground">Stay connected</p>
                 </div>
               </div>
               
