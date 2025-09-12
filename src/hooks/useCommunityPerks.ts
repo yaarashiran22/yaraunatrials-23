@@ -35,12 +35,16 @@ const fetchCommunityPerks = async (userInterests?: string[]) => {
     
     let filteredData = data || [];
     
-    console.log('🏪 Total perks before filtering:', filteredData.length);
+    console.log('🏪 Total perks before prioritizing:', filteredData.length);
     
-    // Filter by interests if provided
+    // Prioritize by interests if provided (don't filter out, just reorder)
     if (userInterests && userInterests.length > 0) {
-      console.log('🎯 Filtering perks by interests:', userInterests);
-      filteredData = (data || []).filter(perk => {
+      console.log('🎯 Prioritizing perks by interests:', userInterests);
+      
+      const matchingPerks: any[] = [];
+      const nonMatchingPerks: any[] = [];
+      
+      (data || []).forEach(perk => {
         const perkText = `${perk.title} ${perk.description} ${perk.business_name}`.toLowerCase();
         const matches = userInterests.some(interest => {
           // Extract keywords from interest (remove emoji and common words)
@@ -58,9 +62,17 @@ const fetchCommunityPerks = async (userInterests?: string[]) => {
           
           return hasMatch;
         });
-        return matches;
+        
+        if (matches) {
+          matchingPerks.push(perk);
+        } else {
+          nonMatchingPerks.push(perk);
+        }
       });
-      console.log('🏪 Perks after interest filtering:', filteredData.length);
+      
+      // Put matching perks first, then non-matching perks
+      filteredData = [...matchingPerks, ...nonMatchingPerks];
+      console.log(`🏪 Perks prioritized: ${matchingPerks.length} matching interests first, ${nonMatchingPerks.length} others after`);
     }
     
     return filteredData;

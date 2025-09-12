@@ -100,11 +100,15 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean,
 
   console.log('📅 Total events before filtering:', events.length);
 
-  // Filter by interests if provided
-  let filteredEvents = events;
+  // Prioritize by interests if provided (don't filter out, just reorder)
+  let prioritizedEvents: Event[] = [];
   if (userInterests && userInterests.length > 0) {
-    console.log('🎯 Filtering by interests:', userInterests);
-    filteredEvents = events.filter(event => {
+    console.log('🎯 Prioritizing by interests:', userInterests);
+    
+    const matchingEvents: Event[] = [];
+    const nonMatchingEvents: Event[] = [];
+    
+    events.forEach(event => {
       const eventText = `${event.title} ${event.description || ''}`.toLowerCase();
       const matches = userInterests.some(interest => {
         // Extract keywords from interest (remove emoji and common words)
@@ -122,16 +126,36 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean,
         
         return hasMatch;
       });
-      return matches;
+      
+      // Cast to Event type for proper typing
+      const typedEvent = {
+        ...event,
+        event_type: event.event_type as 'event' | 'meetup'
+      } as Event;
+      
+      if (matches) {
+        matchingEvents.push(typedEvent);
+      } else {
+        nonMatchingEvents.push(typedEvent);
+      }
     });
-    console.log('🎯 Events after interest filtering:', filteredEvents.length);
+    
+    // Put matching events first, then non-matching events
+    prioritizedEvents = [...matchingEvents, ...nonMatchingEvents];
+    console.log(`🎯 Events prioritized: ${matchingEvents.length} matching interests first, ${nonMatchingEvents.length} others after`);
+  } else {
+    // No interests provided, just convert to proper Event type
+    prioritizedEvents = events.map(event => ({
+      ...event,
+      event_type: event.event_type as 'event' | 'meetup'
+    }) as Event);
   }
 
   // Fetch uploader profiles
-  const userIds = filteredEvents.map(event => event.user_id);
+  const userIds = prioritizedEvents.map(event => event.user_id);
   
   if (userIds.length === 0) {
-    console.log('❌ No events after filtering');
+    console.log('❌ No events after prioritizing');
     return [];
   }
   
@@ -147,9 +171,8 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean,
     return acc;
   }, {});
 
-  return filteredEvents.map(event => ({
+  return prioritizedEvents.map(event => ({
     ...event,
-    event_type: event.event_type as 'event' | 'meetup',
     uploader: {
       name: profilesMap[event.user_id]?.name || 'משתמש',
       image: profilesMap[event.user_id]?.profile_image_url || '/lovable-uploads/c7d65671-6211-412e-af1d-6e5cfdaa248e.png',
