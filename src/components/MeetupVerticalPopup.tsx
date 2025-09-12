@@ -389,6 +389,40 @@ const MeetupVerticalPopup = ({
             )}
           </div>
 
+          {/* Meetup Details */}
+          <div className="space-y-3 p-4 bg-muted/30 rounded-2xl">
+            {displayItem.price && displayItem.price !== 'Free' && (
+              <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+                <div className="h-4 w-4 rounded-full bg-coral flex items-center justify-center text-xs text-white font-bold">₪</div>
+                <span>{displayItem.price}</span>
+              </div>
+            )}
+            {(!displayItem.price || displayItem.price === 'Free') && (
+              <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+                <div className="h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center text-xs text-white font-bold">!</div>
+                <span>Free Meetup</span>
+              </div>
+            )}
+            {itemDetails?.location && (
+              <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+                <MapPin className="h-4 w-4 text-primary" />
+                <span>{locationMapping[itemDetails.location] || itemDetails.location}</span>
+              </div>
+            )}
+            {itemDetails?.created_at && (
+              <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+                <Calendar className="h-4 w-4 text-primary" />
+                <span>
+                  Created {new Date(itemDetails.created_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </span>
+              </div>
+            )}
+          </div>
+
           {/* Location and Date */}
           {itemDetails && (
             <div className="space-y-3 p-4 bg-muted/30 rounded-2xl">
