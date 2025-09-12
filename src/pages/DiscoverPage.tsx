@@ -297,9 +297,9 @@ const DiscoverPage = () => {
           {/* Map Container */}
           <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[calc(100vh-200px)] min-h-[500px] z-10">
             
-            {/* Floating Open to Hang Button - On Top of Map */}
+            {/* Floating Open to Hang Button - Bottom Right of Map */}
             {user && (
-              <div className="absolute top-4 left-4 z-20">
+              <div className="absolute bottom-4 right-4 z-20">
                 <OpenToHangButton 
                   size="icon" 
                   shareText="Hangout" 
