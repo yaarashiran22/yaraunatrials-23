@@ -95,11 +95,16 @@ const DiscoverPage = () => {
   const addUserLocationMarkers = (usersToShow = userLocations) => {
     if (!mapInstanceRef.current) return;
 
-    // Filter out Juan and Juani from the user locations
+    // Filter out Juan and Juani from the user locations - also filter out the current user
     let displayUsers = usersToShow.filter(userLocation => {
       const profile = userLocation.profile as any;
       const name = profile?.name?.toLowerCase() || '';
-      return !name.includes('juan') && !name.includes('juani');
+      const userId = profile?.id || userLocation.user_id;
+      
+      // Filter out Juan/Juani and current user
+      return !name.includes('juan') && 
+             !name.includes('juani') && 
+             userId !== user?.id;
     });
 
     console.log('Adding user location markers, count:', displayUsers.length, 'isOpenToHang:', isOpenToHang);
