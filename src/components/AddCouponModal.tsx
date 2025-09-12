@@ -189,7 +189,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
             </div>
             <div>
               <h2 className="font-bold text-foreground text-xl">Add Community Coupon</h2>
-              <p className="text-base text-muted-foreground font-normal mt-1">Create an exclusive deal for your community</p>
+              <p className="text-base text-white font-normal mt-1">Create an exclusive deal for your community</p>
             </div>
           </SimplifiedModalTitle>
         </SimplifiedModalHeader>
