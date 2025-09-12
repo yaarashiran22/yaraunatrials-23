@@ -25,7 +25,7 @@ export interface Event {
   };
 }
 
-const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean, userId?: string): Promise<Event[]> => {
+const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean, userId?: string, userInterests?: string[]): Promise<Event[]> => {
   let query = supabase
     .from('events')
     .select(`
@@ -95,8 +95,31 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean,
     return [];
   }
 
+  // Filter by interests if provided
+  let filteredEvents = events;
+  if (userInterests && userInterests.length > 0) {
+    filteredEvents = events.filter(event => {
+      const eventText = `${event.title} ${event.description || ''}`.toLowerCase();
+      return userInterests.some(interest => {
+        // Extract keywords from interest (remove emoji and common words)
+        const keywords = interest.toLowerCase()
+          .replace(/[^\w\s]/g, '') // Remove emojis and special chars
+          .split('&')[0] // Take first part if multiple interests
+          .trim();
+        
+        return eventText.includes(keywords) || 
+               eventText.includes(keywords.split(' ')[0]); // Check first word too
+      });
+    });
+  }
+
   // Fetch uploader profiles
-  const userIds = events.map(event => event.user_id);
+  const userIds = filteredEvents.map(event => event.user_id);
+  
+  if (userIds.length === 0) {
+    return [];
+  }
+  
   const { data: profiles, error: profilesError } = await supabase
     .from('profiles')
     .select('id, name, profile_image_url')
@@ -109,7 +132,7 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean,
     return acc;
   }, {});
 
-  return events.map(event => ({
+  return filteredEvents.map(event => ({
     ...event,
     event_type: event.event_type as 'event' | 'meetup',
     uploader: {
@@ -124,9 +147,25 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean,
 export const useEvents = (eventType?: 'event' | 'meetup', filterActive?: boolean) => {
   const { user } = useAuth();
   
+  // Get user profile with interests
+  const { data: userProfile } = useQuery({
+    queryKey: ['profile', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('interests')
+        .eq('id', user.id)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user?.id,
+  });
+  
   const queryResult = useQuery({
-    queryKey: ['events', eventType, filterActive, user?.id],
-    queryFn: () => fetchEvents(eventType, filterActive, user?.id),
+    queryKey: ['events', eventType, filterActive, user?.id, userProfile?.interests],
+    queryFn: () => fetchEvents(eventType, filterActive, user?.id, userProfile?.interests || []),
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
     enabled: !filterActive || !!user?.id, // Only fetch filtered events if user is logged in

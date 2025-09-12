@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Paperclip, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import InterestsSelector from "@/components/InterestsSelector";
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -26,6 +27,7 @@ const LoginPage = () => {
     bio: '',
     instagram: ''
   });
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
   const handleInputChange = (field: string, value: string) => {
@@ -118,7 +120,8 @@ const LoginPage = () => {
           profile_image_url: profileImage,
           username: formData.instagram ? `https://instagram.com/${formData.instagram}` : null,
           show_in_search: true,
-          is_private: false
+          is_private: false,
+          interests: selectedInterests
         };
 
         const { error: profileError } = await supabase
@@ -350,6 +353,15 @@ const LoginPage = () => {
                   className="w-full h-12 text-left bg-white/80 border-coral-200/40 focus:border-coral focus:ring-coral/20 rounded-lg"
                 />
               </div>
+            </div>
+
+            {/* Interests Section */}
+            <div className="pt-6">
+              <InterestsSelector
+                selectedInterests={selectedInterests}
+                onChange={setSelectedInterests}
+                maxInterests={5}
+              />
             </div>
 
             {/* Profile Photo Section */}

@@ -7,6 +7,7 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import InterestsSelector from "@/components/InterestsSelector";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ const RegisterPage = () => {
     tiktok: '',
     linkedin: ''
   });
+  
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -89,7 +92,8 @@ const RegisterPage = () => {
           profile_image_url: profileImage,
           username: formData.instagram ? `https://instagram.com/${formData.instagram}` : null,
           show_in_search: true,
-          is_private: false
+          is_private: false,
+          interests: selectedInterests
         };
 
         const { error: profileError } = await supabase
@@ -253,6 +257,15 @@ const RegisterPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Interests Section */}
+          <div className="bg-card rounded-2xl shadow-lg p-6 mb-6">
+            <InterestsSelector
+              selectedInterests={selectedInterests}
+              onChange={setSelectedInterests}
+              maxInterests={5}
+            />
           </div>
 
           {/* Social Networks Section */}
