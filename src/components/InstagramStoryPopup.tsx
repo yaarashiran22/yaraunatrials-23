@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Download, X, Instagram, Sparkles, Share2, CheckCircle, Zap } from "lucide-react";
+import { Download, X, Instagram, Sparkles, Share2, CheckCircle, Zap, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface InstagramStoryPopupProps {
@@ -104,6 +104,14 @@ export const InstagramStoryPopup = ({
           
           {/* Header with Instagram branding */}
           <DialogHeader className="relative p-5 pb-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="absolute -left-2 -top-2 h-8 w-8 rounded-full p-0 backdrop-blur-sm bg-black/10 hover:bg-primary/20 hover:text-primary border border-white/10 transition-all duration-300 hover:scale-110 z-10"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
             <Button
               variant="ghost"
               size="sm"
