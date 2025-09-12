@@ -18,6 +18,8 @@ export interface CommunityPerk {
 }
 
 const fetchCommunityPerks = async (userInterests?: string[]) => {
+  console.log('🏷️ Fetching community perks with interests:', userInterests);
+  
   try {
     const { data, error } = await supabase
       .from('community_perks')
@@ -33,21 +35,32 @@ const fetchCommunityPerks = async (userInterests?: string[]) => {
     
     let filteredData = data || [];
     
+    console.log('🏪 Total perks before filtering:', filteredData.length);
+    
     // Filter by interests if provided
     if (userInterests && userInterests.length > 0) {
+      console.log('🎯 Filtering perks by interests:', userInterests);
       filteredData = (data || []).filter(perk => {
         const perkText = `${perk.title} ${perk.description} ${perk.business_name}`.toLowerCase();
-        return userInterests.some(interest => {
+        const matches = userInterests.some(interest => {
           // Extract keywords from interest (remove emoji and common words)
           const keywords = interest.toLowerCase()
             .replace(/[^\w\s]/g, '') // Remove emojis and special chars
             .split('&')[0] // Take first part if multiple interests
             .trim();
           
-          return perkText.includes(keywords) || 
+          const hasMatch = perkText.includes(keywords) || 
                  perkText.includes(keywords.split(' ')[0]); // Check first word too
+                 
+          if (hasMatch) {
+            console.log(`✅ Perk match found: "${perk.title}" matches interest "${interest}"`);
+          }
+          
+          return hasMatch;
         });
+        return matches;
       });
+      console.log('🏪 Perks after interest filtering:', filteredData.length);
     }
     
     return filteredData;

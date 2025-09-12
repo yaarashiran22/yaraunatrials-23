@@ -26,6 +26,8 @@ export interface Event {
 }
 
 const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean, userId?: string, userInterests?: string[]): Promise<Event[]> => {
+  console.log('🔍 Fetching events with interests:', userInterests);
+  
   let query = supabase
     .from('events')
     .select(`
@@ -92,31 +94,44 @@ const fetchEvents = async (eventType?: 'event' | 'meetup', filterType?: boolean,
   if (eventsError) throw eventsError;
 
   if (!events || events.length === 0) {
+    console.log('❌ No events found');
     return [];
   }
+
+  console.log('📅 Total events before filtering:', events.length);
 
   // Filter by interests if provided
   let filteredEvents = events;
   if (userInterests && userInterests.length > 0) {
+    console.log('🎯 Filtering by interests:', userInterests);
     filteredEvents = events.filter(event => {
       const eventText = `${event.title} ${event.description || ''}`.toLowerCase();
-      return userInterests.some(interest => {
+      const matches = userInterests.some(interest => {
         // Extract keywords from interest (remove emoji and common words)
         const keywords = interest.toLowerCase()
           .replace(/[^\w\s]/g, '') // Remove emojis and special chars
           .split('&')[0] // Take first part if multiple interests
           .trim();
         
-        return eventText.includes(keywords) || 
+        const hasMatch = eventText.includes(keywords) || 
                eventText.includes(keywords.split(' ')[0]); // Check first word too
+        
+        if (hasMatch) {
+          console.log(`✅ Match found: "${event.title}" matches interest "${interest}"`);
+        }
+        
+        return hasMatch;
       });
+      return matches;
     });
+    console.log('🎯 Events after interest filtering:', filteredEvents.length);
   }
 
   // Fetch uploader profiles
   const userIds = filteredEvents.map(event => event.user_id);
   
   if (userIds.length === 0) {
+    console.log('❌ No events after filtering');
     return [];
   }
   
