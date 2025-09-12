@@ -333,6 +333,24 @@ const MeetupVerticalPopup = ({
             </Button>
           </div>
 
+          {/* Organizer Info at Bottom of Image */}
+          {displayItem.seller && (
+            <div className="absolute bottom-4 left-4 right-4">
+              <div className="flex items-center gap-3 bg-black/40 backdrop-blur-sm rounded-full px-4 py-2">
+                <img 
+                  src={displayItem.seller.image} 
+                  alt={displayItem.seller.name} 
+                  className="w-8 h-8 rounded-full object-cover border-2 border-white/30"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-white text-sm truncate">
+                    {displayItem.seller.name}
+                  </p>
+                  <p className="text-xs text-white/80">Organizer</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Progress Indicators */}
@@ -381,27 +399,8 @@ const MeetupVerticalPopup = ({
                     minute: '2-digit'
                   })}
                 </span>
-          </div>
-
-          {/* Organizer Info at Bottom of Image */}
-          {displayItem.seller && (
-            <div className="absolute bottom-4 left-4 right-4">
-              <div className="flex items-center gap-3 bg-black/40 backdrop-blur-sm rounded-full px-4 py-2">
-                <img 
-                  src={displayItem.seller.image} 
-                  alt={displayItem.seller.name} 
-                  className="w-8 h-8 rounded-full object-cover border-2 border-white/30"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-white text-sm truncate">
-                    {displayItem.seller.name}
-                  </p>
-                  <p className="text-xs text-white/80">Organizer</p>
-                </div>
               </div>
             </div>
-          )}
-        </div>
           )}
 
           {/* Find Companion */}
