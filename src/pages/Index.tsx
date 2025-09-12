@@ -325,7 +325,7 @@ const Index = () => {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => navigate('/all-meetups')}
-                className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground"
+                className="text-sm px-3 py-1.5 h-7 text-foreground/80 hover:text-foreground hover:bg-accent/50"
               >
                 All
               </Button>
