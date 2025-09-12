@@ -278,31 +278,96 @@ const AllMeetupsPage = () => {
     </div>;
 };
 
-// Memoized MeetupCard component for better performance
+// Memoized MeetupCard component with enhanced UI
 const MeetupCard = memo(({
   meetup,
   onClick
 }: {
   meetup: any;
   onClick: () => void;
-}) => <div onClick={onClick} className="cursor-pointer bg-card rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
-    <div className="aspect-[3/4] w-full">
-      {meetup.image_url ? <img src={meetup.image_url} alt={meetup.title} className="w-full h-full object-cover" loading="lazy" /> : <div className="w-full h-full bg-muted flex items-center justify-center">
-          <span className="text-lg">👥</span>
-        </div>}
+}) => (
+  <div 
+    onClick={onClick} 
+    className="group cursor-pointer bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-xl hover:shadow-primary/10 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 relative"
+  >
+    {/* Image Container with Overlay */}
+    <div className="aspect-[3/4] w-full relative overflow-hidden">
+      {meetup.image_url ? (
+        <img 
+          src={meetup.image_url} 
+          alt={meetup.title} 
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+          loading="lazy" 
+        />
+      ) : (
+        <div className="w-full h-full bg-gradient-to-br from-muted via-muted/80 to-muted/60 flex items-center justify-center relative">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center backdrop-blur-sm">
+            <div className="text-2xl font-bold text-primary">👥</div>
+          </div>
+        </div>
+      )}
+      
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
+      {/* Price Badge */}
+      <div className="absolute top-3 right-3">
+        {meetup.price && meetup.price > 0 ? (
+          <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-sm">
+            ₪{meetup.price}
+          </div>
+        ) : (
+          <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-sm">
+            Free
+          </div>
+        )}
+      </div>
+      
+      {/* Hover Action Indicator */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
+        <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-xl">
+          <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div className="p-2">
-      <h3 className="font-semibold text-xs mb-1 truncate leading-tight">
+    
+    {/* Enhanced Content Section */}
+    <div className="p-4 space-y-2">
+      <h3 className="font-bold text-sm leading-tight text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
         {meetup.title}
       </h3>
-      {meetup.location && <p className="text-[10px] text-muted-foreground truncate">
-          📍 {meetup.location}
-        </p>}
-      {meetup.price && meetup.price > 0 ? <p className="text-[10px] font-medium text-primary mt-1">
-          ₪{meetup.price}
-        </p> : <p className="text-[10px] font-medium text-green-600 mt-1">
-          Free
-        </p>}
+      
+      {meetup.location && (
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="w-3 h-3 rounded-full bg-muted flex items-center justify-center">
+            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+          </div>
+          <p className="truncate flex-1">{meetup.location}</p>
+        </div>
+      )}
+      
+      {/* Enhanced Metadata */}
+      <div className="flex items-center justify-between pt-1">
+        <div className="flex items-center gap-1">
+          <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+          <span className="text-[10px] text-green-600 font-medium">Available</span>
+        </div>
+        
+        {/* Join Button */}
+        <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+          <div className="bg-primary/10 hover:bg-primary/20 text-primary px-2 py-1 rounded-lg text-[10px] font-bold transition-colors">
+            Join
+          </div>
+        </div>
+      </div>
     </div>
-  </div>);
+    
+    {/* Subtle Border Glow Effect */}
+    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+      <div className="absolute inset-0 rounded-2xl border-2 border-primary/20 shadow-lg shadow-primary/10"></div>
+    </div>
+  </div>
+));
 export default AllMeetupsPage;
