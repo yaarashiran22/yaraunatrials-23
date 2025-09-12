@@ -181,33 +181,33 @@ const MessagesPage = () => {
         </div>
       ) : (
         <div className="sticky top-0 z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
-          <div className="px-6 py-6 lg:px-6">
+          <div className="px-4 py-3 lg:px-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => navigate('/')}
-                  className="h-12 w-12 rounded-full hover:bg-accent/50 transition-all duration-200"
+                  className="h-10 w-10 rounded-full hover:bg-accent/50 transition-all duration-200"
                 >
-                  <ArrowLeft className="h-6 w-6" />
+                  <ArrowLeft className="h-5 w-5" />
                 </Button>
               </div>
               
               <div className="flex-1 text-center">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-primary-600 to-secondary text-transparent bg-clip-text mb-1">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-primary via-primary-600 to-secondary text-transparent bg-clip-text">
                   Messages
                 </h1>
-                <p className="text-sm text-muted-foreground">Stay connected</p>
+                <p className="text-xs text-muted-foreground">Stay connected</p>
               </div>
               
               <Button
                 variant="default"
                 size="sm"
                 onClick={() => setShowUserSelect(true)}
-                className="bg-primary hover:bg-primary/90 shadow-sm rounded-full h-11 w-11 p-0"
+                className="bg-primary hover:bg-primary/90 shadow-sm rounded-full h-10 w-10 p-0"
               >
-                <Plus className="h-5 w-5" />
+                <Plus className="h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -370,11 +370,11 @@ const MessagesPage = () => {
                     >
                       <Button
                         variant="ghost"
-                        className="w-full justify-start p-5 h-auto rounded-2xl hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 transition-all duration-300 group border border-border/10 hover:border-primary/30 bg-gradient-to-r from-card/80 to-card hover:shadow-xl"
+                        className="w-full justify-start p-3 h-auto rounded-xl hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 transition-all duration-300 group border border-border/10 hover:border-primary/30 bg-gradient-to-r from-card/80 to-card hover:shadow-lg"
                         onClick={() => handleUserSelect(conversation.user.id)}
                       >
                         <div className="relative flex-shrink-0">
-                          <Avatar className="h-14 w-14 mr-4 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-200 shadow-lg">
+                          <Avatar className="h-10 w-10 mr-3 ring-1 ring-primary/10 group-hover:ring-primary/30 transition-all duration-200 shadow-sm">
                             <AvatarImage 
                               src={conversation.user.profile_image_url} 
                               className="object-cover w-full h-full transition-opacity duration-200"
@@ -385,28 +385,28 @@ const MessagesPage = () => {
                             </AvatarFallback>
                           </Avatar>
                           {isUserOnline(conversation.user.id) && (
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full shadow-sm animate-pulse" />
+                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm animate-pulse" />
                           )}
                           {conversation.unreadCount > 0 && (
-                            <div className="absolute -top-1 -right-1 min-w-6 h-6 bg-gradient-to-r from-coral to-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center px-2 shadow-lg animate-bounce">
+                            <div className="absolute -top-0.5 -right-0.5 min-w-5 h-5 bg-gradient-to-r from-coral to-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center px-1.5 shadow-md animate-bounce">
                               {conversation.unreadCount}
                             </div>
                           )}
                         </div>
                         
                         <div className="flex-1 text-left min-w-0">
-                          <div className="flex items-center justify-between mb-2">
-                            <h4 className="font-bold text-foreground group-hover:text-primary transition-colors truncate text-base">
+                          <div className="flex items-center justify-between mb-1">
+                            <h4 className="font-bold text-foreground group-hover:text-primary transition-colors truncate text-sm">
                               {conversation.user.name || 'User'}
                             </h4>
                             {conversation.lastMessage && (
-                              <span className="text-xs text-muted-foreground bg-gradient-to-r from-muted/60 to-muted/40 px-3 py-1.5 rounded-full flex-shrink-0 shadow-sm">
+                              <span className="text-xs text-muted-foreground bg-gradient-to-r from-muted/60 to-muted/40 px-2 py-1 rounded-full flex-shrink-0 shadow-sm">
                                 {format(new Date(conversation.lastMessage.created_at), 'MMM d')}
                               </span>
                             )}
                           </div>
                           {conversation.lastMessage && (
-                            <p className="text-sm text-muted-foreground truncate leading-relaxed">
+                            <p className="text-xs text-muted-foreground truncate leading-relaxed">
                               {conversation.lastMessage.message}
                             </p>
                           )}

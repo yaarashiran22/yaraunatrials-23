@@ -284,55 +284,32 @@ const DiscoverPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-20 flex flex-col">
       <Header 
         title="Discover"
         onNeighborhoodChange={handleNeighborhoodChange}
       />
       
-      <main className={`${user ? 'px-4 py-4 space-y-4' : 'px-4 py-2 space-y-4'} max-w-md mx-auto lg:max-w-none`}>
+      <main className={`${user ? 'px-0 py-0' : 'px-4 py-2 space-y-4'} max-w-md mx-auto lg:max-w-none flex-1`}>
         
-        {/* Share Location Section */}
-        <section className="text-center">
-          {!user && (
-            <div className="mb-6">
-              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                Find people in the same mood as you to hang out with
-              </p>
-            </div>
-          )}
-          
-          {user && (
-            <>
-              {/* Title and description - Only shown on first visit */}
-              {isFirstVisit && (
-                <div className="mb-3">
-                  <h2 className="title-section mb-1 text-coral">share your location</h2>
-                  <p className="text-xs text-white max-w-xs mx-auto">
-                    Find people in the same mood as you to hangout with
-                  </p>
-                </div>
-              )}
-              
-              {/* Button - Always shown */}
-              <div className="bg-white rounded-xl p-2 border border-border shadow-sm max-w-xs mx-auto">
-                <OpenToHangButton 
-                  size="sm" 
-                  shareText="I'm Open to Hang" 
-                  removeText="Stop Sharing" 
-                  className="w-full rounded-full text-sm" 
-                />
-              </div>
-            </>
-          )}
-        </section>
-
-
-
         {/* Map Section - Full Screen */}
-        <section className="flex-1">
+        <section className="flex-1 h-full">
           {/* Map Container */}
-          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[calc(100vh-200px)] min-h-[500px] z-10">
+          <div className="relative bg-white overflow-hidden h-[calc(100vh-140px)] min-h-[500px] z-10">
+            
+            {/* I'm Open to Hang Button - Floating on top right */}
+            {user && (
+              <div className="absolute top-4 right-4 z-20">
+                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-2 border border-border/20 shadow-lg">
+                  <OpenToHangButton 
+                    size="sm" 
+                    shareText="I'm Open to Hang" 
+                    removeText="Stop Sharing" 
+                    className="rounded-full text-xs px-3 py-1.5 h-8" 
+                  />
+                </div>
+              </div>
+            )}
 
             {error ? (
               <div className="flex items-center justify-center h-full">
@@ -355,8 +332,6 @@ const DiscoverPage = () => {
             )}
           </div>
         </section>
-
-
       </main>
       
       <BottomNavigation />
