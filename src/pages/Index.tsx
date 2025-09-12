@@ -467,15 +467,11 @@ const Index = () => {
           }}>
               All
             </Button>
-            <Button variant={couponFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setCouponFilter('following')} className={`text-xs px-2 py-1 rounded-full h-6 ${couponFilter === 'following' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'bg-white border-black text-black hover:bg-gray-50'}`} style={couponFilter === 'following' ? {
+            <Button variant={couponFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setCouponFilter('following')} className={`text-xs px-2 py-1 rounded-full h-6 ${couponFilter === 'following' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'bg-white border-primary text-primary hover:bg-white/90'}`} style={couponFilter === 'following' ? {
             backgroundColor: 'hsl(var(--accent-subtle))',
             borderColor: 'hsl(var(--accent-subtle))',
             color: 'white'
-          } : {
-            backgroundColor: 'white',
-            borderColor: 'black',
-            color: 'black'
-          }} disabled={!user}>
+          } : undefined} disabled={!user}>
               <Users className="h-2.5 w-2.5 mr-1" />
               Following
             </Button>
