@@ -193,7 +193,7 @@ const MessagesPage = () => {
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <div>
-                  <h1 className="text-lg font-bold text-foreground">
+                  <h1 className="text-lg font-bold bg-gradient-to-r from-primary via-primary-600 to-secondary text-transparent bg-clip-text">
                     Messages
                   </h1>
                   <p className="text-xs text-muted-foreground">Stay connected</p>
@@ -382,7 +382,7 @@ const MessagesPage = () => {
                             </h4>
                             {conversation.lastMessage && (
                               <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full flex-shrink-0">
-                                {format(new Date(conversation.lastMessage.created_at), 'HH:mm')}
+                                {format(new Date(conversation.lastMessage.created_at), 'MMM d')}
                               </span>
                             )}
                           </div>
@@ -453,9 +453,9 @@ const MessagesPage = () => {
                             <div className={`flex items-center justify-between mt-2 gap-2 ${
                               isFromCurrentUser ? 'text-primary-foreground/70' : 'text-muted-foreground'
                             }`}>
-                              <span className="text-xs">
-                                {format(new Date(message.created_at), 'HH:mm')}
-                              </span>
+                               <span className="text-xs">
+                                 {format(new Date(message.created_at), 'MMM d')}
+                               </span>
                               {isFromCurrentUser && (
                                 <Button
                                   size="icon"
