@@ -302,7 +302,7 @@ const DiscoverPage = () => {
               <div className="absolute top-4 left-4 z-20">
                 <OpenToHangButton 
                   size="icon" 
-                  shareText="Open" 
+                  shareText="Hangout" 
                   removeText="Stop" 
                   className="w-14 h-14 rounded-full shadow-lg border-2 border-white/20 backdrop-blur-sm text-xs font-bold" 
                 />
