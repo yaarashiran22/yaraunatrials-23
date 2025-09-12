@@ -99,7 +99,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
     return (
       <div className="flex gap-8 animate-pulse min-w-fit">
         {[1, 2, 3].map((i) => (
-          <Card key={i} className="min-w-[280px] w-[280px] flex-shrink-0 h-[360px] bg-gradient-to-br from-muted/30 to-muted/50 rounded-3xl border-0 shadow-lg">
+          <Card key={i} className="min-w-[240px] w-[240px] flex-shrink-0 h-[360px] bg-gradient-to-br from-muted/30 to-muted/50 rounded-3xl border-0 shadow-lg">
             <div className="h-44 bg-muted/40 rounded-t-3xl"></div>
             <div className="p-6 space-y-4">
               <div className="h-4 bg-muted/40 rounded-full w-3/4"></div>
@@ -134,7 +134,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
           const claim = !isUserCoupon ? getClaim(item.id) : null;
           
           return (
-            <Card key={`${item.type}-${item.id}`} className="min-w-[280px] w-[280px] flex-shrink-0 bg-white dark:bg-gray-900 border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group overflow-hidden rounded-3xl">
+            <Card key={`${item.type}-${item.id}`} className="min-w-[240px] w-[240px] flex-shrink-0 bg-white dark:bg-gray-900 border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group overflow-hidden rounded-3xl">
               <CardContent className="p-0 space-y-0 relative">
                 {/* Header Image Section */}
                 {item.image_url ? (

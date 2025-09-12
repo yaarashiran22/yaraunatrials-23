@@ -281,9 +281,9 @@ const MessagesPage = () => {
                             <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate text-sm">
                               {conversation.user.name || 'User'}
                             </h4>
-                            {conversation.lastMessage && <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full flex-shrink-0">
-                                {format(new Date(conversation.lastMessage.created_at), 'HH:mm')}
-                              </span>}
+                             {conversation.lastMessage && <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full flex-shrink-0">
+                                 {format(new Date(conversation.lastMessage.created_at), 'MMM d')}
+                               </span>}
                           </div>
                           {conversation.lastMessage && <p className="text-xs text-muted-foreground truncate">
                               {conversation.lastMessage.message}
@@ -324,10 +324,10 @@ const MessagesPage = () => {
                           <div className={`group relative max-w-[80%] transition-all duration-200 ${isFromCurrentUser ? 'bg-primary text-primary-foreground rounded-2xl rounded-br-md shadow-sm' : 'bg-card border border-border/20 text-foreground rounded-2xl rounded-bl-md shadow-sm'} p-3`}>
                             <p className="text-sm leading-relaxed break-words">{message.message}</p>
                             
-                            <div className={`flex items-center justify-between mt-2 gap-2 ${isFromCurrentUser ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
-                              <span className="text-xs">
-                                {format(new Date(message.created_at), 'HH:mm')}
-                              </span>
+                             <div className={`flex items-center justify-between mt-2 gap-2 ${isFromCurrentUser ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+                               <span className="text-xs">
+                                 {format(new Date(message.created_at), 'MMM d, HH:mm')}
+                               </span>
                               {isFromCurrentUser && <Button size="icon" variant="ghost" onClick={() => deleteMessage(message.id)} className="h-4 w-4 opacity-0 group-hover:opacity-70 hover:opacity-100 transition-all duration-200 rounded-full hover:bg-primary-foreground/20" aria-label="Delete message">
                                   <Trash2 className="h-3 w-3" />
                                 </Button>}

@@ -77,7 +77,7 @@ All colors MUST be HSL.
     /* System Colors - Harmonious palette */
     --success: 142 76% 36%;                  /* Green success */
     --success-foreground: 0 0% 100%;
-    --warning: 32 95% 44%;                   /* Orange warning */
+    --warning: 45 100% 55%;                   /* More yellowish warning */
     --warning-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;                /* Red destructive */
     --destructive-foreground: 0 0% 100%;
@@ -103,10 +103,10 @@ All colors MUST be HSL.
     --muted-foreground: 276 60% 25%;     /* Medium Purple */
 
     /* Four Color Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(17 98% 60%) 0%, hsl(51 100% 70%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(17 98% 60%) 0%, hsl(55 100% 65%) 100%);
     --gradient-plaza-dusk: linear-gradient(135deg, hsl(17 98% 60%) 0%, hsl(110 100% 89%) 50%, hsl(35 61% 89%) 100%);
     --gradient-mint: linear-gradient(135deg, hsl(110 100% 89%) 0%, hsl(110 100% 95%) 100%);
-    --gradient-coupon: linear-gradient(135deg, hsl(51 100% 70%) 0%, hsl(51 80% 75%) 100%);
+    --gradient-coupon: linear-gradient(135deg, hsl(55 100% 65%) 0%, hsl(55 90% 70%) 100%);
     --gradient-soft: linear-gradient(145deg, hsl(110 100% 94%) 0%, hsl(110 100% 89%) 50%, hsl(110 100% 83%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(110 100% 94%) 100%);
     --gradient-elevated: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(110 100% 92%) 100%);
@@ -122,7 +122,7 @@ All colors MUST be HSL.
     --shadow-glow: 0 0 25px hsl(17 98% 60% / 0.4);
     --shadow-inner: inset 0 2px 4px 0 hsl(17 98% 25% / 0.08);
     --shadow-burning: 0 6px 20px hsl(17 98% 60% / 0.25);
-    --shadow-kournikova: 0 6px 20px hsl(51 100% 70% / 0.25);
+    --shadow-kournikova: 0 6px 20px hsl(55 100% 65% / 0.25);
     --shadow-snow: 0 6px 20px hsl(110 100% 89% / 0.25);
     --shadow-champagne: 0 6px 20px hsl(35 61% 89% / 0.25);
     
@@ -131,7 +131,7 @@ All colors MUST be HSL.
     --shadow-button-hover: 0 4px 12px -2px hsl(17 98% 60% / 0.15), 0 2px 8px -1px hsl(220 36% 9% / 0.10);
     --shadow-button-active: inset 0 2px 6px hsl(220 36% 9% / 0.12);
     --shadow-button-burning: 0 6px 18px hsl(17 98% 60% / 0.3);
-    --shadow-button-kournikova: 0 6px 18px hsl(51 100% 70% / 0.3);
+    --shadow-button-kournikova: 0 6px 18px hsl(55 100% 65% / 0.3);
     --shadow-button-snow: 0 6px 18px hsl(110 100% 89% / 0.3);
     --shadow-button-champagne: 0 6px 18px hsl(35 61% 89% / 0.3);
     
@@ -140,7 +140,7 @@ All colors MUST be HSL.
     --shadow-button-hover: 0 4px 12px -2px hsl(17 80% 56% / 0.15), 0 2px 8px -1px hsl(220 36% 9% / 0.10);
     --shadow-button-active: inset 0 2px 6px hsl(220 36% 9% / 0.12);
     --shadow-button-jacaranda: 0 6px 18px hsl(17 80% 56% / 0.3);
-    --shadow-button-mint: 0 6px 18px hsl(43 97% 76% / 0.3);
+    --shadow-button-mint: 0 6px 18px hsl(55 100% 65% / 0.3);
 
     --radius: 0.75rem;
 
@@ -268,7 +268,7 @@ All colors MUST be HSL.
     /* System Colors - Dark Mode Adjustments */
     --success: 142 76% 46%;                  /* Brighter green */
     --success-foreground: 224 71% 4%;
-    --warning: 32 95% 54%;                   /* Brighter orange */
+    --warning: 45 100% 65%;                   /* Brighter more yellowish warning */
     --warning-foreground: 224 71% 4%;
     --destructive: 0 84% 70%;                /* Brighter red */
     --destructive-foreground: 224 71% 4%;
