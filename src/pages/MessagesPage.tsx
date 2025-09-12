@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ArrowLeft, Send, Trash2, Users, MessageCircle, Search, MoreHorizontal, Phone, Video, X, Plus } from 'lucide-react';
+import { ArrowLeft, Send, Trash2, Users, MessageCircle, Search, MoreHorizontal, Phone, Video } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { format } from 'date-fns';
@@ -115,32 +115,32 @@ const MessagesPage = () => {
       {/* Mobile Header */}
       <div className="lg:hidden">
         <Header 
-        title={selectedUser ? selectedUser.name || "User" : "Inbox"}
+          title={selectedUser ? selectedUser.name || "User" : "Messages"}
         />
       </div>
       
       {/* Desktop Header */}
       <DesktopHeader 
-        title={selectedUser ? selectedUser.name || "User" : "Inbox"}
+        title={selectedUser ? selectedUser.name || "User" : "Messages"}
         showSearch={false}
       />
       {/* Custom Chat Headers - Only for mobile conversation view */}
       {selectedUser ? (
         <div className="sticky top-0 z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
-          <div className="px-6 py-5 lg:px-6">
-            <div className="flex items-center gap-4">
+          <div className="px-4 py-3 lg:px-6">
+            <div className="flex items-center gap-3">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => clearSelectedUser()}
-                className="h-12 w-12 rounded-full hover:bg-accent/50 transition-all duration-200"
+                className="h-10 w-10 rounded-full hover:bg-accent/50 transition-all duration-200"
               >
-                <ArrowLeft className="h-6 w-6" />
+                <ArrowLeft className="h-5 w-5" />
               </Button>
               
-              <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div className="relative flex-shrink-0">
-                  <Avatar className="h-12 w-12 ring-2 ring-primary/20">
+                  <Avatar className="h-10 w-10 ring-2 ring-primary/20">
                     <AvatarImage 
                       src={selectedUser.profile_image_url} 
                       className="object-cover w-full h-full transition-opacity duration-200"
@@ -151,29 +151,29 @@ const MessagesPage = () => {
                     </AvatarFallback>
                   </Avatar>
                   {isUserOnline(selectedUser.id) && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
                   )}
                 </div>
                 
-                <div className="flex-1 min-w-0 py-1">
-                  <h3 className="font-bold text-foreground truncate text-lg">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-foreground truncate text-sm">
                     {selectedUser.name || 'User'}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {isUserOnline(selectedUser.id) ? 'Online now' : 'Last seen recently'}
+                  <p className="text-xs text-muted-foreground">
+                    {isUserOnline(selectedUser.id) ? 'Online now' : 'Offline'}
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <Button variant="ghost" size="sm" className="h-11 w-11 rounded-full hover:bg-accent/50">
-                  <Phone className="h-5 w-5" />
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <Button variant="ghost" size="sm" className="h-9 w-9 rounded-full hover:bg-accent/50">
+                  <Phone className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="h-11 w-11 rounded-full hover:bg-accent/50">
-                  <Video className="h-5 w-5" />
+                <Button variant="ghost" size="sm" className="h-9 w-9 rounded-full hover:bg-accent/50">
+                  <Video className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="h-11 w-11 rounded-full hover:bg-accent/50">
-                  <MoreHorizontal className="h-5 w-5" />
+                <Button variant="ghost" size="sm" className="h-9 w-9 rounded-full hover:bg-accent/50">
+                  <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -192,40 +192,38 @@ const MessagesPage = () => {
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
-              </div>
-              
-              <div className="flex-1 text-center">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-primary via-primary-600 to-secondary text-transparent bg-clip-text">
-                  Inbox
-                </h1>
+                <div>
+                  <h1 className="text-lg font-bold text-foreground">
+                    Messages
+                  </h1>
+                  <p className="text-xs text-muted-foreground">Stay connected</p>
+                </div>
               </div>
               
               <Button
                 variant="default"
                 size="sm"
                 onClick={() => setShowUserSelect(true)}
-                className="bg-primary hover:bg-primary/90 shadow-sm rounded-full h-10 w-10 p-0"
+                className="gap-2 bg-primary hover:bg-primary/90 shadow-sm rounded-full px-4 h-9"
               >
-                <Plus className="h-4 w-4" />
+                <Users className="h-4 w-4" />
+                New
               </Button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Modern User Selection Modal with improved styling */}
+      {/* Modern User Selection Modal */}
       {showUserSelect && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-gradient-to-br from-card to-card/95 rounded-3xl max-w-md w-full h-[650px] shadow-2xl border border-border/30 animate-scale-in flex flex-col backdrop-blur-lg">
-            {/* Enhanced Header */}
-            <div className="p-6 border-b border-border/20 flex-shrink-0 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-t-3xl">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
-                    Start a Chat
-                  </h2>
-                  <p className="text-sm text-muted-foreground mt-1">Connect with people around you</p>
-                </div>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-card rounded-2xl max-w-md w-full h-[600px] shadow-2xl border border-border/20 animate-scale-in flex flex-col">
+            {/* Fixed Header */}
+            <div className="p-4 border-b border-border/10 flex-shrink-0">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-bold text-foreground">
+                  Start a Chat
+                </h2>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -233,77 +231,65 @@ const MessagesPage = () => {
                     setShowUserSelect(false);
                     setSearchQuery('');
                   }}
-                  className="h-10 w-10 rounded-full hover:bg-accent/50 shadow-sm"
+                  className="h-8 w-8 rounded-full hover:bg-accent/50"
                 >
-                  <X className="h-5 w-5" />
+                  ×
                 </Button>
               </div>
               <div className="relative">
-                <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search for someone to chat with..."
+                  placeholder="Search for someone..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-12 rounded-2xl border-border/30 bg-background/80 focus:bg-background transition-all duration-200 shadow-sm focus:shadow-md"
+                  className="pl-10 rounded-xl border-border/20 bg-muted/50 focus:bg-background transition-colors"
                 />
               </div>
             </div>
             
-            {/* Scrollable Content with improved styling */}
-            <div className="flex-1 overflow-y-auto p-4">
-              <div className="space-y-3">
+            {/* Scrollable Content - Fixed height with proper scrolling */}
+            <div className="flex-1 overflow-y-auto p-3">
+              <div className="space-y-2">
                 {usersLoading ? (
-                  <div className="text-center py-16 text-muted-foreground">
-                    <div className="relative mb-6">
-                      <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary/20 border-t-primary mx-auto" />
-                      <div className="absolute inset-0 h-12 w-12 animate-pulse rounded-full bg-primary/10 mx-auto" />
-                    </div>
-                    <p className="text-lg font-medium mb-2">Finding people...</p>
-                    <p className="text-sm">Discovering your community</p>
+                  <div className="text-center py-12 text-muted-foreground">
+                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto mb-3" />
+                    <p className="text-sm">Finding people...</p>
                   </div>
                 ) : filteredUsers.length === 0 ? (
-                  <div className="text-center py-16 text-muted-foreground">
-                    <div className="relative mb-6">
-                      <div className="h-16 w-16 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                        <Users className="h-8 w-8 text-primary" />
-                      </div>
-                    </div>
-                    <h3 className="text-lg font-bold mb-2 text-foreground">
+                  <div className="text-center py-12 text-muted-foreground">
+                    <Users className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                    <p className="font-medium mb-1">
                       {searchQuery ? 'No matches found' : 'No users available'}
-                    </h3>
+                    </p>
                     <p className="text-sm">
-                      {searchQuery ? 'Try a different search term' : 'Check back later for new connections'}
+                      {searchQuery ? 'Try a different search term' : 'Check back later'}
                     </p>
                   </div>
                 ) : (
-                  filteredUsers.map((profile, index) => (
+                  filteredUsers.map((profile) => (
                     <Button
                       key={profile.id}
                       variant="ghost"
-                      className="w-full justify-start p-4 h-auto rounded-2xl hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 transition-all duration-300 group border border-transparent hover:border-primary/20 hover:shadow-lg"
+                      className="w-full justify-start p-3 h-auto rounded-xl hover:bg-accent/50 transition-all duration-200 group"
                       onClick={() => handleUserSelect(profile.id)}
-                      style={{ animationDelay: `${index * 0.05}s` }}
                     >
                       <div className="relative">
-                        <Avatar className="h-12 w-12 mr-4 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-200 shadow-md">
+                        <Avatar className="h-10 w-10 mr-3 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
                           <AvatarImage 
                             src={profile.profile_image_url} 
                             className="object-cover w-full h-full"
                           />
-                              <AvatarFallback className="bg-gradient-to-br from-primary/30 to-secondary/30 text-sm font-bold text-foreground">
-                                {(profile.name || profile.email)?.slice(0, 2).toUpperCase()}
-                              </AvatarFallback>
+                          <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-sm font-semibold">
+                            {(profile.name || profile.email)?.slice(0, 2).toUpperCase()}
+                          </AvatarFallback>
                         </Avatar>
                         {isUserOnline(profile.id) && (
-                          <div className="absolute -bottom-1 -right-2 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full shadow-sm animate-pulse" />
+                          <div className="absolute -bottom-0.5 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
                         )}
                       </div>
                       <div className="text-left flex-1 min-w-0">
-                        <p className="font-bold text-foreground group-hover:text-primary transition-colors truncate text-base">
+                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
                           {profile.name || 'User'}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {isUserOnline(profile.id) ? 'Online now' : 'Tap to connect'}
                         </p>
                       </div>
                     </Button>
@@ -337,26 +323,22 @@ const MessagesPage = () => {
                     ))}
                   </div>
                 ) : conversations.length === 0 ? (
-                  <div className="text-center py-24 px-6">
-                    <div className="relative mb-8">
-                      <div className="h-20 w-20 rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-secondary/20 flex items-center justify-center mx-auto shadow-xl">
-                        <MessageCircle className="h-10 w-10 text-primary" />
-                      </div>
-                      <div className="absolute -top-2 -right-2 h-6 w-6 bg-gradient-to-r from-coral to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                        <span className="text-white text-xs font-bold">+</span>
+                  <div className="text-center py-20 px-6">
+                    <div className="relative mb-6">
+                      <div className="h-16 w-16 rounded-full bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center mx-auto">
+                        <MessageCircle className="h-8 w-8 text-primary" />
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
+                    <h3 className="text-xl font-bold mb-2 text-foreground">
                       Your inbox awaits
                     </h3>
-                    <p className="text-muted-foreground mb-8 text-base leading-relaxed max-w-sm mx-auto">
-                      Start meaningful conversations with people around you and build lasting connections
+                    <p className="text-muted-foreground mb-6 text-sm">
+                      Start meaningful conversations with people around you
                     </p>
                     <Button 
                       onClick={() => setShowUserSelect(true)}
-                      className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl rounded-full px-8 py-3 text-base font-semibold transition-all duration-300 hover:scale-105"
+                      className="bg-primary hover:bg-primary/90 shadow-sm rounded-full px-6"
                     >
-                      <Users className="h-5 w-5 mr-2" />
                       Start Chatting
                     </Button>
                   </div>
@@ -369,43 +351,43 @@ const MessagesPage = () => {
                     >
                       <Button
                         variant="ghost"
-                        className="w-full justify-start p-4 h-auto rounded-xl hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 transition-all duration-300 group border border-border/10 hover:border-primary/30 bg-gradient-to-r from-card/80 to-card hover:shadow-lg"
+                        className="w-full justify-start p-4 h-auto rounded-xl hover:bg-accent/50 transition-all duration-200 group border border-border/10 hover:border-primary/20 bg-card/50"
                         onClick={() => handleUserSelect(conversation.user.id)}
                       >
                         <div className="relative flex-shrink-0">
-                          <Avatar className="h-12 w-12 mr-3 ring-1 ring-primary/10 group-hover:ring-primary/30 transition-all duration-200 shadow-sm">
+                          <Avatar className="h-12 w-12 mr-3 ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all">
                             <AvatarImage 
                               src={conversation.user.profile_image_url} 
                               className="object-cover w-full h-full transition-opacity duration-200"
                               onError={() => handleAvatarError(conversation.user.id)}
                             />
-                            <AvatarFallback className="bg-gradient-to-br from-primary/30 to-secondary/30 font-bold text-foreground">
+                            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 font-semibold">
                               {(conversation.user.name || conversation.user.email)?.slice(0, 2).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           {isUserOnline(conversation.user.id) && (
-                            <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full shadow-sm animate-pulse" />
+                            <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full" />
                           )}
                           {conversation.unreadCount > 0 && (
-                            <div className="absolute -top-0.5 -right-0.5 min-w-5 h-5 bg-gradient-to-r from-coral to-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center px-1.5 shadow-md animate-bounce">
+                            <div className="absolute -top-1 -right-1 min-w-5 h-5 bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center px-1.5">
                               {conversation.unreadCount}
                             </div>
                           )}
                         </div>
                         
                         <div className="flex-1 text-left min-w-0">
-                          <div className="flex items-center justify-between mb-1.5">
-                            <h4 className="font-bold text-foreground group-hover:text-primary transition-colors truncate text-base">
+                          <div className="flex items-center justify-between mb-1">
+                            <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate text-sm">
                               {conversation.user.name || 'User'}
                             </h4>
                             {conversation.lastMessage && (
-                              <span className="text-xs text-muted-foreground bg-gradient-to-r from-muted/60 to-muted/40 px-2 py-1 rounded-full flex-shrink-0 shadow-sm">
-                                {format(new Date(conversation.lastMessage.created_at), 'MMM d')}
+                              <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full flex-shrink-0">
+                                {format(new Date(conversation.lastMessage.created_at), 'HH:mm')}
                               </span>
                             )}
                           </div>
                           {conversation.lastMessage && (
-                            <p className="text-sm text-muted-foreground truncate leading-relaxed">
+                            <p className="text-xs text-muted-foreground truncate">
                               {conversation.lastMessage.message}
                             </p>
                           )}
@@ -471,9 +453,9 @@ const MessagesPage = () => {
                             <div className={`flex items-center justify-between mt-2 gap-2 ${
                               isFromCurrentUser ? 'text-primary-foreground/70' : 'text-muted-foreground'
                             }`}>
-                               <span className="text-xs">
-                                 {format(new Date(message.created_at), 'MMM d')}
-                               </span>
+                              <span className="text-xs">
+                                {format(new Date(message.created_at), 'HH:mm')}
+                              </span>
                               {isFromCurrentUser && (
                                 <Button
                                   size="icon"
@@ -489,12 +471,12 @@ const MessagesPage = () => {
                           </div>
                           
                           {isFromCurrentUser && (
-                            <Avatar className="h-8 w-8 mb-1 flex-shrink-0 shadow-md ring-2 ring-white/20">
+                            <Avatar className="h-7 w-7 mb-1 flex-shrink-0">
                               <AvatarImage 
                                 src={user?.user_metadata?.avatar_url} 
                                 className="object-cover w-full h-full"
                               />
-                              <AvatarFallback className="text-xs bg-gradient-to-br from-secondary/30 to-primary/30 font-bold text-white">
+                              <AvatarFallback className="text-xs bg-gradient-to-br from-primary/20 to-primary/40 font-medium">
                                 {(user?.email || 'Y').slice(0, 2).toUpperCase()}
                               </AvatarFallback>
                             </Avatar>
@@ -507,27 +489,27 @@ const MessagesPage = () => {
               </ScrollArea>
             </div>
 
-            {/* Enhanced Message Input Area */}
-            <div className="border-t border-border/20 bg-gradient-to-r from-card/95 to-card p-5 flex-shrink-0 backdrop-blur-sm">
+            {/* Message Input - Always visible at bottom */}
+            <div className="border-t border-border/10 bg-card p-4 flex-shrink-0">
               {isTyping && (
-                <div className="mb-3 text-sm text-muted-foreground animate-fade-in">
-                  <div className="flex items-center gap-3 bg-muted/50 px-4 py-2 rounded-full max-w-fit">
+                <div className="mb-2 text-xs text-muted-foreground animate-fade-in">
+                  <div className="flex items-center gap-2">
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
+                      <div className="w-1 h-1 bg-primary rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
                     </div>
-                    <span className="font-medium">You are typing...</span>
+                    <span>You're typing...</span>
                   </div>
                 </div>
               )}
-              <form onSubmit={handleSendMessage} className="flex gap-4 items-end">
+              <form onSubmit={handleSendMessage} className="flex gap-3 items-end">
                 <div className="flex-1 relative">
                   <Textarea
                     value={newMessage}
                     onChange={handleTextareaChange}
                     placeholder={`Message ${selectedUser?.name || 'user'}...`}
-                    className="min-h-[52px] max-h-[120px] resize-none rounded-3xl border-border/30 bg-background/80 focus:bg-background transition-all duration-200 focus:ring-2 focus:ring-primary/30 pr-16 text-base leading-relaxed shadow-sm focus:shadow-md"
+                    className="min-h-[44px] max-h-[120px] resize-none rounded-2xl border-border/20 bg-muted/50 focus:bg-background transition-all duration-200 focus:ring-2 focus:ring-primary/20 pr-12"
                     disabled={sending}
                     rows={1}
                     onKeyDown={(e) => {
@@ -538,7 +520,7 @@ const MessagesPage = () => {
                     }}
                   />
                   {newMessage.length > 0 && (
-                    <div className="absolute bottom-3 right-16 text-xs text-muted-foreground bg-muted/70 px-2 py-1 rounded-full">
+                    <div className="absolute bottom-2 right-12 text-xs text-muted-foreground">
                       {newMessage.length}/500
                     </div>
                   )}
@@ -546,12 +528,12 @@ const MessagesPage = () => {
                 <Button 
                   type="submit" 
                   disabled={sending || !newMessage.trim()}
-                  className="h-13 w-13 rounded-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex-shrink-0 hover:scale-110 active:scale-95"
+                  className="h-11 w-11 rounded-full bg-primary hover:bg-primary/90 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0"
                 >
                   {sending ? (
-                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                   ) : (
-                    <Send className="h-5 w-5" />
+                    <Send className="h-4 w-4" />
                   )}
                 </Button>
               </form>

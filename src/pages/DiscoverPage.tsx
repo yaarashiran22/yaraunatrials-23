@@ -95,16 +95,11 @@ const DiscoverPage = () => {
   const addUserLocationMarkers = (usersToShow = userLocations) => {
     if (!mapInstanceRef.current) return;
 
-    // Filter out Juan and Juani from the user locations - also filter out the current user
+    // Filter out Juan and Juani from the user locations
     let displayUsers = usersToShow.filter(userLocation => {
       const profile = userLocation.profile as any;
       const name = profile?.name?.toLowerCase() || '';
-      const userId = profile?.id || userLocation.user_id;
-      
-      // Filter out Juan/Juani and current user
-      return !name.includes('juan') && 
-             !name.includes('juani') && 
-             userId !== user?.id;
+      return !name.includes('juan') && !name.includes('juani');
     });
 
     console.log('Adding user location markers, count:', displayUsers.length, 'isOpenToHang:', isOpenToHang);
@@ -225,12 +220,7 @@ const DiscoverPage = () => {
       if (!mapContainer.current) return;
 
       try {
-        // Ensure container has proper dimensions
-        const container = mapContainer.current;
-        container.style.height = '100%';
-        container.style.width = '100%';
-        
-        const map = L.map(container, {
+        const map = L.map(mapContainer.current, {
           center: [-34.6118, -58.3960], // Buenos Aires center
           zoom: 13,
           zoomControl: true,
@@ -239,21 +229,14 @@ const DiscoverPage = () => {
           touchZoom: true,
           boxZoom: false,
           keyboard: true,
-          attributionControl: false, // Remove attribution for cleaner look
         });
 
-        // Add base tile layer with error handling
-        const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Add base tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors',
           maxZoom: 19,
           detectRetina: true,
-        });
-        
-        tileLayer.on('tileerror', (e) => {
-          console.warn('Tile loading error:', e);
-        });
-        
-        tileLayer.addTo(map);
+        }).addTo(map);
 
         mapInstanceRef.current = map;
         setIsLoading(false);
@@ -261,11 +244,7 @@ const DiscoverPage = () => {
         // Wait for map to be fully loaded before adding markers
         map.whenReady(() => {
           console.log('Map is ready, adding initial markers');
-          // Force a resize to ensure proper rendering
-          setTimeout(() => {
-            map.invalidateSize();
-            addUserLocationMarkers();
-          }, 100);
+          addUserLocationMarkers();
         });
 
       } catch (error) {
@@ -275,10 +254,10 @@ const DiscoverPage = () => {
       }
     };
 
-    // Initialize map with small delay to ensure DOM is ready
+    // Initialize map with small delay
     const timer = setTimeout(() => {
       initializeMap();
-    }, 200);
+    }, 100);
 
     return () => {
       clearTimeout(timer);
@@ -305,44 +284,60 @@ const DiscoverPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-background pb-20 flex flex-col">
+    <div className="min-h-screen bg-background pb-20">
       <Header 
         title="Discover"
         onNeighborhoodChange={handleNeighborhoodChange}
       />
       
-      <main className={`${user ? 'px-0 py-0' : 'px-4 py-2 space-y-4'} max-w-md mx-auto lg:max-w-none flex-1`}>
+      <main className={`${user ? 'px-4 py-4 space-y-4' : 'px-4 py-2 space-y-4'} max-w-md mx-auto lg:max-w-none`}>
         
-        {/* Map Section - Full Screen */}
-        <section className="flex-1 h-full">
-          {/* Map Container */}
-          <div className="relative bg-white overflow-hidden h-[calc(100vh-140px)] min-h-[500px] z-10" style={{ height: 'calc(100vh - 140px)' }}>
-            
-            {/* I'm Open to Hang Button - Floating on top right */}
-            {user && (
-              <div className="absolute top-4 right-4 z-20">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-2 border border-border/20 shadow-lg">
-                  <OpenToHangButton 
-                    size="sm" 
-                    shareText="I'm Open to Hang" 
-                    removeText="Stop Sharing" 
-                    className="rounded-full text-xs px-3 py-1.5 h-8" 
-                  />
+        {/* Share Location Section */}
+        <section className="text-center">
+          {!user && (
+            <div className="mb-6">
+              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                Find people in the same mood as you to hang out with
+              </p>
+            </div>
+          )}
+          
+          {user && (
+            <>
+              {/* Title and description - Only shown on first visit */}
+              {isFirstVisit && (
+                <div className="mb-3">
+                  <h2 className="title-section mb-1 text-coral">share your location</h2>
+                  <p className="text-xs text-white max-w-xs mx-auto">
+                    Find people in the same mood as you to hangout with
+                  </p>
                 </div>
+              )}
+              
+              {/* Button - Always shown */}
+              <div className="bg-white rounded-xl p-2 border border-border shadow-sm max-w-xs mx-auto">
+                <OpenToHangButton 
+                  size="sm" 
+                  shareText="I'm Open to Hang" 
+                  removeText="Stop Sharing" 
+                  className="w-full rounded-full text-sm" 
+                />
               </div>
-            )}
+            </>
+          )}
+        </section>
+
+
+
+        {/* Map Section - Full Screen */}
+        <section className="flex-1">
+          {/* Map Container */}
+          <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-sm h-[calc(100vh-200px)] min-h-[500px] z-10">
 
             {error ? (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center p-4">
                   <p className="text-sm text-destructive">{error}</p>
-                  <Button 
-                    onClick={() => window.location.reload()} 
-                    className="mt-2"
-                    size="sm"
-                  >
-                    Reload Page
-                  </Button>
                 </div>
               </div>
             ) : (
@@ -355,15 +350,13 @@ const DiscoverPage = () => {
                     </div>
                   </div>
                 )}
-                <div 
-                  ref={mapContainer} 
-                  className="w-full h-full z-0" 
-                  style={{ minHeight: '500px', height: '100%' }}
-                />
+                <div ref={mapContainer} className="w-full h-full z-0" />
               </>
             )}
           </div>
         </section>
+
+
       </main>
       
       <BottomNavigation />

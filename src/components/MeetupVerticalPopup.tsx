@@ -391,7 +391,6 @@ const MeetupVerticalPopup = ({
 
           {/* Meetup Details */}
           <div className="space-y-3 p-4 bg-muted/30 rounded-2xl">
-            {/* Price */}
             {displayItem.price && displayItem.price !== 'Free' && (
               <div className="flex items-center gap-3 text-sm font-medium text-foreground">
                 <div className="h-4 w-4 rounded-full bg-coral flex items-center justify-center text-xs text-white font-bold">₪</div>
@@ -404,21 +403,18 @@ const MeetupVerticalPopup = ({
                 <span>Free Meetup</span>
               </div>
             )}
-            
-            {/* Location */}
-            {(itemDetails?.location || item?.neighborhood) && (
+            {itemDetails?.location && (
               <div className="flex items-center gap-3 text-sm font-medium text-foreground">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span>{locationMapping[itemDetails?.location] || itemDetails?.location || item?.neighborhood}</span>
+                <span>{locationMapping[itemDetails.location] || itemDetails.location}</span>
               </div>
             )}
-            
-            {/* Date and Time */}
-            {itemDetails && (
+            {itemDetails?.created_at && (
               <div className="flex items-center gap-3 text-sm font-medium text-foreground">
                 <Calendar className="h-4 w-4 text-primary" />
                 <span>
                   {itemDetails.meetup_date ? (
+                    // Show actual meetup date if available
                     <>
                       {new Date(itemDetails.meetup_date).toLocaleDateString('en-US', {
                         weekday: 'short',
@@ -431,6 +427,7 @@ const MeetupVerticalPopup = ({
                       )}
                     </>
                   ) : (
+                    // Fallback to creation date
                     <>Created {new Date(itemDetails.created_at).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
@@ -441,6 +438,28 @@ const MeetupVerticalPopup = ({
               </div>
             )}
           </div>
+
+          {/* Location and Date */}
+          {itemDetails && (
+            <div className="space-y-3 p-4 bg-muted/30 rounded-2xl">
+              <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+                <MapPin className="h-4 w-4 text-primary" />
+                <span>{locationMapping[itemDetails.location] || itemDetails.location || 'Location TBD'}</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm font-medium text-foreground">
+                <Calendar className="h-4 w-4 text-primary" />
+                <span>
+                  {new Date(itemDetails.created_at).toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Find Companion */}
           <Button

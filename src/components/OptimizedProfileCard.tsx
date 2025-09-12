@@ -59,7 +59,7 @@ const OptimizedProfileCard = memo(({
     } finally {
       setIsCheckingStories(false);
     }
-  }, [id]); // Remove isCheckingStories from dependencies to prevent infinite loop
+  }, [id, isCheckingStories]);
 
   // Check for active stories only once per user
   useEffect(() => {

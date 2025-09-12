@@ -99,8 +99,14 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
     return (
       <div className="flex gap-8 animate-pulse min-w-fit">
         {[1, 2, 3].map((i) => (
-          <Card key={i} className="min-w-[240px] w-[240px] flex-shrink-0 aspect-[4/5] bg-gradient-to-br from-muted/30 to-muted/50 rounded-3xl border-0 shadow-lg">
-            <div className="w-full h-full bg-muted/40 rounded-3xl animate-pulse"></div>
+          <Card key={i} className="min-w-[280px] w-[280px] flex-shrink-0 h-[360px] bg-gradient-to-br from-muted/30 to-muted/50 rounded-3xl border-0 shadow-lg">
+            <div className="h-44 bg-muted/40 rounded-t-3xl"></div>
+            <div className="p-6 space-y-4">
+              <div className="h-4 bg-muted/40 rounded-full w-3/4"></div>
+              <div className="h-3 bg-muted/30 rounded-full w-full"></div>
+              <div className="h-3 bg-muted/30 rounded-full w-2/3"></div>
+              <div className="h-12 bg-muted/40 rounded-2xl mt-6"></div>
+            </div>
           </Card>
         ))}
       </div>
@@ -128,155 +134,137 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
           const claim = !isUserCoupon ? getClaim(item.id) : null;
           
           return (
-            <Card key={`${item.type}-${item.id}`} className="min-w-[240px] w-[240px] flex-shrink-0 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group overflow-hidden rounded-3xl hover:scale-[1.02] hover:shadow-primary/20">
-              <CardContent className="p-0 space-y-0 relative aspect-[4/5] overflow-hidden rounded-3xl">
+            <Card key={`${item.type}-${item.id}`} className="min-w-[280px] w-[280px] flex-shrink-0 bg-white dark:bg-gray-900 border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group overflow-hidden rounded-3xl">
+              <CardContent className="p-0 space-y-0 relative">
+                {/* Header Image Section */}
                 {item.image_url ? (
-                  <>
-                    {/* Main image - full height like UniformCard */}
+                  <div className="relative overflow-hidden h-56">
                     <img 
                       src={item.image_url} 
                       alt={item.business_name || item.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                     
-                    {/* Shimmer overlay on hover - matching UniformCard */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-out"></div>
-                    
-                    {/* Glow border on hover */}
-                    <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-primary/30 transition-all duration-500"></div>
-                    
-                    {/* Text overlay at bottom - matching UniformCard style */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-white line-clamp-1 text-base leading-tight drop-shadow-lg">
-                          {item.business_name}
-                        </h3>
-                        <p className="text-xs text-white/80 line-clamp-1 drop-shadow-md">
-                          {item.title}
-                        </p>
-                        
-                        {/* Compact info badges - matching UniformCard style */}
-                        <div className="flex items-center gap-1.5 mt-1">
-                          {item.discount_amount && (
-                            <span className="text-xs font-medium px-2 py-0.5 bg-red-500 backdrop-blur-md rounded-full text-white border border-red-500 shadow-lg transition-all duration-300 group-hover:bg-red-600 group-hover:scale-105">
-                              {item.discount_amount}
-                            </span>
-                          )}
-                          {((item as any).address || (item as any).neighborhood) && (
-                            <span className="text-xs font-medium px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">
-                              <MapPin className="w-2.5 h-2.5 inline mr-1" />
-                              {(item as any).address || (item as any).neighborhood}
-                            </span>
-                          )}
-                          {item.valid_until && (
-                            <span className="text-xs font-medium px-2 py-0.5 bg-orange-500/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-orange-500 group-hover:scale-105">
-                              <Clock className="w-2.5 h-2.5 inline mr-1" />
-                              {new Date(item.valid_until).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric'
-                              })}
-                            </span>
-                          )}
-                        </div>
-                        
-                        {/* Action Button - small and integrated */}
-                        <div className="pt-1">
-                          {isUserCoupon ? (
-                            <Button
-                              onClick={() => handleShowUserCouponQR(item)}
-                              disabled={generatingQR}
-                              className="w-full h-6 bg-white/20 hover:bg-white/30 text-white font-medium text-xs rounded-lg backdrop-blur-md border border-white/30 transition-all duration-200"
-                            >
-                              <QrCode className="w-2.5 h-2.5 mr-1" />
-                              {generatingQR ? 'Loading...' : 'Show QR'}
-                            </Button>
-                          ) : isClaimed ? (
-                            <Button
-                              onClick={() => handleShowQR(item)}
-                              className={`w-full h-6 font-medium text-xs rounded-lg backdrop-blur-md transition-all duration-200 ${
-                                claim?.is_used 
-                                  ? 'bg-gray-500/20 text-white/60 cursor-default border border-white/20' 
-                                  : 'bg-green-500/20 hover:bg-green-500/30 text-white border border-white/30'
-                              }`}
-                              disabled={claim?.is_used}
-                            >
-                              {claim?.is_used ? (
-                                <>
-                                  <CheckCircle className="w-2.5 h-2.5 mr-1" />
-                                  Used
-                                </>
-                              ) : (
-                                <>
-                                  <QrCode className="w-2.5 h-2.5 mr-1" />
-                                  Show QR
-                                </>
-                              )}
-                            </Button>
-                          ) : (
-                            <Button
-                              onClick={() => handleClaimCoupon(item.id)}
-                              disabled={claiming}
-                              className="w-full h-6 bg-coral/20 hover:bg-coral/30 text-white font-medium text-xs rounded-lg backdrop-blur-md border border-white/30 transition-all duration-200"
-                            >
-                              <Gift className="w-2.5 h-2.5 mr-1" />
-                              {claiming ? 'Claiming...' : 'Claim'}
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  /* No Image - Fallback design matching UniformCard style */
-                  <div className="w-full h-full bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 flex flex-col justify-center items-center p-4 relative border border-primary/10 rounded-3xl">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center mb-3 shadow-lg border border-primary/20">
-                      <Gift className="w-8 h-8 text-primary drop-shadow-sm" />
-                    </div>
-                    <h3 className="font-semibold text-foreground text-sm leading-tight mb-1 text-center line-clamp-2">
-                      {item.business_name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground text-center line-clamp-2 mb-3">
-                      {item.title}
-                    </p>
-                    
-                    {/* Badges for no-image version */}
+                    {/* Discount Badge - Floating */}
                     {item.discount_amount && (
-                      <div className="mb-3">
-                        <span className="text-xs font-medium px-2 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full shadow-md">
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-warning hover:bg-warning/90 text-warning-foreground font-bold text-sm px-4 py-2 rounded-2xl shadow-lg border-0">
                           {item.discount_amount}
-                        </span>
+                        </Badge>
                       </div>
                     )}
                     
-                    {/* Compact action button */}
+                    {/* Business Name and Title Overlay */}
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="font-bold text-white text-lg leading-tight drop-shadow-lg mb-1">
+                        {item.business_name}
+                      </h3>
+                      <p className="text-sm text-white/90 font-medium drop-shadow-md line-clamp-2">
+                        {item.title}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  /* No Image Header */
+                  <div className="p-6 pb-4 bg-gradient-to-br from-primary/5 to-secondary/5 h-56 flex flex-col justify-center relative">
+                    {/* Discount Badge - Top Right */}
+                    {item.discount_amount && (
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-warning hover:bg-warning/90 text-warning-foreground font-bold text-sm px-4 py-2 rounded-2xl shadow-md border-0">
+                          {item.discount_amount}
+                        </Badge>
+                      </div>
+                    )}
+                    
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                        <Gift className="w-8 h-8 text-primary" />
+                      </div>
+                      <h3 className="font-bold text-foreground text-xl leading-tight mb-2">
+                        {item.business_name}
+                      </h3>
+                      <p className="text-base text-primary font-semibold">
+                        {item.title}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Content Section */}
+                <div className="p-6 space-y-4">
+                  {/* Description */}
+                  {item.description && (
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                      {item.description}
+                    </p>
+                  )}
+
+                  {/* Location and Valid Until Info */}
+                  <div className="space-y-2">
+                    {(item as any).address && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center">
+                          <MapPin className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium">{(item as any).address}</span>
+                      </div>
+                    )}
+                    {(item as any).neighborhood && !(item as any).address && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center">
+                          <MapPin className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium">{(item as any).neighborhood}</span>
+                      </div>
+                    )}
+                    {item.valid_until && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center">
+                          <Clock className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium">
+                          Valid until {new Date(item.valid_until).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="pt-2">
                     {isUserCoupon ? (
                       <Button
                         onClick={() => handleShowUserCouponQR(item)}
                         disabled={generatingQR}
-                        className="w-full h-6 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-xs rounded-lg shadow-sm transition-all duration-200"
+                        className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
                       >
-                        <QrCode className="w-2.5 h-2.5 mr-1" />
-                        {generatingQR ? 'Loading...' : 'Show QR'}
+                        <QrCode className="w-5 h-5 mr-2" />
+                        {generatingQR ? 'Generating...' : 'Show QR Code'}
                       </Button>
                     ) : isClaimed ? (
                       <Button
                         onClick={() => handleShowQR(item)}
-                        className={`w-full h-6 font-medium text-xs rounded-lg shadow-sm transition-all duration-200 ${
+                        className={`w-full h-12 font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ${
                           claim?.is_used 
-                            ? 'bg-muted text-muted-foreground cursor-default' 
-                            : 'bg-green-500 hover:bg-green-500/90 text-white'
+                            ? 'bg-gray-500 hover:bg-gray-600 text-white cursor-default transform-none' 
+                            : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white'
                         }`}
                         disabled={claim?.is_used}
                       >
                         {claim?.is_used ? (
                           <>
-                            <CheckCircle className="w-2.5 h-2.5 mr-1" />
+                            <CheckCircle className="w-5 h-5 mr-2" />
                             Used
                           </>
                         ) : (
                           <>
-                            <QrCode className="w-2.5 h-2.5 mr-1" />
-                            Show QR
+                            <QrCode className="w-5 h-5 mr-2" />
+                            Show QR Code
                           </>
                         )}
                       </Button>
@@ -284,14 +272,14 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                       <Button
                         onClick={() => handleClaimCoupon(item.id)}
                         disabled={claiming}
-                        className="w-full h-6 bg-coral hover:bg-coral/90 text-white font-medium text-xs rounded-lg shadow-sm transition-all duration-200"
+                        className="w-full h-12 bg-gradient-to-r from-coral to-coral-hover hover:from-coral-hover hover:to-coral text-white font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
                       >
-                        <Gift className="w-2.5 h-2.5 mr-1" />
-                        {claiming ? 'Claiming...' : 'Claim'}
+                        <Gift className="w-5 h-5 mr-2" />
+                        {claiming ? 'Claiming...' : 'Claim Coupon'}
                       </Button>
                     )}
                   </div>
-                )}
+                </div>
               </CardContent>
             </Card>
           );
