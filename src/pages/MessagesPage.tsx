@@ -173,53 +173,58 @@ const MessagesPage = () => {
 
       {/* Modern User Selection Modal */}
       {showUserSelect && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-card rounded-2xl max-w-md w-full h-[600px] shadow-2xl border border-border/20 animate-scale-in flex flex-col">
+          <div className="bg-gradient-to-br from-card via-card to-card/95 rounded-3xl max-w-md w-full h-[600px] shadow-2xl border border-primary/10 animate-scale-in flex flex-col backdrop-blur-xl">
             {/* Fixed Header */}
-            <div className="p-4 border-b border-border/10 flex-shrink-0">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-bold text-foreground">
+            <div className="p-6 border-b border-gradient-to-r from-primary/10 via-primary/5 to-transparent flex-shrink-0 bg-gradient-to-r from-primary/5 to-transparent rounded-t-3xl">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                   Start a Chat
                 </h2>
                 <Button variant="ghost" size="sm" onClick={() => {
               setShowUserSelect(false);
               setSearchQuery('');
-            }} className="h-8 w-8 rounded-full hover:bg-accent/50">
-                  ×
+            }} className="h-10 w-10 rounded-full hover:bg-primary/10 border border-primary/20 hover:border-primary/40 transition-all duration-200">
+                  <span className="text-primary text-lg">×</span>
                 </Button>
               </div>
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search for someone..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-10 rounded-xl border-border/20 bg-muted/50 focus:bg-background transition-colors" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-primary/60" />
+                <Input placeholder="Search for someone..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-12 pr-4 py-3 rounded-2xl border-primary/20 bg-gradient-to-r from-muted/30 to-muted/50 focus:bg-background focus:border-primary/40 transition-all duration-200 placeholder:text-muted-foreground/60" />
               </div>
             </div>
             
             {/* Scrollable Content - Fixed height with proper scrolling */}
-            <div className="flex-1 overflow-y-auto p-3">
-              <div className="space-y-2">
-                {usersLoading ? <div className="text-center py-12 text-muted-foreground">
-                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto mb-3" />
-                    <p className="text-sm">Finding people...</p>
-                  </div> : filteredUsers.length === 0 ? <div className="text-center py-12 text-muted-foreground">
-                    <Users className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                    <p className="font-medium mb-1">
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="space-y-3">
+                {usersLoading ? <div className="text-center py-16 text-muted-foreground">
+                    <div className="h-10 w-10 animate-spin rounded-full border-3 border-primary/30 border-t-primary mx-auto mb-4" />
+                    <p className="text-base font-medium">Finding people...</p>
+                  </div> : filteredUsers.length === 0 ? <div className="text-center py-16 text-muted-foreground">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                      <Users className="h-8 w-8 text-primary/60" />
+                    </div>
+                    <p className="font-semibold text-foreground mb-2 text-lg">
                       {searchQuery ? 'No matches found' : 'No users available'}
                     </p>
-                    <p className="text-sm">
+                    <p className="text-sm text-muted-foreground">
                       {searchQuery ? 'Try a different search term' : 'Check back later'}
                     </p>
-                  </div> : filteredUsers.map(profile => <Button key={profile.id} variant="ghost" className="w-full justify-start p-3 h-auto rounded-xl hover:bg-accent/50 transition-all duration-200 group" onClick={() => handleUserSelect(profile.id)}>
+                  </div> : filteredUsers.map(profile => <Button key={profile.id} variant="ghost" className="w-full justify-start p-4 h-auto rounded-2xl hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 transition-all duration-300 group border border-transparent hover:border-primary/20 hover:shadow-lg hover:shadow-primary/10" onClick={() => handleUserSelect(profile.id)}>
                       <div className="relative">
-                        <Avatar className="h-10 w-10 mr-3 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
+                        <Avatar className="h-12 w-12 mr-4 ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all duration-300 group-hover:scale-105">
                           <AvatarImage src={profile.profile_image_url} className="object-cover w-full h-full" />
-                          <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/40 text-sm font-semibold">
+                          <AvatarFallback className="bg-gradient-to-br from-primary/20 to-secondary/20 text-sm font-bold text-primary">
                             {(profile.name || profile.email)?.slice(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        {isUserOnline(profile.id) && <div className="absolute -bottom-0.5 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />}
+                        {isUserOnline(profile.id) && <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-lg" />}
                       </div>
                       <div className="text-left flex-1 min-w-0">
-                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                        <p className="font-semibold text-foreground group-hover:text-primary transition-colors truncate text-base">
                           {profile.name || 'User'}
+                        </p>
+                        <p className="text-sm text-muted-foreground group-hover:text-primary/60 transition-colors">
+                          {profile.email?.split('@')[0] || 'User'}
                         </p>
                       </div>
                     </Button>)}
