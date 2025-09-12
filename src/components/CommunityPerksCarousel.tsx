@@ -150,7 +150,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                     {/* Discount Badge - Floating */}
                     {item.discount_amount && (
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-coral hover:bg-coral-hover text-white font-bold text-sm px-4 py-2 rounded-2xl shadow-lg border-0">
+                        <Badge className="bg-red-500 hover:bg-red-600 text-white font-bold text-sm px-4 py-2 rounded-2xl shadow-lg border-0">
                           {item.discount_amount}
                         </Badge>
                       </div>
@@ -172,7 +172,7 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                     {/* Discount Badge - Top Right */}
                     {item.discount_amount && (
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-coral hover:bg-coral-hover text-white font-bold text-sm px-4 py-2 rounded-2xl shadow-md border-0">
+                        <Badge className="bg-red-500 hover:bg-red-600 text-white font-bold text-sm px-4 py-2 rounded-2xl shadow-md border-0">
                           {item.discount_amount}
                         </Badge>
                       </div>
