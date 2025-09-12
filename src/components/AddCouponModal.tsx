@@ -266,7 +266,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="e.g., 20% off all pizzas"
                   required
-                  className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
+                  className="h-12 text-base bg-white text-gray-900 placeholder:text-gray-500 border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                 />
               </div>
 
@@ -281,7 +281,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     value={formData.business_name}
                     onChange={(e) => setFormData(prev => ({ ...prev, business_name: e.target.value }))}
                     placeholder="Tony's Pizza"
-                    className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
+                    className="h-12 text-base bg-white text-gray-900 placeholder:text-gray-500 border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
 
@@ -295,7 +295,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     value={formData.discount_amount}
                     onChange={(e) => setFormData(prev => ({ ...prev, discount_amount: e.target.value }))}
                     placeholder="20% off"
-                    className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
+                    className="h-12 text-base bg-white text-gray-900 placeholder:text-gray-500 border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
               </div>
@@ -311,7 +311,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Add details about the coupon terms and conditions..."
                   rows={4}
-                  className="text-base border-2 border-border/40 focus:border-primary transition-colors resize-none rounded-xl px-4 py-3"
+                  className="text-base bg-white text-gray-900 placeholder:text-gray-500 border-2 border-border/40 focus:border-primary transition-colors resize-none rounded-xl px-4 py-3"
                 />
               </div>
 
@@ -327,7 +327,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     type="date"
                     value={formData.valid_until}
                     onChange={(e) => setFormData(prev => ({ ...prev, valid_until: e.target.value }))}
-                    className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
+                    className="h-12 text-base bg-white text-gray-900 border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
 
@@ -341,7 +341,7 @@ export const AddCouponModal = ({ isOpen, onClose }: AddCouponModalProps) => {
                     value={formData.neighborhood}
                     onChange={(e) => setFormData(prev => ({ ...prev, neighborhood: e.target.value }))}
                     placeholder="Downtown"
-                    className="h-12 text-base border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
+                    className="h-12 text-base bg-white text-gray-900 placeholder:text-gray-500 border-2 border-border/40 focus:border-primary transition-colors rounded-xl px-4"
                   />
                 </div>
               </div>
