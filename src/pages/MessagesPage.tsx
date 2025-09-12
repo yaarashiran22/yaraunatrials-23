@@ -169,7 +169,6 @@ const MessagesPage = () => {
                 <h1 className="text-lg font-bold text-foreground">
                   Inbox
                 </h1>
-                <p className="text-xs text-muted-foreground mt-0.5">Stay connected with everyone</p>
               </div>
               
               <Button variant="default" size="sm" onClick={() => setShowUserSelect(true)} className="h-10 w-10 bg-primary hover:bg-primary/90 shadow-sm rounded-full">

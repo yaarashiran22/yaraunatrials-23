@@ -315,12 +315,12 @@ const DiscoverPage = () => {
               )}
               
               {/* Button - Always shown */}
-              <div className="bg-white rounded-xl p-2 border border-border shadow-sm max-w-xs mx-auto">
+              <div className="flex justify-center">
                 <OpenToHangButton 
                   size="sm" 
                   shareText="I'm Open to Hang" 
                   removeText="Stop Sharing" 
-                  className="w-full rounded-full text-sm" 
+                  className="rounded-full px-6 py-2.5 text-sm font-medium shadow-md" 
                 />
               </div>
             </>
