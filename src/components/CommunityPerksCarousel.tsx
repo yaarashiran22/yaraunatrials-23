@@ -97,9 +97,17 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
 
   if (loading) {
     return (
-      <div className="flex gap-5 animate-pulse min-w-fit">
+      <div className="flex gap-8 animate-pulse min-w-fit">
         {[1, 2, 3].map((i) => (
-          <Card key={i} className="min-w-[240px] flex-shrink-0 h-[280px] bg-muted/50" />
+          <Card key={i} className="min-w-[280px] w-[280px] flex-shrink-0 h-[360px] bg-gradient-to-br from-muted/30 to-muted/50 rounded-3xl border-0 shadow-lg">
+            <div className="h-44 bg-muted/40 rounded-t-3xl"></div>
+            <div className="p-6 space-y-4">
+              <div className="h-4 bg-muted/40 rounded-full w-3/4"></div>
+              <div className="h-3 bg-muted/30 rounded-full w-full"></div>
+              <div className="h-3 bg-muted/30 rounded-full w-2/3"></div>
+              <div className="h-12 bg-muted/40 rounded-2xl mt-6"></div>
+            </div>
+          </Card>
         ))}
       </div>
     );
@@ -107,81 +115,114 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
 
   if (allItems.length === 0) {
     return (
-      <div className="text-center py-6 text-muted-foreground w-full">
-        <Gift className="w-8 h-8 mx-auto mb-2 opacity-50" />
-        <p>No coupons available at the moment</p>
+      <div className="text-center py-12 text-muted-foreground w-full">
+        <div className="w-20 h-20 bg-muted/30 rounded-3xl flex items-center justify-center mx-auto mb-4">
+          <Gift className="w-10 h-10 opacity-50" />
+        </div>
+        <h3 className="text-lg font-semibold mb-2">No Hot Deals Available</h3>
+        <p className="text-sm">Check back later for exciting coupons and offers!</p>
       </div>
     );
   }
 
   return (
     <>
-      <div className="flex gap-6 min-w-fit">
+      <div className="flex gap-8 min-w-fit">
         {allItems.map((item) => {
           const isUserCoupon = item.type === 'user_coupon';
           const isClaimed = !isUserCoupon && checkIfClaimed(item.id);
           const claim = !isUserCoupon ? getClaim(item.id) : null;
           
           return (
-            <Card key={`${item.type}-${item.id}`} className="min-w-[240px] w-[240px] flex-shrink-0 bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:shadow-lg transition-all duration-300 group">
-              <CardContent className="p-0 space-y-0 bg-card/80 border border-border/20 rounded-lg backdrop-blur-sm overflow-hidden">
-                {/* Large Header Image */}
-                {item.image_url && (
-                  <div className="relative overflow-hidden">
+            <Card key={`${item.type}-${item.id}`} className="min-w-[280px] w-[280px] flex-shrink-0 bg-white dark:bg-gray-900 border-0 shadow-lg hover:shadow-2xl transition-all duration-500 group overflow-hidden rounded-3xl">
+              <CardContent className="p-0 space-y-0 relative">
+                {/* Header Image Section */}
+                {item.image_url ? (
+                  <div className="relative overflow-hidden h-44">
                     <img 
                       src={item.image_url} 
                       alt={item.business_name || item.title}
-                      className="w-full h-36 object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3">
-                      <h3 className="font-semibold text-white text-base leading-tight drop-shadow-lg">
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    
+                    {/* Discount Badge - Floating */}
+                    {item.discount_amount && (
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-coral hover:bg-coral-hover text-white font-bold text-sm px-4 py-2 rounded-2xl shadow-lg border-0">
+                          {item.discount_amount}
+                        </Badge>
+                      </div>
+                    )}
+                    
+                    {/* Business Name and Title Overlay */}
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="font-bold text-white text-lg leading-tight drop-shadow-lg mb-1">
                         {item.business_name}
                       </h3>
-                      <p className="text-sm text-white/90 font-medium mt-1 drop-shadow-md">
+                      <p className="text-sm text-white/90 font-medium drop-shadow-md line-clamp-2">
+                        {item.title}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  /* No Image Header */
+                  <div className="p-6 pb-4 bg-gradient-to-br from-primary/5 to-secondary/5 h-44 flex flex-col justify-center relative">
+                    {/* Discount Badge - Top Right */}
+                    {item.discount_amount && (
+                      <div className="absolute top-4 right-4">
+                        <Badge className="bg-coral hover:bg-coral-hover text-white font-bold text-sm px-4 py-2 rounded-2xl shadow-md border-0">
+                          {item.discount_amount}
+                        </Badge>
+                      </div>
+                    )}
+                    
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                        <Gift className="w-8 h-8 text-primary" />
+                      </div>
+                      <h3 className="font-bold text-foreground text-xl leading-tight mb-2">
+                        {item.business_name}
+                      </h3>
+                      <p className="text-base text-primary font-semibold">
                         {item.title}
                       </p>
                     </div>
                   </div>
                 )}
                 
-                {/* Content without image header */}
-                {!item.image_url && (
-                  <div className="p-4 pb-2">
-                    <h3 className="font-semibold text-foreground text-base leading-tight">
-                      {item.business_name}
-                    </h3>
-                    <p className="text-sm text-primary font-medium mt-1">
-                      {item.title}
+                {/* Content Section */}
+                <div className="p-6 space-y-4">
+                  {/* Description */}
+                  {item.description && (
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                      {item.description}
                     </p>
-                  </div>
-                )}
-                
-                 <div className="p-4 pt-3 space-y-3">
-                  {/* Discount */}
-                  {item.discount_amount && (
-                    <Badge variant="secondary" className="bg-primary/10 text-primary font-bold">
-                      {item.discount_amount}
-                    </Badge>
                   )}
 
-                  {/* Description */}
-                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                    {item.description}
-                  </p>
-
-                  {/* Location and Valid Until */}
-                  <div className="space-y-1">
+                  {/* Location and Valid Until Info */}
+                  <div className="space-y-2">
                     {(item as any).neighborhood && (
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <MapPin className="w-3 h-3" />
-                        <span>{(item as any).neighborhood}</span>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center">
+                          <MapPin className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium">{(item as any).neighborhood}</span>
                       </div>
                     )}
                     {item.valid_until && (
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Clock className="w-3 h-3" />
-                        <span>Valid until {new Date(item.valid_until).toLocaleDateString()}</span>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="w-8 h-8 bg-muted/50 rounded-full flex items-center justify-center">
+                          <Clock className="w-4 h-4" />
+                        </div>
+                        <span className="font-medium">
+                          Valid until {new Date(item.valid_until).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -192,26 +233,29 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                       <Button
                         onClick={() => handleShowUserCouponQR(item)}
                         disabled={generatingQR}
-                        className="w-full gap-2"
-                        size="sm"
+                        className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
                       >
-                        <QrCode className="w-4 h-4" />
+                        <QrCode className="w-5 h-5 mr-2" />
                         {generatingQR ? 'Generating...' : 'Show QR Code'}
                       </Button>
                     ) : isClaimed ? (
                       <Button
                         onClick={() => handleShowQR(item)}
-                        className="w-full gap-2 bg-green-600 hover:bg-green-700"
-                        size="sm"
+                        className={`w-full h-12 font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ${
+                          claim?.is_used 
+                            ? 'bg-gray-500 hover:bg-gray-600 text-white cursor-default transform-none' 
+                            : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white'
+                        }`}
+                        disabled={claim?.is_used}
                       >
                         {claim?.is_used ? (
                           <>
-                            <CheckCircle className="w-4 h-4" />
+                            <CheckCircle className="w-5 h-5 mr-2" />
                             Used
                           </>
                         ) : (
                           <>
-                            <QrCode className="w-4 h-4" />
+                            <QrCode className="w-5 h-5 mr-2" />
                             Show QR Code
                           </>
                         )}
@@ -220,10 +264,9 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
                       <Button
                         onClick={() => handleClaimCoupon(item.id)}
                         disabled={claiming}
-                        className="w-full gap-2"
-                        size="sm"
+                        className="w-full h-12 bg-gradient-to-r from-coral to-coral-hover hover:from-coral-hover hover:to-coral text-white font-semibold rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
                       >
-                        <Gift className="w-4 h-4" />
+                        <Gift className="w-5 h-5 mr-2" />
                         {claiming ? 'Claiming...' : 'Claim Coupon'}
                       </Button>
                     )}
