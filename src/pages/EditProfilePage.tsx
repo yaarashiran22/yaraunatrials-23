@@ -10,6 +10,7 @@ import { useProfile } from "@/hooks/useProfile";
 import BottomNavigation from "@/components/BottomNavigation";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NotificationsPopup from "@/components/NotificationsPopup";
+import InterestsSelector from "@/components/InterestsSelector";
 import profile1 from "@/assets/profile-1.jpg";
 
 const moodFilters = [
@@ -39,6 +40,7 @@ const EditProfilePage = () => {
     bio: "",
     location: "",
     specialties: [],
+    interests: [],
     isPrivate: false,
     showInSearch: true
   });
@@ -94,6 +96,7 @@ const EditProfilePage = () => {
         bio: formData.bio,
         location: formData.location,
         specialties: formData.specialties,
+        interests: formData.interests,
         is_private: formData.isPrivate,
         show_in_search: formData.showInSearch,
       };
@@ -133,6 +136,7 @@ const EditProfilePage = () => {
         bio: profile.bio || "",
         location: profile.location || "",
         specialties: profile.specialties || [],
+        interests: profile.interests || [],
         isPrivate: profile.is_private || false,
         showInSearch: profile.show_in_search !== false // Default to true if null/undefined
       });
@@ -281,6 +285,16 @@ const EditProfilePage = () => {
                 Add
               </Button>
             </div>
+          </div>
+
+          {/* Interests */}
+          <div className="relative z-10">
+            <label className="block text-sm font-medium bg-gradient-to-r from-primary via-coral to-tertiary bg-clip-text text-transparent mb-3">Interests</label>
+            <InterestsSelector
+              selectedInterests={formData.interests}
+              onChange={(interests) => handleInputChange('interests', interests)}
+              maxInterests={5}
+            />
           </div>
 
           {/* Privacy Settings */}
