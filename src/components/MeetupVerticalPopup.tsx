@@ -333,20 +333,6 @@ const MeetupVerticalPopup = ({
             </Button>
           </div>
 
-          {/* Price Badge */}
-          {displayItem.price && (
-            <div className="absolute bottom-4 left-4">
-              {displayItem.price === 'Free' ? (
-                <div className="bg-emerald-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full font-bold">
-                  Free Event
-                </div>
-              ) : (
-                <div className="bg-white/90 backdrop-blur-sm text-foreground px-4 py-2 rounded-full font-bold">
-                  {displayItem.price}
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Progress Indicators */}
