@@ -104,11 +104,11 @@ const MessagesPage = () => {
   return <div className="min-h-screen bg-background flex flex-col pb-20 lg:pb-0">
       {/* Mobile Header */}
       <div className="lg:hidden">
-        <Header title={selectedUser ? selectedUser.name || "User" : "Messages"} />
+        <Header title={selectedUser ? selectedUser.name || "User" : "Inbox"} />
       </div>
       
       {/* Desktop Header */}
-      <DesktopHeader title={selectedUser ? selectedUser.name || "User" : "Messages"} showSearch={false} />
+      <DesktopHeader title={selectedUser ? selectedUser.name || "User" : "Inbox"} showSearch={false} />
       {/* Custom Chat Headers - Only for mobile conversation view */}
       {selectedUser ? <div className="sticky top-0 z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
           <div className="px-4 py-3 lg:px-6">
@@ -154,21 +154,18 @@ const MessagesPage = () => {
         </div> : <div className="sticky top-0 z-30 bg-card/95 backdrop-blur-lg border-b border-border/20 shadow-sm lg:hidden">
           <div className="px-4 py-3 lg:px-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="h-10 w-10 rounded-full hover:bg-accent/50 transition-all duration-200">
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-                <div>
-                  <h1 className="text-lg font-bold text-foreground">
-                    Messages
-                  </h1>
-                  
-                </div>
+              <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="h-10 w-10 rounded-full hover:bg-accent/50 transition-all duration-200">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              
+              <div className="flex-1 text-center">
+                <h1 className="text-lg font-bold text-foreground">
+                  Inbox
+                </h1>
               </div>
               
-              <Button variant="default" size="sm" onClick={() => setShowUserSelect(true)} className="gap-2 bg-primary hover:bg-primary/90 shadow-sm rounded-full px-4 h-9">
-                <Users className="h-4 w-4" />
-                New
+              <Button variant="default" size="sm" onClick={() => setShowUserSelect(true)} className="h-10 w-10 bg-primary hover:bg-primary/90 shadow-sm rounded-full">
+                +
               </Button>
             </div>
           </div>
