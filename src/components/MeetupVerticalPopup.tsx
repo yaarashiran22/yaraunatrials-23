@@ -322,14 +322,22 @@ const MeetupVerticalPopup = ({
             </Button>
           </div>
 
-          {/* Heart Button */}
-          <div className="absolute top-4 right-16">
+          {/* Heart and Share Buttons */}
+          <div className="absolute top-4 right-16 flex gap-2">
             <Button
               variant="ghost"
               size="sm"
-              className="bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white h-9 w-9 rounded-full p-0"
+              onClick={handleShare}
+              className="bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white h-8 w-8 rounded-full p-0"
             >
-              <Heart className="h-4 w-4" />
+              <Share className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white h-8 w-8 rounded-full p-0"
+            >
+              <Heart className="h-3.5 w-3.5" />
             </Button>
           </div>
 
@@ -483,15 +491,6 @@ const MeetupVerticalPopup = ({
                 Request to Join
               </Button>
             )}
-            
-            <Button 
-              onClick={handleShare}
-              variant="outline"
-              className="w-full h-12 border-2 border-primary/30 hover:bg-primary/10 rounded-2xl font-semibold transition-all duration-200"
-            >
-              <Share className="h-4 w-4 mr-2" />
-              Share Meetup
-             </Button>
            </div>
          </div>
        </div>
