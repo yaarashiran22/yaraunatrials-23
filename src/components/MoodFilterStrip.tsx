@@ -118,11 +118,12 @@ const MoodFilterStrip = ({ onFilterChange, showTitle = true }: MoodFilterStripPr
           size="sm"
           onClick={() => handleFilterClick(allFilter.id)}
           className={`
-            flex-shrink-0 rounded-full px-6 py-3 text-sm font-medium transition-all duration-200 
-            flex items-center gap-2 min-w-fit border border-transparent
+            flex-shrink-0 rounded-full px-8 py-4 text-base font-semibold transition-all duration-300 
+            flex items-center gap-2 min-w-fit border-2 shadow-lg hover:shadow-xl
+            transform hover:scale-105 active:scale-95
             ${activeFilter === allFilter.id 
-              ? `${allFilter.activeBg} ${allFilter.color} border-current/20` 
-              : `${allFilter.color} hover:bg-accent/50`
+              ? `${allFilter.activeBg} ${allFilter.color} border-current/30 shadow-current/20` 
+              : `${allFilter.color} hover:bg-accent/70 border-transparent hover:border-current/20`
             }
           `}
         >
@@ -140,15 +141,16 @@ const MoodFilterStrip = ({ onFilterChange, showTitle = true }: MoodFilterStripPr
               size="sm"
               onClick={() => handleFilterClick(filter.id)}
               className={`
-                flex-shrink-0 rounded-full px-6 py-3 text-sm font-medium transition-all duration-200 
-                flex items-center gap-2 min-w-fit border border-transparent
+                flex-shrink-0 rounded-full px-8 py-4 text-base font-semibold transition-all duration-300 
+                flex items-center gap-3 min-w-fit border-2 shadow-lg hover:shadow-xl
+                transform hover:scale-105 active:scale-95
                 ${activeFilter === filter.id 
-                  ? `${filter.activeBg} ${filter.color} border-current/20` 
-                  : `${filter.color} hover:bg-accent/50`
+                  ? `${filter.activeBg} ${filter.color} border-current/30 shadow-current/20` 
+                  : `${filter.color} hover:bg-accent/70 border-transparent hover:border-current/20`
                 }
               `}
             >
-              <IconComponent className={`h-4 w-4 ${filter.color}`} />
+              <IconComponent className={`h-5 w-5 ${filter.color}`} />
               {filter.label}
             </Button>
           );
@@ -159,14 +161,14 @@ const MoodFilterStrip = ({ onFilterChange, showTitle = true }: MoodFilterStripPr
 
   return (
     <>
-      <div className="sticky top-[var(--header-height,64px)] z-50 bg-accent/5 backdrop-blur-sm border-b border-border/20 shadow-sm">
-        <div className="px-4 lg:px-8 py-3">
+      <div className="sticky top-[var(--header-height,64px)] z-50 bg-gradient-to-r from-background via-background/95 to-background backdrop-blur-md border-b border-primary/20 shadow-lg">
+        <div className="px-4 lg:px-8 py-4">
           {showTitle && (
-            <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
+            <h3 className="text-xl font-bold text-foreground mb-5 text-center">
               What mood are you in?
             </h3>
           )}
-          <div className="flex overflow-x-auto gap-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+          <div className="flex overflow-x-auto gap-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40 pb-2">
             {renderFilterButtons()}
           </div>
         </div>
