@@ -508,7 +508,7 @@ All colors MUST be HSL.
     text-transform: lowercase;
     position: relative;
     color: hsl(0 0% 0%); /* Black font for row titles */
-    font-size: 1.25em;
+    font-size: 1.35em;
     margin-bottom: 0.5rem;
   }
 
@@ -519,7 +519,7 @@ All colors MUST be HSL.
     text-transform: lowercase;
     position: relative;
     color: hsl(0 0% 0%); /* Black font for viral hosts section */
-    font-size: 1.25em;
+    font-size: 1.35em;
     margin-bottom: 0.5rem;
   }
 
