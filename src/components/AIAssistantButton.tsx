@@ -10,7 +10,7 @@ const AIAssistantButton: React.FC = () => {
     <>
       <Button
         onClick={() => setIsPopupOpen(true)}
-        className="fixed bottom-32 lg:bottom-20 right-4 z-40 rounded-full w-14 h-14 shadow-lg bg-white hover:bg-gray-100 text-black border-3 border-tertiary shadow-tertiary/30"
+        className="fixed bottom-32 lg:bottom-20 right-4 z-40 rounded-full w-14 h-14 shadow-lg bg-white hover:bg-gray-100 text-black border-4 border-tertiary shadow-xl shadow-tertiary/50 hover:shadow-2xl hover:shadow-tertiary/60"
         size="icon"
       >
         <Sparkles className="w-7 h-7" />
