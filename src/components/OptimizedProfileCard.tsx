@@ -133,7 +133,7 @@ const OptimizedProfileCard = memo(({
         </div>
         
         <span 
-          className="text-xs font-semibold text-center max-w-[70px] truncate text-white cursor-pointer hover:text-primary transition-all duration-300 hover:scale-105 group-hover:drop-shadow-lg"
+          className="text-xs font-semibold text-center max-w-[70px] truncate text-black cursor-pointer hover:text-primary transition-all duration-300 hover:scale-105 group-hover:drop-shadow-lg"
           onClick={handleNavigateToProfile}
         >
           {name}
