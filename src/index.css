@@ -518,7 +518,7 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(0 0% 100%); /* White font for neighbors section */
+    color: hsl(0 0% 0%); /* Black font for viral hosts section */
     font-size: 1.25em;
     margin-bottom: 0.5rem;
   }
