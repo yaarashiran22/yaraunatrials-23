@@ -66,7 +66,7 @@ const Header = ({
               role="button"
               aria-label="Navigate to homepage"
               style={{ 
-                color: 'hsl(var(--coral))', 
+                color: 'hsl(var(--tertiary))', 
                 fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 700,
                 textTransform: 'lowercase',
@@ -74,7 +74,7 @@ const Header = ({
               }}
             >
               una
-              <Sparkles className="h-4 w-4" style={{ color: 'hsl(var(--coral))' }} />
+              <Sparkles className="h-4 w-4" style={{ color: 'hsl(var(--tertiary))' }} />
             </div>
           </div>
           

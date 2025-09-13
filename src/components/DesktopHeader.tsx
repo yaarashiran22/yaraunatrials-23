@@ -50,7 +50,7 @@ const DesktopHeader = ({
               onClick={() => navigate('/')}
               role="button"
               aria-label="Navigate to homepage"
-              style={{ color: 'hsl(var(--coral))' }}
+              style={{ color: 'hsl(var(--tertiary))' }}
             >
               una
             </div>
