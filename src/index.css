@@ -12,7 +12,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Modern Harmonious Color Palette - Blue, Indigo, Purple with Coral Accents */
-    --background: 82 75% 82%;                 /* Lime-ish mid-light green background */
+    --background: 82 85% 82%;                 /* Lime-ish mid-light green background */
     --foreground: 215 25% 27%;                /* Dark text for light background */
 
     --card: 0 0% 100%;                       /* Pure white cards */
@@ -203,7 +203,7 @@ All colors MUST be HSL.
 
   .dark {
     /* Dark Mode - Harmonious Dark Theme */
-    --background: 82 45% 8%;                /* Dark lime-green background */
+    --background: 82 55% 8%;                /* Dark lime-green background */
     --foreground: 0 0% 98%;                  /* Near white text */
 
     --card: 224 71% 8%;                      /* Dark card background */
