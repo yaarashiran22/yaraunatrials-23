@@ -12,8 +12,8 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Modern Harmonious Color Palette - Blue, Indigo, Purple with Coral Accents */
-    --background: 82 75% 85%;                 /* Lime-ish mid-light green background */
-    --foreground: 215 25% 27%;                /* Dark text for light background */
+    --background: 260 85% 15%;                 /* Electric purple background */
+    --foreground: 210 40% 95%;                /* Light text for dark background */
 
     --card: 0 0% 100%;                       /* Pure white cards */
     --card-foreground: 224 71% 4%;           /* Dark navy for card text */
@@ -203,7 +203,7 @@ All colors MUST be HSL.
 
   .dark {
     /* Dark Mode - Harmonious Dark Theme */
-    --background: 82 45% 10%;                /* Dark lime-green background */
+    --background: 224 71% 4%;                /* Dark navy background */
     --foreground: 0 0% 98%;                  /* Near white text */
 
     --card: 224 71% 8%;                      /* Dark card background */
@@ -508,7 +508,7 @@ All colors MUST be HSL.
     text-transform: lowercase;
     position: relative;
     color: hsl(0 0% 0%); /* Black font for row titles */
-    font-size: 1.35em;
+    font-size: 1.25em;
     margin-bottom: 0.5rem;
   }
 
@@ -518,8 +518,8 @@ All colors MUST be HSL.
     letter-spacing: -0.03em;
     text-transform: lowercase;
     position: relative;
-    color: hsl(0 0% 0%); /* Black font for viral hosts section */
-    font-size: 1.35em;
+    color: hsl(0 0% 100%); /* White font for neighbors section */
+    font-size: 1.25em;
     margin-bottom: 0.5rem;
   }
 
