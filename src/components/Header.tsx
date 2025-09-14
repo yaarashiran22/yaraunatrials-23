@@ -90,14 +90,6 @@ const Header = ({
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="p-2.5 h-10 w-10 bg-white text-black hover:bg-gray-100 border-gray-200 rounded-full"
-                  onClick={openSearch}
-                >
-                  <Search className="h-5 w-5" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
                   className="relative p-2.5 h-10 w-10 bg-black text-white hover:bg-gray-800 border-black rounded-full"
                   onClick={() => setShowNotifications(true)}
                 >
