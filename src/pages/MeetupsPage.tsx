@@ -14,6 +14,7 @@ import UniformCard from '@/components/UniformCard';
 import { getRelativeDay } from '@/utils/dateUtils';
 import MeetupVerticalPopup from '@/components/MeetupVerticalPopup';
 import CreateEventPopup from '@/components/CreateEventPopup';
+import MoodFilterStrip from '@/components/MoodFilterStrip';
 import communityEvent from '@/assets/community-event.jpg';
 import profile1 from '@/assets/profile-1.jpg';
 
@@ -24,6 +25,7 @@ const MeetupsPage = () => {
   
   // Meetup states
   const [meetupFilter, setMeetupFilter] = useState<'all' | 'friends'>('all');
+  const [moodFilter, setMoodFilter] = useState<string>('all');
   const [selectedMeetupItem, setSelectedMeetupItem] = useState<any>(null);
   const [isMeetupPopupOpen, setIsMeetupPopupOpen] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
@@ -33,6 +35,12 @@ const MeetupsPage = () => {
     events: meetupEvents = [],
     refetch: refetchMeetups
   } = useEvents('meetup', meetupFilter === 'friends');
+
+  // Mood filter handler
+  const handleMoodFilterChange = (filterId: string) => {
+    setMoodFilter(filterId);
+    // TODO: Could implement mood-based filtering here if needed
+  };
 
   // Meetup click handler for vertical scrolling popup
   const handleMeetupClick = useCallback((meetup: any, allMeetups?: any[], currentIndex?: number) => {
@@ -94,6 +102,11 @@ const MeetupsPage = () => {
             </div>
           </div>
           
+          {/* Mood Filter Strip */}
+          <MoodFilterStrip 
+            onFilterChange={handleMoodFilterChange}
+            showTitle={false}
+          />
           
           {meetupEvents.length === 0 ? (
             <div className="text-center py-6 text-muted-foreground">
