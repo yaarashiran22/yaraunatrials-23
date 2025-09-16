@@ -161,7 +161,7 @@ const MeetupsPage = () => {
           
           {meetupEvents.length === 0 ? <div className="text-center py-6 text-muted-foreground">
               <p>No meetups available at the moment</p>
-            </div> : <div className="flex flex-col items-center space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+            </div> : <div className="flex flex-col items-center space-y-6 p-4 overflow-visible">
               {meetupEvents.slice(0, 6).map((event, index) => <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
                    <UniformCard id={event.id} image={event.image_url || communityEvent} video={(event as any).video_url} title={event.title} subtitle={event.location || 'Tel Aviv'} price={event.price} date={getRelativeDay(event.date)} type="event" uploader={{
                       ...event.uploader,
