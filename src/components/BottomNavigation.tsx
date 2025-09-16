@@ -1,5 +1,5 @@
 
-import { Home, User, Users, Settings, LogIn, Plus, Heart, Search } from "lucide-react";
+import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -45,6 +45,20 @@ const BottomNavigation = () => {
             }`}
           >
             <Home className={`h-6 w-6 transition-all duration-300 ${isActive('/') ? 'stroke-[2.5]' : 'group-hover:scale-110'}`} />
+          </Button>
+
+          {/* Meetups */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/meetups')}
+            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
+              isActive('/meetups') 
+                ? 'text-foreground' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
+            }`}
+          >
+            <Calendar className={`h-6 w-6 transition-all duration-300 ${isActive('/meetups') ? 'stroke-[2.5]' : 'group-hover:scale-110'}`} />
           </Button>
 
           {/* Profile/Login */}

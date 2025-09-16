@@ -28,6 +28,8 @@ import AllEventsPage from "./pages/AllEventsPage";
 import AllMeetupsPage from "./pages/AllMeetupsPage";
 import AllRecommendationsPage from "./pages/AllRecommendationsPage";
 
+import MeetupsPage from "./pages/MeetupsPage";
+
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
 import NewItemPage from "./pages/NewItemPage";
@@ -96,6 +98,7 @@ const AppContent = () => {
               <Route path="/new-item" element={<NewItemPage />} />
               <Route path="/create-post" element={<CreatePostPage />} />
               <Route path="/create-event" element={<CreateEventPage />} />
+              <Route path="/meetups" element={<MeetupsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
@@ -155,6 +158,7 @@ const AppContent = () => {
             <Route path="/new-item" element={<NewItemPage />} />
             <Route path="/create-post" element={<CreatePostPage />} />
             <Route path="/create-event" element={<CreateEventPage />} />
+            <Route path="/meetups" element={<MeetupsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
