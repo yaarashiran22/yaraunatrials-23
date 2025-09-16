@@ -82,8 +82,8 @@ const UniformCard = ({
       style={{
         transform: 'perspective(1000px)',
         transformStyle: 'preserve-3d',
-        minWidth: '280px',
-        width: '280px'
+        minWidth: '320px',
+        width: '320px'
       }}
     >
       <div className="aspect-[4/5] overflow-hidden relative rounded-3xl">
