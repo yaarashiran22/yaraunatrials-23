@@ -18,7 +18,6 @@ import CreateEventPopup from "@/components/CreateEventPopup";
 import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
-import AIAssistantButton from "@/components/AIAssistantButton";
 import { Button } from "@/components/ui/button";
 import { Bell, Users, Plus, Search, Filter, MapPin, Calendar, MessageCircle, Heart, Share2, UserPlus, MessageSquare, ChevronRight, Clock, Star, ArrowRight, Map as MapIcon } from "lucide-react";
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -462,8 +461,6 @@ const Index = () => {
       refetch();
     }} />}
 
-      {/* Floating AI Assistant Toggle */}
-      <AIAssistantButton />
       
       <BottomNavigation />
     </div>;

@@ -1,5 +1,4 @@
 
-import LanguageSelector from "@/components/LanguageSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
 import NeighborhoodIndicator from "@/components/NeighborhoodIndicator";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -7,10 +6,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Home, Settings, ChevronDown, Heart, Plus, Sparkles, MapPin, Search, Zap } from "lucide-react";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Plus, Sparkles, MapPin, Search, Zap, MessageCircle } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useSearch } from "@/contexts/SearchContext";
+import AIAssistantPopup from "@/components/AIAssistantPopup";
 import { useState } from "react";
 
 interface HeaderProps {
@@ -35,6 +35,7 @@ const Header = ({
   const navigate = useNavigate();
   const { openNewItem } = useNewItem();
   const { openSearch } = useSearch();
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -74,12 +75,28 @@ const Header = ({
             <NeighborhoodSelector onNeighborhoodChange={onNeighborhoodChange} />
           </div>
           
-          {/* Right side - Empty */}
+          {/* Right side - AI Assistant */}
           <div className="flex items-center gap-2 w-32 justify-end">
+            {user && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="p-2.5 h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/80 border-primary rounded-full"
+                onClick={() => setShowAIAssistant(true)}
+              >
+                <MessageCircle className="h-5 w-5" />
+              </Button>
+            )}
           </div>
           
         </div>
       </div>
+      
+      {/* AI Assistant Popup */}
+      <AIAssistantPopup
+        isOpen={showAIAssistant}
+        onClose={() => setShowAIAssistant(false)}
+      />
     </header>
   );
 };
