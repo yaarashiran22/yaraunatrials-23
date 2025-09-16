@@ -121,28 +121,6 @@ const UniformCard = ({
         {/* Subtle glow border on hover */}
         <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-primary/30 transition-all duration-500"></div>
         
-        {/* User profile section for events */}
-        {type === 'event' && uploader && (
-          <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/90 backdrop-blur-md rounded-full px-2 py-1 shadow-lg transition-all duration-300 group-hover:bg-white group-hover:scale-105">
-            <div 
-              className="w-6 h-6 rounded-full overflow-hidden cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onProfileClick && uploader.user_id) {
-                  onProfileClick(uploader.user_id);
-                }
-              }}
-            >
-              <img 
-                src={uploader.image || uploader.small_photo} 
-                alt={uploader.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <span className="text-xs font-medium text-black line-clamp-1 max-w-20">{uploader.name}</span>
-          </div>
-        )}
-
         {/* Enhanced text overlay - smaller to show more image */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
           <div className="space-y-1">
@@ -150,14 +128,38 @@ const UniformCard = ({
             {subtitle && (
               <p className="text-xs text-white/80 line-clamp-1 drop-shadow-md transform translate-y-0 group-hover:translate-y-[-1px] transition-transform duration-300">{subtitle}</p>
             )}
-            <div className="flex items-center gap-1.5 mt-1">
-              {date && (
-                <span className="text-xs font-medium px-2 py-0.5 bg-red-500 backdrop-blur-md rounded-full text-white border border-red-500 shadow-lg transition-all duration-300 group-hover:bg-red-600 group-hover:scale-105">{date}</span>
-              )}
-              {(price || (type === 'event')) && (
-                <span className="text-xs font-medium px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">
-                  {price ? `$${price}` : 'free'}
-                </span>
+            <div className="flex items-center justify-between gap-1.5 mt-1">
+              <div className="flex items-center gap-1.5">
+                {date && (
+                  <span className="text-xs font-medium px-2 py-0.5 bg-red-500 backdrop-blur-md rounded-full text-white border border-red-500 shadow-lg transition-all duration-300 group-hover:bg-red-600 group-hover:scale-105">{date}</span>
+                )}
+                {(price || (type === 'event')) && (
+                  <span className="text-xs font-medium px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded-full text-white border border-white/40 shadow-lg transition-all duration-300 group-hover:bg-primary group-hover:scale-105">
+                    {price ? `$${price}` : 'free'}
+                  </span>
+                )}
+              </div>
+              
+              {/* User profile section for events */}
+              {type === 'event' && uploader && (
+                <div 
+                  className="flex items-center gap-1.5 cursor-pointer group/profile transition-all duration-300 hover:scale-105"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (onProfileClick && uploader.user_id) {
+                      onProfileClick(uploader.user_id);
+                    }
+                  }}
+                >
+                  <span className="text-xs font-medium text-white/90 drop-shadow-md line-clamp-1 max-w-16 group-hover/profile:text-white transition-colors duration-300">by {uploader.name}</span>
+                  <div className="w-5 h-5 rounded-full overflow-hidden border border-white/30 shadow-lg group-hover/profile:border-white/60 transition-all duration-300">
+                    <img 
+                      src={uploader.image || uploader.small_photo} 
+                      alt={uploader.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
               )}
             </div>
           </div>
