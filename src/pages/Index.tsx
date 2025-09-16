@@ -15,7 +15,6 @@ import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import FriendMeetupPopup from "@/components/FriendMeetupPopup";
 import CreateEventPopup from "@/components/CreateEventPopup";
-import { CommunityPerksCarousel } from "@/components/CommunityPerksCarousel";
 import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
@@ -27,7 +26,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
-import { AddCouponModal } from "@/components/AddCouponModal";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useOptimizedHomepage } from "@/hooks/useOptimizedHomepage";
@@ -114,7 +112,6 @@ const Index = () => {
   // Fetch events and meetups separately from the new events table
   const [meetupFilter, setMeetupFilter] = useState<'all' | 'friends'>('all');
   const [eventFilter, setEventFilter] = useState<'all' | 'following'>('all');
-  const [couponFilter, setCouponFilter] = useState<'all' | 'following'>('all');
   const {
     events: realEvents = [],
     refetch: refetchEvents
@@ -150,7 +147,6 @@ const Index = () => {
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [createEventType, setCreateEventType] = useState<'event' | 'meetup'>('event');
-  const [isAddCouponModalOpen, setIsAddCouponModalOpen] = useState(false);
 
   // Set refresh callback for new items - stabilized with useCallback
   const refreshCallback = useCallback(() => {
@@ -443,46 +439,6 @@ const Index = () => {
             </div>}
         </section>
 
-        {/* Coupons Section - Horizontal Carousel */}
-        <section className="home-section">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="title-section">
-              hot deals
-            </h2>
-            <div className="flex items-center gap-2">
-              {currentUserProfile?.account_type === 'business' && <Button variant="outline" size="sm" onClick={() => setIsAddCouponModalOpen(true)} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
-                  <Plus className="h-3 w-3 text-black" />
-                </Button>}
-            </div>
-          </div>
-          
-          <div className="flex gap-2 mb-4">
-            <Button variant={couponFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setCouponFilter('all')} className={`text-xs px-2 py-1 rounded-full h-6 ${couponFilter === 'all' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'border-accent-subtle text-accent-subtle hover:bg-accent-muted'}`} style={couponFilter === 'all' ? {
-            backgroundColor: 'hsl(var(--accent-subtle))',
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'white'
-          } : {
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'hsl(var(--accent-subtle))'
-          }}>
-              All
-            </Button>
-            <Button variant={couponFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setCouponFilter('following')} className={`text-xs px-2 py-1 rounded-full h-6 ${couponFilter === 'following' ? 'bg-accent-subtle text-white border-accent-subtle hover:bg-accent-subtle/90' : 'bg-white border-primary text-primary hover:bg-white/90'}`} style={couponFilter === 'following' ? {
-            backgroundColor: 'hsl(var(--accent-subtle))',
-            borderColor: 'hsl(var(--accent-subtle))',
-            color: 'white'
-          } : undefined} disabled={!user}>
-              <Users className="h-2.5 w-2.5 mr-1" />
-              Following
-            </Button>
-          </div>
-          <div className="flex overflow-x-auto gap-6 pb-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40" dir="ltr" style={{
-          scrollBehavior: 'smooth'
-        }}>
-            <CommunityPerksCarousel filter={couponFilter} following={following} />
-          </div>
-        </section>
-
 
 
       </main>
@@ -512,7 +468,6 @@ const Index = () => {
       <AIAssistantButton />
       
       <BottomNavigation />
-      {isAddCouponModalOpen && <AddCouponModal isOpen={isAddCouponModalOpen} onClose={() => setIsAddCouponModalOpen(false)} />}
     </div>;
 };
 export default Index;
