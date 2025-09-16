@@ -142,7 +142,7 @@ const MeetupsPage = () => {
         <section className="home-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="title-section">
-              spontaneous meetups
+              wanna meet up
             </h2>
             <div className="flex items-center gap-2">
               <Button 
