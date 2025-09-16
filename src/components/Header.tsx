@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Home, Settings, ChevronDown, Heart, Plus, Sparkles, MapPin, Search, Zap, MessageCircle } from "lucide-react";
+import { LogOut, User, Home, Settings, ChevronDown, Heart, Plus, MapPin, Search, Zap, MessageCircle, Sparkles } from "lucide-react";
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useSearch } from "@/contexts/SearchContext";
@@ -66,7 +66,6 @@ const Header = ({
               }}
             >
               una
-              <Sparkles className="h-4 w-4" style={{ color: 'hsl(var(--coral))' }} />
             </div>
           </div>
           
@@ -84,7 +83,7 @@ const Header = ({
                 className="p-2.5 h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/80 border-primary rounded-full"
                 onClick={() => setShowAIAssistant(true)}
               >
-                <MessageCircle className="h-5 w-5" />
+                <Sparkles className="h-5 w-5" />
               </Button>
             )}
           </div>
