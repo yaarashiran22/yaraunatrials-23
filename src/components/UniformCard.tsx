@@ -121,6 +121,28 @@ const UniformCard = ({
         {/* Subtle glow border on hover */}
         <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-primary/30 transition-all duration-500"></div>
         
+        {/* User profile section for events */}
+        {type === 'event' && uploader && (
+          <div className="absolute top-3 left-3 flex items-center gap-2 bg-white/90 backdrop-blur-md rounded-full px-2 py-1 shadow-lg transition-all duration-300 group-hover:bg-white group-hover:scale-105">
+            <div 
+              className="w-6 h-6 rounded-full overflow-hidden cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onProfileClick && uploader.user_id) {
+                  onProfileClick(uploader.user_id);
+                }
+              }}
+            >
+              <img 
+                src={uploader.image || uploader.small_photo} 
+                alt={uploader.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <span className="text-xs font-medium text-black line-clamp-1 max-w-20">{uploader.name}</span>
+          </div>
+        )}
+
         {/* Enhanced text overlay - smaller to show more image */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 transform translate-y-0 group-hover:translate-y-[-2px] transition-transform duration-300">
           <div className="space-y-1">

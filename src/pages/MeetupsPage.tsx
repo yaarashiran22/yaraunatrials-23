@@ -112,7 +112,10 @@ const MeetupsPage = () => {
                     price={event.price} 
                     date={getRelativeDay(event.date)} 
                     type="event" 
-                    uploader={event.uploader} 
+                    uploader={{
+                      ...event.uploader,
+                      user_id: event.user_id
+                    }}
                     onProfileClick={userId => navigate(`/profile/${userId}`)} 
                     onClick={() => handleMeetupClick({
                       id: event.id,

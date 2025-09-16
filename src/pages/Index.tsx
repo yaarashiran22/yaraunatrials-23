@@ -309,7 +309,10 @@ const Index = () => {
               <p>No events available at the moment</p>
             </div> : <div className="flex flex-col items-center space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
               {realEvents.slice(0, 6).map((event, index) => <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
-                   <UniformCard id={event.id} image={event.image_url || communityEvent} video={(event as any).video_url} title={event.title} subtitle={event.location || 'Tel Aviv'} price={event.price} date={getRelativeDay(event.date)} type="event" uploader={event.uploader} onProfileClick={userId => navigate(`/profile/${userId}`)} onClick={() => handleEventClick({
+                   <UniformCard id={event.id} image={event.image_url || communityEvent} video={(event as any).video_url} title={event.title} subtitle={event.location || 'Tel Aviv'} price={event.price} date={getRelativeDay(event.date)} type="event" uploader={{
+                      ...event.uploader,
+                      user_id: event.user_id
+                    }} onProfileClick={userId => navigate(`/profile/${userId}`)} onClick={() => handleEventClick({
               id: event.id,
               title: event.title,
               description: event.description || event.title,
