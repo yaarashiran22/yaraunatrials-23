@@ -394,12 +394,12 @@ const Index = () => {
             </h2>
             <div className="flex items-center gap-2">
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 size="sm" 
                 onClick={() => setShowEventFilters(true)}
-                className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground flex items-center gap-1"
+                className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1"
               >
-                <Filter className="h-3 w-3" />
+                <Filter className="h-3 w-3 text-black" />
               </Button>
               <Button variant="outline" size="sm" onClick={() => {
               setCreateEventType('event');
