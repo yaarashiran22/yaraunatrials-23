@@ -400,7 +400,6 @@ const Index = () => {
                 className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground flex items-center gap-1"
               >
                 <Filter className="h-3 w-3" />
-                Filter
               </Button>
               <Button variant="outline" size="sm" onClick={() => {
               setCreateEventType('event');
