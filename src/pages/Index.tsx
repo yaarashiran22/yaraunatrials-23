@@ -305,18 +305,9 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="flex gap-2 mb-4">
-            <Button variant={eventFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('all')} className="text-xs px-2 py-1 rounded-full h-6">
-              All
-            </Button>
-            <Button variant={eventFilter === 'following' ? 'default' : 'outline'} size="sm" onClick={() => setEventFilter('following')} className={`text-xs px-2 py-1 rounded-full h-6 ${eventFilter === 'following' ? '' : 'bg-white border-primary text-primary hover:bg-white/90'}`} disabled={!user}>
-              <Users className="h-2.5 w-2.5 mr-1" />
-              Following
-            </Button>
-          </div>
           {loading ? <FastLoadingSkeleton type="cards" count={3} /> : realEvents.length === 0 ? <div className="text-center py-6 text-muted-foreground">
               <p>No events available at the moment</p>
-            </div> : <div className="space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
+            </div> : <div className="flex flex-col items-center space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
               {realEvents.slice(0, 6).map((event, index) => <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
                    <UniformCard id={event.id} image={event.image_url || communityEvent} video={(event as any).video_url} title={event.title} subtitle={event.location || 'Tel Aviv'} price={event.price} date={getRelativeDay(event.date)} type="event" uploader={event.uploader} onProfileClick={userId => navigate(`/profile/${userId}`)} onClick={() => handleEventClick({
               id: event.id,
