@@ -15,6 +15,7 @@ import UniformCard from "@/components/UniformCard";
 import AddRecommendationCard from "@/components/AddRecommendationCard";
 import FriendMeetupPopup from "@/components/FriendMeetupPopup";
 import CreateEventPopup from "@/components/CreateEventPopup";
+import EventsFilterPopup, { EventFilters } from "@/components/EventsFilterPopup";
 import { getRelativeDay } from "@/utils/dateUtils";
 import SectionHeader from "@/components/SectionHeader";
 import FastLoadingSkeleton from "@/components/FastLoadingSkeleton";
@@ -141,6 +142,16 @@ const Index = () => {
   const [showFriendMeetup, setShowFriendMeetup] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [createEventType, setCreateEventType] = useState<'event' | 'meetup'>('event');
+  
+  // Event filter states
+  const [showEventFilters, setShowEventFilters] = useState(false);
+  const [eventFilters, setEventFilters] = useState<EventFilters>({
+    search: "",
+    neighborhood: "All Neighborhoods",
+    priceRange: "All Prices",
+    mood: "All",
+    dateRange: "All"
+  });
 
   // Set refresh callback for new items - stabilized with useCallback
   const refreshCallback = useCallback(() => {
@@ -204,6 +215,100 @@ const Index = () => {
     }
     return profilesList;
   }, [user, currentUserProfile, profiles, selectedMoodFilter]);
+
+  // Filter events based on applied filters
+  const filteredEvents = useMemo(() => {
+    if (!realEvents.length) return [];
+    
+    return realEvents.filter(event => {
+      // Search filter - case insensitive
+      if (eventFilters.search.trim()) {
+        const query = eventFilters.search.toLowerCase().trim();
+        const matchesSearch = event.title.toLowerCase().includes(query) ||
+                             event.description?.toLowerCase().includes(query) ||
+                             event.location?.toLowerCase().includes(query);
+        if (!matchesSearch) return false;
+      }
+
+      // Neighborhood filter
+      if (eventFilters.neighborhood !== "All Neighborhoods") {
+        if (!event.location?.includes(eventFilters.neighborhood)) return false;
+      }
+
+      // Price filter
+      if (eventFilters.priceRange !== "All Prices") {
+        const priceStr = event.price || "0";
+        const price = typeof priceStr === 'string' ? parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0 : priceStr;
+        switch (eventFilters.priceRange) {
+          case "Free":
+            if (price !== 0) return false;
+            break;
+          case "Up to ₪50":
+            if (price === 0 || price > 50) return false;
+            break;
+          case "₪50-100":
+            if (price <= 50 || price > 100) return false;
+            break;
+          case "₪100-200":
+            if (price <= 100 || price > 200) return false;
+            break;
+          case "Over ₪200":
+            if (price <= 200) return false;
+            break;
+        }
+      }
+
+      // Mood filter
+      if (eventFilters.mood !== "All") {
+        const eventContent = `${event.title} ${event.description || ''}`.toLowerCase();
+        const moodKeywords = {
+          'Chill': ['chill', 'relax', 'coffee', 'cafe', 'calm', 'peaceful', 'casual', 'lounge'],
+          'Go Out': ['party', 'night', 'club', 'bar', 'dance', 'nightlife', 'celebration', 'festival'],
+          'Romantic': ['romantic', 'date', 'couple', 'love', 'dinner', 'wine', 'sunset', 'intimate'],
+          'Active': ['sport', 'fitness', 'gym', 'run', 'bike', 'hike', 'workout', 'active', 'exercise'],
+          'Creative': ['art', 'creative', 'workshop', 'paint', 'music', 'craft', 'design', 'artistic'],
+          'Wellness': ['wellness', 'yoga', 'meditation', 'spa', 'health', 'mindfulness', 'therapy'],
+          'Music': ['music', 'concert', 'live', 'band', 'song', 'artist', 'performance', 'sound', 'audio']
+        };
+        
+        const keywords = moodKeywords[eventFilters.mood as keyof typeof moodKeywords] || [];
+        const hasMatchingKeyword = keywords.some(keyword => eventContent.includes(keyword));
+        
+        if (!hasMatchingKeyword) return false;
+      }
+
+      // Date filter
+      if (eventFilters.dateRange !== "All") {
+        const today = new Date();
+        const eventDate = event.date ? new Date(event.date) : null;
+        
+        if (!eventDate) return false;
+        
+        switch (eventFilters.dateRange) {
+          case "Today":
+            if (eventDate.toDateString() !== today.toDateString()) return false;
+            break;
+          case "Tomorrow":
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            if (eventDate.toDateString() !== tomorrow.toDateString()) return false;
+            break;
+          case "This Week":
+            const weekFromNow = new Date(today);
+            weekFromNow.setDate(today.getDate() + 7);
+            if (eventDate < today || eventDate > weekFromNow) return false;
+            break;
+          case "This Month":
+            const monthFromNow = new Date(today);
+            monthFromNow.setMonth(today.getMonth() + 1);
+            if (eventDate < today || eventDate > monthFromNow) return false;
+            break;
+        }
+      }
+
+      return true;
+    });
+  }, [realEvents, eventFilters]);
 
   // All business, event, and artwork data now comes from the database
   // Static data has been removed to show only real content
@@ -291,10 +396,11 @@ const Index = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                onClick={() => navigate('/all-events')}
-                className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground"
+                onClick={() => setShowEventFilters(true)}
+                className="text-xs px-2 py-1 h-6 text-muted-foreground hover:text-foreground flex items-center gap-1"
               >
-                All
+                <Filter className="h-3 w-3" />
+                Filter
               </Button>
               <Button variant="outline" size="sm" onClick={() => {
               setCreateEventType('event');
@@ -305,10 +411,10 @@ const Index = () => {
             </div>
           </div>
           
-          {loading ? <FastLoadingSkeleton type="cards" count={3} /> : realEvents.length === 0 ? <div className="text-center py-6 text-muted-foreground">
+          {loading ? <FastLoadingSkeleton type="cards" count={3} /> : filteredEvents.length === 0 ? <div className="text-center py-6 text-muted-foreground">
               <p>No events available at the moment</p>
             </div> : <div className="flex flex-col items-center space-y-6 p-4 overflow-visible">
-              {realEvents.slice(0, 6).map((event, index) => <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
+              {filteredEvents.slice(0, 6).map((event, index) => <ScrollAnimatedCard key={`event-${event.id}`} index={index}>
                    <UniformCard id={event.id} image={event.image_url || communityEvent} video={(event as any).video_url} title={event.title} subtitle={event.location || 'Tel Aviv'} price={event.price} date={getRelativeDay(event.date)} type="event" uploader={{
                       ...event.uploader,
                       user_id: event.user_id
@@ -326,7 +432,7 @@ const Index = () => {
                 name: event.uploader?.name || "Event Organizer",
                 image: event.uploader?.image || profile1
               }
-            }, [...realEvents], index)} showFavoriteButton={true} favoriteData={{
+            }, [...filteredEvents], index)} showFavoriteButton={true} favoriteData={{
               id: event.id,
               title: event.title,
               description: event.description || event.title,
@@ -359,6 +465,13 @@ const Index = () => {
       refetch();
     }} />}
 
+      {/* Events Filter Popup */}
+      <EventsFilterPopup 
+        isOpen={showEventFilters}
+        onClose={() => setShowEventFilters(false)}
+        onFiltersApply={setEventFilters}
+        currentFilters={eventFilters}
+      />
       
       <BottomNavigation />
     </div>;
