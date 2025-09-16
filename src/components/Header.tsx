@@ -80,7 +80,7 @@ const Header = ({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="p-2.5 h-10 w-10 bg-primary text-primary-foreground hover:bg-primary/80 border-primary rounded-full"
+                className="p-2.5 h-10 w-10 bg-white text-primary hover:bg-gray-100 border-gray-200 rounded-full"
                 onClick={() => setShowAIAssistant(true)}
               >
                 <Sparkles className="h-5 w-5" />
