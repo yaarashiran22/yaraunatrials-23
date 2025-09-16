@@ -120,7 +120,7 @@ const MeetupsPage = () => {
               <p>No meetups available at the moment</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex flex-col items-center space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
               {meetupEvents.map((event, index) => (
                 <ScrollAnimatedCard key={`meetup-${event.id}`} index={index}>
                   <UniformCard 
