@@ -94,26 +94,6 @@ const MeetupsPage = () => {
             </div>
           </div>
           
-          <div className="flex gap-2 mb-4">
-            <Button 
-              variant={meetupFilter === 'all' ? 'default' : 'outline'} 
-              size="sm" 
-              onClick={() => setMeetupFilter('all')} 
-              className="text-xs px-2 py-1 rounded-full h-6"
-            >
-              All
-            </Button>
-            <Button 
-              variant={meetupFilter === 'friends' ? 'default' : 'outline'} 
-              size="sm" 
-              onClick={() => setMeetupFilter('friends')} 
-              className={`text-xs px-2 py-1 rounded-full h-6 ${meetupFilter === 'friends' ? '' : 'bg-white border-primary text-primary hover:bg-white/90'}`} 
-              disabled={!user}
-            >
-              <Users className="h-2.5 w-2.5 mr-1" />
-              Friends
-            </Button>
-          </div>
           
           {meetupEvents.length === 0 ? (
             <div className="text-center py-6 text-muted-foreground">
