@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import EventFilterPopup from "@/components/EventFilterPopup";
 import EventPopup from "@/components/EventPopup";
-import NotificationsPopup from "@/components/NotificationsPopup";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -16,7 +15,6 @@ const EventsPage = () => {
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showNotifications, setShowNotifications] = useState(false);
 
   const filteredEvents = events.filter(event => 
     event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -42,7 +40,6 @@ const EventsPage = () => {
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         searchPlaceholder="Search events..."
-        onNotificationsClick={() => setShowNotifications(true)}
       />
       
       {/* Content Grid */}
@@ -106,11 +103,6 @@ const EventsPage = () => {
         isOpen={isEventPopupOpen}
         onClose={() => setIsEventPopupOpen(false)}
         event={selectedEvent}
-      />
-
-      <NotificationsPopup 
-        isOpen={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
       />
       
       <BottomNavigation />

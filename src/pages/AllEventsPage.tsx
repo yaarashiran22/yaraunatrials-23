@@ -381,11 +381,6 @@ const AllEventsPage = () => {
         event={selectedEvent}
       />
 
-      <NotificationsPopup 
-        isOpen={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
-      />
-      
       <BottomNavigation />
     </div>
   );

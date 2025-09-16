@@ -282,11 +282,11 @@ const Index = () => {
   return <div className="min-h-screen bg-background" dir="ltr">
       {/* Mobile Header */}
       <div className="lg:hidden">
-        <Header title={t('common.home')} onNotificationsClick={() => setShowNotifications(true)} />
+        <Header title={t('common.home')} />
       </div>
       
       {/* Desktop Header */}
-      <DesktopHeader title={t('common.home')} onNotificationsClick={() => setShowNotifications(true)} />
+      <DesktopHeader title={t('common.home')} />
       
       
       {/* Mood Filter Strip */}
@@ -312,27 +312,27 @@ const Index = () => {
 
         {/* Join me Section - Horizontal Carousel */}
         <section className="home-section mt-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="title-section">
-              wanna meet up
-            </h2>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => navigate('/all-meetups')}
-                className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-black hover:border-primary/80"
-              >
-                All
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => {
-              setCreateEventType('meetup');
-              setShowCreateEvent(true);
-            }} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
-                <Plus className="h-3 w-3 text-black" />
-              </Button>
-            </div>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="title-section">
+            wanna meet up
+          </h2>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate('/all-meetups')}
+              className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-black hover:border-primary/80"
+            >
+              All
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => {
+            setCreateEventType('meetup');
+            setShowCreateEvent(true);
+          }} className="text-xs px-2 py-1 rounded-full border-2 border-primary bg-transparent text-foreground hover:border-primary/80 gap-1">
+              <Plus className="h-3 w-3 text-black" />
+            </Button>
           </div>
+        </div>
           
           <div className="flex gap-2 mb-4">
             <Button variant={meetupFilter === 'all' ? 'default' : 'outline'} size="sm" onClick={() => setMeetupFilter('all')} className="text-xs px-2 py-1 rounded-full h-6">
@@ -453,8 +453,6 @@ const Index = () => {
       {isMarketplacePopupOpen && selectedMarketplaceItem && <MarketplacePopup isOpen={isMarketplacePopupOpen} onClose={() => setIsMarketplacePopupOpen(false)} item={selectedMarketplaceItem} />}
 
       {isMeetupPopupOpen && selectedMeetupItem && <MeetupVerticalPopup isOpen={isMeetupPopupOpen} onClose={() => setIsMeetupPopupOpen(false)} item={selectedMeetupItem} />}
-
-      {showNotifications && <NotificationsPopup isOpen={showNotifications} onClose={() => setShowNotifications(false)} />}
 
       {showFriendMeetup && <FriendMeetupPopup isOpen={showFriendMeetup} onClose={() => setShowFriendMeetup(false)} />}
 

@@ -10,14 +10,12 @@ import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/Header";
 import LanguageSelector from "@/components/LanguageSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
-import NotificationsPopup from "@/components/NotificationsPopup";
 import { toast } from "sonner";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { profile, updateProfile } = useProfile();
-  const [showNotifications, setShowNotifications] = useState(false);
   const [isUpdatingAccountType, setIsUpdatingAccountType] = useState(false);
 
 
@@ -68,7 +66,6 @@ const SettingsPage = () => {
     <div className="min-h-screen bg-background pb-20" dir="ltr">
       <Header 
         title="Settings"
-        onNotificationsClick={() => setShowNotifications(true)}
       />
 
       <main className="container mx-auto px-4 py-8">
@@ -174,11 +171,6 @@ const SettingsPage = () => {
           </div>
         </div>
       </main>
-      
-      <NotificationsPopup 
-        isOpen={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
-      />
       
       <BottomNavigation />
     </div>

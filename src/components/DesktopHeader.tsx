@@ -3,7 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Bell, Plus, ChevronDown, Settings, MessageCircle } from "lucide-react";
+import { LogOut, User, Plus, ChevronDown, Settings, MessageCircle } from "lucide-react";
 import { useNewItem } from "@/contexts/NewItemContext";
 import LanguageSelector from "@/components/LanguageSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
@@ -77,21 +77,6 @@ const DesktopHeader = ({
             >
               📍 Buenos Aires
             </Button>
-            
-            {/* Notifications */}
-            {user && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="relative p-3 h-11 w-11 bg-primary text-primary-foreground hover:bg-primary/80"
-                onClick={() => {/* Add notification handler */}}
-              >
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-0 shadow-lg border-2 border-background">
-                  3
-                </span>
-              </Button>
-            )}
             
             {/* User menu */}
             {user && (

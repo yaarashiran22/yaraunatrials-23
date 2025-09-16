@@ -10,7 +10,6 @@ import { validateUUID, canUserModifyItem } from "@/utils/security";
 import { useToast } from "@/hooks/use-toast";
 import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/Header";
-import NotificationsPopup from "@/components/NotificationsPopup";
 import { useUserEvents } from "@/hooks/useUserEvents";
 import { InstagramStoryPopup } from "@/components/InstagramStoryPopup";
 import { useFriends } from "@/hooks/useFriends";
@@ -58,7 +57,6 @@ const ProfilePage = () => {
   const { messages, loading: messagesLoading, creating: creatingMessage, updating: updatingMessage, createMessage, updateMessage, deleteMessage } = useUserMessages(actualProfileId);
   
   
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showStoryPopup, setShowStoryPopup] = useState(false);
   const [generatedStoryUrl, setGeneratedStoryUrl] = useState<string | null>(null);
   const [generatingStory, setGeneratingStory] = useState(false);
@@ -1160,7 +1158,6 @@ const ProfilePage = () => {
       <div className="min-h-screen bg-background pb-20" dir="ltr">
         <Header 
           title="Profile"
-          onNotificationsClick={() => setShowNotifications(true)}
         />
         <main className="px-4 py-6 pb-20">
           <div className="text-center">Loading...</div>
@@ -1178,7 +1175,6 @@ const ProfilePage = () => {
         <div className="min-h-screen bg-background pb-20" dir="ltr">
           <Header 
             title="Profile"
-            onNotificationsClick={() => setShowNotifications(true)}
           />
           <main className="px-4 py-6 pb-20">
             <div className="text-center">
@@ -1199,7 +1195,6 @@ const ProfilePage = () => {
       <div className="min-h-screen bg-background pb-20" dir="ltr">
         <Header 
           title="Profile"
-          onNotificationsClick={() => setShowNotifications(true)}
         />
         <main className="px-4 py-6 pb-20">
           <div className="text-center">
@@ -1222,7 +1217,6 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-background pb-20 font-app" dir="ltr">
       <Header 
         title="Profile"
-        onNotificationsClick={() => setShowNotifications(true)}
       />
 
 
@@ -1646,10 +1640,6 @@ const ProfilePage = () => {
       </main>
       
       <BottomNavigation />
-      <NotificationsPopup 
-        isOpen={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
-      />
       <ProfilePictureViewer
         isOpen={showProfilePicture}
         onClose={() => setShowProfilePicture(false)}

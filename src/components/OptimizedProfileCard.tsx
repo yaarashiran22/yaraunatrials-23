@@ -1,10 +1,7 @@
-import { memo, useState, useEffect, useCallback, useRef } from "react";
+import { memo, useState, useCallback, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
 import ProfilePictureViewer from "./ProfilePictureViewer";
-import AddStoryButton from "./AddStoryButton";
-import StoriesPopup from "./StoriesPopup";
-import { supabase } from "@/integrations/supabase/client";
 
 interface OptimizedProfileCardProps {
   id: string;
@@ -24,59 +21,10 @@ const OptimizedProfileCard = memo(({
   isCurrentUser = false 
 }: OptimizedProfileCardProps) => {
   const [showProfileViewer, setShowProfileViewer] = useState(false);
-  const [showAddStory, setShowAddStory] = useState(false);
-  const [showStoriesPopup, setShowStoriesPopup] = useState(false);
-  const [hasStories, setHasStories] = useState(false);
-  const [isCheckingStories, setIsCheckingStories] = useState(false);
-  const storiesCheckedRef = useRef<Set<string>>(new Set());
   const navigate = useNavigate();
 
-  // Memoized function to check for active stories
-  const checkStories = useCallback(async () => {
-    if (!id || isCheckingStories || storiesCheckedRef.current.has(id)) return;
-    
-    setIsCheckingStories(true);
-    
-    try {
-      const { data: stories, error } = await supabase
-        .from('stories')
-        .select('id')
-        .eq('user_id', id)
-        .gt('expires_at', new Date().toISOString())
-        .limit(1);
-        
-      if (error) {
-        console.error('Error fetching stories:', error);
-        return;
-      }
-      
-      const userHasStories = stories && stories.length > 0;
-      setHasStories(userHasStories);
-      storiesCheckedRef.current.add(id);
-      
-    } catch (error) {
-      console.error('Error in checkStories:', error);
-    } finally {
-      setIsCheckingStories(false);
-    }
-  }, [id, isCheckingStories]);
-
-  // Check for active stories only once per user
-  useEffect(() => {
-    checkStories();
-  }, [checkStories]);
-
   const handleAvatarClick = () => {
-    if (hasStories) {
-      setShowStoriesPopup(true);
-    } else {
-      setShowProfileViewer(true);
-    }
-  };
-
-  const handleAddStoryClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering avatar click
-    setShowAddStory(true);
+    setShowProfileViewer(true);
   };
 
   const handleNavigateToProfile = () => {
@@ -94,14 +42,9 @@ const OptimizedProfileCard = memo(({
         style={style}
       >
         <div className="relative">
-          {/* Enhanced gradient ring for stories - stable animation */}
-          <div className={`relative transition-all duration-300 ${hasStories ? 'p-[3px] rounded-full bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400' : ''}`}>
+          <div className="relative transition-all duration-300">
             <Avatar 
-              className={`w-[66px] h-[66px] cursor-pointer transition-all duration-300 shadow-xl transform hover:rotate-3 ${
-                hasStories 
-                  ? 'border-3 border-white shadow-orange-500/30 hover:shadow-orange-500/50' 
-                  : 'border-4 border-primary/30 hover:border-primary/60 shadow-primary/20 hover:shadow-primary/40'
-              }`}
+              className="w-[66px] h-[66px] cursor-pointer transition-all duration-300 shadow-xl transform hover:rotate-3 border-4 border-primary/30 hover:border-primary/60 shadow-primary/20 hover:shadow-primary/40"
               onClick={handleAvatarClick}
             >
             <AvatarImage 
@@ -115,16 +58,6 @@ const OptimizedProfileCard = memo(({
             </AvatarFallback>
             </Avatar>
           </div>
-          
-          {/* Enhanced add story button */}
-          {isCurrentUser && (
-            <div 
-            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-3 border-background flex items-center justify-center cursor-pointer hover:scale-125 transition-all duration-300 bg-gradient-to-r from-primary to-primary-600 shadow-lg hover:shadow-primary/50 active:scale-110"
-              onClick={handleAddStoryClick}
-            >
-              <span className="text-white text-sm font-bold">+</span>
-            </div>
-          )}
           
           {/* Online indicator for current user */}
           {isCurrentUser && (
@@ -150,23 +83,6 @@ const OptimizedProfileCard = memo(({
         userName={name}
         userId={isCurrentUser ? undefined : id}
       />
-
-      <StoriesPopup
-        isOpen={showStoriesPopup}
-        onClose={() => setShowStoriesPopup(false)}
-        userId={id}
-      />
-      
-      {/* Add Story functionality */}
-      {showAddStory && (
-        <div className="fixed inset-0 z-50">
-          <AddStoryButton />
-          <div 
-            className="fixed inset-0 bg-black/50 -z-10"
-            onClick={() => setShowAddStory(false)}
-          />
-        </div>
-      )}
     </>
   );
 });

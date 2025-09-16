@@ -148,13 +148,11 @@ const FeedPage = () => {
       <div className="lg:hidden">
         <Header 
           title="Neighborhood Feed"
-          onNotificationsClick={() => setShowNotifications(true)}
         />
       </div>
       
       <DesktopHeader 
         title="Neighborhood Feed"
-        onNotificationsClick={() => setShowNotifications(true)}
       />
 
       {/* Full Screen Map with Messages Overlay */}

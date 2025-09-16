@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import BusinessFilterPopup from "@/components/BusinessFilterPopup";
 import UniformCard from "@/components/UniformCard";
-import NotificationsPopup from "@/components/NotificationsPopup";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import { useState } from "react";
@@ -20,7 +19,6 @@ const MarketplacePage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const { items, loading } = useItems();
 
   // Transform database items to display format
@@ -46,7 +44,6 @@ const MarketplacePage = () => {
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         searchPlaceholder="חיפוש במרקט פליס..."
-        onNotificationsClick={() => setShowNotifications(true)}
       />
       
       {/* Filter Button */}
@@ -108,11 +105,6 @@ const MarketplacePage = () => {
       <BusinessFilterPopup 
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
-      />
-
-      <NotificationsPopup 
-        isOpen={showNotifications} 
-        onClose={() => setShowNotifications(false)} 
       />
       
       <BottomNavigation />
