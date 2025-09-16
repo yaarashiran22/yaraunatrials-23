@@ -27,7 +27,6 @@ import NeighborsPage from "./pages/NeighborsPage";
 import AllEventsPage from "./pages/AllEventsPage";
 import AllMeetupsPage from "./pages/AllMeetupsPage";
 import AllRecommendationsPage from "./pages/AllRecommendationsPage";
-import MessagesPage from "./pages/MessagesPage";
 
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -90,7 +89,6 @@ const AppContent = () => {
               <Route path="/item/:id" element={<ItemDetailsPage />} />
               <Route path="/recommended" element={<RecommendedPage />} />
               <Route path="/marketplace" element={<MarketplacePage />} />
-              <Route path="/messages" element={<MessagesPage />} />
               <Route path="/neighbors" element={<NeighborsPage />} />
               <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
               <Route path="/settings" element={<SettingsPage />} />
@@ -149,7 +147,6 @@ const AppContent = () => {
             <Route path="/item/:id" element={<ItemDetailsPage />} />
             <Route path="/recommended" element={<RecommendedPage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />
-            <Route path="/messages" element={<MessagesPage />} />
             <Route path="/neighbors" element={<NeighborsPage />} />
             <Route path="/neighborhood/:id" element={<NeighborhoodProfilePage />} />
             

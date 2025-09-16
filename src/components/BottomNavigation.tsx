@@ -1,5 +1,5 @@
 
-import { Home, User, Users, Settings, LogIn, Plus, Heart, Search, MessageCircle } from "lucide-react";
+import { Home, User, Users, Settings, LogIn, Plus, Heart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -45,22 +45,6 @@ const BottomNavigation = () => {
             }`}
           >
             <Home className={`h-6 w-6 transition-all duration-300 ${isActive('/') ? 'stroke-[2.5]' : 'group-hover:scale-110'}`} />
-          </Button>
-
-          {/* Messages */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate('/messages')}
-            className={`flex items-center justify-center h-auto py-3 px-4 transition-all duration-300 rounded-2xl min-h-[3rem] relative overflow-hidden group ${
-              isActive('/messages') 
-                ? 'text-foreground' 
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105 active:scale-95'
-            }`}
-          >
-            <MessageCircle className={`h-6 w-6 transition-all duration-300 ${isActive('/messages') ? 'stroke-[2.5]' : 'group-hover:scale-110'}`} />
-            {/* Message notification dot */}
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-bounce"></div>
           </Button>
 
           {/* Profile/Login */}
