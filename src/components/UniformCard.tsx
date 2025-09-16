@@ -1,5 +1,5 @@
 
-import { Heart } from "lucide-react";
+import { Heart, CalendarCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import React from "react";
@@ -165,20 +165,37 @@ const UniformCard = ({
           </div>
         </div>
         
-        {/* Enhanced heart icon with animation */}
-        {showFavoriteButton && (type === 'marketplace' || type === 'artwork' || type === 'business' || type === 'event') && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all duration-300 border shadow-lg hover:scale-110 active:scale-95 ${
-              isCurrentlyFavorited 
-                ? 'text-red-500 bg-white/90 border-red-200 hover:bg-white shadow-red-200/50' 
-                : 'text-white bg-white/20 border-white/30 hover:bg-white/30 hover:text-red-400'
-            }`}
-            onClick={handleFavoriteClick}
-          >
-            <Heart className={`h-4 w-4 transition-all duration-300 ${isCurrentlyFavorited ? 'fill-current animate-pulse' : ''}`} />
-          </Button>
+        {/* RSVP button for events, heart for other types */}
+        {showFavoriteButton && (
+          <>
+            {type === 'event' ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all duration-300 border shadow-lg hover:scale-110 active:scale-95 text-white bg-white/20 border-white/30 hover:bg-white/30 hover:text-primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // TODO: Implement RSVP functionality
+                  console.log('RSVP clicked for event:', id);
+                }}
+              >
+                <CalendarCheck className="h-4 w-4 transition-all duration-300" />
+              </Button>
+            ) : (type === 'marketplace' || type === 'artwork' || type === 'business') && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all duration-300 border shadow-lg hover:scale-110 active:scale-95 ${
+                  isCurrentlyFavorited 
+                    ? 'text-red-500 bg-white/90 border-red-200 hover:bg-white shadow-red-200/50' 
+                    : 'text-white bg-white/20 border-white/30 hover:bg-white/30 hover:text-red-400'
+                }`}
+                onClick={handleFavoriteClick}
+              >
+                <Heart className={`h-4 w-4 transition-all duration-300 ${isCurrentlyFavorited ? 'fill-current animate-pulse' : ''}`} />
+              </Button>
+            )}
+          </>
         )}
       </div>
     </div>
