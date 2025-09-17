@@ -10,6 +10,7 @@ import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/Header";
 import LanguageSelector from "@/components/LanguageSelector";
 import NeighborhoodSelector from "@/components/NeighborhoodSelector";
+import WhatsAppIntegration from "@/components/WhatsAppIntegration";
 import { toast } from "sonner";
 
 const SettingsPage = () => {
@@ -113,6 +114,11 @@ const SettingsPage = () => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* WhatsApp Integration */}
+        <div className="max-w-md mx-auto space-y-4 mb-8">
+          <WhatsAppIntegration />
         </div>
 
         {/* Language and Location Settings */}
