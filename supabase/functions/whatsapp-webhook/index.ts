@@ -65,6 +65,7 @@ serve(async (req) => {
           
           // Call the AI assistant function
           try {
+            console.log('🔄 Calling AI assistant function...');
             const aiResponse = await supabase.functions.invoke('ai-assistant', {
               body: {
                 message: messageBody,
@@ -72,13 +73,14 @@ serve(async (req) => {
               }
             });
 
-            console.log('🤖 AI response received:', aiResponse.data);
+            console.log('🤖 AI response received:', JSON.stringify(aiResponse, null, 2));
 
             if (aiResponse.data?.response) {
-              // Send response back via Twilio WhatsApp
+              console.log('✅ Valid AI response, sending to Twilio...');
               await sendTwilioWhatsAppMessage(fromNumber, aiResponse.data.response);
+              console.log('📤 Message sent successfully to Twilio');
             } else {
-              console.error('❌ No AI response received');
+              console.error('❌ No AI response received, aiResponse:', aiResponse);
               await sendTwilioWhatsAppMessage(fromNumber, "Sorry, I'm having trouble processing your message. Please try again.");
             }
           } catch (aiError) {
