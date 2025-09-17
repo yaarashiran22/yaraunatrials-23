@@ -156,6 +156,13 @@ async function sendTwilioWhatsAppMessage(to: string, message: string) {
   const TWILIO_AUTH_TOKEN = Deno.env.get('TWILIO_AUTH_TOKEN');
   const TWILIO_WHATSAPP_NUMBER = Deno.env.get('TWILIO_WHATSAPP_NUMBER') || 'whatsapp:+14155238886';
 
+  console.log('🔑 Twilio credentials check:', {
+    hasSID: !!TWILIO_ACCOUNT_SID,
+    hasToken: !!TWILIO_AUTH_TOKEN,
+    fromNumber: TWILIO_WHATSAPP_NUMBER,
+    toNumber: to
+  });
+
   if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN) {
     console.error('❌ Missing Twilio credentials');
     return;
