@@ -45,15 +45,26 @@ serve(async (req) => {
 
     // Handle incoming messages (POST request)
     if (req.method === 'POST') {
+      console.log('📥 POST request received');
+      
       // Check content type and handle accordingly
       const contentType = req.headers.get('content-type') || '';
+      console.log('📋 Content-Type:', contentType);
       
       let twilioData;
       if (contentType.includes('application/x-www-form-urlencoded')) {
         // Handle Twilio webhook format
         const formData = await req.formData();
         twilioData = Object.fromEntries(formData.entries());
-        console.log('📱 Twilio webhook received:', JSON.stringify(twilioData, null, 2));
+        console.log('📱 FULL Twilio webhook data received:');
+        console.log(JSON.stringify(twilioData, null, 2));
+        
+        // Log specific fields we're checking
+        console.log('🔍 Key fields check:');
+        console.log('- Body:', twilioData.Body);
+        console.log('- From:', twilioData.From);
+        console.log('- SmsStatus:', twilioData.SmsStatus);
+        console.log('- ProfileName:', twilioData.ProfileName);
         
         // Check if this is an incoming message from WhatsApp (Twilio format)
         // For Twilio WhatsApp, incoming messages have SmsStatus='received' and Body content
