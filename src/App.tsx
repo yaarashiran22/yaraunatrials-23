@@ -40,6 +40,16 @@ import EditItemPage from "./pages/EditItemPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import NotFound from "./pages/NotFound";
 
+// Admin pages
+import AdminPage from "./pages/AdminPage";
+import AdminUsersPage from "./pages/AdminUsersPage";
+import AdminPostsPage from "./pages/AdminPostsPage";
+import AdminEventsPage from "./pages/AdminEventsPage";
+import AdminCommunitiesPage from "./pages/AdminCommunitiesPage";
+import AdminMarketplacePage from "./pages/AdminMarketplacePage";
+import AdminLocationsPage from "./pages/AdminLocationsPage";
+import AdminRolesPage from "./pages/AdminRolesPage";
+
 
 
 // Desktop navigation item component
@@ -98,6 +108,17 @@ const AppContent = () => {
               <Route path="/create-post" element={<CreatePostPage />} />
               <Route path="/create-event" element={<CreateEventPage />} />
               <Route path="/meetups" element={<MeetupsPage />} />
+              
+              {/* Admin routes */}
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin/users" element={<AdminUsersPage />} />
+              <Route path="/admin/posts" element={<AdminPostsPage />} />
+              <Route path="/admin/events" element={<AdminEventsPage />} />
+              <Route path="/admin/communities" element={<AdminCommunitiesPage />} />
+              <Route path="/admin/marketplace" element={<AdminMarketplacePage />} />
+              <Route path="/admin/locations" element={<AdminLocationsPage />} />
+              <Route path="/admin/roles" element={<AdminRolesPage />} />
+              
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
@@ -157,6 +178,17 @@ const AppContent = () => {
             <Route path="/create-post" element={<CreatePostPage />} />
             <Route path="/create-event" element={<CreateEventPage />} />
             <Route path="/meetups" element={<MeetupsPage />} />
+            
+            {/* Admin routes */}
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route path="/admin/posts" element={<AdminPostsPage />} />
+            <Route path="/admin/events" element={<AdminEventsPage />} />
+            <Route path="/admin/communities" element={<AdminCommunitiesPage />} />
+            <Route path="/admin/marketplace" element={<AdminMarketplacePage />} />
+            <Route path="/admin/locations" element={<AdminLocationsPage />} />
+            <Route path="/admin/roles" element={<AdminRolesPage />} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
