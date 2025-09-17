@@ -10,8 +10,6 @@ import { LogOut, User, Home, Settings, ChevronDown, Heart, Plus, MapPin, Search,
 import logoImage from "@/assets/reference-image.png";
 import { useNewItem } from "@/contexts/NewItemContext";
 import { useSearch } from "@/contexts/SearchContext";
-import AIAssistantPopup from "@/components/AIAssistantPopup";
-import { useState } from "react";
 
 interface HeaderProps {
   title?: string;
@@ -35,7 +33,7 @@ const Header = ({
   const navigate = useNavigate();
   const { openNewItem } = useNewItem();
   const { openSearch } = useSearch();
-  const [showAIAssistant, setShowAIAssistant] = useState(false);
+  
 
   const handleLogout = () => {
     logout();
@@ -74,28 +72,13 @@ const Header = ({
             <NeighborhoodSelector onNeighborhoodChange={onNeighborhoodChange} />
           </div>
           
-          {/* Right side - AI Assistant */}
+          {/* Right side - Empty for now */}
           <div className="flex items-center gap-2 w-32 justify-end">
-            {user && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="p-2.5 h-10 w-10 bg-white text-primary hover:bg-gray-100 border-gray-200 rounded-full"
-                onClick={() => setShowAIAssistant(true)}
-              >
-                <Sparkles className="h-5 w-5" />
-              </Button>
-            )}
           </div>
           
         </div>
       </div>
       
-      {/* AI Assistant Popup */}
-      <AIAssistantPopup
-        isOpen={showAIAssistant}
-        onClose={() => setShowAIAssistant(false)}
-      />
     </header>
   );
 };
