@@ -45,7 +45,21 @@ serve(async (req) => {
 
     // Handle incoming messages (POST request)
     if (req.method === 'POST') {
-      const body = await req.json();
+      // Check content type and handle accordingly
+      const contentType = req.headers.get('content-type') || '';
+      
+      let body;
+      if (contentType.includes('application/json')) {
+        body = await req.json();
+      } else {
+        // Handle non-JSON content (like SMS webhooks)
+        const text = await req.text();
+        console.log('📱 Non-JSON webhook received:', text);
+        return new Response('OK', { 
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'text/plain' }
+        });
+      }
       console.log('📱 WhatsApp webhook received:', JSON.stringify(body, null, 2));
 
       // Check if this is a message event
