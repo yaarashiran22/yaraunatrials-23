@@ -55,13 +55,14 @@ serve(async (req) => {
         twilioData = Object.fromEntries(formData.entries());
         console.log('📱 Twilio webhook received:', JSON.stringify(twilioData, null, 2));
         
-        // Check if this is an incoming message (not a status update)
-        if (twilioData.SmsStatus === 'received' && twilioData.Body) {
+        // Check if this is an incoming message from WhatsApp (Twilio format)
+        // For Twilio WhatsApp, incoming messages have SmsStatus='received' and Body content
+        if (twilioData.Body && (twilioData.From as string)?.includes('whatsapp:')) {
           const messageBody = decodeURIComponent(twilioData.Body as string);
           const fromNumber = twilioData.From as string;
           const profileName = twilioData.ProfileName as string || 'User';
           
-          console.log(`💬 Processing Twilio message from ${profileName} (${fromNumber}): ${messageBody}`);
+          console.log(`💬 Processing Twilio WhatsApp message from ${profileName} (${fromNumber}): ${messageBody}`);
           
           // Call the AI assistant function
           try {
@@ -88,7 +89,7 @@ serve(async (req) => {
             await sendTwilioWhatsAppMessage(fromNumber, "Sorry, I'm experiencing technical difficulties. Please try again later.");
           }
         } else {
-          console.log('📱 Received status update or non-message webhook:', twilioData.SmsStatus);
+          console.log('📱 Received non-WhatsApp message or status update:', twilioData.SmsStatus, 'Body:', !!twilioData.Body, 'From:', twilioData.From);
         }
       } else if (contentType.includes('application/json')) {
         // Handle Meta WhatsApp Business API format (keeping for backward compatibility)
