@@ -23,10 +23,10 @@ const neighborhoods = [
 const NeighborhoodSelector = ({ onNeighborhoodChange }: NeighborhoodSelectorProps) => {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("Palermo");
 
-  const handleNeighborhoodSelect = useCallback((neighborhood: string) => {
+  const handleNeighborhoodSelect = (neighborhood: string) => {
     setSelectedNeighborhood(neighborhood);
     onNeighborhoodChange?.(neighborhood);
-  }, [onNeighborhoodChange]);
+  };
 
   return (
     <DropdownMenu>
