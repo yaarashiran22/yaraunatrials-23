@@ -19,21 +19,6 @@ serve(async (req) => {
     const { message, messages = [], userLocation } = await req.json();
     console.log('AI Assistant v9.0 - Conversation Memory - Processing:', { message, messagesCount: messages.length, userLocation });
     
-    // Detect greeting messages
-    const greetingPatterns = /^(hi|hola|hello|hey|hiya|greetings|good morning|good afternoon|good evening|sup|what's up|whats up|yo)[\s!?,.]*$/i;
-    if (greetingPatterns.test(message.trim())) {
-      console.log('✨ Greeting detected, returning welcome message');
-      return new Response(
-        JSON.stringify({ 
-          response: "Hey! Welcome to Yara AI ✨ If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?",
-          success: true 
-        }),
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
-    }
-    
     // Get OpenAI API key
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
@@ -120,7 +105,9 @@ YOUR VIBE:
 - When mentioning events/deals, make them sound exciting but authentic
 - Use phrases like "there's this cool...", "you should check out...", "ngl (not gonna lie)..."
 - Pay attention to conversation history and don't repeat yourself
-- If the user seems confused or asks the same thing, offer to help differently
+- If the user seems confused or asks the same thing multiple times, acknowledge it friendly and try a different approach
+- For first greetings (hi, hello, hey), respond with: "Hey! Welcome to Yara AI ✨ If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?"
+- If they greet you again after already chatting, be casual like "what's up?" or "back for more?" but still helpful
 
 Remember: You're the friend who always knows the best spots and hookups in BA.${repetitionContext}`;
 
