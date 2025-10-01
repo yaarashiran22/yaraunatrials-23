@@ -41,76 +41,47 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Fetch comprehensive data from ALL relevant tables in parallel
+    // Fetch essential data from key tables - optimized for speed
     const [
       eventsData,
       communitiesData, 
-      postsData,
       itemsData,
-      neighborIdeasData,
-      neighborQuestionsData,
-      couponsData,
-      storiesData
+      couponsData
     ] = await Promise.all([
-      supabase.from('events').select('id, title, description, location, date, time, price, mood, event_type').limit(8),
-      supabase.from('communities').select('id, name, tagline, description, category, subcategory, member_count').limit(6),
-      supabase.from('posts').select('id, content, location, created_at').limit(5),
-      supabase.from('items').select('id, title, description, category, location, price').eq('status', 'active').limit(6),
-      supabase.from('neighborhood_ideas').select('id, question, neighborhood, market').limit(4),
-      supabase.from('neighbor_questions').select('id, content, market, message_type').limit(4),
-      supabase.from('user_coupons').select('id, title, description, business_name, discount_amount, neighborhood').eq('is_active', true).limit(4),
-      supabase.from('stories').select('id, text_content, story_type').gt('expires_at', 'now()').limit(3)
+      supabase.from('events').select('id, title, location, date, time, price').limit(5),
+      supabase.from('communities').select('id, name, tagline, member_count').limit(4),
+      supabase.from('items').select('id, title, category, location, price').eq('status', 'active').limit(4),
+      supabase.from('user_coupons').select('id, title, business_name, discount_amount, neighborhood').eq('is_active', true).limit(3)
     ]);
 
-    console.log('📊 Data fetched - Events:', eventsData.data?.length, 'Communities:', communitiesData.data?.length, 'Posts:', postsData.data?.length, 'Items:', itemsData.data?.length);
+    console.log('📊 Data fetched - Events:', eventsData.data?.length, 'Communities:', communitiesData.data?.length, 'Items:', itemsData.data?.length);
 
-    // Prepare comprehensive context with REAL data
+    // Prepare essential context with REAL data
     const realData = {
       currentEvents: eventsData.data || [],
       activeCommunities: communitiesData.data || [],
-      recentPosts: postsData.data || [],
       marketplaceItems: itemsData.data || [],
-      neighborhoodIdeas: neighborIdeasData.data || [],
-      neighborQuestions: neighborQuestionsData.data || [],
       localCoupons: couponsData.data || [],
-      activeStories: storiesData.data || [],
       userLocation: userLocation || 'Not specified'
     };
 
-    // Create detailed system prompt with ALL real data
-    const systemPrompt = `You are the AI assistant for TheUnaHub (theunahub.com), a vibrant neighborhood social platform. You have access to REAL, current data and should provide specific, helpful responses based on actual content.
+    // Create concise system prompt with essential data
+    const systemPrompt = `You are the AI assistant for TheUnaHub, a neighborhood social platform. Respond quickly with specific, helpful information.
 
-🎯 REAL CURRENT DATA AVAILABLE:
+CURRENT DATA:
+📅 EVENTS (${realData.currentEvents.length}):
+${realData.currentEvents.map(e => `- "${e.title}" at ${e.location} on ${e.date} ${e.time || ''} ${e.price ? '$'+e.price : ''}`).join('\n')}
 
-📅 EVENTS (${realData.currentEvents.length} active):
-${realData.currentEvents.map(e => `- "${e.title}" at ${e.location} on ${e.date} ${e.time ? 'at ' + e.time : ''} ${e.price ? '($' + e.price + ')' : ''} - ${e.description?.substring(0, 100)}...`).join('\n')}
+👥 COMMUNITIES (${realData.activeCommunities.length}):
+${realData.activeCommunities.map(c => `- "${c.name}" (${c.member_count} members)`).join('\n')}
 
-👥 COMMUNITIES (${realData.activeCommunities.length} active):
-${realData.activeCommunities.map(c => `- "${c.name}" (${c.member_count} members) - ${c.category} - ${c.tagline || c.description?.substring(0, 80)}`).join('\n')}
+🏪 MARKETPLACE (${realData.marketplaceItems.length}):
+${realData.marketplaceItems.map(i => `- ${i.title} in ${i.category} at ${i.location} $${i.price}`).join('\n')}
 
-🏪 MARKETPLACE (${realData.marketplaceItems.length} items):
-${realData.marketplaceItems.map(i => `- "${i.title}" in ${i.category} at ${i.location} for $${i.price} - ${i.description?.substring(0, 60)}...`).join('\n')}
+🎫 DEALS (${realData.localCoupons.length}):
+${realData.localCoupons.map(c => `- ${c.discount_amount} off at ${c.business_name}`).join('\n')}
 
-💡 NEIGHBORHOOD IDEAS (${realData.neighborhoodIdeas.length} recent):
-${realData.neighborhoodIdeas.map(n => `- "${n.question}" in ${n.neighborhood}`).join('\n')}
-
-❓ NEIGHBOR QUESTIONS (${realData.neighborQuestions.length} recent):
-${realData.neighborQuestions.map(q => `- ${q.content?.substring(0, 80)}...`).join('\n')}
-
-🎫 LOCAL DEALS (${realData.localCoupons.length} active):
-${realData.localCoupons.map(c => `- ${c.discount_amount} off at ${c.business_name} - ${c.title}`).join('\n')}
-
-📍 User Location: ${realData.userLocation}
-
-🤖 INSTRUCTIONS:
-1. ALWAYS mention specific events, communities, or items from the real data when relevant
-2. Reference actual names, locations, dates, and prices from the database
-3. Be conversational and helpful, like a local neighborhood expert
-4. Keep responses under 150 words but packed with specific information
-5. If asked about events, mention specific ones by name and details
-6. If asked about communities, reference actual community names and member counts
-7. For marketplace questions, mention real items and prices
-8. Always sound knowledgeable about the current neighborhood activity`;
+Keep answers under 100 words. Mention specific names, dates, and prices from real data when relevant.`;
 
     console.log('🤖 Calling OpenAI with comprehensive data context...');
 
@@ -127,7 +98,7 @@ ${realData.localCoupons.map(c => `- ${c.discount_amount} off at ${c.business_nam
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 150,
+        max_tokens: 100,
         temperature: 0.7
       })
     });
