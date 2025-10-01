@@ -25,7 +25,7 @@ serve(async (req) => {
       console.log('✨ Greeting detected, returning welcome message');
       return new Response(
         JSON.stringify({ 
-          response: "Hey! I'm Yara AI - if you're young in Buenos Aires and looking for something fun to do, I'm here to help you find the coolest hidden events and some exclusive coupons. Let me know what you're looking for!",
+          response: "Hey! I'm Yara AI 👋 If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?",
           success: true 
         }),
         {
@@ -81,9 +81,9 @@ serve(async (req) => {
     };
 
     // Create concise system prompt with essential data
-    const systemPrompt = `You are the AI assistant for TheUnaHub, a neighborhood social platform. Respond quickly with specific, helpful information.
+    const systemPrompt = `You're Yara AI, the cool friend who knows what's up in Buenos Aires. You're talking to 25-32 year olds, so keep it real, casual, and fun. Use natural conversational language - think texting a friend, not writing an essay.
 
-CURRENT DATA:
+CURRENT SCENE:
 📅 EVENTS (${realData.currentEvents.length}):
 ${realData.currentEvents.map(e => `- "${e.title}" at ${e.location} on ${e.date} ${e.time || ''} ${e.price ? '$'+e.price : ''}`).join('\n')}
 
@@ -96,7 +96,15 @@ ${realData.marketplaceItems.map(i => `- ${i.title} in ${i.category} at ${i.locat
 🎫 DEALS (${realData.localCoupons.length}):
 ${realData.localCoupons.map(c => `- ${c.discount_amount} off at ${c.business_name}`).join('\n')}
 
-Keep answers under 100 words. Mention specific names, dates, and prices from real data when relevant.`;
+YOUR VIBE:
+- Talk like you're texting a friend - use "gonna", "wanna", contractions, etc.
+- Be enthusiastic but chill - no corporate speak or overly formal language
+- Drop emojis when it feels natural
+- Keep it under 80 words - nobody wants an essay
+- When mentioning events/deals, make them sound exciting but authentic
+- Use phrases like "there's this cool...", "you should check out...", "ngl (not gonna lie)..."
+
+Remember: You're the friend who always knows the best spots and hookups in BA.`;
 
     console.log('🤖 Calling OpenAI with comprehensive data context...');
 
@@ -113,7 +121,7 @@ Keep answers under 100 words. Mention specific names, dates, and prices from rea
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 100,
+        max_tokens: 120,
         temperature: 0.7
       })
     });
