@@ -108,6 +108,7 @@ const AIAssistantPopup: React.FC<AIAssistantPopupProps> = ({ isOpen, onClose }) 
         supabase.functions.invoke('ai-assistant', {
           body: {
             message: inputMessage,
+            messages: messages.map(m => ({ role: m.role, content: m.content })),
             userLocation: userLocation
           }
         }),

@@ -16,8 +16,8 @@ serve(async (req) => {
   }
 
   try {
-    const { message, userLocation } = await req.json();
-    console.log('AI Assistant v8.0 - Full Database Integration - Processing:', { message, userLocation });
+    const { message, messages = [], userLocation } = await req.json();
+    console.log('AI Assistant v9.0 - Conversation Memory - Processing:', { message, messagesCount: messages.length, userLocation });
     
     // Detect greeting messages
     const greetingPatterns = /^(hi|hola|hello|hey|hiya|greetings|good morning|good afternoon|good evening|sup|what's up|whats up|yo)[\s!?,.]*$/i;
@@ -80,6 +80,22 @@ serve(async (req) => {
       userLocation: userLocation || 'Not specified'
     };
 
+    // Check for repetition in recent messages
+    let repetitionContext = '';
+    if (messages.length >= 2) {
+      const recentUserMessages = messages
+        .filter(m => m.role === 'user')
+        .slice(-3)
+        .map(m => m.content.toLowerCase().trim());
+      
+      const lastMessage = message.toLowerCase().trim();
+      const repetitionCount = recentUserMessages.filter(m => m === lastMessage).length;
+      
+      if (repetitionCount >= 2) {
+        repetitionContext = '\n\n⚠️ IMPORTANT: The user just sent the same message multiple times. Address this directly! Say something like "I noticed you sent that a couple times - are you looking for something more specific?" or "Hey, seems like you might be stuck - let me help you out differently" Be helpful and acknowledge the repetition in a friendly way.';
+      }
+    }
+
     // Create concise system prompt with essential data
     const systemPrompt = `You're Yara AI, the cool friend who knows what's up in Buenos Aires. You're talking to 25-32 year olds, so keep it real, casual, and fun. Use natural conversational language - think texting a friend, not writing an essay.
 
@@ -103,12 +119,21 @@ YOUR VIBE:
 - Keep it under 80 words - nobody wants an essay
 - When mentioning events/deals, make them sound exciting but authentic
 - Use phrases like "there's this cool...", "you should check out...", "ngl (not gonna lie)..."
+- Pay attention to conversation history and don't repeat yourself
+- If the user seems confused or asks the same thing, offer to help differently
 
-Remember: You're the friend who always knows the best spots and hookups in BA.`;
+Remember: You're the friend who always knows the best spots and hookups in BA.${repetitionContext}`;
 
-    console.log('🤖 Calling OpenAI with comprehensive data context...');
+    console.log('🤖 Calling OpenAI with conversation history...');
 
-    // Make OpenAI API call with comprehensive context
+    // Build conversation history for context
+    const conversationMessages = [
+      { role: 'system', content: systemPrompt },
+      ...messages.slice(-6), // Include last 6 messages for context
+      { role: 'user', content: message }
+    ];
+
+    // Make OpenAI API call with conversation history
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -117,10 +142,7 @@ Remember: You're the friend who always knows the best spots and hookups in BA.`;
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: message }
-        ],
+        messages: conversationMessages,
         max_tokens: 120,
         temperature: 0.7
       })
