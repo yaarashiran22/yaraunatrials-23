@@ -19,6 +19,21 @@ serve(async (req) => {
     const { message, userLocation } = await req.json();
     console.log('AI Assistant v8.0 - Full Database Integration - Processing:', { message, userLocation });
     
+    // Detect greeting messages
+    const greetingPatterns = /^(hi|hola|hello|hey|hiya|greetings|good morning|good afternoon|good evening|sup|what's up|whats up|yo)[\s!?,.]*$/i;
+    if (greetingPatterns.test(message.trim())) {
+      console.log('✨ Greeting detected, returning welcome message');
+      return new Response(
+        JSON.stringify({ 
+          response: "Hey! I'm Una AI Assistant - if you're young in Buenos Aires and looking for something fun to do, I'm here to help you find the coolest hidden events and some exclusive coupons. Let me know what you're looking for!",
+          success: true 
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+    
     // Get OpenAI API key
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
