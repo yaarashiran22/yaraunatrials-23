@@ -25,7 +25,7 @@ serve(async (req) => {
       console.log('✨ Greeting detected, returning welcome message');
       return new Response(
         JSON.stringify({ 
-          response: "Hey! I'm Yara AI 😎 If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?",
+          response: "Hey! Welcome to Yara AI 👋 If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?",
           success: true 
         }),
         {
