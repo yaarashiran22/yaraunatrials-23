@@ -25,7 +25,7 @@ serve(async (req) => {
       console.log('✨ Greeting detected, returning welcome message');
       return new Response(
         JSON.stringify({ 
-          response: "Hey! I'm Una AI Assistant - if you're young in Buenos Aires and looking for something fun to do, I'm here to help you find the coolest hidden events and some exclusive coupons. Let me know what you're looking for!",
+          response: "Hey! I'm Yara AI - if you're young in Buenos Aires and looking for something fun to do, I'm here to help you find the coolest hidden events and some exclusive coupons. Let me know what you're looking for!",
           success: true 
         }),
         {
