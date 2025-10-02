@@ -43,22 +43,48 @@ serve(async (req) => {
 
     // Fetch essential data from key tables - optimized for speed
     const today = new Date().toISOString().split('T')[0];
+    
+    // Fetch events with creator names
+    const eventsQuery = await supabase
+      .from('events')
+      .select('id, title, location, date, time, price, image_url, description, mood, event_type, user_id')
+      .gte('date', today)
+      .order('date', { ascending: true })
+      .limit(10);
+    
+    // Fetch profile names for event creators
+    let eventsWithCreators = [];
+    if (eventsQuery.data && eventsQuery.data.length > 0) {
+      const userIds = [...new Set(eventsQuery.data.map(e => e.user_id))];
+      const profilesQuery = await supabase
+        .from('profiles')
+        .select('id, name')
+        .in('id', userIds);
+      
+      const profilesMap = new Map(profilesQuery.data?.map(p => [p.id, p.name]) || []);
+      eventsWithCreators = eventsQuery.data.map(event => ({
+        ...event,
+        creator_name: profilesMap.get(event.user_id) || 'Unknown'
+      }));
+    }
+    
     const [
-      eventsData,
       communitiesData, 
       itemsData,
       couponsData
     ] = await Promise.all([
-      supabase.from('events').select(`
-        id, title, location, date, time, price, image_url, description, mood, event_type,
-        profiles:user_id (name)
-      `).gte('date', today).order('date', { ascending: true }).limit(10),
       supabase.from('communities').select('id, name, tagline, member_count').limit(4),
       supabase.from('items').select('id, title, category, location, price').eq('status', 'active').limit(4),
       supabase.from('user_coupons').select('id, title, business_name, discount_amount, neighborhood').eq('is_active', true).limit(3)
     ]);
+    
+    const eventsData = { data: eventsWithCreators, error: eventsQuery.error };
 
     console.log('📊 Data fetched - Events:', eventsData.data?.length, 'Communities:', communitiesData.data?.length, 'Items:', itemsData.data?.length);
+    
+    if (eventsData.data && eventsData.data.length > 0) {
+      console.log('📅 Sample event:', JSON.stringify(eventsData.data[0]));
+    }
 
     // Prepare essential context with REAL data
     const realData = {
@@ -91,10 +117,11 @@ serve(async (req) => {
 CURRENT SCENE:
 📅 EVENTS (${realData.currentEvents.length}):
 ${realData.currentEvents.map(e => {
-  const creator = e.profiles?.name || 'Unknown';
+  const creator = e.creator_name || 'Unknown';
   const mood = e.mood ? ` [${e.mood}]` : '';
   const desc = e.description ? ` - ${e.description.substring(0, 100)}` : '';
-  return `- "${e.title}"${mood} at ${e.location} on ${e.date} ${e.time || ''} ${e.price ? '$'+e.price : 'Free'} (by ${creator})${desc}`;
+  const eventType = e.event_type || 'event';
+  return `- "${e.title}"${mood} [${eventType}] at ${e.location} on ${e.date} ${e.time || ''} ${e.price ? '$'+e.price : 'Free'} (posted by ${creator})${desc}`;
 }).join('\n')}
 
 👥 COMMUNITIES (${realData.activeCommunities.length}):
@@ -118,6 +145,7 @@ YOUR VIBE:
 - For first greetings (hi, hello, hey), respond with: "Hey! Welcome to Yara AI ⚡ If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?"
 - If they greet you again after already chatting, be casual like "what's up?" or "back for more?" but still helpful
 - IMPORTANT: When a user asks about events, quickly ask "What neighborhood + your age?" - keep it super short and casual. After they provide this info, recommend 2-3 specific events from that neighborhood with full details: event name, neighborhood/location, date, time, price, a brief description of what it is, and who posted it (e.g. "posted by Maria").
+- CRITICAL: When a user asks for more details about an event you mentioned (by name), ALWAYS provide the full information about that event from the data above, including the description, date, time, location, price, and who posted it. Never say you don't have information about an event that's in your CURRENT SCENE data.
 
 Remember: You're the friend who always knows the best spots and hookups in BA.${repetitionContext}`;
 
@@ -172,14 +200,18 @@ Remember: You're the friend who always knows the best spots and hookups in BA.${
     const aiResponse = data.choices[0].message.content;
     console.log('🎉 Success! Returning AI response with comprehensive real data');
 
-    // Check if AI is recommending events in the response
+    // Check if AI is recommending events or user is asking about specific events
+    const messageLC = message.toLowerCase();
     const responseLC = aiResponse.toLowerCase();
     const eventImages: string[] = [];
     
-    // Find all events mentioned in the AI response and collect their images
+    // Find all events mentioned in the AI response OR user's message and collect their images
     if (eventsData.data && eventsData.data.length > 0) {
       for (const event of eventsData.data) {
-        if (event.image_url && responseLC.includes(event.title.toLowerCase())) {
+        if (event.image_url && (
+          responseLC.includes(event.title.toLowerCase()) || 
+          messageLC.includes(event.title.toLowerCase())
+        )) {
           eventImages.push(event.image_url);
           console.log(`📸 Found event image for: ${event.title}`);
         }
