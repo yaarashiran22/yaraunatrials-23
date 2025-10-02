@@ -93,10 +93,14 @@ serve(async (req) => {
               await sendTwilioWhatsAppMessage(fromNumber, aiResponse.data.response, messagingServiceSid);
               console.log('📤 Message sent successfully to Twilio');
               
-              // Send event image if provided
-              if (aiResponse.data?.eventImage) {
-                console.log('📸 Sending event image:', aiResponse.data.eventImage);
-                await sendTwilioWhatsAppImage(fromNumber, aiResponse.data.eventImage, messagingServiceSid);
+              // Send event images if provided
+              if (aiResponse.data?.eventImages && Array.isArray(aiResponse.data.eventImages)) {
+                console.log('📸 Sending event images:', aiResponse.data.eventImages.length);
+                for (const imageUrl of aiResponse.data.eventImages) {
+                  await sendTwilioWhatsAppImage(fromNumber, imageUrl, messagingServiceSid);
+                  // Small delay between images to avoid rate limiting
+                  await new Promise(resolve => setTimeout(resolve, 500));
+                }
               }
             } else {
               console.error('❌ No AI response received, aiResponse:', aiResponse);

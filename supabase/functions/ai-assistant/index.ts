@@ -49,7 +49,7 @@ serve(async (req) => {
       itemsData,
       couponsData
     ] = await Promise.all([
-      supabase.from('events').select('id, title, location, date, time, price').gte('date', today).order('date', { ascending: true }).limit(5),
+      supabase.from('events').select('id, title, location, date, time, price, image_url').gte('date', today).order('date', { ascending: true }).limit(10),
       supabase.from('communities').select('id, name, tagline, member_count').limit(4),
       supabase.from('items').select('id, title, category, location, price').eq('status', 'active').limit(4),
       supabase.from('user_coupons').select('id, title, business_name, discount_amount, neighborhood').eq('is_active', true).limit(3)
@@ -109,7 +109,7 @@ YOUR VIBE:
 - If the user seems confused or asks the same thing multiple times, acknowledge it friendly and try a different approach
 - For first greetings (hi, hello, hey), respond with: "Hey! Welcome to Yara AI ⚡ If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?"
 - If they greet you again after already chatting, be casual like "what's up?" or "back for more?" but still helpful
-- IMPORTANT: When a user asks about events, quickly ask "What neighborhood + your age?" - keep it super short and casual. Only recommend specific events after you have this info.
+- IMPORTANT: When a user asks about events, quickly ask "What neighborhood + your age?" - keep it super short and casual. After they provide this info, recommend 2-3 specific events from that neighborhood by name and include their details (date, time, location).
 
 Remember: You're the friend who always knows the best spots and hookups in BA.${repetitionContext}`;
 
@@ -164,26 +164,16 @@ Remember: You're the friend who always knows the best spots and hookups in BA.${
     const aiResponse = data.choices[0].message.content;
     console.log('🎉 Success! Returning AI response with comprehensive real data');
 
-    // Check if user is confirming interest in an event
-    const interestKeywords = ['interested', 'tell me more', 'yes', 'yeah', 'sounds good', 'that one', 'i want', 'me interesa', 'sí', 'si', 'dale'];
-    const messageLC = message.toLowerCase();
+    // Check if AI is recommending events in the response
     const responseLC = aiResponse.toLowerCase();
+    const eventImages: string[] = [];
     
-    let eventImage = null;
-    
-    // If the AI mentioned specific events and user shows interest
-    if (interestKeywords.some(keyword => messageLC.includes(keyword)) && eventsData.data && eventsData.data.length > 0) {
-      // Check if any event was recently mentioned in conversation
-      const recentMessages = messages.slice(-4).map(m => m.content.toLowerCase()).join(' ');
-      
+    // Find all events mentioned in the AI response and collect their images
+    if (eventsData.data && eventsData.data.length > 0) {
       for (const event of eventsData.data) {
-        if (event.image_url && (
-          recentMessages.includes(event.title.toLowerCase()) || 
-          responseLC.includes(event.title.toLowerCase())
-        )) {
-          eventImage = event.image_url;
-          console.log(`📸 Found matching event image: ${event.title}`);
-          break;
+        if (event.image_url && responseLC.includes(event.title.toLowerCase())) {
+          eventImages.push(event.image_url);
+          console.log(`📸 Found event image for: ${event.title}`);
         }
       }
     }
@@ -191,7 +181,7 @@ Remember: You're the friend who always knows the best spots and hookups in BA.${
     return new Response(
       JSON.stringify({ 
         response: aiResponse,
-        eventImage: eventImage,
+        eventImages: eventImages.length > 0 ? eventImages : null,
         success: true 
       }),
       {
