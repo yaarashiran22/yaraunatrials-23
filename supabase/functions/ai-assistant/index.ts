@@ -94,6 +94,12 @@ serve(async (req) => {
       localCoupons: couponsData.data || [],
       userLocation: userLocation || 'Not specified'
     };
+    
+    // Add explicit warning if no events available
+    let noEventsWarning = '';
+    if (!realData.currentEvents || realData.currentEvents.length === 0) {
+      noEventsWarning = '\n\n⚠️ CRITICAL: There are NO upcoming events in the database. If a user asks about events, tell them there are no upcoming events right now and suggest they check back later. DO NOT make up or invent any fake events.';
+    }
 
     // Check for repetition in recent messages
     let repetitionContext = '';
@@ -114,15 +120,17 @@ serve(async (req) => {
     // Create concise system prompt with essential data
     const systemPrompt = `You're Yara AI, the cool friend who knows what's up in Buenos Aires. You're talking to 25-32 year olds, so keep it real, casual, and fun. Use natural conversational language - think texting a friend, not writing an essay.
 
+⚠️ CRITICAL RULE: ONLY recommend REAL events, places, and deals that appear in the CURRENT SCENE data below. NEVER make up or invent fake event names, locations, or details. If there's no data available, say so honestly.
+
 CURRENT SCENE:
 📅 EVENTS (${realData.currentEvents.length}):
-${realData.currentEvents.map(e => {
+${realData.currentEvents.length > 0 ? realData.currentEvents.map(e => {
   const creator = e.creator_name || 'Unknown';
   const mood = e.mood ? ` [${e.mood}]` : '';
   const desc = e.description ? ` - ${e.description.substring(0, 100)}` : '';
   const eventType = e.event_type || 'event';
   return `- "${e.title}"${mood} [${eventType}] at ${e.location} on ${e.date} ${e.time || ''} ${e.price ? '$'+e.price : 'Free'} (posted by ${creator})${desc}`;
-}).join('\n')}
+}).join('\n') : 'NO UPCOMING EVENTS AVAILABLE'}
 
 👥 COMMUNITIES (${realData.activeCommunities.length}):
 ${realData.activeCommunities.map(c => `- "${c.name}" (${c.member_count} members)`).join('\n')}
@@ -146,8 +154,9 @@ YOUR VIBE:
 - If they greet you again after already chatting, be casual like "what's up?" or "back for more?" but still helpful
 - IMPORTANT: When a user asks about events, quickly ask "What neighborhood + your age?" - keep it super short and casual. After they provide this info, recommend 2-3 specific events from that neighborhood with full details: event name, neighborhood/location, date, time, price, a brief description of what it is, and who posted it (e.g. "posted by Maria").
 - CRITICAL: When a user asks for more details about an event you mentioned (by name), ALWAYS provide the full information about that event from the data above, including the description, date, time, location, price, and who posted it. Never say you don't have information about an event that's in your CURRENT SCENE data.
+- ⚠️ NEVER INVENT EVENTS: Only recommend events that are explicitly listed in the CURRENT SCENE data above. If there are no events available (shows "NO UPCOMING EVENTS AVAILABLE"), tell the user "There are no upcoming events right now, but check back soon!" DO NOT make up event names like "Palermo Street Food Festival" or "Tango Night" unless they appear in the actual data.
 
-Remember: You're the friend who always knows the best spots and hookups in BA.${repetitionContext}`;
+Remember: You're the friend who always knows the best spots and hookups in BA.${repetitionContext}${noEventsWarning}`;
 
     console.log('🤖 Calling OpenAI with conversation history...');
 
