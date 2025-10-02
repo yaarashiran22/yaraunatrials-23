@@ -42,13 +42,14 @@ serve(async (req) => {
     );
 
     // Fetch essential data from key tables - optimized for speed
+    const today = new Date().toISOString().split('T')[0];
     const [
       eventsData,
       communitiesData, 
       itemsData,
       couponsData
     ] = await Promise.all([
-      supabase.from('events').select('id, title, location, date, time, price').limit(5),
+      supabase.from('events').select('id, title, location, date, time, price').gte('date', today).order('date', { ascending: true }).limit(5),
       supabase.from('communities').select('id, name, tagline, member_count').limit(4),
       supabase.from('items').select('id, title, category, location, price').eq('status', 'active').limit(4),
       supabase.from('user_coupons').select('id, title, business_name, discount_amount, neighborhood').eq('is_active', true).limit(3)
