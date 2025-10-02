@@ -165,7 +165,8 @@ serve(async (req) => {
 async function sendTwilioWhatsAppMessage(to: string, message: string) {
   const TWILIO_ACCOUNT_SID = Deno.env.get('TWILIO_ACCOUNT_SID');
   const TWILIO_AUTH_TOKEN = Deno.env.get('TWILIO_AUTH_TOKEN');
-  const TWILIO_WHATSAPP_NUMBER = Deno.env.get('TWILIO_WHATSAPP_NUMBER') || 'whatsapp:+14155238886';
+  const twilioNumber = Deno.env.get('TWILIO_WHATSAPP_NUMBER') || '+14155238886';
+  const TWILIO_WHATSAPP_NUMBER = twilioNumber.startsWith('whatsapp:') ? twilioNumber : `whatsapp:${twilioNumber}`;
 
   console.log('🔑 Twilio credentials check:', {
     hasSID: !!TWILIO_ACCOUNT_SID,
