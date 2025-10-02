@@ -72,6 +72,7 @@ serve(async (req) => {
           const messageBody = decodeURIComponent(twilioData.Body as string);
           const fromNumber = twilioData.From as string;
           const profileName = twilioData.ProfileName as string || 'User';
+          const messagingServiceSid = twilioData.MessagingServiceSid as string;
           
           console.log(`💬 Processing Twilio WhatsApp message from ${profileName} (${fromNumber}): ${messageBody}`);
           
@@ -89,15 +90,15 @@ serve(async (req) => {
 
             if (aiResponse.data?.response) {
               console.log('✅ Valid AI response, sending to Twilio...');
-              await sendTwilioWhatsAppMessage(fromNumber, aiResponse.data.response);
+              await sendTwilioWhatsAppMessage(fromNumber, aiResponse.data.response, messagingServiceSid);
               console.log('📤 Message sent successfully to Twilio');
             } else {
               console.error('❌ No AI response received, aiResponse:', aiResponse);
-              await sendTwilioWhatsAppMessage(fromNumber, "Sorry, I'm having trouble processing your message. Please try again.");
+              await sendTwilioWhatsAppMessage(fromNumber, "Sorry, I'm having trouble processing your message. Please try again.", messagingServiceSid);
             }
           } catch (aiError) {
             console.error('❌ Error calling AI assistant:', aiError);
-            await sendTwilioWhatsAppMessage(fromNumber, "Sorry, I'm experiencing technical difficulties. Please try again later.");
+            await sendTwilioWhatsAppMessage(fromNumber, "Sorry, I'm experiencing technical difficulties. Please try again later.", messagingServiceSid);
           }
         } else {
           console.log('📱 Received non-WhatsApp message or status update:', twilioData.SmsStatus, 'Body:', !!twilioData.Body, 'From:', twilioData.From);
@@ -162,7 +163,7 @@ serve(async (req) => {
 });
 
 // Function to send messages via Twilio WhatsApp
-async function sendTwilioWhatsAppMessage(to: string, message: string) {
+async function sendTwilioWhatsAppMessage(to: string, message: string, messagingServiceSid?: string) {
   const TWILIO_ACCOUNT_SID = Deno.env.get('TWILIO_ACCOUNT_SID');
   const TWILIO_AUTH_TOKEN = Deno.env.get('TWILIO_AUTH_TOKEN');
   let twilioNumber = Deno.env.get('TWILIO_WHATSAPP_NUMBER') || '+14155238886';
@@ -179,8 +180,9 @@ async function sendTwilioWhatsAppMessage(to: string, message: string) {
   console.log('🔑 Twilio credentials check:', {
     hasSID: !!TWILIO_ACCOUNT_SID,
     hasToken: !!TWILIO_AUTH_TOKEN,
-    fromNumber: TWILIO_WHATSAPP_NUMBER,
-    toNumber: to
+    fromNumber: messagingServiceSid || TWILIO_WHATSAPP_NUMBER,
+    toNumber: to,
+    usingMessagingService: !!messagingServiceSid
   });
 
   if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN) {
@@ -190,11 +192,19 @@ async function sendTwilioWhatsAppMessage(to: string, message: string) {
 
   const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`;
   
-  const payload = new URLSearchParams({
-    From: TWILIO_WHATSAPP_NUMBER,
+  const payloadData: any = {
     To: to,
     Body: message
-  });
+  };
+
+  // Use MessagingServiceSid if available, otherwise use From number
+  if (messagingServiceSid) {
+    payloadData.MessagingServiceSid = messagingServiceSid;
+  } else {
+    payloadData.From = TWILIO_WHATSAPP_NUMBER;
+  }
+  
+  const payload = new URLSearchParams(payloadData);
 
   try {
     console.log(`📤 Sending Twilio WhatsApp message to ${to}: ${message}`);
