@@ -49,7 +49,10 @@ serve(async (req) => {
       itemsData,
       couponsData
     ] = await Promise.all([
-      supabase.from('events').select('id, title, location, date, time, price, image_url').gte('date', today).order('date', { ascending: true }).limit(10),
+      supabase.from('events').select(`
+        id, title, location, date, time, price, image_url, description, mood, event_type,
+        profiles:user_id (name)
+      `).gte('date', today).order('date', { ascending: true }).limit(10),
       supabase.from('communities').select('id, name, tagline, member_count').limit(4),
       supabase.from('items').select('id, title, category, location, price').eq('status', 'active').limit(4),
       supabase.from('user_coupons').select('id, title, business_name, discount_amount, neighborhood').eq('is_active', true).limit(3)
@@ -87,7 +90,12 @@ serve(async (req) => {
 
 CURRENT SCENE:
 📅 EVENTS (${realData.currentEvents.length}):
-${realData.currentEvents.map(e => `- "${e.title}" at ${e.location} on ${e.date} ${e.time || ''} ${e.price ? '$'+e.price : ''}`).join('\n')}
+${realData.currentEvents.map(e => {
+  const creator = e.profiles?.name || 'Unknown';
+  const mood = e.mood ? ` [${e.mood}]` : '';
+  const desc = e.description ? ` - ${e.description.substring(0, 100)}` : '';
+  return `- "${e.title}"${mood} at ${e.location} on ${e.date} ${e.time || ''} ${e.price ? '$'+e.price : 'Free'} (by ${creator})${desc}`;
+}).join('\n')}
 
 👥 COMMUNITIES (${realData.activeCommunities.length}):
 ${realData.activeCommunities.map(c => `- "${c.name}" (${c.member_count} members)`).join('\n')}
@@ -109,7 +117,7 @@ YOUR VIBE:
 - If the user seems confused or asks the same thing multiple times, acknowledge it friendly and try a different approach
 - For first greetings (hi, hello, hey), respond with: "Hey! Welcome to Yara AI ⚡ If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?"
 - If they greet you again after already chatting, be casual like "what's up?" or "back for more?" but still helpful
-- IMPORTANT: When a user asks about events, quickly ask "What neighborhood + your age?" - keep it super short and casual. After they provide this info, recommend 2-3 specific events from that neighborhood by name and include their details (date, time, location).
+- IMPORTANT: When a user asks about events, quickly ask "What neighborhood + your age?" - keep it super short and casual. After they provide this info, recommend 2-3 specific events from that neighborhood with full details: event name, neighborhood/location, date, time, price, a brief description of what it is, and who posted it (e.g. "posted by Maria").
 
 Remember: You're the friend who always knows the best spots and hookups in BA.${repetitionContext}`;
 
