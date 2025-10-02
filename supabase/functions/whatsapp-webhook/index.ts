@@ -92,6 +92,12 @@ serve(async (req) => {
               console.log('✅ Valid AI response, sending to Twilio...');
               await sendTwilioWhatsAppMessage(fromNumber, aiResponse.data.response, messagingServiceSid);
               console.log('📤 Message sent successfully to Twilio');
+              
+              // Send event image if provided
+              if (aiResponse.data?.eventImage) {
+                console.log('📸 Sending event image:', aiResponse.data.eventImage);
+                await sendTwilioWhatsAppImage(fromNumber, aiResponse.data.eventImage, messagingServiceSid);
+              }
             } else {
               console.error('❌ No AI response received, aiResponse:', aiResponse);
               await sendTwilioWhatsAppMessage(fromNumber, "Sorry, I'm having trouble processing your message. Please try again.", messagingServiceSid);
@@ -227,6 +233,62 @@ async function sendTwilioWhatsAppMessage(to: string, message: string, messagingS
     }
   } catch (error) {
     console.error('❌ Error sending Twilio WhatsApp message:', error);
+  }
+}
+
+// Function to send images via Twilio WhatsApp
+async function sendTwilioWhatsAppImage(to: string, imageUrl: string, messagingServiceSid?: string) {
+  const TWILIO_ACCOUNT_SID = Deno.env.get('TWILIO_ACCOUNT_SID');
+  const TWILIO_AUTH_TOKEN = Deno.env.get('TWILIO_AUTH_TOKEN');
+  let twilioNumber = Deno.env.get('TWILIO_WHATSAPP_NUMBER') || '+14155238886';
+  
+  twilioNumber = twilioNumber.replace('whatsapp:', '');
+  if (!twilioNumber.startsWith('+')) {
+    twilioNumber = '+' + twilioNumber;
+  }
+  const TWILIO_WHATSAPP_NUMBER = `whatsapp:${twilioNumber}`;
+
+  if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN) {
+    console.error('❌ Missing Twilio credentials for image sending');
+    return;
+  }
+
+  const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`;
+  
+  const payloadData: any = {
+    To: to,
+    MediaUrl: imageUrl
+  };
+
+  if (messagingServiceSid) {
+    payloadData.MessagingServiceSid = messagingServiceSid;
+  } else {
+    payloadData.From = TWILIO_WHATSAPP_NUMBER;
+  }
+  
+  const payload = new URLSearchParams(payloadData);
+
+  try {
+    console.log(`📸 Sending Twilio WhatsApp image to ${to}: ${imageUrl}`);
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${btoa(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`)}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: payload,
+    });
+
+    const result = await response.json();
+    
+    if (response.ok) {
+      console.log('✅ Twilio WhatsApp image sent successfully:', result);
+    } else {
+      console.error('❌ Failed to send Twilio WhatsApp image:', result);
+    }
+  } catch (error) {
+    console.error('❌ Error sending Twilio WhatsApp image:', error);
   }
 }
 

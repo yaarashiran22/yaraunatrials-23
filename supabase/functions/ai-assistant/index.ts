@@ -167,9 +167,34 @@ Remember: You're the friend who always knows the best spots and hookups in BA.${
     const aiResponse = data.choices[0].message.content;
     console.log('🎉 Success! Returning AI response with comprehensive real data');
 
+    // Check if user is confirming interest in an event
+    const interestKeywords = ['interested', 'tell me more', 'yes', 'yeah', 'sounds good', 'that one', 'i want', 'me interesa', 'sí', 'si', 'dale'];
+    const messageLC = message.toLowerCase();
+    const responseLC = aiResponse.toLowerCase();
+    
+    let eventImage = null;
+    
+    // If the AI mentioned specific events and user shows interest
+    if (interestKeywords.some(keyword => messageLC.includes(keyword)) && eventsData.data && eventsData.data.length > 0) {
+      // Check if any event was recently mentioned in conversation
+      const recentMessages = messages.slice(-4).map(m => m.content.toLowerCase()).join(' ');
+      
+      for (const event of eventsData.data) {
+        if (event.image_url && (
+          recentMessages.includes(event.title.toLowerCase()) || 
+          responseLC.includes(event.title.toLowerCase())
+        )) {
+          eventImage = event.image_url;
+          console.log(`📸 Found matching event image: ${event.title}`);
+          break;
+        }
+      }
+    }
+
     return new Response(
       JSON.stringify({ 
         response: aiResponse,
+        eventImage: eventImage,
         success: true 
       }),
       {
