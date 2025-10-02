@@ -152,8 +152,8 @@ YOUR VIBE:
 - If the user seems confused or asks the same thing multiple times, acknowledge it friendly and try a different approach
 - For first greetings (hi, hello, hey), respond with: "Hey! Welcome to Yara AI ⚡ If you're looking for cool events, hidden spots, or exclusive deals in BA - I got you. What vibe are you after?"
 - If they greet you again after already chatting, be casual like "what's up?" or "back for more?" but still helpful
-- IMPORTANT: When a user asks about events, quickly ask "What neighborhood + your age?" - keep it super short and casual. After they provide this info, recommend 2-3 specific events from that neighborhood with full details: event name, neighborhood/location, date, time, price, a brief description of what it is, and who posted it (e.g. "posted by Maria").
-- CRITICAL: When a user asks for more details about an event you mentioned (by name), ALWAYS provide the full information about that event from the data above, including the description, date, time, location, price, and who posted it. Never say you don't have information about an event that's in your CURRENT SCENE data.
+- IMPORTANT: When a user asks about events, quickly ask "What neighborhood + your age?" - keep it super short and casual. After they provide this info, recommend 2-3 specific events from that neighborhood with full details: event name, neighborhood/location, date, time, price, a brief description. Then ask "Want more info about any of these?" to see if they're interested in details.
+- CRITICAL: When a user asks for more details about an event you mentioned (by name), ALWAYS provide the full information about that event from the data above, including the full description, date, time, location, price, and who posted it. This is when you provide complete details.
 - ⚠️ NEVER INVENT EVENTS: Only recommend events that are explicitly listed in the CURRENT SCENE data above. If there are no events available (shows "NO UPCOMING EVENTS AVAILABLE"), tell the user "There are no upcoming events right now, but check back soon!" DO NOT make up event names like "Palermo Street Food Festival" or "Tango Night" unless they appear in the actual data.
 
 Remember: You're the friend who always knows the best spots and hookups in BA.${repetitionContext}${noEventsWarning}`;
@@ -209,20 +209,24 @@ Remember: You're the friend who always knows the best spots and hookups in BA.${
     const aiResponse = data.choices[0].message.content;
     console.log('🎉 Success! Returning AI response with comprehensive real data');
 
-    // Check if AI is recommending events or user is asking about specific events
+    // Check if user is asking for more info about specific events
     const messageLC = message.toLowerCase();
     const responseLC = aiResponse.toLowerCase();
     const eventImages: string[] = [];
     
-    // Find all events mentioned in the AI response OR user's message and collect their images
-    if (eventsData.data && eventsData.data.length > 0) {
+    // Keywords that indicate user wants more info
+    const moreInfoKeywords = ['more info', 'more details', 'tell me more', 'want to know more', 'details about', 'about', 'interested', 'yes', 'yeah', 'sure', 'yep', 'si', 'sí', 'dale'];
+    const userWantsMoreInfo = moreInfoKeywords.some(keyword => messageLC.includes(keyword));
+    
+    // Only send images when user explicitly asks for more info AND an event is mentioned
+    if (userWantsMoreInfo && eventsData.data && eventsData.data.length > 0) {
       for (const event of eventsData.data) {
         if (event.image_url && (
-          responseLC.includes(event.title.toLowerCase()) || 
-          messageLC.includes(event.title.toLowerCase())
+          messageLC.includes(event.title.toLowerCase()) || 
+          responseLC.includes(event.title.toLowerCase())
         )) {
           eventImages.push(event.image_url);
-          console.log(`📸 Found event image for: ${event.title}`);
+          console.log(`📸 User requested more info - sending image for: ${event.title}`);
         }
       }
     }
