@@ -52,7 +52,7 @@ const DesktopHeader = ({
               aria-label="Navigate to homepage"
               style={{ color: 'hsl(var(--coral))' }}
             >
-              una
+              yara ai
             </div>
           </div>
           

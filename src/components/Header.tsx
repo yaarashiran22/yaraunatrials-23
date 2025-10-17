@@ -63,7 +63,7 @@ const Header = ({
                 letterSpacing: '-0.03em'
               }}
             >
-              una
+              yara ai
             </div>
           </div>
           
