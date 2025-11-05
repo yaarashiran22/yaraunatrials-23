@@ -25,10 +25,10 @@ const translations = {
     title: 'Title*',
     description: 'Description',
     whatDay: 'What Day*',
-    openDate: 'Open date (no specific day - open invite)',
     recurringEvent: 'Recurring event',
     time: 'Time',
     location: 'Location*',
+    address: 'Address (Optional)',
     price: 'Price (Optional)',
     externalLink: 'External Link (Optional)',
     instagramLink: 'Instagram Link (Optional)',
@@ -64,10 +64,10 @@ const translations = {
     title: 'Título*',
     description: 'Descripción',
     whatDay: 'Qué Día*',
-    openDate: 'Fecha abierta (sin día específico - invitación abierta)',
     recurringEvent: 'Evento recurrente',
     time: 'Hora',
     location: 'Ubicación*',
+    address: 'Dirección (Opcional)',
     price: 'Precio (Opcional)',
     externalLink: 'Enlace Externo (Opcional)',
     instagramLink: 'Enlace de Instagram (Opcional)',
@@ -109,6 +109,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
+  const [address, setAddress] = useState("");
   const [price, setPrice] = useState("");
   const [externalLink, setExternalLink] = useState("");
   const [instagramLink, setInstagramLink] = useState("");
@@ -121,7 +122,6 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
   const [fileType, setFileType] = useState<'image' | 'video' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedMood, setSelectedMood] = useState<string>("");
-  const [isOpenDate, setIsOpenDate] = useState(false);
   const [isRecurring, setIsRecurring] = useState(false);
 
   const t = translations[language];
@@ -184,10 +184,10 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       return;
     }
 
-    if (!date.trim() && !isOpenDate) {
+    if (!date.trim() && !isRecurring) {
       toast({
         title: "Error",
-        description: "Please enter an event date or select open date option",
+        description: "Please enter an event date or select recurring event option",
         variant: "destructive",
       });
       return;
@@ -262,9 +262,10 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           user_id: user.id,
           title: eventName.trim(),
           description: description.trim() || null,
-          date: isOpenDate ? null : (isRecurring ? 'recurring' : (date || null)),
-          time: isOpenDate ? null : (time || null),
+          date: isRecurring ? 'recurring' : (date || null),
+          time: time || null,
           location: location.trim(),
+          address: address.trim() || null,
           price: price.trim() || null,
           image_url: imageUrl,
           video_url: videoUrl,
@@ -288,6 +289,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       setDate("");
       setTime("");
       setLocation("");
+      setAddress("");
       setPrice("");
       setExternalLink("");
       setInstagramLink("");
@@ -299,7 +301,6 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       setFilePreview(null);
       setFileType(null);
       setSelectedMood("");
-      setIsOpenDate(false);
       setIsRecurring(false);
 
       // Call callback to refresh data
@@ -390,39 +391,13 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground block text-left">{t.whatDay}</label>
             
-            {/* Open Date Option */}
-            <div className="flex items-center gap-2 mb-2">
-              <input
-                type="checkbox"
-                id="open-date"
-                checked={isOpenDate}
-                onChange={(e) => {
-                  setIsOpenDate(e.target.checked);
-                  if (e.target.checked) {
-                    setDate("");
-                    setTime("");
-                    setIsRecurring(false);
-                  }
-                }}
-                className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
-              />
-              <label htmlFor="open-date" className="text-sm text-foreground cursor-pointer">
-                {t.openDate}
-              </label>
-            </div>
-
             {/* Recurring Event Option */}
             <div className="flex items-center gap-2 mb-3">
               <input
                 type="checkbox"
                 id="recurring-event"
                 checked={isRecurring}
-                onChange={(e) => {
-                  setIsRecurring(e.target.checked);
-                  if (e.target.checked) {
-                    setIsOpenDate(false);
-                  }
-                }}
+                onChange={(e) => setIsRecurring(e.target.checked)}
                 className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
               />
               <label htmlFor="recurring-event" className="text-sm text-foreground cursor-pointer">
@@ -430,7 +405,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               </label>
             </div>
 
-            {!isOpenDate && !isRecurring && (
+            {!isRecurring && (
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input 
@@ -444,20 +419,18 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           </div>
 
           {/* Time Field */}
-          {!isOpenDate && (
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground block text-left">{t.time}</label>
-              <div className="relative">
-                <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input 
-                  type="time"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
-                />
-              </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-left">{t.time}</label>
+            <div className="relative">
+              <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
+              />
             </div>
-          )}
+          </div>
 
           {/* Location Field */}
           <div className="space-y-2">
@@ -480,6 +453,20 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          {/* Address Field */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-left">{t.address}</label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Av. Santa Fe 1234"
+                className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
+              />
             </div>
           </div>
 

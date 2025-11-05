@@ -14,6 +14,8 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -155,6 +157,138 @@ const LoginPage = () => {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!resetEmail.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Check your email",
+          description: "We've sent you a password reset link",
+        });
+        setIsForgotPassword(false);
+        setResetEmail("");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Forgot Password View
+  if (isForgotPassword) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/30 to-coral-50/30 flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          {/* Header with X button */}
+          <div className="flex justify-end mb-4">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setIsForgotPassword(false)}
+              className="p-2 hover:bg-primary-100/50 text-primary transition-all"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center cursor-pointer" onClick={() => navigate('/')}>
+              <div 
+                className="text-5xl font-black cursor-pointer hover:opacity-80 transition-opacity"
+                style={{ 
+                  color: 'hsl(var(--primary))', 
+                  fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
+                  fontWeight: 700,
+                  textTransform: 'lowercase',
+                  letterSpacing: '-0.03em'
+                }}
+              >
+                una
+              </div>
+            </div>
+            
+            <p className="text-sm font-medium mt-2 mb-6" style={{ color: 'hsl(var(--coral))' }}>
+              Reset Your Password
+            </p>
+          </div>
+
+          {/* Form */}
+          <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-primary-200/30">
+            <h1 
+              className="text-xl text-center mb-6 bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent"
+              style={{ 
+                fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
+                fontWeight: 700,
+                letterSpacing: '-0.03em'
+              }}
+            >
+              Forgot Password
+            </h1>
+
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <div>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  className="w-full h-12 text-left bg-white/80 border-primary-200/40 focus:border-primary focus:ring-primary/20 rounded-lg"
+                  required
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-12 bg-gradient-to-r from-primary to-coral hover:from-primary-600 hover:to-coral-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Sending...' : 'Send Reset Link'}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <button
+                type="button"
+                onClick={() => setIsForgotPassword(false)}
+                className="text-primary hover:text-coral font-medium transition-colors"
+              >
+                Back to Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (isLogin) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/30 to-coral-50/30 flex items-center justify-center px-4">
@@ -228,6 +362,16 @@ const LoginPage = () => {
                   className="w-full h-12 text-left bg-white/80 border-primary-200/40 focus:border-primary focus:ring-primary/20 rounded-lg"
                   required
                 />
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setIsForgotPassword(true)}
+                  className="text-sm text-primary hover:text-coral font-medium transition-colors"
+                >
+                  Forgot password?
+                </button>
               </div>
 
               <Button
