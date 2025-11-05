@@ -21,6 +21,7 @@ export type Database = {
           description: string | null
           id: string
           image_url: string | null
+          is_active: boolean | null
           name: string
           updated_at: string
         }
@@ -30,6 +31,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          is_active?: boolean | null
           name: string
           updated_at?: string
         }
@@ -39,6 +41,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          is_active?: boolean | null
           name?: string
           updated_at?: string
         }
@@ -53,6 +56,9 @@ export type Database = {
           discount_amount: string | null
           id: string
           image_url: string | null
+          is_active: boolean | null
+          terms: string | null
+          title: string | null
           updated_at: string
           valid_until: string | null
         }
@@ -64,6 +70,9 @@ export type Database = {
           discount_amount?: string | null
           id?: string
           image_url?: string | null
+          is_active?: boolean | null
+          terms?: string | null
+          title?: string | null
           updated_at?: string
           valid_until?: string | null
         }
@@ -75,6 +84,9 @@ export type Database = {
           discount_amount?: string | null
           id?: string
           image_url?: string | null
+          is_active?: boolean | null
+          terms?: string | null
+          title?: string | null
           updated_at?: string
           valid_until?: string | null
         }
@@ -126,9 +138,34 @@ export type Database = {
           },
         ]
       }
+      event_rsvps: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           address: string | null
+          age_range: string | null
           created_at: string
           date: string | null
           description: string | null
@@ -136,6 +173,7 @@ export type Database = {
           external_link: string | null
           id: string
           image_url: string | null
+          instagram_link: string | null
           location: string | null
           market: string | null
           mood: string | null
@@ -150,10 +188,12 @@ export type Database = {
           user_id: string
           venue_name: string | null
           venue_size: string | null
+          venue_type: string | null
           video_url: string | null
         }
         Insert: {
           address?: string | null
+          age_range?: string | null
           created_at?: string
           date?: string | null
           description?: string | null
@@ -161,6 +201,7 @@ export type Database = {
           external_link?: string | null
           id?: string
           image_url?: string | null
+          instagram_link?: string | null
           location?: string | null
           market?: string | null
           mood?: string | null
@@ -175,10 +216,12 @@ export type Database = {
           user_id: string
           venue_name?: string | null
           venue_size?: string | null
+          venue_type?: string | null
           video_url?: string | null
         }
         Update: {
           address?: string | null
+          age_range?: string | null
           created_at?: string
           date?: string | null
           description?: string | null
@@ -186,6 +229,7 @@ export type Database = {
           external_link?: string | null
           id?: string
           image_url?: string | null
+          instagram_link?: string | null
           location?: string | null
           market?: string | null
           mood?: string | null
@@ -200,7 +244,32 @@ export type Database = {
           user_id?: string
           venue_name?: string | null
           venue_size?: string | null
+          venue_type?: string | null
           video_url?: string | null
+        }
+        Relationships: []
+      }
+      friends_picture_galleries: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -243,6 +312,36 @@ export type Database = {
         }
         Relationships: []
       }
+      posts: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          updated_at: string
+          user_id: string
+          video_url: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          updated_at?: string
+          user_id: string
+          video_url?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          updated_at?: string
+          user_id?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null
@@ -276,6 +375,75 @@ export type Database = {
           profile_image_url?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_coupons: {
+        Row: {
+          business_name: string | null
+          created_at: string
+          description: string | null
+          discount_amount: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          neighborhood: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          valid_until: string | null
+        }
+        Insert: {
+          business_name?: string | null
+          created_at?: string
+          description?: string | null
+          discount_amount?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          neighborhood?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          valid_until?: string | null
+        }
+        Update: {
+          business_name?: string | null
+          created_at?: string
+          description?: string | null
+          discount_amount?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          neighborhood?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          valid_until?: string | null
+        }
+        Relationships: []
+      }
+      user_picture_galleries: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          user_id?: string
         }
         Relationships: []
       }
