@@ -14,7 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      events: {
+        Row: {
+          address: string | null
+          created_at: string
+          date: string | null
+          description: string | null
+          event_type: string | null
+          external_link: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          market: string | null
+          mood: string | null
+          music_type: string | null
+          price: string | null
+          price_range: string | null
+          target_audience: string | null
+          ticket_link: string | null
+          time: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          venue_name: string | null
+          venue_size: string | null
+          video_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          event_type?: string | null
+          external_link?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          market?: string | null
+          mood?: string | null
+          music_type?: string | null
+          price?: string | null
+          price_range?: string | null
+          target_audience?: string | null
+          ticket_link?: string | null
+          time?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          venue_name?: string | null
+          venue_size?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          event_type?: string | null
+          external_link?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          market?: string | null
+          mood?: string | null
+          music_type?: string | null
+          price?: string | null
+          price_range?: string | null
+          target_audience?: string | null
+          ticket_link?: string | null
+          time?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          venue_name?: string | null
+          venue_size?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
