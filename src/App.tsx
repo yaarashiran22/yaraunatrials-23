@@ -28,8 +28,6 @@ import NeighborsPage from "./pages/NeighborsPage";
 import AllMeetupsPage from "./pages/AllMeetupsPage";
 import AllRecommendationsPage from "./pages/AllRecommendationsPage";
 
-import MeetupsPage from "./pages/MeetupsPage";
-
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
 import NewItemPage from "./pages/NewItemPage";
@@ -107,7 +105,6 @@ const AppContent = () => {
               <Route path="/new-item" element={<NewItemPage />} />
               <Route path="/create-post" element={<CreatePostPage />} />
               <Route path="/create-event" element={<CreateEventPage />} />
-              <Route path="/meetups" element={<MeetupsPage />} />
               
               {/* Admin routes */}
               <Route path="/admin" element={<AdminPage />} />
@@ -177,7 +174,6 @@ const AppContent = () => {
             <Route path="/new-item" element={<NewItemPage />} />
             <Route path="/create-post" element={<CreatePostPage />} />
             <Route path="/create-event" element={<CreateEventPage />} />
-            <Route path="/meetups" element={<MeetupsPage />} />
             
             {/* Admin routes */}
             <Route path="/admin" element={<AdminPage />} />
