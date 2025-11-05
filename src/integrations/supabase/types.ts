@@ -14,6 +14,118 @@ export type Database = {
   }
   public: {
     Tables: {
+      communities: {
+        Row: {
+          created_at: string
+          creator_id: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          creator_id: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      community_perks: {
+        Row: {
+          business_name: string
+          community_id: string | null
+          created_at: string
+          description: string | null
+          discount_amount: string | null
+          id: string
+          image_url: string | null
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          business_name: string
+          community_id?: string | null
+          created_at?: string
+          description?: string | null
+          discount_amount?: string | null
+          id?: string
+          image_url?: string | null
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          business_name?: string
+          community_id?: string | null
+          created_at?: string
+          description?: string | null
+          discount_amount?: string | null
+          id?: string
+          image_url?: string | null
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_perks_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coupon_claims: {
+        Row: {
+          claimed_at: string
+          created_at: string
+          id: string
+          is_used: boolean | null
+          perk_id: string | null
+          qr_code_data: string | null
+          user_id: string | null
+        }
+        Insert: {
+          claimed_at?: string
+          created_at?: string
+          id?: string
+          is_used?: boolean | null
+          perk_id?: string | null
+          qr_code_data?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          claimed_at?: string
+          created_at?: string
+          id?: string
+          is_used?: boolean | null
+          perk_id?: string | null
+          qr_code_data?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coupon_claims_perk_id_fkey"
+            columns: ["perk_id"]
+            isOneToOne: false
+            referencedRelation: "community_perks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           address: string | null
@@ -89,6 +201,81 @@ export type Database = {
           venue_name?: string | null
           venue_size?: string | null
           video_url?: string | null
+        }
+        Relationships: []
+      }
+      items: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          price: number | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          price?: number | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          price?: number | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          bio: string | null
+          created_at: string
+          id: string
+          interests: string[] | null
+          location: string | null
+          name: string | null
+          profile_image_url: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          interests?: string[] | null
+          location?: string | null
+          name?: string | null
+          profile_image_url?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          id?: string
+          interests?: string[] | null
+          location?: string | null
+          name?: string | null
+          profile_image_url?: string | null
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
