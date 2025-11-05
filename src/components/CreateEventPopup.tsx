@@ -1,4 +1,4 @@
-import { X, Plus, Calendar, Clock, MapPin, Camera, Upload, Coffee, Zap, Heart, Dumbbell, Palette, Users } from "lucide-react";
+import { X, Plus, Calendar, Clock, MapPin, Camera, Upload, Coffee, Zap, Heart, Dumbbell, Palette, Users, Instagram, Ticket, Building, Hash, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,10 +16,94 @@ interface CreateEventPopupProps {
   initialEventType?: 'event' | 'meetup';
 }
 
+type Language = 'en' | 'es';
+
+const translations = {
+  en: {
+    newEvent: 'New Event',
+    newMeetup: 'New Meetup',
+    title: 'Title*',
+    description: 'Description',
+    whatDay: 'What Day*',
+    openDate: 'Open date (no specific day - open invite)',
+    recurringEvent: 'Recurring event',
+    time: 'Time',
+    location: 'Location*',
+    price: 'Price (Optional)',
+    externalLink: 'External Link (Optional)',
+    instagramLink: 'Instagram Link (Optional)',
+    ticketLink: 'Ticket Link (Optional)',
+    ageRange: 'Age Range (Optional)',
+    venueType: 'Venue Type (Optional)',
+    whatMood: 'What Mood',
+    imageVideo: 'Image or Video*',
+    chooseMedia: 'Choose image or video',
+    chooseNeighborhood: 'Choose neighborhood',
+    createEvent: 'Create Event',
+    createMeetup: 'Create Meetup',
+    creatingEvent: 'Creating event...',
+    creatingMeetup: 'Creating meetup...',
+    enterEventName: 'Enter event name',
+    enterMeetupName: 'Enter meetup name',
+    describeEvent: 'Describe your event',
+    describeMeetup: 'Describe your meetup',
+    venueTypes: {
+      club: 'Club',
+      bar: 'Bar',
+      restaurant: 'Restaurant',
+      cafe: 'Café',
+      outdoorPark: 'Outdoor/Park',
+      gallery: 'Gallery',
+      theater: 'Theater',
+      other: 'Other',
+    }
+  },
+  es: {
+    newEvent: 'Nuevo Evento',
+    newMeetup: 'Nueva Reunión',
+    title: 'Título*',
+    description: 'Descripción',
+    whatDay: 'Qué Día*',
+    openDate: 'Fecha abierta (sin día específico - invitación abierta)',
+    recurringEvent: 'Evento recurrente',
+    time: 'Hora',
+    location: 'Ubicación*',
+    price: 'Precio (Opcional)',
+    externalLink: 'Enlace Externo (Opcional)',
+    instagramLink: 'Enlace de Instagram (Opcional)',
+    ticketLink: 'Enlace de Entrada (Opcional)',
+    ageRange: 'Rango de Edad (Opcional)',
+    venueType: 'Tipo de Lugar (Opcional)',
+    whatMood: 'Qué Ambiente',
+    imageVideo: 'Imagen o Video*',
+    chooseMedia: 'Elegir imagen o video',
+    chooseNeighborhood: 'Elegir barrio',
+    createEvent: 'Crear Evento',
+    createMeetup: 'Crear Reunión',
+    creatingEvent: 'Creando evento...',
+    creatingMeetup: 'Creando reunión...',
+    enterEventName: 'Ingrese el nombre del evento',
+    enterMeetupName: 'Ingrese el nombre de la reunión',
+    describeEvent: 'Describa su evento',
+    describeMeetup: 'Describa su reunión',
+    venueTypes: {
+      club: 'Club',
+      bar: 'Bar',
+      restaurant: 'Restaurante',
+      cafe: 'Café',
+      outdoorPark: 'Aire Libre/Parque',
+      gallery: 'Galería',
+      theater: 'Teatro',
+      other: 'Otro',
+    }
+  }
+};
+
 const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 'event' }: CreateEventPopupProps) => {
   const { toast } = useToast();
   const { user } = useAuth();
   const { profile } = useProfile(user?.id);
+  const [language, setLanguage] = useState<Language>('en');
   const [eventName, setEventName] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -27,6 +111,10 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
   const [externalLink, setExternalLink] = useState("");
+  const [instagramLink, setInstagramLink] = useState("");
+  const [ticketLink, setTicketLink] = useState("");
+  const [ageRange, setAgeRange] = useState("");
+  const [venueType, setVenueType] = useState("");
   const [eventType, setEventType] = useState<'event' | 'meetup'>(initialEventType);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
@@ -34,6 +122,9 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedMood, setSelectedMood] = useState<string>("");
   const [isOpenDate, setIsOpenDate] = useState(false);
+  const [isRecurring, setIsRecurring] = useState(false);
+
+  const t = translations[language];
 
   // Mood filters from home page
   const moodFilters = [
@@ -171,17 +262,18 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           user_id: user.id,
           title: eventName.trim(),
           description: description.trim() || null,
-          date: isOpenDate ? null : (date || null),
+          date: isOpenDate ? null : (isRecurring ? 'recurring' : (date || null)),
           time: isOpenDate ? null : (time || null),
           location: location.trim(),
           price: price.trim() || null,
           image_url: imageUrl,
           video_url: videoUrl,
           external_link: externalLink.trim() || null,
+          ticket_link: ticketLink.trim() || null,
           event_type: eventType,
           mood: selectedMood || null,
           market: 'argentina' // Argentina market only
-        });
+        } as any);
 
       if (error) throw error;
 
@@ -198,12 +290,17 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
       setLocation("");
       setPrice("");
       setExternalLink("");
+      setInstagramLink("");
+      setTicketLink("");
+      setAgeRange("");
+      setVenueType("");
       setEventType('event');
       setSelectedFile(null);
       setFilePreview(null);
       setFileType(null);
       setSelectedMood("");
       setIsOpenDate(false);
+      setIsRecurring(false);
 
       // Call callback to refresh data
       if (onEventCreated) {
@@ -229,49 +326,72 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-lg font-bold text-foreground">
-            {eventType === 'meetup' ? 'New Meetup' : 'New Event'}
+            {eventType === 'meetup' ? t.newMeetup : t.newEvent}
           </h2>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={onClose}
-            className="rounded-full"
-          >
-            <X className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            {/* Language Switcher */}
+            <div className="flex items-center gap-1 bg-muted rounded-full p-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setLanguage('en')}
+                className={`rounded-full px-3 py-1 text-xs ${language === 'en' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                EN
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setLanguage('es')}
+                className={`rounded-full px-3 py-1 text-xs ${language === 'es' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                ES
+              </Button>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={onClose}
+              className="rounded-full"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
 
         <div className="p-6 space-y-6">
           {/* Event Name Field */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground block text-left">
-              Title*
+              {t.title}
             </label>
             <Input 
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
-              placeholder={eventType === 'meetup' ? 'Enter meetup name' : 'Enter event name'}
+              placeholder={eventType === 'meetup' ? t.enterMeetupName : t.enterEventName}
               className="w-full h-12 text-left bg-white border-2 border-gray-200 rounded-full"
             />
           </div>
 
           {/* Description Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">Description</label>
+            <label className="text-sm font-medium text-foreground block text-left">{t.description}</label>
             <Textarea 
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder={eventType === 'meetup' ? 'Describe your meetup' : 'Describe your event'}
+              placeholder={eventType === 'meetup' ? t.describeMeetup : t.describeEvent}
               className="w-full min-h-24 text-left bg-white border-2 border-gray-200 rounded-2xl resize-none"
             />
           </div>
 
           {/* Date Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">What Day*</label>
+            <label className="text-sm font-medium text-foreground block text-left">{t.whatDay}</label>
             
             {/* Open Date Option */}
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-2">
               <input
                 type="checkbox"
                 id="open-date"
@@ -281,16 +401,36 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
                   if (e.target.checked) {
                     setDate("");
                     setTime("");
+                    setIsRecurring(false);
                   }
                 }}
                 className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
               />
               <label htmlFor="open-date" className="text-sm text-foreground cursor-pointer">
-                Open date (no specific day - open invite)
+                {t.openDate}
               </label>
             </div>
 
-            {!isOpenDate && (
+            {/* Recurring Event Option */}
+            <div className="flex items-center gap-2 mb-3">
+              <input
+                type="checkbox"
+                id="recurring-event"
+                checked={isRecurring}
+                onChange={(e) => {
+                  setIsRecurring(e.target.checked);
+                  if (e.target.checked) {
+                    setIsOpenDate(false);
+                  }
+                }}
+                className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+              />
+              <label htmlFor="recurring-event" className="text-sm text-foreground cursor-pointer">
+                {t.recurringEvent}
+              </label>
+            </div>
+
+            {!isOpenDate && !isRecurring && (
               <div className="relative">
                 <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input 
@@ -306,7 +446,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
           {/* Time Field */}
           {!isOpenDate && (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground block text-left">Time</label>
+              <label className="text-sm font-medium text-foreground block text-left">{t.time}</label>
               <div className="relative">
                 <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input 
@@ -321,12 +461,12 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
 
           {/* Location Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">Location*</label>
+            <label className="text-sm font-medium text-foreground block text-left">{t.location}</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
               <Select value={location} onValueChange={setLocation}>
                 <SelectTrigger className="w-full h-12 pl-12 text-left bg-background border-2 border-border rounded-full">
-                  <SelectValue placeholder="Choose neighborhood" />
+                  <SelectValue placeholder={t.chooseNeighborhood} />
                 </SelectTrigger>
                 <SelectContent className="bg-background border shadow-lg z-50 max-h-60">
                   {neighborhoods.map((neighborhood) => (
@@ -345,7 +485,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
 
           {/* Price Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">Price (Optional)</label>
+            <label className="text-sm font-medium text-foreground block text-left">{t.price}</label>
             <Input 
               value={price}
               onChange={(e) => setPrice(e.target.value)}
@@ -354,20 +494,89 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
             />
           </div>
 
+          {/* Instagram Link Field */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-left">{t.instagramLink}</label>
+            <div className="relative">
+              <Instagram className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                value={instagramLink}
+                onChange={(e) => setInstagramLink(e.target.value)}
+                placeholder="https://instagram.com/..."
+                className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
+              />
+            </div>
+          </div>
+
+          {/* Ticket Link Field */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-left">{t.ticketLink}</label>
+            <div className="relative">
+              <Ticket className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                value={ticketLink}
+                onChange={(e) => setTicketLink(e.target.value)}
+                placeholder="https://tickets.com/..."
+                className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
+              />
+            </div>
+          </div>
+
+          {/* Age Range Field */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-left">{t.ageRange}</label>
+            <div className="relative">
+              <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                value={ageRange}
+                onChange={(e) => setAgeRange(e.target.value)}
+                placeholder="18-25, 25+, All ages"
+                className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
+              />
+            </div>
+          </div>
+
+          {/* Venue Type Field */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground block text-left">{t.venueType}</label>
+            <div className="relative">
+              <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" />
+              <Select value={venueType} onValueChange={setVenueType}>
+                <SelectTrigger className="w-full h-12 pl-12 text-left bg-background border-2 border-border rounded-full">
+                  <SelectValue placeholder={language === 'en' ? "Select venue type" : "Seleccionar tipo de lugar"} />
+                </SelectTrigger>
+                <SelectContent className="bg-background border shadow-lg z-50 max-h-60">
+                  {Object.entries(t.venueTypes).map(([key, value]) => (
+                    <SelectItem 
+                      key={key} 
+                      value={key}
+                      className="text-left cursor-pointer hover:bg-muted"
+                    >
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           {/* External Link Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">External Link (Optional)</label>
-            <Input 
-              value={externalLink}
-              onChange={(e) => setExternalLink(e.target.value)}
-              placeholder="https://example.com"
-              className="w-full h-12 text-left bg-white border-2 border-gray-200 rounded-full"
-            />
+            <label className="text-sm font-medium text-foreground block text-left">{t.externalLink}</label>
+            <div className="relative">
+              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                value={externalLink}
+                onChange={(e) => setExternalLink(e.target.value)}
+                placeholder="https://example.com"
+                className="w-full h-12 pl-12 text-left bg-white border-2 border-gray-200 rounded-full"
+              />
+            </div>
           </div>
 
           {/* What Mood Section */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">What Mood</label>
+            <label className="text-sm font-medium text-foreground block text-left">{t.whatMood}</label>
             <div className="flex flex-wrap gap-2">
               {moodFilters.map((mood) => {
                 const IconComponent = mood.icon;
@@ -396,7 +605,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
 
           {/* Media Field */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground block text-left">Image or Video*</label>
+            <label className="text-sm font-medium text-foreground block text-left">{t.imageVideo}</label>
             <div className="space-y-2">
               <input
                 type="file"
@@ -411,7 +620,7 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               >
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Camera className="h-5 w-5" />
-                  <span className="text-sm">{selectedFile ? selectedFile.name : "Choose image or video"}</span>
+                  <span className="text-sm">{selectedFile ? selectedFile.name : t.chooseMedia}</span>
                 </div>
               </label>
               {filePreview && (
@@ -443,8 +652,8 @@ const CreateEventPopup = ({ isOpen, onClose, onEventCreated, initialEventType = 
               className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full text-lg font-medium"
             >
               {isSubmitting ? 
-                (eventType === 'meetup' ? "Creating meetup..." : "Creating event...") : 
-                (eventType === 'meetup' ? "Create Meetup" : "Create Event")
+                (eventType === 'meetup' ? t.creatingMeetup : t.creatingEvent) : 
+                (eventType === 'meetup' ? t.createMeetup : t.createEvent)
               }
             </Button>
           </div>

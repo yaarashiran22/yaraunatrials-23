@@ -29,10 +29,44 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
 
   // Memoize the combined and filtered items to prevent infinite re-renders
   const allItems = useMemo(() => {
-    // Combine and sort both community perks and user coupons
-    let items = [
-      ...perks.map(perk => ({ ...perk, type: 'community_perk' })),
-      ...coupons.map(coupon => ({ ...coupon, type: 'user_coupon', business_name: coupon.business_name || coupon.title }))
+    // Combine and sort both community perks and user coupons with explicit typing
+    type CombinedItem = {
+      id: string;
+      type: 'community_perk' | 'user_coupon';
+      business_name: string;
+      title?: string;
+      description?: string;
+      discount_amount?: string;
+      image_url?: string;
+      valid_until?: string;
+      created_at: string;
+      user_id?: string;
+    };
+
+    let items: CombinedItem[] = [
+      ...perks.map(perk => ({ 
+        id: perk.id,
+        type: 'community_perk' as const,
+        business_name: perk.business_name,
+        title: (perk as any).title,
+        description: perk.description,
+        discount_amount: perk.discount_amount,
+        image_url: perk.image_url,
+        valid_until: perk.valid_until,
+        created_at: perk.created_at,
+      })),
+      ...coupons.map(coupon => ({ 
+        id: coupon.id,
+        type: 'user_coupon' as const,
+        business_name: coupon.business_name || coupon.title,
+        title: coupon.title,
+        description: coupon.description,
+        discount_amount: coupon.discount_amount,
+        image_url: coupon.image_url,
+        valid_until: coupon.valid_until,
+        created_at: coupon.created_at,
+        user_id: coupon.user_id,
+      }))
     ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
     // Filter based on following users if filter is 'following'
@@ -40,11 +74,10 @@ export const CommunityPerksCarousel = ({ filter = 'all', following = [] }: Commu
       items = items.filter(item => {
         // For user coupons, check if the creator is being followed
         if (item.type === 'user_coupon') {
-          return (item as any).user_id && following.includes((item as any).user_id);
+          return item.user_id && following.includes(item.user_id);
         }
         // For community perks, keep them all since they don't have specific user creators
-        // or check if they have a user_id and if that user is being followed
-        return !(item as any).user_id || following.includes((item as any).user_id);
+        return true;
       });
     }
 
