@@ -16,36 +16,95 @@ export type Database = {
     Tables: {
       communities: {
         Row: {
+          access_type: string | null
+          category: string | null
+          cover_image_url: string | null
           created_at: string
           creator_id: string
           description: string | null
           id: string
           image_url: string | null
           is_active: boolean | null
+          logo_url: string | null
+          member_count: number | null
           name: string
+          subcategory: string | null
+          tagline: string | null
           updated_at: string
         }
         Insert: {
+          access_type?: string | null
+          category?: string | null
+          cover_image_url?: string | null
           created_at?: string
           creator_id: string
           description?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          logo_url?: string | null
+          member_count?: number | null
           name: string
+          subcategory?: string | null
+          tagline?: string | null
           updated_at?: string
         }
         Update: {
+          access_type?: string | null
+          category?: string | null
+          cover_image_url?: string | null
           created_at?: string
           creator_id?: string
           description?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          logo_url?: string | null
+          member_count?: number | null
           name?: string
+          subcategory?: string | null
+          tagline?: string | null
           updated_at?: string
         }
         Relationships: []
+      }
+      community_members: {
+        Row: {
+          community_id: string
+          created_at: string
+          id: string
+          joined_at: string | null
+          role: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          community_id: string
+          created_at?: string
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          community_id?: string
+          created_at?: string
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_members_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       community_perks: {
         Row: {
@@ -312,6 +371,42 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string | null
+          related_id: string | null
+          related_user_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          related_id?: string | null
+          related_user_id?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          related_id?: string | null
+          related_user_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           content: string | null
@@ -353,6 +448,7 @@ export type Database = {
           profile_image_url: string | null
           updated_at: string
           user_id: string | null
+          username: string | null
         }
         Insert: {
           bio?: string | null
@@ -364,6 +460,7 @@ export type Database = {
           profile_image_url?: string | null
           updated_at?: string
           user_id?: string | null
+          username?: string | null
         }
         Update: {
           bio?: string | null
@@ -375,6 +472,7 @@ export type Database = {
           profile_image_url?: string | null
           updated_at?: string
           user_id?: string | null
+          username?: string | null
         }
         Relationships: []
       }
@@ -447,15 +545,46 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      update_community_membership_status: {
+        Args: { membership_id: string; new_status: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -582,6 +711,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
